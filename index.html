@@ -103,7 +103,7 @@ footer{max-width:1000px;margin:0 auto;padding:0 14px 40px;color:var(--mut);font-
 <header>
   <div class="hero" role="img" aria-label="The STOOPIDS crew"></div>
   <div class="titlebar"><h1>STOOP<span>IDS</span></h1><p class="tag" id="tag"></p></div>
-  <div class="sub" id="badges"></div>
+  <div class="sub" id="badges" style="margin:0"></div>
 </header>
 <nav id="nav"></nav>
 <main id="main"><div class="card">Loading the stoopidity…</div></main>
@@ -767,7 +767,7 @@ const VIEWS={standings:vStandings,games:vGames,bets:vBets,rosters:vRosters,teams
 function render(){
   if(!D)return;const m=D.meta;
   $('#tag').textContent={preseason:'0-0 and full of hope. The season hasn\u2019t started, so everyone is a genius.',live:'Where college basketball knowledge goes to be humbled.',final:'The season is over. Someone is insufferable now.',demo:'DEMO: last season\u2019s real results run through this year\u2019s rosters. Nobody\u2019s actual points.'}[m.mode]||'';
-  $('#badges').innerHTML=`<span class="badge">${esc(m.league)}</span><span class="badge">${esc(m.season)}</span><span class="badge">Updated ${esc(m.generated_at_wib)}</span>`+(m.mode==='demo'?'<span class="badge warn">DEMO DATA</span>':'')+(m.mode==='preseason'?'<span class="badge">PRESEASON</span>':'')+(m.warnings.length?'<span class="badge warn">⚠ '+m.warnings.length+' warning(s) — see Rules &amp; sources</span>':'');
+  $('#badges').innerHTML=(m.mode==='demo'?'<span class="badge warn">DEMO DATA</span>':'')+(m.warnings.length?'<span class="badge warn">⚠ '+m.warnings.length+' warning(s) — see Rules &amp; sources</span>':'');
   $('#nav').innerHTML=TABS.map(t=>`<button class="${t[0]===tab?'on':''}" onclick="tab='${t[0]}';render()">${t[1]}</button>`).join('');
   $('#main').innerHTML=(VIEWS[tab]||vStandings)();
   $('#foot').innerHTML=`STOOPIDS · times in WIB (Asia/Jakarta) · scores ESPN (fallback ncaa.com) · ${DEMO?'<a href="?">back to the live season</a>':'<a href="?demo=1">see the demo (last season replay)</a>'}`;
