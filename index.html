@@ -20,8 +20,9 @@ h1 span{color:var(--acc)}
 .tag{color:var(--mut);margin:6px 0 0}
 .badge{display:inline-block;padding:3px 9px;border-radius:99px;font-size:12px;font-weight:700;background:var(--card2);border:1px solid var(--line);margin:8px 6px 0 0}
 .badge.warn{background:#4b3a0b;border-color:#8a6d12;color:#ffe08a}
-nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:8px 10px;display:flex;gap:6px;overflow-x:auto;max-width:1000px;margin:8px auto 0}
-nav button{background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:99px;padding:8px 14px;font-weight:700;white-space:nowrap;cursor:pointer}
+nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:8px 10px;display:flex;flex-wrap:wrap;gap:5px;overflow:visible;max-width:1000px;margin:8px auto 0}
+nav button{background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:99px;padding:6px 10px;font-size:13px;font-weight:700;white-space:nowrap;cursor:pointer}
+@media (max-width:640px){nav{position:static}nav button{padding:5px 8px;font-size:12px}}
 nav button.on{background:var(--acc);color:#111;border-color:var(--acc)}
 main{max-width:1000px;margin:0 auto;padding:12px 10px 60px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin:10px 0}
