@@ -9,9 +9,9 @@
   "sheet_csv_url": "https://docs.google.com/spreadsheets/d/1LQKN3YAJdT3FoKDm7D21_0r7rmGVRhMyxdsBl__wC90/export?format=csv&gid=207957535",
 
   "owners": [
-    {"name": "Murnane",  "team_name": "Dirty Draymond's Poole Party", "emoji": "🍆🥊", "sheet_header_match": "DRAYMOND"},
-    {"name": "Stockman", "team_name": "Stock Rising",                "emoji": "📈", "sheet_header_match": "STOCK RISING"},
-    {"name": "Kurt",     "team_name": "Kurmoji",                     "emoji": "🦠", "sheet_header_match": "KURMOJI"},
+    {"name": "Dirty Draymond",  "team_name": "Dirty Draymond's Poole Party", "emoji": "🍆🥊", "sheet_header_match": "DRAYMOND"},
+    {"name": "Stock", "team_name": "Stock Rising",                "emoji": "📈", "sheet_header_match": "STOCK RISING"},
+    {"name": "Kurmoji",  "team_name": "Kurmoji",                     "emoji": "🦠", "sheet_header_match": "KURMOJI"},
     {"name": "Kentut",   "team_name": "Kentut",                      "emoji": "💨", "sheet_header_match": "KENTUT"},
     {"name": "Murf",     "team_name": "Murfcockchalkrock",           "emoji": "🪨", "sheet_header_match": "MURFCOCK"},
     {"name": "Poo",      "team_name": "POO PARTY",                   "emoji": "💩", "sheet_header_match": "POO PARTY"},
@@ -43,9 +43,9 @@
     "date": "2027-01-20",
     "_help": "On this date each owner drops 2 and adds 2. Dropped teams stop earning for the old owner on this date (wins ON the date don't count). Added teams start earning on this date (wins before it don't count). Fill in 'drop' and 'add' with team names as they appear in the sheet / ESPN.",
     "moves": {
-      "Murnane": {"drop": [], "add": []},
-      "Stockman": {"drop": [], "add": []},
-      "Kurt": {"drop": [], "add": []},
+      "Dirty Draymond": {"drop": [], "add": []},
+      "Stock": {"drop": [], "add": []},
+      "Kurmoji": {"drop": [], "add": []},
       "Kentut": {"drop": [], "add": []},
       "Murf": {"drop": [], "add": []},
       "Poo": {"drop": [], "add": []},

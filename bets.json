@@ -1,179 +1,180 @@
 {
- "_readme": "The live side-bets ledger. 'people' = configurable list (id, name, aliases used by the importer, optional pool_owner link for the emoji). Amounts accept shorthand: 100K, 500k, 1.5mil, 2juta, 250,000. Non-cash stakes use stake_item / item. Add new bets to 'bets' (use the Side Bets tab 'New bet' builder or copy a bet below).",
- "currency": {
-  "code": "IDR",
-  "display_unit": 1000,
-  "suffix": "K",
-  "prefix": "",
-  "note": "Sheet amounts like 100K are assumed to be IDR thousands; change code/unit/suffix freely."
- },
- "people": [
-  {
-   "id": "mark",
-   "name": "Mark",
-   "aliases": [
-    "Murnane",
-    "Mark Murnane",
-    "Marke"
-   ],
-   "pool_owner": "Murnane"
+  "_readme": "The live side-bets ledger. 'people' = configurable list (id, name, aliases used by the importer, optional pool_owner link for the emoji). Amounts accept shorthand: 100K, 500k, 1.5mil, 2juta, 250,000. Non-cash stakes use stake_item / item. Add new bets to 'bets' (use the Side Bets tab 'New bet' builder or copy a bet below).",
+  "currency": {
+    "code": "IDR",
+    "display_unit": 1000,
+    "suffix": "K",
+    "prefix": "",
+    "note": "Sheet amounts like 100K are assumed to be IDR thousands; change code/unit/suffix freely."
   },
-  {
-   "id": "jake",
-   "name": "Jake",
-   "aliases": [
-    "Stock",
-    "Stockman"
-   ],
-   "pool_owner": "Stockman"
-  },
-  {
-   "id": "kurt",
-   "name": "Kurt",
-   "aliases": [
-    "Kurmoji"
-   ],
-   "pool_owner": "Kurt"
-  },
-  {
-   "id": "ken",
-   "name": "Ken",
-   "aliases": [
-    "Kenny",
-    "Kens",
-    "Kem",
-    "Schwartz",
-    "Schwartzkie",
-    "Kentut"
-   ],
-   "pool_owner": "Kentut"
-  },
-  {
-   "id": "neal",
-   "name": "Neal",
-   "aliases": [
-    "Murph",
-    "Murf",
-    "Murphy"
-   ],
-   "pool_owner": "Murf"
-  },
-  {
-   "id": "paul",
-   "name": "Paul",
-   "aliases": [
-    "Eck",
-    "Poo"
-   ],
-   "pool_owner": "Poo"
-  },
-  {
-   "id": "jim",
-   "name": "Jim",
-   "aliases": [
-    "Haske",
-    "James"
-   ],
-   "pool_owner": "Nasty"
-  },
-  {
-   "id": "scott",
-   "name": "Scott",
-   "aliases": [
-    "Burns",
-    "Scotty",
-    "Scotty B"
-   ],
-   "pool_owner": "En Fuego"
-  },
-  {
-   "id": "matthew",
-   "name": "Matthew",
-   "aliases": [
-    "Matt",
-    "Beenen",
-    "Bee"
-   ],
-   "pool_owner": null
-  }
- ],
- "fines": [],
- "bets": [],
- "bet_examples": [
-  {
-   "n": "ex1",
-   "type": "versus",
-   "text": "Mark bets Jake 100K that Duke beats UNC",
-   "side_a": [
-    "mark"
-   ],
-   "side_b": [
-    "jake"
-   ],
-   "stake": "100K",
-   "winner": null
-  },
-  {
-   "n": "ex2",
-   "type": "versus",
-   "text": "Paul takes Belgium at 2:1 vs Mark - 100K",
-   "side_a": [
-    "paul"
-   ],
-   "side_b": [
-    "mark"
-   ],
-   "stake": "100K",
-   "odds": "2:1",
-   "longshot": "a",
-   "winner": "a"
-  },
-  {
-   "n": "ex3",
-   "type": "versus",
-   "text": "Kurt vs Mark Twins/A's 100K per game",
-   "side_a": [
-    "kurt"
-   ],
-   "side_b": [
-    "mark"
-   ],
-   "stake": "100K",
-   "games": {
-    "a": 1,
-    "b": 2
-   }
-  },
-  {
-   "n": "ex4",
-   "type": "pool",
-   "text": "NHL pool 200K buy-in, winner 1mil, 2nd gets 200K back",
-   "participants": [
-    "jake",
-    "kurt",
-    "mark",
-    "ken",
-    "neal",
-    "scott"
-   ],
-   "buy_in": "200K",
-   "payouts": {
-    "jake": 1000000,
-    "scott": 200000
-   }
-  },
-  {
-   "n": "ex5",
-   "type": "versus",
-   "text": "Loser buys the winner a steak dinner",
-   "side_a": [
-    "ken"
-   ],
-   "side_b": [
-    "jim"
-   ],
-   "stake_item": "steak dinner",
-   "winner": "b"
-  }
- ]
+  "people": [
+    {
+      "id": "mark",
+      "name": "Dirty Draymond",
+      "aliases": [
+        "Murnane",
+        "Mark Murnane",
+        "Marke",
+        "Mark"
+      ],
+      "pool_owner": "Dirty Draymond"
+    },
+    {
+      "id": "jake",
+      "name": "Stock",
+      "aliases": [
+        "Stockman",
+        "Jake"
+      ],
+      "pool_owner": "Stock"
+    },
+    {
+      "id": "kurt",
+      "name": "Kurmoji",
+      "aliases": [
+        "Kurt"
+      ],
+      "pool_owner": "Kurmoji"
+    },
+    {
+      "id": "ken",
+      "name": "Ken",
+      "aliases": [
+        "Kenny",
+        "Kens",
+        "Kem",
+        "Schwartz",
+        "Schwartzkie",
+        "Kentut"
+      ],
+      "pool_owner": "Kentut"
+    },
+    {
+      "id": "neal",
+      "name": "Neal",
+      "aliases": [
+        "Murph",
+        "Murf",
+        "Murphy"
+      ],
+      "pool_owner": "Murf"
+    },
+    {
+      "id": "paul",
+      "name": "Paul",
+      "aliases": [
+        "Eck",
+        "Poo"
+      ],
+      "pool_owner": "Poo"
+    },
+    {
+      "id": "jim",
+      "name": "Jim",
+      "aliases": [
+        "Haske",
+        "James"
+      ],
+      "pool_owner": "Nasty"
+    },
+    {
+      "id": "scott",
+      "name": "Scott",
+      "aliases": [
+        "Burns",
+        "Scotty",
+        "Scotty B"
+      ],
+      "pool_owner": "En Fuego"
+    },
+    {
+      "id": "matthew",
+      "name": "Matthew",
+      "aliases": [
+        "Matt",
+        "Beenen",
+        "Bee"
+      ],
+      "pool_owner": null
+    }
+  ],
+  "fines": [],
+  "bets": [],
+  "bet_examples": [
+    {
+      "n": "ex1",
+      "type": "versus",
+      "text": "Mark bets Jake 100K that Duke beats UNC",
+      "side_a": [
+        "mark"
+      ],
+      "side_b": [
+        "jake"
+      ],
+      "stake": "100K",
+      "winner": null
+    },
+    {
+      "n": "ex2",
+      "type": "versus",
+      "text": "Paul takes Belgium at 2:1 vs Mark - 100K",
+      "side_a": [
+        "paul"
+      ],
+      "side_b": [
+        "mark"
+      ],
+      "stake": "100K",
+      "odds": "2:1",
+      "longshot": "a",
+      "winner": "a"
+    },
+    {
+      "n": "ex3",
+      "type": "versus",
+      "text": "Kurt vs Mark Twins/A's 100K per game",
+      "side_a": [
+        "kurt"
+      ],
+      "side_b": [
+        "mark"
+      ],
+      "stake": "100K",
+      "games": {
+        "a": 1,
+        "b": 2
+      }
+    },
+    {
+      "n": "ex4",
+      "type": "pool",
+      "text": "NHL pool 200K buy-in, winner 1mil, 2nd gets 200K back",
+      "participants": [
+        "jake",
+        "kurt",
+        "mark",
+        "ken",
+        "neal",
+        "scott"
+      ],
+      "buy_in": "200K",
+      "payouts": {
+        "jake": 1000000,
+        "scott": 200000
+      }
+    },
+    {
+      "n": "ex5",
+      "type": "versus",
+      "text": "Loser buys the winner a steak dinner",
+      "side_a": [
+        "ken"
+      ],
+      "side_b": [
+        "jim"
+      ],
+      "stake_item": "steak dinner",
+      "winner": "b"
+    }
+  ]
 }

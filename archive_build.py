@@ -49,7 +49,7 @@ PERSON_ALIASES = {  # lower-case label -> canonical person
     "matthew": "Matthew", "bee": "Matthew", "beenen": "Matthew", "mac": "Mac",
 }
 PERSON_TO_CURRENT = {  # canonical person -> config.json owner name
-    "Mark": "Murnane", "Jake": "Stockman", "Kurt": "Kurt", "Ken": "Kentut",
+    "Mark": "Dirty Draymond", "Jake": "Stock", "Kurt": "Kurmoji", "Ken": "Kentut",
     "Neal": "Murf", "Paul": "Poo", "Jim": "Nasty", "Scott": "En Fuego",
 }
 

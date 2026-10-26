@@ -5,8 +5,8 @@
   "season": "2026-27",
   "mode": "preseason",
   "today_et": "2026-10-26",
-  "generated_at_utc": "2026-10-26T13:49:50+00:00",
-  "generated_at_wib": "Mon 26 Oct 2026, 20:49 WIB",
+  "generated_at_utc": "2026-10-26T14:24:43+00:00",
+  "generated_at_wib": "Mon 26 Oct 2026, 21:24 WIB",
   "games_loaded": 305,
   "final_games": 0,
   "roster_source": "sheet (live)",
@@ -146,15 +146,15 @@
   "redraft": {
    "date": "2027-01-20",
    "moves": {
-    "Murnane": {
+    "Dirty Draymond": {
      "drop": [],
      "add": []
     },
-    "Stockman": {
+    "Stock": {
      "drop": [],
      "add": []
     },
-    "Kurt": {
+    "Kurmoji": {
      "drop": [],
      "add": []
     },
@@ -206,7 +206,7 @@
  },
  "owners": [
   {
-   "name": "Murnane",
+   "name": "Dirty Draymond",
    "team_name": "Dirty Draymond's Poole Party",
    "emoji": "🍆🥊",
    "total": 0,
@@ -312,7 +312,7 @@
    "rank": 1
   },
   {
-   "name": "Stockman",
+   "name": "Stock",
    "team_name": "Stock Rising",
    "emoji": "📈",
    "total": 0,
@@ -418,7 +418,7 @@
    "rank": 1
   },
   {
-   "name": "Kurt",
+   "name": "Kurmoji",
    "team_name": "Kurmoji",
    "emoji": "🦠",
    "total": 0,
@@ -1055,984 +1055,16 @@
   }
  ],
  "teams": {
-  "139": {
-   "name": "Saint Louis",
-   "short": "Saint Louis",
-   "abbr": "SLU",
-   "color": "00539C",
-   "alt": "ebebeb",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/139.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/139.png",
-   "mascot": "Billikens",
-   "espn_id": "139"
-  },
-  "2649": {
-   "name": "Toledo",
-   "short": "Toledo",
-   "abbr": "TOL",
-   "color": "0b2240",
-   "alt": "ffcd00",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2649.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2649.png",
-   "mascot": "Rockets",
-   "espn_id": "2649"
-  },
-  "13": {
-   "name": "Cal Poly",
-   "short": "Cal Poly",
-   "abbr": "CP",
-   "color": "1E4D2B",
-   "alt": "eed897",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/13.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/13.png",
-   "mascot": "Mustangs",
-   "espn_id": "13"
-  },
-  "2325": {
-   "name": "La Salle",
-   "short": "La Salle",
-   "abbr": "LAS",
-   "color": "003356",
-   "alt": "ffce00",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2325.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2325.png",
-   "mascot": "Explorers",
-   "espn_id": "2325"
-  },
-  "2287": {
-   "name": "Illinois State",
-   "short": "Illinois St",
-   "abbr": "ILST",
-   "color": "CE1126",
-   "alt": "ffe716",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2287.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2287.png",
-   "mascot": "Redbirds",
-   "espn_id": "2287"
-  },
-  "153": {
-   "name": "North Carolina",
-   "short": "North Carolina",
-   "abbr": "UNC",
-   "color": "7bafd4",
-   "alt": "13294b",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/153.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/153.png",
-   "mascot": "Tar Heels",
-   "espn_id": "153"
-  },
-  "26": {
-   "name": "UCLA",
-   "short": "UCLA",
-   "abbr": "UCLA",
-   "color": "2774ae",
-   "alt": "f2a900",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/26.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/26.png",
-   "mascot": "Bruins",
-   "espn_id": "26"
-  },
-  "47": {
-   "name": "Howard",
-   "short": "Howard",
-   "abbr": "HOW",
-   "color": "003a63",
-   "alt": "e51937",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/47.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/47.png",
-   "mascot": "Bison",
-   "espn_id": "47"
-  },
-  "2097": {
-   "name": "Campbell",
-   "short": "Campbell",
-   "abbr": "CAM",
-   "color": "000000",
-   "alt": null,
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2097.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2097.png",
-   "mascot": "Fighting Camels",
-   "espn_id": "2097"
-  },
-  "93": {
-   "name": "Murray State",
-   "short": "Murray St",
-   "abbr": "MUR",
-   "color": "002148",
-   "alt": "000e00",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/93.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/93.png",
-   "mascot": "Racers",
-   "espn_id": "93"
-  },
-  "130": {
-   "name": "Michigan",
-   "short": "Michigan",
-   "abbr": "MICH",
-   "color": "00274c",
-   "alt": "ffcb05",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/130.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/130.png",
-   "mascot": "Wolverines",
-   "espn_id": "130"
-  },
-  "2182": {
-   "name": "Drexel",
-   "short": "Drexel",
-   "abbr": "DREX",
-   "color": "020260",
-   "alt": "ffd65a",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2182.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2182.png",
-   "mascot": "Dragons",
-   "espn_id": "2182"
-  },
-  "350": {
-   "name": "UNC Wilmington",
-   "short": "UNC Wilmington",
-   "abbr": "UNCW",
-   "color": "00665e",
-   "alt": "ffda00",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/350.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/350.png",
-   "mascot": "Seahawks",
-   "espn_id": "350"
-  },
-  "2329": {
-   "name": "Lehigh",
-   "short": "Lehigh",
-   "abbr": "LEH",
-   "color": "6c2b2a",
-   "alt": "b69e70",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2329.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2329.png",
-   "mascot": "Mountain Hawks",
-   "espn_id": "2329"
-  },
-  "2011": {
-   "name": "Alabama State",
-   "short": "Alabama St",
-   "abbr": "ALST",
-   "color": "e9a900",
-   "alt": "0a0a0a",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2011.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2011.png",
-   "mascot": "Hornets",
-   "espn_id": "2011"
-  },
-  "249": {
-   "name": "North Texas",
-   "short": "North Texas",
-   "abbr": "UNT",
-   "color": "068f33",
-   "alt": "ffffff",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/249.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/249.png",
-   "mascot": "Mean Green",
-   "espn_id": "249"
-  },
-  "87": {
-   "name": "Notre Dame",
-   "short": "Notre Dame",
-   "abbr": "ND",
-   "color": "062340",
-   "alt": "c99700",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/87.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/87.png",
-   "mascot": "Fighting Irish",
-   "espn_id": "87"
-  },
-  "2640": {
-   "name": "Texas Southern",
-   "short": "Texas Southern",
-   "abbr": "TXSO",
-   "color": "860038",
-   "alt": "ffffff",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2640.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2640.png",
-   "mascot": "Tigers",
-   "espn_id": "2640"
-  },
-  "161": {
-   "name": "Fairleigh Dickinson",
-   "short": "FDU",
-   "abbr": "FDU",
-   "color": "72293c",
-   "alt": "28334a",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/161.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/161.png",
-   "mascot": "Knights",
-   "espn_id": "161"
-  },
-  "2449": {
-   "name": "North Dakota State",
-   "short": "N Dakota St",
-   "abbr": "NDSU",
-   "color": "01402A",
-   "alt": "ffffff",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2449.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2449.png",
-   "mascot": "Bison",
-   "espn_id": "2449"
-  },
-  "2599": {
-   "name": "St. John's",
-   "short": "St John's",
-   "abbr": "SJU",
-   "color": "d10000",
-   "alt": "101010",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2599.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2599.png",
-   "mascot": "Red Storm",
-   "espn_id": "2599"
-  },
-  "44": {
-   "name": "American University",
-   "short": "American",
-   "abbr": "AMER",
-   "color": "c41130",
-   "alt": "c8102e",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/44.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/44.png",
-   "mascot": "Eagles",
-   "espn_id": "44"
-  },
-  "245": {
-   "name": "Texas A&M",
-   "short": "Texas A&M",
-   "abbr": "TA&M",
-   "color": "500000",
-   "alt": "ffffff",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/245.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/245.png",
-   "mascot": "Aggies",
-   "espn_id": "245"
-  },
-  "2473": {
-   "name": "Oakland",
-   "short": "Oakland",
-   "abbr": "OAK",
-   "color": "04091c",
-   "alt": "bc955c",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2473.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2473.png",
-   "mascot": "Golden Grizzlies",
-   "espn_id": "2473"
-  },
-  "57": {
-   "name": "Florida",
-   "short": "Florida",
-   "abbr": "FLA",
-   "color": "0021a5",
-   "alt": "fa4616",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/57.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/57.png",
-   "mascot": "Gators",
-   "espn_id": "57"
-  },
-  "2418": {
-   "name": null,
-   "short": null,
-   "abbr": null,
-   "color": null,
-   "alt": null,
-   "logo": null,
-   "logo_dark": null,
-   "mascot": null,
-   "espn_id": "2418"
-  },
-  "84": {
-   "name": "Indiana",
-   "short": "Indiana",
-   "abbr": "IU",
-   "color": "970310",
-   "alt": "ffffff",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/84.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/84.png",
-   "mascot": "Hoosiers",
-   "espn_id": "84"
-  },
-  "2545": {
-   "name": "SE Louisiana",
-   "short": "SE Louisiana",
-   "abbr": "SELA",
-   "color": "215732",
-   "alt": "ffc72c",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2545.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2545.png",
-   "mascot": "Lions",
-   "espn_id": "2545"
-  },
-  "2633": {
-   "name": "Tennessee",
-   "short": "Tennessee",
-   "abbr": "TENN",
-   "color": "ff8200",
-   "alt": "ffffff",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2633.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2633.png",
-   "mascot": "Volunteers",
-   "espn_id": "2633"
-  },
-  "2775": {
-   "name": null,
-   "short": null,
-   "abbr": null,
-   "color": null,
-   "alt": null,
-   "logo": null,
-   "logo_dark": null,
-   "mascot": null,
-   "espn_id": "2775"
-  },
-  "258": {
-   "name": "Virginia",
-   "short": "Virginia",
-   "abbr": "UVA",
-   "color": "232d4b",
-   "alt": "f84c1e",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/258.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/258.png",
-   "mascot": "Cavaliers",
-   "espn_id": "258"
-  },
-  "2634": {
-   "name": "Tennessee State",
-   "short": "Tennessee St",
-   "abbr": "TNST",
-   "color": "171796",
-   "alt": "f0f0f0",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2634.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2634.png",
-   "mascot": "Tigers",
-   "espn_id": "2634"
-  },
-  "2016": {
-   "name": "Alcorn State",
-   "short": "Alcorn St",
-   "abbr": "ALCN",
-   "color": "4b0058",
-   "alt": "46166a",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2016.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2016.png",
-   "mascot": "Braves",
-   "espn_id": "2016"
-  },
-  "142": {
-   "name": "Missouri",
-   "short": "Missouri",
-   "abbr": "MIZ",
-   "color": "f1b82d",
-   "alt": "000000",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/142.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/142.png",
-   "mascot": "Tigers",
-   "espn_id": "142"
-  },
-  "2390": {
-   "name": "Miami",
-   "short": "Miami",
-   "abbr": "MIA",
-   "color": "f47423",
-   "alt": "035131",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2390.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2390.png",
-   "mascot": "Hurricanes",
-   "espn_id": "2390"
-  },
-  "288": {
-   "name": "Lipscomb",
-   "short": "Lipscomb",
-   "abbr": "LIP",
-   "color": "20366C",
-   "alt": "f6b734",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/288.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/288.png",
-   "mascot": "Bisons",
-   "espn_id": "288"
-  },
-  "2641": {
-   "name": "Texas Tech",
-   "short": "Texas Tech",
-   "abbr": "TTU",
-   "color": "da291c",
-   "alt": "000000",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2641.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2641.png",
-   "mascot": "Red Raiders",
-   "espn_id": "2641"
-  },
-  "328": {
-   "name": "Utah State",
-   "short": "Utah State",
-   "abbr": "USU",
-   "color": "0f2439",
-   "alt": "ffffff",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/328.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/328.png",
-   "mascot": "Aggies",
-   "espn_id": "328"
-  },
-  "127": {
-   "name": "Michigan State",
-   "short": "Michigan St",
-   "abbr": "MSU",
-   "color": "173f35",
-   "alt": "ffffff",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/127.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/127.png",
-   "mascot": "Spartans",
-   "espn_id": "127"
-  },
-  "2739": {
-   "name": "Green Bay",
-   "short": "Green Bay",
-   "abbr": "GB",
-   "color": "006633",
-   "alt": "ffffff",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2739.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2739.png",
-   "mascot": "Phoenix",
-   "espn_id": "2739"
-  },
-  "2275": {
-   "name": "Hofstra",
-   "short": "Hofstra",
-   "abbr": "HOF",
-   "color": "003594",
-   "alt": "ffc72c",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2275.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2275.png",
-   "mascot": "Pride",
-   "espn_id": "2275"
-  },
-  "163": {
-   "name": "Princeton",
-   "short": "Princeton",
-   "abbr": "PRIN",
-   "color": "000000",
-   "alt": "ff6000",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/163.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/163.png",
-   "mascot": "Tigers",
-   "espn_id": "163"
-  },
-  "2181": {
-   "name": "Drake",
-   "short": "Drake",
-   "abbr": "DRKE",
-   "color": "005596",
-   "alt": "bec0c2",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2181.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2181.png",
-   "mascot": "Bulldogs",
-   "espn_id": "2181"
-  },
-  "2241": {
-   "name": "Gardner-Webb",
-   "short": "Gardner-Webb",
-   "abbr": "GWEB",
-   "color": "c12535",
-   "alt": "909090",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2241.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2241.png",
-   "mascot": "Runnin' Bulldogs",
-   "espn_id": "2241"
-  },
-  "2065": {
-   "name": "Bethune-Cookman",
-   "short": "Bethune",
-   "abbr": "BCU",
-   "color": "7b1831",
-   "alt": "e9aa12",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2065.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2065.png",
-   "mascot": "Wildcats",
-   "espn_id": "2065"
-  },
-  "2670": {
-   "name": "VCU",
-   "short": "VCU",
-   "abbr": "VCU",
-   "color": "ffaf00",
-   "alt": "000000",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2670.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2670.png",
-   "mascot": "Rams",
-   "espn_id": "2670"
-  },
-  "167": {
-   "name": "New Mexico",
-   "short": "New Mexico",
-   "abbr": "UNM",
-   "color": "ba0c2f",
-   "alt": "a7a8aa",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/167.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/167.png",
-   "mascot": "Lobos",
-   "espn_id": "167"
-  },
-  "41": {
-   "name": "UConn",
-   "short": "UConn",
-   "abbr": "CONN",
-   "color": "0c2340",
-   "alt": "a2aaad",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/41.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/41.png",
-   "mascot": "Huskies",
-   "espn_id": "41"
-  },
-  "152": {
-   "name": "NC State",
-   "short": "NC State",
-   "abbr": "NCSU",
-   "color": "cc0000",
-   "alt": "ffffff",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/152.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/152.png",
-   "mascot": "Wolfpack",
-   "espn_id": "152"
-  },
-  "5": {
-   "name": "UAB",
-   "short": "UAB",
-   "abbr": "UAB",
-   "color": "1a5632",
-   "alt": "fdb913",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/5.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/5.png",
-   "mascot": "Blazers",
-   "espn_id": "5"
-  },
-  "236": {
-   "name": "Chattanooga",
-   "short": "Chattanooga",
-   "abbr": "UTC",
-   "color": "00386b",
-   "alt": "dca71d",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/236.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/236.png",
-   "mascot": "Mocs",
-   "espn_id": "236"
-  },
-  "238": {
-   "name": "Vanderbilt",
-   "short": "Vanderbilt",
-   "abbr": "VAN",
-   "color": "000000",
-   "alt": "cfae70",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/238.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/238.png",
-   "mascot": "Commodores",
-   "espn_id": "238"
-  },
-  "2330": {
-   "name": "Le Moyne",
-   "short": "Le Moyne",
-   "abbr": "LEM",
-   "color": null,
-   "alt": null,
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2330.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2330.png",
-   "mascot": "Dolphins",
-   "espn_id": "2330"
-  },
-  "333": {
-   "name": "Alabama",
-   "short": "Alabama",
-   "abbr": "ALA",
-   "color": "9e1b32",
-   "alt": "ffffff",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/333.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/333.png",
-   "mascot": "Crimson Tide",
-   "espn_id": "333"
-  },
-  "12": {
-   "name": "Arizona",
-   "short": "Arizona",
-   "abbr": "ARIZ",
-   "color": "cc0033",
-   "alt": "003366",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/12.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/12.png",
-   "mascot": "Wildcats",
-   "espn_id": "12"
-  },
-  "2724": {
-   "name": "Wichita State",
-   "short": "Wichita St",
-   "abbr": "WICH",
-   "color": "ffcd00",
-   "alt": "27251f",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2724.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2724.png",
-   "mascot": "Shockers",
-   "espn_id": "2724"
-  },
-  "2272": {
-   "name": "High Point",
-   "short": "High Point",
-   "abbr": "HPU",
-   "color": "330072",
-   "alt": "ffffff",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2272.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2272.png",
-   "mascot": "Panthers",
-   "espn_id": "2272"
-  },
-  "2102": {
-   "name": null,
-   "short": null,
-   "abbr": null,
-   "color": null,
-   "alt": null,
-   "logo": null,
-   "logo_dark": null,
-   "mascot": null,
-   "espn_id": "2102"
-  },
-  "2296": {
-   "name": "Jackson State",
-   "short": "Jackson St",
-   "abbr": "JKST",
-   "color": "123297",
-   "alt": "b5b7ba",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2296.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2296.png",
-   "mascot": "Tigers",
-   "espn_id": "2296"
-  },
-  "300": {
-   "name": "UC Irvine",
-   "short": "UC Irvine",
-   "abbr": "UCI",
-   "color": "002B5C",
-   "alt": "fec52e",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/300.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/300.png",
-   "mascot": "Anteaters",
-   "espn_id": "300"
-  },
-  "2299": {
-   "name": null,
-   "short": null,
-   "abbr": null,
-   "color": null,
-   "alt": null,
-   "logo": null,
-   "logo_dark": null,
-   "mascot": null,
-   "espn_id": "2299"
-  },
-  "8": {
-   "name": "Arkansas",
-   "short": "Arkansas",
-   "abbr": "ARK",
-   "color": "a32136",
-   "alt": "ffffff",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/8.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/8.png",
-   "mascot": "Razorbacks",
-   "espn_id": "8"
-  },
-  "2005": {
-   "name": "Air Force",
-   "short": "Air Force",
-   "abbr": "AF",
-   "color": "003594",
-   "alt": "ffffff",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2005.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2005.png",
-   "mascot": "Falcons",
-   "espn_id": "2005"
-  },
-  "3101": {
-   "name": "Utah Tech",
-   "short": "Utah Tech",
-   "abbr": "UTU",
-   "color": "000000",
-   "alt": null,
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/3101.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/3101.png",
-   "mascot": "Trailblazers",
-   "espn_id": "3101"
-  },
-  "2523": {
-   "name": "Robert Morris",
-   "short": "Robert Morris",
-   "abbr": "RMU",
-   "color": "00214D",
-   "alt": "a21d2b",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2523.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2523.png",
-   "mascot": "Colonials",
-   "espn_id": "2523"
-  },
-  "261": {
-   "name": "Vermont",
-   "short": "Vermont",
-   "abbr": "UVM",
-   "color": "154734",
-   "alt": "ffc72c",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/261.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/261.png",
-   "mascot": "Catamounts",
-   "espn_id": "261"
-  },
-  "2230": {
-   "name": "Fordham",
-   "short": "Fordham",
-   "abbr": "FOR",
-   "color": "830032",
-   "alt": "909090",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2230.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2230.png",
-   "mascot": "Rams",
-   "espn_id": "2230"
-  },
-  "2294": {
-   "name": "Iowa",
-   "short": "Iowa",
-   "abbr": "IOWA",
-   "color": "231f20",
-   "alt": "fcd116",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2294.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2294.png",
-   "mascot": "Hawkeyes",
-   "espn_id": "2294"
-  },
-  "252": {
-   "name": "BYU",
-   "short": "BYU",
-   "abbr": "BYU",
-   "color": "0047ba",
-   "alt": "002e5d",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/252.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/252.png",
-   "mascot": "Cougars",
-   "espn_id": "252"
-  },
-  "2509": {
-   "name": "Purdue",
-   "short": "Purdue",
-   "abbr": "PUR",
-   "color": "ceb888",
-   "alt": "000000",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2509.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2509.png",
-   "mascot": "Boilermakers",
-   "espn_id": "2509"
-  },
-  "2428": {
-   "name": "North Carolina Central",
-   "short": "NC Central",
-   "abbr": "NCCU",
-   "color": "880023",
-   "alt": "c2c3c0",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2428.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2428.png",
-   "mascot": "Eagles",
-   "espn_id": "2428"
-  },
-  "68": {
-   "name": "Boise State",
-   "short": "Boise St",
-   "abbr": "BOIS",
-   "color": "0033a0",
-   "alt": "d64309",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/68.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/68.png",
-   "mascot": "Broncos",
-   "espn_id": "68"
-  },
-  "2363": {
-   "name": "Manhattan",
-   "short": "Manhattan",
-   "abbr": "MAN",
-   "color": "4f8537",
-   "alt": "b5b7ba",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2363.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2363.png",
-   "mascot": "Jaspers",
-   "espn_id": "2363"
-  },
-  "154": {
-   "name": "Wake Forest",
-   "short": "Wake Forest",
-   "abbr": "WAKE",
-   "color": "ceb888",
-   "alt": "2c2a29",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/154.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/154.png",
-   "mascot": "Demon Deacons",
-   "espn_id": "154"
-  },
-  "235": {
-   "name": "Memphis",
-   "short": "Memphis",
-   "abbr": "MEM",
-   "color": "004991",
-   "alt": "8e908f",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/235.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/235.png",
-   "mascot": "Tigers",
-   "espn_id": "235"
-  },
-  "96": {
-   "name": "Kentucky",
-   "short": "Kentucky",
-   "abbr": "UK",
-   "color": "0033a0",
-   "alt": "ffffff",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/96.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/96.png",
-   "mascot": "Wildcats",
-   "espn_id": "96"
-  },
-  "219": {
-   "name": "Pennsylvania",
-   "short": "Penn",
-   "abbr": "PENN",
-   "color": "082A74",
-   "alt": "a6163d",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/219.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/219.png",
-   "mascot": "Quakers",
-   "espn_id": "219"
-  },
-  "61": {
-   "name": "Georgia",
-   "short": "Georgia",
-   "abbr": "UGA",
-   "color": "ba0c2f",
-   "alt": "2c2a29",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/61.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/61.png",
-   "mascot": "Bulldogs",
-   "espn_id": "61"
-  },
-  "97": {
-   "name": "Louisville",
-   "short": "Louisville",
-   "abbr": "LOU",
-   "color": "c9001f",
-   "alt": "ffffff",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/97.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/97.png",
-   "mascot": "Cardinals",
-   "espn_id": "97"
-  },
-  "275": {
-   "name": "Wisconsin",
-   "short": "Wisconsin",
-   "abbr": "WIS",
-   "color": "a00000",
-   "alt": "ffffff",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/275.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/275.png",
-   "mascot": "Badgers",
-   "espn_id": "275"
-  },
-  "2379": {
-   "name": "Maryland Eastern Shore",
-   "short": "MD Eastern",
-   "abbr": "UMES",
-   "color": "5c2301",
-   "alt": "b5b7ba",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2379.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2379.png",
-   "mascot": "Hawks",
-   "espn_id": "2379"
-  },
-  "304": {
-   "name": "Idaho State",
-   "short": "Idaho St",
-   "abbr": "IDST",
-   "color": "ef8c00",
-   "alt": "e9a126",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/304.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/304.png",
-   "mascot": "Bengals",
-   "espn_id": "304"
-  },
-  "2747": {
-   "name": "Wofford",
-   "short": "Wofford",
-   "abbr": "WOF",
-   "color": "533B22",
-   "alt": "f0f0f0",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2747.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2747.png",
-   "mascot": "Terriers",
-   "espn_id": "2747"
-  },
-  "2755": {
-   "name": "Grambling",
-   "short": "Grambling",
-   "abbr": "GRAM",
-   "color": "ee8601",
-   "alt": "ffd10a",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2755.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2755.png",
-   "mascot": "Tigers",
-   "espn_id": "2755"
-  },
-  "2534": {
-   "name": "Sam Houston",
-   "short": "Sam Houston",
-   "abbr": "SHSU",
-   "color": "f56423",
-   "alt": "ffffff",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2534.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2534.png",
-   "mascot": "Bearkats",
-   "espn_id": "2534"
-  },
-  "251": {
-   "name": "Texas",
-   "short": "Texas",
-   "abbr": "TEX",
-   "color": "af5c37",
-   "alt": "ffffff",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/251.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/251.png",
-   "mascot": "Longhorns",
-   "espn_id": "251"
-  },
-  "2172": {
-   "name": "Denver",
-   "short": "Denver",
-   "abbr": "DEN",
-   "color": "98002e",
-   "alt": "a8996e",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2172.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2172.png",
-   "mascot": "Pioneers",
-   "espn_id": "2172"
-  },
-  "2514": {
-   "name": "Quinnipiac",
-   "short": "Quinnipiac",
-   "abbr": "QUIN",
-   "color": "041B43",
-   "alt": null,
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2514.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2514.png",
-   "mascot": "Bobcats",
-   "espn_id": "2514"
-  },
-  "248": {
-   "name": "Houston",
-   "short": "Houston",
-   "abbr": "HOU",
-   "color": "c8102e",
-   "alt": "ffffff",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/248.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/248.png",
-   "mascot": "Cougars",
-   "espn_id": "248"
+  "2440": {
+   "name": "Nevada",
+   "short": "Nevada",
+   "abbr": "NEV",
+   "color": "041e42",
+   "alt": "8a8d8f",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2440.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2440.png",
+   "mascot": "Wolf Pack",
+   "espn_id": "2440"
   },
   "91": {
    "name": "Bellarmine",
@@ -2045,7 +1077,403 @@
    "mascot": "Knights",
    "espn_id": "91"
   },
-  "3107": {
+  "2132": {
+   "name": "Cincinnati",
+   "short": "Cincinnati",
+   "abbr": "CIN",
+   "color": "000000",
+   "alt": "e00122",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2132.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2132.png",
+   "mascot": "Bearcats",
+   "espn_id": "2132"
+  },
+  "12": {
+   "name": "Arizona",
+   "short": "Arizona",
+   "abbr": "ARIZ",
+   "color": "cc0033",
+   "alt": "003366",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/12.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/12.png",
+   "mascot": "Wildcats",
+   "espn_id": "12"
+  },
+  "2514": {
+   "name": "Quinnipiac",
+   "short": "Quinnipiac",
+   "abbr": "QUIN",
+   "color": "041B43",
+   "alt": null,
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2514.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2514.png",
+   "mascot": "Bobcats",
+   "espn_id": "2514"
+  },
+  "304": {
+   "name": "Idaho State",
+   "short": "Idaho St",
+   "abbr": "IDST",
+   "color": "ef8c00",
+   "alt": "e9a126",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/304.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/304.png",
+   "mascot": "Bengals",
+   "espn_id": "304"
+  },
+  "87": {
+   "name": "Notre Dame",
+   "short": "Notre Dame",
+   "abbr": "ND",
+   "color": "062340",
+   "alt": "c99700",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/87.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/87.png",
+   "mascot": "Fighting Irish",
+   "espn_id": "87"
+  },
+  "2739": {
+   "name": "Green Bay",
+   "short": "Green Bay",
+   "abbr": "GB",
+   "color": "006633",
+   "alt": "ffffff",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2739.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2739.png",
+   "mascot": "Phoenix",
+   "espn_id": "2739"
+  },
+  "2473": {
+   "name": "Oakland",
+   "short": "Oakland",
+   "abbr": "OAK",
+   "color": "04091c",
+   "alt": "bc955c",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2473.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2473.png",
+   "mascot": "Golden Grizzlies",
+   "espn_id": "2473"
+  },
+  "130": {
+   "name": "Michigan",
+   "short": "Michigan",
+   "abbr": "MICH",
+   "color": "00274c",
+   "alt": "ffcb05",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/130.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/130.png",
+   "mascot": "Wolverines",
+   "espn_id": "130"
+  },
+  "2142": {
+   "name": "Colgate",
+   "short": "Colgate",
+   "abbr": "COLG",
+   "color": "821019",
+   "alt": "ffffff",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2142.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2142.png",
+   "mascot": "Raiders",
+   "espn_id": "2142"
+  },
+  "294": {
+   "name": "Jacksonville",
+   "short": "Jacksonville",
+   "abbr": "JAX",
+   "color": "00523e",
+   "alt": null,
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/294.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/294.png",
+   "mascot": "Dolphins",
+   "espn_id": "294"
+  },
+  "41": {
+   "name": "UConn",
+   "short": "UConn",
+   "abbr": "CONN",
+   "color": "0c2340",
+   "alt": "a2aaad",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/41.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/41.png",
+   "mascot": "Huskies",
+   "espn_id": "41"
+  },
+  "158": {
+   "name": "Nebraska",
+   "short": "Nebraska",
+   "abbr": "NEB",
+   "color": "e31937",
+   "alt": "ffffff",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/158.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/158.png",
+   "mascot": "Cornhuskers",
+   "espn_id": "158"
+  },
+  "57": {
+   "name": "Florida",
+   "short": "Florida",
+   "abbr": "FLA",
+   "color": "0021a5",
+   "alt": "fa4616",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/57.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/57.png",
+   "mascot": "Gators",
+   "espn_id": "57"
+  },
+  "167": {
+   "name": "New Mexico",
+   "short": "New Mexico",
+   "abbr": "UNM",
+   "color": "ba0c2f",
+   "alt": "a7a8aa",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/167.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/167.png",
+   "mascot": "Lobos",
+   "espn_id": "167"
+  },
+  "219": {
+   "name": "Pennsylvania",
+   "short": "Penn",
+   "abbr": "PENN",
+   "color": "082A74",
+   "alt": "a6163d",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/219.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/219.png",
+   "mascot": "Quakers",
+   "espn_id": "219"
+  },
+  "2275": {
+   "name": "Hofstra",
+   "short": "Hofstra",
+   "abbr": "HOF",
+   "color": "003594",
+   "alt": "ffc72c",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2275.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2275.png",
+   "mascot": "Pride",
+   "espn_id": "2275"
+  },
+  "194": {
+   "name": "Ohio State",
+   "short": "Ohio State",
+   "abbr": "OSU",
+   "color": "ba0c2f",
+   "alt": "a8adb4",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/194.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/194.png",
+   "mascot": "Buckeyes",
+   "espn_id": "194"
+  },
+  "2534": {
+   "name": "Sam Houston",
+   "short": "Sam Houston",
+   "abbr": "SHSU",
+   "color": "f56423",
+   "alt": "ffffff",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2534.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2534.png",
+   "mascot": "Bearkats",
+   "espn_id": "2534"
+  },
+  "2016": {
+   "name": "Alcorn State",
+   "short": "Alcorn St",
+   "abbr": "ALCN",
+   "color": "4b0058",
+   "alt": "46166a",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2016.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2016.png",
+   "mascot": "Braves",
+   "espn_id": "2016"
+  },
+  "26": {
+   "name": "UCLA",
+   "short": "UCLA",
+   "abbr": "UCLA",
+   "color": "2774ae",
+   "alt": "f2a900",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/26.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/26.png",
+   "mascot": "Bruins",
+   "espn_id": "26"
+  },
+  "44": {
+   "name": "American University",
+   "short": "American",
+   "abbr": "AMER",
+   "color": "c41130",
+   "alt": "c8102e",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/44.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/44.png",
+   "mascot": "Eagles",
+   "espn_id": "44"
+  },
+  "324": {
+   "name": "Coastal Carolina",
+   "short": "Coastal",
+   "abbr": "CCU",
+   "color": "006f71",
+   "alt": "a27752",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/324.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/324.png",
+   "mascot": "Chanticleers",
+   "espn_id": "324"
+  },
+  "2305": {
+   "name": "Kansas",
+   "short": "Kansas",
+   "abbr": "KU",
+   "color": "0051ba",
+   "alt": "e8000d",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2305.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2305.png",
+   "mascot": "Jayhawks",
+   "espn_id": "2305"
+  },
+  "127": {
+   "name": "Michigan State",
+   "short": "Michigan St",
+   "abbr": "MSU",
+   "color": "173f35",
+   "alt": "ffffff",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/127.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/127.png",
+   "mascot": "Spartans",
+   "espn_id": "127"
+  },
+  "309": {
+   "name": "Louisiana",
+   "short": "Louisiana",
+   "abbr": "UL",
+   "color": "ce181e",
+   "alt": "000000",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/309.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/309.png",
+   "mascot": "Ragin' Cajuns",
+   "espn_id": "309"
+  },
+  "249": {
+   "name": "North Texas",
+   "short": "North Texas",
+   "abbr": "UNT",
+   "color": "068f33",
+   "alt": "ffffff",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/249.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/249.png",
+   "mascot": "Mean Green",
+   "espn_id": "249"
+  },
+  "2509": {
+   "name": "Purdue",
+   "short": "Purdue",
+   "abbr": "PUR",
+   "color": "ceb888",
+   "alt": "000000",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2509.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2509.png",
+   "mascot": "Boilermakers",
+   "espn_id": "2509"
+  },
+  "96": {
+   "name": "Kentucky",
+   "short": "Kentucky",
+   "abbr": "UK",
+   "color": "0033a0",
+   "alt": "ffffff",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/96.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/96.png",
+   "mascot": "Wildcats",
+   "espn_id": "96"
+  },
+  "245": {
+   "name": "Texas A&M",
+   "short": "Texas A&M",
+   "abbr": "TA&M",
+   "color": "500000",
+   "alt": "ffffff",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/245.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/245.png",
+   "mascot": "Aggies",
+   "espn_id": "245"
+  },
+  "161": {
+   "name": "Fairleigh Dickinson",
+   "short": "FDU",
+   "abbr": "FDU",
+   "color": "72293c",
+   "alt": "28334a",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/161.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/161.png",
+   "mascot": "Knights",
+   "espn_id": "161"
+  },
+  "251": {
+   "name": "Texas",
+   "short": "Texas",
+   "abbr": "TEX",
+   "color": "af5c37",
+   "alt": "ffffff",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/251.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/251.png",
+   "mascot": "Longhorns",
+   "espn_id": "251"
+  },
+  "2005": {
+   "name": "Air Force",
+   "short": "Air Force",
+   "abbr": "AF",
+   "color": "003594",
+   "alt": "ffffff",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2005.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2005.png",
+   "mascot": "Falcons",
+   "espn_id": "2005"
+  },
+  "2239": {
+   "name": "Cal State Fullerton",
+   "short": "Fullerton",
+   "abbr": "CSUF",
+   "color": "003767",
+   "alt": "ff8300",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2239.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2239.png",
+   "mascot": "Titans",
+   "espn_id": "2239"
+  },
+  "252": {
+   "name": "BYU",
+   "short": "BYU",
+   "abbr": "BYU",
+   "color": "0047ba",
+   "alt": "002e5d",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/252.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/252.png",
+   "mascot": "Cougars",
+   "espn_id": "252"
+  },
+  "2750": {
+   "name": "Wright State",
+   "short": "Wright St",
+   "abbr": "WRST",
+   "color": "cba052",
+   "alt": "cba052",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2750.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2750.png",
+   "mascot": "Raiders",
+   "espn_id": "2750"
+  },
+  "238": {
+   "name": "Vanderbilt",
+   "short": "Vanderbilt",
+   "abbr": "VAN",
+   "color": "000000",
+   "alt": "cfae70",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/238.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/238.png",
+   "mascot": "Commodores",
+   "espn_id": "238"
+  },
+  "2964": {
    "name": null,
    "short": null,
    "abbr": null,
@@ -2054,7 +1482,29 @@
    "logo": null,
    "logo_dark": null,
    "mascot": null,
-   "espn_id": "3107"
+   "espn_id": "2964"
+  },
+  "2670": {
+   "name": "VCU",
+   "short": "VCU",
+   "abbr": "VCU",
+   "color": "ffaf00",
+   "alt": "000000",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2670.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2670.png",
+   "mascot": "Rams",
+   "espn_id": "2670"
+  },
+  "2329": {
+   "name": "Lehigh",
+   "short": "Lehigh",
+   "abbr": "LEH",
+   "color": "6c2b2a",
+   "alt": "b69e70",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2329.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2329.png",
+   "mascot": "Mountain Hawks",
+   "espn_id": "2329"
   },
   "325": {
    "name": "Cleveland State",
@@ -2067,60 +1517,467 @@
    "mascot": "Vikings",
    "espn_id": "325"
   },
-  "2197": {
-   "name": "Eastern Illinois",
-   "short": "E Illinois",
-   "abbr": "EIU",
-   "color": "000000",
-   "alt": "bebab9",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2197.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2197.png",
-   "mascot": "Panthers",
-   "espn_id": "2197"
+  "2296": {
+   "name": "Jackson State",
+   "short": "Jackson St",
+   "abbr": "JKST",
+   "color": "123297",
+   "alt": "b5b7ba",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2296.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2296.png",
+   "mascot": "Tigers",
+   "espn_id": "2296"
   },
-  "2463": {
-   "name": "Cal State Northridge",
-   "short": "CSU Northridge",
-   "abbr": "CSUN",
-   "color": "b50000",
+  "2325": {
+   "name": "La Salle",
+   "short": "La Salle",
+   "abbr": "LAS",
+   "color": "003356",
+   "alt": "ffce00",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2325.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2325.png",
+   "mascot": "Explorers",
+   "espn_id": "2325"
+  },
+  "2065": {
+   "name": "Bethune-Cookman",
+   "short": "Bethune",
+   "abbr": "BCU",
+   "color": "7b1831",
+   "alt": "e9aa12",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2065.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2065.png",
+   "mascot": "Wildcats",
+   "espn_id": "2065"
+  },
+  "2230": {
+   "name": "Fordham",
+   "short": "Fordham",
+   "abbr": "FOR",
+   "color": "830032",
+   "alt": "909090",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2230.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2230.png",
+   "mascot": "Rams",
+   "espn_id": "2230"
+  },
+  "349": {
+   "name": "Army",
+   "short": "Army",
+   "abbr": "ARMY",
+   "color": "000000",
+   "alt": "d3bc8d",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/349.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/349.png",
+   "mascot": "Black Knights",
+   "espn_id": "349"
+  },
+  "248": {
+   "name": "Houston",
+   "short": "Houston",
+   "abbr": "HOU",
+   "color": "c8102e",
+   "alt": "ffffff",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/248.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/248.png",
+   "mascot": "Cougars",
+   "espn_id": "248"
+  },
+  "2775": {
+   "name": null,
+   "short": null,
+   "abbr": null,
+   "color": null,
    "alt": null,
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2463.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2463.png",
-   "mascot": "Matadors",
-   "espn_id": "2463"
+   "logo": null,
+   "logo_dark": null,
+   "mascot": null,
+   "espn_id": "2775"
   },
-  "2217": {
-   "name": "Fairfield",
-   "short": "Fairfield",
-   "abbr": "FAIR",
+  "2755": {
+   "name": "Grambling",
+   "short": "Grambling",
+   "abbr": "GRAM",
+   "color": "ee8601",
+   "alt": "ffd10a",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2755.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2755.png",
+   "mascot": "Tigers",
+   "espn_id": "2755"
+  },
+  "142": {
+   "name": "Missouri",
+   "short": "Missouri",
+   "abbr": "MIZ",
+   "color": "f1b82d",
+   "alt": "000000",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/142.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/142.png",
+   "mascot": "Tigers",
+   "espn_id": "142"
+  },
+  "93": {
+   "name": "Murray State",
+   "short": "Murray St",
+   "abbr": "MUR",
+   "color": "002148",
+   "alt": "000e00",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/93.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/93.png",
+   "mascot": "Racers",
+   "espn_id": "93"
+  },
+  "258": {
+   "name": "Virginia",
+   "short": "Virginia",
+   "abbr": "UVA",
+   "color": "232d4b",
+   "alt": "f84c1e",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/258.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/258.png",
+   "mascot": "Cavaliers",
+   "espn_id": "258"
+  },
+  "163": {
+   "name": "Princeton",
+   "short": "Princeton",
+   "abbr": "PRIN",
    "color": "000000",
-   "alt": "ebebeb",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2217.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2217.png",
-   "mascot": "Stags",
-   "espn_id": "2217"
+   "alt": "ff6000",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/163.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/163.png",
+   "mascot": "Tigers",
+   "espn_id": "163"
   },
-  "30": {
-   "name": "USC",
-   "short": "USC",
-   "abbr": "USC",
-   "color": "9d2235",
-   "alt": "ffc72c",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/30.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/30.png",
+  "2717": {
+   "name": "Western Carolina",
+   "short": "W Carolina",
+   "abbr": "WCU",
+   "color": "492F91",
+   "alt": "bf9e70",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2717.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2717.png",
+   "mascot": "Catamounts",
+   "espn_id": "2717"
+  },
+  "236": {
+   "name": "Chattanooga",
+   "short": "Chattanooga",
+   "abbr": "UTC",
+   "color": "00386b",
+   "alt": "dca71d",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/236.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/236.png",
+   "mascot": "Mocs",
+   "espn_id": "236"
+  },
+  "264": {
+   "name": "Washington",
+   "short": "Washington",
+   "abbr": "WASH",
+   "color": "33006f",
+   "alt": "e8d3a2",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/264.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/264.png",
+   "mascot": "Huskies",
+   "espn_id": "264"
+  },
+  "222": {
+   "name": "Villanova",
+   "short": "Villanova",
+   "abbr": "VILL",
+   "color": "00205b",
+   "alt": "13b5ea",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/222.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/222.png",
+   "mascot": "Wildcats",
+   "espn_id": "222"
+  },
+  "66": {
+   "name": "Iowa State",
+   "short": "Iowa State",
+   "abbr": "ISU",
+   "color": "ae192d",
+   "alt": "ffc72a",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/66.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/66.png",
+   "mascot": "Cyclones",
+   "espn_id": "66"
+  },
+  "2608": {
+   "name": "Saint Mary's",
+   "short": "Saint Mary's",
+   "abbr": "SMC",
+   "color": "d80024",
+   "alt": "003057",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2608.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2608.png",
+   "mascot": "Gaels",
+   "espn_id": "2608"
+  },
+  "356": {
+   "name": "Illinois",
+   "short": "Illinois",
+   "abbr": "ILL",
+   "color": "ff5f05",
+   "alt": "13294b",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/356.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/356.png",
+   "mascot": "Fighting Illini",
+   "espn_id": "356"
+  },
+  "2747": {
+   "name": "Wofford",
+   "short": "Wofford",
+   "abbr": "WOF",
+   "color": "533B22",
+   "alt": "f0f0f0",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2747.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2747.png",
+   "mascot": "Terriers",
+   "espn_id": "2747"
+  },
+  "150": {
+   "name": "Duke",
+   "short": "Duke",
+   "abbr": "DUKE",
+   "color": "00539b",
+   "alt": "ffffff",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/150.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/150.png",
+   "mascot": "Blue Devils",
+   "espn_id": "150"
+  },
+  "2031": {
+   "name": "Little Rock",
+   "short": "Little Rock",
+   "abbr": "LR",
+   "color": "AD0000",
+   "alt": "898d8f",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2031.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2031.png",
    "mascot": "Trojans",
-   "espn_id": "30"
+   "espn_id": "2031"
   },
-  "2440": {
-   "name": "Nevada",
-   "short": "Nevada",
-   "abbr": "NEV",
+  "261": {
+   "name": "Vermont",
+   "short": "Vermont",
+   "abbr": "UVM",
+   "color": "154734",
+   "alt": "ffc72c",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/261.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/261.png",
+   "mascot": "Catamounts",
+   "espn_id": "261"
+  },
+  "2250": {
+   "name": "Gonzaga",
+   "short": "Gonzaga",
+   "abbr": "GONZ",
    "color": "041e42",
-   "alt": "8a8d8f",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2440.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2440.png",
-   "mascot": "Wolf Pack",
-   "espn_id": "2440"
+   "alt": "c8102e",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2250.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2250.png",
+   "mascot": "Bulldogs",
+   "espn_id": "2250"
+  },
+  "350": {
+   "name": "UNC Wilmington",
+   "short": "UNC Wilmington",
+   "abbr": "UNCW",
+   "color": "00665e",
+   "alt": "ffda00",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/350.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/350.png",
+   "mascot": "Seahawks",
+   "espn_id": "350"
+  },
+  "8": {
+   "name": "Arkansas",
+   "short": "Arkansas",
+   "abbr": "ARK",
+   "color": "a32136",
+   "alt": "ffffff",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/8.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/8.png",
+   "mascot": "Razorbacks",
+   "espn_id": "8"
+  },
+  "2405": {
+   "name": "Monmouth",
+   "short": "Monmouth",
+   "abbr": "MONM",
+   "color": "051844",
+   "alt": null,
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2405.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2405.png",
+   "mascot": "Hawks",
+   "espn_id": "2405"
+  },
+  "2449": {
+   "name": "North Dakota State",
+   "short": "N Dakota St",
+   "abbr": "NDSU",
+   "color": "01402A",
+   "alt": "ffffff",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2449.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2449.png",
+   "mascot": "Bison",
+   "espn_id": "2449"
+  },
+  "13": {
+   "name": "Cal Poly",
+   "short": "Cal Poly",
+   "abbr": "CP",
+   "color": "1E4D2B",
+   "alt": "eed897",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/13.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/13.png",
+   "mascot": "Mustangs",
+   "espn_id": "13"
+  },
+  "2006": {
+   "name": "Akron",
+   "short": "Akron",
+   "abbr": "AKR",
+   "color": "041e42",
+   "alt": "c5b783",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2006.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2006.png",
+   "mascot": "Zips",
+   "espn_id": "2006"
+  },
+  "2724": {
+   "name": "Wichita State",
+   "short": "Wichita St",
+   "abbr": "WICH",
+   "color": "ffcd00",
+   "alt": "27251f",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2724.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2724.png",
+   "mascot": "Shockers",
+   "espn_id": "2724"
+  },
+  "153": {
+   "name": "North Carolina",
+   "short": "North Carolina",
+   "abbr": "UNC",
+   "color": "7bafd4",
+   "alt": "13294b",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/153.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/153.png",
+   "mascot": "Tar Heels",
+   "espn_id": "153"
+  },
+  "68": {
+   "name": "Boise State",
+   "short": "Boise St",
+   "abbr": "BOIS",
+   "color": "0033a0",
+   "alt": "d64309",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/68.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/68.png",
+   "mascot": "Broncos",
+   "espn_id": "68"
+  },
+  "2418": {
+   "name": null,
+   "short": null,
+   "abbr": null,
+   "color": null,
+   "alt": null,
+   "logo": null,
+   "logo_dark": null,
+   "mascot": null,
+   "espn_id": "2418"
+  },
+  "2011": {
+   "name": "Alabama State",
+   "short": "Alabama St",
+   "abbr": "ALST",
+   "color": "e9a900",
+   "alt": "0a0a0a",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2011.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2011.png",
+   "mascot": "Hornets",
+   "espn_id": "2011"
+  },
+  "110418": {
+   "name": null,
+   "short": null,
+   "abbr": null,
+   "color": null,
+   "alt": null,
+   "logo": null,
+   "logo_dark": null,
+   "mascot": null,
+   "espn_id": "110418"
+  },
+  "314": {
+   "name": "Iona",
+   "short": "Iona",
+   "abbr": "IONA",
+   "color": "6f2c3e",
+   "alt": "f0ab00",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/314.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/314.png",
+   "mascot": "Gaels",
+   "espn_id": "314"
+  },
+  "139": {
+   "name": "Saint Louis",
+   "short": "Saint Louis",
+   "abbr": "SLU",
+   "color": "00539C",
+   "alt": "ebebeb",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/139.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/139.png",
+   "mascot": "Billikens",
+   "espn_id": "139"
+  },
+  "2299": {
+   "name": null,
+   "short": null,
+   "abbr": null,
+   "color": null,
+   "alt": null,
+   "logo": null,
+   "logo_dark": null,
+   "mascot": null,
+   "espn_id": "2299"
+  },
+  "2640": {
+   "name": "Texas Southern",
+   "short": "Texas Southern",
+   "abbr": "TXSO",
+   "color": "860038",
+   "alt": "ffffff",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2640.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2640.png",
+   "mascot": "Tigers",
+   "espn_id": "2640"
+  },
+  "2363": {
+   "name": "Manhattan",
+   "short": "Manhattan",
+   "abbr": "MAN",
+   "color": "4f8537",
+   "alt": "b5b7ba",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2363.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2363.png",
+   "mascot": "Jaspers",
+   "espn_id": "2363"
+  },
+  "288": {
+   "name": "Lipscomb",
+   "short": "Lipscomb",
+   "abbr": "LIP",
+   "color": "20366C",
+   "alt": "f6b734",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/288.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/288.png",
+   "mascot": "Bisons",
+   "espn_id": "288"
   },
   "2253": {
    "name": "Grand Canyon",
@@ -2144,291 +2001,60 @@
    "mascot": "Golden Lions",
    "espn_id": "2029"
   },
-  "2305": {
-   "name": "Kansas",
-   "short": "Kansas",
-   "abbr": "KU",
-   "color": "0051ba",
-   "alt": "e8000d",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2305.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2305.png",
-   "mascot": "Jayhawks",
-   "espn_id": "2305"
+  "2241": {
+   "name": "Gardner-Webb",
+   "short": "Gardner-Webb",
+   "abbr": "GWEB",
+   "color": "c12535",
+   "alt": "909090",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2241.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2241.png",
+   "mascot": "Runnin' Bulldogs",
+   "espn_id": "2241"
   },
-  "411": {
-   "name": null,
-   "short": null,
-   "abbr": null,
-   "color": null,
-   "alt": null,
-   "logo": null,
-   "logo_dark": null,
-   "mascot": null,
-   "espn_id": "411"
-  },
-  "356": {
-   "name": "Illinois",
-   "short": "Illinois",
-   "abbr": "ILL",
-   "color": "ff5f05",
-   "alt": "13294b",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/356.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/356.png",
-   "mascot": "Fighting Illini",
-   "espn_id": "356"
-  },
-  "2459": {
-   "name": "Northern Illinois",
-   "short": "N Illinois",
-   "abbr": "NIU",
-   "color": "c8102e",
-   "alt": "000000",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2459.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2459.png",
-   "mascot": "Huskies",
-   "espn_id": "2459"
-  },
-  "2717": {
-   "name": "Western Carolina",
-   "short": "W Carolina",
-   "abbr": "WCU",
-   "color": "492F91",
-   "alt": "bf9e70",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2717.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2717.png",
-   "mascot": "Catamounts",
-   "espn_id": "2717"
-  },
-  "294": {
-   "name": "Jacksonville",
-   "short": "Jacksonville",
-   "abbr": "JAX",
-   "color": "00523e",
-   "alt": null,
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/294.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/294.png",
-   "mascot": "Dolphins",
-   "espn_id": "294"
-  },
-  "2750": {
-   "name": "Wright State",
-   "short": "Wright St",
-   "abbr": "WRST",
-   "color": "cba052",
-   "alt": "cba052",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2750.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2750.png",
-   "mascot": "Raiders",
-   "espn_id": "2750"
-  },
-  "2335": {
-   "name": "Liberty",
-   "short": "Liberty",
-   "abbr": "LIB",
-   "color": "0a254e",
-   "alt": "b72025",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2335.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2335.png",
-   "mascot": "Flames",
-   "espn_id": "2335"
-  },
-  "264": {
-   "name": "Washington",
-   "short": "Washington",
-   "abbr": "WASH",
-   "color": "33006f",
-   "alt": "e8d3a2",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/264.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/264.png",
-   "mascot": "Huskies",
-   "espn_id": "264"
-  },
-  "2239": {
-   "name": "Cal State Fullerton",
-   "short": "Fullerton",
-   "abbr": "CSUF",
-   "color": "003767",
-   "alt": "ff8300",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2239.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2239.png",
-   "mascot": "Titans",
-   "espn_id": "2239"
-  },
-  "270": {
-   "name": "Milwaukee",
-   "short": "Milwaukee",
-   "abbr": "MILW",
+  "2217": {
+   "name": "Fairfield",
+   "short": "Fairfield",
+   "abbr": "FAIR",
    "color": "000000",
-   "alt": "ffc20e",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/270.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/270.png",
-   "mascot": "Panthers",
-   "espn_id": "270"
+   "alt": "ebebeb",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2217.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2217.png",
+   "mascot": "Stags",
+   "espn_id": "2217"
   },
-  "324": {
-   "name": "Coastal Carolina",
-   "short": "Coastal",
-   "abbr": "CCU",
-   "color": "006f71",
-   "alt": "a27752",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/324.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/324.png",
-   "mascot": "Chanticleers",
-   "espn_id": "324"
-  },
-  "43": {
-   "name": "Yale",
-   "short": "Yale",
-   "abbr": "YALE",
-   "color": "004a81",
-   "alt": "286dc0",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/43.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/43.png",
-   "mascot": "Bulldogs",
-   "espn_id": "43"
-  },
-  "309": {
-   "name": "Louisiana",
-   "short": "Louisiana",
-   "abbr": "UL",
-   "color": "ce181e",
-   "alt": "000000",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/309.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/309.png",
-   "mascot": "Ragin' Cajuns",
-   "espn_id": "309"
-  },
-  "2": {
-   "name": "Auburn",
-   "short": "Auburn",
-   "abbr": "AUB",
-   "color": "002b5c",
-   "alt": "f26522",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2.png",
-   "mascot": "Tigers",
-   "espn_id": "2"
-  },
-  "110418": {
-   "name": null,
-   "short": null,
-   "abbr": null,
-   "color": null,
-   "alt": null,
-   "logo": null,
-   "logo_dark": null,
-   "mascot": null,
-   "espn_id": "110418"
-  },
-  "2142": {
-   "name": "Colgate",
-   "short": "Colgate",
-   "abbr": "COLG",
-   "color": "821019",
-   "alt": "ffffff",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2142.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2142.png",
-   "mascot": "Raiders",
-   "espn_id": "2142"
-  },
-  "2405": {
-   "name": "Monmouth",
-   "short": "Monmouth",
-   "abbr": "MONM",
-   "color": "051844",
-   "alt": null,
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2405.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2405.png",
-   "mascot": "Hawks",
-   "espn_id": "2405"
-  },
-  "21": {
-   "name": "San Diego State",
-   "short": "San Diego St",
-   "abbr": "SDSU",
-   "color": "a6192e",
-   "alt": "000000",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/21.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/21.png",
-   "mascot": "Aztecs",
-   "espn_id": "21"
-  },
-  "66": {
-   "name": "Iowa State",
-   "short": "Iowa State",
-   "abbr": "ISU",
-   "color": "ae192d",
-   "alt": "ffc72a",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/66.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/66.png",
-   "mascot": "Cyclones",
-   "espn_id": "66"
-  },
-  "158": {
-   "name": "Nebraska",
-   "short": "Nebraska",
-   "abbr": "NEB",
-   "color": "e31937",
-   "alt": "ffffff",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/158.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/158.png",
-   "mascot": "Cornhuskers",
-   "espn_id": "158"
-  },
-  "2031": {
-   "name": "Little Rock",
-   "short": "Little Rock",
-   "abbr": "LR",
-   "color": "AD0000",
-   "alt": "898d8f",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2031.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2031.png",
-   "mascot": "Trojans",
-   "espn_id": "2031"
-  },
-  "314": {
-   "name": "Iona",
-   "short": "Iona",
-   "abbr": "IONA",
-   "color": "6f2c3e",
-   "alt": "f0ab00",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/314.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/314.png",
-   "mascot": "Gaels",
-   "espn_id": "314"
-  },
-  "2964": {
-   "name": null,
-   "short": null,
-   "abbr": null,
-   "color": null,
-   "alt": null,
-   "logo": null,
-   "logo_dark": null,
-   "mascot": null,
-   "espn_id": "2964"
-  },
-  "150": {
-   "name": "Duke",
-   "short": "Duke",
-   "abbr": "DUKE",
-   "color": "00539b",
-   "alt": "ffffff",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/150.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/150.png",
-   "mascot": "Blue Devils",
-   "espn_id": "150"
-  },
-  "2132": {
-   "name": "Cincinnati",
-   "short": "Cincinnati",
-   "abbr": "CIN",
+  "2097": {
+   "name": "Campbell",
+   "short": "Campbell",
+   "abbr": "CAM",
    "color": "000000",
-   "alt": "e00122",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2132.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2132.png",
-   "mascot": "Bearcats",
-   "espn_id": "2132"
+   "alt": null,
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2097.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2097.png",
+   "mascot": "Fighting Camels",
+   "espn_id": "2097"
+  },
+  "2523": {
+   "name": "Robert Morris",
+   "short": "Robert Morris",
+   "abbr": "RMU",
+   "color": "00214D",
+   "alt": "a21d2b",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2523.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2523.png",
+   "mascot": "Colonials",
+   "espn_id": "2523"
+  },
+  "2463": {
+   "name": "Cal State Northridge",
+   "short": "CSU Northridge",
+   "abbr": "CSUN",
+   "color": "b50000",
+   "alt": null,
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2463.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2463.png",
+   "mascot": "Matadors",
+   "espn_id": "2463"
   },
   "2377": {
    "name": "McNeese",
@@ -2441,49 +2067,302 @@
    "mascot": "Cowboys",
    "espn_id": "2377"
   },
-  "194": {
-   "name": "Ohio State",
-   "short": "Ohio State",
-   "abbr": "OSU",
-   "color": "ba0c2f",
-   "alt": "a8adb4",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/194.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/194.png",
-   "mascot": "Buckeyes",
-   "espn_id": "194"
+  "154": {
+   "name": "Wake Forest",
+   "short": "Wake Forest",
+   "abbr": "WAKE",
+   "color": "ceb888",
+   "alt": "2c2a29",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/154.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/154.png",
+   "mascot": "Demon Deacons",
+   "espn_id": "154"
   },
-  "222": {
-   "name": "Villanova",
-   "short": "Villanova",
-   "abbr": "VILL",
-   "color": "00205b",
-   "alt": "13b5ea",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/222.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/222.png",
-   "mascot": "Wildcats",
-   "espn_id": "222"
-  },
-  "2608": {
-   "name": "Saint Mary's",
-   "short": "Saint Mary's",
-   "abbr": "SMC",
-   "color": "d80024",
-   "alt": "003057",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2608.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2608.png",
-   "mascot": "Gaels",
-   "espn_id": "2608"
-  },
-  "2130": {
-   "name": "Chicago State",
-   "short": "Chicago St",
-   "abbr": "CHST",
-   "color": "006700",
+  "2330": {
+   "name": "Le Moyne",
+   "short": "Le Moyne",
+   "abbr": "LEM",
+   "color": null,
    "alt": null,
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2130.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2130.png",
-   "mascot": "Cougars",
-   "espn_id": "2130"
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2330.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2330.png",
+   "mascot": "Dolphins",
+   "espn_id": "2330"
+  },
+  "333": {
+   "name": "Alabama",
+   "short": "Alabama",
+   "abbr": "ALA",
+   "color": "9e1b32",
+   "alt": "ffffff",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/333.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/333.png",
+   "mascot": "Crimson Tide",
+   "espn_id": "333"
+  },
+  "2545": {
+   "name": "SE Louisiana",
+   "short": "SE Louisiana",
+   "abbr": "SELA",
+   "color": "215732",
+   "alt": "ffc72c",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2545.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2545.png",
+   "mascot": "Lions",
+   "espn_id": "2545"
+  },
+  "2649": {
+   "name": "Toledo",
+   "short": "Toledo",
+   "abbr": "TOL",
+   "color": "0b2240",
+   "alt": "ffcd00",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2649.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2649.png",
+   "mascot": "Rockets",
+   "espn_id": "2649"
+  },
+  "2294": {
+   "name": "Iowa",
+   "short": "Iowa",
+   "abbr": "IOWA",
+   "color": "231f20",
+   "alt": "fcd116",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2294.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2294.png",
+   "mascot": "Hawkeyes",
+   "espn_id": "2294"
+  },
+  "2": {
+   "name": "Auburn",
+   "short": "Auburn",
+   "abbr": "AUB",
+   "color": "002b5c",
+   "alt": "f26522",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2.png",
+   "mascot": "Tigers",
+   "espn_id": "2"
+  },
+  "2272": {
+   "name": "High Point",
+   "short": "High Point",
+   "abbr": "HPU",
+   "color": "330072",
+   "alt": "ffffff",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2272.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2272.png",
+   "mascot": "Panthers",
+   "espn_id": "2272"
+  },
+  "235": {
+   "name": "Memphis",
+   "short": "Memphis",
+   "abbr": "MEM",
+   "color": "004991",
+   "alt": "8e908f",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/235.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/235.png",
+   "mascot": "Tigers",
+   "espn_id": "235"
+  },
+  "328": {
+   "name": "Utah State",
+   "short": "Utah State",
+   "abbr": "USU",
+   "color": "0f2439",
+   "alt": "ffffff",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/328.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/328.png",
+   "mascot": "Aggies",
+   "espn_id": "328"
+  },
+  "2390": {
+   "name": "Miami",
+   "short": "Miami",
+   "abbr": "MIA",
+   "color": "f47423",
+   "alt": "035131",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2390.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2390.png",
+   "mascot": "Hurricanes",
+   "espn_id": "2390"
+  },
+  "270": {
+   "name": "Milwaukee",
+   "short": "Milwaukee",
+   "abbr": "MILW",
+   "color": "000000",
+   "alt": "ffc20e",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/270.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/270.png",
+   "mascot": "Panthers",
+   "espn_id": "270"
+  },
+  "2641": {
+   "name": "Texas Tech",
+   "short": "Texas Tech",
+   "abbr": "TTU",
+   "color": "da291c",
+   "alt": "000000",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2641.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2641.png",
+   "mascot": "Red Raiders",
+   "espn_id": "2641"
+  },
+  "2181": {
+   "name": "Drake",
+   "short": "Drake",
+   "abbr": "DRKE",
+   "color": "005596",
+   "alt": "bec0c2",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2181.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2181.png",
+   "mascot": "Bulldogs",
+   "espn_id": "2181"
+  },
+  "2197": {
+   "name": "Eastern Illinois",
+   "short": "E Illinois",
+   "abbr": "EIU",
+   "color": "000000",
+   "alt": "bebab9",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2197.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2197.png",
+   "mascot": "Panthers",
+   "espn_id": "2197"
+  },
+  "3107": {
+   "name": null,
+   "short": null,
+   "abbr": null,
+   "color": null,
+   "alt": null,
+   "logo": null,
+   "logo_dark": null,
+   "mascot": null,
+   "espn_id": "3107"
+  },
+  "300": {
+   "name": "UC Irvine",
+   "short": "UC Irvine",
+   "abbr": "UCI",
+   "color": "002B5C",
+   "alt": "fec52e",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/300.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/300.png",
+   "mascot": "Anteaters",
+   "espn_id": "300"
+  },
+  "2379": {
+   "name": "Maryland Eastern Shore",
+   "short": "MD Eastern",
+   "abbr": "UMES",
+   "color": "5c2301",
+   "alt": "b5b7ba",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2379.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2379.png",
+   "mascot": "Hawks",
+   "espn_id": "2379"
+  },
+  "2428": {
+   "name": "North Carolina Central",
+   "short": "NC Central",
+   "abbr": "NCCU",
+   "color": "880023",
+   "alt": "c2c3c0",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2428.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2428.png",
+   "mascot": "Eagles",
+   "espn_id": "2428"
+  },
+  "152": {
+   "name": "NC State",
+   "short": "NC State",
+   "abbr": "NCSU",
+   "color": "cc0000",
+   "alt": "ffffff",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/152.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/152.png",
+   "mascot": "Wolfpack",
+   "espn_id": "152"
+  },
+  "43": {
+   "name": "Yale",
+   "short": "Yale",
+   "abbr": "YALE",
+   "color": "004a81",
+   "alt": "286dc0",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/43.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/43.png",
+   "mascot": "Bulldogs",
+   "espn_id": "43"
+  },
+  "84": {
+   "name": "Indiana",
+   "short": "Indiana",
+   "abbr": "IU",
+   "color": "970310",
+   "alt": "ffffff",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/84.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/84.png",
+   "mascot": "Hoosiers",
+   "espn_id": "84"
+  },
+  "411": {
+   "name": null,
+   "short": null,
+   "abbr": null,
+   "color": null,
+   "alt": null,
+   "logo": null,
+   "logo_dark": null,
+   "mascot": null,
+   "espn_id": "411"
+  },
+  "47": {
+   "name": "Howard",
+   "short": "Howard",
+   "abbr": "HOW",
+   "color": "003a63",
+   "alt": "e51937",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/47.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/47.png",
+   "mascot": "Bison",
+   "espn_id": "47"
+  },
+  "2102": {
+   "name": null,
+   "short": null,
+   "abbr": null,
+   "color": null,
+   "alt": null,
+   "logo": null,
+   "logo_dark": null,
+   "mascot": null,
+   "espn_id": "2102"
+  },
+  "2182": {
+   "name": "Drexel",
+   "short": "Drexel",
+   "abbr": "DREX",
+   "color": "020260",
+   "alt": "ffd65a",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2182.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2182.png",
+   "mascot": "Dragons",
+   "espn_id": "2182"
+  },
+  "2335": {
+   "name": "Liberty",
+   "short": "Liberty",
+   "abbr": "LIB",
+   "color": "0a254e",
+   "alt": "b72025",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2335.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2335.png",
+   "mascot": "Flames",
+   "espn_id": "2335"
   },
   "202": {
    "name": "Tulsa",
@@ -2496,38 +2375,159 @@
    "mascot": "Golden Hurricane",
    "espn_id": "202"
   },
-  "2006": {
-   "name": "Akron",
-   "short": "Akron",
-   "abbr": "AKR",
-   "color": "041e42",
-   "alt": "c5b783",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2006.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2006.png",
-   "mascot": "Zips",
-   "espn_id": "2006"
+  "2172": {
+   "name": "Denver",
+   "short": "Denver",
+   "abbr": "DEN",
+   "color": "98002e",
+   "alt": "a8996e",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2172.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2172.png",
+   "mascot": "Pioneers",
+   "espn_id": "2172"
   },
-  "2250": {
-   "name": "Gonzaga",
-   "short": "Gonzaga",
-   "abbr": "GONZ",
-   "color": "041e42",
-   "alt": "c8102e",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2250.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2250.png",
+  "2130": {
+   "name": "Chicago State",
+   "short": "Chicago St",
+   "abbr": "CHST",
+   "color": "006700",
+   "alt": null,
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2130.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2130.png",
+   "mascot": "Cougars",
+   "espn_id": "2130"
+  },
+  "2287": {
+   "name": "Illinois State",
+   "short": "Illinois St",
+   "abbr": "ILST",
+   "color": "CE1126",
+   "alt": "ffe716",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2287.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2287.png",
+   "mascot": "Redbirds",
+   "espn_id": "2287"
+  },
+  "2634": {
+   "name": "Tennessee State",
+   "short": "Tennessee St",
+   "abbr": "TNST",
+   "color": "171796",
+   "alt": "f0f0f0",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2634.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2634.png",
+   "mascot": "Tigers",
+   "espn_id": "2634"
+  },
+  "61": {
+   "name": "Georgia",
+   "short": "Georgia",
+   "abbr": "UGA",
+   "color": "ba0c2f",
+   "alt": "2c2a29",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/61.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/61.png",
    "mascot": "Bulldogs",
-   "espn_id": "2250"
+   "espn_id": "61"
   },
-  "349": {
-   "name": "Army",
-   "short": "Army",
-   "abbr": "ARMY",
+  "275": {
+   "name": "Wisconsin",
+   "short": "Wisconsin",
+   "abbr": "WIS",
+   "color": "a00000",
+   "alt": "ffffff",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/275.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/275.png",
+   "mascot": "Badgers",
+   "espn_id": "275"
+  },
+  "5": {
+   "name": "UAB",
+   "short": "UAB",
+   "abbr": "UAB",
+   "color": "1a5632",
+   "alt": "fdb913",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/5.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/5.png",
+   "mascot": "Blazers",
+   "espn_id": "5"
+  },
+  "97": {
+   "name": "Louisville",
+   "short": "Louisville",
+   "abbr": "LOU",
+   "color": "c9001f",
+   "alt": "ffffff",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/97.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/97.png",
+   "mascot": "Cardinals",
+   "espn_id": "97"
+  },
+  "30": {
+   "name": "USC",
+   "short": "USC",
+   "abbr": "USC",
+   "color": "9d2235",
+   "alt": "ffc72c",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/30.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/30.png",
+   "mascot": "Trojans",
+   "espn_id": "30"
+  },
+  "2459": {
+   "name": "Northern Illinois",
+   "short": "N Illinois",
+   "abbr": "NIU",
+   "color": "c8102e",
+   "alt": "000000",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2459.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2459.png",
+   "mascot": "Huskies",
+   "espn_id": "2459"
+  },
+  "3101": {
+   "name": "Utah Tech",
+   "short": "Utah Tech",
+   "abbr": "UTU",
    "color": "000000",
-   "alt": "d3bc8d",
-   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/349.png",
-   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/349.png",
-   "mascot": "Black Knights",
-   "espn_id": "349"
+   "alt": null,
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/3101.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/3101.png",
+   "mascot": "Trailblazers",
+   "espn_id": "3101"
+  },
+  "21": {
+   "name": "San Diego State",
+   "short": "San Diego St",
+   "abbr": "SDSU",
+   "color": "a6192e",
+   "alt": "000000",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/21.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/21.png",
+   "mascot": "Aztecs",
+   "espn_id": "21"
+  },
+  "2633": {
+   "name": "Tennessee",
+   "short": "Tennessee",
+   "abbr": "TENN",
+   "color": "ff8200",
+   "alt": "ffffff",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2633.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2633.png",
+   "mascot": "Volunteers",
+   "espn_id": "2633"
+  },
+  "2599": {
+   "name": "St. John's",
+   "short": "St John's",
+   "abbr": "SJU",
+   "color": "d10000",
+   "alt": "101010",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2599.png",
+   "logo_dark": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2599.png",
+   "mascot": "Red Storm",
+   "espn_id": "2599"
   }
  },
  "records": {},
@@ -2549,7 +2549,7 @@
     "src": "espn",
     "start": "2026-11-01T14:30Z",
     "ln": {
-     "p": "Draft Kings",
+     "p": "DraftKings",
      "fav": "222",
      "dog": "87",
      "fav_name": "Villanova",
@@ -2581,7 +2581,7 @@
     "src": "espn",
     "start": "2026-11-02T04:59Z",
     "ln": {
-     "p": "Draft Kings",
+     "p": "DraftKings",
      "fav": "2272",
      "dog": "2335",
      "fav_name": "High Point",
@@ -2799,7 +2799,7 @@
     "src": "espn",
     "start": "2026-11-02T23:00Z",
     "ln": {
-     "p": "Draft Kings",
+     "p": "DraftKings",
      "fav": "57",
      "dog": "2390",
      "fav_name": "Florida",
@@ -2847,7 +2847,7 @@
     "src": "espn",
     "start": "2026-11-02T23:00Z",
     "ln": {
-     "p": "Draft Kings",
+     "p": "DraftKings",
      "fav": "57",
      "dog": "2390",
      "fav_name": "Florida",
@@ -2983,7 +2983,7 @@
     "src": "espn",
     "start": "2026-11-03T00:00Z",
     "ln": {
-     "p": "Draft Kings",
+     "p": "DraftKings",
      "fav": "66",
      "dog": "235",
      "fav_name": "Iowa State",
@@ -3015,7 +3015,7 @@
     "src": "espn",
     "start": "2026-11-03T00:00Z",
     "ln": {
-     "p": "Draft Kings",
+     "p": "DraftKings",
      "fav": "66",
      "dog": "235",
      "fav_name": "Iowa State",
@@ -3323,7 +3323,7 @@
     "src": "espn",
     "start": "2026-11-03T00:30Z",
     "ln": {
-     "p": "Draft Kings",
+     "p": "DraftKings",
      "fav": "2250",
      "dog": "2509",
      "fav_name": "Gonzaga",
@@ -3355,7 +3355,7 @@
     "src": "espn",
     "start": "2026-11-03T00:30Z",
     "ln": {
-     "p": "Draft Kings",
+     "p": "DraftKings",
      "fav": "2250",
      "dog": "2509",
      "fav_name": "Gonzaga",
@@ -3635,7 +3635,7 @@
     "src": "espn",
     "start": "2026-11-03T02:00Z",
     "ln": {
-     "p": "Draft Kings",
+     "p": "DraftKings",
      "fav": "252",
      "dog": "194",
      "fav_name": "BYU",
@@ -3667,7 +3667,7 @@
     "src": "espn",
     "start": "2026-11-03T02:00Z",
     "ln": {
-     "p": "Draft Kings",
+     "p": "DraftKings",
      "fav": "252",
      "dog": "194",
      "fav_name": "BYU",
@@ -3753,7 +3753,7 @@
     "src": "espn",
     "start": "2026-11-03T03:00Z",
     "ln": {
-     "p": "Draft Kings",
+     "p": "DraftKings",
      "fav": "12",
      "dog": "26",
      "fav_name": "Arizona",
@@ -3785,7 +3785,7 @@
     "src": "espn",
     "start": "2026-11-03T03:00Z",
     "ln": {
-     "p": "Draft Kings",
+     "p": "DraftKings",
      "fav": "12",
      "dog": "26",
      "fav_name": "Arizona",
@@ -4158,930 +4158,6 @@
   ]
  },
  "checklist": {
-  "12": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "2724": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "139": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "2272": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "300": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "8": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "261": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "153": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "2294": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "26": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "252": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "47": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "2509": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "68": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "235": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "96": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "130": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "61": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "350": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "97": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "275": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "2755": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "2599": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "251": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "248": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "245": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "57": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "30": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
   "2440": {
    "conf_reg": {
     "v": null,
@@ -5115,7 +4191,7 @@
    "upsets": 0,
    "upset_fallback": false
   },
-  "2253": {
+  "2006": {
    "conf_reg": {
     "v": null,
     "src": "pending"
@@ -5148,7 +4224,7 @@
    "upsets": 0,
    "upset_fallback": false
   },
-  "84": {
+  "2132": {
    "conf_reg": {
     "v": null,
     "src": "pending"
@@ -5214,6 +4290,501 @@
    "upsets": 0,
    "upset_fallback": false
   },
+  "12": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "130": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "2724": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "153": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "68": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "41": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "158": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "57": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "167": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "2142": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "194": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "139": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "26": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "2253": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "127": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
   "2305": {
    "conf_reg": {
     "v": null,
@@ -5247,7 +4818,7 @@
    "upsets": 0,
    "upset_fallback": false
   },
-  "258": {
+  "2250": {
    "conf_reg": {
     "v": null,
     "src": "pending"
@@ -5280,7 +4851,7 @@
    "upsets": 0,
    "upset_fallback": false
   },
-  "2634": {
+  "2377": {
    "conf_reg": {
     "v": null,
     "src": "pending"
@@ -5313,7 +4884,7 @@
    "upsets": 0,
    "upset_fallback": false
   },
-  "356": {
+  "2509": {
    "conf_reg": {
     "v": null,
     "src": "pending"
@@ -5346,7 +4917,7 @@
    "upsets": 0,
    "upset_fallback": false
   },
-  "142": {
+  "333": {
    "conf_reg": {
     "v": null,
     "src": "pending"
@@ -5379,7 +4950,205 @@
    "upsets": 0,
    "upset_fallback": false
   },
-  "2750": {
+  "96": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "2294": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "2": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "2272": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "235": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "328": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "245": {
    "conf_reg": {
     "v": null,
     "src": "pending"
@@ -5478,204 +5247,6 @@
    "upsets": 0,
    "upset_fallback": false
   },
-  "328": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "127": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "2": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "163": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "2142": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "21": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
   "2181": {
    "conf_reg": {
     "v": null,
@@ -5709,7 +5280,7 @@
    "upsets": 0,
    "upset_fallback": false
   },
-  "66": {
+  "251": {
    "conf_reg": {
     "v": null,
     "src": "pending"
@@ -5742,7 +5313,7 @@
    "upsets": 0,
    "upset_fallback": false
   },
-  "158": {
+  "300": {
    "conf_reg": {
     "v": null,
     "src": "pending"
@@ -5775,7 +5346,7 @@
    "upsets": 0,
    "upset_fallback": false
   },
-  "2670": {
+  "252": {
    "conf_reg": {
     "v": null,
     "src": "pending"
@@ -5808,271 +5379,7 @@
    "upsets": 0,
    "upset_fallback": false
   },
-  "167": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "150": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "41": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "152": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "2132": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "2377": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "194": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "222": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "2608": {
+  "2750": {
    "conf_reg": {
     "v": null,
     "src": "pending"
@@ -6138,6 +5445,765 @@
    "upsets": 0,
    "upset_fallback": false
   },
+  "2670": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "261": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "152": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "84": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "47": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "350": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "248": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "2755": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "142": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "258": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "163": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "2634": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "61": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "275": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "2608": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "356": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "66": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "222": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "97": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "150": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "30": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "21": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
+  "8": {
+   "conf_reg": {
+    "v": null,
+    "src": "pending"
+   },
+   "conf_tourn": {
+    "v": null,
+    "src": "pending"
+   },
+   "ncaa_entry": {
+    "v": null,
+    "src": "pending"
+   },
+   "missed_dance": {
+    "v": null,
+    "src": "pending"
+   },
+   "final4": {
+    "v": null,
+    "src": "pending"
+   },
+   "champ": {
+    "v": null,
+    "src": "pending"
+   },
+   "playin_win": {
+    "v": false,
+    "src": "auto"
+   },
+   "ncaa_wins": 0,
+   "upsets": 0,
+   "upset_fallback": false
+  },
   "202": {
    "conf_reg": {
     "v": null,
@@ -6171,73 +6237,7 @@
    "upsets": 0,
    "upset_fallback": false
   },
-  "2006": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "2250": {
-   "conf_reg": {
-    "v": null,
-    "src": "pending"
-   },
-   "conf_tourn": {
-    "v": null,
-    "src": "pending"
-   },
-   "ncaa_entry": {
-    "v": null,
-    "src": "pending"
-   },
-   "missed_dance": {
-    "v": null,
-    "src": "pending"
-   },
-   "final4": {
-    "v": null,
-    "src": "pending"
-   },
-   "champ": {
-    "v": null,
-    "src": "pending"
-   },
-   "playin_win": {
-    "v": false,
-    "src": "auto"
-   },
-   "ncaa_wins": 0,
-   "upsets": 0,
-   "upset_fallback": false
-  },
-  "333": {
+  "2599": {
    "conf_reg": {
     "v": null,
     "src": "pending"
@@ -6509,30 +6509,31 @@
   "people": [
    {
     "id": "mark",
-    "name": "Mark",
+    "name": "Dirty Draymond",
     "aliases": [
      "Murnane",
      "Mark Murnane",
-     "Marke"
+     "Marke",
+     "Mark"
     ],
-    "pool_owner": "Murnane"
+    "pool_owner": "Dirty Draymond"
    },
    {
     "id": "jake",
-    "name": "Jake",
+    "name": "Stock",
     "aliases": [
-     "Stock",
-     "Stockman"
+     "Stockman",
+     "Jake"
     ],
-    "pool_owner": "Stockman"
+    "pool_owner": "Stock"
    },
    {
     "id": "kurt",
-    "name": "Kurt",
+    "name": "Kurmoji",
     "aliases": [
-     "Kurmoji"
+     "Kurt"
     ],
-    "pool_owner": "Kurt"
+    "pool_owner": "Kurmoji"
    },
    {
     "id": "ken",
@@ -12285,7 +12286,7 @@
     "owners": []
    },
    "line": {
-    "p": "Draft Kings",
+    "p": "DraftKings",
     "fav": "222",
     "dog": "87",
     "fav_name": "Villanova",
@@ -12333,7 +12334,7 @@
     "owners": []
    },
    "line": {
-    "p": "Draft Kings",
+    "p": "DraftKings",
     "fav": "2272",
     "dog": "2335",
     "fav_name": "High Point",
@@ -12368,7 +12369,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Murnane"
+     "Dirty Draymond"
     ]
    },
    "away": {
@@ -12438,7 +12439,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Stockman"
+     "Stock"
     ]
    },
    "away": {
@@ -12543,7 +12544,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Murnane"
+     "Dirty Draymond"
     ]
    },
    "away": {
@@ -12558,7 +12559,7 @@
     ]
    },
    "line": {
-    "p": "Draft Kings",
+    "p": "DraftKings",
     "fav": "57",
     "dog": "2390",
     "fav_name": "Florida",
@@ -12628,7 +12629,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Stockman"
+     "Stock"
     ]
    },
    "away": {
@@ -12663,7 +12664,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Stockman"
+     "Stock"
     ]
    },
    "away": {
@@ -12713,7 +12714,7 @@
     ]
    },
    "line": {
-    "p": "Draft Kings",
+    "p": "DraftKings",
     "fav": "66",
     "dog": "235",
     "fav_name": "Iowa State",
@@ -12783,7 +12784,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Murnane"
+     "Dirty Draymond"
     ]
    },
    "away": {
@@ -12958,7 +12959,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Murnane"
+     "Dirty Draymond"
     ]
    },
    "away": {
@@ -13238,7 +13239,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Stockman"
+     "Stock"
     ]
    },
    "away": {
@@ -13288,7 +13289,7 @@
     ]
    },
    "line": {
-    "p": "Draft Kings",
+    "p": "DraftKings",
     "fav": "2250",
     "dog": "2509",
     "fav_name": "Gonzaga",
@@ -13367,7 +13368,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Murnane"
+     "Dirty Draymond"
     ]
    },
    "line": null,
@@ -13463,7 +13464,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Stockman"
+     "Stock"
     ]
    },
    "away": {
@@ -13568,7 +13569,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Kurt"
+     "Kurmoji"
     ]
    },
    "away": {
@@ -13583,7 +13584,7 @@
     ]
    },
    "line": {
-    "p": "Draft Kings",
+    "p": "DraftKings",
     "fav": "252",
     "dog": "194",
     "fav_name": "BYU",
@@ -13618,7 +13619,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Kurt"
+     "Kurmoji"
     ]
    },
    "away": {
@@ -13723,7 +13724,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Murnane"
+     "Dirty Draymond"
     ]
    },
    "away": {
@@ -13758,7 +13759,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Stockman"
+     "Stock"
     ]
    },
    "away": {
@@ -13773,7 +13774,7 @@
     ]
    },
    "line": {
-    "p": "Draft Kings",
+    "p": "DraftKings",
     "fav": "12",
     "dog": "26",
     "fav_name": "Arizona",
@@ -13808,7 +13809,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Kurt"
+     "Kurmoji"
     ]
    },
    "away": {
@@ -13843,7 +13844,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Stockman"
+     "Stock"
     ]
    },
    "away": {
@@ -13913,7 +13914,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Kurt"
+     "Kurmoji"
     ]
    },
    "away": {
@@ -13948,7 +13949,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Kurt"
+     "Kurmoji"
     ]
    },
    "away": {
@@ -14018,7 +14019,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Murnane"
+     "Dirty Draymond"
     ]
    },
    "away": {
@@ -14053,7 +14054,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Kurt"
+     "Kurmoji"
     ]
    },
    "away": {
@@ -14088,7 +14089,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Kurt"
+     "Kurmoji"
     ]
    },
    "away": {
@@ -14158,7 +14159,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Kurt"
+     "Kurmoji"
     ]
    },
    "away": {
@@ -14263,7 +14264,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Murnane"
+     "Dirty Draymond"
     ]
    },
    "away": {
@@ -14403,7 +14404,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Stockman"
+     "Stock"
     ]
    },
    "away": {
@@ -14473,7 +14474,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Stockman"
+     "Stock"
     ]
    },
    "away": {
@@ -14508,7 +14509,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Murnane"
+     "Dirty Draymond"
     ]
    },
    "away": {
@@ -14753,7 +14754,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Murnane"
+     "Dirty Draymond"
     ]
    },
    "away": {
@@ -14823,7 +14824,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Murnane"
+     "Dirty Draymond"
     ]
    },
    "away": {
@@ -14858,7 +14859,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Stockman"
+     "Stock"
     ]
    },
    "away": {
@@ -14893,7 +14894,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Stockman"
+     "Stock"
     ]
    },
    "away": {
@@ -14928,7 +14929,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Stockman"
+     "Stock"
     ]
    },
    "away": {
@@ -15033,7 +15034,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Murnane"
+     "Dirty Draymond"
     ]
    },
    "away": {
@@ -15102,7 +15103,7 @@
   "adjust": "Commissioner adjustment"
  },
  "windows": {
-  "Murnane": [
+  "Dirty Draymond": [
    {
     "tid": "57",
     "start": null,
@@ -15152,7 +15153,7 @@
     "sheet_name": "Tulsa"
    }
   ],
-  "Stockman": [
+  "Stock": [
    {
     "tid": "150",
     "start": null,
@@ -15202,7 +15203,7 @@
     "sheet_name": "WISCONSIN"
    }
   ],
-  "Kurt": [
+  "Kurmoji": [
    {
     "tid": "258",
     "start": null,

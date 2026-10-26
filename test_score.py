@@ -24,7 +24,7 @@ def run(games, windows, standings=None, lines=None, ov=None, cfg=None, today="20
     return {o["name"]: o for o in res["owners"]}, res
 
 
-W = lambda owner_tids: {"Murnane": [{"tid": str(t), "start": None, "end": None} for t in owner_tids], **{o["name"]: [] for o in CFG["owners"] if o["name"] != "Murnane"}}
+W = lambda owner_tids: {"Dirty Draymond": [{"tid": str(t), "start": None, "end": None} for t in owner_tids], **{o["name"]: [] for o in CFG["owners"] if o["name"] != "Dirty Draymond"}}
 
 
 class T(unittest.TestCase):
@@ -33,7 +33,7 @@ class T(unittest.TestCase):
              game(2, "2026-11-12", "reg", side(50, 60, True), side(1, 55, False)),
              game(3, "2027-02-01", "conf", side(1, 70, True), side(51, 60, False), headline="X Tournament - Quarterfinal")]
         o, r = run(g, W([1]))
-        self.assertEqual(o["Murnane"]["total"], 2)
+        self.assertEqual(o["Dirty Draymond"]["total"], 2)
         self.assertEqual(r["records"]["1"]["w"], 2)
         self.assertEqual(r["records"]["1"]["l"], 1)
 
@@ -42,11 +42,11 @@ class T(unittest.TestCase):
              game(2, "2027-01-20", "reg", side(1, 80, True), side(50, 70, False)),
              game(3, "2027-01-21", "reg", side(1, 80, True), side(50, 70, False))]
         win = W([])
-        win["Murnane"] = [{"tid": "1", "start": None, "end": "2027-01-20"}]   # dropped on Jan 20
-        win["Kurt"] = [{"tid": "1", "start": "2027-01-20", "end": None}]     # added Jan 20
+        win["Dirty Draymond"] = [{"tid": "1", "start": None, "end": "2027-01-20"}]   # dropped on Jan 20
+        win["Kurmoji"] = [{"tid": "1", "start": "2027-01-20", "end": None}]     # added Jan 20
         o, _ = run(g, win)
-        self.assertEqual(o["Murnane"]["total"], 1)   # only Jan 19 counts for the old owner
-        self.assertEqual(o["Kurt"]["total"], 2)      # Jan 20 + Jan 21 for the new owner
+        self.assertEqual(o["Dirty Draymond"]["total"], 1)   # only Jan 19 counts for the old owner
+        self.assertEqual(o["Kurmoji"]["total"], 2)      # Jan 20 + Jan 21 for the new owner
 
     def test_ncaa_points_and_upset_by_seed(self):
         t = lambda i, seed, win: side(i, 70 if win else 60, win, seed)
@@ -60,7 +60,7 @@ class T(unittest.TestCase):
                  "12": {"underdog_id": "62", "favorite_id": "1", "details": "T1 -1.5"},     # Vegas favorite, but the pool judges by seed
                  "13": {"underdog_id": None, "favorite_id": None, "details": "PK"}}
         o, r = run(g, W([1]), lines=lines)
-        by = o["Murnane"]["by_cat"]
+        by = o["Dirty Draymond"]["by_cat"]
         self.assertEqual(by["playin_win"], 1)
         self.assertEqual(by["ncaa_entry"], 5)
         self.assertEqual(by["ncaa_win"], 6)          # R1, R2, S16 (First Four is not a +2)
@@ -70,7 +70,7 @@ class T(unittest.TestCase):
         self.assertFalse(a["11"]["fallback"])
         cfg = copy.deepcopy(CFG); cfg["rules"]["tournament_upset_basis"] = "vegas"       # optional old behaviour
         o2, r2 = run(g, W([1]), lines=lines, cfg=cfg)
-        self.assertEqual(o2["Murnane"]["by_cat"]["upset"], 4)
+        self.assertEqual(o2["Dirty Draymond"]["by_cat"]["upset"], 4)
 
     def test_upset_seed_fallback_flagged(self):
         t = lambda i, seed, win: side(i, 70 if win else 60, win, seed)
@@ -80,17 +80,17 @@ class T(unittest.TestCase):
         a = {x["id"]: x for x in r["upset_audit"]}
         self.assertTrue(a["20"]["upset"]); self.assertFalse(a["20"]["fallback"])
         self.assertFalse(a["21"]["upset"])
-        ups = [i for i in o["Murnane"]["teams"][0]["items"] if i["cat"] == "upset"]
+        ups = [i for i in o["Dirty Draymond"]["teams"][0]["items"] if i["cat"] == "upset"]
         self.assertEqual(len(ups), 1); self.assertFalse(ups[0].get("fallback"))
 
     def test_upset_scope_toggle(self):
         g = [game(30, "2026-12-01", "reg", side(1, 80, True), side(2, 70, False))]
         lines = {"30": {"underdog_id": "1", "favorite_id": "2"}}
         o, _ = run(g, W([1]), lines=lines)
-        self.assertEqual(o["Murnane"]["by_cat"].get("upset", 0), 0)        # default: NCAA only
+        self.assertEqual(o["Dirty Draymond"]["by_cat"].get("upset", 0), 0)        # default: NCAA only
         cfg = copy.deepcopy(CFG); cfg["rules"]["upset_games"] = ["ncaa", "reg"]
         o, _ = run(g, W([1]), lines=lines, cfg=cfg)
-        self.assertEqual(o["Murnane"]["by_cat"]["upset"], 4)
+        self.assertEqual(o["Dirty Draymond"]["by_cat"]["upset"], 4)
 
     def test_final4_champ_missed(self):
         t = lambda i, seed, win: side(i, 70 if win else 60, win, seed)
@@ -102,7 +102,7 @@ class T(unittest.TestCase):
         g.append(game(300, "2027-04-04", "ncaa", t(70, 5, True), t(72, 5, False), "Final Four"))
         g.append(game(301, "2027-04-06", "ncaa", t(70, 5, True), t(74, 5, False), "National Championship"))
         o, r = run(g, W([70, 71, 5]))
-        by = o["Murnane"]["by_cat"]
+        by = o["Dirty Draymond"]["by_cat"]
         self.assertEqual(by["ncaa_entry"], 10)
         self.assertEqual(by["final4"], 3); self.assertEqual(by["champ"], 4)
         self.assertEqual(by["missed_dance"], -1)   # team 5 never played in the tournament
@@ -112,18 +112,18 @@ class T(unittest.TestCase):
         st = {"7": {"name": "Big Ten", "teams": [{"tid": "1", "name": "A", "cw": 18, "cl": 2, "seed": 1}, {"tid": "2", "name": "B", "cw": 17, "cl": 3, "seed": 2}]}}
         g = [game(40, "2027-03-11", "conf", side(2, 70, True), side(3, 60, False), "Quarterfinal", conf="7", headline="Big Ten Tournament - Quarterfinal"),
              game(41, "2027-03-15", "conf", side(2, 70, True), side(1, 60, False), "Final", conf="7", headline="Big Ten Tournament - Final")]
-        o, _ = run(g, {**W([1]), "Kurt": [{"tid": "2", "start": None, "end": None}]}, standings=st)
-        self.assertEqual(o["Murnane"]["by_cat"]["conf_reg"], 4)
-        self.assertEqual(o["Kurt"]["by_cat"]["conf_tourn"], 4)
-        self.assertNotIn("conf_reg", o["Kurt"]["by_cat"])
+        o, _ = run(g, {**W([1]), "Kurmoji": [{"tid": "2", "start": None, "end": None}]}, standings=st)
+        self.assertEqual(o["Dirty Draymond"]["by_cat"]["conf_reg"], 4)
+        self.assertEqual(o["Kurmoji"]["by_cat"]["conf_tourn"], 4)
+        self.assertNotIn("conf_reg", o["Kurmoji"]["by_cat"])
         # not awarded before the tournament starts
         o, _ = run([], W([1]), standings=st)
-        self.assertEqual(o["Murnane"]["total"], 0)
+        self.assertEqual(o["Dirty Draymond"]["total"], 0)
 
     def test_overrides(self):
-        ov = {"flags": {}, "adjustments": [{"owner": "Murnane", "team": "", "pts": -3, "note": "fine"}]}
+        ov = {"flags": {}, "adjustments": [{"owner": "Dirty Draymond", "team": "", "pts": -3, "note": "fine"}]}
         o, _ = run([], W([1]), ov=ov)
-        self.assertEqual(o["Murnane"]["total"], -3)
+        self.assertEqual(o["Dirty Draymond"]["total"], -3)
 
     def test_preseason_zero(self):
         o, r = run([game(1, "2026-11-02", "reg", side(1, None, False), side(2, None, False), status="scheduled")], W([1]), today="2026-10-26")
@@ -172,8 +172,8 @@ class Replay(unittest.TestCase):
 class GamesView(unittest.TestCase):
     def _w(self):
         w = {o["name"]: [] for o in CFG["owners"]}
-        w["Murnane"] = [{"tid": "1", "start": None, "end": None}]
-        w["Kurt"] = [{"tid": "2", "start": None, "end": None}]
+        w["Dirty Draymond"] = [{"tid": "1", "start": None, "end": None}]
+        w["Kurmoji"] = [{"tid": "2", "start": None, "end": None}]
         w["Poo"] = [{"tid": "3", "start": None, "end": None}, {"tid": "4", "start": None, "end": None}]
         return w
 
@@ -189,7 +189,7 @@ class GamesView(unittest.TestCase):
         v = S.build_games_view(cfg, {}, "2026-11-02", g, lines, self._w(), 14, 10)
         by = {x["id"]: x for x in v}
         self.assertEqual(set(by), {"1", "2", "3"})                   # game 4 has no pool team
-        self.assertTrue(by["1"]["h2h"]); self.assertEqual(by["1"]["home"]["owners"], ["Murnane"]); self.assertEqual(by["1"]["away"]["owners"], ["Kurt"])
+        self.assertTrue(by["1"]["h2h"]); self.assertEqual(by["1"]["home"]["owners"], ["Dirty Draymond"]); self.assertEqual(by["1"]["away"]["owners"], ["Kurmoji"])
         self.assertTrue(by["1"]["upset"]["is"]); self.assertTrue(by["1"]["upset"]["scored"])
         self.assertEqual(by["1"]["line"]["dog_name"], "T1")
         self.assertTrue(by["2"]["civil"]); self.assertIsNone(by["2"]["line"])   # "line not posted yet"

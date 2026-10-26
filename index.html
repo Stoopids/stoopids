@@ -137,6 +137,8 @@ function quip(o,i,n){
 }
 function stamp(){return D.meta.generated_at_wib}
 /* ---------- views ---------- */
+const NOPTS=['No points yet. Everyone starts somewhere (0).','Zero points. Pure potential.','Nothing on the board yet. Dream big.','0 points and no evidence of poor drafting.','Spotless record, because nothing has happened.','No points yet. The comeback story starts here.','Blank scoreboard. Peak optimism.'];
+function noPts(n){let h=0;for(const c of String(n))h=(h*31+c.charCodeAt(0))>>>0;return NOPTS[(h+(window._tagSeed||(window._tagSeed=Math.floor(Math.random()*997))))%NOPTS.length]}
 function vStandings(){
   const mx=Math.max(10,...D.owners.map(o=>o.total));
   return D.owners.map((o,i)=>`<div class="card"><div class="lb" onclick="goOwner('${esc(o.name)}')">
@@ -608,7 +610,7 @@ function sbBuilder(){
   const f=sbForm||(sbForm={type:'versus'});
   let h=`<h2>➕ New bet</h2><div class="card"><div class="tabs" style="margin:0 0 8px"><button class="${f.type==='versus'?'on':''}" onclick="sbSnap();sbForm.type='versus';render()">One side vs another</button><button class="${f.type==='pool'?'on':''}" onclick="sbSnap();sbForm.type='pool';render()">Pool / buy-in</button></div>
    <div class="note">Fill in the terms, hit "Build". Leave the result blank for an open bet; settle it later below.</div>
-   <textarea id="sb_text" class="sb-ta" placeholder="Terms, in words (e.g. Kurt bets Ken 100K that Duke covers -4.5)">${esc(f.text||'')}</textarea>`;
+   <textarea id="sb_text" class="sb-ta" placeholder="Terms, in words (e.g. Kurmoji bets Ken 100K that Duke covers -4.5)">${esc(f.text||'')}</textarea>`;
   if(f.type==='versus')h+=`<div class="row2" style="margin-top:6px"><div><b>Side A</b><br>${chk('sa',f.a)}</div><div><b>Side B</b> <span class="note">(each A–B pair is a separate wager)</span><br>${chk('sb',f.b)}</div></div>
    <div class="row2" style="margin-top:6px"><input id="sb_stake" class="sb-in" placeholder="Stake: 100K, 1.5mil, 2juta, 250,000" value="${esc(f.stake||'')}"><input id="sb_item" class="sb-in" placeholder="…or non-cash stake: steak dinner" value="${esc(f.item||'')}"></div>
    <div class="row2" style="margin-top:6px"><input id="sb_odds" class="sb-in" placeholder="Odds (optional): 2:1" value="${esc(f.odds||'')}"><select id="sb_long"><option value="a">Longshot = Side A</option><option value="b"${f.long==='b'?' selected':''}>Longshot = Side B</option></select>
@@ -649,7 +651,7 @@ function vRosters(){
   let h=`<div class="tabs">${D.owners.map(x=>`<button class="${x.name===ownerSel?'on':''}" onclick="ownerSel='${esc(x.name)}';render()">${esc(x.emoji)} ${esc(x.name)}</button>`).join('')}</div>`;
   const cats=Object.entries(o.by_cat).filter(([k,v])=>v!==0);
   h+=`<div class="card"><b style="font-size:20px">${esc(o.emoji)} ${esc(o.name)} — ${o.total} pts</b> <span class="mut">(#${o.rank})</span><div class="note">${esc(o.team_name)}</div>
-    <div style="margin-top:6px">${cats.length?cats.map(([k,v])=>`<span class="pill">${esc(D.cat_labels[k]||k)}: <b class="${v<0?'bad':''}">${sign(v)}</b></span>`).join(''):'<span class="mut">No points yet. Everyone starts somewhere (0).</span>'}</div></div>`;
+    <div style="margin-top:6px">${cats.length?cats.map(([k,v])=>`<span class="pill">${esc(D.cat_labels[k]||k)}: <b class="${v<0?'bad':''}">${sign(v)}</b></span>`).join(''):'<span class="mut">'+esc(noPts(o.name))+'</span>'}</div></div>`;
   h+=`<div class="card sc"><table><tr><th>Team</th><th class="n">Rec</th><th class="n">Wins ctd</th><th class="n">Bonus</th><th class="n">Pts</th></tr>`;
   o.teams.forEach((t,ix)=>{const key=o.name+'|'+t.tid+'|'+ix;const bonus=t.total-(t.by.win||0);
     h+=`<tr class="trow" onclick="openTeam['${key}']=!openTeam['${key}'];render()"><td>${chip(t.tid,{big:1,out:t.status==='dropped'})} ${t.status==='dropped'?'<span class="pill">dropped</span>':t.status==='added'?'<span class="pill">added '+esc(t.window.start)+'</span>':''}</td><td class="n">${rec(t.tid)}</td><td class="n">${t.wins_counted}</td><td class="n">${sign(bonus)}</td><td class="n"><b>${t.total}</b></td></tr>`;
@@ -770,7 +772,14 @@ function vArchive(){
 const VIEWS={standings:vStandings,games:vGames,bets:vBets,rosters:vRosters,teams:vTeams,checklist:vChecklist,redraft:vRedraft,archive:vArchive,about:vAbout};
 function render(){
   if(!D)return;const m=D.meta;
-  $('#tag').textContent={preseason:'0-0 and full of hope. The season hasn\u2019t started, so everyone is a genius.',live:'Where college basketball knowledge goes to be humbled.',final:'The season is over. Someone is insufferable now.',demo:'DEMO: last season\u2019s real results run through this year\u2019s rosters. Nobody\u2019s actual points.'}[m.mode]||'';
+  if(!window._tagPick)window._tagPick={};
+  const TAGS={
+   preseason:['0-0 and full of hope. The season hasn\u2019t started, so everyone is a genius.','Nobody has lost yet, so every draft was brilliant.','Preseason: where every roster is a masterpiece and every owner is undefeated.','Zero games played, zero bad takes proven wrong. Enjoy it.','The hot takes are free until November.','Everyone is in first place. It will not last.','Every team is a Final Four team on paper. Paper is patient.'],
+   live:['Where college basketball knowledge goes to be humbled.','Confidence is high. The scoreboard disagrees.','Every win is skill. Every loss is the refs.','Somebody\u2019s mid-major is carrying them. Somebody\u2019s blue blood is not.','Bragging rights are updated every 15 minutes.'],
+   final:['The season is over. Someone is insufferable now.','The trophy is decided. The group chat will never be the same.','It\u2019s over. Screenshots will be used against you.'],
+   demo:['DEMO: last season\u2019s real results run through this year\u2019s rosters. Nobody\u2019s actual points.']};
+  const pickTag=(k,arr)=>{if(window._tagPick[k]==null)window._tagPick[k]=Math.floor(Math.random()*arr.length);return arr[window._tagPick[k]%arr.length]};
+  $('#tag').textContent=TAGS[m.mode]?pickTag('tag'+m.mode,TAGS[m.mode]):'';
   $('#badges').innerHTML=(m.mode==='demo'?'<span class="badge warn">DEMO DATA</span>':'')+(m.warnings.length?'<span class="badge warn">⚠ '+m.warnings.length+' warning(s) — see Rules &amp; sources</span>':'');
   $('#nav').innerHTML=TABS.map(t=>`<button class="${t[0]===tab?'on':''}" onclick="tab='${t[0]}';render()">${t[1]}</button>`).join('');
   $('#main').innerHTML=(VIEWS[tab]||vStandings)();
