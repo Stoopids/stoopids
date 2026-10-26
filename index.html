@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>STOOPIDS — NCAA Stoopids Pool</title>
+<style>
+:root{--bg:#10131a;--card:#1a1f2b;--card2:#222939;--line:#2d3548;--tx:#eef1f7;--mut:#9aa6bd;--acc:#ffd23f;--good:#4ade80;--bad:#f87171}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+a{color:var(--acc)}
+header{max-width:1000px;margin:0 auto;padding:0 0 8px}
+.hero{position:relative;min-height:230px;display:flex;flex-direction:column;justify-content:flex-end;padding:16px 14px 14px;background:linear-gradient(180deg,rgba(16,19,26,.05) 0%,rgba(16,19,26,.55) 55%,rgba(16,19,26,.96) 100%),url(assets/hero-wide.jpg) center 22%/cover no-repeat;border-radius:0 0 18px 18px;overflow:hidden}
+.hero h1{text-shadow:0 2px 10px rgba(0,0,0,.85)}
+.hero .tag{color:#e7ecf6;text-shadow:0 1px 6px rgba(0,0,0,.9)}
+.sub{padding:0 14px}
+@media (max-width:640px){.hero{min-height:270px;background:linear-gradient(180deg,rgba(16,19,26,.05) 0%,rgba(16,19,26,.6) 58%,rgba(16,19,26,.97) 100%),url(assets/hero-mobile.jpg) center 12%/cover no-repeat}}
+@media (min-width:1000px){.hero{border-radius:0 0 18px 18px;min-height:280px;background-position:center 20%}}
+h1{margin:0;font-size:clamp(34px,9vw,56px);letter-spacing:.04em;font-weight:900;line-height:1}
+h1 span{color:var(--acc)}
+.tag{color:var(--mut);margin:6px 0 0}
+.badge{display:inline-block;padding:3px 9px;border-radius:99px;font-size:12px;font-weight:700;background:var(--card2);border:1px solid var(--line);margin:8px 6px 0 0}
+.badge.warn{background:#4b3a0b;border-color:#8a6d12;color:#ffe08a}
+nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:8px 10px;display:flex;gap:6px;overflow-x:auto;max-width:1000px;margin:8px auto 0}
+nav button{background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:99px;padding:8px 14px;font-weight:700;white-space:nowrap;cursor:pointer}
+nav button.on{background:var(--acc);color:#111;border-color:var(--acc)}
+main{max-width:1000px;margin:0 auto;padding:12px 10px 60px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin:10px 0}
+.lb{display:flex;align-items:center;gap:10px;cursor:pointer}
+.rank{font-size:26px;font-weight:900;width:36px;text-align:center;color:var(--acc)}
+.who{flex:1;min-width:0}
+.who b{font-size:17px}
+.who small{display:block;color:var(--mut)}
+.pts{font-size:28px;font-weight:900;text-align:right}
+.pts small{display:block;font-size:11px;color:var(--mut);font-weight:600}
+.bar{height:6px;background:var(--card2);border-radius:9px;margin-top:8px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--acc)}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:2px 8px 2px 2px;border-radius:99px;font-weight:700;font-size:12.5px;border:2px solid transparent;max-width:100%}
+.chip img,.chip .nologo{width:22px;height:22px;border-radius:50%;background:#fff;object-fit:contain;padding:1px;flex:none}
+.chip .nologo{display:inline-block}
+.chip.big{font-size:15px;padding:3px 11px 3px 3px}
+.chip.big img{width:30px;height:30px}
+.chip.out{opacity:.55;text-decoration:line-through}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:7px 6px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}
+th{color:var(--mut);font-size:12px;text-transform:uppercase;letter-spacing:.04em;position:sticky;top:0}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.sc{overflow-x:auto}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px}
+.tabs button{background:var(--card);border:1px solid var(--line);color:var(--tx);border-radius:10px;padding:7px 11px;cursor:pointer;font-weight:600}
+.tabs button.on{border-color:var(--acc);color:var(--acc)}
+.trow{cursor:pointer}
+.det{background:var(--card2);border-radius:10px;padding:8px 10px;margin:4px 0 10px}
+.pill{display:inline-block;padding:1px 8px;border-radius:99px;background:var(--card2);border:1px solid var(--line);font-size:12px;margin:2px 3px 2px 0}
+.good{color:var(--good)}.bad{color:var(--bad)}.mut{color:var(--mut)}
+ul.it{margin:6px 0;padding-left:18px}
+ul.it li{margin:2px 0}
+.quip{color:var(--acc);font-style:italic;margin:6px 0 0}
+h2{font-size:19px;margin:18px 0 6px}
+.note{font-size:13px;color:var(--mut)}
+select,.sel{background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:10px;padding:7px 9px;font:inherit}
+.gday{margin:16px 2px 4px;font-weight:800;color:var(--acc)}
+.gm{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin:8px 0}
+.gm.h2h{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc) inset}
+.gm .gh{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12.5px;color:var(--mut);margin-bottom:6px}
+.gside{display:flex;align-items:center;gap:8px;padding:4px 0}
+.gside .nm{flex:1;min-width:0;display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.gside .sc2{font-size:22px;font-weight:900;min-width:34px;text-align:right}
+.gside.lose .sc2{color:var(--mut);font-weight:700}
+.opill{display:inline-block;padding:0 7px;border-radius:99px;font-size:11.5px;font-weight:700;background:var(--card2);border:1px solid var(--line)}
+.opill.none{opacity:.5}
+.gl{border-top:1px dashed var(--line);margin-top:6px;padding-top:6px;font-size:13px}
+.up{display:inline-block;padding:1px 8px;border-radius:99px;font-weight:800;font-size:12px;background:#7c2d12;color:#ffedd5}
+.up.ns{background:var(--card2);color:var(--mut)}
+.h2b{display:inline-block;padding:1px 8px;border-radius:99px;font-weight:800;font-size:12px;background:var(--acc);color:#111}
+.seed{font-size:11px;color:var(--mut)}
+
+.sb-in,.sb-ta{background:var(--card2);color:var(--tx);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font:inherit;width:100%}
+.sb-ta{min-height:70px}
+.row2{display:flex;flex-wrap:wrap;gap:8px}.row2>*{flex:1 1 150px}
+label.k{display:inline-flex;align-items:center;gap:4px;margin:3px 8px 3px 0;font-size:14px}
+.btn{background:var(--acc);color:#111;border:0;border-radius:10px;padding:9px 14px;font-weight:800;cursor:pointer}
+.btn.sec{background:var(--card2);color:var(--tx);border:1px solid var(--line)}
+.st{display:inline-block;padding:0 8px;border-radius:99px;font-size:11.5px;font-weight:800;border:1px solid var(--line);background:var(--card2)}
+.st.open{color:#7dd3fc}.st.settled{color:var(--good)}.st.wash{color:var(--mut)}.st.unparsed{color:#fbbf24;border-color:#8a6d12}
+.mx td,.mx th{padding:5px 7px;font-size:13px;text-align:right;white-space:nowrap}.mx td:first-child,.mx th:first-child{text-align:left;position:sticky;left:0;background:var(--card)}
+.mx td.z{color:#4b566d}
+pre.js{background:#0b0e14;border:1px solid var(--line);border-radius:10px;padding:10px;overflow:auto;font-size:12px;white-space:pre-wrap;word-break:break-all}
+footer{max-width:1000px;margin:0 auto;padding:0 14px 40px;color:var(--mut);font-size:12px}
+</style>
+</head>
+<body>
+<header>
+  <div class="hero"><h1>STOOP<span>IDS</span></h1><p class="tag" id="tag"></p></div>
+  <div class="sub" id="badges"></div>
+</header>
+<nav id="nav"></nav>
+<main id="main"><div class="card">Loading the stoopidity…</div></main>
+<footer id="foot"></footer>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const params=new URLSearchParams(location.search);
+const DEMO=params.has('demo');
+let D=null,tab=params.get('tab')||'standings',ownerSel=null,openTeam={};
+const TABS=[['standings','🏆 Standings'],['games','📅 Games'],['rosters','👥 Rosters'],['bets','🎲 Side bets'],['teams','🏀 All teams'],['checklist','✅ Bonus checklist'],['upsets','😱 Upsets'],['redraft','🔄 Jan 20 redraft'],['about','📖 Rules & sources']];
+
+/* ---------- color helpers (auto contrast) ---------- */
+function hex2rgb(h){h=(h||'').replace('#','');if(h.length===3)h=h.split('').map(c=>c+c).join('');if(!/^[0-9a-f]{6}$/i.test(h))return null;return[0,2,4].map(i=>parseInt(h.substr(i,2),16))}
+function lum(rgb){const f=v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)};return .2126*f(rgb[0])+.7152*f(rgb[1])+.0722*f(rgb[2])}
+function textOn(hex){const r=hex2rgb(hex);if(!r)return '#fff';const L=lum(r);return (1.05)/(L+.05) > (L+.05)/.05 ? '#fff':'#111'}
+function chip(tid,opt){opt=opt||{};const t=D.teams[tid]||{};if(!t.short&&opt.name)t.short=opt.name;const bg='#'+((t.color||'').replace('#','')||'3a4256');const alt='#'+((t.alt||'').replace('#','')||'ffffff');
+  const fg=textOn(bg);const logo=t.logo?`<img src="${esc(t.logo)}" alt="" loading="lazy" onerror="this.outerHTML='<span class=nologo></span>'">`:'<span class="nologo"></span>';
+  return `<span class="chip${opt.big?' big':''}${opt.out?' out':''}" style="background:${bg};color:${fg};border-color:${alt}">${logo}${esc(t.short||t.name||tid)}</span>`}
+/* ---------- helpers ---------- */
+const rec=tid=>{const r=D.records[tid]||{w:0,l:0};return r.w+'-'+r.l};
+const sign=n=>n>0?'+'+n:String(n);
+function ownerOf(tid){for(const o of D.owners)for(const t of o.teams)if(t.tid===tid&&t.status!=='dropped')return o.name;return '—'}
+function wibDay(d){return d}
+function quip(o,i,n){
+  if(D.meta.mode==='preseason')return ['Everyone is 0-0 and a genius. Enjoy it.','Undefeated in spirit.','Zero points. Zero mistakes. Peak performance.'][i%3];
+  if(i===0)return 'Don\u2019t get cocky. Cocky gets a 5-seed.';
+  if(i===n-1)return 'Proud owner of the participation trophy.';
+  return ['Hanging in there.','Vibes are immaculate, points are TBD.','Blame the refs.','The committee will remember this.'][i%4];
+}
+function stamp(){return D.meta.generated_at_wib}
+/* ---------- views ---------- */
+function vStandings(){
+  const mx=Math.max(10,...D.owners.map(o=>o.total));
+  return D.owners.map((o,i)=>`<div class="card"><div class="lb" onclick="goOwner('${esc(o.name)}')">
+    <div class="rank">${o.rank}</div>
+    <div class="who"><b>${esc(o.emoji)} ${esc(o.name)}</b><small>${esc(o.team_name)}</small><div class="quip">${esc(quip(o,i,D.owners.length))}</div></div>
+    <div class="pts">${o.total}<small>points</small></div></div>
+    <div class="bar"><i style="width:${Math.max(0,o.total)/mx*100}%"></i></div>
+    <div class="chips">${o.teams.map(t=>chip(t.tid,{out:t.status==='dropped'})).join('')}</div></div>`).join('')+
+    `<p class="note">Tap an owner for the full breakdown. Struck-through teams were dropped in the Jan 20 redraft.</p>`}
+function goOwner(n){ownerSel=n;tab='rosters';render();window.scrollTo(0,0)}
+
+/* ---------- games tab ---------- */
+const WIBD=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Jakarta',weekday:'short',day:'2-digit',month:'short'});
+const WIBT=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Jakarta',hour:'2-digit',minute:'2-digit',hour12:false});
+const WIBK=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jakarta'});
+function wibKey(g){if(g.start){const d=new Date(g.start);if(!isNaN(d))return WIBK.format(d)}return g.day}
+function wibLabel(k){const d=new Date(k+'T12:00:00Z');return WIBD.format(d)}
+function wibTime(g){if(g.start){const d=new Date(g.start);if(!isNaN(d))return WIBT.format(d)+' WIB'}return 'time TBD'}
+const fml=n=>n==null?'–':(n>0?'+'+n:String(n));
+const ownerEmoji=n=>{const o=D.owners.find(x=>x.name===n);return o?o.emoji:''};
+const opills=a=>a&&a.length?a.map(n=>`<span class="opill">${esc(ownerEmoji(n))} ${esc(n)}</span>`).join(''):'<span class="opill none">no owner</span>';
+function lineTxt(ln,away,home,final){
+  if(!ln)return null;
+  const fav=ln.fav_name?`<b>${esc(ln.fav_name)}</b> -${ln.sp!=null?ln.sp:'?'}`:'Pick\u2019em';
+  const ml=(ln.aml!=null||ln.hml!=null)?` · ML ${esc(away)} ${fml(ln.aml)} / ${esc(home)} ${fml(ln.hml)}`:'';
+  const ou=ln.ou!=null?` · O/U ${ln.ou}`:'';
+  return `${final?(ln.type==='close'?'Closing line':'Last line'):'Line'}: ${fav}${ml}${ou} <span class="mut">· ${esc(ln.p||'')}</span>`}
+function gameCard(g){
+  const fin=g.status==='final',live=g.status==='live';
+  const dog=g.line&&g.line.dog;
+  const row=(s,other)=>{
+    const lose=fin&&!s.win;const tag=g.line?(String(dog)===String(s.id)?' <span title="betting underdog">🐶</span>':(String(g.line.fav)===String(s.id)?' <span title="betting favorite">⭐</span>':'')):'';
+    return `<div class="gside${lose?' lose':''}"><div class="nm">${chip(s.id,{big:1,name:s.short})}${s.seed?`<span class="seed">(${s.seed})</span>`:''}${tag}${opills(s.owners)}</div><div class="sc2">${(fin||live)&&s.score!=null?s.score:''}</div></div>`};
+  let head=`<span>${fin?'FINAL':live?'<b class="good">LIVE</b>':'<b>'+wibTime(g)+'</b>'}</span>`;
+  if(g.round)head+=`<span>· ${esc(g.round)}</span>`;else if(g.kind==='conf')head+='<span>· Conf tournament</span>';
+  if(g.neutral)head+='<span>· neutral</span>';
+  if(g.h2h)head+=`<span class="h2b">🥊 ${esc(g.away.owners.join('/'))} vs ${esc(g.home.owners.join('/'))}</span>`;
+  if(g.civil)head+=`<span class="h2b">🙃 CIVIL WAR (${esc(g.away.owners.join('/'))} wins either way)</span>`;
+  let lt=lineTxt(g.line,g.away.short,g.home.short,fin);
+  let foot=lt||(fin?'<span class="mut">No betting line on file for this game.</span>':'<span class="mut">📭 line not posted yet</span>');
+  if(fin&&g.upset){const u=g.upset;if(u.is)foot+=` <span class="up${u.scored?'':' ns'}">😱 UPSET${u.scored?' +'+D.meta.points.upset:' (not scored: outside upset rules)'}${u.fallback?' ⚠️ by seed':''}</span>`;else if(u.is===false&&g.line)foot+=' <span class="mut">· favorite won, no upset</span>'}
+  return `<div class="gm${g.h2h||g.civil?' h2h':''}"><div class="gh">${head}</div>${row(g.away)}${row(g.home)}<div class="gl">${foot}</div></div>`}
+let gOwner='all',gMode=null,gDay='all',gH2H=params.has('h2h');
+function vGames(){
+  const all=D.games||[];
+  const ups=all.filter(g=>g.status!=='final'),fin=all.filter(g=>g.status==='final');
+  if(!gMode)gMode=ups.length?'upcoming':'scores';
+  let list=(gMode==='upcoming'?ups:fin.slice().reverse());
+  if(gOwner!=='all')list=list.filter(g=>g.home.owners.includes(gOwner)||g.away.owners.includes(gOwner));
+  if(gH2H)list=list.filter(g=>g.h2h||g.civil);
+  const days=[...new Set(list.map(wibKey))];
+  if(gDay!=='all'&&!days.includes(gDay))gDay='all';
+  if(gDay!=='all')list=list.filter(g=>wibKey(g)===gDay);
+  if(gMode==='upcoming')list.sort((a,b)=>(a.start||a.day).localeCompare(b.start||b.day));
+  let h=`<div class="card"><div class="tabs" style="margin:0 0 8px"><button class="${gMode==='upcoming'?'on':''}" onclick="gMode='upcoming';gDay='all';render()">⏭ Upcoming (${ups.length})</button><button class="${gMode==='scores'?'on':''}" onclick="gMode='scores';gDay='all';render()">✅ Scores (${fin.length})</button></div>
+   <div class="tabs" style="margin:0"><select onchange="gOwner=this.value;render()"><option value="all">All owners</option>${D.owners.map(o=>`<option value="${esc(o.name)}"${o.name===gOwner?' selected':''}>${esc(o.emoji)} ${esc(o.name)}</option>`).join('')}</select>
+   <select onchange="gDay=this.value;render()"><option value="all">All days</option>${days.map(k=>`<option value="${k}"${k===gDay?' selected':''}>${esc(wibLabel(k))}</option>`).join('')}</select>
+   <button class="${gH2H?'on':''}" onclick="gH2H=!gH2H;render()">🥊 Pool vs pool only</button></div>
+   <div class="note" style="margin-top:6px">Times in WIB. ⭐ = betting favorite, 🐶 = underdog. Lines: ${D.meta.games_view.n_with_line}/${D.meta.games_view.n_games} games have one on file (${esc((D.meta.sources||{}).odds||'')}).</div></div>`;
+  if(!list.length)return h+`<div class="card">${all.length?'Nothing matches those filters.':'No games for rostered teams yet. Check back when the schedule fills in.'}</div>`;
+  if(gMode==='upcoming'&&D.meta.mode==='preseason')h+=`<div class="card note">Preseason: only the first few nights of the schedule are loaded, and sportsbooks have posted lines for just some of them so far. Everything refreshes automatically.</div>`;
+  let cur=null;
+  list.forEach(g=>{const k=wibKey(g);if(k!==cur){cur=k;h+=`<div class="gday">${esc(wibLabel(k))}</div>`}h+=gameCard(g)});
+  return h}
+function gameLine(g){/* compact line for a team-row game (roster tab) */
+  const ln=g.ln;if(!ln)return g.status==='final'?'':'<div class="mut" style="font-size:12px">📭 line not posted yet</div>';
+  const fav=ln.fav_name?`${esc(ln.fav_name)} -${ln.sp!=null?ln.sp:'?'}`:'Pick\u2019em';
+  let s=`<div class="mut" style="font-size:12px">${g.status==='final'?(ln.type==='close'?'Closing':'Last'):'Line'}: ${fav}${ln.ou!=null?' · O/U '+ln.ou:''}· ${esc(ln.p||'')}${ln.we_dog?' · 🐶 underdog':ln.we_fav?' · ⭐ favorite':''}${g.upset?' <span class="up">😱 UPSET</span>':''}</div>`;
+  return s}
+
+
+/* ---------- side bets ---------- */
+let sbScope='all',sbPaid=false,sbPerson='all',sbStatus='all',sbQ='',sbForm=null,sbMsg='',editOK=null;
+fetch('api/ping').then(r=>r.json()).then(j=>{editOK=!!j.edit;if(tab==='bets')render()}).catch(()=>{editOK=false});
+const P=id=>(D.bets.people.find(p=>p.id===id)||{name:id});
+const pname=id=>{const p=P(id);const e=p.pool_owner?ownerEmoji(p.pool_owner):'';return (e?e+' ':'')+esc(p.name)};
+function money(v){const c=D.bets.currency||{};const x=v/(c.display_unit||1000);return (c.prefix||'')+(Math.round(x*100)/100).toString()+(c.suffix||'K')}
+function vBets(){
+  const B=D.bets,T=B.tallies[sbScope][sbPaid?'unpaid':'all'],ids=T.ids;
+  const seg=(cur,set,opts)=>opts.map(o=>`<button class="${cur===o[0]?'on':''}" onclick="${set}='${o[0]}';render()">${o[1]}</button>`).join('');
+  let h=`<div class="card"><b>🎲 Side bets</b><div class="note">Who owes who, across every wager. Amounts in ${esc(B.currency.code||'')} thousands (${esc(B.currency.suffix||'K')}). Rows owe columns. Non-cash stakes are listed separately.</div>
+   <div class="tabs" style="margin-top:8px">${seg(sbScope,'sbScope',[['all','All'],['ledger','New ledger'],['imported','2025-26 import']])}<button class="${sbPaid?'on':''}" onclick="sbPaid=!sbPaid;render()">Hide paid</button></div></div>`;
+  h+=`<div class="card sc"><table><tr><th>Person</th><th class="n">Lost</th><th class="n">Won</th><th class="n">Net +/-</th><th class="n">Bets</th><th class="n">Fines</th></tr>${ids.slice().sort((a,b)=>T.net[b]-T.net[a]).map(i=>`<tr><td>${pname(i)}</td><td class="n">${money(T.lost[i])}</td><td class="n">${money(T.won[i])}</td><td class="n"><b class="${T.net[i]>0?'good':T.net[i]<0?'bad':''}">${T.net[i]>0?'+':''}${money(T.net[i])}</b></td><td class="n">${T.bets[i]}</td><td class="n">${B.fines[i]?money(B.fines[i]):'<span class=mut>0</span>'}</td></tr>`).join('')}</table></div>`;
+  h+=`<h2>Who owes who</h2><div class="card sc"><table class="mx"><tr><th>owes ↓ / to →</th>${ids.map(i=>`<th>${esc(P(i).name)}</th>`).join('')}</tr>${ids.map(r=>`<tr><td><b>${esc(P(r).name)}</b></td>${ids.map(c=>{const v=T.matrix[r][c];return r===c?'<td class="z">·</td>':v?`<td>${money(v)}</td>`:'<td class="z">0</td>'}).join('')}</tr>`).join('')}</table></div>`;
+  if(T.items.length)h+=`<h2>Non-cash IOUs</h2><div class="card">${T.items.map(x=>`<div>${pname(x.from)} owes ${pname(x.to)}: <b>${esc(x.item)}</b> <span class="mut">bet #${esc(x.bet)}${x.paid?' · paid':''}</span></div>`).join('')}</div>`;
+  h+=sbBuilder();
+  /* list */
+  let L=B.bets.filter(b=>sbScope==='all'||b.src===sbScope);
+  if(sbPerson!=='all')L=L.filter(b=>b.participants.includes(sbPerson)||b.entries.some(e=>e.from===sbPerson||e.to===sbPerson));
+  if(sbStatus!=='all')L=L.filter(b=>b.status===sbStatus);
+  if(sbQ)L=L.filter(b=>(b.text+' '+b.outcome).toLowerCase().includes(sbQ.toLowerCase()));
+  const cov=B.coverage;
+  h+=`<h2>Wagers (${L.length})</h2><div class="card"><div class="row2"><select onchange="sbPerson=this.value;render()"><option value="all">Everyone</option>${B.people.map(p=>`<option value="${p.id}"${p.id===sbPerson?' selected':''}>${esc(p.name)}</option>`).join('')}</select>
+   <select onchange="sbStatus=this.value;render()">${['all','open','settled','wash','unparsed'].map(s=>`<option value="${s}"${s===sbStatus?' selected':''}>${s==='all'?'Any status':s}</option>`).join('')}</select>
+   <input class="sb-in" placeholder="search terms…" value="${esc(sbQ)}" onchange="sbQ=this.value;render()"></div></div>`;
+  h+=L.slice().reverse().slice(0,150).map(b=>`<div class="card"><div><b>#${esc(b.n)}</b> <span class="st ${b.status}">${b.status==='unparsed'?'⚠ not in tally':b.status}</span> <span class="mut" style="font-size:12px">${b.src==='imported'?'2025-26 sheet import':esc(b.season||'ledger')}</span></div>
+    <div style="margin:4px 0">${esc(b.text)}</div>${b.outcome?`<div class="note">Outcome: ${esc(b.outcome)}</div>`:''}
+    ${b.entries.length?`<div style="margin-top:4px">${b.entries.map(e=>`<span class="pill">${esc(P(e.from).name)} → ${esc(P(e.to).name)} <b>${e.amount!=null?money(e.amount):esc(e.item)}</b>${e.paid?' ✓paid':''}</span>`).join('')}</div>`:''}
+    ${b.notes&&b.notes.length&&b.status!=='open'?`<div class="note ${b.status==='unparsed'?'bad':''}">${b.status==='unparsed'?'Needs a human: ':'Assumed: '}${b.notes.map(esc).join('; ')}</div>`:''}</div>`).join('');
+  if(L.length>150)h+=`<p class="note">Showing the latest 150 of ${L.length}. Use the filters.</p>`;
+  if(cov)h+=`<div class="card"><b>2025-26 sheet import coverage</b> <span class="note">(${esc((B.imported_at||'').slice(0,10))})</span><div class="note">${cov.total} bets read from the "NEW BETS" block. <b>${cov.settled}</b> turned into ledger entries (${cov.settled_with_assumptions} of those rest on a stated assumption), ${cov.wash} washes, ${cov.open} still open (no outcome written), <b class="bad">${cov.unparsed}</b> could not be read safely and are <b>excluded from the totals</b> (filter Status → unparsed to see them and fix by hand). Payment-detail columns of the sheet are never read.</div></div>`;
+  return h}
+/* new bet builder */
+function chk(name,sel){return D.bets.people.map(p=>`<label class="k"><input type="checkbox" name="${name}" value="${p.id}"${sel&&sel.includes(p.id)?' checked':''}> ${esc(p.name)}</label>`).join('')}
+function picked(name){return [...document.querySelectorAll('input[name="'+name+'"]:checked')].map(x=>x.value)}
+function sbBuilder(){
+  const f=sbForm||(sbForm={type:'versus'});
+  let h=`<h2>➕ New bet</h2><div class="card"><div class="tabs" style="margin:0 0 8px"><button class="${f.type==='versus'?'on':''}" onclick="sbSnap();sbForm.type='versus';render()">One side vs another</button><button class="${f.type==='pool'?'on':''}" onclick="sbSnap();sbForm.type='pool';render()">Pool / buy-in</button></div>
+   <div class="note">Fill in the terms, hit "Build". Leave the result blank for an open bet; settle it later below.</div>
+   <textarea id="sb_text" class="sb-ta" placeholder="Terms, in words (e.g. Kurt bets Ken 100K that Duke covers -4.5)">${esc(f.text||'')}</textarea>`;
+  if(f.type==='versus')h+=`<div class="row2" style="margin-top:6px"><div><b>Side A</b><br>${chk('sa',f.a)}</div><div><b>Side B</b> <span class="note">(each A–B pair is a separate wager)</span><br>${chk('sb',f.b)}</div></div>
+   <div class="row2" style="margin-top:6px"><input id="sb_stake" class="sb-in" placeholder="Stake: 100K, 1.5mil, 2juta, 250,000" value="${esc(f.stake||'')}"><input id="sb_item" class="sb-in" placeholder="…or non-cash stake: steak dinner" value="${esc(f.item||'')}"></div>
+   <div class="row2" style="margin-top:6px"><input id="sb_odds" class="sb-in" placeholder="Odds (optional): 2:1" value="${esc(f.odds||'')}"><select id="sb_long"><option value="a">Longshot = Side A</option><option value="b"${f.long==='b'?' selected':''}>Longshot = Side B</option></select>
+   <select id="sb_win"><option value="">Result: open</option><option value="a"${f.win==='a'?' selected':''}>A wins</option><option value="b"${f.win==='b'?' selected':''}>B wins</option><option value="wash"${f.win==='wash'?' selected':''}>Wash</option></select></div>
+   <div class="note">Odds 2:1 with the longshot side: if the longshot wins it is paid stake × 2; if it loses it pays the stake. Per-game series: build it open, then settle with games won (below).</div>`;
+  else h+=`<div style="margin-top:6px"><b>Participants</b><br>${chk('pp',f.pp)}</div><div class="row2" style="margin-top:6px"><input id="sb_buy" class="sb-in" placeholder="Buy-in each: 250K" value="${esc(f.buy||'')}"><input id="sb_pay" class="sb-in" placeholder='Payouts when done (total received), e.g. kurt:800K, mark:1.2mil' value="${esc(f.pay||'')}"></div><div class="note">Winner and runner-up money-back are just payouts (e.g. winner 1mil, 2nd 200K back). Payouts must add up to the pot. People ids: ${B_ids()}</div>`;
+  h+=`<div style="margin-top:8px"><button class="btn" onclick="sbBuild()">Build</button></div>`;
+  if(f.json)h+=`<pre class="js" id="sb_json">${esc(f.json)}</pre><div class="row2"><button class="btn sec" onclick="navigator.clipboard&&navigator.clipboard.writeText(sbForm.json);sbMsg='Copied. Paste it into the "bets" list in bets.json, then run python3 refresh.py.';render()">Copy JSON</button>${editOK?'<button class="btn" onclick="sbSave()">Save to ledger</button>':''}</div>`+(editOK?'':'<div class="note">Static viewing: copy the JSON into <code>bets.json</code> (or run <code>python3 serve.py</code> locally for one-click saving).</div>');
+  if(sbMsg)h+=`<div class="note" style="margin-top:6px">${esc(sbMsg)}</div>`;
+  h+=`</div>`+sbSettle();return h}
+const B_ids=()=>D.bets.people.map(p=>p.id).join(', ');
+function sbSnap(){const g=id=>{const e=document.getElementById(id);return e?e.value:undefined};sbForm=Object.assign(sbForm||{},{text:g('sb_text'),a:picked('sa'),b:picked('sb'),pp:picked('pp'),stake:g('sb_stake'),item:g('sb_item'),odds:g('sb_odds'),long:g('sb_long'),win:g('sb_win'),buy:g('sb_buy'),pay:g('sb_pay')})}
+function sbBuild(){sbSnap();const f=sbForm;let bet;
+  if(f.type==='versus'){bet={type:'versus',text:f.text,side_a:f.a,side_b:f.b};if(f.stake)bet.stake=f.stake;if(f.item)bet.stake_item=f.item;if(f.odds){bet.odds=f.odds;bet.longshot=f.long}bet.winner=f.win||null}
+  else{bet={type:'pool',text:f.text,participants:f.pp,buy_in:f.buy};if(f.pay){bet.payouts={};f.pay.split(',').forEach(x=>{const [k,v]=x.split(':');if(k&&v)bet.payouts[k.trim().toLowerCase()]=v.trim()})}}
+  f.json=JSON.stringify(bet,null,1);f.bet=bet;sbMsg='';render()}
+async function sbSave(){sbMsg='Saving…';render();try{const r=await fetch('api/bets/add',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({bet:sbForm.bet})});const j=await r.json();sbMsg=j.ok?'Saved as bet #'+j.n+'. Reloading numbers…':'Not saved: '+j.error;if(j.ok){sbForm={type:sbForm.type};load()}}catch(e){sbMsg='Save failed: '+e}render()}
+let stSel='',stWin='',stGa='',stGb='',stPay='';
+function sbSettle(){
+  const open=D.bets.bets.filter(b=>b.src==='ledger'&&b.status==='open');
+  if(!open.length)return '';
+  const cur=open.find(b=>b.n===stSel)||open[0];stSel=cur.n;const sp=cur.spec||{};
+  let h=`<h2>✅ Settle an open bet</h2><div class="card"><select onchange="stSel=this.value;render()" class="sb-in">${open.map(b=>`<option value="${esc(b.n)}"${b.n===stSel?' selected':''}>#${esc(b.n)} — ${esc(b.text.slice(0,70))}</option>`).join('')}</select>`;
+  if(sp.type==='pool')h+=`<input id="st_pay" class="sb-in" style="margin-top:6px" placeholder="Payouts: kurt:800K, mark:1.2mil" value="${esc(stPay)}">`;
+  else h+=`<div class="row2" style="margin-top:6px"><select id="st_win" class="sb-in"><option value="a">Side A wins (${esc((sp.side_a||[]).map(i=>P(i).name).join(', '))})</option><option value="b">Side B wins (${esc((sp.side_b||[]).map(i=>P(i).name).join(', '))})</option><option value="wash">Wash</option></select>
+   <input id="st_ga" class="sb-in" placeholder="or per-game: games won by A" value="${esc(stGa)}"><input id="st_gb" class="sb-in" placeholder="games won by B" value="${esc(stGb)}"></div>`;
+  h+=`<div style="margin-top:8px">${editOK?'<button class="btn" onclick="sbSettleGo()">Settle</button>':'<span class="note">Settling needs the local server (python3 serve.py), or edit bets.json: set "winner" to "a", "b" or "wash".</span>'}</div></div>`;
+  return h}
+async function sbSettleGo(){const g=id=>document.getElementById(id);const cur=D.bets.bets.find(b=>b.n===stSel);let patch={};
+  if((cur.spec||{}).type==='pool'){patch.payouts={};g('st_pay').value.split(',').forEach(x=>{const [k,v]=x.split(':');if(k&&v)patch.payouts[k.trim().toLowerCase()]=v.trim()})}
+  else if(g('st_ga').value||g('st_gb').value){patch.games={a:+g('st_ga').value||0,b:+g('st_gb').value||0}}
+  else patch.winner=g('st_win').value;
+  sbMsg='Saving…';render();try{const r=await fetch('api/bets/update',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({n:stSel,patch})});const j=await r.json();sbMsg=j.ok?'Settled #'+stSel:'Not saved: '+j.error;if(j.ok)load()}catch(e){sbMsg='Failed: '+e}render()}
+
+function vRosters(){
+  if(!ownerSel)ownerSel=D.owners[0].name;
+  const o=D.owners.find(x=>x.name===ownerSel);
+  let h=`<div class="tabs">${D.owners.map(x=>`<button class="${x.name===ownerSel?'on':''}" onclick="ownerSel='${esc(x.name)}';render()">${esc(x.emoji)} ${esc(x.name)}</button>`).join('')}</div>`;
+  const cats=Object.entries(o.by_cat).filter(([k,v])=>v!==0);
+  h+=`<div class="card"><b style="font-size:20px">${esc(o.emoji)} ${esc(o.name)} — ${o.total} pts</b> <span class="mut">(#${o.rank})</span><div class="note">${esc(o.team_name)}</div>
+    <div style="margin-top:6px">${cats.length?cats.map(([k,v])=>`<span class="pill">${esc(D.cat_labels[k]||k)}: <b class="${v<0?'bad':''}">${sign(v)}</b></span>`).join(''):'<span class="mut">No points yet. Everyone starts somewhere (0).</span>'}</div></div>`;
+  h+=`<div class="card sc"><table><tr><th>Team</th><th class="n">Rec</th><th class="n">Wins ctd</th><th class="n">Bonus</th><th class="n">Pts</th></tr>`;
+  o.teams.forEach((t,ix)=>{const key=o.name+'|'+t.tid+'|'+ix;const bonus=t.total-(t.by.win||0);
+    h+=`<tr class="trow" onclick="openTeam['${key}']=!openTeam['${key}'];render()"><td>${chip(t.tid,{big:1,out:t.status==='dropped'})} ${t.status==='dropped'?'<span class="pill">dropped</span>':t.status==='added'?'<span class="pill">added '+esc(t.window.start)+'</span>':''}</td><td class="n">${rec(t.tid)}</td><td class="n">${t.wins_counted}</td><td class="n">${sign(bonus)}</td><td class="n"><b>${t.total}</b></td></tr>`;
+    if(openTeam[key]){
+      h+=`<tr><td colspan="5"><div class="det">`;
+      h+=`<div class="note">Counting window: ${esc(t.window.start||'season start')} → ${esc(t.window.end?'before '+t.window.end:'present')}</div>`;
+      const by=Object.entries(t.by).map(([k,v])=>`<span class="pill">${esc(D.cat_labels[k]||k)}: <b>${sign(v)}</b></span>`).join('');
+      h+=by||'<span class="mut">No points yet.</span>';
+      const bonusItems=t.items.filter(i=>i.cat!=='win');
+      if(bonusItems.length)h+=`<ul class="it">${bonusItems.map(i=>`<li><b class="${i.pts<0?'bad':'good'}">${sign(i.pts)}</b> ${esc(i.note)} <span class="mut">${esc(i.day)}${i.auto===false?' ✍️ manual':''}${i.fallback?' ⚠️ seed fallback':''}</span></li>`).join('')}</ul>`;
+      const gs=(D.team_games[t.tid]||[]).filter(g=>g.status==='final').slice(-8).reverse();
+      const nx=(D.team_games[t.tid]||[]).filter(g=>g.status!=='final'&&g.status!=='postponed'&&g.status!=='canceled').slice(0,3);
+      if(gs.length)h+=`<div class="note" style="margin-top:6px">Last games</div>`+gs.map(g=>`<div style="margin:3px 0">${g.res==='W'?'<b class="good">W</b>':'<b class="bad">L</b>'} ${g.us}-${g.them} ${g.site==='A'?'@':g.site==='N'?'vs (N)':'vs'} ${esc(g.opp)} <span class="mut">${esc(g.day)}${g.round?' · '+esc(g.round):''}</span>${gameLine(g)}</div>`).join('');
+      if(nx.length)h+=`<div class="note" style="margin-top:6px">Up next</div>`+nx.map(g=>`<div style="margin:3px 0">${g.site==='A'?'@':'vs'} ${esc(g.opp)} <span class="mut">${esc(g.start?wibLabel(wibKey(g))+' '+wibTime(g):g.day)}</span>${gameLine(g)}</div>`).join('');
+      h+=`</div></td></tr>`}
+  });
+  h+=`</table></div>`;return h}
+function vTeams(){
+  const rows=[];D.owners.forEach(o=>o.teams.forEach(t=>rows.push({o:o.name,t})));
+  rows.sort((a,b)=>b.t.total-a.t.total||a.t.tid.localeCompare(b.t.tid));
+  return `<div class="card sc"><table><tr><th>Team</th><th>Owner</th><th class="n">Rec</th><th class="n">Pts</th></tr>${rows.map(r=>`<tr><td>${chip(r.t.tid,{out:r.t.status==='dropped'})}</td><td>${esc(r.o)}</td><td class="n">${rec(r.t.tid)}</td><td class="n"><b>${r.t.total}</b></td></tr>`).join('')}</table></div><p class="note">Record = full season record (regular season + conference tournaments + postseason as ESPN counts it). Points only count inside each owner's ownership window.</p>`}
+function mark(f){if(!f)return '';if(f.v===true)return f.src==='manual'?'✍️':'✅';if(f.v===false)return '<span class="mut">·</span>';return '<span class="mut" title="not decided yet">⏳</span>'}
+function vChecklist(){
+  let h=`<div class="card sc"><table><tr><th>Team</th><th>Owner</th><th title="Conference regular-season champ">Conf reg</th><th title="Conference tournament champ">Conf tourn</th><th>NCAA in</th><th>Play-in W</th><th class="n">NCAA W</th><th class="n">Upsets</th><th>F4</th><th>Champ</th><th>Missed</th></tr>`;
+  D.owners.forEach(o=>o.teams.filter(t=>t.status!=='dropped').forEach(t=>{const c=D.checklist[t.tid]||{};
+    h+=`<tr><td>${chip(t.tid)}</td><td>${esc(o.name)}</td><td>${mark(c.conf_reg)}</td><td>${mark(c.conf_tourn)}</td><td>${mark(c.ncaa_entry)}</td><td>${c.playin_win&&c.playin_win.v?'✅':'<span class=mut>·</span>'}</td><td class="n">${c.ncaa_wins||0}</td><td class="n">${c.upsets||0}${c.upset_fallback?' ⚠️':''}</td><td>${mark(c.final4)}</td><td>${mark(c.champ)}</td><td>${mark(c.missed_dance)}</td></tr>`}));
+  h+=`</table></div><p class="note">✅ auto-detected from ESPN · ✍️ set by hand in overrides.json · ⏳ not decided yet · · no · ⚠️ upset judged by seed because no betting line was available.</p>`;
+  const started=D.conf_audit.filter(c=>c.tournament_started);
+  h+=`<h2>Conference regular-season champs (${started.length}/${D.conf_audit.length} conferences decided)</h2><div class="card sc"><table><tr><th>Conference</th><th>Champ (top seed)</th><th>Status</th></tr>${D.conf_audit.map(c=>`<tr><td>${esc(c.conf)}</td><td>${esc(c.leader||'—')}</td><td class="mut">${esc(c.status)}</td></tr>`).join('')}</table></div>`;
+  return h}
+function vUpsets(){
+  const A=D.upset_audit.slice().reverse();
+  const sc=D.meta.rules.upset_games.map(x=>({ncaa:'NCAA tournament',conf:'conference tournaments',reg:'regular season'}[x]||x)).join(' + ');
+  let h=`<div class="card"><b>The upset rule</b><div class="note">Upset = your team <b>won as the betting underdog</b> (closing line from ESPN/DraftKings, saved with each game below). Applies to: <b>${esc(sc)}</b>. Equal seeds never count. No line? We fall back to seed (worse seed beats better seed) and flag it ⚠️.</div></div>`;
+  if(!A.length)return h+`<div class="card">No eligible games yet — upsets are scored from the NCAA tournament in March. Place your bets responsibly (we mean the figurative kind).</div>`;
+  h+=`<div class="card sc"><table><tr><th>Date</th><th>Game</th><th>Line (pre-game)</th><th>Upset?</th></tr>${A.map(a=>{const l=a.line;const ls=l?`${esc(l.provider)}: ${esc(l.details||'')} · ML ${l.home_ml}/${l.away_ml} <span class="mut">(home/away; dog ${esc(a.winnerId==l.underdog_id?a.winner:a.loser)})</span>`:'<span class="mut">no line</span>';
+    return `<tr><td>${esc(a.day)}<div class="note">${esc(a.round)}</div></td><td>${a.winnerSeed?'('+a.winnerSeed+') ':''}<b>${esc(a.winner)}</b> ${a.winnerScore}-${a.loserScore} ${a.loserSeed?'('+a.loserSeed+') ':''}${esc(a.loser)}</td><td>${ls}</td><td>${a.upset?'<b class="good">YES +'+D.meta.points.upset+'</b>':a.upset===false?'no':'?'} ${a.fallback?'⚠️':''}<div class="note">${esc(a.basis)}</div></td></tr>`}).join('')}</table></div>`;
+  return h}
+function vRedraft(){
+  const r=D.meta.redraft;const any=Object.values(r.moves).some(m=>(m.drop||[]).length||(m.add||[]).length);
+  let h=`<div class="card"><b>Redraft date: ${esc(r.date)}</b><div class="note">Each owner drops 2, adds 2. Wins before ${esc(r.date)} don't count for added teams. Wins on ${esc(r.date)} don't count for dropped teams. Dropped teams keep the points they earned before the date for their old owner.</div></div>`;
+  if(!any)h+=`<div class="card">No moves entered yet. After the redraft, put each owner's 2 drops and 2 adds in <code>config.json → redraft → moves</code> and refresh — the ownership windows below update automatically.</div>`;
+  h+=D.owners.map(o=>{const m=r.moves[o.name]||{};return `<div class="card"><b>${esc(o.emoji)} ${esc(o.name)}</b>
+    <div class="note">Drops: ${(m.drop||[]).map(esc).join(', ')||'—'} &nbsp;|&nbsp; Adds: ${(m.add||[]).map(esc).join(', ')||'—'}</div>
+    <div class="chips">${o.teams.map(t=>chip(t.tid,{out:t.status==='dropped'})+`<span class="note" style="align-self:center">${t.window.start?'from '+esc(t.window.start):''}${t.window.end?'until '+esc(t.window.end):''}</span>`).join('')}</div></div>`}).join('');
+  return h}
+function vAbout(){
+  const P=D.meta.points,m=D.meta;
+  const rows=[['Win (reg season + conf tourney, any opponent)',P.win],['Conference regular-season champ',P.conf_reg],['Conference tournament champ',P.conf_tourn],['Make the NCAA field',P.ncaa_entry],['Play-in (First Four) win',P.playin_win],['Upset (win as betting underdog)',P.upset],['NCAA tournament win',P.ncaa_win],['Final Four',P.final4],['National champ',P.champ],['Miss the Big Dance',P.missed_dance]];
+  return `<div class="card sc"><table><tr><th>Scoring</th><th class="n">Pts</th></tr>${rows.map(r=>`<tr><td>${r[0]}</td><td class="n">${sign(r[1])}</td></tr>`).join('')}</table></div>
+  <div class="card"><b>Where the numbers come from</b><ul class="it">
+   <li><b>Scores, records, seeds, tournament rounds:</b> ESPN public scoreboard (primary). Fallback: ncaa.com data via the free ncaa-api.henrygd.me relay, used automatically for any day ESPN fails (scores/seeds only).</li>
+   <li><b>Betting lines (Games tab + upsets):</b> ESPN odds API (DraftKings preferred; live in-game odds are ignored). Upcoming games show the latest posted line (re-checked every refresh, books usually post a few days ahead, otherwise 'line not posted yet'); final games keep the stored closing line.</li>
+   <li><b>Conference regular-season champs:</b> ESPN standings (top conference seed, which includes tiebreaks) once the conference tournament starts.</li>
+   <li><b>Rosters:</b> your Google Sheet, re-read on every refresh.</li></ul>
+   <b>Automatic</b>: wins, losses, conf tournament champs, conf regular-season champs, NCAA entry, play-in wins, NCAA wins, Final Four, champ, missed dance, upsets.<br>
+   <b>Manual</b>: the Jan 20 redraft moves (config.json), and any corrections or rulings (overrides.json: force/deny a bonus, force/deny an upset, add a commissioner adjustment).</div>
+  <div class="card"><b>House interpretations (change in config.json)</b><ul class="it">
+   <li>Upset bonus applies to <b>${esc(m.rules.upset_games.join(', '))}</b> games only (the sheet says "beats a higher seed in the NCAA tournament"). Equal seeds = no upset. First Four upsets: ${m.rules.upset_first_four?'on':'off'}.</li>
+   <li>A First Four win = +1 play-in and +5 for making the field, but not the +2 NCAA win. A First Four loser: ${m.rules.first_four_loser_penalty?'gets -1':'no -1 penalty (just no +5)'}.</li>
+   <li>Games vs non-Division I opponents that ESPN lists count as wins (rule says "any opponent"): ${m.rules.count_non_d1_wins?'yes':'no'}.</li>
+   <li>NIT/CBI/Crown and other postseason wins don't count. Postponed/canceled games give nothing.</li></ul></div>
+  <div class="card"><b>Data health</b><ul class="it"><li>Updated: ${esc(m.generated_at_wib)}</li><li>Mode: ${esc(m.mode)} · season ${esc(m.season)} · games loaded ${m.games_loaded} (${m.final_games} final)</li>
+   <li>Days fetched fresh ${m.fetch.days_fetched}, cached ${m.fetch.days_cached}, ncaa.com fallback ${m.fetch.days_ncaa_fallback}, failed ${m.fetch.days_failed_both}</li>
+   <li>Betting lines found ${m.odds.lines_found}/${m.odds.games_needing_line}</li><li>Rosters: ${esc(m.roster_source)}; sheet ${m.sheet_ok?'OK':'ERROR '+esc(m.sheet_error)}</li>
+   ${m.warnings.length?'<li class="bad">Warnings: '+m.warnings.map(esc).join('; ')+'</li>':''}</ul></div>`}
+const VIEWS={standings:vStandings,games:vGames,bets:vBets,rosters:vRosters,teams:vTeams,checklist:vChecklist,upsets:vUpsets,redraft:vRedraft,about:vAbout};
+function render(){
+  if(!D)return;const m=D.meta;
+  $('#tag').textContent={preseason:'0-0 and full of hope. The season hasn\u2019t started, so everyone is a genius.',live:'Where college basketball knowledge goes to be humbled.',final:'The season is over. Someone is insufferable now.',demo:'DEMO: last season\u2019s real results run through this year\u2019s rosters. Nobody\u2019s actual points.'}[m.mode]||'';
+  $('#badges').innerHTML=`<span class="badge">${esc(m.league)}</span><span class="badge">${esc(m.season)}</span><span class="badge">Updated ${esc(m.generated_at_wib)}</span>`+(m.mode==='demo'?'<span class="badge warn">DEMO DATA</span>':'')+(m.mode==='preseason'?'<span class="badge">PRESEASON</span>':'')+(m.warnings.length?'<span class="badge warn">⚠ '+m.warnings.length+' warning(s) — see Rules &amp; sources</span>':'');
+  $('#nav').innerHTML=TABS.map(t=>`<button class="${t[0]===tab?'on':''}" onclick="tab='${t[0]}';render()">${t[1]}</button>`).join('');
+  $('#main').innerHTML=(VIEWS[tab]||vStandings)();
+  $('#foot').innerHTML=`STOOPIDS · times in WIB (Asia/Jakarta) · scores ESPN (fallback ncaa.com) · ${DEMO?'<a href="?">back to the live season</a>':'<a href="?demo=1">see the demo (last season replay)</a>'}`;
+}
+function load(){
+  const s=document.createElement('script');s.src=(DEMO?'demo/':'')+'data.js?v='+Date.now();
+  s.onload=()=>{D=window.STOOPIDS_DATA;render()};
+  s.onerror=()=>{if(!D)$('#main').innerHTML='<div class="card">Couldn\u2019t load data.js. Run <code>python3 refresh.py</code> first.</div>'};
+  document.head.appendChild(s);
+}
+load();setInterval(load,5*60*1000);
+</script>
+</body>
+</html>

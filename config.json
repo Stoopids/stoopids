@@ -1,0 +1,64 @@
+{
+  "_readme": "Edit me. Dates are YYYY-MM-DD (US Eastern game day, as ESPN buckets them). After editing, run: python3 refresh.py",
+  "league_name": "NCAA Stoopids Pool",
+  "app_name": "STOOPIDS",
+  "season_label": "2026-27",
+  "espn_season_year": 2027,
+  "season_start": "2026-10-30",
+  "season_end": "2027-04-12",
+  "sheet_csv_url": "https://docs.google.com/spreadsheets/d/1LQKN3YAJdT3FoKDm7D21_0r7rmGVRhMyxdsBl__wC90/export?format=csv&gid=207957535",
+
+  "owners": [
+    {"name": "Murnane",  "team_name": "Dirty Draymond's Poole Party", "emoji": "🍆🥊", "sheet_header_match": "DRAYMOND"},
+    {"name": "Stockman", "team_name": "Stock Rising",                "emoji": "📈", "sheet_header_match": "STOCK RISING"},
+    {"name": "Kurt",     "team_name": "Kurmoji",                     "emoji": "🦠", "sheet_header_match": "KURMOJI"},
+    {"name": "Kentut",   "team_name": "Kentut",                      "emoji": "💨", "sheet_header_match": "KENTUT"},
+    {"name": "Murf",     "team_name": "Murfcockchalkrock",           "emoji": "🪨", "sheet_header_match": "MURFCOCK"},
+    {"name": "Poo",      "team_name": "POO PARTY",                   "emoji": "💩", "sheet_header_match": "POO PARTY"},
+    {"name": "Nasty",    "team_name": "Peacock",                     "emoji": "🦚", "sheet_header_match": "PEACOCK"},
+    {"name": "En Fuego", "team_name": "En Fuego",                    "emoji": "🔥", "sheet_header_match": "EN FUEGO"}
+  ],
+
+  "points": {
+    "win": 1, "conf_reg": 4, "conf_tourn": 4, "ncaa_entry": 5, "playin_win": 1,
+    "upset": 4, "ncaa_win": 2, "final4": 3, "champ": 4, "missed_dance": -1
+  },
+
+  "rules": {
+    "upset_games": ["ncaa"],
+    "upset_games_help": "Which games can earn the +4 upset bonus. Default ['ncaa'] (the sheet says 'beats a higher seed in the NCAA tournament'). Add 'conf' (conference tournaments) and/or 'reg' (regular season) to widen it.",
+    "upset_basis": "vegas",
+    "upset_basis_help": "'vegas' = winner was the betting underdog (ESPN/DraftKings closing line, stored per game). If a line is missing, falls back to NCAA seed (winner has a worse seed number) and is flagged. 'seed' = always use seeds.",
+    "upset_first_four": false,
+    "equal_seed_no_upset": true,
+    "first_four_loser_penalty": false,
+    "dropped_keep_points": true,
+    "count_non_d1_wins": true,
+    "field_locked_min_teams": 64
+  },
+
+  "redraft": {
+    "date": "2027-01-20",
+    "_help": "On this date each owner drops 2 and adds 2. Dropped teams stop earning for the old owner on this date (wins ON the date don't count). Added teams start earning on this date (wins before it don't count). Fill in 'drop' and 'add' with team names as they appear in the sheet / ESPN.",
+    "moves": {
+      "Murnane": {"drop": [], "add": []},
+      "Stockman": {"drop": [], "add": []},
+      "Kurt": {"drop": [], "add": []},
+      "Kentut": {"drop": [], "add": []},
+      "Murf": {"drop": [], "add": []},
+      "Poo": {"drop": [], "add": []},
+      "Nasty": {"drop": [], "add": []},
+      "En Fuego": {"drop": [], "add": []}
+    }
+  },
+
+  "team_aliases": {
+    "_help": "Sheet name (any case) -> ESPN team id. Only needed when the automatic name match fails.",
+    "UCONN": "41", "ST. JOHN'S": "2599", "ST. MARY'S": "2608", "MIAMI": "2390", "MIAMI FL": "2390",
+    "UNC": "153", "TENN ST.": "2634", "MCNEESE ST.": "2377", "GRAMBLING ST.": "2755",
+    "BOISE ST.": "68", "UTAH ST": "328", "NC STATE": "152", "UNC WILMINGTON": "350"
+  },
+
+  "games_view": {"recent_days": 14, "upcoming_days": 10},
+  "refresh": {"live_interval_minutes": 10, "lookahead_days": 10, "upcoming_line_ttl_minutes": 15, "odds_provider_preference": ["DraftKings", "ESPN BET"]}
+}

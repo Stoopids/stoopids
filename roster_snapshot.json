@@ -1,0 +1,274 @@
+{
+ "Murnane": [
+  {
+   "tid": "57",
+   "sheet_name": "FLORIDA"
+  },
+  {
+   "tid": "2641",
+   "sheet_name": "Texas Tech"
+  },
+  {
+   "tid": "333",
+   "sheet_name": "Alabama"
+  },
+  {
+   "tid": "328",
+   "sheet_name": "UTAH ST"
+  },
+  {
+   "tid": "300",
+   "sheet_name": "UC Irvine"
+  },
+  {
+   "tid": "2006",
+   "sheet_name": "Akron"
+  },
+  {
+   "tid": "2132",
+   "sheet_name": "CINCINNATI"
+  },
+  {
+   "tid": "202",
+   "sheet_name": "Tulsa"
+  }
+ ],
+ "Stockman": [
+  {
+   "tid": "150",
+   "sheet_name": "DUKE"
+  },
+  {
+   "tid": "2599",
+   "sheet_name": "ST. JOHN'S"
+  },
+  {
+   "tid": "251",
+   "sheet_name": "TEXAS"
+  },
+  {
+   "tid": "2608",
+   "sheet_name": "ST. MARY'S"
+  },
+  {
+   "tid": "26",
+   "sheet_name": "UCLA"
+  },
+  {
+   "tid": "2",
+   "sheet_name": "AUBURN"
+  },
+  {
+   "tid": "2634",
+   "sheet_name": "TENN ST."
+  },
+  {
+   "tid": "275",
+   "sheet_name": "WISCONSIN"
+  }
+ ],
+ "Kurt": [
+  {
+   "tid": "258",
+   "sheet_name": "VIRGINIA"
+  },
+  {
+   "tid": "97",
+   "sheet_name": "LOUISVILLE"
+  },
+  {
+   "tid": "2633",
+   "sheet_name": "TENNESSEE"
+  },
+  {
+   "tid": "252",
+   "sheet_name": "BYU"
+  },
+  {
+   "tid": "30",
+   "sheet_name": "USC"
+  },
+  {
+   "tid": "142",
+   "sheet_name": "MISSOURI"
+  },
+  {
+   "tid": "2440",
+   "sheet_name": "NEVADA"
+  },
+  {
+   "tid": "2294",
+   "sheet_name": "IOWA"
+  }
+ ],
+ "Kentut": [
+  {
+   "tid": "356",
+   "sheet_name": "ILLINOIS"
+  },
+  {
+   "tid": "2272",
+   "sheet_name": "HIGH POINT"
+  },
+  {
+   "tid": "8",
+   "sheet_name": "ARKANSAS"
+  },
+  {
+   "tid": "350",
+   "sheet_name": "UNC WILMINGTON"
+  },
+  {
+   "tid": "2670",
+   "sheet_name": "VCU"
+  },
+  {
+   "tid": "152",
+   "sheet_name": "NC STATE"
+  },
+  {
+   "tid": "261",
+   "sheet_name": "VERMONT"
+  },
+  {
+   "tid": "61",
+   "sheet_name": "GEORGIA"
+  }
+ ],
+ "Murf": [
+  {
+   "tid": "248",
+   "sheet_name": "HOUSTON"
+  },
+  {
+   "tid": "130",
+   "sheet_name": "MICHIGAN"
+  },
+  {
+   "tid": "21",
+   "sheet_name": "SAN DIEGO STATE"
+  },
+  {
+   "tid": "2253",
+   "sheet_name": "GRAND CANYON"
+  },
+  {
+   "tid": "235",
+   "sheet_name": "MEMPHIS"
+  },
+  {
+   "tid": "2181",
+   "sheet_name": "Drake"
+  },
+  {
+   "tid": "2750",
+   "sheet_name": "Wright State"
+  },
+  {
+   "tid": "2755",
+   "sheet_name": "Grambling St."
+  }
+ ],
+ "Poo": [
+  {
+   "tid": "41",
+   "sheet_name": "UCONN"
+  },
+  {
+   "tid": "66",
+   "sheet_name": "IOWA STATE"
+  },
+  {
+   "tid": "158",
+   "sheet_name": "NEBRASKA"
+  },
+  {
+   "tid": "2377",
+   "sheet_name": "McNEESE ST."
+  },
+  {
+   "tid": "139",
+   "sheet_name": "SAINT LOUIS"
+  },
+  {
+   "tid": "2724",
+   "sheet_name": "Wichita State"
+  },
+  {
+   "tid": "222",
+   "sheet_name": "VILLANOVA"
+  },
+  {
+   "tid": "47",
+   "sheet_name": "Howard"
+  }
+ ],
+ "Nasty": [
+  {
+   "tid": "12",
+   "sheet_name": "ARIZONA"
+  },
+  {
+   "tid": "127",
+   "sheet_name": "MICHIGAN STATE"
+  },
+  {
+   "tid": "238",
+   "sheet_name": "VANDERBILT"
+  },
+  {
+   "tid": "96",
+   "sheet_name": "KENTUCKY"
+  },
+  {
+   "tid": "167",
+   "sheet_name": "NEW MEXICO"
+  },
+  {
+   "tid": "245",
+   "sheet_name": "TEXAS A&M"
+  },
+  {
+   "tid": "153",
+   "sheet_name": "UNC"
+  },
+  {
+   "tid": "84",
+   "sheet_name": "INDIANA"
+  }
+ ],
+ "En Fuego": [
+  {
+   "tid": "2305",
+   "sheet_name": "KANSAS"
+  },
+  {
+   "tid": "2250",
+   "sheet_name": "GONZAGA"
+  },
+  {
+   "tid": "2390",
+   "sheet_name": "miami"
+  },
+  {
+   "tid": "2509",
+   "sheet_name": "PURDUE"
+  },
+  {
+   "tid": "68",
+   "sheet_name": "BOISE ST."
+  },
+  {
+   "tid": "194",
+   "sheet_name": "Ohio State"
+  },
+  {
+   "tid": "163",
+   "sheet_name": "PRINCETON"
+  },
+  {
+   "tid": "2142",
+   "sheet_name": "COLGATE"
+  }
+ ]
+}

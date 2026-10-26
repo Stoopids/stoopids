@@ -1,0 +1,15 @@
+{
+  "league_name": "NCAA Stoopids Pool (DEMO: last season's real results, this year's rosters)",
+  "games_view": {"recent_days": 20, "upcoming_days": 10},
+  "season_label": "2025-26 replay",
+  "espn_season_year": 2026,
+  "season_start": "2025-11-03",
+  "season_end": "2026-04-09",
+  "redraft": {
+    "date": "2026-01-20",
+    "moves": {
+      "Poo": {"drop": ["Howard", "Wichita State"], "add": ["Duke", "Houston"]},
+      "Stockman": {"drop": ["Duke", "Tennessee State"], "add": ["Howard", "Wichita State"]}
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "_readme": "MANUAL OVERRIDES. Anything the app can't detect (or detects wrong) goes here. After editing, run: python3 refresh.py (or just wait for the next auto refresh).",
+  "flags": {
+    "_example": "\"Duke\": {\"conf_reg\": true, \"conf_tourn\": false}  (keys: conf_reg, conf_tourn, ncaa_entry, final4, champ, missed_dance). true = force award, false = force deny. Remove or leave out to use auto-detection.",
+    "_dated_example": "Add \"date\": \"2027-03-08\" in an entry via flag_dates if the date matters for redraft ownership."
+  },
+  "flag_dates": {},
+  "upset_events": {
+    "_example": "\"401856529\": false   (ESPN event id -> true forces an upset bonus for the winner, false denies it)"
+  },
+  "adjustments": [],
+  "adjustments_example": [{"owner": "Poo", "team": "UConn", "pts": 4, "date": "2027-03-20", "note": "commissioner ruling"}],
+  "field_locked": null
+}
