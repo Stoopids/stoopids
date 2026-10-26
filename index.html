@@ -87,6 +87,15 @@ label.k{display:inline-flex;align-items:center;gap:4px;margin:3px 8px 3px 0;font
 .mx td,.mx th{padding:5px 7px;font-size:13px;text-align:right;white-space:nowrap}.mx td:first-child,.mx th:first-child{text-align:left;position:sticky;left:0;background:var(--card)}
 .mx td.z{color:#4b566d}
 pre.js{background:#0b0e14;border:1px solid var(--line);border-radius:10px;padding:10px;overflow:auto;font-size:12px;white-space:pre-wrap;word-break:break-all}
+.agrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.agrid .card{margin:0}
+.agrid td.t{word-break:break-word}
+.arow-champ td{background:rgba(255,210,63,.08)}
+.crown{margin-left:4px}
+.asel{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:6px 0 4px}
+.asel select{font-size:16px;font-weight:700;min-width:190px}
+.fine{font-size:12px;color:var(--mut)}
+.pill.warn{background:#4b3a0b;border-color:#8a6d12;color:#ffe08a}
 footer{max-width:1000px;margin:0 auto;padding:0 14px 40px;color:var(--mut);font-size:12px}
 </style>
 </head>
@@ -99,13 +108,14 @@ footer{max-width:1000px;margin:0 auto;padding:0 14px 40px;color:var(--mut);font-
 <nav id="nav"></nav>
 <main id="main"><div class="card">Loading the stoopidity…</div></main>
 <footer id="foot"></footer>
+<script src="archive.js?v=1"></script>
 <script>
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const params=new URLSearchParams(location.search);
 const DEMO=params.has('demo');
 let D=null,tab=params.get('tab')||'standings',ownerSel=null,openTeam={};
-const TABS=[['standings','🏆 Standings'],['games','📅 Games'],['rosters','👥 Rosters'],['bets','🎲 Side bets'],['teams','🏀 All teams'],['checklist','✅ Bonus checklist'],['redraft','🔄 Jan 20 redraft'],['about','📖 Rules & sources']];
+const TABS=[['standings','🏆 Standings'],['games','📅 Games'],['rosters','👥 Rosters'],['bets','🎲 Side bets'],['teams','🏀 All teams'],['checklist','✅ Bonus checklist'],['redraft','🔄 Jan 20 redraft'],['archive','🗂️ Archive'],['about','📖 Rules & sources']];
 
 /* ---------- color helpers (auto contrast) ---------- */
 function hex2rgb(h){h=(h||'').replace('#','');if(h.length===3)h=h.split('').map(c=>c+c).join('');if(!/^[0-9a-f]{6}$/i.test(h))return null;return[0,2,4].map(i=>parseInt(h.substr(i,2),16))}
@@ -707,7 +717,53 @@ function vAbout(){
    <li>Days fetched fresh ${m.fetch.days_fetched}, cached ${m.fetch.days_cached}, ncaa.com fallback ${m.fetch.days_ncaa_fallback}, failed ${m.fetch.days_failed_both}</li>
    <li>Betting lines found ${m.odds.lines_found}/${m.odds.games_needing_line}</li><li>Rosters: ${esc(m.roster_source)}; sheet ${m.sheet_ok?'OK':'ERROR '+esc(m.sheet_error)}</li>
    ${m.warnings.length?'<li class="bad">Warnings: '+m.warnings.map(esc).join('; ')+'</li>':''}</ul></div>`}
-const VIEWS={standings:vStandings,games:vGames,bets:vBets,rosters:vRosters,teams:vTeams,checklist:vChecklist,redraft:vRedraft,about:vAbout};
+/* ---------- archive (static: archive.js built once by archive_build.py) ---------- */
+let archSel=null;
+function archOwnerName(o){
+  const cur=o.current_owner&&o.current_owner!==o.person?` <span class="mut">(${esc(o.current_owner)})</span>`:'';
+  return `<b>${esc(o.person)}</b>${cur}`}
+function archEmoji(o){const m=o.current_owner&&D&&D.owners?D.owners.find(x=>x.name===o.current_owner):null;return m&&m.emoji?esc(m.emoji)+' ':''}
+function archRank(o){return o.rank==null?'–':(o.tie?'T-':'')+o.rank}
+function archAllTime(A){
+  const rows=A.alltime;
+  const maxS=Math.max(...rows.map(p=>p.seasons));
+  const waiting=rows.filter(p=>p.titles===0&&p.seasons===maxS).map(p=>p.person);
+  const q=waiting.length?`${waiting.join(' and ')} ${waiting.length>1?'have':'has'} played ${maxS} seasons without a title. Next year is always next year.`:'Every title here is real. Nobody asked for the receipts.';
+  return `<div class="card"><b>🏛️ All-time</b> <span class="note">· ${A.seasons_played} seasons played, computed from the archived sheets</span>
+   <div class="quip">${esc(q)}</div>
+   <div class="sc"><table><tr><th>Owner</th><th class="n">Titles</th><th class="n">Seasons</th><th>Title years</th></tr>`+
+   rows.map(p=>{const cur=p.current_owner&&p.current_owner!==p.person?` <span class="mut">(${esc(p.current_owner)})</span>`:'';
+    const yrs=p.title_seasons.slice().sort().reverse().map(y=>esc(y)+(((A.seasons.find(s=>s.season===y)||{}).no_tournament)?' 🦠':'')).join(', ')||'<span class="mut">—</span>';
+    return `<tr><td><b>${esc(p.person)}</b>${cur}</td><td class="n">${p.titles?'🏆 '+p.titles:'0'}</td><td class="n">${p.seasons}</td><td>${yrs}</td></tr>`}).join('')+
+   `</table></div><div class="fine">🦠 = 2019-20, when the NCAA tournament was cancelled. A title is the top total in that season's sheet. Tied firsts would not be counted.</div></div>`}
+function archTeams(o){
+  return `<div class="sc"><table><tr><th>#</th><th>Team</th><th class="n">Wins</th><th class="n">Pts</th></tr>`+
+   o.teams.map(t=>`<tr><td>${t.pick}</td><td class="t">${t.name?esc(t.name):'<i class="mut">(no team name in sheet)</i>'}${t.redraft_add?' <span class="pill" title="Pick 9–10 carry the Jan 20 adjustment column">Jan 20 pick</span>':''}</td><td class="n mut">${t.wins==null?'':t.wins}</td><td class="n"><b>${t.pts==null?'—':t.pts}</b></td></tr>`).join('')+
+   `</table></div>`}
+function vArchive(){
+  const A=window.ARCHIVE;
+  if(!A)return '<div class="card">Couldn\u2019t load archive.js.</div>';
+  const seasons=A.seasons; // newest first
+  if(!archSel||!seasons.some(s=>s.season===archSel))archSel=(seasons.find(s=>s.pool)||seasons[0]).season;
+  const S=seasons.find(s=>s.season===archSel);
+  const opts=seasons.map(s=>`<option value="${esc(s.season)}"${s.season===archSel?' selected':''}>${esc(s.season)}${s.pool?'':': no pool'}</option>`).join('');
+  let h=archAllTime(A)+`<h2>🗂️ Season archive</h2>
+   <div class="asel"><label for="archsel" class="mut">Season</label><select id="archsel" onchange="archSel=this.value;render()">${opts}</select></div>
+   <div class="note">Results as the sheet shows them. No side bets here.</div>`;
+  if(!S.pool)return h+`<div class="card"><b>${esc(S.season)}: no pool</b><div class="note">${S.notes.map(esc).join(' ')}</div></div>`;
+  const champs=S.owners.filter(o=>o.champ);
+  h+=`<div class="card"><b>${esc(S.season)}</b> <span class="note">· ${S.owners.length} owners${S.no_tournament?' · 🦠 no NCAA tournament':''}</span>
+    <div style="margin-top:6px">${S.champion.length>1?'Tied for first':'Champion'}: ${champs.map(o=>'👑 '+archEmoji(o)+archOwnerName(o)).join(' & ')} <b>${S.top_total}</b> pts</div>`+
+    (S.notes.length?`<ul class="it note">${S.notes.map(n=>'<li>'+esc(n)+'</li>').join('')}</ul>`:'')+`</div>`;
+  h+=`<div class="card"><b>Final standings</b><div class="sc"><table><tr><th>Rank</th><th>Owner / team</th><th class="n">Points</th></tr>`+
+    S.owners.map(o=>`<tr class="${o.champ?'arow-champ':''}"><td><b>${archRank(o)}</b></td><td>${archEmoji(o)}${archOwnerName(o)}${o.champ?'<span class="crown" title="Champion">👑</span>':''}<div class="fine">${esc(o.team_name)}</div></td><td class="n"><b>${o.total}</b></td></tr>`).join('')+
+    `</table></div></div><h2>Rosters &amp; points</h2><div class="agrid">`+
+    S.owners.map(o=>`<div class="card"><div class="lb"><div class="rank">${o.champ?'👑':archRank(o)}</div><div class="who">${archEmoji(o)}${archOwnerName(o)}<small>${esc(o.team_name)}</small></div><div class="pts">${o.total}<small>points</small></div></div>`+
+      (o.team_sum!=null?`<div class="note"><span class="pill warn">sheet quirk</span> Sheet total is ${o.total}; the teams below add up to ${o.team_sum}. Showing the sheet's total.</div>`:'')+
+      (o.unranked?`<div class="note"><span class="pill warn">unranked</span> ${esc(o.unranked)}</div>`:'')+
+      archTeams(o)+`</div>`).join('')+`</div>`;
+  return h}
+const VIEWS={standings:vStandings,games:vGames,bets:vBets,rosters:vRosters,teams:vTeams,checklist:vChecklist,redraft:vRedraft,archive:vArchive,about:vAbout};
 function render(){
   if(!D)return;const m=D.meta;
   $('#tag').textContent={preseason:'0-0 and full of hope. The season hasn\u2019t started, so everyone is a genius.',live:'Where college basketball knowledge goes to be humbled.',final:'The season is over. Someone is insufferable now.',demo:'DEMO: last season\u2019s real results run through this year\u2019s rosters. Nobody\u2019s actual points.'}[m.mode]||'';
