@@ -680,7 +680,7 @@ function vUpsets(){
   return h}
 function vRedraft(){
   const r=D.meta.redraft;const any=Object.values(r.moves).some(m=>(m.drop||[]).length||(m.add||[]).length);
-  let h=`<div class="card"><b>Redraft date: ${esc(r.date)}</b><div class="note">Each owner drops 2, adds 2. Wins before ${esc(r.date)} don't count for added teams. Wins on ${esc(r.date)} don't count for dropped teams. Dropped teams keep the points they earned before the date for their old owner.</div></div>`;
+  let h=`<div class="card"><b>Redraft date: ${esc(r.date)}</b><div class="note">Each owner has the option to drop up to 2 teams and add up to 2. Wins before ${esc(r.date)} don't count for added teams. Wins on ${esc(r.date)} don't count for dropped teams. Dropped teams keep the points they earned before the date for their old owner.</div></div>`;
   if(!any)h+=`<div class="card">No moves entered yet. After the redraft, put each owner's 2 drops and 2 adds in <code>config.json → redraft → moves</code> and refresh — the ownership windows below update automatically.</div>`;
   h+=D.owners.map(o=>{const m=r.moves[o.name]||{};return `<div class="card"><b>${esc(o.emoji)} ${esc(o.name)}</b>
     <div class="note">Drops: ${(m.drop||[]).map(esc).join(', ')||'—'} &nbsp;|&nbsp; Adds: ${(m.add||[]).map(esc).join(', ')||'—'}</div>
