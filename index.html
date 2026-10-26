@@ -105,7 +105,7 @@ const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;',
 const params=new URLSearchParams(location.search);
 const DEMO=params.has('demo');
 let D=null,tab=params.get('tab')||'standings',ownerSel=null,openTeam={};
-const TABS=[['standings','🏆 Standings'],['games','📅 Games'],['rosters','👥 Rosters'],['bets','🎲 Side bets'],['teams','🏀 All teams'],['checklist','✅ Bonus checklist'],['upsets','😱 Upsets'],['redraft','🔄 Jan 20 redraft'],['about','📖 Rules & sources']];
+const TABS=[['standings','🏆 Standings'],['games','📅 Games'],['rosters','👥 Rosters'],['bets','🎲 Side bets'],['teams','🏀 All teams'],['checklist','✅ Bonus checklist'],['redraft','🔄 Jan 20 redraft'],['about','📖 Rules & sources']];
 
 /* ---------- color helpers (auto contrast) ---------- */
 function hex2rgb(h){h=(h||'').replace('#','');if(h.length===3)h=h.split('').map(c=>c+c).join('');if(!/^[0-9a-f]{6}$/i.test(h))return null;return[0,2,4].map(i=>parseInt(h.substr(i,2),16))}
@@ -673,7 +673,7 @@ function vChecklist(){
 function vUpsets(){
   const A=D.upset_audit.slice().reverse();
   const sc=D.meta.rules.upset_games.map(x=>({ncaa:'NCAA tournament',conf:'conference tournaments',reg:'regular season'}[x]||x)).join(' + ');
-  let h=`<div class="card"><b>The upset rule</b><div class="note">Upset = in the NCAA tournament, your team <b>beat a better seed</b> (a bigger seed number beats a smaller one, e.g. a 12 over a 5). Equal seeds never count. Vegas lines are shown for fun but don't decide tournament upsets. Applies to: <b>${esc(sc)}</b>.</div></div>`;
+  let h=`<div class="card"><b>😱 The upset rule</b><div class="note">Upset = in the NCAA tournament, your team <b>beat a better seed</b> (a bigger seed number beats a smaller one, e.g. a 12 over a 5). Equal seeds never count. Vegas lines are shown for fun but don't decide tournament upsets. Applies to: <b>${esc(sc)}</b>.</div></div>`;
   if(!A.length)return h+`<div class="card">No eligible games yet — upsets are scored from the NCAA tournament in March. Place your bets responsibly (we mean the figurative kind).</div>`;
   h+=`<div class="card sc"><table><tr><th>Date</th><th>Game</th><th>Line (pre-game)</th><th>Upset?</th></tr>${A.map(a=>{const l=a.line;const ls=l?`${esc(l.provider)}: ${esc(l.details||'')} · ML ${l.home_ml}/${l.away_ml} <span class="mut">(home/away; dog ${esc(a.winnerId==l.underdog_id?a.winner:a.loser)})</span>`:'<span class="mut">no line</span>';
     return `<tr><td>${esc(a.day)}<div class="note">${esc(a.round)}</div></td><td>${a.winnerSeed?'('+a.winnerSeed+') ':''}<b>${esc(a.winner)}</b> ${a.winnerScore}-${a.loserScore} ${a.loserSeed?'('+a.loserSeed+') ':''}${esc(a.loser)}</td><td>${ls}</td><td>${a.upset?'<b class="good">YES +'+D.meta.points.upset+'</b>':a.upset===false?'no':'?'} ${a.fallback?'⚠️':''}<div class="note">${esc(a.basis)}</div></td></tr>`}).join('')}</table></div>`;
@@ -688,8 +688,9 @@ function vRedraft(){
   return h}
 function vAbout(){
   const P=D.meta.points,m=D.meta;
-  const rows=[['Win (reg season + conf tourney, any opponent)',P.win],['Conference regular-season champ',P.conf_reg],['Conference tournament champ',P.conf_tourn],['Make the NCAA field',P.ncaa_entry],['Play-in (First Four) win',P.playin_win],['Upset (win as betting underdog)',P.upset],['NCAA tournament win',P.ncaa_win],['Final Four',P.final4],['National champ',P.champ],['Miss the Big Dance',P.missed_dance]];
+  const rows=[['Win (reg season + conf tourney, any opponent)',P.win],['Conference regular-season champ',P.conf_reg],['Conference tournament champ',P.conf_tourn],['Make the NCAA field',P.ncaa_entry],['Play-in (First Four) win',P.playin_win],['Upset (NCAA tournament: beat a better seed)',P.upset],['NCAA tournament win',P.ncaa_win],['Final Four',P.final4],['National champ',P.champ],['Miss the Big Dance',P.missed_dance]];
   return `<div class="card sc"><table><tr><th>Scoring</th><th class="n">Pts</th></tr>${rows.map(r=>`<tr><td>${r[0]}</td><td class="n">${sign(r[1])}</td></tr>`).join('')}</table></div>
+  ${vUpsets()}
   <div class="card"><b>Where the numbers come from</b><ul class="it">
    <li><b>Scores, records, seeds, tournament rounds:</b> ESPN public scoreboard (primary). Fallback: ncaa.com data via the free ncaa-api.henrygd.me relay, used automatically for any day ESPN fails (scores/seeds only).</li>
    <li><b>Betting lines (Games tab; tournament upsets use seeds, not lines):</b> ESPN odds API (DraftKings preferred; live in-game odds are ignored). Upcoming games show the latest posted line (re-checked every refresh, books usually post a few days ahead, otherwise 'line not posted yet'); final games keep the stored closing line.</li>
@@ -706,7 +707,7 @@ function vAbout(){
    <li>Days fetched fresh ${m.fetch.days_fetched}, cached ${m.fetch.days_cached}, ncaa.com fallback ${m.fetch.days_ncaa_fallback}, failed ${m.fetch.days_failed_both}</li>
    <li>Betting lines found ${m.odds.lines_found}/${m.odds.games_needing_line}</li><li>Rosters: ${esc(m.roster_source)}; sheet ${m.sheet_ok?'OK':'ERROR '+esc(m.sheet_error)}</li>
    ${m.warnings.length?'<li class="bad">Warnings: '+m.warnings.map(esc).join('; ')+'</li>':''}</ul></div>`}
-const VIEWS={standings:vStandings,games:vGames,bets:vBets,rosters:vRosters,teams:vTeams,checklist:vChecklist,upsets:vUpsets,redraft:vRedraft,about:vAbout};
+const VIEWS={standings:vStandings,games:vGames,bets:vBets,rosters:vRosters,teams:vTeams,checklist:vChecklist,redraft:vRedraft,about:vAbout};
 function render(){
   if(!D)return;const m=D.meta;
   $('#tag').textContent={preseason:'0-0 and full of hope. The season hasn\u2019t started, so everyone is a genius.',live:'Where college basketball knowledge goes to be humbled.',final:'The season is over. Someone is insufferable now.',demo:'DEMO: last season\u2019s real results run through this year\u2019s rosters. Nobody\u2019s actual points.'}[m.mode]||'';
