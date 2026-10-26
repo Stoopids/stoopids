@@ -153,12 +153,12 @@ function vStandings(){
 function goOwner(n){ownerSel=n;tab='rosters';render();window.scrollTo(0,0)}
 
 /* ---------- games tab ---------- */
-const WIBD=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Jakarta',weekday:'short',day:'2-digit',month:'short'});
-const WIBT=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Jakarta',hour:'2-digit',minute:'2-digit',hour12:false});
-const WIBK=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jakarta'});
+const WIBD=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',day:'2-digit',month:'short'});
+const WIBT=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',hour:'numeric',minute:'2-digit',hour12:true});
+const WIBK=new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York'});
 function wibKey(g){if(g.start){const d=new Date(g.start);if(!isNaN(d))return WIBK.format(d)}return g.day}
 function wibLabel(k){const d=new Date(k+'T12:00:00Z');return WIBD.format(d)}
-function wibTime(g){if(g.start){const d=new Date(g.start);if(!isNaN(d))return WIBT.format(d)+' WIB'}return 'time TBD'}
+function wibTime(g){if(g.start){const d=new Date(g.start);if(!isNaN(d))return WIBT.format(d)+' ET'}return 'time TBD'}
 const fml=n=>n==null?'–':(n>0?'+'+n:String(n));
 const ownerEmoji=n=>{const o=D.owners.find(x=>x.name===n);return o?o.emoji:''};
 const opills=a=>a&&a.length?a.map(n=>`<span class="opill">${esc(ownerEmoji(n))} ${esc(n)}</span>`).join(''):'<span class="opill none">no owner</span>';
@@ -199,7 +199,7 @@ function vGames(){
    <div class="tabs" style="margin:0"><select onchange="gOwner=this.value;render()"><option value="all">All owners</option>${D.owners.map(o=>`<option value="${esc(o.name)}"${o.name===gOwner?' selected':''}>${esc(o.emoji)} ${esc(o.name)}</option>`).join('')}</select>
    <select onchange="gDay=this.value;render()"><option value="all">All days</option>${days.map(k=>`<option value="${k}"${k===gDay?' selected':''}>${esc(wibLabel(k))}</option>`).join('')}</select>
    <button class="${gH2H?'on':''}" onclick="gH2H=!gH2H;render()">🥊 Pool vs pool only</button></div>
-   <div class="note" style="margin-top:6px">Times in WIB. ⭐ = betting favorite, 🐶 = underdog. Lines: ${D.meta.games_view.n_with_line}/${D.meta.games_view.n_games} games have one on file (${esc((D.meta.sources||{}).odds||'')}).</div></div>`;
+   <div class="note" style="margin-top:6px">Times in Eastern (ET). ⭐ = betting favorite, 🐶 = underdog. Lines: ${D.meta.games_view.n_with_line}/${D.meta.games_view.n_games} games have one on file (${esc((D.meta.sources||{}).odds||'')}).</div></div>`;
   if(!list.length)return h+`<div class="card">${all.length?'Nothing matches those filters.':'No games for rostered teams yet. Check back when the schedule fills in.'}</div>`;
   if(gMode==='upcoming'&&D.meta.mode==='preseason')h+=`<div class="card note">Preseason: only the first few nights of the schedule are loaded, and sportsbooks have posted lines for just some of them so far. Everything refreshes automatically.</div>`;
   let cur=null;
@@ -785,7 +785,7 @@ function render(){
   $('#badges').innerHTML=(m.mode==='demo'?'<span class="badge warn">DEMO DATA</span>':'')+(m.warnings.length?'<span class="badge warn">⚠ '+m.warnings.length+' warning(s) — see Rules &amp; sources</span>':'');
   $('#nav').innerHTML=TABS.map(t=>`<button class="${t[0]===tab?'on':''}" onclick="tab='${t[0]}';render()">${t[1]}</button>`).join('');
   $('#main').innerHTML=(VIEWS[tab]||vStandings)();
-  $('#foot').innerHTML=`STOOPIDS · times in WIB (Asia/Jakarta) · scores ESPN (fallback ncaa.com) · ${DEMO?'<a href="?">back to the live season</a>':'<a href="?demo=1">see the demo (last season replay)</a>'}`;
+  $('#foot').innerHTML=`STOOPIDS · times in Eastern (ET) · scores ESPN (fallback ncaa.com) · ${DEMO?'<a href="?">back to the live season</a>':'<a href="?demo=1">see the demo (last season replay)</a>'}`;
 }
 function load(){
   const s=document.createElement('script');s.src=(DEMO?'demo/':'')+'data.js?v='+Date.now();
