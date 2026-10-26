@@ -3,7 +3,7 @@
 for the group's "NEW BETS 25-26" Google-Sheet tab.  Standard library only.
 
   python3 bets.py import-sheet [--csv FILE_OR_URL]   # parse the sheet tab -> bets_imported.json + coverage report
-  python3 bets.py tally                              # print the who-owes-who matrix
+  python3 bets.py tally [--shared FILE]              # print the who-owes-who matrix (optionally incl. a shared-ledger snapshot)
   python3 bets.py selftest
 
 Files
@@ -88,7 +88,7 @@ def build_entries(bet, cur=None):
         odds = None
         if bet.get("odds"):
             m = re.fullmatch(r"\s*(\d+(?:\.\d+)?)\s*(?::|-|to)\s*(\d+(?:\.\d+)?)\s*", str(bet["odds"]))
-            if m:
+            if m and float(m.group(2)) > 0:
                 odds = float(m.group(1)) / float(m.group(2))
         for x in bet.get("side_a", []):
             for y in bet.get("side_b", []):
@@ -383,8 +383,8 @@ def package(ledger, imported):
 
 
 # ------------------------------------------------------------------ ledger edits (used by serve.py and the CLI)
-ALLOWED = {"versus": {"type", "n", "text", "date", "season", "side_a", "side_b", "stake", "stake_item", "odds", "longshot", "winner", "games", "outcome"},
-           "pool": {"type", "n", "text", "date", "season", "participants", "buy_in", "payouts", "outcome"}}
+ALLOWED = {"versus": {"type", "n", "text", "date", "season", "side_a", "side_b", "stake", "stake_item", "odds", "longshot", "winner", "games", "outcome", "id", "created_at"},
+           "pool": {"type", "n", "text", "id", "created_at", "date", "season", "participants", "buy_in", "payouts", "outcome"}}
 PATCHABLE = {"winner", "games", "payouts", "outcome", "text", "stake", "odds", "longshot"}
 
 
@@ -405,6 +405,8 @@ def validate_bet(bet, people):
         raise ValueError("unexpected fields: %s" % sorted(extra))
     if not str(bet.get("text", "")).strip():
         raise ValueError("write the wager terms in 'text'")
+    if len(str(bet["text"])) > 500:
+        raise ValueError("terms are too long (500 characters max)")
     for k in ("side_a", "side_b", "participants"):
         for i in bet.get(k, []):
             if i not in ids:
@@ -430,6 +432,8 @@ def validate_bet(bet, people):
         if parse_amount(bet.get("buy_in"), default_k=True) is None:
             raise ValueError("pool needs a buy_in like 250K")
         pay = bet.get("payouts") or {}
+        if pay and any(parse_amount(v, default_k=True) is None for v in pay.values()):
+            raise ValueError("can't read one of the payouts (try 800K, 1.2mil)")
         if pay:
             bi = parse_amount(bet["buy_in"], default_k=True)
             tot = sum(parse_amount(v, default_k=True) or 0 for v in pay.values())
@@ -479,6 +483,87 @@ def update_bet(n, patch, path=None):
     raise ValueError("no ledger bet numbered %s (imported sheet bets are read-only)" % n)
 
 
+# ------------------------------------------------------------------ shared (hosted) ledger
+# The hosted site keeps new/settled bets in an anonymous shared JSON document {"bets":[...]} (see config.json "shared_bets").
+# index.html merges it with the repo ledger + imported bets and recomputes the tally in JS; this is the Python reference
+# implementation of that merge (used by tests, the CLI and the backup snapshot).  Nothing payment-related is ever stored:
+# a bet may only contain the ALLOWED fields above.
+def bet_key(b):
+    """Identity of a ledger bet: its shared 'id' when it has one, else 'n<number>'."""
+    return str(b["id"]) if b.get("id") not in (None, "") else "n" + str(b.get("n", ""))
+
+
+def normalize_bet(bet):
+    b = dict(bet)
+    if isinstance(b.get("payouts"), dict):
+        b["payouts"] = {k: parse_amount(v, default_k=True) for k, v in b["payouts"].items()}
+    return b
+
+
+def merge_shared(ledger, shared_doc):
+    """Return a copy of `ledger` whose bets = repo ledger bets, overridden/extended by the valid bets of the shared doc
+    (matched by bet_key; shared wins, repo order kept, new ones appended in shared order).  Invalid shared bets are skipped."""
+    led = dict(ledger)
+    out = [dict(b) for b in ledger.get("bets", [])]
+    idx = {bet_key(b): i for i, b in enumerate(out)}
+    for sb in (shared_doc or {}).get("bets", []):
+        try:
+            nb = normalize_bet(sb)
+            validate_bet(nb, ledger["people"])
+        except Exception:
+            continue
+        k = bet_key(nb)
+        if k in idx:
+            out[idx[k]] = nb
+        else:
+            idx[k] = len(out); out.append(nb)
+    led["bets"] = out
+    return led
+
+
+def fetch_shared(cfg, timeout=20):
+    """GET the shared document. Returns the parsed {"bets":[...]} dict. Raises on any problem."""
+    url = cfg["url"]
+    with urllib.request.urlopen(urllib.request.Request(url, headers=UA, method="GET"), timeout=timeout) as r:
+        doc = json.loads(r.read().decode("utf-8"))
+    if isinstance(doc, str):            # some stores hand back the document as a JSON string
+        doc = json.loads(doc)
+    if not isinstance(doc, dict) or not isinstance(doc.get("bets"), list):
+        raise ValueError("shared document has no 'bets' list")
+    return doc
+
+
+def backup_shared(cfg, path, people=None):
+    """Fail-soft snapshot of the shared ledger into `path` (bets_shared_backup.json). Returns a short status string.
+    Only ALLOWED bet fields are kept (so nothing unexpected - e.g. payment details - could be copied into the public repo)."""
+    sc = (cfg or {}).get("shared_bets") or {}
+    if not sc.get("enabled") or not sc.get("url"):
+        return "shared ledger not configured"
+    try:
+        doc = fetch_shared(sc)
+    except Exception as ex:
+        return "shared ledger unreachable (%s) - backup left as is" % ex
+    keep, dropped = [], 0
+    for b in doc["bets"]:
+        if isinstance(b, dict) and b.get("type") in ALLOWED:
+            keep.append({k: v for k, v in b.items() if k in ALLOWED[b["type"]]})
+        else:
+            dropped += 1
+    snap = {"_note": "Automatic snapshot of the shared side-bets ledger (written by refresh.py). Restore by pasting the 'bets' list into the shared document or into bets.json.",
+            "source": sc.get("kind", "shared"), "bets": keep}
+    if dropped:
+        snap["dropped_unrecognised"] = dropped
+    try:
+        with open(path) as _f:
+            old = json.load(_f)
+    except Exception:
+        old = None
+    if old == snap:
+        return "shared ledger backup unchanged (%d bets)" % len(keep)
+    _save(path, snap)
+    return "shared ledger backup written (%d bets)" % len(keep)
+
+
 def main():
     a = sys.argv[1:]
     if not a or a[0] not in ("import-sheet", "tally", "selftest"):
@@ -496,6 +581,8 @@ def main():
         return 0
     if a[0] == "tally":
         led = load_people_ledger()
+        if "--shared" in a:     # also count the bets of a shared-ledger snapshot, e.g. --shared bets_shared_backup.json
+            led = merge_shared(led, json.load(open(a[a.index("--shared") + 1])))
         imp = json.load(open(os.path.join(HERE, "bets_imported.json"))) if os.path.exists(os.path.join(HERE, "bets_imported.json")) else None
         bs = derive(led, imp)
         t = tally(led["people"], bs)

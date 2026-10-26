@@ -1,0 +1,5 @@
+{
+ "_note": "Automatic snapshot of the shared side-bets ledger (written by refresh.py). Restore by pasting the 'bets' list into the shared document or into bets.json.",
+ "source": "textdb",
+ "bets": []
+}

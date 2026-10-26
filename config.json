@@ -59,6 +59,13 @@
     "BOISE ST.": "68", "UTAH ST": "328", "NC STATE": "152", "UNC WILMINGTON": "350"
   },
 
+  "shared_bets": {
+    "enabled": true,
+    "kind": "textdb",
+    "url": "https://textdb.dev/api/data/stoopids-ledger-df75dacf7b4d9c834621a36e",
+    "_help": "Shared side-bets ledger for the hosted (static) site. Anonymous free JSON store (textdb.dev): anyone with this URL can read AND edit it - friends-pool grade, no auth, no secrets. refresh.py snapshots it to bets_shared_backup.json every run. kind: textdb (POST text/plain) | jsonblob (PUT json) | npoint (POST json). Optional: write_method, write_content_type. Set enabled=false to turn the shared ledger off (site falls back to read-only)."
+  },
+
   "games_view": {"recent_days": 14, "upcoming_days": 10},
   "refresh": {"live_interval_minutes": 10, "lookahead_days": 10, "upcoming_line_ttl_minutes": 15, "odds_provider_preference": ["DraftKings", "ESPN BET"]}
 }

@@ -560,6 +560,11 @@ def main():
     jsave(os.path.join(out_dir, "data.json"), out)
     with open(os.path.join(out_dir, "data.js"), "w") as f:
         f.write("window.STOOPIDS_DATA = " + json.dumps(out, ensure_ascii=False, separators=(",", ":")) + ";\n")
+    if not a.demo and not a.offline:        # fail-soft backup of the shared side-bets ledger (repo keeps the history)
+        try:
+            log("shared bets:", B.backup_shared(cfg, os.path.join(out_dir, "bets_shared_backup.json")))
+        except Exception as ex:
+            log("shared bets: backup failed (%s) - ignored" % ex)
     log("OK mode=%s games=%d final=%d lines=%d/%d leader=%s %s" % (mode, len(games), n_final, lstats["lines_found"], lstats["games_needing_line"], res["owners"][0]["name"], res["owners"][0]["total"]))
     if warnings:
         log("WARNINGS:", *warnings, sep="\n  ")

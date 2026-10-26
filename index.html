@@ -10,12 +10,12 @@
 body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
 a{color:var(--acc)}
 header{max-width:1000px;margin:0 auto;padding:0 0 8px}
-.hero{position:relative;min-height:230px;display:flex;flex-direction:column;justify-content:flex-end;padding:16px 14px 14px;background:linear-gradient(180deg,rgba(16,19,26,.05) 0%,rgba(16,19,26,.55) 55%,rgba(16,19,26,.96) 100%),url(assets/hero-wide.jpg) center 22%/cover no-repeat;border-radius:0 0 18px 18px;overflow:hidden}
+.hero{position:relative;min-height:330px;display:flex;flex-direction:column;justify-content:flex-end;padding:16px 14px 14px;background:linear-gradient(180deg,rgba(16,19,26,.05) 0%,rgba(16,19,26,.55) 55%,rgba(16,19,26,.96) 100%),url(assets/hero-wide.jpg) center 8%/cover no-repeat;border-radius:0 0 18px 18px;overflow:hidden}
 .hero h1{text-shadow:0 2px 10px rgba(0,0,0,.85)}
 .hero .tag{color:#e7ecf6;text-shadow:0 1px 6px rgba(0,0,0,.9)}
 .sub{padding:0 14px}
-@media (max-width:640px){.hero{min-height:270px;background:linear-gradient(180deg,rgba(16,19,26,.05) 0%,rgba(16,19,26,.6) 58%,rgba(16,19,26,.97) 100%),url(assets/hero-mobile.jpg) center 12%/cover no-repeat}}
-@media (min-width:1000px){.hero{border-radius:0 0 18px 18px;min-height:280px;background-position:center 20%}}
+@media (max-width:640px){.hero{min-height:300px;background:linear-gradient(180deg,rgba(16,19,26,.05) 0%,rgba(16,19,26,.6) 58%,rgba(16,19,26,.97) 100%),url(assets/hero-mobile.jpg) center 6%/cover no-repeat}}
+@media (min-width:1000px){.hero{border-radius:0 0 18px 18px;min-height:380px;background-position:center 10%}}
 h1{margin:0;font-size:clamp(34px,9vw,56px);letter-spacing:.04em;font-weight:900;line-height:1}
 h1 span{color:var(--acc)}
 .tag{color:var(--mut);margin:6px 0 0}
@@ -199,7 +199,368 @@ function gameLine(g){/* compact line for a team-row game (roster tab) */
 
 /* ---------- side bets ---------- */
 let sbScope='all',sbPaid=false,sbPerson='all',sbStatus='all',sbQ='',sbForm=null,sbMsg='',editOK=null;
-fetch('api/ping').then(r=>r.json()).then(j=>{editOK=!!j.edit;if(tab==='bets')render()}).catch(()=>{editOK=false});
+/*<SHARED-BETS-CORE>*/
+/* Ledger maths in JS: a line-for-line port of bets.py (parse_amount, build_entries, bet_status, tally, validate_bet,
+   merge_shared, package). test_shared.py runs this exact block under node and compares it with the Python output. */
+const SB_SUF={k:1e3,kk:1e6,m:1e6,mil:1e6,mill:1e6,million:1e6,juta:1e6,jt:1e6,mm:1e6};
+const SB_ALLOWED={versus:['type','n','text','date','season','side_a','side_b','stake','stake_item','odds','longshot','winner','games','outcome','id','created_at'],
+  pool:['type','n','text','id','created_at','date','season','participants','buy_in','payouts','outcome']};
+const SB_PATCHABLE=['winner','games','payouts','outcome','text','stake','odds','longshot'];
+const SB_ODDS=/^\s*(\d+(?:\.\d+)?)\s*(?::|-|to)\s*(\d+(?:\.\d+)?)\s*$/;
+function parseAmount(s,defK){
+  if(s==null)return null;
+  if(typeof s==='number')return s;
+  const t=String(s).trim().toLowerCase().replace(/[ _]/g,'');
+  const m=/^(\d[\d,]*(?:\.\d+)?)(k|kk|m|mm|mil|mill|million|juta|jt)?$/.exec(t);
+  if(!m)return null;
+  const num=parseFloat(m[1].replace(/,/g,''));
+  if(m[2])return num*SB_SUF[m[2]];
+  return defK&&num<1000?num*1000:num;
+}
+function round2(x){const y=x*100,f=Math.floor(y);return (y-f===0.5?(f%2===0?f:f+1):Math.round(y))/100}   // Python round(x,2): ties to even
+const truthy=v=>!(v==null||v===''||v===0||v===false||(Array.isArray(v)&&!v.length)||(typeof v==='object'&&!Array.isArray(v)&&!Object.keys(v).length));
+function buildEntries(bet){
+  const t=('type' in bet)?bet.type:'direct';
+  if(t==='direct')return (bet.entries||[]).map(e=>Object.assign({},e));
+  const out=[];
+  if(t==='versus'){
+    let w=bet.winner;
+    let stake=(bet.stake!=null&&bet.stake!=='')?parseAmount(bet.stake,true):null;
+    const item=bet.stake_item,games=bet.games;
+    if(truthy(games)){
+      const diff=(games.a||0)-(games.b||0);
+      if(diff===0||stake===null)return [];
+      w=diff>0?'a':'b';stake=stake*Math.abs(diff);
+    }
+    if(w!=='a'&&w!=='b')return [];
+    let odds=null;
+    if(truthy(bet.odds)){const m=SB_ODDS.exec(String(bet.odds));if(m&&parseFloat(m[2])>0)odds=parseFloat(m[1])/parseFloat(m[2])}
+    for(const x of (bet.side_a||[]))for(const y of (bet.side_b||[])){
+      const win=w==='a'?x:y,lose=w==='a'?y:x;
+      let amt=stake;
+      if(amt!==null&&odds&&bet.longshot===w)amt=stake*odds;
+      const e={from:lose,to:win};
+      if(amt!==null)e.amount=round2(amt);
+      else if(truthy(item))e.item=item;
+      else continue;
+      out.push(e);
+    }
+    return out;
+  }
+  if(t==='pool'){
+    const pay=bet.payouts||{},parts=bet.participants||[],bi=parseAmount(bet.buy_in,true);
+    if(!Object.keys(pay).length||bi===null)return [];
+    const net=new Map();
+    for(const p of parts)net.set(p,(Object.prototype.hasOwnProperty.call(pay,p)?pay[p]:0)-bi);
+    const debt=[],cred=[];
+    for(const [p,v] of net){if(v<0)debt.push([p,-v]);else if(v>0)cred.push([p,v])}
+    const tot=cred.reduce((a,c)=>a+c[1],0)||1;
+    for(const [d,dv] of debt)for(const [c,cv] of cred)out.push({from:d,to:c,amount:round2(dv*cv/tot)});
+    return out;
+  }
+  return out;
+}
+function betStatus(bet,entries){
+  if(truthy(bet.status))return bet.status;
+  if(bet.type==='versus'&&bet.winner==='wash')return 'wash';
+  return entries.length?'settled':'open';
+}
+const hasOwn=(o,k)=>Object.prototype.hasOwnProperty.call(o,k);
+function tallyJS(people,bets,hidePaid){
+  const ids=people.map(p=>p.id),M={},cnt={},lost={},won={},items=[];
+  ids.forEach(a=>{M[a]={};ids.forEach(b=>{M[a][b]=0});cnt[a]=0;lost[a]=0;won[a]=0});
+  for(const b of bets){
+    const ents=b._entries||[],parts=new Set(b.participants||[]);
+    ents.forEach(e=>{parts.add(e.from);parts.add(e.to)});
+    parts.forEach(i=>{if(hasOwn(cnt,i))cnt[i]+=1});
+    for(const e of ents){
+      if(!hasOwn(M,e.from)||!hasOwn(M,e.to)||e.from===e.to)continue;
+      if(hidePaid&&e.paid)continue;
+      if('amount' in e){M[e.from][e.to]+=e.amount;lost[e.from]+=e.amount;won[e.to]+=e.amount}
+      else items.push({bet:b.n===undefined?null:b.n,from:e.from,to:e.to,item:e.item||'',paid:!!e.paid});
+    }
+  }
+  const net={};ids.forEach(i=>{net[i]=won[i]-lost[i]});
+  return {ids,matrix:M,lost,won,net,bets:cnt,items};
+}
+function validateBetJS(bet,people){
+  const ids=new Set(people.map(p=>p.id)),t=bet.type;
+  if(t!=='versus'&&t!=='pool')throw new Error("type must be 'versus' or 'pool'");
+  const extra=Object.keys(bet).filter(k=>!SB_ALLOWED[t].includes(k));
+  if(extra.length)throw new Error('unexpected fields: '+extra.sort().join(', '));
+  if(!String(bet.text==null?'':bet.text).trim())throw new Error("write the wager terms in 'text'");
+  if(String(bet.text).length>500)throw new Error('terms are too long (500 characters max)');
+  for(const k of ['side_a','side_b','participants']){
+    if(k in bet){if(!Array.isArray(bet[k]))throw new Error(k+' must be a list');for(const i of bet[k])if(!ids.has(i))throw new Error('unknown person id '+JSON.stringify(i)+" (add them to 'people' first)")}
+  }
+  if(t==='versus'){
+    if(!(bet.side_a||[]).length||!(bet.side_b||[]).length)throw new Error('both sides need at least one person');
+    if(bet.side_a.some(i=>bet.side_b.includes(i)))throw new Error("a person can't be on both sides");
+    if(bet.stake!=null&&bet.stake!==''&&parseAmount(bet.stake,true)===null)throw new Error("can't read stake "+JSON.stringify(bet.stake)+' (try 100K, 1.5mil, 2juta, 250,000)');
+    if(!truthy(bet.stake)&&!truthy(bet.stake_item))throw new Error('give a stake (100K) or a non-cash stake_item');
+    if(bet.winner!=null&&!['a','b','wash'].includes(bet.winner))throw new Error('winner must be a, b, wash or empty (open)');
+    if(truthy(bet.odds)&&!SB_ODDS.test(String(bet.odds)))throw new Error('odds look like 2:1 or 3.5:1');
+    if(truthy(bet.odds)&&bet.longshot!=='a'&&bet.longshot!=='b')throw new Error("odds need 'longshot' = a or b (which side is paid at the odds)");
+  }else{
+    if((bet.participants||[]).length<2)throw new Error('a pool needs 2+ participants');
+    const bi=parseAmount(bet.buy_in,true);
+    if(bi===null)throw new Error('pool needs a buy_in like 250K');
+    const pay=bet.payouts||{};
+    if(Object.keys(pay).length){
+      const vals=Object.values(pay);
+      if(vals.some(v=>parseAmount(v,true)===null))throw new Error("can't read one of the payouts (try 800K, 1.2mil)");
+      const tot=vals.reduce((a,v)=>a+(parseAmount(v,true)||0),0);
+      if(Math.abs(tot-bi*bet.participants.length)>1)throw new Error('payouts add up to '+tot+' but the pot is '+bi*bet.participants.length);
+    }
+  }
+  return true;
+}
+function normalizeBet(bet){
+  const b=Object.assign({},bet);
+  if(b.payouts&&typeof b.payouts==='object'&&!Array.isArray(b.payouts)){const p={};Object.keys(b.payouts).forEach(k=>{p[k]=parseAmount(b.payouts[k],true)});b.payouts=p}
+  return b;
+}
+const betKey=b=>(b.id!=null&&b.id!=='')?String(b.id):'n'+(b.n===undefined?'':b.n);
+/* repo ledger bets + shared bets (matched by betKey; shared wins; repo order kept; new ones appended; invalid shared bets skipped) */
+function mergeLedger(repoBets,sharedBets,people){
+  const out=repoBets.map(b=>Object.assign({},b)),idx=new Map();
+  out.forEach((b,i)=>idx.set(betKey(b),i));
+  for(const sb of (sharedBets||[])){
+    let nb;
+    try{if(!sb||typeof sb!=='object')continue;nb=normalizeBet(sb);validateBetJS(nb,people)}catch(e){continue}
+    const k=betKey(nb);
+    if(idx.has(k))out[idx.get(k)]=nb;else{idx.set(k,out.length);out.push(nb)}
+  }
+  return out;
+}
+/* the Side Bets package (same shape as bets.package) from the build-time package `base` + the shared doc's bets */
+function derivePackage(base,sharedBets){
+  const people=base.people;
+  const repo=base.bets.filter(b=>b.src==='ledger').map(b=>b.spec||{});
+  const imported=base.bets.filter(b=>b.src==='imported');
+  const merged=mergeLedger(repo,sharedBets,people);
+  const allb=[];
+  for(const b of merged){
+    let e;try{e=buildEntries(b)}catch(_){e=[]}
+    allb.push(Object.assign({},b,{_entries:e,_status:betStatus(b,e),_src:'ledger'}));
+  }
+  for(const o of imported)allb.push(Object.assign({},o,{_entries:o.entries,_status:o.status,_src:'imported'}));
+  const tallies={};
+  [['all',()=>true],['ledger',b=>b._src==='ledger'],['imported',b=>b._src==='imported']].forEach(([sc,pred])=>{
+    const sel=allb.filter(b=>pred(b)&&b._status==='settled');
+    tallies[sc]={all:tallyJS(people,sel,false),unpaid:tallyJS(people,sel,true)};
+  });
+  const bets=allb.map(b=>{
+    if(b._src==='imported'){const o=Object.assign({},b);delete o._entries;delete o._status;delete o._src;return o}
+    const spec={};Object.keys(b).forEach(k=>{if(k[0]!=='_')spec[k]=b[k]});
+    return {n:String(b.n===undefined?'':b.n),season:b.season||'',src:'ledger',status:b._status,type:b.type||'direct',text:b.text||'',outcome:b.outcome||'',
+      entries:b._entries,participants:b.participants||[],notes:(b.parse||{}).notes||[],spec};
+  });
+  return Object.assign({},base,{bets,tallies});
+}
+/* ---- edits of the shared document (pure functions: take the freshly fetched doc, return the new doc, or null = nothing to change) ---- */
+const uerr=m=>{const e=new Error(m);e.user=true;return e};
+function nextN(repoBets,docBets){
+  let mx=0;[...repoBets,...docBets].forEach(b=>{if(/^\d+$/.test(String(b.n)))mx=Math.max(mx,parseInt(b.n,10))});
+  return String(mx+1);
+}
+function addMutator(doc,repoBets,bet,newId,people,defaults){
+  const nd=JSON.parse(JSON.stringify(doc));
+  if(nd.bets.some(b=>b.id===newId))return null;
+  if(nd.bets.length>=1000)throw uerr('the shared ledger is full (1000 bets)');
+  const nb=normalizeBet(bet);
+  nb.id=newId;nb.n=nextN(repoBets,nd.bets);
+  if(!nb.season)nb.season=defaults.season;
+  if(!nb.date)nb.date=defaults.date;
+  nb.created_at=defaults.now;
+  try{validateBetJS(nb,people)}catch(e){throw uerr(e.message)}
+  nd.bets.push(nb);
+  return nd;
+}
+function patchMatches(b,patch){const cur=normalizeBet(b),np=normalizeBet(patch);return Object.keys(np).every(k=>JSON.stringify(cur[k])===JSON.stringify(np[k]))}
+function settleMutator(doc,key,patch,repoSpec,people){
+  const nd=JSON.parse(JSON.stringify(doc));
+  const bad=Object.keys(patch).filter(k=>!SB_PATCHABLE.includes(k));
+  if(bad.length)throw uerr("can't patch "+bad.join(', '));
+  let b=nd.bets.find(x=>betKey(x)===key);
+  if(!b){
+    if(!repoSpec)throw uerr('that bet is not in the shared ledger any more - reload');
+    b=Object.assign({},repoSpec,{id:key});nd.bets.push(b);
+  }else{
+    const st=betStatus(b,buildEntries(normalizeBet(b)));
+    if(st!=='open'){
+      if(patchMatches(b,patch))return null;
+      throw uerr('bet #'+b.n+' was already settled by someone else - reload to see it');
+    }
+  }
+  const nb=normalizeBet(Object.assign({},b,patch));
+  try{validateBetJS(nb,people)}catch(e){throw uerr(e.message)}
+  Object.keys(patch).forEach(k=>{b[k]=nb[k]});
+  return nd;
+}
+/*</SHARED-BETS-CORE>*/
+/* serve.py answers api/ping (local mode, unchanged). No answer = static host (GitHub Pages): use the shared ledger. */
+fetch('api/ping').then(r=>r.json()).then(j=>{editOK=!!j.edit;if(tab==='bets')render()},()=>{editOK=false;sharedInit()});
+/* ---------- shared ledger (hosted/static site) ---------- */
+/* On GitHub Pages there is no server, so new/settled bets live in ONE small anonymous JSON document (config.json -> shared_bets).
+   Writes = re-fetch -> apply my change to the fresh copy -> PUT the whole doc -> re-fetch to verify (retry up to 3x if someone else wrote at the same moment). */
+const SH={cfg:null,state:DEMO?'demo':'init',doc:null,err:'',fromBackup:false,busy:false,sig:'',at:null,mine:[],settleMs:1200};
+const netErr=(m,e)=>{const x=new Error(m+(e&&e.message?' ('+e.message+')':''));x.net=true;return x};
+async function sharedGet(cfg){
+  let r;
+  try{r=await fetch(cfg.url,{cache:'no-store'})}catch(e){throw netErr('could not reach the shared ledger',e)}
+  if(!r.ok)throw netErr('shared ledger answered HTTP '+r.status);
+  let d;
+  try{d=JSON.parse(await r.text());if(typeof d==='string')d=JSON.parse(d)}catch(e){throw netErr('shared ledger returned something that is not JSON')}
+  if(!d||typeof d!=='object'||!Array.isArray(d.bets))throw netErr("shared ledger document has no 'bets' list");
+  return d;
+}
+async function sharedPut(cfg,doc){
+  const kind=cfg.kind||'textdb';
+  const method=cfg.write_method||({textdb:'POST',jsonblob:'PUT',npoint:'POST'}[kind]||'PUT');
+  const ct=cfg.write_content_type||(kind==='textdb'?'text/plain':'application/json');   // text/plain = a "simple" CORS request, no preflight
+  let r;
+  try{r=await fetch(cfg.url,{method,headers:{'Content-Type':ct},body:JSON.stringify(doc)})}catch(e){throw netErr('could not reach the shared ledger',e)}
+  if(!r.ok)throw netErr('shared ledger refused the save (HTTP '+r.status+')');
+}
+async function sharedWrite(mutate,verify){
+  let last=null;
+  for(let i=0;i<3;i++){
+    const doc=await sharedGet(SH.cfg);              // freshest copy right before writing
+    const nd=mutate(doc);
+    if(nd===null){if(verify(doc))return doc}        // nothing to change (someone/an earlier try already did it)
+    else{
+      nd.schema=1;nd.updated_at=new Date().toISOString();
+      await sharedPut(SH.cfg,nd);
+      const chk=await sharedGet(SH.cfg);            // read back: did our change survive?
+      if(verify(chk)){
+        await new Promise(r=>setTimeout(r,SH.settleMs));   // ...and once more a moment later (catches a concurrent writer that read before our PUT)
+        const c2=await sharedGet(SH.cfg);
+        if(verify(c2))return c2;
+      }
+    }
+    last=new Error('someone else saved at the same moment - please try again');
+    await new Promise(r=>setTimeout(r,400+Math.random()*600));
+  }
+  throw last;
+}
+function applyShared(){
+  if(!D)return;
+  if(!D._base)D._base=D.bets;
+  const use=SH.doc&&(SH.state==='ok'||SH.state==='error');
+  try{D.bets=use?derivePackage(D._base,SH.doc.bets):D._base}catch(e){D.bets=D._base;SH.err='could not merge shared bets: '+e.message}
+}
+function sbRerender(){if(D&&tab==='bets'){sbSnap();render()}}
+async function sharedInit(){
+  if(DEMO)return;
+  try{const r=await fetch('config.json',{cache:'no-store'});const c=await r.json();const sc=c.shared_bets;if(sc&&sc.enabled!==false&&sc.url)SH.cfg=sc}catch(e){}
+  if(!SH.cfg){SH.state='off';sbRerender();return}
+  SH.state='loading';sbRerender();
+  await sharedReload(true);
+  setInterval(()=>{if(!document.hidden&&!SH.busy)sharedReload(false)},45000);
+}
+async function sharedReload(force){
+  if(!SH.cfg||SH.busy)return;
+  const prev=SH.state;
+  try{
+    let d=await sharedGet(SH.cfg);
+    d=await sharedHeal(d);
+    const sig=JSON.stringify(d.bets),changed=sig!==SH.sig;
+    SH.state='ok';SH.err='';SH.fromBackup=false;SH.doc=d;SH.sig=sig;SH.at=new Date();
+    if(changed||force||prev!=='ok'){applyShared();sbRerender()}
+  }catch(e){
+    SH.state='error';SH.err=e.message||String(e);
+    if(!SH.doc){                                     // never loaded: show the repo's last snapshot (read-only)
+      try{const r=await fetch('bets_shared_backup.json',{cache:'no-store'});const b=await r.json();if(Array.isArray(b.bets)){SH.doc={bets:b.bets};SH.fromBackup=true}}catch(_){}
+    }
+    applyShared();sbRerender();
+  }
+}
+/* If a concurrent writer overwrote one of MY recent saves (last-write-wins store), put it back on the next poll. */
+async function sharedHeal(d){
+  const now=Date.now();SH.mine=SH.mine.filter(m=>now-m.t<15*60e3);
+  const miss=SH.mine.filter(m=>!m.verify(d));
+  if(!miss.length||SH.busy)return d;
+  SH.busy=true;
+  for(const m of miss){
+    try{d=await sharedWrite(m.mutate,m.verify)}catch(e){SH.mine=SH.mine.filter(x=>x!==m);if(e.net)break}
+  }
+  SH.busy=false;return d;
+}
+function sbMode(){
+  if(editOK===true)return 'local';                   // python3 serve.py: unchanged behaviour (writes bets.json)
+  if(editOK===null)return 'wait';
+  if(DEMO)return 'demo';
+  if(SH.state==='ok')return 'shared';
+  if(SH.state==='init'||SH.state==='loading')return 'wait';
+  return SH.state==='error'?'ro':'off';
+}
+const bkey=b=>(b.spec&&b.spec.id)?String(b.spec.id):'n'+b.n;
+function sharedNote(){
+  const m=sbMode();
+  const exp='<button class="btn sec" onclick="sbExport()">⬇ Export JSON backup</button>';
+  const rel='<button class="btn sec" onclick="sharedReload(true)">↻ Reload</button>';
+  let h='<div class="card"><b>🌐 Shared ledger</b> ';
+  if(m==='shared')h+=`<span class="good">● live</span><div class="note">Everyone with the link sees the same side bets and can add or settle them — the tally updates for the whole group${SH.at?' (synced '+esc(SH.at.toLocaleTimeString())+')':''}. There are no logins, so anyone with the link can edit: friends-pool grade, play nice. A backup snapshot is committed to the repo every ~15 minutes.</div><div class="row2" style="margin-top:8px">${rel}${exp}</div>`;
+  else if(m==='ro')h+=`<span class="bad">● unreachable — read-only</span><div class="note bad">${esc(SH.err||'The shared ledger could not be reached.')}. Adding and settling are switched off until it is back; ${SH.doc?(SH.fromBackup?"showing the repo's last backup snapshot (may be ~15 min old)":'showing the last copy loaded in this page'):'no copy of the shared bets could be loaded'}.</div><div class="row2" style="margin-top:8px">${rel}${exp}</div>`;
+  else if(m==='wait')h+='<div class="note">Connecting to the shared ledger…</div>';
+  else if(m==='local')h+=`<div class="note">Local server mode: saving writes <code>bets.json</code> on this machine. (The hosted site uses the shared ledger instead.)</div><div style="margin-top:8px">${exp}</div>`;
+  else if(m==='demo')h+='<div class="note">Demo mode: the shared ledger is switched off here, so nothing you do can touch the real bets.</div>';
+  else h+=`<div class="note">No shared ledger is configured (<code>shared_bets</code> in config.json), so this page is read-only: copy built bets into <code>bets.json</code>.</div><div style="margin-top:8px">${exp}</div>`;
+  return h+'</div>';
+}
+function sbExport(){
+  const live=SH.doc&&(SH.state==='ok'||SH.state==='error')&&editOK!==true;
+  const bets=live?SH.doc.bets:(D._base||D.bets).bets.filter(b=>b.src==='ledger').map(b=>b.spec);
+  const out={schema:1,exported_at:new Date().toISOString(),source:live?'shared ledger':'ledger (bets.json)',bets};
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(out,null,1)],{type:'application/json'}));
+  a.download='stoopids-bets-backup-'+out.exported_at.slice(0,10)+'.json';
+  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+}
+const repoBets=()=>(D._base||D.bets).bets.filter(b=>b.src==='ledger').map(b=>b.spec||{});
+const mkId=()=>'b'+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+function sbDefaults(){return {season:(D.meta&&D.meta.season)||'',date:new Date().toISOString().slice(0,10),now:new Date().toISOString()}}
+async function sbShared(optimistic,mutate,verify,okMsg){
+  if(SH.busy)return;
+  SH.busy=true;const before=SH.doc;sbMsg='Saving to the shared ledger…';render();
+  try{
+    const o=optimistic(SH.doc);if(o){SH.doc=o;applyShared();render()}     // optimistic: show it at once
+    const chk=await sharedWrite(mutate,verify);
+    SH.doc=chk;SH.sig=JSON.stringify(chk.bets);SH.at=new Date();SH.state='ok';SH.err='';
+    SH.mine.push({t:Date.now(),mutate,verify});
+    sbMsg=okMsg(chk);
+  }catch(e){
+    SH.doc=before;
+    if(e.net){SH.state='error';SH.err=e.message}
+    sbMsg='Not saved: '+(e.message||e);
+  }
+  SH.busy=false;applyShared();render();
+}
+function sbSaveShared(){
+  const bet=sbForm&&sbForm.bet;if(!bet)return;
+  const people=D._base.people,repo=repoBets(),id=mkId(),def=sbDefaults();
+  try{validateBetJS(normalizeBet(bet),people)}catch(e){sbMsg='Not saved: '+e.message;render();return}
+  sbShared(doc=>{const nd=addMutator(doc,repo,bet,id,people,def);return nd},
+    doc=>addMutator(doc,repo,bet,id,people,def),
+    doc=>doc.bets.some(b=>b.id===id),
+    doc=>{const n=(doc.bets.find(b=>b.id===id)||{}).n;sbForm={type:sbForm.type};return 'Saved as bet #'+n+' in the shared ledger — everyone sees it now.'});
+}
+function settlePatch(cur){
+  const g=id=>document.getElementById(id);const patch={};
+  if((cur.spec||{}).type==='pool'){patch.payouts={};g('st_pay').value.split(',').forEach(x=>{const [k,v]=x.split(':');if(k&&v)patch.payouts[k.trim().toLowerCase()]=v.trim()})}
+  else if(g('st_ga').value||g('st_gb').value){patch.games={a:+g('st_ga').value||0,b:+g('st_gb').value||0}}
+  else patch.winner=g('st_win').value;
+  return patch;
+}
+function sbSettleShared(){
+  const cur=D.bets.bets.find(b=>bkey(b)===stSel);if(!cur)return;
+  const key=stSel,patch=settlePatch(cur),people=D._base.people,spec=cur.spec;
+  sbShared(doc=>{try{return settleMutator(doc,key,patch,spec,people)}catch(e){return null}},
+    doc=>settleMutator(doc,key,patch,spec,people),
+    doc=>{const b=doc.bets.find(x=>betKey(x)===key);return !!b&&patchMatches(b,patch)},
+    ()=>'Settled #'+cur.n+' — the tally is updated for everyone.');
+}
 const P=id=>(D.bets.people.find(p=>p.id===id)||{name:id});
 const pname=id=>{const p=P(id);const e=p.pool_owner?ownerEmoji(p.pool_owner):'';return (e?e+' ':'')+esc(p.name)};
 function money(v){const c=D.bets.currency||{};const x=v/(c.display_unit||1000);return (c.prefix||'')+(Math.round(x*100)/100).toString()+(c.suffix||'K')}
@@ -208,6 +569,7 @@ function vBets(){
   const seg=(cur,set,opts)=>opts.map(o=>`<button class="${cur===o[0]?'on':''}" onclick="${set}='${o[0]}';render()">${o[1]}</button>`).join('');
   let h=`<div class="card"><b>🎲 Side bets</b><div class="note">Who owes who, across every wager. Amounts in ${esc(B.currency.code||'')} thousands (${esc(B.currency.suffix||'K')}). Rows owe columns. Non-cash stakes are listed separately.</div>
    <div class="tabs" style="margin-top:8px">${seg(sbScope,'sbScope',[['all','All'],['ledger','New ledger'],['imported','2025-26 import']])}<button class="${sbPaid?'on':''}" onclick="sbPaid=!sbPaid;render()">Hide paid</button></div></div>`;
+  h+=sharedNote();
   h+=`<div class="card sc"><table><tr><th>Person</th><th class="n">Lost</th><th class="n">Won</th><th class="n">Net +/-</th><th class="n">Bets</th><th class="n">Fines</th></tr>${ids.slice().sort((a,b)=>T.net[b]-T.net[a]).map(i=>`<tr><td>${pname(i)}</td><td class="n">${money(T.lost[i])}</td><td class="n">${money(T.won[i])}</td><td class="n"><b class="${T.net[i]>0?'good':T.net[i]<0?'bad':''}">${T.net[i]>0?'+':''}${money(T.net[i])}</b></td><td class="n">${T.bets[i]}</td><td class="n">${B.fines[i]?money(B.fines[i]):'<span class=mut>0</span>'}</td></tr>`).join('')}</table></div>`;
   h+=`<h2>Who owes who</h2><div class="card sc"><table class="mx"><tr><th>owes ↓ / to →</th>${ids.map(i=>`<th>${esc(P(i).name)}</th>`).join('')}</tr>${ids.map(r=>`<tr><td><b>${esc(P(r).name)}</b></td>${ids.map(c=>{const v=T.matrix[r][c];return r===c?'<td class="z">·</td>':v?`<td>${money(v)}</td>`:'<td class="z">0</td>'}).join('')}</tr>`).join('')}</table></div>`;
   if(T.items.length)h+=`<h2>Non-cash IOUs</h2><div class="card">${T.items.map(x=>`<div>${pname(x.from)} owes ${pname(x.to)}: <b>${esc(x.item)}</b> <span class="mut">bet #${esc(x.bet)}${x.paid?' · paid':''}</span></div>`).join('')}</div>`;
@@ -221,7 +583,7 @@ function vBets(){
   h+=`<h2>Wagers (${L.length})</h2><div class="card"><div class="row2"><select onchange="sbPerson=this.value;render()"><option value="all">Everyone</option>${B.people.map(p=>`<option value="${p.id}"${p.id===sbPerson?' selected':''}>${esc(p.name)}</option>`).join('')}</select>
    <select onchange="sbStatus=this.value;render()">${['all','open','settled','wash','unparsed'].map(s=>`<option value="${s}"${s===sbStatus?' selected':''}>${s==='all'?'Any status':s}</option>`).join('')}</select>
    <input class="sb-in" placeholder="search terms…" value="${esc(sbQ)}" onchange="sbQ=this.value;render()"></div></div>`;
-  h+=L.slice().reverse().slice(0,150).map(b=>`<div class="card"><div><b>#${esc(b.n)}</b> <span class="st ${b.status}">${b.status==='unparsed'?'⚠ not in tally':b.status}</span> <span class="mut" style="font-size:12px">${b.src==='imported'?'2025-26 sheet import':esc(b.season||'ledger')}</span></div>
+  h+=L.slice().reverse().slice(0,150).map(b=>`<div class="card"><div><b>#${esc(b.n)}</b> <span class="st ${b.status}">${b.status==='unparsed'?'⚠ not in tally':b.status}</span> <span class="mut" style="font-size:12px">${b.src==='imported'?'2025-26 sheet import':esc(b.season||'ledger')+(b.spec&&b.spec.id?' · shared':'')}</span></div>
     <div style="margin:4px 0">${esc(b.text)}</div>${b.outcome?`<div class="note">Outcome: ${esc(b.outcome)}</div>`:''}
     ${b.entries.length?`<div style="margin-top:4px">${b.entries.map(e=>`<span class="pill">${esc(P(e.from).name)} → ${esc(P(e.to).name)} <b>${e.amount!=null?money(e.amount):esc(e.item)}</b>${e.paid?' ✓paid':''}</span>`).join('')}</div>`:''}
     ${b.notes&&b.notes.length&&b.status!=='open'?`<div class="note ${b.status==='unparsed'?'bad':''}">${b.status==='unparsed'?'Needs a human: ':'Assumed: '}${b.notes.map(esc).join('; ')}</div>`:''}</div>`).join('');
@@ -243,11 +605,13 @@ function sbBuilder(){
    <div class="note">Odds 2:1 with the longshot side: if the longshot wins it is paid stake × 2; if it loses it pays the stake. Per-game series: build it open, then settle with games won (below).</div>`;
   else h+=`<div style="margin-top:6px"><b>Participants</b><br>${chk('pp',f.pp)}</div><div class="row2" style="margin-top:6px"><input id="sb_buy" class="sb-in" placeholder="Buy-in each: 250K" value="${esc(f.buy||'')}"><input id="sb_pay" class="sb-in" placeholder='Payouts when done (total received), e.g. kurt:800K, mark:1.2mil' value="${esc(f.pay||'')}"></div><div class="note">Winner and runner-up money-back are just payouts (e.g. winner 1mil, 2nd 200K back). Payouts must add up to the pot. People ids: ${B_ids()}</div>`;
   h+=`<div style="margin-top:8px"><button class="btn" onclick="sbBuild()">Build</button></div>`;
-  if(f.json)h+=`<pre class="js" id="sb_json">${esc(f.json)}</pre><div class="row2"><button class="btn sec" onclick="navigator.clipboard&&navigator.clipboard.writeText(sbForm.json);sbMsg='Copied. Paste it into the "bets" list in bets.json, then run python3 refresh.py.';render()">Copy JSON</button>${editOK?'<button class="btn" onclick="sbSave()">Save to ledger</button>':''}</div>`+(editOK?'':'<div class="note">Static viewing: copy the JSON into <code>bets.json</code> (or run <code>python3 serve.py</code> locally for one-click saving).</div>');
+  if(f.json)h+=`<pre class="js" id="sb_json">${esc(f.json)}</pre><div class="row2"><button class="btn sec" onclick="navigator.clipboard&&navigator.clipboard.writeText(sbForm.json);sbMsg='Copied. Paste it into the "bets" list in bets.json, then run python3 refresh.py.';render()">Copy JSON</button>${sbMode()==='local'?'<button class="btn" onclick="sbSave()">Save to ledger</button>':sbMode()==='shared'?'<button class="btn" onclick="sbSaveShared()">Save to shared ledger</button>':''}</div>`+(sbMode()==='local'?'':sbMode()==='shared'?'<div class="note">Saving adds it to the shared ledger for everyone (no login needed).</div>':sbMode()==='ro'?'<div class="note bad">The shared ledger is unreachable, so saving is switched off (read-only). You can still copy the JSON into <code>bets.json</code>.</div>':sbMode()==='wait'?'<div class="note">Connecting to the shared ledger…</div>':'<div class="note">Static viewing: copy the JSON into <code>bets.json</code> (or run <code>python3 serve.py</code> locally for one-click saving).</div>');
   if(sbMsg)h+=`<div class="note" style="margin-top:6px">${esc(sbMsg)}</div>`;
   h+=`</div>`+sbSettle();return h}
 const B_ids=()=>D.bets.people.map(p=>p.id).join(', ');
-function sbSnap(){const g=id=>{const e=document.getElementById(id);return e?e.value:undefined};sbForm=Object.assign(sbForm||{},{text:g('sb_text'),a:picked('sa'),b:picked('sb'),pp:picked('pp'),stake:g('sb_stake'),item:g('sb_item'),odds:g('sb_odds'),long:g('sb_long'),win:g('sb_win'),buy:g('sb_buy'),pay:g('sb_pay')})}
+function sbSnap(){const g=id=>{const e=document.getElementById(id);return e?e.value:undefined};sbForm=Object.assign(sbForm||{},{text:g('sb_text'),a:picked('sa'),b:picked('sb'),pp:picked('pp'),stake:g('sb_stake'),item:g('sb_item'),odds:g('sb_odds'),long:g('sb_long'),win:g('sb_win'),buy:g('sb_buy'),pay:g('sb_pay')});
+  const s=id=>{const e=document.getElementById(id);return e?e.value:null};
+  if(s('st_win')!==null)stWin=s('st_win');if(s('st_ga')!==null)stGa=s('st_ga');if(s('st_gb')!==null)stGb=s('st_gb');if(s('st_pay')!==null)stPay=s('st_pay')}
 function sbBuild(){sbSnap();const f=sbForm;let bet;
   if(f.type==='versus'){bet={type:'versus',text:f.text,side_a:f.a,side_b:f.b};if(f.stake)bet.stake=f.stake;if(f.item)bet.stake_item=f.item;if(f.odds){bet.odds=f.odds;bet.longshot=f.long}bet.winner=f.win||null}
   else{bet={type:'pool',text:f.text,participants:f.pp,buy_in:f.buy};if(f.pay){bet.payouts={};f.pay.split(',').forEach(x=>{const [k,v]=x.split(':');if(k&&v)bet.payouts[k.trim().toLowerCase()]=v.trim()})}}
@@ -257,18 +621,16 @@ let stSel='',stWin='',stGa='',stGb='',stPay='';
 function sbSettle(){
   const open=D.bets.bets.filter(b=>b.src==='ledger'&&b.status==='open');
   if(!open.length)return '';
-  const cur=open.find(b=>b.n===stSel)||open[0];stSel=cur.n;const sp=cur.spec||{};
-  let h=`<h2>✅ Settle an open bet</h2><div class="card"><select onchange="stSel=this.value;render()" class="sb-in">${open.map(b=>`<option value="${esc(b.n)}"${b.n===stSel?' selected':''}>#${esc(b.n)} — ${esc(b.text.slice(0,70))}</option>`).join('')}</select>`;
+  const cur=open.find(b=>bkey(b)===stSel)||open[0];stSel=bkey(cur);const sp=cur.spec||{};
+  let h=`<h2>✅ Settle an open bet</h2><div class="card"><select onchange="stSel=this.value;render()" class="sb-in">${open.map(b=>`<option value="${esc(bkey(b))}"${bkey(b)===stSel?' selected':''}>#${esc(b.n)} — ${esc(b.text.slice(0,70))}</option>`).join('')}</select>`;
   if(sp.type==='pool')h+=`<input id="st_pay" class="sb-in" style="margin-top:6px" placeholder="Payouts: kurt:800K, mark:1.2mil" value="${esc(stPay)}">`;
-  else h+=`<div class="row2" style="margin-top:6px"><select id="st_win" class="sb-in"><option value="a">Side A wins (${esc((sp.side_a||[]).map(i=>P(i).name).join(', '))})</option><option value="b">Side B wins (${esc((sp.side_b||[]).map(i=>P(i).name).join(', '))})</option><option value="wash">Wash</option></select>
+  else h+=`<div class="row2" style="margin-top:6px"><select id="st_win" class="sb-in"><option value="a"${stWin==='a'?' selected':''}>Side A wins (${esc((sp.side_a||[]).map(i=>P(i).name).join(', '))})</option><option value="b"${stWin==='b'?' selected':''}>Side B wins (${esc((sp.side_b||[]).map(i=>P(i).name).join(', '))})</option><option value="wash"${stWin==='wash'?' selected':''}>Wash</option></select>
    <input id="st_ga" class="sb-in" placeholder="or per-game: games won by A" value="${esc(stGa)}"><input id="st_gb" class="sb-in" placeholder="games won by B" value="${esc(stGb)}"></div>`;
-  h+=`<div style="margin-top:8px">${editOK?'<button class="btn" onclick="sbSettleGo()">Settle</button>':'<span class="note">Settling needs the local server (python3 serve.py), or edit bets.json: set "winner" to "a", "b" or "wash".</span>'}</div></div>`;
+  h+=`<div style="margin-top:8px">${sbMode()==='local'||sbMode()==='shared'?'<button class="btn" onclick="sbSettleGo()">Settle</button>'+(sbMode()==='shared'?' <span class="note">for everyone, no login</span>':''):sbMode()==='ro'?'<span class="note bad">The shared ledger is unreachable: settling is switched off until it is back.</span>':sbMode()==='wait'?'<span class="note">Connecting to the shared ledger…</span>':'<span class="note">Settling needs the local server (python3 serve.py), or edit bets.json: set "winner" to "a", "b" or "wash".</span>'}</div></div>`;
   return h}
-async function sbSettleGo(){const g=id=>document.getElementById(id);const cur=D.bets.bets.find(b=>b.n===stSel);let patch={};
-  if((cur.spec||{}).type==='pool'){patch.payouts={};g('st_pay').value.split(',').forEach(x=>{const [k,v]=x.split(':');if(k&&v)patch.payouts[k.trim().toLowerCase()]=v.trim()})}
-  else if(g('st_ga').value||g('st_gb').value){patch.games={a:+g('st_ga').value||0,b:+g('st_gb').value||0}}
-  else patch.winner=g('st_win').value;
-  sbMsg='Saving…';render();try{const r=await fetch('api/bets/update',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({n:stSel,patch})});const j=await r.json();sbMsg=j.ok?'Settled #'+stSel:'Not saved: '+j.error;if(j.ok)load()}catch(e){sbMsg='Failed: '+e}render()}
+async function sbSettleGo(){if(sbMode()==='shared')return sbSettleShared();
+  const cur=D.bets.bets.find(b=>bkey(b)===stSel);const patch=settlePatch(cur);
+  sbMsg='Saving…';render();try{const r=await fetch('api/bets/update',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({n:cur.n,patch})});const j=await r.json();sbMsg=j.ok?'Settled #'+cur.n:'Not saved: '+j.error;if(j.ok)load()}catch(e){sbMsg='Failed: '+e}render()}
 
 function vRosters(){
   if(!ownerSel)ownerSel=D.owners[0].name;
@@ -354,7 +716,7 @@ function render(){
 }
 function load(){
   const s=document.createElement('script');s.src=(DEMO?'demo/':'')+'data.js?v='+Date.now();
-  s.onload=()=>{D=window.STOOPIDS_DATA;render()};
+  s.onload=()=>{D=window.STOOPIDS_DATA;D._base=D.bets;applyShared();render()};
   s.onerror=()=>{if(!D)$('#main').innerHTML='<div class="card">Couldn\u2019t load data.js. Run <code>python3 refresh.py</code> first.</div>'};
   document.head.appendChild(s);
 }
