@@ -21,4 +21,4 @@ jobs:
           git config user.name stoopids-bot; git config user.email bot@users.noreply.github.com
           git add data.js data.json roster_snapshot.json
           if [ -f bets_shared_backup.json ]; then git add bets_shared_backup.json; fi
-          git diff --cached --quiet || (git commit -m "refresh" && git push)
+          git diff --cached --quiet || (git commit -m "refresh" && git pull --rebase -X theirs origin main && git push)
