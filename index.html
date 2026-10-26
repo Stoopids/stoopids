@@ -747,10 +747,10 @@ function vArchive(){
   if(!archSel||!seasons.some(s=>s.season===archSel))archSel=(seasons.find(s=>s.pool)||seasons[0]).season;
   const S=seasons.find(s=>s.season===archSel);
   const opts=seasons.map(s=>`<option value="${esc(s.season)}"${s.season===archSel?' selected':''}>${esc(s.season)}${s.pool?'':': no pool'}</option>`).join('');
-  let h=archAllTime(A)+`<h2>🗂️ Season archive</h2>
+  let h=`<h2>🗂️ Season archive</h2>
    <div class="asel"><label for="archsel" class="mut">Season</label><select id="archsel" onchange="archSel=this.value;render()">${opts}</select></div>
    <div class="note">Results as the sheet shows them. No side bets here.</div>`;
-  if(!S.pool)return h+`<div class="card"><b>${esc(S.season)}: no pool</b><div class="note">${S.notes.map(esc).join(' ')}</div></div>`;
+  if(!S.pool)return h+`<div class="card"><b>${esc(S.season)}: no pool</b><div class="note">${S.notes.map(esc).join(' ')}</div></div>`+archAllTime(A);
   const champs=S.owners.filter(o=>o.champ);
   h+=`<div class="card"><b>${esc(S.season)}</b> <span class="note">· ${S.owners.length} owners${S.no_tournament?' · 🦠 no NCAA tournament':''}</span>
     <div style="margin-top:6px">${S.champion.length>1?'Tied for first':'Champion'}: ${champs.map(o=>'👑 '+archEmoji(o)+archOwnerName(o)).join(' & ')} <b>${S.top_total}</b> pts</div>`+
@@ -762,7 +762,7 @@ function vArchive(){
       (o.team_sum!=null?`<div class="note"><span class="pill warn">sheet quirk</span> Sheet total is ${o.total}; the teams below add up to ${o.team_sum}. Showing the sheet's total.</div>`:'')+
       (o.unranked?`<div class="note"><span class="pill warn">unranked</span> ${esc(o.unranked)}</div>`:'')+
       archTeams(o)+`</div>`).join('')+`</div>`;
-  return h}
+  return h+archAllTime(A)}
 const VIEWS={standings:vStandings,games:vGames,bets:vBets,rosters:vRosters,teams:vTeams,checklist:vChecklist,redraft:vRedraft,archive:vArchive,about:vAbout};
 function render(){
   if(!D)return;const m=D.meta;
