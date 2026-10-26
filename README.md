@@ -15,7 +15,7 @@ Static app (`index.html` + `data.js`) and a stdlib-only Python refresh script. N
 `index.html` also works opened straight from disk (file://) — it just shows whatever data.js was last built.
 
 ## Tabs
-Standings · **Games** (recent results + upcoming games for rostered teams, WIB tip-offs, Vegas line, favorite/underdog, owners per side, pool-vs-pool highlighted, upset badge) · Rosters · **Side bets** (who-owes-who matrix, per-person totals, wager list, new-bet builder) · All teams · Bonus checklist · Upsets · Jan 20 redraft · Rules & sources.
+Standings · **Games** (recent results + upcoming games for rostered teams, WIB tip-offs, Vegas line, favorite/underdog, owners per side, pool-vs-pool highlighted, upset badge; NCAA tournament upsets are judged by seed, lower seed beating a better seed) · Rosters · **Side bets** (who-owes-who matrix, per-person totals, wager list, new-bet builder) · All teams · Bonus checklist · Upsets · Jan 20 redraft · Rules & sources.
 
 ## Side bets
 - `bets.json` = live ledger: `people` (ids + aliases + optional `pool_owner`), `currency` (IDR, shown in K), `fines`, `bets`. Shorthand amounts: 100K, 1.5mil, 2juta, 250,000. Bet types: `versus` (one-vs-many, odds like 2:1 with a longshot side, per-game series, non-cash `stake_item`), `pool` (buy-in + payouts incl. runner-up money back).

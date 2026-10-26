@@ -27,6 +27,8 @@
   "rules": {
     "upset_games": ["ncaa"],
     "upset_games_help": "Which games can earn the +4 upset bonus. Default ['ncaa'] (the sheet says 'beats a higher seed in the NCAA tournament'). Add 'conf' (conference tournaments) and/or 'reg' (regular season) to widen it.",
+    "tournament_upset_basis": "seed",
+    "tournament_upset_basis_help": "NCAA tournament games: 'seed' (pool rule) = the lower-seeded team (higher seed number) beating a better seed is an upset; equal seeds = no upset. If seeds are missing it falls back to the Vegas underdog. 'vegas' = use the betting underdog for tournament games too.",
     "upset_basis": "vegas",
     "upset_basis_help": "'vegas' = winner was the betting underdog (ESPN/DraftKings closing line, stored per game). If a line is missing, falls back to NCAA seed (winner has a worse seed number) and is flagged. 'seed' = always use seeds.",
     "upset_first_four": false,

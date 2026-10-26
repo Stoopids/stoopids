@@ -673,7 +673,7 @@ function vChecklist(){
 function vUpsets(){
   const A=D.upset_audit.slice().reverse();
   const sc=D.meta.rules.upset_games.map(x=>({ncaa:'NCAA tournament',conf:'conference tournaments',reg:'regular season'}[x]||x)).join(' + ');
-  let h=`<div class="card"><b>The upset rule</b><div class="note">Upset = your team <b>won as the betting underdog</b> (closing line from ESPN/DraftKings, saved with each game below). Applies to: <b>${esc(sc)}</b>. Equal seeds never count. No line? We fall back to seed (worse seed beats better seed) and flag it ⚠️.</div></div>`;
+  let h=`<div class="card"><b>The upset rule</b><div class="note">Upset = in the NCAA tournament, your team <b>beat a better seed</b> (a bigger seed number beats a smaller one, e.g. a 12 over a 5). Equal seeds never count. Vegas lines are shown for fun but don't decide tournament upsets. Applies to: <b>${esc(sc)}</b>.</div></div>`;
   if(!A.length)return h+`<div class="card">No eligible games yet — upsets are scored from the NCAA tournament in March. Place your bets responsibly (we mean the figurative kind).</div>`;
   h+=`<div class="card sc"><table><tr><th>Date</th><th>Game</th><th>Line (pre-game)</th><th>Upset?</th></tr>${A.map(a=>{const l=a.line;const ls=l?`${esc(l.provider)}: ${esc(l.details||'')} · ML ${l.home_ml}/${l.away_ml} <span class="mut">(home/away; dog ${esc(a.winnerId==l.underdog_id?a.winner:a.loser)})</span>`:'<span class="mut">no line</span>';
     return `<tr><td>${esc(a.day)}<div class="note">${esc(a.round)}</div></td><td>${a.winnerSeed?'('+a.winnerSeed+') ':''}<b>${esc(a.winner)}</b> ${a.winnerScore}-${a.loserScore} ${a.loserSeed?'('+a.loserSeed+') ':''}${esc(a.loser)}</td><td>${ls}</td><td>${a.upset?'<b class="good">YES +'+D.meta.points.upset+'</b>':a.upset===false?'no':'?'} ${a.fallback?'⚠️':''}<div class="note">${esc(a.basis)}</div></td></tr>`}).join('')}</table></div>`;
@@ -692,7 +692,7 @@ function vAbout(){
   return `<div class="card sc"><table><tr><th>Scoring</th><th class="n">Pts</th></tr>${rows.map(r=>`<tr><td>${r[0]}</td><td class="n">${sign(r[1])}</td></tr>`).join('')}</table></div>
   <div class="card"><b>Where the numbers come from</b><ul class="it">
    <li><b>Scores, records, seeds, tournament rounds:</b> ESPN public scoreboard (primary). Fallback: ncaa.com data via the free ncaa-api.henrygd.me relay, used automatically for any day ESPN fails (scores/seeds only).</li>
-   <li><b>Betting lines (Games tab + upsets):</b> ESPN odds API (DraftKings preferred; live in-game odds are ignored). Upcoming games show the latest posted line (re-checked every refresh, books usually post a few days ahead, otherwise 'line not posted yet'); final games keep the stored closing line.</li>
+   <li><b>Betting lines (Games tab; tournament upsets use seeds, not lines):</b> ESPN odds API (DraftKings preferred; live in-game odds are ignored). Upcoming games show the latest posted line (re-checked every refresh, books usually post a few days ahead, otherwise 'line not posted yet'); final games keep the stored closing line.</li>
    <li><b>Conference regular-season champs:</b> ESPN standings (top conference seed, which includes tiebreaks) once the conference tournament starts.</li>
    <li><b>Rosters:</b> your Google Sheet, re-read on every refresh.</li></ul>
    <b>Automatic</b>: wins, losses, conf tournament champs, conf regular-season champs, NCAA entry, play-in wins, NCAA wins, Final Four, champ, missed dance, upsets.<br>

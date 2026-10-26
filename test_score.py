@@ -48,25 +48,29 @@ class T(unittest.TestCase):
         self.assertEqual(o["Murnane"]["total"], 1)   # only Jan 19 counts for the old owner
         self.assertEqual(o["Kurt"]["total"], 2)      # Jan 20 + Jan 21 for the new owner
 
-    def test_ncaa_points_and_upset_vegas(self):
+    def test_ncaa_points_and_upset_by_seed(self):
         t = lambda i, seed, win: side(i, 70 if win else 60, win, seed)
         g = [game(10, "2027-03-17", "ncaa", t(1, 11, True), t(60, 11, False), "First Four"),
-             game(11, "2027-03-19", "ncaa", t(1, 11, True), t(61, 6, False), "1st Round"),     # underdog wins -> upset
-             game(12, "2027-03-21", "ncaa", t(1, 11, True), t(62, 3, False), "2nd Round"),     # favorite per line -> no upset even though 11 > 3 seed
+             game(11, "2027-03-19", "ncaa", t(1, 11, True), t(61, 6, False), "1st Round"),     # 11 beats 6 -> upset by seed
+             game(12, "2027-03-21", "ncaa", t(1, 11, True), t(62, 3, False), "2nd Round"),     # 11 beats 3 -> upset by seed (Vegas line is ignored in the tournament)
              game(13, "2027-03-26", "ncaa", t(63, 2, False), t(1, 11, True), "Sweet 16", home_win=False)]
         g.append(game(14, "2027-03-28", "ncaa", t(1, 11, False), t(64, 1, True), "Elite 8"))  # lost
         # entry via first four win; Final Four appearance not set
         lines = {"11": {"underdog_id": "1", "favorite_id": "61", "details": "T61 -2.5"},
-                 "12": {"underdog_id": "62", "favorite_id": "1", "details": "T1 -1.5"},     # the SEED upset is NOT a vegas upset
+                 "12": {"underdog_id": "62", "favorite_id": "1", "details": "T1 -1.5"},     # Vegas favorite, but the pool judges by seed
                  "13": {"underdog_id": None, "favorite_id": None, "details": "PK"}}
         o, r = run(g, W([1]), lines=lines)
         by = o["Murnane"]["by_cat"]
         self.assertEqual(by["playin_win"], 1)
         self.assertEqual(by["ncaa_entry"], 5)
         self.assertEqual(by["ncaa_win"], 6)          # R1, R2, S16 (First Four is not a +2)
-        self.assertEqual(by["upset"], 4)             # exactly one vegas upset
+        self.assertEqual(by["upset"], 12)            # games 11, 12, 13 are seed upsets (First Four does not score)
         a = {x["id"]: x for x in r["upset_audit"]}
-        self.assertTrue(a["11"]["upset"]); self.assertFalse(a["12"]["upset"]); self.assertFalse(a["13"]["upset"])
+        self.assertTrue(a["11"]["upset"]); self.assertTrue(a["12"]["upset"]); self.assertTrue(a["13"]["upset"])
+        self.assertFalse(a["11"]["fallback"])
+        cfg = copy.deepcopy(CFG); cfg["rules"]["tournament_upset_basis"] = "vegas"       # optional old behaviour
+        o2, r2 = run(g, W([1]), lines=lines, cfg=cfg)
+        self.assertEqual(o2["Murnane"]["by_cat"]["upset"], 4)
 
     def test_upset_seed_fallback_flagged(self):
         t = lambda i, seed, win: side(i, 70 if win else 60, win, seed)
@@ -74,10 +78,10 @@ class T(unittest.TestCase):
              game(21, "2027-03-21", "ncaa", t(1, 12, True), t(62, 12, False), "2nd Round")]  # equal seeds: never an upset
         o, r = run(g, W([1]), lines={})
         a = {x["id"]: x for x in r["upset_audit"]}
-        self.assertTrue(a["20"]["upset"]); self.assertTrue(a["20"]["fallback"])
+        self.assertTrue(a["20"]["upset"]); self.assertFalse(a["20"]["fallback"])
         self.assertFalse(a["21"]["upset"])
         ups = [i for i in o["Murnane"]["teams"][0]["items"] if i["cat"] == "upset"]
-        self.assertEqual(len(ups), 1); self.assertTrue(ups[0].get("fallback"))
+        self.assertEqual(len(ups), 1); self.assertFalse(ups[0].get("fallback"))
 
     def test_upset_scope_toggle(self):
         g = [game(30, "2026-12-01", "reg", side(1, 80, True), side(2, 70, False))]

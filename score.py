@@ -34,6 +34,9 @@ def decide_upset(g, lines, cfg, ov):
     ws, ls = w.get("seed"), l.get("seed")
     if g["kind"] == "ncaa" and rules.get("equal_seed_no_upset", True) and ws and ls and ws == ls:
         return {"upset": False, "basis": "equal seeds (no upset per pool rule)", "fallback": False}
+    # NCAA tournament games: the pool judges an upset by SEED (lower seed beats a higher seed), not by Vegas.
+    if g["kind"] == "ncaa" and rules.get("tournament_upset_basis", "seed") == "seed" and ws and ls:
+        return {"upset": ws > ls, "basis": "seed (%s over %s)" % (ws, ls), "fallback": False}
     basis = rules.get("upset_basis", "vegas")
     line = (lines or {}).get(str(g["id"]))
     if basis == "vegas" and line:
