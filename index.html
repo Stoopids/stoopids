@@ -36,9 +36,10 @@ main{max-width:1000px;margin:0 auto;padding:12px 10px 60px}
 .bar{height:6px;background:var(--card2);border-radius:9px;margin-top:8px;overflow:hidden}
 .bar i{display:block;height:100%;background:var(--acc)}
 .chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
-.chip{display:inline-flex;align-items:center;gap:5px;padding:2px 8px 2px 2px;border-radius:99px;font-weight:700;font-size:12.5px;border:2px solid transparent;max-width:100%}
+.chip{text-decoration:none;display:inline-flex;align-items:center;gap:5px;padding:2px 8px 2px 2px;border-radius:99px;font-weight:700;font-size:12.5px;border:2px solid transparent;max-width:100%}
 .chip img,.chip .nologo{width:22px;height:22px;border-radius:50%;background:#fff;object-fit:contain;padding:1px;flex:none}
 .chip .nologo{display:inline-block}
+.chip:hover{filter:brightness(1.12)}
 .chip.big{font-size:15px;padding:3px 11px 3px 3px}
 .chip.big img{width:30px;height:30px}
 .chip.out{opacity:.55;text-decoration:line-through}
@@ -123,7 +124,8 @@ function lum(rgb){const f=v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/
 function textOn(hex){const r=hex2rgb(hex);if(!r)return '#fff';const L=lum(r);return (1.05)/(L+.05) > (L+.05)/.05 ? '#fff':'#111'}
 function chip(tid,opt){opt=opt||{};const t=D.teams[tid]||{};if(!t.short&&opt.name)t.short=opt.name;const bg='#'+((t.color||'').replace('#','')||'3a4256');const alt='#'+((t.alt||'').replace('#','')||'ffffff');
   const fg=textOn(bg);const logo=t.logo?`<img src="${esc(t.logo)}" alt="" loading="lazy" onerror="this.outerHTML='<span class=nologo></span>'">`:'<span class="nologo"></span>';
-  return `<span class="chip${opt.big?' big':''}${opt.out?' out':''}" style="background:${bg};color:${fg};border-color:${alt}">${logo}${esc(t.short||t.name||tid)}</span>`}
+  const url='https://www.espn.com/mens-college-basketball/team/_/id/'+encodeURIComponent(t.espn_id||tid);
+  return `<a class="chip${opt.big?' big':''}${opt.out?' out':''}" href="${url}" target="_blank" rel="noopener" title="Open ${esc(t.name||t.short||tid)} on ESPN" onclick="event.stopPropagation()" style="background:${bg};color:${fg};border-color:${alt}">${logo}${esc(t.short||t.name||tid)}</a>`}
 /* ---------- helpers ---------- */
 const rec=tid=>{const r=D.records[tid]||{w:0,l:0};return r.w+'-'+r.l};
 const sign=n=>n>0?'+'+n:String(n);
