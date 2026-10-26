@@ -131,16 +131,20 @@ const rec=tid=>{const r=D.records[tid]||{w:0,l:0};return r.w+'-'+r.l};
 const sign=n=>n>0?'+'+n:String(n);
 function ownerOf(tid){for(const o of D.owners)for(const t of o.teams)if(t.tid===tid&&t.status!=='dropped')return o.name;return '—'}
 function wibDay(d){return d}
+function shuf(a,seed){a=a.slice();let x=seed>>>0||1;const r=()=>{x^=x<<13;x>>>=0;x^=x>>>17;x^=x<<5;x>>>=0;return x/4294967296};for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+const TSEED=window._tagSeed||(window._tagSeed=Math.floor(Math.random()*1e9)+1);
+const PRE_Q=['Everyone is 0-0 and a genius. Enjoy it.','Undefeated in spirit.','Zero points. Zero mistakes. Peak performance.','Perfect record. Ask again after the first tip-off.','Bracket confidence: sky high. Evidence: none.','Still technically in first place.','The trophy engraver is on standby.','Every pick looks brilliant right now.','No bad beats yet. Give it time.','Rumor has it this roster is cursed. Rumor has not been tested.'];
+const MID_Q=['Hanging in there.','Vibes are immaculate, points are TBD.','Blame the refs.','The committee will remember this.','Still believes in the process.','Has a spreadsheet and no answers.','Running on hope and one good mid-major.','Bracket busted, spirit intact.','Playing the long game. Very long.','Would like a word with the transfer portal.'];
 function quip(o,i,n){
-  if(D.meta.mode==='preseason')return ['Everyone is 0-0 and a genius. Enjoy it.','Undefeated in spirit.','Zero points. Zero mistakes. Peak performance.'][i%3];
+  if(D.meta.mode==='preseason'){return shuf(PRE_Q,TSEED)[i%PRE_Q.length]}
   if(i===0)return 'Don\u2019t get cocky. Cocky gets a 5-seed.';
   if(i===n-1)return 'Proud owner of the participation trophy.';
-  return ['Hanging in there.','Vibes are immaculate, points are TBD.','Blame the refs.','The committee will remember this.'][i%4];
+  return shuf(MID_Q,TSEED)[(i-1)%MID_Q.length];
 }
 function stamp(){return D.meta.generated_at_wib}
 /* ---------- views ---------- */
-const NOPTS=['No points yet. Everyone starts somewhere (0).','Zero points. Pure potential.','Nothing on the board yet. Dream big.','0 points and no evidence of poor drafting.','Spotless record, because nothing has happened.','No points yet. The comeback story starts here.','Blank scoreboard. Peak optimism.'];
-function noPts(n){let h=0;for(const c of String(n))h=(h*31+c.charCodeAt(0))>>>0;return NOPTS[(h+(window._tagSeed||(window._tagSeed=Math.floor(Math.random()*997))))%NOPTS.length]}
+const NOPTS=['No points yet. Everyone starts somewhere (0).','Zero points. Pure potential.','Nothing on the board yet. Dream big.','0 points and no evidence of poor drafting.','Spotless record, because nothing has happened.','No points yet. The comeback story starts here.','Blank scoreboard. Peak optimism.','Zero points, zero regrets.','The ledger is clean. Enjoy it while it lasts.','Not a single point lost, either.'];
+function noPts(n){const idx=Math.max(0,(D.owners||[]).findIndex(o=>o.name===n));return shuf(NOPTS,TSEED+7)[idx%NOPTS.length]}
 function vStandings(){
   const mx=Math.max(10,...D.owners.map(o=>o.total));
   return D.owners.map((o,i)=>`<div class="card"><div class="lb" onclick="goOwner('${esc(o.name)}')">
