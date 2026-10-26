@@ -725,17 +725,17 @@ function archOwnerName(o){
 function archEmoji(o){const m=o.current_owner&&D&&D.owners?D.owners.find(x=>x.name===o.current_owner):null;return m&&m.emoji?esc(m.emoji)+' ':''}
 function archRank(o){return o.rank==null?'–':(o.tie?'T-':'')+o.rank}
 function archAllTime(A){
-  const rows=A.alltime;
+  const rows=A.alltime;const cnt=p=>p.title_seasons.filter(y=>!((A.seasons.find(s=>s.season===y)||{}).no_tournament)).length;
   const maxS=Math.max(...rows.map(p=>p.seasons));
-  const waiting=rows.filter(p=>p.titles===0&&p.seasons===maxS).map(p=>p.person);
+  const waiting=rows.filter(p=>cnt(p)===0&&p.seasons===maxS).map(p=>p.person);
   const q=waiting.length?`${waiting.join(' and ')} ${waiting.length>1?'have':'has'} played ${maxS} seasons without a title. Next year is always next year.`:'Every title here is real. Nobody asked for the receipts.';
   return `<div class="card"><b>🏛️ All-time</b> <span class="note">· ${A.seasons_played} seasons played, computed from the archived sheets</span>
    <div class="quip">${esc(q)}</div>
    <div class="sc"><table><tr><th>Owner</th><th class="n">Titles</th><th class="n">Seasons</th><th>Title years</th></tr>`+
    rows.map(p=>{const cur=p.current_owner&&p.current_owner!==p.person?` <span class="mut">(${esc(p.current_owner)})</span>`:'';
     const yrs=p.title_seasons.slice().sort().reverse().map(y=>esc(y)+(((A.seasons.find(s=>s.season===y)||{}).no_tournament)?' 🦠':'')).join(', ')||'<span class="mut">—</span>';
-    return `<tr><td><b>${esc(p.person)}</b>${cur}</td><td class="n">${p.titles?'🏆 '+p.titles:'0'}</td><td class="n">${p.seasons}</td><td>${yrs}</td></tr>`}).join('')+
-   `</table></div><div class="fine">🦠 = 2019-20, when the NCAA tournament was cancelled. A title is the top total in that season's sheet. Tied firsts would not be counted.</div></div>`}
+    return `<tr><td><b>${esc(p.person)}</b>${cur}</td><td class="n">${cnt(p)?'🏆 '+cnt(p):'0'}</td><td class="n">${p.seasons}</td><td>${yrs}</td></tr>`}).join('')+
+   `</table></div><div class="fine">🦠 = 2019-20, when the NCAA tournament was cancelled. Listed as a title year, but not counted in the Titles total. A title is the top total in that season's sheet. Tied firsts would not be counted.</div></div>`}
 function archTeams(o){
   return `<div class="sc"><table><tr><th>#</th><th>Team</th><th class="n">Wins</th><th class="n">Pts</th></tr>`+
    o.teams.map(t=>`<tr><td>${t.pick}</td><td class="t">${t.name?esc(t.name):'<i class="mut">(no team name in sheet)</i>'}${t.redraft_add?' <span class="pill" title="Pick 9–10 carry the Jan 20 adjustment column">Jan 20 pick</span>':''}</td><td class="n mut">${t.wins==null?'':t.wins}</td><td class="n"><b>${t.pts==null?'—':t.pts}</b></td></tr>`).join('')+
