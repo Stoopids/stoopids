@@ -98,7 +98,7 @@
      "drop": [],
      "add": []
     },
-    "Party Paul": {
+    "Paul": {
      "drop": [
       "Howard",
       "Wichita State"
@@ -134,8 +134,8 @@
  },
  "owners": [
   {
-   "name": "Party Paul",
-   "team_name": "PARTY PAUL",
+   "name": "Paul",
+   "team_name": "PAUL",
    "emoji": "💩",
    "total": 316,
    "by_cat": {
@@ -64551,7 +64551,7 @@
      "Poo",
      "Party Paul"
     ],
-    "pool_owner": "Party Paul"
+    "pool_owner": "Paul"
    },
    {
     "id": "jim",
@@ -66678,7 +66678,7 @@
     "src": "imported",
     "status": "open",
     "type": "direct",
-    "text": "Party Paul goes Maddux.... Ken bets 200K he beats Paul in the 2026-27 Stoops BBall Pick 'em",
+    "text": "Paul goes Maddux.... Ken bets 200K he beats Paul in the 2026-27 Stoops BBall Pick 'em",
     "outcome": "",
     "entries": [],
     "participants": [
@@ -66695,7 +66695,7 @@
     "src": "imported",
     "status": "wash",
     "type": "direct",
-    "text": "Party Paul goes Maddux,.... Ken bets 100K he beats Paul in this year's Elite 8",
+    "text": "Paul goes Maddux,.... Ken bets 100K he beats Paul in this year's Elite 8",
     "outcome": "Paul bets Ken w a team Ken drafted for him... but, owes Ken half. So, we are calling this whole mess a wash.",
     "entries": [],
     "participants": [
@@ -66731,8 +66731,8 @@
     "src": "imported",
     "status": "settled",
     "type": "direct",
-    "text": "Party Paul takes michigan ove kurt duke 100k",
-    "outcome": "duke takes it, Party Paul owes kurt 100k",
+    "text": "Paul takes michigan ove kurt duke 100k",
+    "outcome": "duke takes it, Paul owes kurt 100k",
     "entries": [
      {
       "from": "paul",
@@ -67866,8 +67866,8 @@
     "src": "imported",
     "status": "settled",
     "type": "direct",
-    "text": "ELITE 8 - Jake 1st, Murf 2nd, Party Paul 3rd LINK",
-    "outcome": "Kurt, Mark, Paul, Jim each owe Jake 500K \nScott owes Murf 500K\nParty Paul gets money back (split w Ken)\nJake owes Murf 1.25million to split pot for drafting his team for him",
+    "text": "ELITE 8 - Jake 1st, Murf 2nd, Paul 3rd LINK",
+    "outcome": "Kurt, Mark, Paul, Jim each owe Jake 500K \nScott owes Murf 500K\nPaul gets money back (split w Ken)\nJake owes Murf 1.25million to split pot for drafting his team for him",
     "entries": [
      {
       "from": "kurt",
@@ -68418,7 +68418,7 @@
     "src": "imported",
     "status": "settled",
     "type": "direct",
-    "text": "Japan will beat Brazil. Ken takes the bet from Party Paul",
+    "text": "Japan will beat Brazil. Ken takes the bet from Paul",
     "outcome": "Paul owes Ken 100K",
     "entries": [
      {
@@ -70475,7 +70475,7 @@
     "win": true,
     "pool": true,
     "owners": [
-     "Party Paul"
+     "Paul"
     ]
    },
    "away": {
@@ -70581,7 +70581,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Party Paul"
+     "Paul"
     ]
    },
    "away": {
@@ -71062,7 +71062,7 @@
     "win": true,
     "pool": true,
     "owners": [
-     "Party Paul"
+     "Paul"
     ]
    },
    "away": {
@@ -71126,7 +71126,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Party Paul"
+     "Paul"
     ]
    },
    "line": {
@@ -71225,7 +71225,7 @@
     "win": true,
     "pool": true,
     "owners": [
-     "Party Paul"
+     "Paul"
     ]
    },
    "away": {
@@ -71279,7 +71279,7 @@
     "pool": true,
     "owners": [
      "Murf",
-     "Party Paul"
+     "Paul"
     ]
    },
    "away": {
@@ -71550,7 +71550,7 @@
     "win": true,
     "pool": true,
     "owners": [
-     "Party Paul"
+     "Paul"
     ]
    },
    "away": {
@@ -71715,7 +71715,7 @@
     "win": true,
     "pool": true,
     "owners": [
-     "Party Paul"
+     "Paul"
     ]
    },
    "away": {
@@ -72202,7 +72202,7 @@
     "win": true,
     "pool": true,
     "owners": [
-     "Party Paul"
+     "Paul"
     ]
    },
    "away": {
@@ -72530,7 +72530,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Party Paul"
+     "Paul"
     ]
    },
    "away": {
@@ -72586,7 +72586,7 @@
     "pool": true,
     "owners": [
      "Murf",
-     "Party Paul"
+     "Paul"
     ]
    },
    "away": {
@@ -72696,7 +72696,7 @@
     "win": true,
     "pool": true,
     "owners": [
-     "Party Paul"
+     "Paul"
     ]
    },
    "away": {
@@ -72806,7 +72806,7 @@
     "win": true,
     "pool": true,
     "owners": [
-     "Party Paul"
+     "Paul"
     ]
    },
    "away": {
@@ -72861,7 +72861,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Party Paul"
+     "Paul"
     ]
    },
    "away": {
@@ -73081,7 +73081,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Party Paul"
+     "Paul"
     ]
    },
    "away": {
@@ -73092,7 +73092,7 @@
     "win": true,
     "pool": true,
     "owners": [
-     "Party Paul"
+     "Paul"
     ]
    },
    "line": {
@@ -73244,7 +73244,7 @@
     "win": true,
     "pool": true,
     "owners": [
-     "Party Paul"
+     "Paul"
     ]
    },
    "away": {
@@ -73420,7 +73420,7 @@
     "win": false,
     "pool": true,
     "owners": [
-     "Party Paul"
+     "Paul"
     ]
    },
    "line": {
@@ -73725,7 +73725,7 @@
     "sheet_name": "Grambling St."
    }
   ],
-  "Party Paul": [
+  "Paul": [
    {
     "tid": "41",
     "start": null,
