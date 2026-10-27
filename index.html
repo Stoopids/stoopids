@@ -69,32 +69,35 @@ main{max-width:1000px;margin:0 auto;padding:12px 10px 60px}
 .chip.big .nologo{font-size:11px}
 .chip:hover{filter:brightness(1.12)}
 /*<RANK-CHIPS>*/
-/* Ranks tab: row 1 = rank | name + team-name subtitle | points (right); the team chips sit below it as a full-width wrapped grid (4 columns on phones = 4x2 for 8 teams, 3 columns below 340px, 4 columns from 700px, 8 in one row from 1000px; chips >=32px tall). Markup/links unchanged, CSS only (+ class "oc" on the card, per-owner quip dropped from these cards). */
+/* Ranks tab (tidy): every card is the same height. Phones (<700px): row 1 = rank | name + team-name subtitle | points, then an equal-width chip grid (4 columns, 3 below 340px, rows fixed at 32px). Team names wrap to 2 lines inside the chip instead of being cut off. >=700px (RANK-BESIDE below): rank | name | points | chips as true columns shared by all cards (CSS subgrid), so points and chips line up vertically. Markup: cards wrapped in .ocl, chip name in span.cn. Links/JS unchanged. */
 .card.oc{display:grid;grid-template-columns:46px minmax(0,1fr) auto;grid-template-areas:"rank who pts" "bar bar bar" "chips chips chips";column-gap:10px;align-items:center}
 .card.oc .lb{display:contents}
 .card.oc .rank{grid-area:rank}
 .card.oc .who{grid-area:who}
 .card.oc .pts{grid-area:pts}
 .card.oc .bar{grid-area:bar}
-.card.oc .chips{grid-area:chips;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;margin-top:8px;align-self:stretch}
-.card.oc .chip{display:block;min-width:0;max-width:none;padding:1px 2px 1px 1px;font-size:10px;line-height:26px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.card.oc .chip img,.card.oc .chip .nologo{width:20px;height:20px;display:inline-block;vertical-align:middle;margin-right:2px}
-.card.oc .chip .nologo{display:inline-flex;font-size:8px}
-@media (max-width:339px){.card.oc .chips{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media (min-width:700px){
-  .card.oc .chips{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
-  .card.oc .chip{font-size:12.5px;padding:1px 8px 1px 1px;margin:0}
-}
-@media (min-width:1000px){.card.oc .chips{grid-template-columns:repeat(8,minmax(0,1fr));gap:4px}.card.oc .chip{font-size:11px;padding:1px 2px 1px 1px}}
+.card.oc .chips{grid-area:chips;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:32px;gap:4px;margin-top:8px;align-self:stretch;--rows:2;min-height:calc(var(--rows)*32px + (var(--rows) - 1)*4px);align-content:start}
+.card.oc .chip{display:flex;align-items:center;gap:3px;min-width:0;max-width:none;height:32px;box-sizing:border-box;padding:0 3px 0 2px;font-size:9.5px;letter-spacing:-.02em;line-height:1.1;overflow:hidden}
+.card.oc .chip img,.card.oc .chip .nologo{width:17px;height:17px;margin:0;flex:none;padding:1px}
+.card.oc .chip .nologo{font-size:7px}
+.card.oc .chip .cn{min-width:0;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden;overflow-wrap:normal;word-break:normal;text-align:left}
+.card.oc .chip .cn.one{display:block;white-space:nowrap;text-overflow:ellipsis}
+@media (max-width:339px){.card.oc .chips{grid-template-columns:repeat(3,minmax(0,1fr));--rows:3}}
 /*</RANK-CHIPS>*/
 /*<RANK-BESIDE>*/
-/* Ranks, >=700px only (phones keep the layout above): row = rank | name block | points (small gap after the name) | team chips taking the remaining width, left-packed, wrapping inside their own area; the progress bar spans the card underneath. No far-right points, no empty band. Drop this block to get the earlier layout back. */
+/* >=700px only: one shared 4-column track set (rank | name | points | chips) for the whole list via subgrid, so names, points and chip grids line up in every card; name column is as wide as the longest name (max 230px), points column right-aligned. */
 @media (min-width:700px){
-  .card.oc{grid-template-columns:46px fit-content(250px) auto minmax(0,1fr);grid-template-areas:"rank who pts chips" "bar bar bar bar";column-gap:12px;align-items:center}
-  .card.oc .pts{text-align:left}
-  .card.oc .chips{margin-top:0;margin-left:6px;align-self:center;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+  .ocl{display:grid;grid-template-columns:56px fit-content(230px) auto minmax(0,1fr);column-gap:12px;margin-top:10px}
+  .ocl>.card.oc{grid-column:1/-1;grid-template-columns:56px 200px 64px minmax(0,1fr);grid-template-areas:"rank who pts chips" "bar bar bar bar";column-gap:12px}
+  @supports (grid-template-columns:subgrid){.ocl>.card.oc{grid-template-columns:subgrid}}
+  .card.oc .pts{justify-self:end;text-align:right}
+  .card.oc .chips{margin-top:0}
   .card.oc .bar{margin-top:8px}
+  .card.oc .chip{font-size:11.5px;letter-spacing:0;padding:0 6px 0 2px;gap:4px}
+  .card.oc .chip img,.card.oc .chip .nologo{width:20px;height:20px}
+  .ocl>.card.oc{margin:0 0 10px}
 }
+@media (min-width:1000px){.card.oc .chip{font-size:12.5px}}
 /*</RANK-BESIDE>*/
 .chip.big{font-size:15px;padding:3px 11px 3px 3px}
 .chip.big img{width:30px;height:30px}
@@ -300,7 +303,7 @@ function initials(n){n=String(n||'').replace(/\(.*?\)/g,' ').replace(/[^A-Za-z0-
 function chip(tid,opt){opt=opt||{};const t=D.teams[tid]||{};if(!t.short&&opt.name)t.short=opt.name;const bg='#'+((t.color||'').replace('#','')||'3a4256');const alt='#'+((t.alt||'').replace('#','')||'ffffff');
   const fg=textOn(bg);const ini=esc(initials(t.short||t.name||opt.name||tid));const logo=t.logo?`<img src="${esc(t.logo)}" alt="" loading="lazy" onerror="this.outerHTML='<span class=nologo>${ini}</span>'">`:`<span class="nologo" aria-hidden="true">${ini}</span>`;
   const url='https://www.espn.com/mens-college-basketball/team/_/id/'+encodeURIComponent(t.espn_id||tid);
-  return `<a class="chip${opt.big?' big':''}${opt.out?' out':''}" href="${url}" target="_blank" rel="noopener" title="Open ${esc(t.name||t.short||tid)} on ESPN" onclick="event.stopPropagation()" style="background:${bg};color:${fg};border-color:${alt}">${logo}${esc(t.short||t.name||tid)}</a>`}
+  return `<a class="chip${opt.big?' big':''}${opt.out?' out':''}" href="${url}" target="_blank" rel="noopener" title="Open ${esc(t.name||t.short||tid)} on ESPN" onclick="event.stopPropagation()" style="background:${bg};color:${fg};border-color:${alt}">${logo}${/*<RANK-CHIPS>*/opt.cn?'<span class="cn'+(/\s/.test(t.short||t.name||tid)?'':' one')+'">'+esc(t.short||t.name||tid)+'</span>':/*</RANK-CHIPS>*/esc(t.short||t.name||tid)}</a>`}
 /* ---------- helpers ---------- */
 const rec=tid=>{const r=D.records[tid]||{w:0,l:0};return r.w+'-'+r.l};
 const sign=n=>n>0?'+'+n:String(n);
@@ -593,12 +596,12 @@ function noPts(n){const idx=Math.max(0,(D.owners||[]).findIndex(o=>o.name===n));
 const rankTxt=o=>(D.owners.filter(x=>x.rank===o.rank).length>1?'T-':'')+o.rank;
 function vStandings(){
   const mx=Math.max(10,...D.owners.map(o=>o.total));
-  return D.owners.map((o,i)=>`<div class="card${/*<RANK-CHIPS>*/' oc'/*</RANK-CHIPS>*/}"><div class="lb" onclick="goOwner('${esc(o.name)}')">
+  return /*<RANK-CHIPS>*/'<div class="ocl">'/*</RANK-CHIPS>*/+D.owners.map((o,i)=>`<div class="card${/*<RANK-CHIPS>*/' oc'/*</RANK-CHIPS>*/}"><div class="lb" onclick="goOwner('${esc(o.name)}')">
     <div class="rank">${rankTxt(o)}</div>
     <div class="who"><b>${esc(o.emoji)} ${esc(o.name)}</b><small>${esc(o.team_name)}</small>${/*<RANK-CHIPS>*/''/*per-owner quip no longer shown on these cards (quip() itself is untouched; Rosters still uses it)*//*</RANK-CHIPS>*/}</div>
     <div class="pts">${o.total}<small>points</small></div></div>
     <div class="bar"><i style="width:${Math.max(0,o.total)/mx*100}%"></i></div>
-    <div class="chips">${o.teams.map(t=>chip(t.tid,{out:t.status==='dropped'})).join('')}</div></div>`).join('')+
+    <div class="chips">${o.teams.map(t=>chip(t.tid,{out:t.status==='dropped',cn:1})).join('')}</div></div>`).join('')+'</div>'+
     `<p class="note">Tap an owner for the full breakdown. Struck-through teams were dropped in the Jan 20 redraft.</p>`}
 function goOwner(n){ownerSel=n;tab='rosters';render();window.scrollTo(0,0)}
 
