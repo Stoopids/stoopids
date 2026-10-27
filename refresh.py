@@ -407,7 +407,7 @@ def load_standings(cfg, cache_dir, offline):
 
 
 # ---------------------------------------------------------------- main
-def main():
+def _refresh():
     ap = argparse.ArgumentParser()
     ap.add_argument("--demo", action="store_true", help="replay last season with this year's rosters")
     ap.add_argument("--offline", action="store_true")
@@ -557,9 +557,12 @@ def main():
     out = {"meta": meta, "owners": res["owners"], "teams": teams_info, "records": res["records"], "team_games": res["team_games"],
            "checklist": res["checklist"], "upset_audit": res["upset_audit"], "conf_audit": res["conf_audit"],
            "bets": B.package(jload(os.path.join(HERE, "bets.json"), {"people": [], "bets": []}), jload(os.path.join(HERE, "bets_imported.json"))), "games": view, "cat_labels": S.CAT_LABEL, "windows": {k: [{kk: vv for kk, vv in w.items()} for w in v] for k, v in windows.items()}}
-    jsave(os.path.join(out_dir, "data.json"), out)
-    with open(os.path.join(out_dir, "data.js"), "w") as f:
-        f.write("window.STOOPIDS_DATA = " + json.dumps(out, ensure_ascii=False, separators=(",", ":")) + ";\n")
+    # FAIL-SOFT: never replace the last good data.js/data.json with empty or partial data
+    prev = load_good(out_dir)
+    problems = sanity_problems(out, gstats, sheet_ok, rosters, a, prev)
+    if problems:
+        raise Hold("; ".join(problems))
+    write_data(out_dir, out)
     if not a.demo and not a.offline:        # fail-soft backup of the shared side-bets ledger (repo keeps the history)
         try:
             log("shared bets:", B.backup_shared(cfg, os.path.join(out_dir, "bets_shared_backup.json")))
@@ -569,6 +572,92 @@ def main():
     if warnings:
         log("WARNINGS:\n  " + "\n  ".join(warnings))
     return 0
+
+
+# ---------------------------------------------------------------- FAIL-SOFT refresh (separate change, see failsoft-refresh.diff)
+class Hold(Exception):
+    """A refresh problem that must NOT overwrite the last good data (reported, exit 0)."""
+
+
+def load_good(out_dir):
+    """The previously published data.json if it looks usable, else None."""
+    d = jload(os.path.join(out_dir, "data.json"))
+    if isinstance(d, dict) and isinstance(d.get("meta"), dict) and d["meta"].get("generated_at_utc") and d.get("owners"):
+        return d
+    return None
+
+
+def write_data(out_dir, out):
+    """Write data.json + data.js via temp files so a crash never leaves a half-written file."""
+    jp, sp = os.path.join(out_dir, "data.json"), os.path.join(out_dir, "data.js")
+    jsave(jp, out)
+    with open(sp + ".tmp", "w") as f:
+        f.write("window.STOOPIDS_DATA = " + json.dumps(out, ensure_ascii=False, separators=(",", ":")) + ";\n")
+    os.replace(sp + ".tmp", sp)
+
+
+def sanity_problems(out, gstats, sheet_ok, rosters, a, prev):
+    """Reasons the freshly built data must not replace the last good data (empty / partial / not actually refreshed)."""
+    p = []
+    if a.offline:
+        return p          # offline rebuild is an explicit manual action
+    if gstats["days_total"] and gstats["days_fetched"] + gstats["days_ncaa_fallback"] == 0:
+        p.append("no fresh scoreboard data from ESPN or NCAA (network down?) - data is not actually refreshed")
+    empty = [o for o, v in rosters.items() if not v]
+    if empty:
+        p.append("no teams found in the sheet for %s%s" % (", ".join(empty), "" if sheet_ok else " (sheet fetch failed)"))
+    if not out["games"] and not out["owners"]:
+        p.append("built data is empty")
+    if prev:
+        pg = prev["meta"].get("games_loaded") or 0
+        if pg and out["meta"]["games_loaded"] == 0:
+            p.append("0 games loaded (previous run had %d)" % pg)
+        elif gstats["days_failed_both"] and out["meta"]["games_loaded"] < pg:
+            p.append("%d day(s) failed on both ESPN and NCAA and games dropped %d -> %d" % (gstats["days_failed_both"], pg, out["meta"]["games_loaded"]))
+    return p
+
+
+def record_refresh_error(out_dir, msg):
+    """Keep the last good data; only add meta.refresh_error + a warning. generated_at_utc is NOT touched.
+    Idempotent: repeating the same message rewrites nothing (no commit noise)."""
+    prev = load_good(out_dir)
+    if not prev:
+        return False
+    m = prev["meta"]
+    if (m.get("refresh_error") or {}).get("message") == msg:
+        return True
+    tag = "REFRESH FAILED (showing last good data from %s): %s" % (m["generated_at_utc"], msg)
+    m["warnings"] = [w for w in m.get("warnings", []) if not w.startswith("REFRESH FAILED")] + [tag]
+    m["refresh_error"] = {"message": msg, "first_seen_utc": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"), "last_good_utc": m["generated_at_utc"]}
+    write_data(out_dir, prev)
+    return True
+
+
+def main():
+    try:
+        return _refresh()
+    except SystemExit:
+        raise
+    except Exception as ex:  # noqa - Hold, network, parse, anything uncaught
+        if not isinstance(ex, Hold):
+            import traceback
+            traceback.print_exc()
+        msg = (str(ex) if isinstance(ex, Hold) else "%s: %s" % (type(ex).__name__, ex)).replace("\n", " ")[:300]
+        ap = argparse.ArgumentParser(add_help=False)
+        ap.add_argument("--out")
+        ap.add_argument("--demo", action="store_true")
+        known, _ = ap.parse_known_args()
+        out_dir = known.out or (os.path.join(HERE, "demo") if known.demo else HERE)
+        try:
+            kept = record_refresh_error(out_dir, msg)
+        except Exception as ex2:  # noqa
+            log("could not record refresh error:", ex2)
+            kept = bool(load_good(out_dir))
+        if kept:
+            log("REFRESH SOFT-FAIL (kept last good data, exit 0): " + msg)
+            return 0
+        log("REFRESH FATAL (no previous good data): " + msg)
+        return 1
 
 
 if __name__ == "__main__":

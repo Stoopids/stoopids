@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>STOOPIDS — NCAA Stoopids Pool</title>
+<!--<FAVICON>--><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%23ffd23f%27/%3E%3Ctext x=%2732%27 y=%2749%27 font-family=%27Arial Black,Arial,sans-serif%27 font-size=%2748%27 font-weight=%27900%27 text-anchor=%27middle%27 fill=%27%23111%27%3ES%3C/text%3E%3C/svg%3E"><!--</FAVICON>-->
 <style>
 :root{--bg:#10131a;--card:#1a1f2b;--card2:#222939;--line:#2d3548;--tx:#eef1f7;--mut:#9aa6bd;--acc:#ffd23f;--good:#4ade80;--bad:#f87171}
 *{box-sizing:border-box}
@@ -24,10 +25,18 @@ h1 span{color:var(--acc)}
 .tag{color:var(--mut);margin:6px 0 0}
 .badge{display:inline-block;padding:3px 9px;border-radius:99px;font-size:12px;font-weight:700;background:var(--card2);border:1px solid var(--line);margin:8px 6px 0 0}
 .badge.warn{background:#4b3a0b;border-color:#8a6d12;color:#ffe08a}
-nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:8px 10px;display:flex;flex-wrap:wrap;gap:5px;overflow:visible;max-width:1000px;margin:8px auto 0}
-nav button{background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:99px;padding:8px 12px;min-height:36px;font-size:13px;font-weight:700;white-space:nowrap;cursor:pointer}
-@media (max-width:640px){nav{position:sticky;top:0;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:8px 40px 8px 10px;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 32px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 32px),transparent)}nav::-webkit-scrollbar{display:none}nav button{padding:10px 14px;min-height:42px;font-size:13px}}
+/*<NAV-ONE-ROW>*/
+/* All tabs on ONE row, never wrapping or scrolling. Phone: tiny icon above a short label (full name stays in aria-label). Desktop (>=900px): full labels in pills. */
+nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:6px 4px;display:flex;flex-wrap:nowrap;gap:2px;overflow:hidden;max-width:1000px;margin:8px auto 0}
+nav button{position:relative;flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:9px;padding:4px 0;min-height:46px;font:inherit;font-size:9.5px;font-weight:800;letter-spacing:-.01em;line-height:1.05;white-space:nowrap;cursor:pointer}
+nav button .ni{font-size:17px;line-height:1}
+nav button .nl{display:block;max-width:100%;overflow:hidden;text-overflow:clip}
+nav button .nl.f{display:none}
 nav button.on{background:var(--acc);color:#111;border-color:var(--acc)}
+nav button:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
+@media (max-width:370px){nav{padding:6px 2px;gap:1px}nav button{font-size:8.8px;letter-spacing:-.025em}}
+@media (min-width:900px){nav{padding:8px 10px;gap:5px}nav button{flex:1 1 auto;flex-direction:row;gap:6px;border-radius:99px;padding:8px 10px;min-height:40px;font-size:13px;letter-spacing:0}nav button .ni{font-size:14px}nav button .nl.f{display:block}nav button .nl.s{display:none}}
+/*</NAV-ONE-ROW>*/
 main{max-width:1000px;margin:0 auto;padding:12px 10px 60px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin:10px 0;overflow-wrap:anywhere}
 .lb{display:flex;align-items:center;gap:10px;cursor:pointer}
@@ -134,6 +143,50 @@ button.pc{cursor:pointer}
 .pwho button.cur{background:var(--acc);color:#111;border-color:var(--acc)}
 .pwho button.guest{width:100%;margin-top:9px;background:transparent;border-style:dashed;color:var(--mut);font-weight:700}
 .pwho .skip{display:block;margin:10px auto 0;background:none;border:0;color:var(--mut);font-size:12.5px;font-weight:600;text-decoration:underline;padding:4px}
+/*<NEWBET-CSS>*/
+.nbt{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:40;width:calc(100% - 20px);max-width:420px;display:flex;align-items:center;gap:6px;background:var(--card2);color:var(--tx);border:1px solid var(--acc);border-radius:14px;padding:6px 6px 6px 12px;box-shadow:0 8px 28px rgba(0,0,0,.55);font-size:14px;font-weight:700}
+.nbt[hidden]{display:none}
+.nbt .nbm{flex:1;min-width:0;overflow-wrap:anywhere;line-height:1.3}
+.nbt button{flex:none;min-width:40px;min-height:40px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--tx);font:inherit;font-size:13px;font-weight:800;cursor:pointer;padding:0 10px}
+.nbt .nbv{background:var(--acc);color:#111;border-color:var(--acc)}
+body.chatopen .nbt{bottom:auto;top:64px}
+nav button .nb{position:absolute;top:1px;right:2px;background:var(--acc);color:#111;border-radius:99px;font-size:9px;font-weight:900;line-height:1;padding:2px 4px;pointer-events:none}
+/*</NEWBET-CSS>*/
+/*<WA-SHARE-CSS>*/
+a.wa{display:inline-flex;align-items:center;gap:6px;min-height:40px;margin-top:6px;padding:0 12px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--mut);font-size:13px;font-weight:700;text-decoration:none}
+a.wa:hover,a.wa:focus-visible{color:var(--tx);border-color:#2f6b47}
+/*</WA-SHARE-CSS>*/
+/*<CHAT-CSS>*/
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.chat{max-width:1000px;margin:0 auto 18px;padding:0 10px}
+.chat[hidden]{display:none}
+.chat-t{display:flex;align-items:center;gap:8px;width:100%;min-height:44px;background:var(--card);border:1px solid var(--line);border-radius:12px;color:var(--tx);font:inherit;font-weight:800;padding:0 12px;cursor:pointer;text-align:left}
+.chat-t:focus-visible,.chat-f button:focus-visible,.chat-f input:focus-visible,.chat-p button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.chat-t .cn{margin-left:auto;color:var(--mut);font-size:12px;font-weight:600;white-space:nowrap}
+.chat-t .cdot{width:10px;height:10px;border-radius:50%;background:var(--acc);box-shadow:0 0 0 3px rgba(255,210,63,.25);flex:none}
+.chat-t .cdot[hidden]{display:none}
+.chat-t .ca{color:var(--acc);font-size:12px;flex:none}
+.chat-b{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-top:6px;padding:8px;min-width:0}
+.chat-b[hidden]{display:none}
+.chat-l{height:min(46vh,320px);overflow-y:auto;overflow-x:hidden;padding:2px 2px 4px;overscroll-behavior:contain}
+.chat-l .ce{color:var(--mut);font-size:13px;text-align:center;padding:18px 8px}
+.cm{max-width:90%;margin:6px 0;padding:6px 10px;border-radius:12px;background:var(--card2);border:1px solid var(--line);min-width:0}
+.cm.me{margin-left:auto;background:#3a3010;border-color:#8a6d12}
+.cm .cw{font-weight:800;color:var(--acc);font-size:12px}
+.cm .ct{color:var(--mut);font-size:11px;margin-left:6px;white-space:nowrap}
+.cm .cx{font-size:14px;overflow-wrap:anywhere;word-break:break-word}
+.cm.pend{opacity:.6}
+.chat-f{display:flex;gap:6px;margin-top:8px}
+.chat-f input{flex:1;min-width:0;min-height:44px;font-size:16px;background:var(--card2);color:var(--tx);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-family:inherit}
+.chat-f button{flex:none;min-height:44px;min-width:64px;border:0;border-radius:10px;background:var(--acc);color:#111;font:inherit;font-weight:800;cursor:pointer;padding:0 14px}
+.chat-f button:disabled{opacity:.5;cursor:default}
+.chat-p{margin-top:8px}
+.chat-p button{width:100%;min-height:44px;border-radius:10px;border:1px dashed var(--acc);background:transparent;color:var(--acc);font:inherit;font-weight:800;cursor:pointer}
+.chat-p[hidden],.chat-f[hidden]{display:none}
+.chat-m{min-height:18px;margin-top:4px;font-size:12px;color:var(--mut);display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:space-between}
+.chat-m .bad{color:var(--bad)}
+.chat-m button{min-height:40px;padding:0 10px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font:inherit;font-size:12px;cursor:pointer}
+/*</CHAT-CSS>*/
 </style>
 </head>
 <body>
@@ -147,6 +200,15 @@ button.pc{cursor:pointer}
 <nav id="nav"></nav>
 <main id="main"><div class="card">Loading the stoopidity…</div></main>
 <div id="presence" hidden></div>
+<!--<CHAT>--><section id="chat" class="chat" aria-label="Live chat" hidden>
+  <button type="button" id="chatT" class="chat-t" aria-expanded="false" aria-controls="chatB"><span class="ca" aria-hidden="true">▸</span><span>💬 Chat</span><i class="cdot" hidden title="New messages"></i><span class="cn" id="chatN"></span></button>
+  <div id="chatB" class="chat-b" hidden>
+    <div id="chatL" class="chat-l" role="log" aria-live="polite" aria-label="Chat messages" tabindex="0"></div>
+    <form id="chatF" class="chat-f" autocomplete="off" hidden><label for="chatI" class="sr">Your message</label><input id="chatI" type="text" maxlength="200" enterkeyhint="send" autocomplete="off" autocapitalize="sentences" placeholder="Say something Stoopid…"><button type="submit" id="chatS">Send</button></form>
+    <div id="chatP" class="chat-p" hidden><button type="button" id="chatPb">👋 Pick who you are to chat</button></div>
+    <div class="chat-m"><span id="chatM" role="status"></span><span id="chatA"></span></div>
+  </div>
+</section><!--</CHAT>-->
 <footer id="foot"></footer>
 <script src="archive.js?v=1"></script>
 <script>
@@ -156,7 +218,8 @@ const params=new URLSearchParams(location.search);
 const DEMO=params.has('demo');
 const ADMIN=params.has('admin');   // ?admin=1 shows developer-facing details (warnings, data health, config/overrides notes, JSON export)
 let D=null,tab=params.get('tab')||'standings',ownerSel=null,openTeam={};
-const TABS=[['standings','🏆 Standings'],['games','📅 Games'],['rosters','👥 Rosters'],['bets','🎲 Side bets'],['teams','🏀 All teams'],['checklist','✅ Postseason'],['redraft','🔄 Jan 20 redraft'],['archive','🗂️ Archive'],['about','📖 Rules & sources']];
+const TABS=[['standings','🏆 Standings'],['games','📅 Games'],['rosters','👥 Rosters'],['bets','🎲 Side bets'],['teams','🏀 All teams'],['checklist','✅ Postseason'],['redraft','🔄 Jan 20 redraft'],['archive','🗂️ Archive'],['about','📖 Rules']];
+/*<NAV-ONE-ROW>*/const NAVSHORT={standings:'Ranks',games:'Games',rosters:'Rosters',bets:'Bets',teams:'Teams',checklist:'Post',redraft:'Redraft',archive:'Archive',about:'Rules'};/*</NAV-ONE-ROW>*/   // short phone labels (the full name is each button's aria-label)
 
 /* ---------- color helpers (auto contrast) ---------- */
 function hex2rgb(h){h=(h||'').replace('#','');if(h.length===3)h=h.split('').map(c=>c+c).join('');if(!/^[0-9a-f]{6}$/i.test(h))return null;return[0,2,4].map(i=>parseInt(h.substr(i,2),16))}
@@ -541,7 +604,14 @@ function settleMutator(doc,key,patch,repoSpec,people){
 }
 /*</SHARED-BETS-CORE>*/
 /* serve.py answers api/ping (local mode, unchanged). No answer = static host (GitHub Pages): use the shared ledger. */
-fetch('api/ping').then(r=>r.json()).then(j=>{editOK=!!j.edit;if(tab==='bets')render()},()=>{editOK=false;sharedInit()});
+/*<PING>*/
+/* api/ping only exists when the page is served by serve.py (local mode). On GitHub Pages (*.github.io) there is no such endpoint, so don't ask: it would only add a 404 to every visitor's console. Any failure is swallowed. */
+(function(){
+  const noServer=()=>{editOK=false;sharedInit()},later=()=>setTimeout(noServer,0);   // later(): `const SH` etc. are declared below this line, so never run it synchronously
+  if(/\.github\.io$/i.test(location.hostname)){later();return}
+  try{fetch('api/ping').then(r=>r.json()).then(j=>{editOK=!!j.edit;if(tab==='bets')render()},noServer)}catch(e){later()}
+})();
+/*</PING>*/
 /* ---------- shared ledger (hosted/static site) ---------- */
 /* On GitHub Pages there is no server, so new/settled bets live in ONE small anonymous JSON document (config.json -> shared_bets).
    Writes = re-fetch -> apply my change to the fresh copy -> PUT the whole doc -> re-fetch to verify (retry up to 3x if someone else wrote at the same moment). */
@@ -607,7 +677,7 @@ async function sharedReload(force){
     let d=await sharedGet(SH.cfg);
     d=await sharedHeal(d);
     const sig=JSON.stringify(d.bets),changed=sig!==SH.sig;
-    SH.state='ok';SH.err='';SH.fromBackup=false;SH.doc=d;SH.sig=sig;SH.at=new Date();
+    SH.state='ok';SH.err='';SH.fromBackup=false;SH.doc=d;SH.sig=sig;SH.at=new Date();try{nbUpdate(d.bets)}catch(_){}   // NEWBET hook
     if(changed||force||prev!=='ok'){applyShared();sbRerender()}
   }catch(e){
     SH.state='error';SH.err=e.message||String(e);
@@ -670,6 +740,7 @@ async function sbShared(optimistic,mutate,verify,okMsg){
     const chk=await sharedWrite(mutate,verify);
     SH.doc=chk;SH.sig=JSON.stringify(chk.bets);SH.at=new Date();SH.state='ok';SH.err='';
     SH.mine.push({t:Date.now(),mutate,verify});
+    try{nbSilent(chk.bets)}catch(_){}   // NEWBET hook: my own bet is never announced to me
     sbMsg=okMsg(chk);
   }catch(e){
     SH.doc=before;
@@ -728,7 +799,7 @@ function vBets(){
   h+=L.slice().reverse().slice(0,150).map(b=>`<div class="card"><div><b>#${esc(b.n)}</b> <span class="st ${b.status}">${b.status==='unparsed'?'⚠ not in tally':(SBL[b.status]||b.status)}</span> <span class="mut" style="font-size:12px">${b.src==='imported'?'2025-26':esc(b.season||'')}</span></div>
     <div style="margin:4px 0">${esc(b.text)}</div>${b.outcome?`<div class="note">Outcome: ${esc(b.outcome)}</div>`:''}
     ${b.entries.length?`<div style="margin-top:4px">${b.entries.map(e=>`<span class="pill">${esc(P(e.from).name)} → ${esc(P(e.to).name)} <b>${e.amount!=null?money(e.amount):esc(e.item)}</b>${e.paid?' ✓paid':''}</span>`).join('')}</div>`:''}
-    ${b.notes&&b.notes.length&&b.status!=='open'?`<div class="note ${b.status==='unparsed'?'bad':''}">${b.status==='unparsed'?'Needs checking: ':'Assumed: '}${b.notes.map(esc).join('; ')}</div>`:''}</div>`).join('');
+    ${b.notes&&b.notes.length&&b.status!=='open'?`<div class="note ${b.status==='unparsed'?'bad':''}">${b.status==='unparsed'?'Needs checking: ':'Assumed: '}${b.notes.map(esc).join('; ')}</div>`:''}${waBtn(b)}</div>`).join('');
   if(L.length>150)h+=`<p class="note">Showing the latest 150 of ${L.length}. Use the filters.</p>`;
   if(cov)h+=`<div class="card"><b>2025-26 bets: what was counted</b>${ADMIN?` <span class="note">(imported ${esc(fmtDate((B.imported_at||'').slice(0,10)))})</span>`:''}<div class="note">${cov.total} bets were read from last season’s sheet. <b>${cov.settled}</b> are counted in the totals${cov.settled_with_assumptions?` (${cov.settled_with_assumptions} of those rest on a stated assumption)`:''}, ${cov.wash} washes, ${cov.open} still open (no outcome written), and <b class="bad">${cov.unparsed}</b> couldn’t be read safely and are <b>not in the totals</b> (set Status to “Couldn’t read” to see them).${ADMIN?' Source: the “NEW BETS” block; payment-detail columns of the sheet are never read.':''}</div></div>`;
   return h}
@@ -843,19 +914,17 @@ function vAbout(){
   const rows=[['Win (reg season + conf tourney, any opponent)',P.win],['Conference regular-season champ',P.conf_reg],['Conference tournament champ',P.conf_tourn],['Make the NCAA field',P.ncaa_entry],['Play-in (First Four) win',P.playin_win],['Upset (NCAA tournament: beat a better seed)',P.upset],['NCAA tournament win',P.ncaa_win],['Final Four',P.final4],['National champ',P.champ],['Miss the Big Dance',P.missed_dance]];
   return `<div class="card sc"><table><tr><th>Scoring</th><th class="n">Pts</th></tr>${rows.map(r=>`<tr><td>${r[0]}</td><td class="n">${sign(r[1])}</td></tr>`).join('')}</table></div>
   ${vUpsets()}
-  ${ADMIN?`<div class="card"><b>Where the numbers come from</b><ul class="it">
-   <li><b>Scores, records, seeds, tournament rounds:</b> ESPN public scoreboard (primary). Fallback: ncaa.com data via the free ncaa-api.henrygd.me relay, used automatically for any day ESPN fails (scores/seeds only).</li>
-   <li><b>Betting lines (Games tab; tournament upsets use seeds, not lines):</b> ESPN odds API (DraftKings preferred; live in-game odds are ignored). Upcoming games show the latest posted line (re-checked every refresh, books usually post a few days ahead, otherwise 'line not posted yet'); final games keep the stored closing line.</li>
-   <li><b>Conference regular-season champs:</b> ESPN standings (top conference seed, which includes tiebreaks) once the conference tournament starts.</li>
-   <li><b>Rosters:</b> your Google Sheet, re-read on every refresh.</li></ul>
+  ${''/*<RULES-ONLY>*/}
+  ${ADMIN?`<div class="card"><b>What is automatic</b><ul class="it">
+   <li><b>Conference regular-season champ:</b> the top conference seed (tiebreaks included), awarded once the conference tournament starts.</li>
+</ul>
    <b>Automatic</b>: wins, losses, conf tournament champs, conf regular-season champs, NCAA entry, play-in wins, NCAA wins, Final Four, champ, missed dance, upsets.<br>
-   <b>Manual</b>: the Jan 20 redraft moves (config.json), and any corrections or rulings (overrides.json: force/deny a bonus, force/deny an upset, add a commissioner adjustment).</div>`:`<div class="card"><b>Where the numbers come from</b><ul class="it">
-   <li><b>Scores, records, seeds, tournament rounds:</b> ESPN.</li>
-   <li><b>Betting lines (Games tab):</b> DraftKings, via ESPN. Tournament upsets are judged by seed, not by the line. Upcoming games show the latest posted line (books usually post a few days ahead, otherwise “line not posted yet”); final games keep the closing line.</li>
-   <li><b>Conference regular-season champs:</b> ESPN standings (top conference seed, which includes tiebreaks) once the conference tournament starts.</li>
-   <li><b>Rosters:</b> the pool’s Google Sheet.</li></ul>
+   <b>Manual</b>: the Jan 20 redraft moves (config.json), and any corrections or rulings (overrides.json: force/deny a bonus, force/deny an upset, add a commissioner adjustment).</div>`:`<div class="card"><b>What is automatic</b><ul class="it">
+   <li><b>Conference regular-season champ:</b> the top conference seed (tiebreaks included), awarded once the conference tournament starts.</li>
+</ul>
    <b>Automatic</b>: wins, losses, conference champs, NCAA entry, play-in wins, NCAA wins, Final Four, champ, missed dance, upsets.<br>
    <b>By hand</b>: the Jan 20 redraft moves, and any corrections or rulings from the commissioner.</div>`}
+  ${''/*</RULES-ONLY>*/}
   <div class="card"><b>House interpretations${ADMIN?' (change in config.json)':''}</b><ul class="it">
    <li>Upset bonus applies to <b>${esc(m.rules.upset_games.map(x=>({ncaa:'NCAA tournament',conf:'conference tournament',reg:'regular-season'}[x]||x)).join(', '))}</b> games only (the sheet says "beats a higher seed in the NCAA tournament"). Equal seeds = no upset. First Four upsets: ${m.rules.upset_first_four?'on':'off'}.</li>
    <li>A First Four win = +1 play-in and +5 for making the field, but not the +2 NCAA win. A First Four loser: ${m.rules.first_four_loser_penalty?'gets -1':'no -1 penalty (just no +5)'}.</li>
@@ -864,7 +933,7 @@ function vAbout(){
   ${ADMIN?`<div class="card"><b>Data health</b><ul class="it"><li>Updated: ${esc(stampET())}</li><li>Mode: ${esc(m.mode)} · season ${esc(m.season)} · games loaded ${m.games_loaded} (${m.final_games} final)</li>
    <li>Days fetched fresh ${m.fetch.days_fetched}, cached ${m.fetch.days_cached}, ncaa.com fallback ${m.fetch.days_ncaa_fallback}, failed ${m.fetch.days_failed_both}</li>
    <li>Betting lines found ${m.odds.lines_found}/${m.odds.games_needing_line}</li><li>Rosters: ${esc(m.roster_source)}; sheet ${m.sheet_ok?'OK':'ERROR '+esc(m.sheet_error)}</li>
-   ${m.warnings.length?'<li class="bad">Warnings: '+m.warnings.map(esc).join('; ')+'</li>':''}</ul></div>`:`<div class="card"><b>Updated:</b> ${esc(stampET())}</div>`}`}
+   ${m.warnings.length?'<li class="bad">Warnings: '+m.warnings.map(esc).join('; ')+'</li>':''}</ul></div>`:''/*RULES-ONLY: owners' 'Updated' card removed (the freshness line under the title shows it)*/}`}
 /* ---------- archive (static: archive.js built once by archive_build.py) ---------- */
 let archSel=null;
 function archOwnerName(o){
@@ -925,13 +994,82 @@ function render(){
    demo:['DEMO: last season\u2019s real results run through this year\u2019s rosters. Nobody\u2019s actual points.']};
   const pickTag=(k,arr)=>{if(window._tagPick[k]==null)window._tagPick[k]=Math.floor(Math.random()*arr.length);return arr[window._tagPick[k]%arr.length]};
   $('#tag').textContent=TAGLINE_MODES.includes(m.mode)?stoopidTagline(new Date(),(D.owners||[]).map(o=>o.name)):(TAGS[m.mode]?pickTag('tag'+m.mode,TAGS[m.mode]):'');   // textContent: the owner name can never inject HTML
-  $('#badges').innerHTML=(m.mode==='demo'?'<span class="badge warn">DEMO DATA</span>':'')+(ADMIN?'<span class="badge">ADMIN VIEW</span>':'')+(ADMIN&&m.warnings.length?'<span class="badge warn">⚠ '+m.warnings.length+' warning(s) — see Rules &amp; sources</span>':'');
-  $('#nav').innerHTML=TABS.map(t=>`<button class="${t[0]===tab?'on':''}" onclick="tab='${t[0]}';render()">${t[1]}</button>`).join('');
-  {const nv=$('#nav'),on=nv.querySelector('button.on');if(on&&nv.scrollWidth>nv.clientWidth)nv.scrollLeft=Math.max(0,on.offsetLeft-(nv.clientWidth-on.offsetWidth)/2)}   // phone: nav scrolls sideways, keep the current tab in view
+  $('#badges').innerHTML=(m.mode==='demo'?'<span class="badge warn">DEMO DATA</span>':'')+(ADMIN?'<span class="badge">ADMIN VIEW</span>':'')+(ADMIN&&m.warnings.length?'<span class="badge warn">⚠ '+m.warnings.length+' warning(s) — see Rules</span>':'');
+  try{nbSeen()}catch(_){}   // NEWBET hook: opening Side bets clears the 'new' badge
+  /*<NAV-ONE-ROW>*/
+  $('#nav').innerHTML=TABS.map(t=>{const sp=t[1].indexOf(' '),ic=t[1].slice(0,sp),full=t[1].slice(sp+1),on=t[0]===tab;
+    return `<button class="${on?'on':''}" aria-label="${esc(full)}"${on?' aria-current="page"':''} onclick="tab='${t[0]}';render()"><span class="ni" aria-hidden="true">${ic}</span><span class="nl f">${esc(full)}</span><span class="nl s" aria-hidden="true">${esc(NAVSHORT[t[0]]||full)}</span>${nbBadge(t[0])}</button>`}).join('');
+  /*</NAV-ONE-ROW>*/
   $('#main').innerHTML=(VIEWS[tab]||vStandings)();
   $('#foot').innerHTML=`STOOPIDS · times in Eastern (ET) · ${DEMO?'<a href="?">back to the live season</a>':'<a href="?demo=1">see the demo (last season replay)</a>'}${ADMIN?' · scores ESPN (fallback ncaa.com)':''}`;
   freshStart();
 }
+/*<NEWBET>*/
+/* "Recently added bet" alert. Detects bets that show up in the shared ledger AFTER this page has loaded (compares bet keys with the set seen at first load).
+   - toast for people with the page open (one at a time; several new bets are combined into "N new side bets")
+   - 'new' badge on the Side bets tab for people who come back later: watermark = highest bet NUMBER (n, always increasing) already seen, stored in localStorage.
+     First-ever visit: the watermark starts at the current highest n, so nothing existing is flagged. */
+const NBSEEN='stoopids_bets_seen';
+const NB={known:null,pending:[],timer:null,maxN:0,el:null};
+const nbN=b=>{const n=parseInt(b&&b.n,10);return isFinite(n)?n:0};
+const nbMax=bets=>{let m=0;[...repoBets(),...(bets||[])].forEach(b=>{m=Math.max(m,nbN(b))});return m};
+const nbValid=b=>{try{validateBetJS(normalizeBet(b),D._base.people);return true}catch(e){return false}};
+function nbSides(b){const sp=b.spec||b;
+  if(Array.isArray(sp.side_a)&&Array.isArray(sp.side_b))return [sp.side_a,sp.side_b];
+  return [(sp.participants||b.participants||[]).slice(),null]}
+function nbText(b){
+  const nm=ids=>ids.map(i=>P(i).name).join(' & ');
+  const [a,c]=nbSides(b);
+  if(c&&a.length&&c.length)return nm(a)+' just made a bet with '+nm(c);
+  if(a.length>1)return a.map(i=>P(i).name).join(', ').replace(/, ([^,]*)$/,' and $1')+' just made a bet';
+  return 'New side bet #'+(b.n||'')+' added';
+}
+function nbBadge(key){
+  if(key!=='bets'||tab==='bets')return '';
+  const seen=parseInt(lsGet(NBSEEN),10);
+  return isFinite(seen)&&NB.maxN>seen?'<b class="nb" aria-hidden="true">new</b>':'';
+}
+function nbSeen(){if(tab==='bets'&&SH.state==='ok'&&NB.maxN)lsSet(NBSEEN,String(Math.max(NB.maxN,parseInt(lsGet(NBSEEN),10)||0)))}
+function nbSilent(bets){NB.maxN=nbMax(bets);if(NB.known)bets.forEach(b=>NB.known.add(betKey(b)));if(tab==='bets')nbSeen()}
+function nbUpdate(bets){
+  NB.maxN=nbMax(bets);
+  if(lsGet(NBSEEN)==null)lsSet(NBSEEN,String(NB.maxN));          // first-ever visit: nothing existing counts as new
+  if(NB.known===null){NB.known=new Set(bets.map(betKey));if(tab!=='bets'&&nbBadge('bets'))setTimeout(render,0);return}  // first load of this page: never announce what already exists (but a returning visitor's badge is drawn)
+  const added=bets.filter(b=>!NB.known.has(betKey(b)));
+  bets.forEach(b=>NB.known.add(betKey(b)));
+  const fresh=added.filter(nbValid);
+  if(fresh.length)nbShow(fresh);
+  if(tab==='bets')nbSeen();else if(added.length)setTimeout(render,0);   // after applyShared(): redraw so the nav badge appears
+}
+function nbEnsure(){
+  if(NB.el)return NB.el;
+  const e=document.createElement('div');e.id='nbtoast';e.className='nbt';e.setAttribute('role','status');e.setAttribute('aria-live','polite');e.hidden=true;
+  e.innerHTML='<span class="nbm"></span><button type="button" class="nbv">View</button><button type="button" class="nbx" aria-label="Dismiss">\u2715</button>';
+  e.querySelector('.nbx').onclick=nbHide;
+  e.querySelector('.nbv').onclick=()=>{nbHide();tab='bets';sbScope='ledger';render();window.scrollTo(0,0)};   // 'ledger' scope = the 2026-27 bets, where the new one is listed
+  document.body.appendChild(e);return NB.el=e;
+}
+function nbShow(list){
+  const e=nbEnsure();NB.pending=NB.pending.concat(list);
+  e.querySelector('.nbm').textContent=NB.pending.length===1?nbText(NB.pending[0]):NB.pending.length+' new side bets just added';
+  e.hidden=false;clearTimeout(NB.timer);NB.timer=setTimeout(nbHide,10000);
+}
+function nbHide(){clearTimeout(NB.timer);NB.pending=[];if(NB.el)NB.el.hidden=true}
+try{nbEnsure()}catch(_){}
+/*</NEWBET>*/
+/*<WA-SHARE>*/
+/* "Share to WhatsApp": a plain wa.me link with a prefilled text. The user taps send inside WhatsApp; nothing is sent by this page and no phone numbers are involved. Remove this block + ${waBtn(b)} in vBets + the WA-SHARE-CSS to drop the feature. */
+const WA_SITE='https://stoopids.github.io/stoopids/';
+function waText(b){
+  const clean=t=>String(t==null?'':t).replace(/[\u0000-\u001f\u007f]+/g,' ').replace(/\s+/g,' ').trim();
+  const cut=(t,n)=>{const a=Array.from(t);return a.length>n?a.slice(0,n-1).join('').trim()+'\u2026':t};
+  const [a,c]=nbSides(b),nm=ids=>ids.map(i=>P(i).name).join(' & ');
+  const who=(c&&a.length&&c.length)?nm(a)+' vs '+nm(c):(a.length?a.map(i=>P(i).name).join(', '):'');
+  return 'Stoopids side bet #'+clean(b.n)+(who?': '+who:'')+' \u2014 '+cut(clean(b.text),100)+' '+WA_SITE;
+}
+const waUrl=b=>'https://wa.me/?text='+encodeURIComponent(waText(b));
+const waBtn=b=>`<a class="wa" href="${esc(waUrl(b))}" target="_blank" rel="noopener" aria-label="Share bet #${esc(b.n)} to WhatsApp">\u{1F4AC} Share to WhatsApp</a>`;
+/*</WA-SHARE>*/
 /* ---------- who's online (anonymous shared blob; no passwords, anyone can pick any name) ---------- */
 const PRES={url:'https://textdb.dev/api/data/stoopids-presence-23658198955328729a557ddb',beatMs:30000,onlineMs:75000,guestKeepMs:600000,guestKey:'__guest__'};
 const PS={map:{},lastOk:0,timer:null,busy:false,started:false,dev:null,who:null};
@@ -996,9 +1134,159 @@ function presInit(){
   document.addEventListener('visibilitychange',()=>{presTick();if(!document.hidden)presBeat()});
   if(!PS.who)presAsk(true);else{presBeat();presTick()}
 }
+/*<CHAT>*/
+/* Live chat for people who are on the page. Same anonymous textdb approach as the presence strip, but its OWN key (presence key with 'stoopids-chat-' instead of 'stoopids-presence-').
+   Stored: {"v":1,"m":[{"i":randomId,"w":poolName,"t":ms,"x":text}]} - pool names only, last 50 messages, capped in size.
+   textdb has no append/compare-and-set, so a write = re-read -> add my message -> POST the whole blob -> read back; if my message got lost to a concurrent writer, retry once.
+   Not a secure channel: anyone with the key can post/edit it directly. Client-side guards only. Remove everything between the CHAT markers (CSS, markup, JS, load hook) to drop it. */
+const CHAT={url:PRES.url.replace('stoopids-presence-','stoopids-chat-'),max:50,maxBytes:12000,maxLen:200,gapMs:2000,openMs:9000,idleMs:60000,seenKey:'stoopids_chat_seen'};
+const CH={list:[],pend:[],open:false,started:false,busy:false,sending:false,last:0,fails:0,timer:null,seen:null,unread:false,msg:'',msgT:null,tick:null};
+function chatClean(t){
+  t=String(t==null?'':t).replace(/[\u0000-\u001f\u007f-\u009f\u200b-\u200f\u202a-\u202e\u2060-\u2069\ufeff]/g,' ').replace(/\s+/g,' ').trim();
+  t=t.replace(/[A-Z0-9._%+\-]+@[A-Z0-9.\-]+\.[A-Z]{2,}/gi,'[hidden]');                       // e-mail addresses
+  t=t.replace(/\+?\(?\d[\d\s().\-]{6,}\d/g,m=>m.replace(/\D/g,'').length>=8?'[hidden]':m);        // phone-like numbers (8+ digits)
+  const a=Array.from(t);return (a.length>CHAT.maxLen?a.slice(0,CHAT.maxLen).join(''):t).trim();
+}
+function chatParse(txt){
+  try{
+    if(!txt||!txt.trim())return [];let d=JSON.parse(txt);if(typeof d==='string')d=JSON.parse(d);
+    const arr=d&&Array.isArray(d.m)?d.m:[];const out=[],ids=new Set();
+    for(const x of arr){
+      if(!x||typeof x.i!=='string'||!/^[a-z0-9]{6,20}$/.test(x.i)||ids.has(x.i))continue;
+      const t=Number(x.t);if(!isFinite(t)||t<=0||typeof x.x!=='string'||typeof x.w!=='string')continue;
+      ids.add(x.i);out.push({i:x.i,w:x.w.slice(0,30),t,x:Array.from(x.x).slice(0,CHAT.maxLen).join('')});
+    }
+    return out.sort((a,b)=>a.t-b.t);
+  }catch(e){return []}
+}
+function chatTrim(list){
+  list=list.slice().sort((a,b)=>a.t-b.t).slice(-CHAT.max);
+  while(list.length>1&&JSON.stringify({v:1,m:list}).length>CHAT.maxBytes)list.shift();
+  return list;
+}
+const chatETfmt=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',hour:'numeric',minute:'2-digit'});
+const chatETday=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',month:'short',day:'numeric'});
+function chatTime(ms,now){const d=new Date(ms),tm=chatETfmt.format(d);return chatETday.format(d)===chatETday.format(new Date(now==null?Date.now():now))?tm:chatETday.format(d)+', '+tm}
+function chatWho(){const w=PS.who||lsGet('stoopids_who');return w&&presOwners().some(o=>o.name===w)?w:null}
+const chatName=w=>presOwners().some(o=>o.name===w)?w:'guest';
+const chatRid=()=>{const a=new Uint8Array(6);(window.crypto||window.msCrypto).getRandomValues(a);return 'm'+Array.from(a,b=>('0'+b.toString(16)).slice(-2)).join('')};
+function chatOnlineCount(){
+  const m=PS.map||{},now=Date.now();let n=0;
+  if(!PS.who||!PS.lastOk)return 0;
+  presOwners().forEach(o=>{const e=m[o.name];if(e&&(now-e.t<=PRES.onlineMs||o.name===PS.who))n++});
+  for(const k in m)if(k.indexOf('g-')===0&&now-m[k].t<=PRES.onlineMs)n++;
+  return n;
+}
+function chatSay(t,bad){CH.msg=t||'';const e=$('#chatM');if(e){e.textContent=CH.msg;e.className=bad?'bad':''}clearTimeout(CH.msgT);if(t)CH.msgT=setTimeout(()=>chatSay(''),5000)}
+function chatDrawList(){
+  const L=$('#chatL');if(!L)return;
+  const near=L.scrollHeight-L.scrollTop-L.clientHeight<60,first=!L.querySelector('.cm');
+  const all=CH.list.concat(CH.pend.filter(p=>!CH.list.some(x=>x.i===p.i))),me=chatWho(),now=Date.now();
+  const nodes={};L.querySelectorAll('.cm').forEach(n=>{nodes[n.getAttribute('data-i')]=n});
+  const keep=new Set(all.map(x=>x.i));
+  Object.keys(nodes).forEach(k=>{if(!keep.has(k)){nodes[k].remove();delete nodes[k]}});
+  const ce=L.querySelector('.ce');
+  if(!all.length){if(!ce){const e=document.createElement('div');e.className='ce';e.textContent='No messages yet. Be the first to say something Stoopid.';L.appendChild(e)}return}
+  if(ce)ce.remove();
+  let prev=null;
+  all.forEach(x=>{
+    let d=nodes[x.i];
+    if(!d){                                    // new message: build it (text only, never innerHTML)
+      d=document.createElement('div');d.setAttribute('data-i',x.i);
+      const w=document.createElement('span'),t=document.createElement('span'),b=document.createElement('div');
+      w.className='cw';w.textContent=chatName(x.w);t.className='ct';t.textContent=chatTime(x.t,now);b.className='cx';b.textContent=x.x;
+      d.appendChild(w);d.appendChild(t);d.appendChild(b);
+    }
+    d.className='cm'+(x.w===me?' me':'')+(CH.pend.some(p=>p.i===x.i)&&!CH.list.some(y=>y.i===x.i)?' pend':'');
+    const want=prev?prev.nextSibling:L.firstChild;
+    if(want!==d)L.insertBefore(d,want);
+    prev=d;
+  });
+  if(near||first||(CH.pend.length&&me))L.scrollTop=L.scrollHeight;     // only follow new messages if the reader is already at the bottom
+}
+function chatUI(){
+  const sec=$('#chat');if(!sec||sec.hidden)return;
+  const who=chatWho(),f=$('#chatF'),p=$('#chatP');
+  f.hidden=!who;p.hidden=!!who;
+  $('#chatN').textContent=(()=>{const n=chatOnlineCount();return n?n+' online':''})();
+  sec.querySelector('.cdot').hidden=!(CH.unread&&!CH.open);
+  const A=$('#chatA');A.textContent='';
+  if(ADMIN&&CH.open){const b=document.createElement('button');b.type='button';b.textContent='Clear chat (admin)';b.onclick=chatClear;A.appendChild(b)}
+}
+function chatNewest(){return CH.list.length?CH.list[CH.list.length-1].t:0}
+function chatMarkSeen(){const n=chatNewest();if(n){CH.seen=n;lsSet(CHAT.seenKey,String(n))}CH.unread=false}
+function chatUnreadCheck(){const me=chatWho();CH.unread=CH.seen!=null&&CH.list.some(x=>x.t>CH.seen&&x.w!==me)}
+async function chatPoll(){
+  if(CH.busy||document.hidden)return;CH.busy=true;
+  try{
+    const r=await fetch(CHAT.url,{cache:'no-store'});if(!r.ok)throw 0;
+    CH.list=chatParse(await r.text());CH.fails=0;
+    if(CH.seen==null){chatMarkSeen()}                   // first ever look: existing history is not "unread"
+    else if(CH.open)chatMarkSeen();else chatUnreadCheck();
+    chatDrawList();chatUI();
+  }catch(e){CH.fails=Math.min(CH.fails+1,5)}
+  CH.busy=false;chatSchedule();
+}
+function chatSchedule(){
+  clearTimeout(CH.timer);CH.timer=null;
+  if(document.hidden)return;                                   // paused while the tab is hidden
+  const base=CH.open?CHAT.openMs:CHAT.idleMs;                  // open: ~9s; collapsed: a slow 60s peek just to light the unread dot
+  CH.timer=setTimeout(chatPoll,base*Math.pow(2,CH.fails));     // back off on errors (x2 each, max x32)
+}
+async function chatSend(text){
+  const txt=chatClean(text),who=chatWho();
+  if(!who){chatSay('Pick who you are first.',true);return false}
+  if(!txt){chatSay('Nothing to send.',true);return false}
+  const now=Date.now();if(now-CH.last<CHAT.gapMs){chatSay('Easy there: one message every 2 seconds.',true);return false}
+  if(CH.sending)return false;
+  CH.last=now;CH.sending=true;
+  const m={i:chatRid(),w:who,t:now,x:txt};CH.pend.push(m);chatDrawList();
+  let ok=false;
+  try{
+    for(let k=0;k<2&&!ok;k++){
+      const r=await fetch(CHAT.url,{cache:'no-store'});if(!r.ok)throw 0;
+      let cur=chatParse(await r.text());
+      if(!cur.some(x=>x.i===m.i))cur.push(m);
+      cur=chatTrim(cur);
+      const w=await fetch(CHAT.url,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({v:1,m:cur})});if(!w.ok)throw 0;
+      const c=await fetch(CHAT.url,{cache:'no-store'});if(!c.ok)throw 0;
+      const back=chatParse(await c.text());
+      if(back.some(x=>x.i===m.i)){CH.list=back;ok=true}
+    }
+  }catch(e){}
+  CH.pend=CH.pend.filter(x=>x!==m);CH.sending=false;
+  if(!ok)chatSay("Couldn't send. Check your connection and try again.",true);
+  chatDrawList();chatUI();
+  return ok;
+}
+async function chatClear(){
+  if(!ADMIN||!window.confirm('Delete ALL chat messages for everyone?'))return;
+  try{const w=await fetch(CHAT.url,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({v:1,m:[]})});if(!w.ok)throw 0;CH.list=[];chatDrawList();chatSay('Chat cleared.')}catch(e){chatSay("Couldn't clear the chat.",true)}
+}
+function chatToggle(open){
+  CH.open=open==null?!CH.open:!!open;
+  $('#chatB').hidden=!CH.open;$('#chatT').setAttribute('aria-expanded',CH.open?'true':'false');$('#chatT .ca').textContent=CH.open?'▾':'▸';
+  document.body.classList.toggle('chatopen',CH.open);
+  if(CH.open){chatMarkSeen();chatDrawList();CH.fails=0;clearTimeout(CH.timer);chatPoll();const L=$('#chatL');L.scrollTop=L.scrollHeight}
+  else chatSchedule();
+  chatUI();
+}
+function chatInit(){
+  if(CH.started||DEMO||!D||!D.owners)return;CH.started=true;
+  const sec=$('#chat');if(!sec)return;sec.hidden=false;
+  const sv=parseInt(lsGet(CHAT.seenKey),10);CH.seen=isFinite(sv)?sv:null;
+  $('#chatT').onclick=()=>chatToggle();
+  $('#chatPb').onclick=()=>presAsk();
+  $('#chatF').addEventListener('submit',async ev=>{ev.preventDefault();const i=$('#chatI');const v=i.value;const sent=await chatSend(v);if(sent&&i.value===v)i.value=''});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden){clearTimeout(CH.timer);CH.timer=null}else{chatPoll()}});
+  const pp=presPick;presPick=function(w){pp(w);try{chatUI();chatDrawList()}catch(e){}};   // refresh the compose box right after the 'Who are you?' pick
+  CH.tick=setInterval(()=>{try{chatUI()}catch(e){}},15000);     // keeps the 'n online' label current (no network)
+  chatUI();chatPoll();setTimeout(()=>{try{chatUI()}catch(e){}},2500);   // once more after the first presence beat, so '(n) online' shows up
+}
+/*</CHAT>*/
 function load(){
   const s=document.createElement('script');s.src=(DEMO?'demo/':'')+'data.js?v='+Date.now();
-  s.onload=()=>{D=window.STOOPIDS_DATA;D._base=D.bets;applyShared();render();try{presInit()}catch(e){}};
+  s.onload=()=>{D=window.STOOPIDS_DATA;D._base=D.bets;applyShared();render();try{presInit()}catch(e){}try{chatInit()}catch(e){}};   /* chatInit = CHAT hook */
   s.onerror=()=>{if(!D)$('#main').innerHTML='<div class="card">Couldn\u2019t load the latest data. Try reloading the page.'+(ADMIN?' (data.js missing: run <code>python3 refresh.py</code> first.)':'')+'</div>'};
   document.head.appendChild(s);
 }
