@@ -108,6 +108,10 @@ main{max-width:1000px;margin:0 auto;padding:12px 10px 60px}
 .card.oc .chip .cr{grid-column:2;display:block;font-size:.92em;font-weight:600;line-height:1.1;letter-spacing:0;white-space:nowrap;font-variant-numeric:tabular-nums;opacity:.85;text-align:left;margin-top:1px}
 .card.oc .chip .cn.one{align-self:end}
 /*</CHIP-RECORD>*/
+/*<CHIP-FIT>*/
+/* Standings chips: the school name stays on ONE line (never wraps). chipFit() (JS, after every render / resize) shrinks the name font a step at a time until it fits the chip (floor 9px); only a name that still does not fit at 9px is cut with an ellipsis (the whole chip link title and the text keep the full name). Chip size / width / height unchanged. */
+.card.oc .chip .cn{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/*</CHIP-FIT>*/
 .chip.big{font-size:15px;padding:3px 11px 3px 3px}
 .chip.big img{width:30px;height:30px}
 .chip.out{opacity:.55;text-decoration:line-through}
@@ -121,6 +125,7 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
 .tabs{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px}
 .tabs button{background:var(--card);border:1px solid var(--line);color:var(--tx);border-radius:10px;padding:10px 13px;min-height:40px;cursor:pointer;font-weight:600}
 .tabs button.on{border-color:var(--acc);color:var(--acc)}
+/*<ONE-BETS>*/.ob-seg{flex-wrap:nowrap;gap:0;max-width:440px}.ob-seg button{flex:1 1 0;min-width:0;position:relative;border-radius:0;white-space:nowrap;padding:10px 6px}.ob-seg button:first-child{border-radius:10px 0 0 10px}.ob-seg button:last-child{border-radius:0 10px 10px 0;margin-left:-1px}.ob-seg button.on{background:var(--acc);color:#111;border-color:var(--acc);font-weight:800}.ob-seg .nb{position:absolute;top:-5px;right:6px;background:var(--acc);color:#111;border-radius:99px;font-size:9px;font-weight:900;line-height:1;padding:2px 5px;pointer-events:none}/*</ONE-BETS>*/
 .trow{cursor:pointer}
 .det{background:var(--card2);border-radius:10px;padding:8px 10px;margin:4px 0 10px}
 .pill{display:inline-block;padding:1px 8px;border-radius:99px;background:var(--card2);border:1px solid var(--line);font-size:12px;margin:2px 3px 2px 0}
@@ -145,6 +150,10 @@ select,.sel{background:var(--card);color:var(--tx);border:1px solid var(--line);
 .up{display:inline-block;padding:1px 8px;border-radius:99px;font-weight:800;font-size:12px;background:#7c2d12;color:#ffedd5}
 .up.ns{background:var(--card2);color:var(--mut)}
 .h2b{display:inline-block;padding:1px 8px;border-radius:99px;font-weight:800;font-size:12px;background:var(--acc);color:#111}
+/*<QUICK-BET>*/.qbw{margin-top:8px;display:flex;justify-content:flex-end}.qb-btn{font:inherit;font-size:13px;font-weight:800;min-height:36px;padding:0 12px;border-radius:99px;border:1px solid var(--acc);background:transparent;color:var(--acc);cursor:pointer}.qb-btn[aria-expanded=true]{background:var(--acc);color:#111}
+.qb-pick{margin-top:8px;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--card2);font-size:13px}.qb-pick .qb-r{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0}.qb-pick .qb-l{font-weight:800}.qb-pick .qb-r.v{display:block}.qb-pick .qb-r.v .qb-l{display:block;margin-bottom:4px;font-size:12px;color:var(--mut)}.qb-pick .qb-g{display:flex;gap:6px}.qb-pick .qb-g button{flex:1 1 0;min-width:0}.qb-pick .qb-g.w{flex-wrap:wrap}.qb-pick .qb-g.w button{flex:1 1 auto}.b27-form{scroll-margin-top:84px}
+.qb-pick button{font:inherit;font-weight:800;font-size:14px;min-height:40px;padding:0 12px;border-radius:10px;border:2px solid var(--line);background:var(--card);color:var(--tx);cursor:pointer;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.qb-pick button[aria-pressed=true]{border-color:var(--acc);color:var(--acc)}.qb-pick .qb-x{border:0;background:transparent;color:var(--mut);min-height:32px;font-weight:600}.qb-pick .qb-m{color:var(--bad,#ff6b6b);font-weight:700;margin:4px 0}
+.qb-hint{margin:6px 0 2px;padding:6px 10px;border-radius:10px;background:var(--card2);border:1px solid var(--acc);color:var(--tx)}/*</QUICK-BET>*/
 .seed{font-size:11px;color:var(--mut)}
 
 .sb-in,.sb-ta{background:var(--card2);color:var(--tx);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font:inherit;width:100%}
@@ -315,22 +324,9 @@ nav button .nu{position:absolute;top:1px;left:2px;min-width:15px;background:#ff3
 .oqn{white-space:nowrap}.oqn::before{content:attr(data-em) " "}.oqn .s{display:none}
 .oqs{font-size:12px;color:var(--mut);margin:2px 0 6px}
 /*<OWES-CHART>*/
-.oqg-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:10px}
-.oqg{border-collapse:separate;border-spacing:0;table-layout:fixed;width:100%;min-width:522px;font-size:13px;font-variant-numeric:tabular-nums}
-.oqg th{text-transform:none;letter-spacing:0}
-.oqg col.f{width:96px}.oqg col.t{width:58px}.oqg col:not(.f):not(.t){width:46px}
-.oqg th,.oqg td{padding:7px 2px;text-align:center;white-space:nowrap;border-right:1px solid rgba(0,0,0,.35);border-bottom:1px solid rgba(0,0,0,.35)}
-.oqg thead th{background:var(--card2);color:var(--mut);font-size:9.5px;font-weight:700;padding:5px 0;line-height:1.15}
-.oqg .ch .e{display:block;font-size:15px;line-height:1.2}.oqg .ch .t{display:block;overflow:hidden}
-.oqg .rl{text-align:left;padding:7px 6px;font-weight:700;position:sticky;left:0;z-index:1;color:var(--tx);overflow:hidden}
-.oqg .c0{text-align:left;padding-left:6px;position:sticky;left:0;z-index:2}
-.oqg td.w{font-size:10px;letter-spacing:-.3px}.oqg td{color:var(--tx)}.oqg td.z{opacity:.55}.oqg td.nz{font-weight:800}
-.oqg .dg{background:#000!important;color:#fff;font-size:9.5px;font-weight:600}
-.oqg tbody .tt,.oqg tfoot th,.oqg tfoot td:not(.dg),.oqg thead .tt{background:#4b5260;color:#fff;font-weight:800}
-.oqg thead .tt{font-size:10px;white-space:normal;line-height:1.1}
-.oqg tfoot th{position:sticky;left:0;z-index:1}
-.oqg tr.r0>*:not(.dg):not(.tt){background:#4a4217}.oqg tr.r1>*:not(.dg):not(.tt){background:#5a4614}.oqg tr.r2>*:not(.dg):not(.tt){background:#69470f}.oqg tr.r3>*:not(.dg):not(.tt){background:#6f3a10}
-.oqg tr.r4>*:not(.dg):not(.tt){background:#6e2c1b}.oqg tr.r5>*:not(.dg):not(.tt){background:#6a2733}.oqg tr.r6>*:not(.dg):not(.tt){background:#5d2d4a}.oqg tr.r7>*:not(.dg):not(.tt){background:#482f5a}
+/* plain matrix = the old Side bets matrix (table.mx inside .card.sc); only the totals get a light divider + bold */
+.mx.oqm td.t,.mx.oqm th.t{font-weight:800;border-left:1px solid var(--line)}.mx.oqm tfoot td,.mx.oqm tfoot th{font-weight:800;border-top:1px solid var(--line)}.mx.oqm td.t{color:var(--tx)}
+@media (max-width:1000px){.swipe.oqw{display:block}}
 .oqc{display:flex;flex-direction:column;gap:5px;margin-top:6px}
 .oqc .cr{display:grid;grid-template-columns:96px minmax(0,1fr) 54px;align-items:center;gap:6px}
 .oqc .cn{white-space:nowrap;font-size:13.5px}
@@ -340,8 +336,7 @@ nav button .nu{position:absolute;top:1px;left:2px;min-width:15px;background:#ff3
 .oqc .cb.pos{left:50%;background:var(--good);border-radius:0 4px 4px 0}.oqc .cb.neg{right:50%;background:var(--bad);border-radius:4px 0 0 4px}
 .oqc .cv{text-align:right;font-size:13.5px;font-variant-numeric:tabular-nums}
 .b27-pd{margin-top:12px;border-top:1px solid var(--line);padding-top:8px}.b27-pd summary{cursor:pointer;font-weight:800;min-height:32px;list-style:none}.b27-pd summary::-webkit-details-marker{display:none}.b27-pd summary::before{content:'▸ ';color:var(--acc)}.b27-pd[open] summary::before{content:'▾ '}
-@media (min-width:600px){.oqg col:not(.f):not(.t){width:auto}.oqg col.f{width:170px}.oqg{font-size:14px}.oqg thead th{font-size:12px}.oqc .cr{grid-template-columns:170px minmax(0,1fr) 64px}}
-@media (max-width:599px){.oqg .dg span{display:none}.oqg thead .ch .t{font-size:9px;font-weight:600;letter-spacing:-.2px}}
+@media (min-width:600px){.oqc .cr{grid-template-columns:170px minmax(0,1fr) 64px}}
 /*</OWES-CHART>*/
 
 @media (max-width:599px){.oqn.hs .f{display:none}.oqn.hs .s{display:inline}.oq td,.oq th{padding:7px 2px}.oqn::before{content:attr(data-e1) " "}}
@@ -354,21 +349,6 @@ nav button .nu{position:absolute;top:1px;left:2px;min-width:15px;background:#ff3
 @media (min-width:1040px) and (max-width:1239px){nav{padding:6px 4px;gap:2px}nav button,nav a.nd{flex:1 1 0;flex-direction:column;gap:2px;border-radius:9px;padding:4px 0;min-height:46px;font-size:11.5px;letter-spacing:-.01em}nav button .ni,nav a.nd .ni{font-size:19px}nav button .nl.f,nav a.nd .nl.f{display:none}nav button .nl.s,nav a.nd .nl.s{display:block}}
 @media (min-width:1240px){nav{max-width:1180px}}
 /*</BETS-2627>*/
-
-/*<WIDE-PAGE>*/
-/* Wider page (601px and up; phones <=600px untouched): header, tab row, content, footer and the fixed chat bar all share ONE container, min(1320px, viewport - 32px), so the first tab's left edge / last tab's right edge line up exactly with the cards, tables, hero and chat bar. The tab row has no side padding of its own and its tabs grow to fill it. Standings chips: 8 per row from 1360px. */
-@media (min-width:601px){
-  header,nav,main,footer{width:min(1320px,calc(100% - 32px));max-width:none;margin-left:auto;margin-right:auto;box-sizing:border-box}
-  nav{padding-left:0;padding-right:0}
-  main{padding-left:0;padding-right:0}
-  footer{padding-left:0;padding-right:0}
-  .hero{width:100%;max-height:400px}
-  .chat{padding-left:max(16px,calc((100% - 1320px)/2));padding-right:max(16px,calc((100% - 1320px)/2))}
-}
-@media (min-width:601px) and (max-width:899px){.oqg thead th{font-size:10.5px}}   /* tablet: the owes-grid column headers ("Draymond") fit their columns */
-@media (min-width:1240px){nav{gap:6px}}
-@media (min-width:1360px){.card.oc .chips{grid-template-columns:repeat(8,minmax(0,1fr));--rows:1}}
-/*</WIDE-PAGE>*/
 </style>
 </head>
 <body>
@@ -401,7 +381,7 @@ const params=new URLSearchParams(location.search);
 const DEMO=params.has('demo');
 const ADMIN=params.has('admin');   // ?admin=1 shows developer-facing details (warnings, data health, config/overrides notes, JSON export)
 let D=null,tab=params.get('tab')||'standings',ownerSel=null,openTeam={};
-const TABS=[['standings','🏆 Standings'],['games','📅 Games'],['rosters','👥 Rosters'],['bets','🎲 Side bets'],['teams','🏀 All teams'],['checklist','✅ Postseason'],['redraft','🔄 Jan 20 redraft'],['archive','🗂️ Archive'],['about','📖 Rules']];
+const TABS=[['standings','🏆 Standings'],['games','📅 Games'],['rosters','👥 Rosters'],['bets','💪 Bets'],['teams','🏀 All teams'],['checklist','✅ Postseason'],['redraft','🔄 Jan 20 redraft'],['archive','🗂️ Archive'],['about','📖 Rules']];
 /*<NAV-ONE-ROW>*/const NAVSHORT={standings:'Ranks',games:'Games',rosters:'Rosters',bets:'Bets',teams:'Teams',checklist:'Post',redraft:'Redraft',archive:'Archive',about:'Rules'};/*</NAV-ONE-ROW>*/   // short phone labels (the full name is each button's aria-label)
 /*<DRAFT-TAB>*/
 const DRAFT_URL='https://stoopids.github.io/stoopids/draft2/';   // the new draft room: a full separate app, so a normal same-tab link (the browser Back button returns here); no target=_blank
@@ -762,7 +742,52 @@ function gameCard(g){
     if(g.kind==='ncaa'){if(u.is)foot+=` <span class="up${u.scored?'':' ns'}">😱 UPSET${u.scored?' +'+D.meta.points.upset:' (no bonus)'}</span>`;else if(u.is===false)foot+=' <span class="mut">· no upset</span>'}
     else if(u.is)foot+=' <span class="up ns">🐶 Underdog win</span>';}
   /*<REFRESH-NOW>*/foot+=lvNote(g);/*</REFRESH-NOW>*/
-  return `<div class="gm${g.h2h||g.civil?' h2h':''}"><div class="gh">${head}</div>${row(g.away)}${row(g.home)}<div class="gl">${foot}</div></div>`}
+  return `<div class="gm${g.h2h||g.civil?' h2h':''}"><div class="gh">${head}</div>${row(g.away)}${row(g.home)}<div class="gl">${foot}</div>${/*<QUICK-BET>*/qbHtml(g)/*</QUICK-BET>*/}</div>`}
+/*<QUICK-BET>*/
+/* "Quick bet" on a Games-tab card (only when the two teams belong to DIFFERENT owners and the game has not started). The picker lists the sides of up to three bet types: Spread (posted line), Winner (just who wins, EVEN odds, no moneyline odds used) and Over/under (posted total); spread / over-under are left out when no line / total is posted. Tapping a side only PREFILLS the existing 2026-27 New bet form (U state: opponent, text, amount, even odds) and switches to Bets > 2026-27. Nothing is created or saved until the person presses Place bet and confirms, exactly as before. Amount chips 5 / 10 are two of the form's own amounts (PULK.amounts). */
+let qbG=null,qbAmt=5,qbMe=null,qbMsg='';
+const qbOwn=s=>s&&s.owners&&s.owners.length?s.owners[0]:null;
+const qbDate=g=>etLabel(etKey(g)).replace(/,/g,'').replace(/\s+\d{4}$/,'');   // "Mon Nov 2" (ET, same day the card is listed under)
+const qbNm=s=>String(s.short||s.name||s.id);
+function qbOk(g){
+  if(DEMO||!g||typeof VIEWS==='undefined'||!VIEWS.bets27||g.status==='final'||g.status==='live'||!g.home||!g.away)return false;
+  const a=g.away.owners||[],h=g.home.owners||[],ow=b27OwnerNames();
+  return a.length>0&&h.length>0&&!a.some(n=>h.includes(n))&&ow.includes(a[0])&&ow.includes(h[0])}
+function qbOpts(g){
+  const A=g.away,H=g.home,ln=g.line||{},d=qbDate(g),o=[];
+  const fav=String(ln.fav)===String(A.id)?A:String(ln.fav)===String(H.id)?H:null,sp=ln.sp;
+  if(fav&&sp!=null&&+sp>0){const dog=fav===A?H:A;o.push({k:'sp',t:'Spread',s:[fav,dog].map(t=>{const x=t===fav?fav:dog,y=t===fav?dog:fav,sx=x===fav?'-':'+',sy=y===fav?'-':'+';return{lab:qbNm(x)+' '+sx+sp,team:x,txt:qbNm(x)+' '+sx+sp+' vs '+qbNm(y)+' '+sy+sp+', '+d}})})}
+  o.push({k:'win',t:'Winner',s:[A,H].map(t=>{const y=t===A?H:A;return{lab:qbNm(t),team:t,txt:qbNm(t)+' beats '+qbNm(y)+', '+d}})});
+  if(ln.ou!=null&&+ln.ou>0){const m=qbNm(A)+' v '+qbNm(H);o.push({k:'ou',t:'Over/under',s:[['Over','Under'],['Under','Over']].map(([x,y])=>({lab:x+' '+ln.ou,team:null,txt:x+' '+ln.ou+' vs '+y+' '+ln.ou+', '+m+', '+d}))})}
+  return o}
+function qbHtml(g){
+  if(!qbOk(g))return '';const id=String(g.id),open=qbG===id;
+  let h=`<div class="qbw"><button type="button" class="qb-btn" aria-expanded="${open}" aria-label="Quick bet: ${esc(qbNm(g.away))} vs ${esc(qbNm(g.home))}" onclick="qbToggle('${esc(id)}')">⚡ Quick bet</button></div>`;
+  if(!open)return h;
+  const oa=qbOwn(g.away),oh=qbOwn(g.home),me=b27Who(),need=me!==oa&&me!==oh;
+  h+=`<div class="qb-pick" role="group" aria-label="Quick bet picker">`;
+  if(need)h+=`<div class="qb-r v"><span class="qb-l">I'm</span><span class="qb-g w">${[oa,oh].map(n=>`<button type="button" aria-pressed="${qbMe===n}" onclick="qbWho(this.dataset.w)" data-w="${esc(n)}">${esc(ownerEmoji(n))} ${esc(n)}</button>`).join('')}</span></div>`;
+  h+=`<div class="qb-r"><span class="qb-l">Amount</span>${[5,10].map(a=>`<button type="button" aria-pressed="${qbAmt===a}" onclick="qbSetAmt(${a})">${a}</button>`).join('')}<span class="note">more in the form</span></div>`;
+  qbOpts(g).forEach(o=>{h+=`<div class="qb-r v"><span class="qb-l">${esc(o.t)}</span><span class="qb-g">${o.s.map((s,i)=>`<button type="button" class="qb-s" title="${esc(s.txt)}" onclick="qbPick('${esc(id)}','${o.k}',${i})">${esc(s.lab)}</button>`).join('')}</span></div>`});
+  if(qbMsg)h+=`<div class="qb-m" role="alert">${esc(qbMsg)}</div>`;
+  return h+`<div class="qb-r"><button type="button" class="qb-x" onclick="qbToggle(null)">Close</button><span class="note">Nothing is placed yet: the form opens filled in.</span></div></div>`}
+function qbToggle(id){qbG=(id==null||qbG===String(id))?null:String(id);qbMsg='';render()}
+function qbSetAmt(a){qbAmt=a;render()}
+function qbWho(n){qbMe=n;qbMsg='';render()}
+function qbPick(id,k,i){
+  const g=(D.games||[]).find(x=>String(x.id)===String(id));if(!g||!qbOk(g))return;
+  const o=qbOpts(g).find(x=>x.k===k),s=o&&o.s[i];if(!s)return;
+  const pair=[qbOwn(g.away),qbOwn(g.home)];let me=b27Who();
+  if(!pair.includes(me)){   // the form's "you are" must be one of the two owners: use the one picked above, else the owner of the picked team
+    me=qbMe&&pair.includes(qbMe)?qbMe:(s.team?qbOwn(s.team):null);
+    if(!me){qbMsg='Tap who you are first.';render();return}
+    presPick(me)}
+  const opp=pair.find(n=>n!==me),t=b27Clean(s.txt);
+  Object.assign(U,{kind:'bet',confirm:false,msg:'',msgBad:false,opps:[opp],pp:[],text:t,amt:qbAmt,amtCustom:false,amtTxt:'',amtErr:'',odds:[1,1],custom:false,customTxt:'',oddsErr:'',qb:t});
+  qbG=null;qbMsg='';tab='bets27';render();
+  setTimeout(()=>{try{const f=document.querySelector('.b27-form');if(f){f.scrollIntoView({block:'start'});const b=document.getElementById('b27Place');if(b&&!b.disabled)b.focus({preventScroll:true})}}catch(_){}},30)}
+const qbHint=()=>U.qb&&U.qb===U.text&&U.kind==='bet'&&!U.confirm?'<div class="qb-hint note" role="status">⚡ Quick bet filled in — check and place it.</div>':'';
+/*</QUICK-BET>*/
 let gOwner='all',gMode=null,gDay='all',gH2H=params.has('h2h');
 /*<OWNED-GAMES>*/let gAll=false;   // 'Show unowned games' toggle: OFF by default
 /* a game is owned when at least one of its two teams belongs to one of the owners ON THAT GAME DAY (home/away.owners comes from the owners' team windows). The build keeps every game that touches ANY pool team, so a pool team whose owner window does not cover the day can leave a game with nobody's name on it: those are hidden unless the toggle is on. */
@@ -1176,13 +1201,13 @@ const SBL={open:'Open',settled:'Settled',wash:'Wash',unparsed:'Couldn’t read'}
 function vBets(){
   const B=D.bets,T=B.tallies[sbScope][sbPaid?'unpaid':'all'],ids=T.ids;
   const seg=(cur,set,opts)=>opts.map(o=>`<button class="${cur===o[0]?'on':''}" onclick="${set}='${o[0]}';render()">${o[1]}</button>`).join('');
-  let h=`<div class="card"><b>🎲 Side bets</b><div class="note">Who owes who, across every wager. Amounts in ${esc(B.currency.code||'')} thousands (${esc(B.currency.suffix||'K')}). Rows owe columns. Non-cash stakes are listed separately.</div>
+  let h=`<div class="card"><b>🎲 Side bets${/*<ONE-BETS>*/DEMO?'':' · 2025-26 (old)'/*</ONE-BETS>*/}</b><div class="note">Who owes who, across every wager. Amounts in ${esc(B.currency.code||'')} thousands (${esc(B.currency.suffix||'K')}). Rows owe columns. Non-cash stakes are listed separately.</div>
    <div class="tabs" style="margin-top:8px">${seg(sbScope,'sbScope',[['all','All'],['ledger',esc((D.meta&&D.meta.season)||'New bets')],['imported','2025-26']])}<button class="${sbPaid?'on':''}" onclick="sbPaid=!sbPaid;render()">Hide paid</button></div></div>`;
-  h+=sharedNote();
+  h+=/*<ONE-BETS>*/obOldNote()/*</ONE-BETS>*/;
   h+=`<div class="card sc"><table><tr><th>Person</th><th class="n">Lost</th><th class="n">Won</th><th class="n">Net +/-</th><th class="n">Bets</th><th class="n">Fines</th></tr>${ids.slice().sort((a,b)=>T.net[b]-T.net[a]).map(i=>`<tr><td>${pname(i)}</td><td class="n">${money(T.lost[i])}</td><td class="n">${money(T.won[i])}</td><td class="n"><b class="${T.net[i]>0?'good':T.net[i]<0?'bad':''}">${T.net[i]>0?'+':''}${money(T.net[i])}</b></td><td class="n">${T.bets[i]}</td><td class="n">${B.fines[i]?money(B.fines[i]):'<span class=mut>0</span>'}</td></tr>`).join('')}</table></div>`;
   h+=`<h2>Who owes who</h2><div class="swipe">↔ Swipe sideways to see every column</div><div class="card sc"><table class="mx"><tr><th>owes ↓ / to →</th>${ids.map(i=>`<th>${esc(P(i).name)}</th>`).join('')}</tr>${ids.map(r=>`<tr><td><b>${esc(P(r).name)}</b></td>${ids.map(c=>{const v=T.matrix[r][c];return r===c?'<td class="z">·</td>':v?`<td>${money(v)}</td>`:'<td class="z">0</td>'}).join('')}</tr>`).join('')}</table></div>`;
   if(T.items.length)h+=`<h2>Non-cash IOUs</h2><div class="card">${T.items.map(x=>`<div>${pname(x.from)} owes ${pname(x.to)}: <b>${esc(x.item)}</b> <span class="mut">bet #${esc(x.bet)}${x.paid?' · paid':''}</span></div>`).join('')}</div>`;
-  h+=sbBuilder();
+  /*<ONE-BETS>*//* the old 2025-26 ledger is view-only: its New bet + Settle forms (sbBuilder) are not shown any more (functions kept, unreachable) *//*</ONE-BETS>*/
   /* list */
   let L=B.bets.filter(b=>sbScope==='all'||b.src===sbScope);
   if(sbPerson!=='all')L=L.filter(b=>b.participants.includes(sbPerson)||b.entries.some(e=>e.from===sbPerson||e.to===sbPerson));
@@ -1381,6 +1406,17 @@ function vArchive(){
       archTeams(o)+`</div>`).join('')+`</div>`;
   return h+archAllTime(A)}
 const VIEWS={standings:vStandings,games:vGames,bets:vBets,rosters:vRosters,teams:vTeams,checklist:vChecklist,redraft:vRedraft,archive:vArchive,about:vAbout};
+/*<CHIP-FIT>*/
+const CHIPFIT_MIN=9;
+function chipFit(){   // one line per school name: full size if it fits, else the largest font (steps of .25px) >= 9px that fits; below that the CSS ellipsis applies
+  const L=[...document.querySelectorAll('.card.oc .chip .cn')];if(!L.length)return;
+  L.forEach(e=>{e.style.fontSize=''});
+  const base=L.map(e=>parseFloat(getComputedStyle(e).fontSize));
+  const need=L.map(e=>e.scrollWidth>e.clientWidth+.5);
+  L.forEach((e,i)=>{if(!need[i])return;let f=base[i];while(f>CHIPFIT_MIN){f=Math.max(CHIPFIT_MIN,Math.floor((f-.25)*4)/4);e.style.fontSize=f+'px';if(e.scrollWidth<=e.clientWidth+.5)break}});
+}
+try{let _cf=0;window.addEventListener('resize',()=>{clearTimeout(_cf);_cf=setTimeout(()=>{try{chipFit()}catch(_){}},120)});if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{try{chipFit()}catch(_){}})}catch(_){}
+/*</CHIP-FIT>*/
 function render(){
   if(!D)return;const m=D.meta;
   if(!window._tagPick)window._tagPick={};
@@ -1393,13 +1429,14 @@ function render(){
   $('#badges').innerHTML=(m.mode==='demo'?'<span class="badge warn">DEMO DATA</span>':'')+(ADMIN?'<span class="badge">ADMIN VIEW</span>':'')+(ADMIN&&m.warnings.length?'<span class="badge warn">⚠ '+m.warnings.length+' warning(s) — see Rules</span>':'');
   try{nbSeen()}catch(_){}   // NEWBET hook: opening Side bets clears the 'new' badge
   /*<NAV-ONE-ROW>*/
-  $('#nav').innerHTML=TABS.map(t=>{const sp=t[1].indexOf(' '),ic=t[1].slice(0,sp),full=t[1].slice(sp+1),on=t[0]===tab;
+  $('#nav').innerHTML=TABS.map(t=>{const sp=t[1].indexOf(' '),ic=t[1].slice(0,sp),full=t[1].slice(sp+1),on=t[0]===tab||/*<ONE-BETS>*/(t[0]==='bets27'&&tab==='bets')/*</ONE-BETS>*/;
     return `<button class="${on?'on':''}" aria-label="${esc(full)}"${on?' aria-current="page"':''} onclick="tab='${t[0]}';render()"><span class="ni" aria-hidden="true">${ic}</span><span class="nl f">${esc(full)}</span><span class="nl s" aria-hidden="true">${esc(NAVSHORT[t[0]]||full)}</span>${nbBadge(t[0])}</button>`}).join('');
   /*</NAV-ONE-ROW>*/
   $('#main').innerHTML=(VIEWS[tab]||vStandings)();
   $('#foot').innerHTML=`STOOPIDS · times in Eastern (ET) · ${DEMO?'<a href="?">back to the live season</a>':'<a href="?demo=1">see the demo (last season replay)</a>'}${ADMIN?' · scores ESPN (fallback ncaa.com)':''}`;
   freshStart();
   /*<DRAFT-TAB>*/try{draftNavLink()}catch(_){}/*</DRAFT-TAB>*/
+  /*<CHIP-FIT>*/try{chipFit()}catch(_){}/*</CHIP-FIT>*/
   /*<CHAT-BAR>*/try{chatAfterRender()}catch(_){}/*</CHAT-BAR>*/
 }
 /*<NEWBET>*/
@@ -2192,16 +2229,16 @@ function b27Card(b,me){
 const b27E1=e=>{e=String(e||'');try{return new Intl.Segmenter(undefined,{granularity:'grapheme'}).segment(e)[Symbol.iterator]().next().value.segment}catch(_){return Array.from(e)[0]||''}};   // first emoji only (phones: two-emoji names stay short)
 const b27Nm=n=>{const o=(D&&D.owners||[]).find(x=>x.name===n)||{},sh=b27ShortName(n);return `<span class="oqn${sh!==n?' hs':''}" data-em="${esc(o.emoji||'')}" data-e1="${esc(b27E1(o.emoji))}"><span class="f">${esc(n)}</span>${sh!==n?`<span class="s">${esc(sh)}</span>`:''}</span>`};
 /*<OWES-CHART>*/
-/* "Who owes who" card: (1) a spreadsheet-style GRID of the pair nets of SETTLED one-vs-one bets (row = who owes, column = who is owed, 0 shown, diagonal black, "Total owes" per row, "Total won" per column; a pair is netted so only one direction is non-zero; pools are NOT in the grid), (2) ONE bar chart of every manager's net INCLUDING pools (the old Net per manager numbers), (3) the pool settle-up folded away. Reads b27Tally only; no extra network calls. Opens the card; the caller closes it. */
+/* "Who owes who" card: (1) a PLAIN matrix (same look as the old Side bets matrix: table.mx in a .card.sc, no colours) of the pair nets of SETTLED one-vs-one bets (row = who owes, column = who is owed, 0 shown dim, diagonal a dim dot, "Total owes" per row, "Total won" per column; a pair is netted so only one direction is non-zero; pools are NOT in the grid), (2) ONE bar chart of every manager's net INCLUDING pools (the old Net per manager numbers), (3) the pool settle-up folded away. Reads b27Tally only; no extra network calls. Opens the card; the caller closes it. */
 Object.assign(U,{poolOpen:false});
 function b27OwesHtml(T){
   const ppl=Object.entries(T.per).sort((a,b)=>b[1].net-a[1].net||a[0].localeCompare(b[0]));
-  let h=`<h2 id="b27Owes">Who owes who <span class="note">(settled bets only)</span></h2><div class="card">`;
-  if(!ppl.length)return h+'<div class="note">Nothing settled yet. Settled bets show up here.</div>';
+  let h=`<h2 id="b27Owes">Who owes who <span class="note">(settled bets only)</span></h2>`;
+  if(!ppl.length)return h+'<div class="card"><div class="note">Nothing settled yet. Settled bets show up here.</div>';
   const own=b27OwnerNames(),cell={},rt={},ct={};own.forEach(n=>{cell[n]={};rt[n]=0;ct[n]=0});
   T.owes.forEach(o=>{if(cell[o.from]&&o.to in cell){cell[o.from][o.to]=o.num;rt[o.from]+=o.num;ct[o.to]+=o.num}});
-  const e1=n=>{const o=(D&&D.owners||[]).find(x=>x.name===n)||{};return esc(o.emoji||'')},wc=v=>b27Num(v).length>6?' w':'';   // wc: 7+ characters (100,000) get a smaller font so they stay inside the cell
-  h+=`<div class="oqg-wrap" role="region" aria-label="Who owes who, grid" tabindex="0"><table class="oqg"><colgroup><col class="f">${own.map(()=>'<col>').join('')}<col class="t"></colgroup><thead><tr><th class="c0">Owes</th>${own.map(n=>`<th class="ch" title="${esc(n)}"><span class="e">${e1(n)}</span><span class="t">${esc(b27ShortName(n))}</span></th>`).join('')}<th class="ch tt">Total owes</th></tr></thead><tbody>${own.map((r,i)=>`<tr class="r${i%8}"><th scope="row" class="rl">${b27Nm(r)}</th>${own.map(c=>c===r?'<td class="dg"><span>owes &gt;&gt;&gt;</span></td>':`<td class="${cell[r][c]?'nz':'z'}${wc(cell[r][c]||0)}">${b27Num(cell[r][c]||0)}</td>`).join('')}<td class="tt${wc(rt[r])}">${b27Num(rt[r])}</td></tr>`).join('')}</tbody><tfoot><tr><th scope="row" class="rl">Total won</th>${own.map(c=>`<td class="${wc(ct[c]).trim()}">${b27Num(ct[c])}</td>`).join('')}<td class="dg"></td></tr></tfoot></table></div>`;
+  const em=n=>{const o=(D&&D.owners||[]).find(x=>x.name===n)||{};return o.emoji?esc(o.emoji)+' ':''};
+  h+=`<div class="swipe oqw">↔ Swipe sideways to see every column</div><div class="card sc"><table class="mx oqm" aria-label="Who owes who"><thead><tr><th>owes ↓ / to →</th>${own.map(n=>`<th data-n="${esc(n)}">${esc(n)}</th>`).join('')}<th class="t">Total owes</th></tr></thead><tbody>${own.map(r=>`<tr><td class="rn" data-n="${esc(r)}"><b>${em(r)}${esc(r)}</b></td>${own.map(c=>c===r?'<td class="z dg">·</td>':cell[r][c]?`<td class="c">${b27Num(cell[r][c])}</td>`:'<td class="z c">0</td>').join('')}<td class="t">${b27Num(rt[r])}</td></tr>`).join('')}</tbody><tfoot><tr><td class="rn">Total won</td>${own.map(c=>`<td>${b27Num(ct[c])}</td>`).join('')}<td class="t"></td></tr></tfoot></table></div><div class="card">`;
   const mx=Math.max(1,...ppl.map(([n,p])=>Math.abs(p.net)));
   h+=`<div class="b27-q">Net per manager${T.poolOwes.length?' <span class="note">incl. pools</span>':''}</div><div class="oqc" role="list" aria-label="Net per manager">${ppl.map(([n,p])=>{const w=p.net?Math.max(.03,Math.abs(p.net)/mx):0;return `<div class="cr" role="listitem"><span class="cn">${b27Nm(n)}</span><span class="ct"><i class="cb ${p.net>0?'pos':'neg'}" style="--w:${w.toFixed(3)}"></i></span><b class="cv ${p.net>0?'good':p.net<0?'bad':''}">${b27Signed(p.net)}</b></div>`}).join('')}</div>`;
   h+=/*<POOL>*/b27PoolOwesHtml(T)/*</POOL>*/;
@@ -2212,7 +2249,7 @@ function b27OwesHtml(T){
 function vB27(){
   b27Seen();
   const me=b27Who(),names=b27OwnerNames(),others=names.filter(n=>n!==me);
-  let h=`<div class="card"><b>💪 Bets 2026-27</b><div class="note b27-note" id="b27Note">${esc(BETS_DISCLAIMER)}</div><div class="note" style="margin-top:6px">This page just <b>records</b> who bet what and who owes whom. Separate from the older Side bets tab.</div>
+  let h=`<div class="card"><b>💪 Bets 2026-27</b><div class="note b27-note" id="b27Note">${esc(BETS_DISCLAIMER)}</div><div class="note" style="margin-top:6px">This page just <b>records</b> who bet what and who owes whom. Separate from the 2025-26 bets (toggle above).</div>
    <div class="note" id="b27Top" style="margin-top:6px">${U.state==='ok'?'<span class="good">● live</span> · anyone with the link can add bets (no logins). Play nice.':U.state==='error'?'<span class="bad">● can’t reach the bets ledger right now</span>':'Connecting…'}</div></div>`;
   if(U.msg)h+=`<div class="card ${U.msgBad?'b27-bad':'b27-ok'}" role="status">${esc(U.msg)}${/*<MULTI-BET>*/U.undoG&&b27GroupUndoable(U.undoG).length>1?`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27UndoGroup('${U.undoG}')"${U.busy?' disabled':''}>↩ Undo all ${b27GroupUndoable(U.undoG).length} bets (30 s)</button></div>`:''/*</MULTI-BET>*/}</div>`;
   if(!me){h+=`<div class="card"><button type="button" class="btn b27-big" onclick="presAsk()">👋 Pick who you are to bet</button></div>`}
@@ -2223,7 +2260,7 @@ function vB27(){
      <div class="b27-act"><button type="button" class="btn b27-big" onclick="b27Confirm()"${U.busy?' disabled':''}>${U.busy?'Saving…':'✅ Yes, place it'}</button><button type="button" class="btn sec b27-big" onclick="b27Edit()"${U.busy?' disabled':''}>← Change</button></div></div>`;
   }else{
     const oc=U.odds?U.odds.join('-'):'';
-    h+=/*<POOL>*/U.kind==='pool'?b27PoolForm(me):/*</POOL>*/`<div class="card b27-form"><b>New bet</b> <span class="note">· you are <b>${esc(me)}</b> <a href="#" onclick="presAsk();return false">(change)</a></span>${/*<POOL>*/b27KindTabs()/*</POOL>*/}
+    h+=/*<POOL>*/U.kind==='pool'?b27PoolForm(me):/*</POOL>*/`<div class="card b27-form"><b>New bet</b> <span class="note">· you are <b>${esc(me)}</b> <a href="#" onclick="presAsk();return false">(change)</a></span>${/*<QUICK-BET>*/qbHint()/*</QUICK-BET>*/}${/*<POOL>*/b27KindTabs()/*</POOL>*/}
      ${/*<MULTI-BET>*/''/*opponents: multi-select*/}<div class="b27-q">1. Who are you betting against? <span class="note">Tap one or more. Several = one bet, one result.</span></div><div class="b27-opps" role="group" aria-label="Opponents" style="--n:${others.length}">${others.map((n,i)=>{const o=(D.owners.find(x=>x.name===n)||{});const on=U.opps.includes(n);return `<button type="button" class="b27-chip op" data-b27-opp="${i}" data-b27-name="${esc(n)}" aria-label="${esc(n)}" aria-pressed="${on}" onclick="b27Opp(${i})"><span class="ck" aria-hidden="true">✓</span><span class="em" aria-hidden="true">${esc(o.emoji||'')}</span><span class="nm" aria-hidden="true"><span class="f">${esc(n)}</span><span class="sh">${esc(b27ShortName(n))}</span><span class="xs">${esc(b27TinyName(n))}</span></span></button>`}).join('')}</div>
      <div class="b27-selbar"><button type="button" class="b27-sm" data-b27-all="1" onclick="b27OppAll()">Select all</button><button type="button" class="b27-sm" data-b27-clear="1" onclick="b27OppClear()">Clear</button><span class="cnt" id="b27SelCnt" aria-live="polite">${esc(b27SelTxt())}</span></div>
      ${''/*</MULTI-BET>*/}<div class="b27-q"><label for="b27Text">2. What’s the bet? <span class="note">I say…</span></label></div><input id="b27Text" class="sb-in b27-in" maxlength="${PULK.maxText}" autocomplete="off" enterkeyhint="go" placeholder="e.g. Kansas beats Duke" value="${esc(U.text)}" oninput="b27Text(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();b27Place()}">
@@ -2243,11 +2280,23 @@ function vB27(){
   if(bets.length>60)h+='<p class="note">Showing the latest 60.</p>';
   return h;
 }
+/*<ONE-BETS>*/
+/* One "Bets" tab: tab id 'bets27' = 2026-27 view (default), tab id 'bets' = the old 2025-26 side-bets ledger (read-only). ?tab=bets (the old Side bets URL) opens the old view, ?tab=bets27 the new one. */
+function obToggle(){
+  const seg=(k,t,bd)=>`<button type="button" class="${tab===k?'on':''}" aria-pressed="${tab===k}" data-ob="${k}"${tab!==k&&bd?' aria-label="'+t+', new bets"':''} onclick="obGo('${k}')">${t}${tab===k?'':bd}</button>`;
+  return `<div class="tabs ob-seg" role="group" aria-label="Bets season">${seg('bets27','2026-27',b27Badge())}${seg('bets','2025-26 (old)',nbBadge('bets'))}</div>`;
+}
+function obGo(k){tab=k;render()}
+function obOldNote(){   // read-only replacement of the old shared-ledger card (no add / settle wording or buttons)
+  const m=sbMode(),rel=m==='shared'||m==='ro'?'<button class="btn sec" onclick="sharedReload(true)">↻ Reload</button>':'',exp=ADMIN?'<button class="btn sec" onclick="sbExport()">⬇ Export JSON backup</button>':'';
+  return `<div class="card"><b>🌐 Shared ledger</b> ${m==='shared'?'<span class="good">● live</span>':m==='ro'?'<span class="bad">● unreachable</span>':''}<div class="note${m==='ro'?' bad':''}">${m==='wait'?'Connecting to the shared ledger… ':''}${m==='ro'?'Can’t reach it right now; showing '+(SH.doc?(SH.fromBackup?'the last saved copy (may be ~15 min old)':'the last copy loaded in this page'):'no copy')+'. ':''}This old ledger is view-only: nothing can be added or settled here.${DEMO?'':' New bets go in the 2026-27 view.'}</div>${rel||exp?`<div class="row2" style="margin-top:8px">${rel}${exp}</div>`:''}</div>`;
+}
+/*</ONE-BETS>*/
 (function(){
   if(DEMO)return;
-  const i=TABS.findIndex(t=>t[0]==='bets');TABS.splice(i<0?TABS.length:i+1,0,['bets27','💪 Bets 26-27']);   // right after Side bets; the Draft link stays last
-  VIEWS.bets27=vB27;NAVSHORT.bets27='26-27';
-  if(typeof nbBadge==='function'){const _b=nbBadge;nbBadge=function(k){return k==='bets27'?b27Badge():_b(k)}}      // 'new' badge on this tab (own watermark)
+  /*<ONE-BETS>*/const i=TABS.findIndex(t=>t[0]==='bets');if(i<0)TABS.push(['bets27','💪 Bets']);else TABS[i]=['bets27','💪 Bets'];   // the ONE Bets tab (was Side bets + Bets 26-27); the Draft link stays last
+  VIEWS.bets27=()=>obToggle()+vB27();VIEWS.bets=()=>obToggle()+vBets();NAVSHORT.bets27='Bets';/*</ONE-BETS>*/
+  if(typeof nbBadge==='function'){const _b=nbBadge;nbBadge=function(k){return k==='bets27'?/*<ONE-BETS>*/(tab==='bets'||tab==='bets27'?'':b27Badge()||_b('bets'))/*</ONE-BETS>*/:_b(k)}}      // 'new' badge on the one Bets tab: 2026-27 (own watermark) or the old ledger; inside the tab the toggle shows it on the other segment
   const pp=presPick;presPick=function(w){pp(w);try{U.opps=[];/*<POOL>*/U.pp=[];/*</POOL>*/if(tab==='bets27')render()}catch(e){}};
   /* toast: own text, and 'View' opens this tab when every pending item is a Bets 26-27 bet (wraps the existing functions; nothing in them is edited) */
   const _nt=nbText;nbText=function(b){return b&&b._msg?b._msg:_nt(b)};
@@ -2255,7 +2304,7 @@ function vB27(){
   const _ns=nbShow;nbShow=function(list){_ns(list);try{const e=NB.el;if(!e)return;
     if(allP())e.querySelector('.nbm').textContent=NB.pending.length===1?NB.pending[0]._msg:NB.pending.length+' new 2026-27 bets just added';
     const v=e.querySelector('.nbv');if(v&&!v._pu){const orig=v.onclick;v.onclick=function(ev){if(allP()){nbHide();tab='bets27';render();window.scrollTo(0,0)}else if(orig)orig.call(v,ev)};v._pu=1}}catch(_){}};
-  /* chat bar: the one fixed bottom bar on every tab (no top copy any more); the unread count badge shows on BOTH bets tabs */
+  /* chat bar: the one fixed bottom bar on every tab (no top copy any more); the unread count badge shows on the one Bets tab */
   if(typeof chatNavBadge==='function'){const _cb=chatNavBadge;chatNavBadge=function(){_cb();try{const nav=$('#nav');if(!nav||!D)return;const i=TABS.findIndex(t=>t[0]==='bets27'),b=nav.children[i];if(!b)return;
     const n=CH.nUnread,full=TABS[i][1].slice(TABS[i][1].indexOf(' ')+1);let e=b.querySelector('.nu');b.classList.toggle('hasu',!!n);
     if(!n){if(e)e.remove();b.setAttribute('aria-label',full);return}
