@@ -72,6 +72,11 @@ nav.tabs{position:fixed;left:0;right:0;bottom:0;background:#0b0e14;border-top:1p
 nav.tabs button{flex:1;background:none;border:0;padding:8px 2px 7px;color:var(--mut);font-size:11px;font-weight:800;position:relative}
 nav.tabs button span{display:block;font-size:20px;line-height:1.1}
 nav.tabs button.on{color:var(--acc)}
+/* SITE-TAB: "🏆 Stoopids" is a plain link (not an in-page tab) back to the main site at ../ (outside this app's /draft2/ service-worker scope, so the SW never sees it); dashed accent border mirrors the "Draft" link on the main site */
+nav.tabs a.site{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:4px 3px;padding:4px 2px 3px;border:1px dashed var(--acc);border-radius:9px;background:var(--card);color:var(--tx);font-family:inherit;font-size:11px;font-weight:800;line-height:normal;text-decoration:none;white-space:nowrap;position:relative}
+nav.tabs a.site span{display:block;font-size:20px;line-height:1.1}
+nav.tabs a.site:hover{background:var(--card2)}
+nav.tabs a.site:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
 nav.tabs button .bd{position:absolute;top:3px;left:55%;background:var(--bad);color:#fff;border-radius:99px;font-size:10px;padding:0 5px;font-weight:900}
 /* board */
 .bwrap{overflow:auto;border:1px solid var(--line);border-radius:12px;background:var(--card);max-height:70vh}
@@ -204,7 +209,7 @@ body[data-tab=teams] .banner{padding:8px 12px}body[data-tab=teams] .banner .em{f
 <div class="wrap">
   <header>
     <h1>STOOPIDS<small>SNAKE DRAFT ROOM · V2</small></h1>
-    <div id="buildtag"><span>Draft room <b>v2</b> · build <b id="buildid">2026-10-27c</b></span><a href="#" data-a="reloadlatest" id="reloadlatest">Reload latest</a></div>
+    <div id="buildtag"><span>Draft room <b>v2</b> · build <b id="buildid">2026-10-27d</b></span><a href="#" data-a="reloadlatest" id="reloadlatest">Reload latest</a></div>
     <div class="hr">
       <span id="conn" class="pill bad"><i></i>Connecting…</span>
       <span id="who" class="pill"></span>
@@ -509,7 +514,7 @@ function presenceView(recs,now,me,owners){const on=[],off=[];(owners||[]).forEac
 /*LOGIC-END*/
 
 /* ===================== CONFIG ===================== */
-const BUILD='2026-10-27c';
+const BUILD='2026-10-27d';
 const CFG={
   url:'https://textdb.dev/api/data/stoopids-draft2-ff4dac2bc4128b72',            // META key; pick slots / owner prefs are derived keys: <url>-e{epoch}-p{n}, <url>-u-{owner}
   chatUrl:'https://textdb.dev/api/data/stoopids-draft2-chat-64dd9060436573b9',    // chat blob (separate key => chat never races with picks)
@@ -879,7 +884,9 @@ async function enableAlerts(){if(!('Notification' in window)){toast('This browse
 /* ===================== RENDER ===================== */
 let tab=lsGet('tab')||'board',chatSub='chat',viewOwner=null,reactOpen=null,simN=4;
 const TABS=[['board','🧩','Board'],['teams','🏀','Teams'],['my','👤','My Team'],['chat','💬','Chat'],['admin','⚙️','Admin']];
-function renderTabs(){const unread=Math.max(0,C.msgs.length-seenChat);$('tabs').innerHTML=TABS.map(t=>`<button class="${tab===t[0]?'on':''}" data-a="tab" data-t="${t[0]}"><span>${t[1]}</span>${t[2]}${t[0]==='chat'&&unread&&tab!=='chat'?`<i class="bd">${unread>9?'9+':unread}</i>`:''}</button>`).join('')}
+/* link back to the main Stoopids site (draft room lives at /stoopids/draft2/, so ../ = /stoopids/). Same-tab navigation, no data-a (the click handler ignores it), outside the SW scope. */
+const SITE_TAB='<a class="site" id="sitetab" href="../" rel="external noopener" aria-label="Stoopids site (leaves the draft room)"><span aria-hidden="true">\u{1F3C6}</span>Stoopids</a>';
+function renderTabs(){const unread=Math.max(0,C.msgs.length-seenChat);$('tabs').innerHTML=TABS.map(t=>`<button class="${tab===t[0]?'on':''}" data-a="tab" data-t="${t[0]}"><span>${t[1]}</span>${t[2]}${t[0]==='chat'&&unread&&tab!=='chat'?`<i class="bd">${unread>9?'9+':unread}</i>`:''}</button>`).join('')+SITE_TAB}
 function canPick(){if(!S||!me||!S.logReady)return false;const s=onClock(S);if(!s||S.paused)return false;return(!isSpec()&&s.owner===me)||commish()}
 function remaining(){if(!S||!S.clockSecs)return null;if(S.paused)return S.pausedLeft;return S.deadline?S.deadline-nowSrv():null}
 function renderBanner(){renderBanner0();if(S&&loaded&&S.status==='live'&&canPick()&&$('banner'))$('banner').insertAdjacentHTML('beforeend','<button class="btn pri pickbtn" data-a="popen">📋 Pick a team</button>');if($('pickov')){if(!canPick())closePick();else updateTeams()}if(conflictMsg&&$('banner'))$('banner').insertAdjacentHTML('beforeend',`<div class="cflict" id="conflict">${conflictMsg}</div>`)}
