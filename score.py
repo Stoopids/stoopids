@@ -9,7 +9,7 @@ from collections import defaultdict
 ROUND_ORDER = ["First Four", "1st Round", "2nd Round", "Sweet 16", "Elite 8", "Final Four", "National Championship"]
 CAT_LABEL = {
     "win": "Wins", "conf_reg": "Conf regular-season champ", "conf_tourn": "Conf tournament champ",
-    "ncaa_entry": "Made NCAA field", "playin_win": "Play-in win", "upset": "Upset (beat the betting favorite)",
+    "ncaa_entry": "Made NCAA field", "playin_win": "Play-in win", "upset": "Upset (beat a better seed)",
     "ncaa_win": "NCAA tournament wins", "final4": "Final Four", "champ": "National champ",
     "missed_dance": "Missed the Big Dance", "adjust": "Commissioner adjustment",
 }

@@ -567,7 +567,7 @@ def main():
             log("shared bets: backup failed (%s) - ignored" % ex)
     log("OK mode=%s games=%d final=%d lines=%d/%d leader=%s %s" % (mode, len(games), n_final, lstats["lines_found"], lstats["games_needing_line"], res["owners"][0]["name"], res["owners"][0]["total"]))
     if warnings:
-        log("WARNINGS:", *warnings, sep="\n  ")
+        log("WARNINGS:\n  " + "\n  ".join(warnings))
     return 0
 
 

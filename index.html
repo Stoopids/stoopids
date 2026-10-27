@@ -13,6 +13,10 @@ header{max-width:1000px;margin:0 auto;padding:0 0 8px}
 .hero{position:relative;aspect-ratio:992/340;background:url(assets/hero-wide.jpg?v=4) center 14%/cover no-repeat;border-radius:0 0 18px 18px;overflow:hidden}
 .titlebar{padding:12px 14px 4px;text-align:left}
 .titlebar .tag{margin:6px 0 0;color:#e7ecf6}
+.fresh{display:flex;width:fit-content;max-width:100%;align-items:center;min-height:40px;margin:-6px 0 -8px;padding:6px 14px 6px 0;font-size:12px;line-height:1.3;color:var(--mut);opacity:.55;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+.fresh[hidden]{display:none}
+.fresh:hover{opacity:.85}
+.fresh:focus-visible{opacity:.9;outline:1px dashed var(--mut);outline-offset:-2px;border-radius:6px}
 .sub{padding:0 14px}
 @media (max-width:640px){.hero{aspect-ratio:16/10;background-image:url(assets/hero-mobile.jpg?v=4);background-position:center 8%}}
 h1{color:var(--acc);margin:0;font-size:clamp(34px,9vw,56px);letter-spacing:.04em;font-weight:900;line-height:1}
@@ -21,13 +25,13 @@ h1 span{color:var(--acc)}
 .badge{display:inline-block;padding:3px 9px;border-radius:99px;font-size:12px;font-weight:700;background:var(--card2);border:1px solid var(--line);margin:8px 6px 0 0}
 .badge.warn{background:#4b3a0b;border-color:#8a6d12;color:#ffe08a}
 nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:8px 10px;display:flex;flex-wrap:wrap;gap:5px;overflow:visible;max-width:1000px;margin:8px auto 0}
-nav button{background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:99px;padding:6px 10px;font-size:13px;font-weight:700;white-space:nowrap;cursor:pointer}
-@media (max-width:640px){nav{position:static}nav button{padding:5px 8px;font-size:12px}}
+nav button{background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:99px;padding:8px 12px;min-height:36px;font-size:13px;font-weight:700;white-space:nowrap;cursor:pointer}
+@media (max-width:640px){nav{position:sticky;top:0;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:8px 40px 8px 10px;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 32px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 32px),transparent)}nav::-webkit-scrollbar{display:none}nav button{padding:10px 14px;min-height:42px;font-size:13px}}
 nav button.on{background:var(--acc);color:#111;border-color:var(--acc)}
 main{max-width:1000px;margin:0 auto;padding:12px 10px 60px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin:10px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin:10px 0;overflow-wrap:anywhere}
 .lb{display:flex;align-items:center;gap:10px;cursor:pointer}
-.rank{font-size:26px;font-weight:900;width:36px;text-align:center;color:var(--acc)}
+.rank{font-size:26px;font-weight:900;width:46px;text-align:center;color:var(--acc)}
 .who{flex:1;min-width:0}
 .who b{font-size:17px}
 .who small{display:block;color:var(--mut)}
@@ -38,7 +42,8 @@ main{max-width:1000px;margin:0 auto;padding:12px 10px 60px}
 .chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
 .chip{text-decoration:none;display:inline-flex;align-items:center;gap:5px;padding:2px 8px 2px 2px;border-radius:99px;font-weight:700;font-size:12.5px;border:2px solid transparent;max-width:100%}
 .chip img,.chip .nologo{width:22px;height:22px;border-radius:50%;background:#fff;object-fit:contain;padding:1px;flex:none}
-.chip .nologo{display:inline-block}
+.chip .nologo{display:inline-flex;align-items:center;justify-content:center;background:#e2e8f0;color:#1e293b;font-size:9px;font-weight:900;letter-spacing:-.02em;line-height:1}
+.chip.big .nologo{font-size:11px}
 .chip:hover{filter:brightness(1.12)}
 .chip.big{font-size:15px;padding:3px 11px 3px 3px}
 .chip.big img{width:30px;height:30px}
@@ -47,9 +52,11 @@ table{width:100%;border-collapse:collapse;font-size:14px}
 th,td{padding:7px 6px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}
 th{color:var(--mut);font-size:12px;text-transform:uppercase;letter-spacing:.04em;position:sticky;top:0}
 td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
-.sc{overflow-x:auto}
+.sc{overflow-x:auto;overflow-wrap:normal;background-color:var(--card);background-image:linear-gradient(90deg,var(--card) 30%,rgba(26,31,43,0)),linear-gradient(270deg,var(--card) 30%,rgba(26,31,43,0)),linear-gradient(90deg,rgba(0,0,0,.5),rgba(0,0,0,0)),linear-gradient(270deg,rgba(0,0,0,.6),rgba(0,0,0,0));background-position:0 0,100% 0,0 0,100% 0;background-repeat:no-repeat;background-size:28px 100%,28px 100%,12px 100%,12px 100%;background-attachment:local,local,scroll,scroll}
+.swipe{display:none;font-size:12px;color:var(--mut);margin:4px 2px 0}
+@media (max-width:640px){.swipe{display:block}}
 .tabs{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px}
-.tabs button{background:var(--card);border:1px solid var(--line);color:var(--tx);border-radius:10px;padding:7px 11px;cursor:pointer;font-weight:600}
+.tabs button{background:var(--card);border:1px solid var(--line);color:var(--tx);border-radius:10px;padding:10px 13px;min-height:40px;cursor:pointer;font-weight:600}
 .tabs button.on{border-color:var(--acc);color:var(--acc)}
 .trow{cursor:pointer}
 .det{background:var(--card2);border-radius:10px;padding:8px 10px;margin:4px 0 10px}
@@ -59,8 +66,8 @@ ul.it{margin:6px 0;padding-left:18px}
 ul.it li{margin:2px 0}
 .quip{color:var(--acc);font-style:italic;margin:6px 0 0}
 h2{font-size:19px;margin:18px 0 6px}
-.note{font-size:13px;color:var(--mut)}
-select,.sel{background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:10px;padding:7px 9px;font:inherit}
+.note{overflow-wrap:anywhere;font-size:13px;color:var(--mut)}
+select,.sel{background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:10px;padding:9px 10px;min-height:40px;font:inherit}
 .gday{margin:16px 2px 4px;font-weight:800;color:var(--acc)}
 .gm{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin:8px 0}
 .gm.h2h{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc) inset}
@@ -81,7 +88,7 @@ select,.sel{background:var(--card);color:var(--tx);border:1px solid var(--line);
 .sb-ta{min-height:70px}
 .row2{display:flex;flex-wrap:wrap;gap:8px}.row2>*{flex:1 1 150px}
 label.k{display:inline-flex;align-items:center;gap:4px;margin:3px 8px 3px 0;font-size:14px}
-.btn{background:var(--acc);color:#111;border:0;border-radius:10px;padding:9px 14px;font-weight:800;cursor:pointer}
+.btn{background:var(--acc);color:#111;border:0;border-radius:10px;padding:11px 14px;min-height:40px;font-weight:800;cursor:pointer}
 .btn.sec{background:var(--card2);color:var(--tx);border:1px solid var(--line)}
 .st{display:inline-block;padding:0 8px;border-radius:99px;font-size:11.5px;font-weight:800;border:1px solid var(--line);background:var(--card2)}
 .st.open{color:#7dd3fc}.st.settled{color:var(--good)}.st.wash{color:var(--mut)}.st.unparsed{color:#fbbf24;border-color:#8a6d12}
@@ -98,16 +105,48 @@ pre.js{background:#0b0e14;border:1px solid var(--line);border-radius:10px;paddin
 .fine{font-size:12px;color:var(--mut)}
 .pill.warn{background:#4b3a0b;border-color:#8a6d12;color:#ffe08a}
 footer{max-width:1000px;margin:0 auto;padding:0 14px 40px;color:var(--mut);font-size:12px}
+
+/* ---------- who's online strip + "Who are you?" ---------- */
+#presence{max-width:1000px;margin:-30px auto 16px;padding:0 10px}
+#presence[hidden]{display:none}
+.pr{display:flex;flex-wrap:wrap;align-items:center;gap:5px 6px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:7px 9px;min-width:0}
+.pr .prl{font-size:12px;font-weight:800;color:var(--acc);margin-right:2px;white-space:nowrap}
+.pc{display:inline-flex;align-items:center;gap:5px;max-width:100%;min-width:0;padding:3px 9px;border-radius:99px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font:inherit;font-size:12.5px;font-weight:700;line-height:1.2}
+.pc .pn{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pc .pd{width:8px;height:8px;border-radius:50%;background:var(--good);box-shadow:0 0 0 2px rgba(74,222,128,.22);flex:none}
+.pc.on{border-color:#2f6b47}
+.pc.off{opacity:.78;background:transparent;border-style:dashed;color:var(--mut)}
+.pc.off .pd{background:#5b6578;box-shadow:none}
+.pc.off{padding:2px 9px}
+.pc .pt{display:flex;flex-direction:column;min-width:0}
+.pc small{font-size:10.5px;font-weight:600;color:var(--mut);white-space:nowrap;line-height:1.15}
+.pc.me{cursor:pointer;border-color:var(--acc)}
+.pc.me .pe{font-size:10px;color:var(--acc);font-weight:800}
+.pg{font-size:12px;font-weight:700;color:var(--mut);padding:0 3px}
+button.pc{cursor:pointer}
+.pwho{position:fixed;inset:0;z-index:50;background:rgba(5,7,12,.78);display:flex;align-items:center;justify-content:center;padding:14px}
+.pwho .box{width:100%;max-width:360px;max-height:100%;overflow:auto;background:var(--card);border:2px solid var(--acc);border-radius:18px;padding:16px 14px 14px;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.55)}
+.pwho h2{margin:0;color:var(--acc);font-size:24px;font-weight:900}
+.pwho p{margin:6px 0 12px;color:var(--mut);font-size:13.5px}
+.pwho .grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.pwho button{font:inherit;font-weight:800;font-size:14px;color:var(--tx);background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:10px 6px;cursor:pointer;min-width:0;line-height:1.15}
+.pwho button:active,.pwho button:hover{border-color:var(--acc);color:var(--acc)}
+.pwho button.cur{background:var(--acc);color:#111;border-color:var(--acc)}
+.pwho button.guest{width:100%;margin-top:9px;background:transparent;border-style:dashed;color:var(--mut);font-weight:700}
+.pwho .skip{display:block;margin:10px auto 0;background:none;border:0;color:var(--mut);font-size:12.5px;font-weight:600;text-decoration:underline;padding:4px}
 </style>
 </head>
 <body>
 <header>
   <div class="hero" role="img" aria-label="The STOOPIDS crew"></div>
-  <div class="titlebar"><h1>STOOP<span>IDS</span></h1><p class="tag" id="tag"></p></div>
+  <div class="titlebar"><h1>STOOP<span>IDS</span></h1>
+  <div id="fresh" class="fresh" role="button" tabindex="0" hidden onclick="freshToggle()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();freshToggle()}"><span></span></div>
+  <p class="tag" id="tag"></p></div>
   <div class="sub" id="badges" style="margin:0"></div>
 </header>
 <nav id="nav"></nav>
 <main id="main"><div class="card">Loading the stoopidity…</div></main>
+<div id="presence" hidden></div>
 <footer id="foot"></footer>
 <script src="archive.js?v=1"></script>
 <script>
@@ -115,22 +154,28 @@ const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const params=new URLSearchParams(location.search);
 const DEMO=params.has('demo');
+const ADMIN=params.has('admin');   // ?admin=1 shows developer-facing details (warnings, data health, config/overrides notes, JSON export)
 let D=null,tab=params.get('tab')||'standings',ownerSel=null,openTeam={};
-const TABS=[['standings','🏆 Standings'],['games','📅 Games'],['rosters','👥 Rosters'],['bets','🎲 Side bets'],['teams','🏀 All teams'],['checklist','✅ Post Season'],['redraft','🔄 Jan 20 redraft'],['archive','🗂️ Archive'],['about','📖 Rules & sources']];
+const TABS=[['standings','🏆 Standings'],['games','📅 Games'],['rosters','👥 Rosters'],['bets','🎲 Side bets'],['teams','🏀 All teams'],['checklist','✅ Postseason'],['redraft','🔄 Jan 20 redraft'],['archive','🗂️ Archive'],['about','📖 Rules & sources']];
 
 /* ---------- color helpers (auto contrast) ---------- */
 function hex2rgb(h){h=(h||'').replace('#','');if(h.length===3)h=h.split('').map(c=>c+c).join('');if(!/^[0-9a-f]{6}$/i.test(h))return null;return[0,2,4].map(i=>parseInt(h.substr(i,2),16))}
 function lum(rgb){const f=v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)};return .2126*f(rgb[0])+.7152*f(rgb[1])+.0722*f(rgb[2])}
 function textOn(hex){const r=hex2rgb(hex);if(!r)return '#fff';const L=lum(r);return (1.05)/(L+.05) > (L+.05)/.05 ? '#fff':'#111'}
+function initials(n){n=String(n||'').replace(/\(.*?\)/g,' ').replace(/[^A-Za-z0-9 ]/g,' ').trim();if(!n||/^\d+$/.test(n))return '?';const w=n.split(/\s+/);return (w.length>1?w[0][0]+w[1][0]:n.slice(0,2)).toUpperCase()}
 function chip(tid,opt){opt=opt||{};const t=D.teams[tid]||{};if(!t.short&&opt.name)t.short=opt.name;const bg='#'+((t.color||'').replace('#','')||'3a4256');const alt='#'+((t.alt||'').replace('#','')||'ffffff');
-  const fg=textOn(bg);const logo=t.logo?`<img src="${esc(t.logo)}" alt="" loading="lazy" onerror="this.outerHTML='<span class=nologo></span>'">`:'<span class="nologo"></span>';
+  const fg=textOn(bg);const ini=esc(initials(t.short||t.name||opt.name||tid));const logo=t.logo?`<img src="${esc(t.logo)}" alt="" loading="lazy" onerror="this.outerHTML='<span class=nologo>${ini}</span>'">`:`<span class="nologo" aria-hidden="true">${ini}</span>`;
   const url='https://www.espn.com/mens-college-basketball/team/_/id/'+encodeURIComponent(t.espn_id||tid);
   return `<a class="chip${opt.big?' big':''}${opt.out?' out':''}" href="${url}" target="_blank" rel="noopener" title="Open ${esc(t.name||t.short||tid)} on ESPN" onclick="event.stopPropagation()" style="background:${bg};color:${fg};border-color:${alt}">${logo}${esc(t.short||t.name||tid)}</a>`}
 /* ---------- helpers ---------- */
 const rec=tid=>{const r=D.records[tid]||{w:0,l:0};return r.w+'-'+r.l};
 const sign=n=>n>0?'+'+n:String(n);
 function ownerOf(tid){for(const o of D.owners)for(const t of o.teams)if(t.tid===tid&&t.status!=='dropped')return o.name;return '—'}
-function wibDay(d){return d}
+const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+/* 'YYYY-MM-DD' -> 'Nov 2, 2026' (or 'Mon, Nov 2, 2026' with wd) */
+function fmtDate(k,wd){const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(k||'');if(!m)return k||'';const d=new Date(Date.UTC(+m[1],+m[2]-1,+m[3],12));return (wd?DOW[d.getUTCDay()]+', ':'')+MON[+m[2]-1]+' '+(+m[3])+', '+m[1]}
+const MONL=['January','February','March','April','May','June','July','August','September','October','November','December'];
+function fmtDateLong(k){const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(k||'');return m?MONL[+m[2]-1]+' '+(+m[3])+', '+m[1]:(k||'')}
 function shuf(a,seed){a=a.slice();let x=seed>>>0||1;const r=()=>{x^=x<<13;x>>>=0;x^=x>>>17;x^=x<<5;x>>>=0;return x/4294967296};for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 const TSEED=window._tagSeed||(window._tagSeed=Math.floor(Math.random()*1e9)+1);
 const PRE_Q=['Everyone is 0-0 and a genius. Enjoy it.','Undefeated in spirit.','Zero points. Zero mistakes. Peak performance.','Perfect record. Ask again after the first tip-off.','Bracket confidence: sky high. Evidence: none.','Still technically in first place.','The trophy engraver is on standby.','Every pick looks brilliant right now.','No bad beats yet. Give it time.','Rumor has it this roster is cursed. Rumor has not been tested.'];
@@ -141,14 +186,85 @@ function quip(o,i,n){
   if(i===n-1)return 'Proud owner of the participation trophy.';
   return shuf(MID_Q,TSEED)[(i-1)%MID_Q.length];
 }
-function stamp(){return D.meta.generated_at_wib}
+const ETSTAMP=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',year:'numeric',month:'numeric',day:'numeric',hour:'numeric',minute:'2-digit',hour12:true});
+/* "Tue, Oct 27, 2026, 9:14 PM ET" from the build time (UTC) */
+function genDate(){const u=D&&D.meta&&D.meta.generated_at_utc,d=u?new Date(u):null;return d&&!isNaN(d)?d:null}   // the data's last-updated stamp (same field as About > Updated)
+function stampET(){const d=genDate();if(!d)return (D.meta&&D.meta.generated_at_wib)||'';const p={};ETSTAMP.formatToParts(d).forEach(x=>p[x.type]=x.value);return p.weekday+', '+MON[+p.month-1]+' '+(+p.day)+', '+p.year+', '+p.hour+':'+p.minute+' '+p.dayPeriod+' ET'}
+/* ---------- weekly "Stoopid tagline" (header slot #tag): same line for everyone all week, changes Monday 00:00 ET ---------- */
+const TAGLINE_MODES=['preseason'];   // data modes whose header slot shows the weekly tagline (add 'live' to use it in-season too)
+/*<TAGLINE-CORE>*/
+const TAGLINES=[
+  "To be Stoopid, or not to be Stoopid: that is the question. (It isn't.)",
+  "Ask not what your team can do for you. Ask why you drafted them.",
+  "I think, therefore I'm Stoopid.",
+  "Float like a butterfly, sting like a 12-seed.",
+  "Houston, we have a Stoopid.",
+  "Stoopid is as Stoopid does.",
+  "Smaht is temporary. Stoopid is forever.",
+  "May the Stoopid be with you.",
+  "You miss 100% of the shots you don't take, and 100% of the ones you take on {owner}'s advice.",   // {owner} = next owner in the list each time this line comes up
+  "It ain't over till the STOOPID lady sings.",
+  "Winning isn't everything. It's the only thing, except when you're Stoopid.",
+  "If you build it, you are smaht. Be Stoopid."
+];
+const TAG_EPOCH=Date.UTC(2026,9,26);   // civil date of a Monday (Oct 26, 2026) = week 0 = line 1
+const TAG_ET=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',year:'numeric',month:'numeric',day:'numeric',weekday:'short'});
+function tagWeekIndex(now){   // weeks since the epoch Monday; a week runs Monday 00:00 ET to the next Monday 00:00 ET (DST-proof: counts ET calendar days)
+  const d=now instanceof Date?now:new Date(now);if(isNaN(d))return null;
+  const p={};TAG_ET.formatToParts(d).forEach(x=>p[x.type]=x.value);
+  const wd=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].indexOf(p.weekday);if(wd<0)return null;
+  const monday=Date.UTC(+p.year,+p.month-1,+p.day)-wd*864e5;
+  return Math.round((monday-TAG_EPOCH)/(7*864e5));
+}
+/* owners = the pool's owner names in standings-list order; the {owner} line walks through them, one per time it comes up (every 12 weeks) */
+function stoopidTagline(now,owners){
+  const n=TAGLINES.length,w=tagWeekIndex(now);
+  if(w===null)return TAGLINES[0];                                  // unreadable clock: a fixed line
+  const at=((w%n)+n)%n,cycle=Math.floor(w/n);
+  const t=TAGLINES[at];
+  if(t.indexOf('{owner}')<0)return t;
+  const names=(Array.isArray(owners)?owners:[]).filter(x=>typeof x==='string'&&x.trim()).map(x=>x.trim());
+  const who=names.length?names[((cycle%names.length)+names.length)%names.length]:'a friend';
+  return t.replace('{owner}',who);
+}
+/*</TAGLINE-CORE>*/
+/* ---------- freshness line under the title: "Updated 5 min ago" (ticks; tap = exact ET time) ---------- */
+/*<FRESH-CORE>*/
+function relAgo(ms){   // elapsed milliseconds -> "just now" / "5 min ago" / "3 hours ago" / "2 days ago"; null if not a number
+  if(typeof ms!=='number'||!isFinite(ms))return null;
+  const m=Math.floor(Math.max(0,ms)/60000);
+  if(m<1)return 'just now';
+  if(m<60)return m+' min ago';
+  const h=Math.floor(m/60);
+  if(h<24)return h+(h===1?' hour':' hours')+' ago';
+  const d=Math.floor(h/24);
+  return d+(d===1?' day':' days')+' ago';
+}
+/*</FRESH-CORE>*/
+const FR={exact:false,timer:null,vis:false};
+function freshTick(){   // text only, no re-render
+  const el=document.getElementById('fresh');if(!el)return;
+  const d=D?genDate():null,rel=d?relAgo(Date.now()-d.getTime()):null;
+  if(!d||rel===null){el.hidden=true;return}
+  const ex=stampET(),txt='Updated '+(FR.exact?ex:rel),sp=el.firstElementChild;
+  if(sp.textContent!==txt)sp.textContent=txt;
+  el.title='Updated '+ex+' (tap to '+(FR.exact?'show how long ago':'show the exact time')+')';
+  el.hidden=false;
+}
+function freshToggle(){FR.exact=!FR.exact;freshTick()}
+function freshStart(){   // (re)start the 30 s ticker; called from render(), so a re-render never leaves two timers
+  clearInterval(FR.timer);FR.timer=setInterval(freshTick,30000);
+  if(!FR.vis){FR.vis=true;document.addEventListener('visibilitychange',()=>{if(!document.hidden)freshTick()})}
+  freshTick();
+}
 /* ---------- views ---------- */
 const NOPTS=['No points yet. Everyone starts somewhere (0).','Zero points. Pure potential.','Nothing on the board yet. Dream big.','0 points and no evidence of poor drafting.','Spotless record, because nothing has happened.','No points yet. The comeback story starts here.','Blank scoreboard. Peak optimism.','Zero points, zero regrets.','The ledger is clean. Enjoy it while it lasts.','Not a single point lost, either.'];
 function noPts(n){const idx=Math.max(0,(D.owners||[]).findIndex(o=>o.name===n));return shuf(NOPTS,TSEED+7)[idx%NOPTS.length]}
+const rankTxt=o=>(D.owners.filter(x=>x.rank===o.rank).length>1?'T-':'')+o.rank;
 function vStandings(){
   const mx=Math.max(10,...D.owners.map(o=>o.total));
   return D.owners.map((o,i)=>`<div class="card"><div class="lb" onclick="goOwner('${esc(o.name)}')">
-    <div class="rank">${o.rank}</div>
+    <div class="rank">${rankTxt(o)}</div>
     <div class="who"><b>${esc(o.emoji)} ${esc(o.name)}</b><small>${esc(o.team_name)}</small><div class="quip">${esc(quip(o,i,D.owners.length))}</div></div>
     <div class="pts">${o.total}<small>points</small></div></div>
     <div class="bar"><i style="width:${Math.max(0,o.total)/mx*100}%"></i></div>
@@ -157,20 +273,22 @@ function vStandings(){
 function goOwner(n){ownerSel=n;tab='rosters';render();window.scrollTo(0,0)}
 
 /* ---------- games tab ---------- */
-const WIBD=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',day:'2-digit',month:'short'});
-const WIBT=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',hour:'numeric',minute:'2-digit',hour12:true});
-const WIBK=new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York'});
-function wibKey(g){if(g.start){const d=new Date(g.start);if(!isNaN(d))return WIBK.format(d)}return g.day}
-function wibLabel(k){const d=new Date(k+'T12:00:00Z');return WIBD.format(d)}
-function wibTime(g){if(g.start){const d=new Date(g.start);if(!isNaN(d))return WIBT.format(d)+' ET'}return 'time TBD'}
+const ETT=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',hour:'numeric',minute:'2-digit',hour12:true});
+const ETK=new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York'});
+function etKey(g){if(g.start){const d=new Date(g.start);if(!isNaN(d))return ETK.format(d)}return g.day}
+function etLabel(k){return fmtDate(k,true)}
+const ETHM=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',hour:'numeric',minute:'numeric',hourCycle:'h23'});
+/* ESPN uses 12:00 AM / 11:59 PM ET as "no tip time yet" placeholders */
+function isTBD(g){if(!g.start)return true;const d=new Date(g.start);if(isNaN(d))return true;const p={};ETHM.formatToParts(d).forEach(x=>p[x.type]=+x.value);const h=p.hour%24,m=p.minute;return (h===0&&m===0)||(h===23&&m===59)}
+function etTime(g){return isTBD(g)?'time TBD':ETT.format(new Date(g.start))+' ET'}
 const fml=n=>n==null?'–':(n>0?'+'+n:String(n));
 const ownerEmoji=n=>{const o=D.owners.find(x=>x.name===n);return o?o.emoji:''};
-const opills=a=>a&&a.length?a.map(n=>`<span class="opill">${esc(ownerEmoji(n))} ${esc(n)}</span>`).join(''):'<span class="opill none">no owner</span>';
+const opills=a=>a&&a.length?a.map(n=>`<span class="opill">${esc(ownerEmoji(n))} ${esc(n)}</span>`).join(''):'';
 function lineTxt(ln,away,home,final){
   if(!ln)return null;
   const fav=ln.fav_name?`<b>${esc(ln.fav_name)}</b> -${ln.sp!=null?ln.sp:'?'}`:'Pick\u2019em';
-  const ml=(ln.aml!=null||ln.hml!=null)?` · ML ${esc(away)} ${fml(ln.aml)} / ${esc(home)} ${fml(ln.hml)}`:'';
-  const ou=ln.ou!=null?` · O/U ${ln.ou}`:'';
+  const ml=(ln.aml!=null||ln.hml!=null)?` · Moneyline ${esc(away)} ${fml(ln.aml)} / ${esc(home)} ${fml(ln.hml)}`:'';
+  const ou=ln.ou!=null?` · Over/under ${ln.ou}`:'';
   return `${final?(ln.type==='close'?'Closing line':'Last line'):'Line'}: ${fav}${ml}${ou} <span class="mut">· ${esc(ln.p||'')}</span>`}
 function gameCard(g){
   const fin=g.status==='final',live=g.status==='live';
@@ -178,14 +296,16 @@ function gameCard(g){
   const row=(s,other)=>{
     const lose=fin&&!s.win;const tag=g.line?(String(dog)===String(s.id)?' <span title="betting underdog">🐶</span>':(String(g.line.fav)===String(s.id)?' <span title="betting favorite">⭐</span>':'')):'';
     return `<div class="gside${lose?' lose':''}"><div class="nm">${chip(s.id,{big:1,name:s.short})}${s.seed?`<span class="seed">(${s.seed})</span>`:''}${tag}${opills(s.owners)}</div><div class="sc2">${(fin||live)&&s.score!=null?s.score:''}</div></div>`};
-  let head=`<span>${fin?'FINAL':live?'<b class="good">LIVE</b>':'<b>'+wibTime(g)+'</b>'}</span>`;
+  let head=`<span>${fin?'FINAL':live?'<b class="good">LIVE</b>':'<b>'+etTime(g)+'</b>'}</span>`;
   if(g.round)head+=`<span>· ${esc(g.round)}</span>`;else if(g.kind==='conf')head+='<span>· Conf tournament</span>';
-  if(g.neutral)head+='<span>· neutral</span>';
+  if(g.neutral)head+='<span>· neutral site</span>';
   if(g.h2h)head+=`<span class="h2b">🥊 ${esc(g.away.owners.join('/'))} vs ${esc(g.home.owners.join('/'))}</span>`;
   if(g.civil)head+=`<span class="h2b">🙃 CIVIL WAR (${esc(g.away.owners.join('/'))} wins either way)</span>`;
   let lt=lineTxt(g.line,g.away.short,g.home.short,fin);
   let foot=lt||(fin?'<span class="mut">No betting line on file for this game.</span>':'<span class="mut">📭 line not posted yet</span>');
-  if(fin&&g.upset){const u=g.upset;if(u.is)foot+=` <span class="up${u.scored?'':' ns'}">😱 UPSET${u.scored?' +'+D.meta.points.upset:' (not scored: outside upset rules)'}${u.fallback?' ⚠️ by seed':''}</span>`;else if(u.is===false&&g.line)foot+=' <span class="mut">· favorite won, no upset</span>'}
+  if(fin&&g.upset){const u=g.upset;
+    if(g.kind==='ncaa'){if(u.is)foot+=` <span class="up${u.scored?'':' ns'}">😱 UPSET${u.scored?' +'+D.meta.points.upset:' (no bonus)'}</span>`;else if(u.is===false)foot+=' <span class="mut">· no upset</span>'}
+    else if(u.is)foot+=' <span class="up ns">🐶 Underdog win</span>';}
   return `<div class="gm${g.h2h||g.civil?' h2h':''}"><div class="gh">${head}</div>${row(g.away)}${row(g.home)}<div class="gl">${foot}</div></div>`}
 let gOwner='all',gMode=null,gDay='all',gH2H=params.has('h2h');
 function vGames(){
@@ -195,25 +315,27 @@ function vGames(){
   let list=(gMode==='upcoming'?ups:fin.slice().reverse());
   if(gOwner!=='all')list=list.filter(g=>g.home.owners.includes(gOwner)||g.away.owners.includes(gOwner));
   if(gH2H)list=list.filter(g=>g.h2h||g.civil);
-  const days=[...new Set(list.map(wibKey))];
+  const days=[...new Set(list.map(etKey))];
   if(gDay!=='all'&&!days.includes(gDay))gDay='all';
-  if(gDay!=='all')list=list.filter(g=>wibKey(g)===gDay);
-  if(gMode==='upcoming')list.sort((a,b)=>(a.start||a.day).localeCompare(b.start||b.day));
+  if(gDay!=='all')list=list.filter(g=>etKey(g)===gDay);
+  if(gMode==='upcoming'){const sk=g=>etKey(g)+(isTBD(g)?'~':' ')+(g.start||'');list.sort((a,b)=>sk(a).localeCompare(sk(b)))}   // 'time TBD' games last within their day
   let h=`<div class="card"><div class="tabs" style="margin:0 0 8px"><button class="${gMode==='upcoming'?'on':''}" onclick="gMode='upcoming';gDay='all';render()">⏭ Upcoming (${ups.length})</button><button class="${gMode==='scores'?'on':''}" onclick="gMode='scores';gDay='all';render()">✅ Scores (${fin.length})</button></div>
    <div class="tabs" style="margin:0"><select onchange="gOwner=this.value;render()"><option value="all">All owners</option>${D.owners.map(o=>`<option value="${esc(o.name)}"${o.name===gOwner?' selected':''}>${esc(o.emoji)} ${esc(o.name)}</option>`).join('')}</select>
-   <select onchange="gDay=this.value;render()"><option value="all">All days</option>${days.map(k=>`<option value="${k}"${k===gDay?' selected':''}>${esc(wibLabel(k))}</option>`).join('')}</select>
+   <select onchange="gDay=this.value;render()"><option value="all">All days</option>${days.map(k=>`<option value="${k}"${k===gDay?' selected':''}>${esc(etLabel(k))}</option>`).join('')}</select>
    <button class="${gH2H?'on':''}" onclick="gH2H=!gH2H;render()">🥊 Pool vs pool only</button></div>
-   <div class="note" style="margin-top:6px">Times in Eastern (ET). ⭐ = betting favorite, 🐶 = underdog. Lines: ${D.meta.games_view.n_with_line}/${D.meta.games_view.n_games} games have one on file (${esc((D.meta.sources||{}).odds||'')}).</div></div>`;
+   <div class="note" style="margin-top:6px">Times in Eastern (ET). ⭐ = betting favorite, 🐶 = underdog. Betting lines posted so far: ${D.meta.games_view.n_with_line} of ${D.meta.games_view.n_games} games${ADMIN?' ('+esc((D.meta.sources||{}).odds||'')+')':' (DraftKings, via ESPN)'}.</div></div>`;
   if(!list.length)return h+`<div class="card">${all.length?'Nothing matches those filters.':'No games for rostered teams yet. Check back when the schedule fills in.'}</div>`;
   if(gMode==='upcoming'&&D.meta.mode==='preseason')h+=`<div class="card note">Preseason: only the first few nights of the schedule are loaded, and sportsbooks have posted lines for just some of them so far. Everything refreshes automatically.</div>`;
   let cur=null;
-  list.forEach(g=>{const k=wibKey(g);if(k!==cur){cur=k;h+=`<div class="gday">${esc(wibLabel(k))}</div>`}h+=gameCard(g)});
+  list.forEach(g=>{const k=etKey(g);if(k!==cur){cur=k;h+=`<div class="gday">${esc(etLabel(k))}</div>`}h+=gameCard(g)});
   return h}
 function gameLine(g){/* compact line for a team-row game (roster tab) */
-  const ln=g.ln;if(!ln)return g.status==='final'?'':'<div class="mut" style="font-size:12px">📭 line not posted yet</div>';
+  const fin=g.status==='final';let up='';
+  if(fin){if(g.kind==='ncaa'){if(g.res==='W'&&g.seed!=null&&g.oppSeed!=null&&+g.seed>+g.oppSeed)up=' <span class="up">😱 UPSET</span>'}   /* NCAA tournament: by seed, same seed never an upset */
+    else if(g.upset)up=' <span class="up ns">🐶 Underdog win</span>'}
+  const ln=g.ln;if(!ln)return fin?(up?`<div class="mut" style="font-size:12px">${up}</div>`:''):'<div class="mut" style="font-size:12px">📭 line not posted yet</div>';
   const fav=ln.fav_name?`${esc(ln.fav_name)} -${ln.sp!=null?ln.sp:'?'}`:'Pick\u2019em';
-  let s=`<div class="mut" style="font-size:12px">${g.status==='final'?(ln.type==='close'?'Closing':'Last'):'Line'}: ${fav}${ln.ou!=null?' · O/U '+ln.ou:''}· ${esc(ln.p||'')}${ln.we_dog?' · 🐶 underdog':ln.we_fav?' · ⭐ favorite':''}${g.upset?' <span class="up">😱 UPSET</span>':''}</div>`;
-  return s}
+  return `<div class="mut" style="font-size:12px">${fin?(ln.type==='close'?'Closing':'Last'):'Line'}: ${fav}${ln.ou!=null?' · Over/under '+ln.ou:''} · ${esc(ln.p||'')}${ln.we_dog?' · 🐶 underdog':ln.we_fav?' · ⭐ favorite':''}${up}</div>`}
 
 
 /* ---------- side bets ---------- */
@@ -517,15 +639,15 @@ function sbMode(){
 const bkey=b=>(b.spec&&b.spec.id)?String(b.spec.id):'n'+b.n;
 function sharedNote(){
   const m=sbMode();
-  const exp='<button class="btn sec" onclick="sbExport()">⬇ Export JSON backup</button>';
+  const exp=ADMIN?'<button class="btn sec" onclick="sbExport()">⬇ Export JSON backup</button>':'';
   const rel='<button class="btn sec" onclick="sharedReload(true)">↻ Reload</button>';
   let h='<div class="card"><b>🌐 Shared ledger</b> ';
-  if(m==='shared')h+=`<span class="good">● live</span><div class="note">Everyone with the link sees the same side bets and can add or settle them — the tally updates for the whole group${SH.at?' (synced '+esc(SH.at.toLocaleTimeString())+')':''}. There are no logins, so anyone with the link can edit: friends-pool grade, play nice. A backup snapshot is committed to the repo every ~15 minutes.</div><div class="row2" style="margin-top:8px">${rel}${exp}</div>`;
-  else if(m==='ro')h+=`<span class="bad">● unreachable — read-only</span><div class="note bad">${esc(SH.err||'The shared ledger could not be reached.')}. Adding and settling are switched off until it is back; ${SH.doc?(SH.fromBackup?"showing the repo's last backup snapshot (may be ~15 min old)":'showing the last copy loaded in this page'):'no copy of the shared bets could be loaded'}.</div><div class="row2" style="margin-top:8px">${rel}${exp}</div>`;
+  if(m==='shared')h+=`<span class="good">● live</span><div class="note">Everyone with the link sees the same side bets and can add or settle them, and the tally updates for the whole group. There are no logins, so anyone with the link can edit. Play nice.${ADMIN?' (synced '+esc(SH.at?SH.at.toLocaleTimeString():'')+'. A backup snapshot is committed to the repo every ~15 minutes.)':''}</div><div class="row2" style="margin-top:8px">${rel}${exp}</div>`;
+  else if(m==='ro')h+=`<span class="bad">● unreachable — read-only</span><div class="note bad">${ADMIN?esc(SH.err||'The shared ledger could not be reached.')+'. ':'The shared ledger can’t be reached right now. '}Adding and settling are switched off until it is back; ${SH.doc?(SH.fromBackup?"showing the last saved copy (may be ~15 min old)":'showing the last copy loaded in this page'):'no copy of the shared bets could be loaded'}.</div><div class="row2" style="margin-top:8px">${rel}${exp}</div>`;
   else if(m==='wait')h+='<div class="note">Connecting to the shared ledger…</div>';
-  else if(m==='local')h+=`<div class="note">Local server mode: saving writes <code>bets.json</code> on this machine. (The hosted site uses the shared ledger instead.)</div><div style="margin-top:8px">${exp}</div>`;
+  else if(m==='local')h+=ADMIN?`<div class="note">Local server mode: saving writes <code>bets.json</code> on this machine. (The hosted site uses the shared ledger instead.)</div><div style="margin-top:8px">${exp}</div>`:'<div class="note">Saving is on.</div>';
   else if(m==='demo')h+='<div class="note">Demo mode: the shared ledger is switched off here, so nothing you do can touch the real bets.</div>';
-  else h+=`<div class="note">No shared ledger is configured (<code>shared_bets</code> in config.json), so this page is read-only: copy built bets into <code>bets.json</code>.</div><div style="margin-top:8px">${exp}</div>`;
+  else h+=ADMIN?`<div class="note">No shared ledger is configured (<code>shared_bets</code> in config.json), so this page is read-only: copy built bets into <code>bets.json</code>.</div><div style="margin-top:8px">${exp}</div>`:'<div class="note">Side bets are view-only right now.</div>';
   return h+'</div>';
 }
 function sbExport(){
@@ -583,14 +705,15 @@ function sbSettleShared(){
 const P=id=>(D.bets.people.find(p=>p.id===id)||{name:id});
 const pname=id=>{const p=P(id);const e=p.pool_owner?ownerEmoji(p.pool_owner):'';return (e?e+' ':'')+esc(p.name)};
 function money(v){const c=D.bets.currency||{};const x=v/(c.display_unit||1000);return (c.prefix||'')+(Math.round(x*100)/100).toString()+(c.suffix||'K')}
+const SBL={open:'Open',settled:'Settled',wash:'Wash',unparsed:'Couldn’t read'};
 function vBets(){
   const B=D.bets,T=B.tallies[sbScope][sbPaid?'unpaid':'all'],ids=T.ids;
   const seg=(cur,set,opts)=>opts.map(o=>`<button class="${cur===o[0]?'on':''}" onclick="${set}='${o[0]}';render()">${o[1]}</button>`).join('');
   let h=`<div class="card"><b>🎲 Side bets</b><div class="note">Who owes who, across every wager. Amounts in ${esc(B.currency.code||'')} thousands (${esc(B.currency.suffix||'K')}). Rows owe columns. Non-cash stakes are listed separately.</div>
-   <div class="tabs" style="margin-top:8px">${seg(sbScope,'sbScope',[['all','All'],['ledger','New ledger'],['imported','2025-26 import']])}<button class="${sbPaid?'on':''}" onclick="sbPaid=!sbPaid;render()">Hide paid</button></div></div>`;
+   <div class="tabs" style="margin-top:8px">${seg(sbScope,'sbScope',[['all','All'],['ledger',esc((D.meta&&D.meta.season)||'New bets')],['imported','2025-26']])}<button class="${sbPaid?'on':''}" onclick="sbPaid=!sbPaid;render()">Hide paid</button></div></div>`;
   h+=sharedNote();
   h+=`<div class="card sc"><table><tr><th>Person</th><th class="n">Lost</th><th class="n">Won</th><th class="n">Net +/-</th><th class="n">Bets</th><th class="n">Fines</th></tr>${ids.slice().sort((a,b)=>T.net[b]-T.net[a]).map(i=>`<tr><td>${pname(i)}</td><td class="n">${money(T.lost[i])}</td><td class="n">${money(T.won[i])}</td><td class="n"><b class="${T.net[i]>0?'good':T.net[i]<0?'bad':''}">${T.net[i]>0?'+':''}${money(T.net[i])}</b></td><td class="n">${T.bets[i]}</td><td class="n">${B.fines[i]?money(B.fines[i]):'<span class=mut>0</span>'}</td></tr>`).join('')}</table></div>`;
-  h+=`<h2>Who owes who</h2><div class="card sc"><table class="mx"><tr><th>owes ↓ / to →</th>${ids.map(i=>`<th>${esc(P(i).name)}</th>`).join('')}</tr>${ids.map(r=>`<tr><td><b>${esc(P(r).name)}</b></td>${ids.map(c=>{const v=T.matrix[r][c];return r===c?'<td class="z">·</td>':v?`<td>${money(v)}</td>`:'<td class="z">0</td>'}).join('')}</tr>`).join('')}</table></div>`;
+  h+=`<h2>Who owes who</h2><div class="swipe">↔ Swipe sideways to see every column</div><div class="card sc"><table class="mx"><tr><th>owes ↓ / to →</th>${ids.map(i=>`<th>${esc(P(i).name)}</th>`).join('')}</tr>${ids.map(r=>`<tr><td><b>${esc(P(r).name)}</b></td>${ids.map(c=>{const v=T.matrix[r][c];return r===c?'<td class="z">·</td>':v?`<td>${money(v)}</td>`:'<td class="z">0</td>'}).join('')}</tr>`).join('')}</table></div>`;
   if(T.items.length)h+=`<h2>Non-cash IOUs</h2><div class="card">${T.items.map(x=>`<div>${pname(x.from)} owes ${pname(x.to)}: <b>${esc(x.item)}</b> <span class="mut">bet #${esc(x.bet)}${x.paid?' · paid':''}</span></div>`).join('')}</div>`;
   h+=sbBuilder();
   /* list */
@@ -600,14 +723,14 @@ function vBets(){
   if(sbQ)L=L.filter(b=>(b.text+' '+b.outcome).toLowerCase().includes(sbQ.toLowerCase()));
   const cov=B.coverage;
   h+=`<h2>Wagers (${L.length})</h2><div class="card"><div class="row2"><select onchange="sbPerson=this.value;render()"><option value="all">Everyone</option>${B.people.map(p=>`<option value="${p.id}"${p.id===sbPerson?' selected':''}>${esc(p.name)}</option>`).join('')}</select>
-   <select onchange="sbStatus=this.value;render()">${['all','open','settled','wash','unparsed'].map(s=>`<option value="${s}"${s===sbStatus?' selected':''}>${s==='all'?'Any status':s}</option>`).join('')}</select>
+   <select onchange="sbStatus=this.value;render()">${['all','open','settled','wash','unparsed'].map(s=>`<option value="${s}"${s===sbStatus?' selected':''}>${s==='all'?'Any status':(SBL[s]||s)}</option>`).join('')}</select>
    <input class="sb-in" placeholder="search terms…" value="${esc(sbQ)}" onchange="sbQ=this.value;render()"></div></div>`;
-  h+=L.slice().reverse().slice(0,150).map(b=>`<div class="card"><div><b>#${esc(b.n)}</b> <span class="st ${b.status}">${b.status==='unparsed'?'⚠ not in tally':b.status}</span> <span class="mut" style="font-size:12px">${b.src==='imported'?'2025-26 sheet import':esc(b.season||'ledger')+(b.spec&&b.spec.id?' · shared':'')}</span></div>
+  h+=L.slice().reverse().slice(0,150).map(b=>`<div class="card"><div><b>#${esc(b.n)}</b> <span class="st ${b.status}">${b.status==='unparsed'?'⚠ not in tally':(SBL[b.status]||b.status)}</span> <span class="mut" style="font-size:12px">${b.src==='imported'?'2025-26':esc(b.season||'')}</span></div>
     <div style="margin:4px 0">${esc(b.text)}</div>${b.outcome?`<div class="note">Outcome: ${esc(b.outcome)}</div>`:''}
     ${b.entries.length?`<div style="margin-top:4px">${b.entries.map(e=>`<span class="pill">${esc(P(e.from).name)} → ${esc(P(e.to).name)} <b>${e.amount!=null?money(e.amount):esc(e.item)}</b>${e.paid?' ✓paid':''}</span>`).join('')}</div>`:''}
-    ${b.notes&&b.notes.length&&b.status!=='open'?`<div class="note ${b.status==='unparsed'?'bad':''}">${b.status==='unparsed'?'Needs a human: ':'Assumed: '}${b.notes.map(esc).join('; ')}</div>`:''}</div>`).join('');
+    ${b.notes&&b.notes.length&&b.status!=='open'?`<div class="note ${b.status==='unparsed'?'bad':''}">${b.status==='unparsed'?'Needs checking: ':'Assumed: '}${b.notes.map(esc).join('; ')}</div>`:''}</div>`).join('');
   if(L.length>150)h+=`<p class="note">Showing the latest 150 of ${L.length}. Use the filters.</p>`;
-  if(cov)h+=`<div class="card"><b>2025-26 sheet import coverage</b> <span class="note">(${esc((B.imported_at||'').slice(0,10))})</span><div class="note">${cov.total} bets read from the "NEW BETS" block. <b>${cov.settled}</b> turned into ledger entries (${cov.settled_with_assumptions} of those rest on a stated assumption), ${cov.wash} washes, ${cov.open} still open (no outcome written), <b class="bad">${cov.unparsed}</b> could not be read safely and are <b>excluded from the totals</b> (filter Status → unparsed to see them and fix by hand). Payment-detail columns of the sheet are never read.</div></div>`;
+  if(cov)h+=`<div class="card"><b>2025-26 bets: what was counted</b>${ADMIN?` <span class="note">(imported ${esc(fmtDate((B.imported_at||'').slice(0,10)))})</span>`:''}<div class="note">${cov.total} bets were read from last season’s sheet. <b>${cov.settled}</b> are counted in the totals${cov.settled_with_assumptions?` (${cov.settled_with_assumptions} of those rest on a stated assumption)`:''}, ${cov.wash} washes, ${cov.open} still open (no outcome written), and <b class="bad">${cov.unparsed}</b> couldn’t be read safely and are <b>not in the totals</b> (set Status to “Couldn’t read” to see them).${ADMIN?' Source: the “NEW BETS” block; payment-detail columns of the sheet are never read.':''}</div></div>`;
   return h}
 /* new bet builder */
 function chk(name,sel){return D.bets.people.map(p=>`<label class="k"><input type="checkbox" name="${name}" value="${p.id}"${sel&&sel.includes(p.id)?' checked':''}> ${esc(p.name)}</label>`).join('')}
@@ -622,11 +745,17 @@ function sbBuilder(){
    <div class="row2" style="margin-top:6px"><input id="sb_odds" class="sb-in" placeholder="Odds (optional): 2:1" value="${esc(f.odds||'')}"><select id="sb_long"><option value="a">Longshot = Side A</option><option value="b"${f.long==='b'?' selected':''}>Longshot = Side B</option></select>
    <select id="sb_win"><option value="">Result: open</option><option value="a"${f.win==='a'?' selected':''}>A wins</option><option value="b"${f.win==='b'?' selected':''}>B wins</option><option value="wash"${f.win==='wash'?' selected':''}>Wash</option></select></div>
    <div class="note">Odds 2:1 with the longshot side: if the longshot wins it is paid stake × 2; if it loses it pays the stake. Per-game series: build it open, then settle with games won (below).</div>`;
-  else h+=`<div style="margin-top:6px"><b>Participants</b><br>${chk('pp',f.pp)}</div><div class="row2" style="margin-top:6px"><input id="sb_buy" class="sb-in" placeholder="Buy-in each: 250K" value="${esc(f.buy||'')}"><input id="sb_pay" class="sb-in" placeholder='Payouts when done (total received), e.g. kurt:800K, mark:1.2mil' value="${esc(f.pay||'')}"></div><div class="note">Winner and runner-up money-back are just payouts (e.g. winner 1mil, 2nd 200K back). Payouts must add up to the pot. People ids: ${B_ids()}</div>`;
+  else h+=`<div style="margin-top:6px"><b>Participants</b><br>${chk('pp',f.pp)}</div><div class="row2" style="margin-top:6px"><input id="sb_buy" class="sb-in" placeholder="Buy-in each: 250K" value="${esc(f.buy||'')}"><input id="sb_pay" class="sb-in" placeholder='Payouts when done (total received), e.g. kurt:800K, mark:1.2mil' value="${esc(f.pay||'')}"></div><div class="note">Winner and runner-up money-back are just payouts (e.g. winner 1mil, 2nd 200K back). Payouts must add up to the pot. Use these short names for payouts: ${B_ids()}</div>`;
   h+=`<div style="margin-top:8px"><button class="btn" onclick="sbBuild()">Build</button></div>`;
-  if(f.json)h+=`<pre class="js" id="sb_json">${esc(f.json)}</pre><div class="row2"><button class="btn sec" onclick="navigator.clipboard&&navigator.clipboard.writeText(sbForm.json);sbMsg='Copied. Paste it into the "bets" list in bets.json, then run python3 refresh.py.';render()">Copy JSON</button>${sbMode()==='local'?'<button class="btn" onclick="sbSave()">Save to ledger</button>':sbMode()==='shared'?'<button class="btn" onclick="sbSaveShared()">Save to shared ledger</button>':''}</div>`+(sbMode()==='local'?'':sbMode()==='shared'?'<div class="note">Saving adds it to the shared ledger for everyone (no login needed).</div>':sbMode()==='ro'?'<div class="note bad">The shared ledger is unreachable, so saving is switched off (read-only). You can still copy the JSON into <code>bets.json</code>.</div>':sbMode()==='wait'?'<div class="note">Connecting to the shared ledger…</div>':'<div class="note">Static viewing: copy the JSON into <code>bets.json</code> (or run <code>python3 serve.py</code> locally for one-click saving).</div>');
+  if(f.json){const m=sbMode();
+    h+=(ADMIN?`<pre class="js" id="sb_json">${esc(f.json)}</pre>`:`<div class="note" style="margin-top:8px"><b>Ready to save:</b> ${esc(sbSummary(f.bet))}</div>`)
+      +`<div class="row2">${ADMIN?`<button class="btn sec" onclick="navigator.clipboard&&navigator.clipboard.writeText(sbForm.json);sbMsg='Copied. Paste it into the &quot;bets&quot; list in bets.json, then run python3 refresh.py.';render()">Copy JSON</button>`:''}${m==='local'?'<button class="btn" onclick="sbSave()">Save to ledger</button>':m==='shared'?'<button class="btn" onclick="sbSaveShared()">Save to shared ledger</button>':''}</div>`
+      +(m==='local'?'':m==='shared'?'<div class="note">Saving adds it to the shared ledger for everyone (no login needed).</div>':m==='ro'?'<div class="note bad">The shared ledger is unreachable, so saving is switched off for now.'+(ADMIN?' You can still copy the JSON into <code>bets.json</code>.':'')+'</div>':m==='wait'?'<div class="note">Connecting to the shared ledger…</div>':ADMIN?'<div class="note">Static viewing: copy the JSON into <code>bets.json</code> (or run <code>python3 serve.py</code> locally for one-click saving).</div>':'<div class="note">Saving is switched off right now.</div>')}
   if(sbMsg)h+=`<div class="note" style="margin-top:6px">${esc(sbMsg)}</div>`;
   h+=`</div>`+sbSettle();return h}
+function sbSummary(b){const nm=ids=>(ids||[]).map(i=>P(i).name).join(', ');
+  if(b.type==='pool')return 'Pool of '+nm(b.participants)+' · buy-in '+(b.buy_in||'?')+(b.payouts?' · payouts entered':' · payouts open');
+  return nm(b.side_a)+' vs '+nm(b.side_b)+' · '+(b.stake?'stake '+b.stake:b.stake_item?'stake: '+b.stake_item:'no stake')+(b.odds?' · odds '+b.odds:'')+' · '+(b.winner==='a'?'Side A wins':b.winner==='b'?'Side B wins':b.winner==='wash'?'wash':'result open')}
 const B_ids=()=>D.bets.people.map(p=>p.id).join(', ');
 function sbSnap(){const g=id=>{const e=document.getElementById(id);return e?e.value:undefined};sbForm=Object.assign(sbForm||{},{text:g('sb_text'),a:picked('sa'),b:picked('sb'),pp:picked('pp'),stake:g('sb_stake'),item:g('sb_item'),odds:g('sb_odds'),long:g('sb_long'),win:g('sb_win'),buy:g('sb_buy'),pay:g('sb_pay')});
   const s=id=>{const e=document.getElementById(id);return e?e.value:null};
@@ -645,7 +774,7 @@ function sbSettle(){
   if(sp.type==='pool')h+=`<input id="st_pay" class="sb-in" style="margin-top:6px" placeholder="Payouts: kurt:800K, mark:1.2mil" value="${esc(stPay)}">`;
   else h+=`<div class="row2" style="margin-top:6px"><select id="st_win" class="sb-in"><option value="a"${stWin==='a'?' selected':''}>Side A wins (${esc((sp.side_a||[]).map(i=>P(i).name).join(', '))})</option><option value="b"${stWin==='b'?' selected':''}>Side B wins (${esc((sp.side_b||[]).map(i=>P(i).name).join(', '))})</option><option value="wash"${stWin==='wash'?' selected':''}>Wash</option></select>
    <input id="st_ga" class="sb-in" placeholder="or per-game: games won by A" value="${esc(stGa)}"><input id="st_gb" class="sb-in" placeholder="games won by B" value="${esc(stGb)}"></div>`;
-  h+=`<div style="margin-top:8px">${sbMode()==='local'||sbMode()==='shared'?'<button class="btn" onclick="sbSettleGo()">Settle</button>'+(sbMode()==='shared'?' <span class="note">for everyone, no login</span>':''):sbMode()==='ro'?'<span class="note bad">The shared ledger is unreachable: settling is switched off until it is back.</span>':sbMode()==='wait'?'<span class="note">Connecting to the shared ledger…</span>':'<span class="note">Settling needs the local server (python3 serve.py), or edit bets.json: set "winner" to "a", "b" or "wash".</span>'}</div></div>`;
+  h+=`<div style="margin-top:8px">${sbMode()==='local'||sbMode()==='shared'?'<button class="btn" onclick="sbSettleGo()">Settle</button>'+(sbMode()==='shared'?' <span class="note">for everyone, no login</span>':''):sbMode()==='ro'?'<span class="note bad">The shared ledger is unreachable: settling is switched off until it is back.</span>':sbMode()==='wait'?'<span class="note">Connecting to the shared ledger…</span>':ADMIN?'<span class="note">Settling needs the local server (python3 serve.py), or edit bets.json: set "winner" to "a", "b" or "wash".</span>':'<span class="note">Settling is switched off right now.</span>'}</div></div>`;
   return h}
 async function sbSettleGo(){if(sbMode()==='shared')return sbSettleShared();
   const cur=D.bets.bets.find(b=>bkey(b)===stSel);const patch=settlePatch(cur);
@@ -656,35 +785,35 @@ function vRosters(){
   const o=D.owners.find(x=>x.name===ownerSel);
   let h=`<div class="tabs">${D.owners.map(x=>`<button class="${x.name===ownerSel?'on':''}" onclick="ownerSel='${esc(x.name)}';render()">${esc(x.emoji)} ${esc(x.name)}</button>`).join('')}</div>`;
   const cats=Object.entries(o.by_cat).filter(([k,v])=>v!==0);
-  h+=`<div class="card"><b style="font-size:20px">${esc(o.emoji)} ${esc(o.name)} — ${o.total} pts</b> <span class="mut">(#${o.rank})</span><div class="note">${esc(o.team_name)}</div>
+  h+=`<div class="card"><b style="font-size:20px">${esc(o.emoji)} ${esc(o.name)} — ${o.total} pts</b> <span class="mut">(${D.owners.filter(x=>x.rank===o.rank).length>1?"T-"+o.rank:"#"+o.rank})</span><div class="note">${esc(o.team_name)}</div>
     <div style="margin-top:6px">${cats.length?cats.map(([k,v])=>`<span class="pill">${esc(D.cat_labels[k]||k)}: <b class="${v<0?'bad':''}">${sign(v)}</b></span>`).join(''):'<span class="mut">'+esc(noPts(o.name))+'</span>'}</div></div>`;
-  h+=`<div class="card sc"><table><tr><th>Team</th><th class="n">Rec</th><th class="n">Wins ctd</th><th class="n">Bonus</th><th class="n">Pts</th></tr>`;
+  h+=`<div class="card sc"><table><tr><th>Team</th><th class="n">Record</th><th class="n">Wins counted</th><th class="n">Bonus pts</th><th class="n">Pts</th></tr>`;
   o.teams.forEach((t,ix)=>{const key=o.name+'|'+t.tid+'|'+ix;const bonus=t.total-(t.by.win||0);
-    h+=`<tr class="trow" onclick="openTeam['${key}']=!openTeam['${key}'];render()"><td>${chip(t.tid,{big:1,out:t.status==='dropped'})} ${t.status==='dropped'?'<span class="pill">dropped</span>':t.status==='added'?'<span class="pill">added '+esc(t.window.start)+'</span>':''}</td><td class="n">${rec(t.tid)}</td><td class="n">${t.wins_counted}</td><td class="n">${sign(bonus)}</td><td class="n"><b>${t.total}</b></td></tr>`;
+    h+=`<tr class="trow" onclick="openTeam['${key}']=!openTeam['${key}'];render()"><td>${chip(t.tid,{big:1,out:t.status==='dropped'})} ${t.status==='dropped'?'<span class="pill">dropped</span>':t.status==='added'?'<span class="pill">added '+esc(fmtDate(t.window.start))+'</span>':''}</td><td class="n">${rec(t.tid)}</td><td class="n">${t.wins_counted}</td><td class="n">${sign(bonus)}</td><td class="n"><b>${t.total}</b></td></tr>`;
     if(openTeam[key]){
       h+=`<tr><td colspan="5"><div class="det">`;
-      h+=`<div class="note">Counting window: ${esc(t.window.start||'season start')} → ${esc(t.window.end?'before '+t.window.end:'present')}</div>`;
+      h+=`<div class="note">Counting window: ${esc(t.window.start?fmtDate(t.window.start):'season start')} → ${esc(t.window.end?'before '+fmtDate(t.window.end):'present')}</div>`;
       const by=Object.entries(t.by).map(([k,v])=>`<span class="pill">${esc(D.cat_labels[k]||k)}: <b>${sign(v)}</b></span>`).join('');
       h+=by||'<span class="mut">No points yet.</span>';
       const bonusItems=t.items.filter(i=>i.cat!=='win');
-      if(bonusItems.length)h+=`<ul class="it">${bonusItems.map(i=>`<li><b class="${i.pts<0?'bad':'good'}">${sign(i.pts)}</b> ${esc(i.note)} <span class="mut">${esc(i.day)}${i.auto===false?' ✍️ manual':''}${i.fallback?' ⚠️ seed fallback':''}</span></li>`).join('')}</ul>`;
+      if(bonusItems.length)h+=`<ul class="it">${bonusItems.map(i=>`<li><b class="${i.pts<0?'bad':'good'}">${sign(i.pts)}</b> ${esc(i.note)} <span class="mut">${esc(fmtDate(i.day))}${i.auto===false?' ✍️ commissioner ruling':''}</span></li>`).join('')}</ul>`;
       const gs=(D.team_games[t.tid]||[]).filter(g=>g.status==='final').slice(-8).reverse();
       const nx=(D.team_games[t.tid]||[]).filter(g=>g.status!=='final'&&g.status!=='postponed'&&g.status!=='canceled').slice(0,3);
-      if(gs.length)h+=`<div class="note" style="margin-top:6px">Last games</div>`+gs.map(g=>`<div style="margin:3px 0">${g.res==='W'?'<b class="good">W</b>':'<b class="bad">L</b>'} ${g.us}-${g.them} ${g.site==='A'?'@':g.site==='N'?'vs (N)':'vs'} ${esc(g.opp)} <span class="mut">${esc(g.day)}${g.round?' · '+esc(g.round):''}</span>${gameLine(g)}</div>`).join('');
-      if(nx.length)h+=`<div class="note" style="margin-top:6px">Up next</div>`+nx.map(g=>`<div style="margin:3px 0">${g.site==='A'?'@':'vs'} ${esc(g.opp)} <span class="mut">${esc(g.start?wibLabel(wibKey(g))+' '+wibTime(g):g.day)}</span>${gameLine(g)}</div>`).join('');
+      if(gs.length)h+=`<div class="note" style="margin-top:6px">Last games</div>`+gs.map(g=>`<div style="margin:3px 0">${g.res==='W'?'<b class="good">W</b>':'<b class="bad">L</b>'} ${g.us}-${g.them} ${g.site==='A'?'@':g.site==='N'?'vs (N)':'vs'} ${esc(g.opp)} <span class="mut">${esc(fmtDate(g.day))}${g.round?' · '+esc(g.round):''}</span>${gameLine(g)}</div>`).join('');
+      if(nx.length)h+=`<div class="note" style="margin-top:6px">Up next</div>`+nx.map(g=>`<div style="margin:3px 0">${g.site==='A'?'@':'vs'} ${esc(g.opp)} <span class="mut">${esc(g.start?etLabel(etKey(g))+', '+etTime(g):fmtDate(g.day))}</span>${gameLine(g)}</div>`).join('');
       h+=`</div></td></tr>`}
   });
   h+=`</table></div>`;return h}
 function vTeams(){
   const rows=[];D.owners.forEach(o=>o.teams.forEach(t=>rows.push({o:o.name,t})));
   rows.sort((a,b)=>b.t.total-a.t.total||a.t.tid.localeCompare(b.t.tid));
-  return `<div class="card sc"><table><tr><th>Team</th><th>Owner</th><th class="n">Rec</th><th class="n">Pts</th></tr>${rows.map(r=>`<tr><td>${chip(r.t.tid,{out:r.t.status==='dropped'})}</td><td>${esc(r.o)}</td><td class="n">${rec(r.t.tid)}</td><td class="n"><b>${r.t.total}</b></td></tr>`).join('')}</table></div><p class="note">Record = full season record (regular season + conference tournaments + postseason as ESPN counts it). Points only count inside each owner's ownership window.</p>`}
+  return `<div class="card sc"><table><tr><th>Team</th><th>Owner</th><th class="n">Record</th><th class="n">Pts</th></tr>${rows.map(r=>`<tr><td>${chip(r.t.tid,{out:r.t.status==='dropped'})}</td><td>${esc(r.o)}</td><td class="n">${rec(r.t.tid)}</td><td class="n"><b>${r.t.total}</b></td></tr>`).join('')}</table></div><p class="note">Record = full season record (regular season + conference tournaments + postseason as ESPN counts it). Points only count inside each owner's ownership window.</p>`}
 function mark(f){if(!f)return '';if(f.v===true)return f.src==='manual'?'✍️':'✅';if(f.v===false)return '<span class="mut">·</span>';return '<span class="mut" title="not decided yet">⏳</span>'}
 function vChecklist(){
-  let h=`<div class="card sc"><table><tr><th>Team</th><th>Owner</th><th title="Conference regular-season champ">Conf reg</th><th title="Conference tournament champ">Conf tourn</th><th>NCAA in</th><th>Play-in W</th><th class="n">NCAA W</th><th class="n">Upsets</th><th>F4</th><th>Champ</th><th>Missed</th></tr>`;
+  let h=`<div class="swipe">↔ Swipe sideways to see every column</div><div class="card sc"><table><tr><th>Team</th><th>Owner</th><th title="Conference regular-season champ">Conf season champ</th><th title="Conference tournament champ">Conf tourney champ</th><th>Made NCAA</th><th>Play-in win</th><th class="n">NCAA wins</th><th class="n">Upsets</th><th>Final Four</th><th>National champ</th><th>Missed dance</th></tr>`;
   D.owners.forEach(o=>o.teams.filter(t=>t.status!=='dropped').forEach(t=>{const c=D.checklist[t.tid]||{};
-    h+=`<tr><td>${chip(t.tid)}</td><td>${esc(o.name)}</td><td>${mark(c.conf_reg)}</td><td>${mark(c.conf_tourn)}</td><td>${mark(c.ncaa_entry)}</td><td>${c.playin_win&&c.playin_win.v?'✅':'<span class=mut>·</span>'}</td><td class="n">${c.ncaa_wins||0}</td><td class="n">${c.upsets||0}${c.upset_fallback?' ⚠️':''}</td><td>${mark(c.final4)}</td><td>${mark(c.champ)}</td><td>${mark(c.missed_dance)}</td></tr>`}));
-  h+=`</table></div><p class="note">✅ auto-detected from ESPN · ✍️ set by hand in overrides.json · ⏳ not decided yet · · no · ⚠️ upset judged by seed because no betting line was available.</p>`;
+    h+=`<tr><td>${chip(t.tid)}</td><td>${esc(o.name)}</td><td>${mark(c.conf_reg)}</td><td>${mark(c.conf_tourn)}</td><td>${mark(c.ncaa_entry)}</td><td>${c.playin_win&&c.playin_win.v?'✅':'<span class=mut>·</span>'}</td><td class="n">${c.ncaa_wins||0}</td><td class="n">${c.upsets||0}</td><td>${mark(c.final4)}</td><td>${mark(c.champ)}</td><td>${mark(c.missed_dance)}</td></tr>`}));
+  h+=`</table></div><p class="note">✅ yes (from ESPN) · ✍️ set by the commissioner${ADMIN?' (overrides.json)':''} · ⏳ not decided yet · · no</p>`;
   const started=D.conf_audit.filter(c=>c.tournament_started);
   h+=`<h2>Conference regular-season champs (${started.length}/${D.conf_audit.length} conferences decided)</h2><div class="card sc"><table><tr><th>Conference</th><th>Champ (top seed)</th><th>Status</th></tr>${D.conf_audit.map(c=>`<tr><td>${esc(c.conf)}</td><td>${esc(c.leader||'—')}</td><td class="mut">${esc(c.status)}</td></tr>`).join('')}</table></div>`;
   return h}
@@ -693,12 +822,12 @@ function vUpsets(){
   const sc=D.meta.rules.upset_games.map(x=>({ncaa:'NCAA tournament',conf:'conference tournaments',reg:'regular season'}[x]||x)).join(' + ');
   let h=`<div class="card"><b>😱 The upset rule</b><div class="note">Upset = in the NCAA tournament, your team <b>beat a better seed</b> (a bigger seed number beats a smaller one, e.g. a 12 over a 5). Equal seeds never count. Vegas lines are shown for fun but don't decide tournament upsets. Applies to: <b>${esc(sc)}</b>.</div></div>`;
   if(!A.length)return h+`<div class="card">No eligible games yet — upsets are scored from the NCAA tournament in March. Place your bets responsibly (we mean the figurative kind).</div>`;
-  h+=`<div class="card sc"><table><tr><th>Date</th><th>Game</th><th>Line (pre-game)</th><th>Upset?</th></tr>${A.map(a=>{const l=a.line;const ls=l?`${esc(l.provider)}: ${esc(l.details||'')} · ML ${l.home_ml}/${l.away_ml} <span class="mut">(home/away; dog ${esc(a.winnerId==l.underdog_id?a.winner:a.loser)})</span>`:'<span class="mut">no line</span>';
-    return `<tr><td>${esc(a.day)}<div class="note">${esc(a.round)}</div></td><td>${a.winnerSeed?'('+a.winnerSeed+') ':''}<b>${esc(a.winner)}</b> ${a.winnerScore}-${a.loserScore} ${a.loserSeed?'('+a.loserSeed+') ':''}${esc(a.loser)}</td><td>${ls}</td><td>${a.upset?'<b class="good">YES +'+D.meta.points.upset+'</b>':a.upset===false?'no':'?'} ${a.fallback?'⚠️':''}<div class="note">${esc(a.basis)}</div></td></tr>`}).join('')}</table></div>`;
+  h+=`<div class="card sc"><table><tr><th>Date</th><th>Game</th><th>Line (pre-game)</th><th>Upset?</th></tr>${A.map(a=>{const l=a.line;const ls=l?`${esc(l.provider)}: ${esc(l.details||'')} · Moneyline ${l.home_ml}/${l.away_ml} <span class="mut">(home/away; underdog ${esc(a.winnerId==l.underdog_id?a.winner:a.loser)})</span>`:'<span class="mut">no line</span>';
+    return `<tr><td>${esc(fmtDate(a.day))}<div class="note">${esc(a.round)}</div></td><td>${a.winnerSeed?'('+a.winnerSeed+') ':''}<b>${esc(a.winner)}</b> ${a.winnerScore}-${a.loserScore} ${a.loserSeed?'('+a.loserSeed+') ':''}${esc(a.loser)}</td><td>${ls}</td><td>${a.upset?'<b class="good">YES +'+D.meta.points.upset+'</b>':a.upset===false?'no':'?'}<div class="note">${esc(a.basis)}</div></td></tr>`}).join('')}</table></div>`;
   return h}
 function vRedraft(){
   const r=D.meta.redraft;const any=Object.values(r.moves).some(m=>(m.drop||[]).length||(m.add||[]).length);
-  const dd=new Date(r.date+'T12:00:00Z').toLocaleDateString('en-GB',{timeZone:'UTC',day:'numeric',month:'long',year:'numeric'});
+  const dd=fmtDateLong(r.date);
   let h=`<div class="card"><b>\u{1F4C5} Redraft: ${esc(dd)}</b><ul class="it">
    <li><b>Snake draft</b> in standings order as of ${esc(dd)}. <b>Last place</b> chooses where they draft, then it moves up the standings. Being bad finally pays off.</li>
    <li><b>Tiebreaker:</b> fewest total wins ranks lower.</li>
@@ -707,29 +836,35 @@ function vRedraft(){
   if(!any)h+=`<div class="card">No redraft moves yet. Each owner\u2019s drops and adds will show up here after the Jan 20 redraft.</div>`;
   h+=D.owners.map(o=>{const m=r.moves[o.name]||{};return `<div class="card"><b>${esc(o.emoji)} ${esc(o.name)}</b>
     <div class="note">Drops: ${(m.drop||[]).map(esc).join(', ')||'—'} &nbsp;|&nbsp; Adds: ${(m.add||[]).map(esc).join(', ')||'—'}</div>
-    <div class="chips">${o.teams.map(t=>chip(t.tid,{out:t.status==='dropped'})+`<span class="note" style="align-self:center">${t.window.start?'from '+esc(t.window.start):''}${t.window.end?'until '+esc(t.window.end):''}</span>`).join('')}</div></div>`}).join('');
+    <div class="chips">${o.teams.map(t=>chip(t.tid,{out:t.status==='dropped'})+`<span class="note" style="align-self:center">${t.window.start?'from '+esc(fmtDate(t.window.start)):''}${t.window.end?'until '+esc(fmtDate(t.window.end)):''}</span>`).join('')}</div></div>`}).join('');
   return h}
 function vAbout(){
   const P=D.meta.points,m=D.meta;
   const rows=[['Win (reg season + conf tourney, any opponent)',P.win],['Conference regular-season champ',P.conf_reg],['Conference tournament champ',P.conf_tourn],['Make the NCAA field',P.ncaa_entry],['Play-in (First Four) win',P.playin_win],['Upset (NCAA tournament: beat a better seed)',P.upset],['NCAA tournament win',P.ncaa_win],['Final Four',P.final4],['National champ',P.champ],['Miss the Big Dance',P.missed_dance]];
   return `<div class="card sc"><table><tr><th>Scoring</th><th class="n">Pts</th></tr>${rows.map(r=>`<tr><td>${r[0]}</td><td class="n">${sign(r[1])}</td></tr>`).join('')}</table></div>
   ${vUpsets()}
-  <div class="card"><b>Where the numbers come from</b><ul class="it">
+  ${ADMIN?`<div class="card"><b>Where the numbers come from</b><ul class="it">
    <li><b>Scores, records, seeds, tournament rounds:</b> ESPN public scoreboard (primary). Fallback: ncaa.com data via the free ncaa-api.henrygd.me relay, used automatically for any day ESPN fails (scores/seeds only).</li>
    <li><b>Betting lines (Games tab; tournament upsets use seeds, not lines):</b> ESPN odds API (DraftKings preferred; live in-game odds are ignored). Upcoming games show the latest posted line (re-checked every refresh, books usually post a few days ahead, otherwise 'line not posted yet'); final games keep the stored closing line.</li>
    <li><b>Conference regular-season champs:</b> ESPN standings (top conference seed, which includes tiebreaks) once the conference tournament starts.</li>
    <li><b>Rosters:</b> your Google Sheet, re-read on every refresh.</li></ul>
    <b>Automatic</b>: wins, losses, conf tournament champs, conf regular-season champs, NCAA entry, play-in wins, NCAA wins, Final Four, champ, missed dance, upsets.<br>
-   <b>Manual</b>: the Jan 20 redraft moves (config.json), and any corrections or rulings (overrides.json: force/deny a bonus, force/deny an upset, add a commissioner adjustment).</div>
-  <div class="card"><b>House interpretations (change in config.json)</b><ul class="it">
-   <li>Upset bonus applies to <b>${esc(m.rules.upset_games.join(', '))}</b> games only (the sheet says "beats a higher seed in the NCAA tournament"). Equal seeds = no upset. First Four upsets: ${m.rules.upset_first_four?'on':'off'}.</li>
+   <b>Manual</b>: the Jan 20 redraft moves (config.json), and any corrections or rulings (overrides.json: force/deny a bonus, force/deny an upset, add a commissioner adjustment).</div>`:`<div class="card"><b>Where the numbers come from</b><ul class="it">
+   <li><b>Scores, records, seeds, tournament rounds:</b> ESPN.</li>
+   <li><b>Betting lines (Games tab):</b> DraftKings, via ESPN. Tournament upsets are judged by seed, not by the line. Upcoming games show the latest posted line (books usually post a few days ahead, otherwise “line not posted yet”); final games keep the closing line.</li>
+   <li><b>Conference regular-season champs:</b> ESPN standings (top conference seed, which includes tiebreaks) once the conference tournament starts.</li>
+   <li><b>Rosters:</b> the pool’s Google Sheet.</li></ul>
+   <b>Automatic</b>: wins, losses, conference champs, NCAA entry, play-in wins, NCAA wins, Final Four, champ, missed dance, upsets.<br>
+   <b>By hand</b>: the Jan 20 redraft moves, and any corrections or rulings from the commissioner.</div>`}
+  <div class="card"><b>House interpretations${ADMIN?' (change in config.json)':''}</b><ul class="it">
+   <li>Upset bonus applies to <b>${esc(m.rules.upset_games.map(x=>({ncaa:'NCAA tournament',conf:'conference tournament',reg:'regular-season'}[x]||x)).join(', '))}</b> games only (the sheet says "beats a higher seed in the NCAA tournament"). Equal seeds = no upset. First Four upsets: ${m.rules.upset_first_four?'on':'off'}.</li>
    <li>A First Four win = +1 play-in and +5 for making the field, but not the +2 NCAA win. A First Four loser: ${m.rules.first_four_loser_penalty?'gets -1':'no -1 penalty (just no +5)'}.</li>
    <li>Games vs non-Division I opponents that ESPN lists count as wins (rule says "any opponent"): ${m.rules.count_non_d1_wins?'yes':'no'}.</li>
    <li>NIT/CBI/Crown and other postseason wins don't count. Postponed/canceled games give nothing.</li></ul></div>
-  <div class="card"><b>Data health</b><ul class="it"><li>Updated: ${esc(m.generated_at_wib)}</li><li>Mode: ${esc(m.mode)} · season ${esc(m.season)} · games loaded ${m.games_loaded} (${m.final_games} final)</li>
+  ${ADMIN?`<div class="card"><b>Data health</b><ul class="it"><li>Updated: ${esc(stampET())}</li><li>Mode: ${esc(m.mode)} · season ${esc(m.season)} · games loaded ${m.games_loaded} (${m.final_games} final)</li>
    <li>Days fetched fresh ${m.fetch.days_fetched}, cached ${m.fetch.days_cached}, ncaa.com fallback ${m.fetch.days_ncaa_fallback}, failed ${m.fetch.days_failed_both}</li>
    <li>Betting lines found ${m.odds.lines_found}/${m.odds.games_needing_line}</li><li>Rosters: ${esc(m.roster_source)}; sheet ${m.sheet_ok?'OK':'ERROR '+esc(m.sheet_error)}</li>
-   ${m.warnings.length?'<li class="bad">Warnings: '+m.warnings.map(esc).join('; ')+'</li>':''}</ul></div>`}
+   ${m.warnings.length?'<li class="bad">Warnings: '+m.warnings.map(esc).join('; ')+'</li>':''}</ul></div>`:`<div class="card"><b>Updated:</b> ${esc(stampET())}</div>`}`}
 /* ---------- archive (static: archive.js built once by archive_build.py) ---------- */
 let archSel=null;
 function archOwnerName(o){
@@ -749,13 +884,17 @@ function archAllTime(A){
     const yrs=p.title_seasons.slice().sort().reverse().map(y=>esc(y)+(((A.seasons.find(s=>s.season===y)||{}).no_tournament)?' 🦠':'')).join(', ')||'<span class="mut">—</span>';
     return `<tr><td><b>${esc(p.person)}</b>${cur}</td><td class="n">${cnt(p)?'🏆 '+cnt(p):'0'}</td><td class="n">${p.seasons}</td><td>${yrs}</td></tr>`}).join('')+
    `</table></div><div class="fine">🦠 = 2019-20, when the NCAA tournament was cancelled. Listed as a title year, but not counted in the Titles total. A title is the top total in that season's sheet. Tied firsts would not be counted.</div></div>`}
+const ACRO={UNC:'UNC',UCLA:'UCLA',USC:'USC',BYU:'BYU',VCU:'VCU',SMU:'SMU',TCU:'TCU',LSU:'LSU',UCF:'UCF',UNCW:'UNCW',UNCO:'UNCO',UCSB:'UCSB',UMBC:'UMBC',UAB:'UAB',USF:'USF',SFU:'SFU',UNLV:'UNLV',UTEP:'UTEP',LIU:'LIU',VMI:'VMI',UCONN:'UConn',UMASS:'UMass',MIZZOU:'Mizzou'};
+/* sheet names are hand-typed; only ALL-CAPS ones are softened (mixed-case names are left as typed) */
+function archName(n){n=String(n==null?'':n);if(n!==n.toUpperCase()||!/[A-Z]{2}/.test(n))return n;
+  return n.replace(/[A-Za-z][A-Za-z.'&-]*/g,w=>{const u=w.toUpperCase();if(ACRO[u])return ACRO[u];if(/^([A-Z]\.)+$/.test(w))return w;if(w.length<=2&&u!=='ST'&&u!=='OF')return u;if(u==='OF'||u==='THE'||u==='AND')return u.toLowerCase();return u[0]+u.slice(1).toLowerCase().replace(/(^|[-'])([a-z])/g,(m0,p1,p2)=>p1+p2.toUpperCase())})}
 function archTeams(o){
   return `<div class="sc"><table><tr><th>#</th><th>Team</th><th class="n">Wins</th><th class="n">Pts</th></tr>`+
-   o.teams.map(t=>`<tr><td>${t.pick}</td><td class="t">${t.name?esc(t.name):'<i class="mut">(no team name in sheet)</i>'}${t.redraft_add?' <span class="pill" title="Pick 9–10 carry the Jan 20 adjustment column">Jan 20 pick</span>':''}</td><td class="n mut">${t.wins==null?'':t.wins}</td><td class="n"><b>${t.pts==null?'—':t.pts}</b></td></tr>`).join('')+
+   o.teams.map(t=>`<tr><td>${t.pick}</td><td class="t">${t.name?esc(archName(t.name)):'<i class="mut">(no team name in sheet)</i>'}${t.redraft_add?' <span class="pill" title="Picks 9–10 were added at the Jan 20 redraft">Jan 20 pick</span>':''}</td><td class="n mut">${t.wins==null?'':t.wins}</td><td class="n"><b>${t.pts==null?'—':t.pts}</b></td></tr>`).join('')+
    `</table></div>`}
 function vArchive(){
   const A=window.ARCHIVE;
-  if(!A)return '<div class="card">Couldn\u2019t load archive.js.</div>';
+  if(!A)return '<div class="card">Couldn\u2019t load the archive. Try reloading the page.</div>';
   const seasons=A.seasons; // newest first
   if(!archSel||!seasons.some(s=>s.season===archSel))archSel=(seasons.find(s=>s.pool)||seasons[0]).season;
   const S=seasons.find(s=>s.season===archSel);
@@ -781,21 +920,86 @@ function render(){
   if(!D)return;const m=D.meta;
   if(!window._tagPick)window._tagPick={};
   const TAGS={
-   preseason:['0-0 and full of hope. The season hasn\u2019t started, so everyone is a genius.','Nobody has lost yet, so every draft was brilliant.','Preseason: where every roster is a masterpiece and every owner is undefeated.','Zero games played, zero bad takes proven wrong. Enjoy it.','The hot takes are free until November.','Everyone is in first place. It will not last.','Every team is a Final Four team on paper. Paper is patient.'],
    live:['Where college basketball knowledge goes to be humbled.','Confidence is high. The scoreboard disagrees.','Every win is skill. Every loss is the refs.','Somebody\u2019s mid-major is carrying them. Somebody\u2019s blue blood is not.','Bragging rights are updated every 15 minutes.'],
    final:['The season is over. Someone is insufferable now.','The trophy is decided. The group chat will never be the same.','It\u2019s over. Screenshots will be used against you.'],
    demo:['DEMO: last season\u2019s real results run through this year\u2019s rosters. Nobody\u2019s actual points.']};
   const pickTag=(k,arr)=>{if(window._tagPick[k]==null)window._tagPick[k]=Math.floor(Math.random()*arr.length);return arr[window._tagPick[k]%arr.length]};
-  $('#tag').textContent=TAGS[m.mode]?pickTag('tag'+m.mode,TAGS[m.mode]):'';
-  $('#badges').innerHTML=(m.mode==='demo'?'<span class="badge warn">DEMO DATA</span>':'')+(m.warnings.length?'<span class="badge warn">⚠ '+m.warnings.length+' warning(s) — see Rules &amp; sources</span>':'');
+  $('#tag').textContent=TAGLINE_MODES.includes(m.mode)?stoopidTagline(new Date(),(D.owners||[]).map(o=>o.name)):(TAGS[m.mode]?pickTag('tag'+m.mode,TAGS[m.mode]):'');   // textContent: the owner name can never inject HTML
+  $('#badges').innerHTML=(m.mode==='demo'?'<span class="badge warn">DEMO DATA</span>':'')+(ADMIN?'<span class="badge">ADMIN VIEW</span>':'')+(ADMIN&&m.warnings.length?'<span class="badge warn">⚠ '+m.warnings.length+' warning(s) — see Rules &amp; sources</span>':'');
   $('#nav').innerHTML=TABS.map(t=>`<button class="${t[0]===tab?'on':''}" onclick="tab='${t[0]}';render()">${t[1]}</button>`).join('');
+  {const nv=$('#nav'),on=nv.querySelector('button.on');if(on&&nv.scrollWidth>nv.clientWidth)nv.scrollLeft=Math.max(0,on.offsetLeft-(nv.clientWidth-on.offsetWidth)/2)}   // phone: nav scrolls sideways, keep the current tab in view
   $('#main').innerHTML=(VIEWS[tab]||vStandings)();
-  $('#foot').innerHTML=`STOOPIDS · times in Eastern (ET) · scores ESPN (fallback ncaa.com) · ${DEMO?'<a href="?">back to the live season</a>':'<a href="?demo=1">see the demo (last season replay)</a>'}`;
+  $('#foot').innerHTML=`STOOPIDS · times in Eastern (ET) · ${DEMO?'<a href="?">back to the live season</a>':'<a href="?demo=1">see the demo (last season replay)</a>'}${ADMIN?' · scores ESPN (fallback ncaa.com)':''}`;
+  freshStart();
+}
+/* ---------- who's online (anonymous shared blob; no passwords, anyone can pick any name) ---------- */
+const PRES={url:'https://textdb.dev/api/data/stoopids-presence-23658198955328729a557ddb',beatMs:30000,onlineMs:75000,guestKeepMs:600000,guestKey:'__guest__'};
+const PS={map:{},lastOk:0,timer:null,busy:false,started:false,dev:null,who:null};
+const lsGet=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
+const lsSet=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+function presDev(){if(PS.dev)return PS.dev;let d=lsGet('stoopids_dev');if(!d||!/^[0-9a-f]{12}$/.test(d)){const a=new Uint8Array(6);(window.crypto||window.msCrypto).getRandomValues(a);d=Array.from(a,b=>('0'+b.toString(16)).slice(-2)).join('');lsSet('stoopids_dev',d)}return PS.dev=d}
+const presOwners=()=>(D&&D.owners||[]);
+function presWho(){const w=lsGet('stoopids_who');if(!w)return null;if(w===PRES.guestKey)return w;return presOwners().some(o=>o.name===w)?w:null}
+const presMyKey=()=>PS.who===PRES.guestKey?'g-'+presDev():PS.who;
+function presAgo(ms){const m=Math.floor(ms/60000);if(m<1)return 'just now';if(m<60)return m+'m ago';const h=Math.floor(m/60);if(h<24)return h+'h ago';if(h<48)return 'yesterday';return Math.floor(h/24)+'d ago'}
+function presParse(txt){try{if(!txt||!txt.trim())return {};let d=JSON.parse(txt);if(typeof d==='string')d=JSON.parse(d);if(!d||typeof d!=='object'||Array.isArray(d))return {};const o={};for(const k in d){const t=d[k]&&Number(d[k].t);if(isFinite(t)&&t>0)o[k]={t}}return o}catch(e){return {}}}
+async function presBeat(){
+  if(PS.busy||!PS.who||document.hidden)return;PS.busy=true;
+  try{
+    const r=await fetch(PRES.url,{cache:'no-store'});if(!r.ok)throw 0;
+    const m=presParse(await r.text());const now=Date.now();
+    m[presMyKey()]={t:now};
+    for(const k in m)if(k.indexOf('g-')===0&&now-m[k].t>PRES.guestKeepMs)delete m[k];
+    const w=await fetch(PRES.url,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(m)});if(!w.ok)throw 0;
+    PS.map=m;PS.lastOk=now;
+  }catch(e){PS.lastOk=0}
+  PS.busy=false;presDraw();
+}
+function presDraw(){
+  const el=$('#presence');if(!el)return;
+  const now=Date.now();
+  if(!PS.who||!PS.lastOk||now-PS.lastOk>PRES.beatMs*4){el.hidden=true;el.innerHTML='';return}
+  const m=PS.map,me=PS.who,on=[],off=[];let g=0;
+  presOwners().forEach(o=>{const e=m[o.name];if(!e)return;const age=now-e.t;
+    if(age<=PRES.onlineMs||o.name===me)on.push(o);else off.push([o,age])});
+  for(const k in m)if(k.indexOf('g-')===0&&now-m[k].t<=PRES.onlineMs)g++;
+  off.sort((a,b)=>a[1]-b[1]);
+  const chip=(o,isOn,age)=>{const mine=o.name===me;const lab=esc(o.emoji)+' '+esc(o.name);
+    const inner=`<i class="pd"></i>`+(isOn?`<span class="pn">${lab}</span>`:`<span class="pt"><span class="pn">${lab}</span><small>last seen ${presAgo(age)}</small></span>`)+(mine?'<span class="pe">you · change</span>':'');
+    return mine?`<button type="button" class="pc me on" onclick="presAsk()" title="Not you? Tap to change">${inner}</button>`:`<span class="pc ${isOn?'on':'off'}">${inner}</span>`};
+  let h='<div class="pr"><span class="prl">👀 Online now</span>'+on.map(o=>chip(o,true)).join('');
+  if(g)h+=`<span class="pg">+${g} guest${g>1?'s':''}</span>`;
+  if(me===PRES.guestKey)h+='<button type="button" class="pc me on" onclick="presAsk()" title="Tap to pick your name"><i class="pd"></i><span class="pn">You: guest</span><span class="pe">pick name</span></button>';
+  h+=off.map(x=>chip(x[0],false,x[1])).join('')+'</div>';
+  if(!on.length&&!g&&!off.length){el.hidden=true;return}
+  el.hidden=false;el.innerHTML=h;
+}
+function presAsk(first){
+  const cur=PS.who,old=document.getElementById('pwho');if(old)old.remove();
+  const d=document.createElement('div');d.id='pwho';d.className='pwho';d.setAttribute('role','dialog');d.setAttribute('aria-label','Who are you?');
+  d.innerHTML=`<div class="box"><h2>Who are you? 👋</h2><p>Tap your name so the crew can see who\u2019s around. No password needed.</p><div class="grid">`+
+    presOwners().map(o=>`<button type="button" data-w="${esc(o.name)}" class="${o.name===cur?'cur':''}">${esc(o.emoji)} ${esc(o.name)}</button>`).join('')+
+    `</div><button type="button" data-w="${PRES.guestKey}" class="guest${cur===PRES.guestKey?' cur':''}">👀 Just watching (guest)</button>`+(first?'':'<button type="button" class="skip" data-w="">Cancel</button>')+`</div>`;
+  d.addEventListener('click',e=>{const b=e.target.closest('button[data-w]');if(b){presPick(b.getAttribute('data-w'));return}if(e.target===d&&!first)d.remove()});
+  document.body.appendChild(d);
+}
+function presPick(w){
+  const d=document.getElementById('pwho');if(d)d.remove();
+  if(!w)return;
+  if(w!==PS.who){const oldKey=PS.who&&presMyKey();PS.who=w;lsSet('stoopids_who',w);if(oldKey&&oldKey!==presMyKey()&&PS.map[oldKey]&&oldKey.indexOf('g-')===0)delete PS.map[oldKey]}
+  presBeat();presTick();
+}
+function presTick(){clearInterval(PS.timer);PS.timer=null;if(!document.hidden&&PS.who){PS.timer=setInterval(()=>{presBeat()},PRES.beatMs)}}
+function presInit(){
+  if(PS.started)return;PS.started=true;
+  PS.who=presWho();
+  document.addEventListener('visibilitychange',()=>{presTick();if(!document.hidden)presBeat()});
+  if(!PS.who)presAsk(true);else{presBeat();presTick()}
 }
 function load(){
   const s=document.createElement('script');s.src=(DEMO?'demo/':'')+'data.js?v='+Date.now();
-  s.onload=()=>{D=window.STOOPIDS_DATA;D._base=D.bets;applyShared();render()};
-  s.onerror=()=>{if(!D)$('#main').innerHTML='<div class="card">Couldn\u2019t load data.js. Run <code>python3 refresh.py</code> first.</div>'};
+  s.onload=()=>{D=window.STOOPIDS_DATA;D._base=D.bets;applyShared();render();try{presInit()}catch(e){}};
+  s.onerror=()=>{if(!D)$('#main').innerHTML='<div class="card">Couldn\u2019t load the latest data. Try reloading the page.'+(ADMIN?' (data.js missing: run <code>python3 refresh.py</code> first.)':'')+'</div>'};
   document.head.appendChild(s);
 }
 load();setInterval(load,5*60*1000);
