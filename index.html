@@ -99,6 +99,15 @@ main{max-width:1000px;margin:0 auto;padding:12px 10px 60px}
 }
 @media (min-width:1000px){.card.oc .chip{font-size:12.5px}}
 /*</RANK-BESIDE>*/
+/*<CHIP-RECORD>*/
+/* Standings chips: the team's W-L (data.json "records": completed regular-season + conference games, same number as the Teams tab) sits inside the chip on its own small line under the school name (logo spans both lines). Chip rows are 40px instead of 32px to make room. A team with no completed game is not in "records" and shows 0-0; if the data has no "records" key at all, no record is shown. */
+.card.oc .chips{grid-auto-rows:40px;min-height:calc(var(--rows)*40px + (var(--rows) - 1)*4px)}
+.card.oc .chip{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto auto;align-content:center;align-items:center;column-gap:3px;row-gap:0;height:40px}
+.card.oc .chip img,.card.oc .chip .nologo{grid-row:1/3;align-self:center}
+.card.oc .chip .cn{grid-column:2}
+.card.oc .chip .cr{grid-column:2;display:block;font-size:.92em;font-weight:600;line-height:1.1;letter-spacing:0;white-space:nowrap;font-variant-numeric:tabular-nums;opacity:.85;text-align:left;margin-top:1px}
+.card.oc .chip .cn.one{align-self:end}
+/*</CHIP-RECORD>*/
 .chip.big{font-size:15px;padding:3px 11px 3px 3px}
 .chip.big img{width:30px;height:30px}
 .chip.out{opacity:.55;text-decoration:line-through}
@@ -345,6 +354,21 @@ nav button .nu{position:absolute;top:1px;left:2px;min-width:15px;background:#ff3
 @media (min-width:1040px) and (max-width:1239px){nav{padding:6px 4px;gap:2px}nav button,nav a.nd{flex:1 1 0;flex-direction:column;gap:2px;border-radius:9px;padding:4px 0;min-height:46px;font-size:11.5px;letter-spacing:-.01em}nav button .ni,nav a.nd .ni{font-size:19px}nav button .nl.f,nav a.nd .nl.f{display:none}nav button .nl.s,nav a.nd .nl.s{display:block}}
 @media (min-width:1240px){nav{max-width:1180px}}
 /*</BETS-2627>*/
+
+/*<WIDE-PAGE>*/
+/* Wider page (601px and up; phones <=600px untouched): header, tab row, content, footer and the fixed chat bar all share ONE container, min(1320px, viewport - 32px), so the first tab's left edge / last tab's right edge line up exactly with the cards, tables, hero and chat bar. The tab row has no side padding of its own and its tabs grow to fill it. Standings chips: 8 per row from 1360px. */
+@media (min-width:601px){
+  header,nav,main,footer{width:min(1320px,calc(100% - 32px));max-width:none;margin-left:auto;margin-right:auto;box-sizing:border-box}
+  nav{padding-left:0;padding-right:0}
+  main{padding-left:0;padding-right:0}
+  footer{padding-left:0;padding-right:0}
+  .hero{width:100%;max-height:400px}
+  .chat{padding-left:max(16px,calc((100% - 1320px)/2));padding-right:max(16px,calc((100% - 1320px)/2))}
+}
+@media (min-width:601px) and (max-width:899px){.oqg thead th{font-size:10.5px}}   /* tablet: the owes-grid column headers ("Draymond") fit their columns */
+@media (min-width:1240px){nav{gap:6px}}
+@media (min-width:1360px){.card.oc .chips{grid-template-columns:repeat(8,minmax(0,1fr));--rows:1}}
+/*</WIDE-PAGE>*/
 </style>
 </head>
 <body>
@@ -399,7 +423,8 @@ function chip(tid,opt){opt=opt||{};const t=D.teams[tid]||{};if(!t.short&&opt.nam
   const url='https://www.espn.com/mens-college-basketball/team/_/id/'+encodeURIComponent(t.espn_id||tid);
   return `<a class="chip${opt.big?' big':''}${opt.out?' out':''}" href="${url}" target="_blank" rel="noopener" title="Open ${esc(t.name||t.short||tid)} on ESPN" onclick="event.stopPropagation()" style="background:${bg};color:${fg};border-color:${alt}">${logo}${/*<RANK-CHIPS>*/opt.cn?'<span class="cn'+(/\s/.test(t.short||t.name||tid)?'':' one')+'">'+esc(t.short||t.name||tid)+'</span>':/*</RANK-CHIPS>*/esc(t.short||t.name||tid)}</a>`}
 /* ---------- helpers ---------- */
-const rec=tid=>{const r=D.records[tid]||{w:0,l:0};return r.w+'-'+r.l};
+const rec=tid=>{const r=(D.records||{})[tid]||{w:0,l:0};return r.w+'-'+r.l};
+/*<CHIP-RECORD>*/const chipRec=(tid,o)=>{const h=chip(tid,o);return D.records?h.replace(/<\/a>$/,'<span class="cr" title="Season record (W-L)">'+rec(tid)+'</span></a>'):h};/*</CHIP-RECORD>*/
 const sign=n=>n>0?'+'+n:String(n);
 function ownerOf(tid){for(const o of D.owners)for(const t of o.teams)if(t.tid===tid&&t.status!=='dropped')return o.name;return '—'}
 const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
@@ -698,7 +723,7 @@ function vStandings(){
     <div class="who"><b>${esc(o.emoji)} ${esc(o.name)}</b><small>${esc(o.team_name)}</small>${/*<RANK-CHIPS>*/''/*per-owner quip no longer shown on these cards (quip() itself is untouched; Rosters still uses it)*//*</RANK-CHIPS>*/}</div>
     <div class="pts">${o.total}<small>points</small></div></div>
     <div class="bar"><i style="width:${Math.max(0,o.total)/mx*100}%"></i></div>
-    <div class="chips">${o.teams.map(t=>chip(t.tid,{out:t.status==='dropped',cn:1})).join('')}</div></div>`).join('')+'</div>'+
+    <div class="chips">${o.teams.map(t=>/*<CHIP-RECORD>*/chipRec/*</CHIP-RECORD>*/(t.tid,{out:t.status==='dropped',cn:1})).join('')}</div></div>`).join('')+'</div>'+
     `<p class="note">Tap an owner for the full breakdown. Struck-through teams were dropped in the Jan 20 redraft.</p>`}
 function goOwner(n){ownerSel=n;tab='rosters';render();window.scrollTo(0,0)}
 
