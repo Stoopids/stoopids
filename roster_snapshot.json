@@ -1,16 +1,16 @@
 {
- "Murnane": [
+ "Dirty Draymond": [
   {
    "tid": "57",
    "sheet_name": "FLORIDA"
   },
   {
    "tid": "2641",
-   "sheet_name": "Texas Tech"
+   "sheet_name": "TEXAS TECH"
   },
   {
    "tid": "333",
-   "sheet_name": "Alabama"
+   "sheet_name": "ALABAMA"
   },
   {
    "tid": "328",
@@ -18,11 +18,11 @@
   },
   {
    "tid": "300",
-   "sheet_name": "UC Irvine"
+   "sheet_name": "UC IRVINE"
   },
   {
    "tid": "2006",
-   "sheet_name": "Akron"
+   "sheet_name": "AKRON"
   },
   {
    "tid": "2132",
@@ -33,7 +33,7 @@
    "sheet_name": "Tulsa"
   }
  ],
- "Stockman": [
+ "Stock": [
   {
    "tid": "150",
    "sheet_name": "DUKE"
@@ -67,7 +67,7 @@
    "sheet_name": "WISCONSIN"
   }
  ],
- "Kurt": [
+ "Kurmoji": [
   {
    "tid": "258",
    "sheet_name": "VIRGINIA"
