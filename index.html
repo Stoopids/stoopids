@@ -178,12 +178,18 @@ footer{max-width:1000px;margin:0 auto;padding:0 14px 40px;color:var(--mut);font-
 .nbt .nbm{flex:1;min-width:0;overflow-wrap:anywhere;line-height:1.3}
 .nbt button{flex:none;min-width:40px;min-height:40px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--tx);font:inherit;font-size:13px;font-weight:800;cursor:pointer;padding:0 10px}
 .nbt .nbv{background:var(--acc);color:#111;border-color:var(--acc)}
-body.chatopen .nbt{bottom:auto;top:64px}
+/*<CHAT-BOTTOM>*/body.chatopen .nbt{bottom:auto;top:64px}
+.nbt{bottom:calc(var(--chatH,0px) + 12px)}   /* new-bet toast sits just above the fixed chat bar (at the top while the chat panel is open) *//*</CHAT-BOTTOM>*/
 nav button .nb{position:absolute;top:1px;right:2px;background:var(--acc);color:#111;border-radius:99px;font-size:9px;font-weight:900;line-height:1;padding:2px 4px;pointer-events:none}
 /*</NEWBET-CSS>*/
 /*<CHAT-CSS>*/
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.chat{max-width:1000px;margin:0 auto 18px;padding:0 10px}
+/*<CHAT-BOTTOM>*/
+.chat{position:fixed;left:0;right:0;bottom:0;z-index:30;box-sizing:border-box;margin:0;padding:8px max(10px,calc((100% - 1000px)/2)) calc(8px + env(safe-area-inset-bottom,0px));background:var(--bg);border-top:1px solid var(--line);display:flex;flex-direction:column-reverse}   /* ONE fixed bar at the bottom of every tab (page content gets --chatH bottom padding), the panel opens upward as a sheet */
+body{padding-bottom:var(--chatH,0px)}
+body.nochat .chat{visibility:hidden}   /* hidden (space kept) while a text field outside the chat has focus, so the phone keyboard never meets two bars */
+.chat-b{display:flex;flex-direction:column;max-height:70vh;max-height:70dvh;overflow:hidden}
+/*</CHAT-BOTTOM>*/
 .chat[hidden]{display:none}
 /*<CHAT-BAR>*/
 .chat-t{display:flex;align-items:center;gap:8px;width:100%;min-height:54px;background:var(--card);border:1px solid var(--line);border-radius:12px;color:var(--tx);font:inherit;padding:6px 12px;cursor:pointer;text-align:left}
@@ -1628,7 +1634,7 @@ function chatBarOnline(el){
 }
 function chatBarDraw(){
   const sec=$('#chat');if(!sec)return;
-  chatBarOnline($('#chatOn'));
+  chatBarOnline($('#chatOn'));/*<CHAT-BOTTOM>*/chatFit($('#chatOn'));/*</CHAT-BOTTOM>*/
   const pv=$('#chatPv'),ty=chatTypers(),n=CH.nUnread,last=CH.list.length?CH.list[CH.list.length-1]:null;
   clearTimeout(CH.typeT);CH.typeT=null;
   if(ty.length){pv.textContent=chatTypingText(ty);pv.className='cb2 ty';
@@ -1637,7 +1643,7 @@ function chatBarDraw(){
   else{pv.textContent='No messages yet. Say something Stoopid.';pv.className='cb2 mut'}
   const d=sec.querySelector('.cdot');d.hidden=!n;d.textContent=n?chatCount(n):'';d.title=n?n+' new message'+(n>1?'s':''):'New messages';
   sec.classList.toggle('unread',n>0);
-  $('#chatT').setAttribute('aria-label','Chat'+(n?', '+n+' unread':'')+'. '+pv.textContent);
+  $('#chatT').setAttribute('aria-label','Chat'+(n?', '+n+' unread':'')+'. '+pv.textContent);/*<CHAT-BOTTOM>*/chatLayout();/*</CHAT-BOTTOM>*/
   const w=chatWho(),wb=$('#chatWho');wb.hidden=!PS.who;wb.textContent=PS.who===PRES.guestKey?'You: guest \u00b7 pick name':'You: '+(w||'?')+' \u00b7 change';
   const sb=$('#chatSnd');sb.setAttribute('aria-pressed',CH.snd?'true':'false');sb.textContent=CH.snd?'\u{1F514} Sound on':'\u{1F515} Sound off';
   chatTitle();chatNavBadge();
@@ -1651,11 +1657,27 @@ function chatNavBadge(){
   if(!e){e=document.createElement('b');e.className='nu';e.setAttribute('aria-hidden','true');b.appendChild(e)}
   e.textContent=chatCount(n);b.setAttribute('aria-label',full+', '+n+' unread chat message'+(n>1?'s':''));
 }
-function chatPlace(){      // the one bar: top of the Side bets tab, otherwise above the footer
-  const s=$('#chat'),par=s&&s.parentNode;if(!par)return;const want=tab==='bets'?$('#main'):$('#foot');
-  if(want&&s.nextElementSibling!==want)par.insertBefore(s,want);
-  s.classList.toggle('top',tab==='bets');
+function chatPlace(){      // the one bar: fixed to the bottom of the page on EVERY tab (CSS); the element just stays before the footer in the DOM
+  const s=$('#chat'),par=s&&s.parentNode,f=$('#foot');if(!s||!par)return;
+  if(f&&s.nextElementSibling!==f)par.insertBefore(s,f);
+  s.classList.remove('top');/*<CHAT-BOTTOM>*/chatLayout();/*</CHAT-BOTTOM>*/
 }
+/*<CHAT-BOTTOM>*/
+/* page bottom padding = bar height (also expanded); the bar lifts above the phone keyboard; online list that does not fit is cut with "+N more" */
+function chatLayout(){const s=document.getElementById('chat');document.documentElement.style.setProperty('--chatH',(s&&!s.hidden?s.offsetHeight:0)+'px')}
+function chatFit(el){if(!el||!el.clientWidth)return;const old=el.querySelector('.cbm2');if(old)old.remove();if(el.scrollWidth<=el.clientWidth)return;
+  const more=document.createElement('span');more.className='cbg cbm2';el.appendChild(more);let n=0;
+  while(el.scrollWidth>el.clientWidth&&el.children.length>3){el.removeChild(el.children[el.children.length-2]);n++;more.textContent='+'+n+' more'}
+  more.textContent='+'+n+' more'}
+(function(){
+  if(window.ResizeObserver){try{new ResizeObserver(()=>chatLayout()).observe(document.getElementById('chat'))}catch(e){}}
+  window.addEventListener('resize',()=>{try{chatBarDraw();chatLayout()}catch(e){}});
+  const TXT='input:not([type=checkbox]):not([type=radio]):not([type=button]):not([type=submit]):not([type=range]),textarea';
+  document.addEventListener('focusin',e=>{const x=e.target;document.body.classList.toggle('nochat',!!(x&&x.matches&&x.matches(TXT)&&!x.closest('#chat')))});
+  document.addEventListener('focusout',()=>setTimeout(()=>{const a=document.activeElement;if(!(a&&a.matches&&a.matches(TXT)&&!a.closest('#chat')))document.body.classList.remove('nochat')},0));
+  if(window.visualViewport){const vv=window.visualViewport,fn=()=>{const s=document.getElementById('chat');if(s)s.style.bottom=Math.max(0,Math.round(window.innerHeight-vv.height-vv.offsetTop))+'px'};vv.addEventListener('resize',fn);vv.addEventListener('scroll',fn)}
+})();
+/*</CHAT-BOTTOM>*/
 function chatAfterRender(){chatPlace();chatNavBadge()}      // called at the end of render()
 /*</CHAT-BAR>*/
 async function chatPoll(){
@@ -1708,7 +1730,7 @@ async function chatClear(){
 function chatToggle(open){
   CH.open=open==null?!CH.open:!!open;
   $('#chatB').hidden=!CH.open;$('#chatT').setAttribute('aria-expanded',CH.open?'true':'false');$('#chatT .ca').textContent=CH.open?'▾':'▸';
-  document.body.classList.toggle('chatopen',CH.open);
+  document.body.classList.toggle('chatopen',CH.open);/*<CHAT-BOTTOM>*/chatLayout();/*</CHAT-BOTTOM>*/
   if(CH.open){/*<CHAT-BAR>*/if(!document.hidden)chatMarkSeen();/*</CHAT-BAR>*/chatDrawList();CH.fails=0;clearTimeout(CH.timer);chatPoll();const L=$('#chatL');L.scrollTop=L.scrollHeight}
   else chatSchedule();
   chatUI();
@@ -2208,8 +2230,7 @@ function vB27(){
   const _ns=nbShow;nbShow=function(list){_ns(list);try{const e=NB.el;if(!e)return;
     if(allP())e.querySelector('.nbm').textContent=NB.pending.length===1?NB.pending[0]._msg:NB.pending.length+' new 2026-27 bets just added';
     const v=e.querySelector('.nbv');if(v&&!v._pu){const orig=v.onclick;v.onclick=function(ev){if(allP()){nbHide();tab='bets27';render();window.scrollTo(0,0)}else if(orig)orig.call(v,ev)};v._pu=1}}catch(_){}};
-  /* chat bar: same single element, also near the top of this tab; the unread count badge shows on BOTH bets tabs */
-  if(typeof chatPlace==='function'){chatPlace=function(){const s=$('#chat'),par=s&&s.parentNode;if(!par)return;const top=tab==='bets'||tab==='bets27',want=top?$('#main'):$('#foot');if(want&&s.nextElementSibling!==want)par.insertBefore(s,want);s.classList.toggle('top',top)}}
+  /* chat bar: the one fixed bottom bar on every tab (no top copy any more); the unread count badge shows on BOTH bets tabs */
   if(typeof chatNavBadge==='function'){const _cb=chatNavBadge;chatNavBadge=function(){_cb();try{const nav=$('#nav');if(!nav||!D)return;const i=TABS.findIndex(t=>t[0]==='bets27'),b=nav.children[i];if(!b)return;
     const n=CH.nUnread,full=TABS[i][1].slice(TABS[i][1].indexOf(' ')+1);let e=b.querySelector('.nu');b.classList.toggle('hasu',!!n);
     if(!n){if(e)e.remove();b.setAttribute('aria-label',full);return}
