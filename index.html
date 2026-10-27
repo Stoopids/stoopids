@@ -272,6 +272,15 @@ nav button .nu{position:absolute;top:1px;left:2px;min-width:15px;background:#ff3
 .b27-act{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px}
 .b27-b{min-height:44px;padding:0 12px}
 .b27-t{margin:4px 0;font-size:15px;overflow-wrap:anywhere}.b27-m{font-size:13.5px}
+/*<MULTI-BET>*/
+.b27-opps{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:6px}
+.b27-opps .b27-chip{min-height:46px;min-width:0;padding:4px 8px;display:flex;align-items:center;justify-content:center;gap:4px;line-height:1.15;text-align:center;overflow:hidden}
+.b27-chip.op .ck{display:none;font-weight:900}.b27-chip.op[aria-pressed=true] .ck{display:inline}
+.b27-chip.op .nm{min-width:0;overflow-wrap:anywhere}
+.b27-selbar{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:6px}
+.b27-selbar .b27-sm{min-height:40px;min-width:88px;padding:0 12px;border-radius:10px;border:2px solid var(--line);background:var(--card2);color:var(--tx);font:inherit;font-weight:700;font-size:14px;cursor:pointer}
+.b27-selbar .cnt{font-size:13px;color:var(--mut)}
+/*</MULTI-BET>*/
 .b27-owe{padding:6px 0;border-bottom:1px solid var(--line);font-size:15px}
 .b27-ok{border-color:#2f6b47}.b27-bad{border-color:#8a2d2d}
 /* Bets 26-27 tab: nav now has 11 items (10 tabs + Draft): phones size each item by its label (short labels give room to the longer ones); stacked icon+label up to 1239px; full-label pills only from 1240px in a wider nav. Overrides the earlier NAV-ONE-ROW/DRAFT-TAB rules; drop this block together with the tab. */
@@ -1685,7 +1694,7 @@ function chatInit(){
    Remove everything between the BETS-2627 markers (CSS, JS, load hook) to drop the tab. */
 const BETS_DISCLAIMER="Bets here are just for fun and are settled in pullups, not money. Betting is Stoopid, and we don't endorse or facilitate gambling for money.";   // the ONLY place the unit word appears in the tab; rendered once above the form
 const PULK={url:'https://textdb.dev/api/data/stoopids-bets-2627-9eaa4f66',amounts:[5,10,20,50,100],minAmt:5,maxAmt:1000,oddsChips:[[1,1],[2,1],[3,1],[4,1],[5,1]],maxOdds:100,maxText:140,maxBets:300,undoMs:30000,seenKey:'stoopids_bets2627_seen',pollMs:45000,pollOpenMs:15000};
-const U={state:'init',doc:{bets:[]},known:null,maxN:0,mine:new Set(),opp:null,amt:null,amtCustom:false,amtTxt:'',amtErr:'',odds:[1,1],custom:false,customTxt:'',oddsErr:'',text:'',confirm:false,busy:false,msg:'',msgBad:false,fid:null,askSettle:null,fails:0,timer:null,started:false,undoT:null};
+const U={state:'init',doc:{bets:[]},known:null,maxN:0,mine:new Set(),opps:[],amt:null,amtCustom:false,amtTxt:'',amtErr:'',odds:[1,1],custom:false,customTxt:'',oddsErr:'',text:'',confirm:false,busy:false,msg:'',msgBad:false,fids:{},gid:null,askSettle:null,fails:0,timer:null,started:false,undoT:null};
 /* ---- pure helpers (unit-tested) ---- */
 const b27Num=n=>{const neg=n<0;n=Math.abs(Math.round(n));return (neg?'-':'')+n.toLocaleString('en-US')};      // plain whole number, thousands separator, no unit
 const b27Signed=n=>(n>0?'+':'')+b27Num(n);
@@ -1729,7 +1738,7 @@ function b27Valid(x,names){
   if(!Number.isInteger(a)||!Number.isInteger(b)||a<1||b<1||a>PULK.maxOdds||b>PULK.maxOdds)return null;
   if(!Number.isInteger(n)||n<1||!isFinite(t)||typeof x.text!=='string')return null;
   const status=['open','backer','other','push','void'].includes(x.status)?x.status:'open';
-  return {id:x.id,n,backer:x.backer,other:x.other,amt:st,odds:{a,b},text:b27Clean(x.text),created_at:new Date(t).toISOString(),status,settled_at:x.settled_at&&isFinite(Date.parse(x.settled_at))?new Date(x.settled_at).toISOString():null};
+  return {id:x.id,n,backer:x.backer,other:x.other,amt:st,odds:{a,b},text:b27Clean(x.text),created_at:new Date(t).toISOString(),status,settled_at:x.settled_at&&isFinite(Date.parse(x.settled_at))?new Date(x.settled_at).toISOString():null/*<MULTI-BET>*/,g:typeof x.g==='string'&&/^[a-z0-9]{6,24}$/.test(x.g)?x.g:undefined/*</MULTI-BET>*/};
 }
 function b27Parse(txt,names){
   try{if(!txt||!txt.trim())return [];let d=JSON.parse(txt);if(typeof d==='string')d=JSON.parse(d);
@@ -1797,15 +1806,22 @@ function b27Err(t){U.msg=t;U.msgBad=true}
 function b27FormOK(){
   const me=b27Who();
   if(!me)return 'Pick who you are first.';
-  if(!U.opp||!b27OwnerNames().includes(U.opp))return 'Choose who you are betting against.';
-  if(U.opp===me)return 'You can’t bet against yourself.';
+/*<MULTI-BET>*/  const names=b27OwnerNames();if(!U.opps.length||!U.opps.every(o=>names.includes(o)))return 'Choose who you are betting against.';
+  if(U.opps.includes(me))return 'You can’t bet against yourself.';
+  if(new Set(U.opps).size!==U.opps.length)return 'Choose who you are betting against.';/*</MULTI-BET>*/
+
   if(!b27Clean(U.text))return 'Say what the bet is about.';
   if(!Number.isInteger(U.amt)||U.amt<PULK.minAmt||U.amt>PULK.maxAmt)return U.amtCustom?b27ParseAmt(U.amtTxt).err||'Pick an amount.':'Tap an amount or type your own (minimum '+PULK.minAmt+').';
   if(!(U.odds&&U.odds[0]>=1&&U.odds[1]>=1))return 'Pick the odds.';
   return '';
 }
-function b27BetFromForm(){return {id:U.fid||(U.fid=b27Rid()),backer:b27Who(),other:U.opp,amt:U.amt,odds:{a:U.odds[0],b:U.odds[1]},text:b27Clean(U.text),status:'open'}}
-function b27Opp(i){U.opp=b27OwnerNames().filter(n=>n!==b27Who())[i]||null;b27Sync()}
+/*<MULTI-BET>*//* one separate bet per selected opponent: same text, amount and odds; with 2+ they share a group id `g` (used only by the group undo). Ids are kept across a failed save so a retry never double-posts. */
+function b27BetsFromForm(){const many=U.opps.length>1;if(many&&!U.gid)U.gid=b27Rid();
+  return U.opps.map(o=>({id:U.fids[o]||(U.fids[o]=b27Rid()),backer:b27Who(),other:o,amt:U.amt,odds:{a:U.odds[0],b:U.odds[1]},text:b27Clean(U.text),status:'open',g:many?U.gid:undefined}))}
+const b27Others=()=>b27OwnerNames().filter(n=>n!==b27Who());
+function b27Opp(i){const n=b27Others()[i];if(!n)return;const k=U.opps.indexOf(n);if(k>=0)U.opps.splice(k,1);else{U.opps.push(n);const o=b27Others();U.opps.sort((x,y)=>o.indexOf(x)-o.indexOf(y))}b27Sync()}
+function b27OppAll(){U.opps=b27Others().slice();b27Sync()}
+function b27OppClear(){U.opps=[];b27Sync()}/*</MULTI-BET>*/
 function b27Amt(v){U.amtCustom=false;U.amtErr='';U.amt=PULK.amounts.includes(v)?v:null;b27Sync()}
 function b27AmtCustomOpen(){U.amtCustom=true;b27AmtApply(U.amtTxt,true);b27Sync();const i=document.getElementById('b27Ao');if(i)i.focus()}
 function b27AmtApply(t,quiet){U.amtTxt=t;const r=b27ParseAmt(t);if(r.ok){U.amt=r.n;U.amtErr=''}else{U.amt=null;U.amtErr=quiet&&!String(t||'').trim()?'':r.err}}
@@ -1815,21 +1831,35 @@ function b27CustomApply(t,quiet){U.customTxt=t;const r=b27ParseOdds(t);if(r.ok){
 function b27Text(t){U.text=t;b27Sync()}
 function b27Place(){const e=b27FormOK();if(e){b27Err(e);render();return}U.msg='';U.confirm=true;render()}
 function b27Edit(){U.confirm=false;render()}
-async function b27Confirm(){
+/*<MULTI-BET>*/async function b27Confirm(){
   if(U.busy)return;const e=b27FormOK();if(e){b27Err(e);U.confirm=false;render();return}
   U.busy=true;U.msg='Saving…';U.msgBad=false;render();
-  const nb=b27BetFromForm();
+  const nbs=b27BetsFromForm(),ids=nbs.map(b=>b.id);
   try{
-    const back=await b27Write(cur=>{if(cur.length>=PULK.maxBets)throw new Error('full');const n=b27MaxN(cur)+1;return cur.concat([Object.assign({},nb,{n,created_at:new Date().toISOString(),settled_at:null})])},cur=>cur.some(b=>b.id===nb.id));
-    U.mine.add(nb.id);b27Apply(back);
-    const mine=back.find(b=>b.id===nb.id);
-    U.msg='Placed! Bet #'+(mine?mine.n:'')+' is open. You can undo it for 30 seconds.';U.msgBad=false;
-    U.opp=null;U.amt=null;U.amtCustom=false;U.amtTxt='';U.amtErr='';U.odds=[1,1];U.custom=false;U.customTxt='';U.oddsErr='';U.text='';U.confirm=false;U.fid=null;
+    /* ONE read-modify-write for the whole batch (+ read-back, one retry): only the bets whose id is not there yet are added; done when every id is present */
+    const back=await b27Write(cur=>{const miss=nbs.filter(b=>!cur.some(c=>c.id===b.id));if(cur.length+miss.length>PULK.maxBets)throw new Error('full');let n=b27MaxN(cur);const at=new Date().toISOString();
+      return cur.concat(miss.map(b=>Object.assign({},b,{n:++n,created_at:at,settled_at:null})))},cur=>ids.every(id=>cur.some(b=>b.id===id)));
+    ids.forEach(id=>U.mine.add(id));b27Apply(back);
+    const mine=ids.map(id=>back.find(b=>b.id===id)).filter(Boolean);
+    U.msg=mine.length>1?'Placed! '+mine.length+' separate bets of '+b27Num(U.amt)+' each ('+mine.map(b=>'#'+b.n).join(', ')+') are open. You can undo all '+mine.length+' for 30 seconds.':'Placed! Bet #'+(mine[0]?mine[0].n:'')+' is open. You can undo it for 30 seconds.';U.msgBad=false;
+    U.undoG=mine.length>1?(mine[0].g||null):null;
+    U.opps=[];U.amt=null;U.amtCustom=false;U.amtTxt='';U.amtErr='';U.odds=[1,1];U.custom=false;U.customTxt='';U.oddsErr='';U.text='';U.confirm=false;U.fids={};U.gid=null;
     clearTimeout(U.undoT);U.undoT=setTimeout(()=>{if(tab==='bets27')render()},PULK.undoMs+300);
   }catch(e){U.msg=e&&e.message==='full'?'The bets ledger is full.':'Couldn’t save. Check your connection and tap Place bet again (it won’t double-post).';U.msgBad=true;U.confirm=true}
   U.busy=false;render();
 }
-async function b27SetStatus(id,status){
+/* group undo: voids every still-open bet of the group that is mine and inside the 30 s window, in ONE write */
+function b27GroupUndoable(g){return g?U.doc.bets.filter(b=>b.g===g&&b27CanUndo(b)):[]}
+async function b27UndoGroup(g){
+  if(U.busy)return;const ids=b27GroupUndoable(g).map(b=>b.id);if(!ids.length)return;
+  U.busy=true;U.askSettle=null;render();
+  try{
+    const back=await b27Write(cur=>cur.map(b=>ids.includes(b.id)&&b.status==='open'&&b27CanUndo(b)?Object.assign({},b,{status:'void',settled_at:new Date().toISOString()}):b),cur=>ids.every(id=>{const b=cur.find(x=>x.id===id);return !b||b.status!=='open'}));
+    b27Apply(back,'force');U.undoG=null;U.msg='Undone: '+ids.length+' bet'+(ids.length===1?'':'s')+' cancelled.';U.msgBad=false;
+  }catch(e){U.msg='Couldn’t save that. Try again.';U.msgBad=true}
+  U.busy=false;render();
+}
+/*</MULTI-BET>*/async function b27SetStatus(id,status){
   if(U.busy)return;U.busy=true;U.askSettle=null;render();
   try{
     const back=await b27Write(cur=>cur.map(b=>b.id===id&&b.status==='open'?Object.assign({},b,{status,settled_at:new Date().toISOString()}):b),cur=>{const b=cur.find(x=>x.id===id);return !b||b.status===status||b.status!=='open'});
@@ -1842,7 +1872,9 @@ function b27CanUndo(b){return b.status==='open'&&b.backer===b27Who()&&Date.now()
 /* ---- view ---- */
 function b27SyncDom(){
   const m=document.getElementById('main');if(!m)return;
-  m.querySelectorAll('[data-b27-opp]').forEach(b=>b.setAttribute('aria-pressed',String(b27OwnerNames().filter(n=>n!==b27Who())[+b.getAttribute('data-b27-opp')]===U.opp)));
+/*<MULTI-BET>*/  m.querySelectorAll('[data-b27-opp]').forEach(b=>b.setAttribute('aria-pressed',String(U.opps.includes(b27Others()[+b.getAttribute('data-b27-opp')]))));
+  const sc=document.getElementById('b27SelCnt');if(sc)sc.textContent=b27SelTxt();/*</MULTI-BET>*/
+
   m.querySelectorAll('[data-b27-amt]').forEach(b=>b.setAttribute('aria-pressed',String(!U.amtCustom&&+b.getAttribute('data-b27-amt')===U.amt)));
   const ab=m.querySelector('[data-b27-amtcustom]');if(ab)ab.setAttribute('aria-pressed',String(U.amtCustom));
   const aw=document.getElementById('b27Aw');if(aw)aw.hidden=!U.amtCustom;
@@ -1855,28 +1887,35 @@ function b27SyncDom(){
   const sum=document.getElementById('b27Sum');const err=b27FormOK();
   if(sum)sum.textContent=b27Summary();
   const pb=document.getElementById('b27Place');if(pb){pb.disabled=!!err||U.busy;pb.setAttribute('aria-disabled',String(!!err))}
-  const hint=document.getElementById('b27Hint');if(hint)hint.textContent=err&&(U.opp||U.text||U.amt)?err:'';
+  const hint=document.getElementById('b27Hint');if(hint)hint.textContent=err&&(U.opps.length||U.text||U.amt)?err:'';
 }
 function b27Sync(){try{b27SyncDom()}catch(e){}}
-function b27Summary(){const me=b27Who()||'You',o=U.opp||'…',od=U.odds?b27OddsShort(U.odds[0],U.odds[1]).replace(/^at /,''):'?',t=b27Clean(U.text);
-  return me+' vs '+o+' · '+(U.amt?b27Num(U.amt):'?')+' · '+od+(t?' · '+t:'')}
+/*<MULTI-BET>*/const b27SelTxt=()=>U.opps.length?U.opps.length+' selected':'None selected';
+/* "3 bets of 10 each" / "1 bet of 10" */
+const b27CountTxt=()=>{const n=U.opps.length;return n+' bet'+(n===1?'':'s')+' of '+(U.amt?b27Num(U.amt):'?')+(n>1?' each':'')};
+function b27Summary(){const me=b27Who()||'You',o=U.opps.length?U.opps.join(', '):'…',od=U.odds?b27OddsShort(U.odds[0],U.odds[1]).replace(/^at /,''):'?',t=b27Clean(U.text);
+  return me+' vs '+o+' · '+(U.opps.length?b27CountTxt():(U.amt?b27Num(U.amt):'?'))+' · '+od+(t?' · '+t:'')}/*</MULTI-BET>*/
 function b27LiveHtml(){
-  const me=b27Who();if(!me||!U.opp||!U.amt||!U.odds)return '<span class="mut">Pick an opponent, an amount and the odds to see who owes what.</span>';
-  const L=b27Lines({backer:me,other:U.opp,amt:U.amt,odds:{a:U.odds[0],b:U.odds[1]}});
+  const me=b27Who();if(!me||!U.opps.length||!U.amt||!U.odds)return '<span class="mut">Pick one or more opponents, an amount and the odds to see who owes what.</span>';
+  const L=b27Lines({backer:me,other:U.opps[0],amt:U.amt,odds:{a:U.odds[0],b:U.odds[1]}});
+  /*<MULTI-BET>*/if(U.opps.length>1){const p=b27Pay({amt:U.amt,odds:{a:U.odds[0],b:U.odds[1]}});
+    return '<b>'+esc(b27CountTxt())+'</b> · '+esc(b27OddsShort(U.odds[0],U.odds[1]))+'<div class="mut b27-r">'+U.opps.length+' separate bets, one per opponent. Each one is settled on its own.</div><div class="b27-w">'+esc('If '+me+' is right on one, that opponent owes '+me+' '+b27Num(p.ifBackerRight)+'.')+'</div><div class="b27-l">'+esc('If an opponent is right, '+me+' owes that opponent '+b27Num(p.ifOtherRight)+'.')+'</div>'+(L.rounded?'<div class="mut b27-r">Rounded to a whole number.</div>':'')}/*</MULTI-BET>*/
   return '<b>'+esc(L.top)+'</b><div class="b27-w">'+esc(L.win)+'</div><div class="b27-l">'+esc(L.lose)+'</div>'+(L.rounded?'<div class="mut b27-r">Rounded to a whole number.</div>':'');
 }
 function b27Card(b,me){
   const L=b27Lines(b),isP=me&&(b.backer===me||b.other===me),st=b.status;
   const stTxt={open:'Open',backer:'Settled',other:'Settled',push:'Wash',void:'Cancelled'}[st];
   const res=st==='backer'?b.backer+' won ('+esc(b.other)+' owes '+b27Num(b27Pay(b).ifBackerRight)+')':st==='other'?b.other+' won ('+esc(b.backer)+' owes '+b27Num(b27Pay(b).ifOtherRight)+')':st==='push'?'Wash: nobody owes anything':'';
-  let h=`<div class="card b27-c"><div><b>Bet #${b.n}</b> <span class="st ${st==='open'?'open':st==='push'?'wash':st==='void'?'unparsed':'settled'}">${stTxt}</span> <span class="mut" style="font-size:12px">${esc(b27Day(Date.parse(b.created_at)))}</span></div>
+  let h=`<div class="card b27-c"><div><b>Bet #${b.n}</b> <span class="st ${st==='open'?'open':st==='push'?'wash':st==='void'?'unparsed':'settled'}">${stTxt}</span> <span class="mut" style="font-size:12px">${esc(b27Day(Date.parse(b.created_at)))}</span>${/*<MULTI-BET>*/b.g&&U.doc.bets.filter(x=>x.g===b.g).length>1?` <span class="mut" style="font-size:12px">· 1 of ${U.doc.bets.filter(x=>x.g===b.g).length} placed together</span>`:''/*</MULTI-BET>*/}</div>
    <div class="b27-t">${esc(b.text)}</div><div class="b27-m"><b>${esc(b.backer)}</b> vs <b>${esc(b.other)}</b> · <b>${b27Num(b.amt)}</b> · ${esc(b27OddsLabel(b.odds.a,b.odds.b))}</div>
    <div class="b27-w">${esc(L.win)}</div><div class="b27-l">${esc(L.lose)}</div>${L.rounded?'<div class="mut b27-r">Rounded to a whole number.</div>':''}${res?`<div class="note" style="margin-top:4px"><b>Result:</b> ${esc(res)}</div>`:''}`;
   if(st==='open'&&(isP||ADMIN)){
     const ask=w=>U.askSettle&&U.askSettle.id===b.id&&U.askSettle.what===w;
     const btn=(w,label)=>`<button type="button" class="btn sec b27-b" onclick="${ask(w)?`b27SetStatus('${b.id}','${w}')`:`b27Ask('${b.id}','${w}')`}"${U.busy?' disabled':''}>${ask(w)?'Tap again to confirm':label}</button>`;
     h+=`<div class="b27-act"><span class="note">Who won?</span>${btn('backer',esc(b.backer)+' won')}${btn('other',esc(b.other)+' won')}${btn('push','Wash')}</div>`;
-    if(b27CanUndo(b))h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27SetStatus('${b.id}','void')"${U.busy?' disabled':''}>↩ Undo this bet (30 s)</button></div>`;
+    /*<MULTI-BET>*/const gu=b.g?b27GroupUndoable(b.g):[];
+    if(b27CanUndo(b)&&b.g&&gu.length>1){if(U.doc.bets.filter(x=>x.g===b.g&&b27CanUndo(x)).sort((p,q)=>q.n-p.n)[0].id===b.id)h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27UndoGroup('${b.g}')"${U.busy?' disabled':''}>↩ Undo all ${gu.length} bets placed together (30 s)</button></div>`}
+    else /*</MULTI-BET>*/if(b27CanUndo(b))h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27SetStatus('${b.id}','void')"${U.busy?' disabled':''}>↩ Undo this bet (30 s)</button></div>`;
     else if(ADMIN)h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27SetStatus('${b.id}','void')"${U.busy?' disabled':''}>Cancel bet (admin)</button></div>`;
   }
   if(typeof waUrl==='function'){const txt='Stoopids bet #'+b.n+': '+b.backer+' vs '+b.other+' \u2014 '+b27Num(b.amt)+' '+b27OddsShort(b.odds.a,b.odds.b)+' \u2014 '+Array.from(b.text).slice(0,100).join('')+' '+WA_SITE;
@@ -1888,17 +1927,18 @@ function vB27(){
   const me=b27Who(),names=b27OwnerNames(),others=names.filter(n=>n!==me);
   let h=`<div class="card"><b>💪 Bets 2026-27</b><div class="note b27-note" id="b27Note">${esc(BETS_DISCLAIMER)}</div><div class="note" style="margin-top:6px">This page just <b>records</b> who bet what and who owes whom. Separate from the older Side bets tab.</div>
    <div class="note" id="b27Top" style="margin-top:6px">${U.state==='ok'?'<span class="good">● live</span> · anyone with the link can add bets (no logins). Play nice.':U.state==='error'?'<span class="bad">● can’t reach the bets ledger right now</span>':'Connecting…'}</div></div>`;
-  if(U.msg)h+=`<div class="card ${U.msgBad?'b27-bad':'b27-ok'}" role="status">${esc(U.msg)}</div>`;
+  if(U.msg)h+=`<div class="card ${U.msgBad?'b27-bad':'b27-ok'}" role="status">${esc(U.msg)}${/*<MULTI-BET>*/U.undoG&&b27GroupUndoable(U.undoG).length>1?`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27UndoGroup('${U.undoG}')"${U.busy?' disabled':''}>↩ Undo all ${b27GroupUndoable(U.undoG).length} bets (30 s)</button></div>`:''/*</MULTI-BET>*/}</div>`;
   if(!me){h+=`<div class="card"><button type="button" class="btn b27-big" onclick="presAsk()">👋 Pick who you are to bet</button></div>`}
   else if(U.confirm){
-    const e=b27FormOK(),L=e?null:b27Lines(b27BetFromForm());
+    const e=b27FormOK();
     h+=`<div class="card b27-confirm"><b>Check it, then confirm</b><div class="b27-sum">${esc(b27Summary())}</div><div id="b27Live">${b27LiveHtml()}</div>
      <div class="b27-act"><button type="button" class="btn b27-big" onclick="b27Confirm()"${U.busy?' disabled':''}>${U.busy?'Saving…':'✅ Yes, place it'}</button><button type="button" class="btn sec b27-big" onclick="b27Edit()"${U.busy?' disabled':''}>← Change</button></div></div>`;
   }else{
     const oc=U.odds?U.odds.join('-'):'';
     h+=`<div class="card b27-form"><b>New bet</b> <span class="note">· you are <b>${esc(me)}</b> <a href="#" onclick="presAsk();return false">(change)</a></span>
-     <div class="b27-q">1. Who are you betting against?</div><div class="b27-chips" role="group" aria-label="Opponent">${others.map((n,i)=>{const o=(D.owners.find(x=>x.name===n)||{});return `<button type="button" class="b27-chip" data-b27-opp="${i}" aria-pressed="${n===U.opp}" onclick="b27Opp(${i})">${esc(o.emoji||'')} ${esc(n)}</button>`}).join('')}</div>
-     <div class="b27-q"><label for="b27Text">2. What’s the bet? <span class="note">I say…</span></label></div><input id="b27Text" class="sb-in b27-in" maxlength="${PULK.maxText}" autocomplete="off" enterkeyhint="go" placeholder="e.g. Kansas beats Duke" value="${esc(U.text)}" oninput="b27Text(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();b27Place()}">
+     ${/*<MULTI-BET>*/''/*opponents: multi-select*/}<div class="b27-q">1. Who are you betting against? <span class="note">Tap one or more. Each gets its own bet.</span></div><div class="b27-opps" role="group" aria-label="Opponents">${others.map((n,i)=>{const o=(D.owners.find(x=>x.name===n)||{});const on=U.opps.includes(n);return `<button type="button" class="b27-chip op" data-b27-opp="${i}" aria-pressed="${on}" onclick="b27Opp(${i})"><span class="ck" aria-hidden="true">✓</span><span class="nm">${esc(o.emoji||'')} ${esc(n)}</span></button>`}).join('')}</div>
+     <div class="b27-selbar"><button type="button" class="b27-sm" data-b27-all="1" onclick="b27OppAll()">Select all</button><button type="button" class="b27-sm" data-b27-clear="1" onclick="b27OppClear()">Clear</button><span class="cnt" id="b27SelCnt" aria-live="polite">${esc(b27SelTxt())}</span></div>
+     ${''/*</MULTI-BET>*/}<div class="b27-q"><label for="b27Text">2. What’s the bet? <span class="note">I say…</span></label></div><input id="b27Text" class="sb-in b27-in" maxlength="${PULK.maxText}" autocomplete="off" enterkeyhint="go" placeholder="e.g. Kansas beats Duke" value="${esc(U.text)}" oninput="b27Text(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();b27Place()}">
      <div class="b27-q">3. Amount <span class="note">(minimum ${PULK.minAmt})</span></div><div class="b27-amts" role="group" aria-label="Amount">${PULK.amounts.map(a=>`<button type="button" class="b27-amt" data-b27-amt="${a}" aria-pressed="${!U.amtCustom&&a===U.amt}" onclick="b27Amt(${a})">${a}</button>`).join('')}<button type="button" class="b27-amt cu" data-b27-amtcustom="1" aria-pressed="${U.amtCustom}" onclick="b27AmtCustomOpen()">Custom</button></div>
      <div id="b27Aw" class="b27-cw"${U.amtCustom?'':' hidden'}><label for="b27Ao" class="sr">Custom amount</label><input id="b27Ao" class="sb-in b27-in" inputmode="numeric" pattern="[0-9]*" autocomplete="off" maxlength="6" placeholder="Whole number, ${PULK.minAmt} to ${PULK.maxAmt}" value="${esc(U.amtTxt)}" oninput="b27AmtApply(this.value);b27Sync()" onkeydown="if(event.key==='Enter'){event.preventDefault();b27Place()}"><div id="b27Ae" class="b27-bad-t" role="alert">${esc(U.amtErr)}</div></div>
      <div class="b27-q">4. Odds <span class="note">(if you’re right, they owe amount × first ÷ second)</span></div><div class="b27-chips" role="group" aria-label="Odds">${PULK.oddsChips.map(([a,b])=>`<button type="button" class="b27-chip" data-b27-odds="${a}-${b}" aria-pressed="${!U.custom&&!!U.odds&&U.odds[0]===a&&U.odds[1]===b}" onclick="b27Odds(${a},${b})">${a===1&&b===1?'Even':a+'-'+b}</button>`).join('')}<button type="button" class="b27-chip" data-b27-custom="1" aria-pressed="${U.custom}" onclick="b27CustomOpen()">Custom…</button></div>
@@ -1923,7 +1963,7 @@ function vB27(){
   const i=TABS.findIndex(t=>t[0]==='bets');TABS.splice(i<0?TABS.length:i+1,0,['bets27','💪 Bets 26-27']);   // right after Side bets; the Draft link stays last
   VIEWS.bets27=vB27;NAVSHORT.bets27='26-27';
   if(typeof nbBadge==='function'){const _b=nbBadge;nbBadge=function(k){return k==='bets27'?b27Badge():_b(k)}}      // 'new' badge on this tab (own watermark)
-  const pp=presPick;presPick=function(w){pp(w);try{U.opp=null;if(tab==='bets27')render()}catch(e){}};
+  const pp=presPick;presPick=function(w){pp(w);try{U.opps=[];if(tab==='bets27')render()}catch(e){}};
   /* toast: own text, and 'View' opens this tab when every pending item is a Bets 26-27 bet (wraps the existing functions; nothing in them is edited) */
   const _nt=nbText;nbText=function(b){return b&&b._msg?b._msg:_nt(b)};
   const allP=()=>NB.pending.length>0&&NB.pending.every(x=>x&&x._msg);
