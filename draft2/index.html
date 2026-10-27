@@ -1,0 +1,893 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>STOOPIDS Draft Room (TEST)</title>
+<meta name="theme-color" content="#ffd23f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Stoopids Draft">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" id="fav" type="image/png" href="icon-192.png">
+<style>
+:root{--bg:#10131a;--card:#1a1f2b;--card2:#222939;--line:#2d3548;--tx:#eef1f7;--mut:#9aa6bd;--acc:#ffd23f;--good:#4ade80;--bad:#f87171;--warn:#fbbf24;--sb:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+body{padding-bottom:calc(74px + var(--sb));min-height:100vh}
+a{color:var(--acc)}
+button{font:inherit;color:inherit;cursor:pointer}
+.ribbon{background:repeating-linear-gradient(-45deg,#ffd23f 0 14px,#e6b800 14px 28px);color:#111;text-align:center;font-weight:900;font-size:12px;letter-spacing:.04em;padding:5px 8px;padding-top:calc(5px + env(safe-area-inset-top,0px))}
+.wrap{max-width:1100px;margin:0 auto;padding:0 10px}
+header{display:flex;align-items:center;gap:8px;padding:10px 0 6px;flex-wrap:wrap}
+h1{color:var(--acc);margin:0;font-size:clamp(28px,8vw,44px);letter-spacing:.04em;font-weight:900;line-height:1}
+h1 small{display:block;font-size:12px;letter-spacing:.08em;color:var(--mut);font-weight:700;margin-top:3px}
+.hr{margin-left:auto;display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:99px;font-size:12px;font-weight:800;background:var(--card2);border:1px solid var(--line);white-space:nowrap}
+.pill.live{color:var(--good);border-color:#1f6b3d}.pill.bad{color:var(--warn);border-color:#8a6d12}
+.pill i{width:8px;height:8px;border-radius:50%;background:currentColor;display:inline-block}
+.pill.live i{animation:pulse 1.6s infinite}
+@keyframes pulse{50%{opacity:.25}}
+.btn{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-weight:800;font-size:14px}
+.btn.pri{background:var(--acc);color:#111;border-color:var(--acc)}
+.btn.bad{background:#3a1717;border-color:#7f2d2d;color:#ffb4b4}
+.btn.sm{padding:4px 9px;font-size:12px;border-radius:8px}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.link{background:none;border:0;color:var(--acc);text-decoration:underline;padding:0;font-size:12px;font-weight:700}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin:10px 0}
+.card h3{margin:0 0 6px;font-size:15px}
+.mut{color:var(--mut)}.small{font-size:12px}
+/* banner */
+.banner{border-radius:16px;padding:12px 14px;margin:8px 0;background:var(--card);border:1px solid var(--line);display:flex;gap:12px;align-items:center}
+.banner .em{font-size:34px;line-height:1;flex:none}
+.banner .bm{flex:1;min-width:0}
+.banner .lbl{font-size:11px;font-weight:900;letter-spacing:.1em;color:var(--acc)}
+.banner .nm{font-size:22px;font-weight:900;line-height:1.1;overflow-wrap:anywhere}
+.banner .sb{color:var(--mut);font-size:13px;margin-top:2px}
+.banner .cd{font-size:30px;font-weight:900;font-variant-numeric:tabular-nums;text-align:right}
+.banner .cd small{display:block;font-size:10px;color:var(--mut);font-weight:700;letter-spacing:.05em}
+.banner.me{background:var(--acc);color:#111;border-color:#fff;animation:glow 1.4s infinite}
+.banner.me .lbl,.banner.me .sb{color:#2b2400}.banner.me .nm{font-size:23px}
+.banner.near{border-color:var(--acc)}
+.cd.low{color:var(--bad)}
+.banner.me .cd.low{color:#a10000}
+@keyframes glow{50%{box-shadow:0 0 0 4px rgba(255,210,63,.35)}}
+.alertbar{background:#4b3a0b;border:1px solid #8a6d12;color:#ffe08a;border-radius:12px;padding:8px 12px;margin:6px 0;font-weight:700}
+.ticker{display:flex;gap:6px;overflow-x:auto;padding:2px 0 6px;scrollbar-width:none}
+.ticker::-webkit-scrollbar{display:none}
+.tk{flex:none;display:flex;align-items:center;gap:5px;background:var(--card);border:1px solid var(--line);border-radius:99px;padding:2px 8px 2px 8px;font-size:12px}
+.tk b{color:var(--acc)}
+.roastline{font-size:13px;color:#dfe5f3;background:var(--card);border-left:3px solid var(--acc);padding:6px 10px;border-radius:8px;margin:2px 0 6px}
+/* chips */
+.chip{text-decoration:none;display:inline-flex;align-items:center;gap:5px;padding:2px 8px 2px 2px;border-radius:99px;font-weight:700;font-size:12.5px;border:2px solid transparent;max-width:100%;white-space:nowrap}
+.chip img,.chip .nologo{width:22px;height:22px;border-radius:50%;background:#fff;object-fit:contain;padding:1px;flex:none}
+.chip .nologo{display:inline-block}
+.chip.big{font-size:15px;padding:3px 11px 3px 3px}.chip.big img{width:30px;height:30px}
+.chip.sm{font-size:11px;padding:1px 6px 1px 1px}.chip.sm img,.chip.sm .nologo{width:18px;height:18px}
+.chip:hover{filter:brightness(1.12)}
+/* nav */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:#0b0e14;border-top:1px solid var(--line);display:flex;padding-bottom:var(--sb);z-index:20}
+nav.tabs button{flex:1;background:none;border:0;padding:8px 2px 7px;color:var(--mut);font-size:11px;font-weight:800;position:relative}
+nav.tabs button span{display:block;font-size:20px;line-height:1.1}
+nav.tabs button.on{color:var(--acc)}
+nav.tabs button .bd{position:absolute;top:3px;left:55%;background:var(--bad);color:#fff;border-radius:99px;font-size:10px;padding:0 5px;font-weight:900}
+/* board */
+.bwrap{overflow:auto;border:1px solid var(--line);border-radius:12px;background:var(--card);max-height:70vh}
+table.board{border-collapse:separate;border-spacing:0;min-width:100%}
+.board th,.board td{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:3px;text-align:center;vertical-align:middle}
+.board th{position:sticky;top:0;background:#151a25;z-index:2;font-size:11px;min-width:96px;padding:5px 3px}
+.board th .oe{font-size:18px;display:block}
+.board th.me{background:#3a3211;color:var(--acc)}
+.board th.rh,.board td.rh{position:sticky;left:0;z-index:3;min-width:38px;width:38px;background:#151a25;font-size:11px;font-weight:900;color:var(--mut)}
+.board td{height:50px;min-width:96px;position:relative}
+.board td .pn{position:absolute;top:1px;left:3px;font-size:9px;color:var(--mut);font-weight:800}
+.board td.cur{outline:2px solid var(--acc);outline-offset:-2px;background:#2a2410;animation:glow 1.4s infinite}
+.board td.mine{background:#1f2616}
+.board td .dim{color:#3d465c;font-size:12px;font-weight:800}
+.board td .chip{max-width:90px;overflow:hidden}
+.board td .au{position:absolute;top:1px;right:3px;font-size:9px}
+/* teams */
+.ctl{position:sticky;top:0;background:var(--bg);padding:6px 0;z-index:4}
+input[type=search],input[type=text],input[type=password],select{width:100%;background:var(--card2);border:1px solid var(--line);color:var(--tx);border-radius:10px;padding:10px 12px;font-size:16px;outline:none}
+select{width:auto;padding:6px 8px;font-size:14px}
+input:focus{border-color:var(--acc)}
+.pills{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.pills button{background:var(--card);border:1px solid var(--line);border-radius:99px;padding:4px 10px;font-size:12px;font-weight:800}
+.pills button.on{background:var(--acc);color:#111;border-color:var(--acc)}
+.trow{display:flex;align-items:center;gap:8px;padding:7px 8px;background:var(--card);border:1px solid var(--line);border-radius:12px;margin:5px 0}
+.trow.taken{opacity:.5}
+.trow.go{cursor:pointer}
+.trow .tm{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;align-items:flex-start}
+.trow .tm small{color:var(--mut);font-size:11px}
+.trow .rk{font-size:11px;color:var(--mut);font-weight:800;min-width:28px;text-align:center}
+.star{background:none;border:1px solid var(--line);border-radius:8px;font-size:18px;line-height:1;padding:5px 8px;color:var(--mut)}
+.star.on{color:var(--acc);border-color:var(--acc)}
+/* misc */
+.tag{display:inline-block;font-size:10px;font-weight:900;border-radius:6px;padding:1px 6px;letter-spacing:.04em}
+.tag.steal{background:#12351f;color:var(--good)}.tag.reach{background:#3a1717;color:#ffb4b4}.tag.curse{background:#3d2a05;color:#ffb347}.tag.dart{background:#1b2a45;color:#9cc2ff}.tag.fair{background:var(--card2);color:var(--mut)}.tag.auto,.tag.first,.tag.last{background:var(--card2);color:var(--acc)}
+.opills{display:flex;gap:6px;overflow-x:auto;padding:4px 0}
+.opills button{flex:none;background:var(--card);border:1px solid var(--line);border-radius:99px;padding:5px 10px;font-weight:800;font-size:13px}
+.opills button.on{background:var(--acc);color:#111;border-color:var(--acc)}
+.qrow{display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid var(--line)}
+.qrow:last-child{border:0}
+.qn{width:22px;color:var(--acc);font-weight:900;text-align:center}
+.sw{display:inline-flex;align-items:center;gap:8px;font-weight:800}
+.sw input{width:20px;height:20px;accent-color:var(--acc)}
+.rrow{display:flex;gap:8px;align-items:center;margin:4px 0;padding:6px 8px;background:var(--card);border:1px solid var(--line);border-radius:10px}
+.rrow .no{color:var(--acc);font-weight:900;width:22px}
+.grid2{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.seg{display:flex;gap:6px;margin:6px 0}
+.seg button{flex:1;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:7px;font-weight:800}
+.seg button.on{background:var(--acc);color:#111;border-color:var(--acc)}
+.msg{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:7px 10px;margin:6px 0;max-width:92%}
+.msg.mine{margin-left:auto;background:#2a2410;border-color:#5b4a12}
+.msg .who{font-size:11px;font-weight:900;color:var(--acc)}
+.msg .tx{overflow-wrap:anywhere;white-space:pre-wrap}
+.msg .rx{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+.rx button{background:var(--card2);border:1px solid var(--line);border-radius:99px;padding:1px 7px;font-size:12px}
+.rx button.on{border-color:var(--acc);background:#3a3211}
+.chatbox{position:sticky;bottom:calc(66px + var(--sb));display:flex;gap:6px;background:var(--bg);padding:8px 0;z-index:4}
+.recap{border:2px solid var(--acc)}
+.recap .hd{font-size:18px;font-weight:900;color:var(--acc)}
+.recap .st{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0;font-size:12px}
+/* overlay + sheet + toast */
+.ov{position:fixed;inset:0;background:rgba(5,7,11,.92);z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;overflow:auto}
+.ov h2{color:var(--acc);margin:0 0 4px;font-size:28px}
+.who8{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;max-width:420px;margin:14px 0}
+.who8 button{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 8px;font-weight:900;font-size:16px}
+.who8 button span{display:block;font-size:26px}
+.who8 button:active{background:var(--acc);color:#111}
+.sheetbg{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:40;display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--card);border-top:3px solid var(--acc);border-radius:18px 18px 0 0;padding:16px 16px calc(16px + var(--sb));width:100%;max-width:520px;max-height:90vh;overflow:auto}
+.sheet h2{margin:0 0 8px;font-size:20px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(86px + var(--sb));background:#0b0e14;border:1px solid var(--acc);color:var(--tx);padding:9px 14px;border-radius:12px;z-index:60;max-width:92vw;font-weight:700;box-shadow:0 6px 24px rgba(0,0,0,.5);text-align:center}
+.qr{background:#fff;padding:10px;border-radius:12px;display:inline-block;line-height:0}
+.qr svg{width:210px;height:210px}
+.stub{border-style:dashed;opacity:.9}
+.hide{display:none!important}
+body[data-tab=teams] #roastline,body[data-tab=teams] #ticker,body[data-tab=my] #roastline,body[data-tab=my] #ticker,body[data-tab=admin] #roastline,body[data-tab=admin] #ticker{display:none}
+body[data-tab=teams] .banner{padding:8px 12px}body[data-tab=teams] .banner .em{font-size:26px}body[data-tab=teams] .banner .nm{font-size:18px}
+.urlbox{font-size:12px;word-break:break-all;background:var(--card2);padding:6px 8px;border-radius:8px;margin:6px 0;user-select:all}
+
+/* v2 additions */
+.ctl .row2{display:flex;gap:6px}.ctl .row2 select{flex:1;min-width:0;padding:8px 10px;font-size:15px}
+.ctl .pills{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}.ctl .pills button{white-space:nowrap;flex:none}
+.grp{background:var(--bg);margin:10px 0 2px;padding:3px 2px;font-weight:900;font-size:13px;color:var(--acc);display:flex;justify-content:space-between;border-bottom:1px solid var(--line)}
+.grp small{color:var(--mut);font-weight:700}
+.wstar{background:none;border:0;font-size:20px;line-height:1;padding:2px 4px;color:#586079}.wstar.on{color:var(--acc)}
+.qbtn{background:none;border:1px solid var(--line);border-radius:8px;font-size:11px;font-weight:900;padding:5px 6px;color:var(--mut)}.qbtn.on{color:#111;background:var(--acc);border-color:var(--acc)}
+.trow .rk{min-width:34px}.trow .rk small{display:block;font-size:9px;font-weight:700;color:#6f7893}
+.trow.taken .tm .chip{filter:grayscale(.6)}
+.dr{font-size:10px;font-weight:900;color:#9fd7a8}
+.lockcard{border-color:#7f6a1d}.errtxt{color:#ff9a9a;font-weight:800;margin:6px 0;min-height:18px}
+.pin{letter-spacing:4px;text-align:center;font-size:22px!important}
+.cflict{background:#3a1717;border:1px solid #7f2d2d;color:#ffd0d0;border-radius:12px;padding:10px 12px;margin:8px 0;font-weight:800}
+</style>
+</head>
+<body>
+<div class="ribbon">🧪 TEST MODE – nothing here affects the live pool</div>
+<div class="wrap">
+  <header>
+    <h1>STOOPIDS<small>SNAKE DRAFT ROOM</small></h1>
+    <div class="hr">
+      <span id="conn" class="pill bad"><i></i>Connecting…</span>
+      <span id="who" class="pill"></span>
+      <button class="btn sm" data-a="invite">📨 Invite</button>
+    </div>
+  </header>
+  <div id="alertbar"></div>
+  <div id="banner"></div>
+  <div id="roastline"></div>
+  <div id="ticker" class="ticker"></div>
+  <main id="view"></main>
+</div>
+<nav class="tabs" id="tabs"></nav>
+<div id="overlay"></div>
+<div id="sheetwrap"></div>
+<div id="toast" class="toast hide"></div>
+<script>
+window.EMBED={"teams":[["324","Coastal Carolina","Coastal","CCU","006f71","a27752","https://a.espncdn.com/i/teamlogos/ncaa/500/324.png","Chanticleers"],["2132","Cincinnati","Cincinnati","CIN","000000","e00122","https://a.espncdn.com/i/teamlogos/ncaa/500/2132.png","Bearcats"],["87","Notre Dame","Notre Dame","ND","062340","c99700","https://a.espncdn.com/i/teamlogos/ncaa/500/87.png","Fighting Irish"],["163","Princeton","Princeton","PRIN","000000","ff6000","https://a.espncdn.com/i/teamlogos/ncaa/500/163.png","Tigers"],["2287","Illinois State","Illinois St","ILST","CE1126","ffe716","https://a.espncdn.com/i/teamlogos/ncaa/500/2287.png","Redbirds"],["249","North Texas","North Texas","UNT","068f33","ffffff","https://a.espncdn.com/i/teamlogos/ncaa/500/249.png","Mean Green"],["2182","Drexel","Drexel","DREX","020260","ffd65a","https://a.espncdn.com/i/teamlogos/ncaa/500/2182.png","Dragons"],["2633","Tennessee","Tennessee","TENN","ff8200","ffffff","https://a.espncdn.com/i/teamlogos/ncaa/500/2633.png","Volunteers"],["30","USC","USC","USC","9d2235","ffc72c","https://a.espncdn.com/i/teamlogos/ncaa/500/30.png","Trojans"],["2005","Air Force","Air Force","AF","003594","ffffff","https://a.espncdn.com/i/teamlogos/ncaa/500/2005.png","Falcons"],["300","UC Irvine","UC Irvine","UCI","002B5C","fec52e","https://a.espncdn.com/i/teamlogos/ncaa/500/300.png","Anteaters"],["2217","Fairfield","Fairfield","FAIR","000000","ebebeb","https://a.espncdn.com/i/teamlogos/ncaa/500/2217.png","Stags"],["2","Auburn","Auburn","AUB","002b5c","f26522","https://a.espncdn.com/i/teamlogos/ncaa/500/2.png","Tigers"],["13","Cal Poly","Cal Poly","CP","1E4D2B","eed897","https://a.espncdn.com/i/teamlogos/ncaa/500/13.png","Mustangs"],["2523","Robert Morris","Robert Morris","RMU","00214D","a21d2b","https://a.espncdn.com/i/teamlogos/ncaa/500/2523.png","Colonials"],["142","Missouri","Missouri","MIZ","f1b82d","000000","https://a.espncdn.com/i/teamlogos/ncaa/500/142.png","Tigers"],["2142","Colgate","Colgate","COLG","821019","ffffff","https://a.espncdn.com/i/teamlogos/ncaa/500/2142.png","Raiders"],["2739","Green Bay","Green Bay","GB","006633","ffffff","https://a.espncdn.com/i/teamlogos/ncaa/500/2739.png","Phoenix"],["2250","Gonzaga","Gonzaga","GONZ","041e42","c8102e","https://a.espncdn.com/i/teamlogos/ncaa/500/2250.png","Bulldogs"],["248","Houston","Houston","HOU","c8102e","ffffff","https://a.espncdn.com/i/teamlogos/ncaa/500/248.png","Cougars"],["2755","Grambling","Grambling","GRAM","ee8601","ffd10a","https://a.espncdn.com/i/teamlogos/ncaa/500/2755.png","Tigers"],["2440","Nevada","Nevada","NEV","041e42","8a8d8f","https://a.espncdn.com/i/teamlogos/ncaa/500/2440.png","Wolf Pack"],["2031","Little Rock","Little Rock","LR","AD0000","898d8f","https://a.espncdn.com/i/teamlogos/ncaa/500/2031.png","Trojans"],["2294","Iowa","Iowa","IOWA","231f20","fcd116","https://a.espncdn.com/i/teamlogos/ncaa/500/2294.png","Hawkeyes"],["61","Georgia","Georgia","UGA","ba0c2f","2c2a29","https://a.espncdn.com/i/teamlogos/ncaa/500/61.png","Bulldogs"],["41","UConn","UConn","CONN","0c2340","a2aaad","https://a.espncdn.com/i/teamlogos/ncaa/500/41.png","Huskies"],["66","Iowa State","Iowa State","ISU","ae192d","ffc72a","https://a.espncdn.com/i/teamlogos/ncaa/500/66.png","Cyclones"],["2599","St. John's","St John's","SJU","d10000","101010","https://a.espncdn.com/i/teamlogos/ncaa/500/2599.png","Red Storm"],["158","Nebraska","Nebraska","NEB","e31937","ffffff","https://a.espncdn.com/i/teamlogos/ncaa/500/158.png","Cornhuskers"],["2379","Maryland Eastern Shore","MD Eastern","UMES","5c2301","b5b7ba","https://a.espncdn.com/i/teamlogos/ncaa/500/2379.png","Hawks"],["2181","Drake","Drake","DRKE","005596","bec0c2","https://a.espncdn.com/i/teamlogos/ncaa/500/2181.png","Bulldogs"],["264","Washington","Washington","WASH","33006f","e8d3a2","https://a.espncdn.com/i/teamlogos/ncaa/500/264.png","Huskies"],["2029","Arkansas-Pine Bluff","AR-Pine Bluff","UAPB","e0aa0f","eaaa00","https://a.espncdn.com/i/teamlogos/ncaa/500/2029.png","Golden Lions"],["349","Army","Army","ARMY","000000","d3bc8d","https://a.espncdn.com/i/teamlogos/ncaa/500/349.png","Black Knights"],["84","Indiana","Indiana","IU","970310","ffffff","https://a.espncdn.com/i/teamlogos/ncaa/500/84.png","Hoosiers"],["350","UNC Wilmington","UNC Wilmington","UNCW","00665e","ffda00","https://a.espncdn.com/i/teamlogos/ncaa/500/350.png","Seahawks"],["294","Jacksonville","Jacksonville","JAX","00523e","ffffff","https://a.espncdn.com/i/teamlogos/ncaa/500/294.png","Dolphins"],["57","Florida","Florida","FLA","0021a5","fa4616","https://a.espncdn.com/i/teamlogos/ncaa/500/57.png","Gators"],["2634","Tennessee State","Tennessee St","TNST","171796","f0f0f0","https://a.espncdn.com/i/teamlogos/ncaa/500/2634.png","Tigers"],["2305","Kansas","Kansas","KU","0051ba","e8000d","https://a.espncdn.com/i/teamlogos/ncaa/500/2305.png","Jayhawks"],["2649","Toledo","Toledo","TOL","0b2240","ffcd00","https://a.espncdn.com/i/teamlogos/ncaa/500/2649.png","Rockets"],["2130","Chicago State","Chicago St","CHST","006700","ffffff","https://a.espncdn.com/i/teamlogos/ncaa/500/2130.png","Cougars"],["270","Milwaukee","Milwaukee","MILW","000000","ffc20e","https://a.espncdn.com/i/teamlogos/ncaa/500/270.png","Panthers"],["261","Vermont","Vermont","UVM","154734","ffc72c","https://a.espncdn.com/i/teamlogos/ncaa/500/261.png","Catamounts"],["2545","SE Louisiana","SE Louisiana","SELA","215732","ffc72c","https://a.espncdn.com/i/teamlogos/ncaa/500/2545.png","Lions"],["2428","North Carolina Central","NC Central","NCCU","880023","c2c3c0","https://a.espncdn.com/i/teamlogos/ncaa/500/2428.png","Eagles"],["2230","Fordham","Fordham","FOR","830032","909090","https://a.espncdn.com/i/teamlogos/ncaa/500/2230.png","Rams"],["252","BYU","BYU","BYU","0047ba","002e5d","https://a.espncdn.com/i/teamlogos/ncaa/500/252.png","Cougars"],["167","New Mexico","New Mexico","UNM","ba0c2f","a7a8aa","https://a.espncdn.com/i/teamlogos/ncaa/500/167.png","Lobos"],["43","Yale","Yale","YALE","004a81","286dc0","https://a.espncdn.com/i/teamlogos/ncaa/500/43.png","Bulldogs"],["325","Cleveland State","Cleveland St","CLE","006633","231f20","https://a.espncdn.com/i/teamlogos/ncaa/500/325.png","Vikings"],["5","UAB","UAB","UAB","1a5632","fdb913","https://a.espncdn.com/i/teamlogos/ncaa/500/5.png","Blazers"],["333","Alabama","Alabama","ALA","9e1b32","ffffff","https://a.espncdn.com/i/teamlogos/ncaa/500/333.png","Crimson Tide"],["245","Texas A&M","Texas A&M","TA&M","500000","ffffff","https://a.espncdn.com/i/teamlogos/ncaa/500/245.png","Aggies"],["44","American University","American","AMER","c41130","c8102e","https://a.espncdn.com/i/teamlogos/ncaa/500/44.png","Eagles"],["2197","Eastern Illinois","E Illinois","EIU","000000","bebab9","https://a.espncdn.com/i/teamlogos/ncaa/500/2197.png","Panthers"],["2534","Sam Houston","Sam Houston","SHSU","f56423","ffffff","https://a.espncdn.com/i/teamlogos/ncaa/500/2534.png","Bearkats"],["2275","Hofstra","Hofstra","HOF","003594","ffc72c","https://a.espncdn.com/i/teamlogos/ncaa/500/2275.png","Pride"],["2272","High Point","High Point","HPU","330072","ffffff","https://a.espncdn.com/i/teamlogos/ncaa/500/2272.png","Panthers"],["2363","Manhattan","Manhattan","MAN","4f8537","b5b7ba","https://a.espncdn.com/i/teamlogos/ncaa/500/2363.png","Jaspers"],["2335","Liberty","Liberty","LIB","0a254e","b72025","https://a.espncdn.com/i/teamlogos/ncaa/500/2335.png","Flames"],["2509","Purdue","Purdue","PUR","ceb888","000000","https://a.espncdn.com/i/teamlogos/ncaa/500/2509.png","Boilermakers"],["8","Arkansas","Arkansas","ARK","a32136","ffffff","https://a.espncdn.com/i/teamlogos/ncaa/500/8.png","Razorbacks"],["238","Vanderbilt","Vanderbilt","VAN","000000","cfae70","https://a.espncdn.com/i/teamlogos/ncaa/500/238.png","Commodores"],["26","UCLA","UCLA","UCLA","2774ae","f2a900","https://a.espncdn.com/i/teamlogos/ncaa/500/26.png","Bruins"],["236","Chattanooga","Chattanooga","UTC","00386b","dca71d","https://a.espncdn.com/i/teamlogos/ncaa/500/236.png","Mocs"],["328","Utah State","Utah State","USU","0f2439","ffffff","https://a.espncdn.com/i/teamlogos/ncaa/500/328.png","Aggies"],["2747","Wofford","Wofford","WOF","533B22","f0f0f0","https://a.espncdn.com/i/teamlogos/ncaa/500/2747.png","Terriers"],["2459","Northern Illinois","N Illinois","NIU","c8102e","000000","https://a.espncdn.com/i/teamlogos/ncaa/500/2459.png","Huskies"],["139","Saint Louis","Saint Louis","SLU","00539C","ebebeb","https://a.espncdn.com/i/teamlogos/ncaa/500/139.png","Billikens"],["154","Wake Forest","Wake Forest","WAKE","ceb888","2c2a29","https://a.espncdn.com/i/teamlogos/ncaa/500/154.png","Demon Deacons"],["2377","McNeese","McNeese","MCN","00529C","ffd204","https://a.espncdn.com/i/teamlogos/ncaa/500/2377.png","Cowboys"],["2253","Grand Canyon","Grand Canyon","GCU","522398","ffffff","https://a.espncdn.com/i/teamlogos/ncaa/500/2253.png","Lopes"],["2405","Monmouth","Monmouth","MONM","051844","ffffff","https://a.espncdn.com/i/teamlogos/ncaa/500/2405.png","Hawks"],["2097","Campbell","Campbell","CAM","000000","ffffff","https://a.espncdn.com/i/teamlogos/ncaa/500/2097.png","Fighting Camels"],["288","Lipscomb","Lipscomb","LIP","20366C","f6b734","https://a.espncdn.com/i/teamlogos/ncaa/500/288.png","Bisons"],["2641","Texas Tech","Texas Tech","TTU","da291c","000000","https://a.espncdn.com/i/teamlogos/ncaa/500/2641.png","Red Raiders"],["235","Memphis","Memphis","MEM","004991","8e908f","https://a.espncdn.com/i/teamlogos/ncaa/500/235.png","Tigers"],["258","Virginia","Virginia","UVA","232d4b","f84c1e","https://a.espncdn.com/i/teamlogos/ncaa/500/258.png","Cavaliers"],["161","Fairleigh Dickinson","FDU","FDU","72293c","28334a","https://a.espncdn.com/i/teamlogos/ncaa/500/161.png","Knights"],["2329","Lehigh","Lehigh","LEH","6c2b2a","b69e70","https://a.espncdn.com/i/teamlogos/ncaa/500/2329.png","Mountain Hawks"],["153","North Carolina","North Carolina","UNC","7bafd4","13294b","https://a.espncdn.com/i/teamlogos/ncaa/500/153.png","Tar Heels"],["2241","Gardner-Webb","Gardner-Webb","GWEB","c12535","909090","https://a.espncdn.com/i/teamlogos/ncaa/500/2241.png","Runnin' Bulldogs"],["356","Illinois","Illinois","ILL","ff5f05","13294b","https://a.espncdn.com/i/teamlogos/ncaa/500/356.png","Fighting Illini"],["150","Duke","Duke","DUKE","00539b","ffffff","https://a.espncdn.com/i/teamlogos/ncaa/500/150.png","Blue Devils"],["202","Tulsa","Tulsa","TLSA","003595","d0b787","https://a.espncdn.com/i/teamlogos/ncaa/500/202.png","Golden Hurricane"],["2750","Wright State","Wright St","WRST","cba052","cba052","https://a.espncdn.com/i/teamlogos/ncaa/500/2750.png","Raiders"],["127","Michigan State","Michigan St","MSU","173f35","ffffff","https://a.espncdn.com/i/teamlogos/ncaa/500/127.png","Spartans"],["3101","Utah Tech","Utah Tech","UTU","000000","ffffff","https://a.espncdn.com/i/teamlogos/ncaa/500/3101.png","Trailblazers"],["47","Howard","Howard","HOW","003a63","e51937","https://a.espncdn.com/i/teamlogos/ncaa/500/47.png","Bison"],["2724","Wichita State","Wichita St","WICH","ffcd00","27251f","https://a.espncdn.com/i/teamlogos/ncaa/500/2724.png","Shockers"],["2011","Alabama State","Alabama St","ALST","e9a900","0a0a0a","https://a.espncdn.com/i/teamlogos/ncaa/500/2011.png","Hornets"],["97","Louisville","Louisville","LOU","c9001f","ffffff","https://a.espncdn.com/i/teamlogos/ncaa/500/97.png","Cardinals"],["314","Iona","Iona","IONA","6f2c3e","f0ab00","https://a.espncdn.com/i/teamlogos/ncaa/500/314.png","Gaels"],["91","Bellarmine","Bellarmine","BELL","000000","ffffff","https://a.espncdn.com/i/teamlogos/ncaa/500/91.png","Knights"],["130","Michigan","Michigan","MICH","00274c","ffcb05","https://a.espncdn.com/i/teamlogos/ncaa/500/130.png","Wolverines"],["2065","Bethune-Cookman","Bethune","BCU","7b1831","e9aa12","https://a.espncdn.com/i/teamlogos/ncaa/500/2065.png","Wildcats"],["222","Villanova","Villanova","VILL","00205b","13b5ea","https://a.espncdn.com/i/teamlogos/ncaa/500/222.png","Wildcats"],["194","Ohio State","Ohio State","OSU","ba0c2f","a8adb4","https://a.espncdn.com/i/teamlogos/ncaa/500/194.png","Buckeyes"],["93","Murray State","Murray St","MUR","002148","000e00","https://a.espncdn.com/i/teamlogos/ncaa/500/93.png","Racers"],["2449","North Dakota State","N Dakota St","NDSU","01402A","ffffff","https://a.espncdn.com/i/teamlogos/ncaa/500/2449.png","Bison"],["2325","La Salle","La Salle","LAS","003356","ffce00","https://a.espncdn.com/i/teamlogos/ncaa/500/2325.png","Explorers"],["2473","Oakland","Oakland","OAK","04091c","bc955c","https://a.espncdn.com/i/teamlogos/ncaa/500/2473.png","Golden Grizzlies"],["2670","VCU","VCU","VCU","ffaf00","000000","https://a.espncdn.com/i/teamlogos/ncaa/500/2670.png","Rams"],["2239","Cal State Fullerton","Fullerton","CSUF","003767","ff8300","https://a.espncdn.com/i/teamlogos/ncaa/500/2239.png","Titans"],["2172","Denver","Denver","DEN","98002e","a8996e","https://a.espncdn.com/i/teamlogos/ncaa/500/2172.png","Pioneers"],["2390","Miami","Miami","MIA","f47423","035131","https://a.espncdn.com/i/teamlogos/ncaa/500/2390.png","Hurricanes"],["2717","Western Carolina","W Carolina","WCU","492F91","bf9e70","https://a.espncdn.com/i/teamlogos/ncaa/500/2717.png","Catamounts"],["21","San Diego State","San Diego St","SDSU","a6192e","000000","https://a.espncdn.com/i/teamlogos/ncaa/500/21.png","Aztecs"],["251","Texas","Texas","TEX","af5c37","ffffff","https://a.espncdn.com/i/teamlogos/ncaa/500/251.png","Longhorns"],["219","Pennsylvania","Penn","PENN","082A74","a6163d","https://a.espncdn.com/i/teamlogos/ncaa/500/219.png","Quakers"],["152","NC State","NC State","NCSU","cc0000","ffffff","https://a.espncdn.com/i/teamlogos/ncaa/500/152.png","Wolfpack"],["96","Kentucky","Kentucky","UK","0033a0","ffffff","https://a.espncdn.com/i/teamlogos/ncaa/500/96.png","Wildcats"],["2640","Texas Southern","Texas Southern","TXSO","860038","ffffff","https://a.espncdn.com/i/teamlogos/ncaa/500/2640.png","Tigers"],["275","Wisconsin","Wisconsin","WIS","a00000","ffffff","https://a.espncdn.com/i/teamlogos/ncaa/500/275.png","Badgers"],["304","Idaho State","Idaho St","IDST","ef8c00","e9a126","https://a.espncdn.com/i/teamlogos/ncaa/500/304.png","Bengals"],["2608","Saint Mary's","Saint Mary's","SMC","d80024","003057","https://a.espncdn.com/i/teamlogos/ncaa/500/2608.png","Gaels"],["2016","Alcorn State","Alcorn St","ALCN","4b0058","46166a","https://a.espncdn.com/i/teamlogos/ncaa/500/2016.png","Braves"],["2514","Quinnipiac","Quinnipiac","QUIN","041B43","ffffff","https://a.espncdn.com/i/teamlogos/ncaa/500/2514.png","Bobcats"],["12","Arizona","Arizona","ARIZ","cc0033","003366","https://a.espncdn.com/i/teamlogos/ncaa/500/12.png","Wildcats"],["68","Boise State","Boise St","BOIS","0033a0","d64309","https://a.espncdn.com/i/teamlogos/ncaa/500/68.png","Broncos"],["2463","Cal State Northridge","CSU Northridge","CSUN","b50000","ffffff","https://a.espncdn.com/i/teamlogos/ncaa/500/2463.png","Matadors"],["2296","Jackson State","Jackson St","JKST","123297","b5b7ba","https://a.espncdn.com/i/teamlogos/ncaa/500/2296.png","Tigers"]],"owners":[{"name":"Dirty Draymond","emoji":"🍆🥊","team_name":"Dirty Draymond's Poole Party"},{"name":"Stock","emoji":"📈","team_name":"Stock Rising"},{"name":"Kurmoji","emoji":"🦠","team_name":"Kurmoji"},{"name":"Kentut","emoji":"💨","team_name":"Kentut"},{"name":"Murf","emoji":"🪨","team_name":"Murfcockchalkrock"},{"name":"Poo","emoji":"💩","team_name":"POO PARTY"},{"name":"Nasty","emoji":"🦚","team_name":"Peacock"},{"name":"En Fuego","emoji":"🔥","team_name":"En Fuego"}]};
+window.TEAMMETA={"2363":{"c":"Metro","r":"12-20"},"2747":{"c":"SoCon","r":"19-13"},"2473":{"c":"Horizon","r":"16-16"},"97":{"c":"ACC","r":"24-11","p":18,"e":32.7,"s":4.5},"2006":{"c":"MAC","r":"29-6","p":44,"e":27.5,"s":13.5},"2750":{"c":"Horizon","r":"23-12","p":55,"e":24.1,"s":14.5},"41":{"c":"Big East","r":"34-6","p":4,"e":37.7,"s":2.5},"153":{"c":"ACC","r":"24-9","p":47,"e":26.4,"s":9.5},"2142":{"c":"Patriot","r":"18-15"},"2463":{"c":"Big West","r":"20-14"},"150":{"c":"ACC","r":"35-3","p":1,"e":44.4,"s":1},"350":{"c":"CAA","r":"27-7","p":32,"e":29.4,"s":13.5},"2509":{"c":"Big Ten","r":"30-9","p":42,"e":28.0,"s":8},"2130":{"c":"NEC","r":"7-25"},"270":{"c":"Horizon","r":"12-20"},"2755":{"c":"SWAC","r":"14-19"},"2739":{"c":"Horizon","r":"18-15"},"2305":{"c":"Big 12","r":"24-11","p":10,"e":35.8,"s":3},"2390":{"c":"ACC","r":"26-9","p":14,"e":33.7,"s":5},"2599":{"c":"Big East","r":"30-7","p":17,"e":33.2,"s":5},"2241":{"c":"Big South","r":"4-29"},"314":{"c":"Metro","r":"18-14"},"333":{"c":"SEC","r":"25-10","p":29,"e":29.6,"s":5},"251":{"c":"SEC","r":"21-15","p":15,"e":33.5,"s":3},"2005":{"c":"Mountain West","r":"3-29"},"2296":{"c":"SWAC","r":"12-21"},"349":{"c":"Patriot","r":"11-21"},"158":{"c":"Big Ten","r":"28-7","p":16,"e":33.3,"s":6},"2329":{"c":"Patriot","r":"18-17"},"2649":{"c":"MAC","r":"19-15"},"248":{"c":"Big 12","r":"30-7","p":7,"e":36.9,"s":2},"2633":{"c":"SEC","r":"25-12","p":21,"e":32.2,"s":5},"87":{"c":"ACC","r":"13-18"},"2011":{"c":"SWAC","r":"10-22"},"2239":{"c":"Big West","r":"18-16"},"43":{"c":"Ivy","r":"24-7"},"2230":{"c":"A-10","r":"17-15"},"12":{"c":"Big 12","r":"36-3","p":6,"e":37.2,"s":2},"235":{"c":"American","r":"13-19"},"2029":{"c":"SWAC","r":"13-19"},"2724":{"c":"American","r":"24-12","p":27,"e":30.1,"s":12},"294":{"c":"Atlantic Sun","r":"12-20"},"2294":{"c":"Big Ten","r":"24-13"},"139":{"c":"A-10","r":"29-6","p":31,"e":29.6,"s":10},"167":{"c":"Mountain West","r":"26-11","p":33,"e":29.3,"s":12},"252":{"c":"Big 12","r":"23-12","p":40,"e":28.4,"s":8},"2325":{"c":"A-10","r":"9-23"},"26":{"c":"Big Ten","r":"24-12","p":41,"e":28.3,"s":8},"127":{"c":"Big Ten","r":"27-8","p":11,"e":35.6,"s":3},"238":{"c":"SEC","r":"27-9","p":19,"e":32.6,"s":5},"300":{"c":"Big West","r":"23-12","p":51,"e":25.9,"s":14},"2132":{"c":"Big 12","r":"18-15","p":45,"e":27.3,"s":10},"66":{"c":"Big 12","r":"29-8","p":13,"e":34.3,"s":4},"96":{"c":"SEC","r":"22-14","p":34,"e":29.2,"s":7},"2197":{"c":"OVC","r":"13-20"},"2217":{"c":"Metro","r":"21-13"},"84":{"c":"Big Ten","r":"18-14","p":46,"e":27.2,"s":10},"2335":{"c":"CUSA","r":"26-8","p":56,"e":23.3,"s":14.5},"2272":{"c":"Big South","r":"31-5","p":9,"e":36.5,"s":13},"261":{"c":"Am. East","r":"22-12","p":52,"e":25.2,"s":16},"2641":{"c":"Big 12","r":"23-11","p":25,"e":30.8,"s":5},"2608":{"c":"WCC","r":"27-6","p":23,"e":31.8,"s":11},"288":{"c":"Atlantic Sun","r":"19-13"},"2275":{"c":"CAA","r":"24-11"},"219":{"c":"Ivy","r":"18-12","p":57,"e":23.2,"s":15},"2670":{"c":"A-10","r":"28-8","p":24,"e":31.0,"s":10},"2097":{"c":"CAA","r":"16-18"},"44":{"c":"Patriot","r":"16-16","p":53,"e":24.3,"s":16},"93":{"c":"MVC","r":"20-13","p":50,"e":26.0,"s":13},"21":{"c":"Pac-12","r":"22-11","p":54,"e":24.3,"s":11.5},"2534":{"c":"CUSA","r":"22-12"},"91":{"c":"Atlantic Sun","r":"13-19"},"2459":{"c":"Horizon","r":"9-21"},"57":{"c":"SEC","r":"27-8","p":2,"e":40.1,"s":1},"236":{"c":"SoCon","r":"13-19"},"324":{"c":"Sun Belt","r":"19-13"},"2031":{"c":"UAC","r":"12-20"},"163":{"c":"Ivy","r":"9-20"},"2":{"c":"SEC","r":"22-16","p":58,"e":23.2,"s":10.5},"130":{"c":"Big Ten","r":"37-3","p":26,"e":30.4,"s":6},"2640":{"c":"SWAC","r":"12-18"},"2250":{"c":"Pac-12","r":"31-4","p":3,"e":39.2,"s":3},"68":{"c":"Pac-12","r":"20-12"},"2523":{"c":"Horizon","r":"22-11"},"3101":{"c":"Big Sky","r":"19-15"},"264":{"c":"Big Ten","r":"16-17"},"2428":{"c":"MEAC","r":"14-18"},"2172":{"c":"WCC","r":"15-17"},"152":{"c":"ACC","r":"20-14","p":39,"e":28.7,"s":10.5},"258":{"c":"ACC","r":"30-6","p":8,"e":36.7,"s":4},"5":{"c":"American","r":"20-12"},"2379":{"c":"MEAC","r":"9-23"},"2440":{"c":"Mountain West","r":"24-13","p":48,"e":26.2,"s":12},"309":{"c":"Sun Belt","r":"11-22"},"2181":{"c":"MVC","r":"14-20"},"47":{"c":"MEAC","r":"24-11","p":28,"e":29.9,"s":15.5},"2016":{"c":"SWAC","r":"9-23"},"2065":{"c":"SWAC","r":"17-15","p":61,"e":21.1,"s":16},"2717":{"c":"SoCon","r":"15-16"},"202":{"c":"American","r":"30-8"},"30":{"c":"Big Ten","r":"18-14","p":37,"e":29.0,"s":7},"154":{"c":"ACC","r":"18-17"},"8":{"c":"SEC","r":"28-9","p":22,"e":32.0,"s":5},"328":{"c":"Pac-12","r":"29-7","p":30,"e":29.6,"s":11},"2545":{"c":"Southland","r":"9-22"},"161":{"c":"NEC","r":"11-21"},"275":{"c":"Big Ten","r":"24-11","p":59,"e":22.8,"s":11},"61":{"c":"SEC","r":"22-11","p":49,"e":26.1,"s":10},"2405":{"c":"CAA","r":"19-15"},"13":{"c":"Big West","r":"14-19"},"222":{"c":"Big East","r":"24-9","p":38,"e":28.7,"s":8.5},"356":{"c":"Big Ten","r":"28-9","p":5,"e":37.6,"s":2},"2634":{"c":"OVC","r":"23-10","p":60,"e":22.1,"s":16},"142":{"c":"SEC","r":"20-13","p":43,"e":28.0,"s":9},"2287":{"c":"MVC","r":"23-13"},"2514":{"c":"Metro","r":"19-13"},"325":{"c":"Horizon","r":"11-22"},"2182":{"c":"CAA","r":"17-16"},"2253":{"c":"Mountain West","r":"20-12","p":12,"e":34.5,"s":11},"2377":{"c":"Southland","r":"28-6","p":20,"e":32.6,"s":13},"304":{"c":"Big Sky","r":"13-20"},"194":{"c":"Big Ten","r":"21-13","p":36,"e":29.1,"s":8},"245":{"c":"SEC","r":"22-12","p":35,"e":29.1,"s":8},"2449":{"c":"Summit","r":"27-8"},"249":{"c":"American","r":"19-14"}};
+</script>
+<script>
+var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],f={},c=function(t,r){o=function(t){for(var r=new Array(t),e=0;e<t;e+=1){r[e]=new Array(t);for(var n=0;n<t;n+=1)r[e][n]=null}return r}(i=4*e+17),l(0,0),l(i-7,0),l(0,i-7),s(),h(),d(t,r),e>=7&&v(t),null==a&&(a=p(e,n,u)),w(a,r)},l=function(t,r){for(var e=-1;e<=7;e+=1)if(!(t+e<=-1||i<=t+e))for(var n=-1;n<=7;n+=1)r+n<=-1||i<=r+n||(o[t+e][r+n]=0<=e&&e<=6&&(0==n||6==n)||0<=n&&n<=6&&(0==e||6==e)||2<=e&&e<=4&&2<=n&&n<=4)},h=function(){for(var t=8;t<i-8;t+=1)null==o[t][6]&&(o[t][6]=t%2==0);for(var r=8;r<i-8;r+=1)null==o[6][r]&&(o[6][r]=r%2==0)},s=function(){for(var t=B.getPatternPosition(e),r=0;r<t.length;r+=1)for(var n=0;n<t.length;n+=1){var i=t[r],a=t[n];if(null==o[i][a])for(var u=-2;u<=2;u+=1)for(var f=-2;f<=2;f+=1)o[i+u][a+f]=-2==u||2==u||-2==f||2==f||0==u&&0==f}},v=function(t){for(var r=B.getBCHTypeNumber(e),n=0;n<18;n+=1){var a=!t&&1==(r>>n&1);o[Math.floor(n/3)][n%3+i-8-3]=a}for(n=0;n<18;n+=1){a=!t&&1==(r>>n&1);o[n%3+i-8-3][Math.floor(n/3)]=a}},d=function(t,r){for(var e=n<<3|r,a=B.getBCHTypeInfo(e),u=0;u<15;u+=1){var f=!t&&1==(a>>u&1);u<6?o[u][8]=f:u<8?o[u+1][8]=f:o[i-15+u][8]=f}for(u=0;u<15;u+=1){f=!t&&1==(a>>u&1);u<8?o[8][i-u-1]=f:u<9?o[8][15-u-1+1]=f:o[8][15-u-1]=f}o[i-8][8]=!t},w=function(t,r){for(var e=-1,n=i-1,a=7,u=0,f=B.getMaskFunction(r),c=i-1;c>0;c-=2)for(6==c&&(c-=1);;){for(var g=0;g<2;g+=1)if(null==o[n][c-g]){var l=!1;u<t.length&&(l=1==(t[u]>>>a&1)),f(n,c-g)&&(l=!l),o[n][c-g]=l,-1==(a-=1)&&(u+=1,a=7)}if((n+=e)<0||i<=n){n-=e,e=-e;break}}},p=function(t,r,e){for(var n=A.getRSBlocks(t,r),o=b(),i=0;i<e.length;i+=1){var a=e[i];o.put(a.getMode(),4),o.put(a.getLength(),B.getLengthInBits(a.getMode(),t)),a.write(o)}var u=0;for(i=0;i<n.length;i+=1)u+=n[i].dataCount;if(o.getLengthInBits()>8*u)throw"code length overflow. ("+o.getLengthInBits()+">"+8*u+")";for(o.getLengthInBits()+4<=8*u&&o.put(0,4);o.getLengthInBits()%8!=0;)o.putBit(!1);for(;!(o.getLengthInBits()>=8*u||(o.put(236,8),o.getLengthInBits()>=8*u));)o.put(17,8);return function(t,r){for(var e=0,n=0,o=0,i=new Array(r.length),a=new Array(r.length),u=0;u<r.length;u+=1){var f=r[u].dataCount,c=r[u].totalCount-f;n=Math.max(n,f),o=Math.max(o,c),i[u]=new Array(f);for(var g=0;g<i[u].length;g+=1)i[u][g]=255&t.getBuffer()[g+e];e+=f;var l=B.getErrorCorrectPolynomial(c),h=k(i[u],l.getLength()-1).mod(l);for(a[u]=new Array(l.getLength()-1),g=0;g<a[u].length;g+=1){var s=g+h.getLength()-a[u].length;a[u][g]=s>=0?h.getAt(s):0}}var v=0;for(g=0;g<r.length;g+=1)v+=r[g].totalCount;var d=new Array(v),w=0;for(g=0;g<n;g+=1)for(u=0;u<r.length;u+=1)g<i[u].length&&(d[w]=i[u][g],w+=1);for(g=0;g<o;g+=1)for(u=0;u<r.length;u+=1)g<a[u].length&&(d[w]=a[u][g],w+=1);return d}(o,n)};f.addData=function(t,r){var e=null;switch(r=r||"Byte"){case"Numeric":e=M(t);break;case"Alphanumeric":e=x(t);break;case"Byte":e=m(t);break;case"Kanji":e=L(t);break;default:throw"mode:"+r}u.push(e),a=null},f.isDark=function(t,r){if(t<0||i<=t||r<0||i<=r)throw t+","+r;return o[t][r]},f.getModuleCount=function(){return i},f.make=function(){if(e<1){for(var t=1;t<40;t++){for(var r=A.getRSBlocks(t,n),o=b(),i=0;i<u.length;i++){var a=u[i];o.put(a.getMode(),4),o.put(a.getLength(),B.getLengthInBits(a.getMode(),t)),a.write(o)}var g=0;for(i=0;i<r.length;i++)g+=r[i].dataCount;if(o.getLengthInBits()<=8*g)break}e=t}c(!1,function(){for(var t=0,r=0,e=0;e<8;e+=1){c(!0,e);var n=B.getLostPoint(f);(0==e||t>n)&&(t=n,r=e)}return r}())},f.createTableTag=function(t,r){t=t||2;var e="";e+='<table style="',e+=" border-width: 0px; border-style: none;",e+=" border-collapse: collapse;",e+=" padding: 0px; margin: "+(r=void 0===r?4*t:r)+"px;",e+='">',e+="<tbody>";for(var n=0;n<f.getModuleCount();n+=1){e+="<tr>";for(var o=0;o<f.getModuleCount();o+=1)e+='<td style="',e+=" border-width: 0px; border-style: none;",e+=" border-collapse: collapse;",e+=" padding: 0px; margin: 0px;",e+=" width: "+t+"px;",e+=" height: "+t+"px;",e+=" background-color: ",e+=f.isDark(n,o)?"#000000":"#ffffff",e+=";",e+='"/>';e+="</tr>"}return e+="</tbody>",e+="</table>"},f.createSvgTag=function(t,r,e,n){var o={};"object"==typeof arguments[0]&&(t=(o=arguments[0]).cellSize,r=o.margin,e=o.alt,n=o.title),t=t||2,r=void 0===r?4*t:r,(e="string"==typeof e?{text:e}:e||{}).text=e.text||null,e.id=e.text?e.id||"qrcode-description":null,(n="string"==typeof n?{text:n}:n||{}).text=n.text||null,n.id=n.text?n.id||"qrcode-title":null;var i,a,u,c,g=f.getModuleCount()*t+2*r,l="";for(c="l"+t+",0 0,"+t+" -"+t+",0 0,-"+t+"z ",l+='<svg version="1.1" xmlns="http://www.w3.org/2000/svg"',l+=o.scalable?"":' width="'+g+'px" height="'+g+'px"',l+=' viewBox="0 0 '+g+" "+g+'" ',l+=' preserveAspectRatio="xMinYMin meet"',l+=n.text||e.text?' role="img" aria-labelledby="'+y([n.id,e.id].join(" ").trim())+'"':"",l+=">",l+=n.text?'<title id="'+y(n.id)+'">'+y(n.text)+"</title>":"",l+=e.text?'<description id="'+y(e.id)+'">'+y(e.text)+"</description>":"",l+='<rect width="100%" height="100%" fill="white" cx="0" cy="0"/>',l+='<path d="',a=0;a<f.getModuleCount();a+=1)for(u=a*t+r,i=0;i<f.getModuleCount();i+=1)f.isDark(a,i)&&(l+="M"+(i*t+r)+","+u+c);return l+='" stroke="transparent" fill="black"/>',l+="</svg>"},f.createDataURL=function(t,r){t=t||2,r=void 0===r?4*t:r;var e=f.getModuleCount()*t+2*r,n=r,o=e-r;return I(e,e,function(r,e){if(n<=r&&r<o&&n<=e&&e<o){var i=Math.floor((r-n)/t),a=Math.floor((e-n)/t);return f.isDark(a,i)?0:1}return 1})},f.createImgTag=function(t,r,e){t=t||2,r=void 0===r?4*t:r;var n=f.getModuleCount()*t+2*r,o="";return o+="<img",o+=' src="',o+=f.createDataURL(t,r),o+='"',o+=' width="',o+=n,o+='"',o+=' height="',o+=n,o+='"',e&&(o+=' alt="',o+=y(e),o+='"'),o+="/>"};var y=function(t){for(var r="",e=0;e<t.length;e+=1){var n=t.charAt(e);switch(n){case"<":r+="&lt;";break;case">":r+="&gt;";break;case"&":r+="&amp;";break;case'"':r+="&quot;";break;default:r+=n}}return r};return f.createASCII=function(t,r){if((t=t||1)<2)return function(t){t=void 0===t?2:t;var r,e,n,o,i,a=1*f.getModuleCount()+2*t,u=t,c=a-t,g={"██":"█","█ ":"▀"," █":"▄","  ":" "},l={"██":"▀","█ ":"▀"," █":" ","  ":" "},h="";for(r=0;r<a;r+=2){for(n=Math.floor((r-u)/1),o=Math.floor((r+1-u)/1),e=0;e<a;e+=1)i="█",u<=e&&e<c&&u<=r&&r<c&&f.isDark(n,Math.floor((e-u)/1))&&(i=" "),u<=e&&e<c&&u<=r+1&&r+1<c&&f.isDark(o,Math.floor((e-u)/1))?i+=" ":i+="█",h+=t<1&&r+1>=c?l[i]:g[i];h+="\n"}return a%2&&t>0?h.substring(0,h.length-a-1)+Array(a+1).join("▀"):h.substring(0,h.length-1)}(r);t-=1,r=void 0===r?2*t:r;var e,n,o,i,a=f.getModuleCount()*t+2*r,u=r,c=a-r,g=Array(t+1).join("██"),l=Array(t+1).join("  "),h="",s="";for(e=0;e<a;e+=1){for(o=Math.floor((e-u)/t),s="",n=0;n<a;n+=1)i=1,u<=n&&n<c&&u<=e&&e<c&&f.isDark(o,Math.floor((n-u)/t))&&(i=0),s+=i?g:l;for(o=0;o<t;o+=1)h+=s+"\n"}return h.substring(0,h.length-1)},f.renderTo2dContext=function(t,r){r=r||2;for(var e=f.getModuleCount(),n=0;n<e;n++)for(var o=0;o<e;o++)t.fillStyle=f.isDark(n,o)?"black":"white",t.fillRect(o*r,n*r,r,r)},f};t.stringToBytes=(t.stringToBytesFuncs={default:function(t){for(var r=[],e=0;e<t.length;e+=1){var n=t.charCodeAt(e);r.push(255&n)}return r}}).default,t.createStringToBytes=function(t,r){var e=function(){for(var e=S(t),n=function(){var t=e.read();if(-1==t)throw"eof";return t},o=0,i={};;){var a=e.read();if(-1==a)break;var u=n(),f=n()<<8|n();i[String.fromCharCode(a<<8|u)]=f,o+=1}if(o!=r)throw o+" != "+r;return i}(),n="?".charCodeAt(0);return function(t){for(var r=[],o=0;o<t.length;o+=1){var i=t.charCodeAt(o);if(i<128)r.push(i);else{var a=e[t.charAt(o)];"number"==typeof a?(255&a)==a?r.push(a):(r.push(a>>>8),r.push(255&a)):r.push(n)}}return r}};var r,e,n,o,i,a=1,u=2,f=4,c=8,g={L:1,M:0,Q:3,H:2},l=0,h=1,s=2,v=3,d=4,w=5,p=6,y=7,B=(r=[[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50],[6,30,54],[6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70],[6,26,50,74],[6,30,54,78],[6,30,56,82],[6,30,58,86],[6,34,62,90],[6,28,50,72,94],[6,26,50,74,98],[6,30,54,78,102],[6,28,54,80,106],[6,32,58,84,110],[6,30,58,86,114],[6,34,62,90,118],[6,26,50,74,98,122],[6,30,54,78,102,126],[6,26,52,78,104,130],[6,30,56,82,108,134],[6,34,60,86,112,138],[6,30,58,86,114,142],[6,34,62,90,118,146],[6,30,54,78,102,126,150],[6,24,50,76,102,128,154],[6,28,54,80,106,132,158],[6,32,58,84,110,136,162],[6,26,54,82,110,138,166],[6,30,58,86,114,142,170]],e=1335,n=7973,i=function(t){for(var r=0;0!=t;)r+=1,t>>>=1;return r},(o={}).getBCHTypeInfo=function(t){for(var r=t<<10;i(r)-i(e)>=0;)r^=e<<i(r)-i(e);return 21522^(t<<10|r)},o.getBCHTypeNumber=function(t){for(var r=t<<12;i(r)-i(n)>=0;)r^=n<<i(r)-i(n);return t<<12|r},o.getPatternPosition=function(t){return r[t-1]},o.getMaskFunction=function(t){switch(t){case l:return function(t,r){return(t+r)%2==0};case h:return function(t,r){return t%2==0};case s:return function(t,r){return r%3==0};case v:return function(t,r){return(t+r)%3==0};case d:return function(t,r){return(Math.floor(t/2)+Math.floor(r/3))%2==0};case w:return function(t,r){return t*r%2+t*r%3==0};case p:return function(t,r){return(t*r%2+t*r%3)%2==0};case y:return function(t,r){return(t*r%3+(t+r)%2)%2==0};default:throw"bad maskPattern:"+t}},o.getErrorCorrectPolynomial=function(t){for(var r=k([1],0),e=0;e<t;e+=1)r=r.multiply(k([1,C.gexp(e)],0));return r},o.getLengthInBits=function(t,r){if(1<=r&&r<10)switch(t){case a:return 10;case u:return 9;case f:case c:return 8;default:throw"mode:"+t}else if(r<27)switch(t){case a:return 12;case u:return 11;case f:return 16;case c:return 10;default:throw"mode:"+t}else{if(!(r<41))throw"type:"+r;switch(t){case a:return 14;case u:return 13;case f:return 16;case c:return 12;default:throw"mode:"+t}}},o.getLostPoint=function(t){for(var r=t.getModuleCount(),e=0,n=0;n<r;n+=1)for(var o=0;o<r;o+=1){for(var i=0,a=t.isDark(n,o),u=-1;u<=1;u+=1)if(!(n+u<0||r<=n+u))for(var f=-1;f<=1;f+=1)o+f<0||r<=o+f||0==u&&0==f||a==t.isDark(n+u,o+f)&&(i+=1);i>5&&(e+=3+i-5)}for(n=0;n<r-1;n+=1)for(o=0;o<r-1;o+=1){var c=0;t.isDark(n,o)&&(c+=1),t.isDark(n+1,o)&&(c+=1),t.isDark(n,o+1)&&(c+=1),t.isDark(n+1,o+1)&&(c+=1),0!=c&&4!=c||(e+=3)}for(n=0;n<r;n+=1)for(o=0;o<r-6;o+=1)t.isDark(n,o)&&!t.isDark(n,o+1)&&t.isDark(n,o+2)&&t.isDark(n,o+3)&&t.isDark(n,o+4)&&!t.isDark(n,o+5)&&t.isDark(n,o+6)&&(e+=40);for(o=0;o<r;o+=1)for(n=0;n<r-6;n+=1)t.isDark(n,o)&&!t.isDark(n+1,o)&&t.isDark(n+2,o)&&t.isDark(n+3,o)&&t.isDark(n+4,o)&&!t.isDark(n+5,o)&&t.isDark(n+6,o)&&(e+=40);var g=0;for(o=0;o<r;o+=1)for(n=0;n<r;n+=1)t.isDark(n,o)&&(g+=1);return e+=Math.abs(100*g/r/r-50)/5*10},o),C=function(){for(var t=new Array(256),r=new Array(256),e=0;e<8;e+=1)t[e]=1<<e;for(e=8;e<256;e+=1)t[e]=t[e-4]^t[e-5]^t[e-6]^t[e-8];for(e=0;e<255;e+=1)r[t[e]]=e;var n={glog:function(t){if(t<1)throw"glog("+t+")";return r[t]},gexp:function(r){for(;r<0;)r+=255;for(;r>=256;)r-=255;return t[r]}};return n}();function k(t,r){if(void 0===t.length)throw t.length+"/"+r;var e=function(){for(var e=0;e<t.length&&0==t[e];)e+=1;for(var n=new Array(t.length-e+r),o=0;o<t.length-e;o+=1)n[o]=t[o+e];return n}(),n={getAt:function(t){return e[t]},getLength:function(){return e.length},multiply:function(t){for(var r=new Array(n.getLength()+t.getLength()-1),e=0;e<n.getLength();e+=1)for(var o=0;o<t.getLength();o+=1)r[e+o]^=C.gexp(C.glog(n.getAt(e))+C.glog(t.getAt(o)));return k(r,0)},mod:function(t){if(n.getLength()-t.getLength()<0)return n;for(var r=C.glog(n.getAt(0))-C.glog(t.getAt(0)),e=new Array(n.getLength()),o=0;o<n.getLength();o+=1)e[o]=n.getAt(o);for(o=0;o<t.getLength();o+=1)e[o]^=C.gexp(C.glog(t.getAt(o))+r);return k(e,0).mod(t)}};return n}var A=function(){var t=[[1,26,19],[1,26,16],[1,26,13],[1,26,9],[1,44,34],[1,44,28],[1,44,22],[1,44,16],[1,70,55],[1,70,44],[2,35,17],[2,35,13],[1,100,80],[2,50,32],[2,50,24],[4,25,9],[1,134,108],[2,67,43],[2,33,15,2,34,16],[2,33,11,2,34,12],[2,86,68],[4,43,27],[4,43,19],[4,43,15],[2,98,78],[4,49,31],[2,32,14,4,33,15],[4,39,13,1,40,14],[2,121,97],[2,60,38,2,61,39],[4,40,18,2,41,19],[4,40,14,2,41,15],[2,146,116],[3,58,36,2,59,37],[4,36,16,4,37,17],[4,36,12,4,37,13],[2,86,68,2,87,69],[4,69,43,1,70,44],[6,43,19,2,44,20],[6,43,15,2,44,16],[4,101,81],[1,80,50,4,81,51],[4,50,22,4,51,23],[3,36,12,8,37,13],[2,116,92,2,117,93],[6,58,36,2,59,37],[4,46,20,6,47,21],[7,42,14,4,43,15],[4,133,107],[8,59,37,1,60,38],[8,44,20,4,45,21],[12,33,11,4,34,12],[3,145,115,1,146,116],[4,64,40,5,65,41],[11,36,16,5,37,17],[11,36,12,5,37,13],[5,109,87,1,110,88],[5,65,41,5,66,42],[5,54,24,7,55,25],[11,36,12,7,37,13],[5,122,98,1,123,99],[7,73,45,3,74,46],[15,43,19,2,44,20],[3,45,15,13,46,16],[1,135,107,5,136,108],[10,74,46,1,75,47],[1,50,22,15,51,23],[2,42,14,17,43,15],[5,150,120,1,151,121],[9,69,43,4,70,44],[17,50,22,1,51,23],[2,42,14,19,43,15],[3,141,113,4,142,114],[3,70,44,11,71,45],[17,47,21,4,48,22],[9,39,13,16,40,14],[3,135,107,5,136,108],[3,67,41,13,68,42],[15,54,24,5,55,25],[15,43,15,10,44,16],[4,144,116,4,145,117],[17,68,42],[17,50,22,6,51,23],[19,46,16,6,47,17],[2,139,111,7,140,112],[17,74,46],[7,54,24,16,55,25],[34,37,13],[4,151,121,5,152,122],[4,75,47,14,76,48],[11,54,24,14,55,25],[16,45,15,14,46,16],[6,147,117,4,148,118],[6,73,45,14,74,46],[11,54,24,16,55,25],[30,46,16,2,47,17],[8,132,106,4,133,107],[8,75,47,13,76,48],[7,54,24,22,55,25],[22,45,15,13,46,16],[10,142,114,2,143,115],[19,74,46,4,75,47],[28,50,22,6,51,23],[33,46,16,4,47,17],[8,152,122,4,153,123],[22,73,45,3,74,46],[8,53,23,26,54,24],[12,45,15,28,46,16],[3,147,117,10,148,118],[3,73,45,23,74,46],[4,54,24,31,55,25],[11,45,15,31,46,16],[7,146,116,7,147,117],[21,73,45,7,74,46],[1,53,23,37,54,24],[19,45,15,26,46,16],[5,145,115,10,146,116],[19,75,47,10,76,48],[15,54,24,25,55,25],[23,45,15,25,46,16],[13,145,115,3,146,116],[2,74,46,29,75,47],[42,54,24,1,55,25],[23,45,15,28,46,16],[17,145,115],[10,74,46,23,75,47],[10,54,24,35,55,25],[19,45,15,35,46,16],[17,145,115,1,146,116],[14,74,46,21,75,47],[29,54,24,19,55,25],[11,45,15,46,46,16],[13,145,115,6,146,116],[14,74,46,23,75,47],[44,54,24,7,55,25],[59,46,16,1,47,17],[12,151,121,7,152,122],[12,75,47,26,76,48],[39,54,24,14,55,25],[22,45,15,41,46,16],[6,151,121,14,152,122],[6,75,47,34,76,48],[46,54,24,10,55,25],[2,45,15,64,46,16],[17,152,122,4,153,123],[29,74,46,14,75,47],[49,54,24,10,55,25],[24,45,15,46,46,16],[4,152,122,18,153,123],[13,74,46,32,75,47],[48,54,24,14,55,25],[42,45,15,32,46,16],[20,147,117,4,148,118],[40,75,47,7,76,48],[43,54,24,22,55,25],[10,45,15,67,46,16],[19,148,118,6,149,119],[18,75,47,31,76,48],[34,54,24,34,55,25],[20,45,15,61,46,16]],r=function(t,r){var e={};return e.totalCount=t,e.dataCount=r,e},e={};return e.getRSBlocks=function(e,n){var o=function(r,e){switch(e){case g.L:return t[4*(r-1)+0];case g.M:return t[4*(r-1)+1];case g.Q:return t[4*(r-1)+2];case g.H:return t[4*(r-1)+3];default:return}}(e,n);if(void 0===o)throw"bad rs block @ typeNumber:"+e+"/errorCorrectionLevel:"+n;for(var i=o.length/3,a=[],u=0;u<i;u+=1)for(var f=o[3*u+0],c=o[3*u+1],l=o[3*u+2],h=0;h<f;h+=1)a.push(r(c,l));return a},e}(),b=function(){var t=[],r=0,e={getBuffer:function(){return t},getAt:function(r){var e=Math.floor(r/8);return 1==(t[e]>>>7-r%8&1)},put:function(t,r){for(var n=0;n<r;n+=1)e.putBit(1==(t>>>r-n-1&1))},getLengthInBits:function(){return r},putBit:function(e){var n=Math.floor(r/8);t.length<=n&&t.push(0),e&&(t[n]|=128>>>r%8),r+=1}};return e},M=function(t){var r=a,e=t,n={getMode:function(){return r},getLength:function(t){return e.length},write:function(t){for(var r=e,n=0;n+2<r.length;)t.put(o(r.substring(n,n+3)),10),n+=3;n<r.length&&(r.length-n==1?t.put(o(r.substring(n,n+1)),4):r.length-n==2&&t.put(o(r.substring(n,n+2)),7))}},o=function(t){for(var r=0,e=0;e<t.length;e+=1)r=10*r+i(t.charAt(e));return r},i=function(t){if("0"<=t&&t<="9")return t.charCodeAt(0)-"0".charCodeAt(0);throw"illegal char :"+t};return n},x=function(t){var r=u,e=t,n={getMode:function(){return r},getLength:function(t){return e.length},write:function(t){for(var r=e,n=0;n+1<r.length;)t.put(45*o(r.charAt(n))+o(r.charAt(n+1)),11),n+=2;n<r.length&&t.put(o(r.charAt(n)),6)}},o=function(t){if("0"<=t&&t<="9")return t.charCodeAt(0)-"0".charCodeAt(0);if("A"<=t&&t<="Z")return t.charCodeAt(0)-"A".charCodeAt(0)+10;switch(t){case" ":return 36;case"$":return 37;case"%":return 38;case"*":return 39;case"+":return 40;case"-":return 41;case".":return 42;case"/":return 43;case":":return 44;default:throw"illegal char :"+t}};return n},m=function(r){var e=f,n=t.stringToBytes(r),o={getMode:function(){return e},getLength:function(t){return n.length},write:function(t){for(var r=0;r<n.length;r+=1)t.put(n[r],8)}};return o},L=function(r){var e=c,n=t.stringToBytesFuncs.SJIS;if(!n)throw"sjis not supported.";!function(){var t=n("友");if(2!=t.length||38726!=(t[0]<<8|t[1]))throw"sjis not supported."}();var o=n(r),i={getMode:function(){return e},getLength:function(t){return~~(o.length/2)},write:function(t){for(var r=o,e=0;e+1<r.length;){var n=(255&r[e])<<8|255&r[e+1];if(33088<=n&&n<=40956)n-=33088;else{if(!(57408<=n&&n<=60351))throw"illegal char at "+(e+1)+"/"+n;n-=49472}n=192*(n>>>8&255)+(255&n),t.put(n,13),e+=2}if(e<r.length)throw"illegal char at "+(e+1)}};return i},D=function(){var t=[],r={writeByte:function(r){t.push(255&r)},writeShort:function(t){r.writeByte(t),r.writeByte(t>>>8)},writeBytes:function(t,e,n){e=e||0,n=n||t.length;for(var o=0;o<n;o+=1)r.writeByte(t[o+e])},writeString:function(t){for(var e=0;e<t.length;e+=1)r.writeByte(t.charCodeAt(e))},toByteArray:function(){return t},toString:function(){var r="";r+="[";for(var e=0;e<t.length;e+=1)e>0&&(r+=","),r+=t[e];return r+="]"}};return r},S=function(t){var r=t,e=0,n=0,o=0,i={read:function(){for(;o<8;){if(e>=r.length){if(0==o)return-1;throw"unexpected end of file./"+o}var t=r.charAt(e);if(e+=1,"="==t)return o=0,-1;t.match(/^\s$/)||(n=n<<6|a(t.charCodeAt(0)),o+=6)}var i=n>>>o-8&255;return o-=8,i}},a=function(t){if(65<=t&&t<=90)return t-65;if(97<=t&&t<=122)return t-97+26;if(48<=t&&t<=57)return t-48+52;if(43==t)return 62;if(47==t)return 63;throw"c:"+t};return i},I=function(t,r,e){for(var n=function(t,r){var e=t,n=r,o=new Array(t*r),i={setPixel:function(t,r,n){o[r*e+t]=n},write:function(t){t.writeString("GIF87a"),t.writeShort(e),t.writeShort(n),t.writeByte(128),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(255),t.writeByte(255),t.writeByte(255),t.writeString(","),t.writeShort(0),t.writeShort(0),t.writeShort(e),t.writeShort(n),t.writeByte(0);var r=a(2);t.writeByte(2);for(var o=0;r.length-o>255;)t.writeByte(255),t.writeBytes(r,o,255),o+=255;t.writeByte(r.length-o),t.writeBytes(r,o,r.length-o),t.writeByte(0),t.writeString(";")}},a=function(t){for(var r=1<<t,e=1+(1<<t),n=t+1,i=u(),a=0;a<r;a+=1)i.add(String.fromCharCode(a));i.add(String.fromCharCode(r)),i.add(String.fromCharCode(e));var f,c,g,l=D(),h=(f=l,c=0,g=0,{write:function(t,r){if(t>>>r!=0)throw"length over";for(;c+r>=8;)f.writeByte(255&(t<<c|g)),r-=8-c,t>>>=8-c,g=0,c=0;g|=t<<c,c+=r},flush:function(){c>0&&f.writeByte(g)}});h.write(r,n);var s=0,v=String.fromCharCode(o[s]);for(s+=1;s<o.length;){var d=String.fromCharCode(o[s]);s+=1,i.contains(v+d)?v+=d:(h.write(i.indexOf(v),n),i.size()<4095&&(i.size()==1<<n&&(n+=1),i.add(v+d)),v=d)}return h.write(i.indexOf(v),n),h.write(e,n),h.flush(),l.toByteArray()},u=function(){var t={},r=0,e={add:function(n){if(e.contains(n))throw"dup key:"+n;t[n]=r,r+=1},size:function(){return r},indexOf:function(r){return t[r]},contains:function(r){return void 0!==t[r]}};return e};return i}(t,r),o=0;o<r;o+=1)for(var i=0;i<t;i+=1)n.setPixel(i,o,e(i,o));var a=D();n.write(a);for(var u=function(){var t=0,r=0,e=0,n="",o={},i=function(t){n+=String.fromCharCode(a(63&t))},a=function(t){if(t<0);else{if(t<26)return 65+t;if(t<52)return t-26+97;if(t<62)return t-52+48;if(62==t)return 43;if(63==t)return 47}throw"n:"+t};return o.writeByte=function(n){for(t=t<<8|255&n,r+=8,e+=1;r>=6;)i(t>>>r-6),r-=6},o.flush=function(){if(r>0&&(i(t<<6-r),t=0,r=0),e%3!=0)for(var o=3-e%3,a=0;a<o;a+=1)n+="="},o.toString=function(){return n},o}(),f=a.toByteArray(),c=0;c<f.length;c+=1)u.writeByte(f[c]);return u.flush(),"data:image/gif;base64,"+u};return t}();qrcode.stringToBytesFuncs["UTF-8"]=function(t){return function(t){for(var r=[],e=0;e<t.length;e++){var n=t.charCodeAt(e);n<128?r.push(n):n<2048?r.push(192|n>>6,128|63&n):n<55296||n>=57344?r.push(224|n>>12,128|n>>6&63,128|63&n):(e++,n=65536+((1023&n)<<10|1023&t.charCodeAt(e)),r.push(240|n>>18,128|n>>12&63,128|n>>6&63,128|63&n))}return r}(t)},function(t){"function"==typeof define&&define.amd?define([],t):"object"==typeof exports&&(module.exports=t())}(function(){return qrcode});
+</script>
+<script>
+/*LOGIC-START*/
+const ROUNDS=8;
+const RANKLIST=['150','2305','41','248','2509','12','130','57','356','333','2633','127','2641','2250','96','2','66','97','26','153','8','251','252','238','275','2599','194','258','158','245','84','222','2608','2390','235','142','61'];
+const CURSE_TID='2253';
+function rankOf(tid){const i=RANKLIST.indexOf(String(tid));return i<0?0:i+1}
+function snakeSeq(order,rounds){rounds=rounds||ROUNDS;const out=[];for(let r=0;r<rounds;r++){const L=order.length;for(let i=0;i<L;i++){const col=r%2?L-1-i:i;out.push({n:r*L+i+1,round:r+1,owner:order[col],col})}}return out}
+function totalPicks(st){return st.order.length*ROUNDS}
+function slot(st,n){const L=st.order.length;if(n<1||n>L*ROUNDS)return null;const r=Math.floor((n-1)/L),i=(n-1)%L,col=r%2?L-1-i:i;return{n,round:r+1,owner:st.order[col],col}}
+function onClock(st){return st.status==='live'?slot(st,st.picks.length+1):null}
+function takenMap(st){const m={};st.picks.forEach(p=>m[p.tid]=p);return m}
+function ownerCount(st,owner){return st.picks.filter(p=>p.owner===owner).length}
+function defaultState(order){return{version:0,order:order.slice(),picks:[],status:'setup',mode:'test',updated:new Date().toISOString(),clockSecs:0,deadline:null,paused:false,pausedLeft:null,auto:{},queues:{}}}
+function normalizeState(d,ownerNames){const base=defaultState(ownerNames);if(!d||typeof d!=='object'||Array.isArray(d))return base;
+  const st=Object.assign(base,d);
+  const okOrder=Array.isArray(st.order)&&st.order.length===ownerNames.length&&ownerNames.every(o=>st.order.indexOf(o)>=0);
+  if(!okOrder)st.order=ownerNames.slice();
+  if(!Array.isArray(st.picks))st.picks=[];
+  if(['setup','live','done'].indexOf(st.status)<0)st.status='setup';
+  if(!st.auto||typeof st.auto!=='object')st.auto={};
+  if(!st.queues||typeof st.queues!=='object')st.queues={};
+  st.clockSecs=+st.clockSecs||0;st.paused=!!st.paused;st.mode='test';
+  st.version=+st.version||0;
+  return st}
+function validatePick(st,owner,tid,opt){opt=opt||{};
+  if(st.status!=='live')return{error:'The draft is not live right now.'};
+  if(st.paused)return{error:'The draft is paused.'};
+  const s=onClock(st);if(!s)return{error:'No pick is on the clock.'};
+  if(opt.pool&&!opt.pool.has(String(tid)))return{error:'That team is not in the draft pool.'};
+  const t=takenMap(st)[tid];if(t)return{error:'That team was already taken by '+t.owner+' (pick #'+t.n+').',taken:t};
+  if(owner!==s.owner)return{error:'It is '+s.owner+"'s turn (pick #"+s.n+'), not '+owner+"'s.",turn:true};
+  if(ownerCount(st,owner)>=ROUNDS)return{error:owner+' already has '+ROUNDS+' teams.'};
+  return{ok:true,slot:s}}
+function clone(o){return JSON.parse(JSON.stringify(o))}
+function applyPick(st,owner,tid,opt){opt=opt||{};const v=validatePick(st,owner,tid,opt);if(v.error)return v;
+  const now=opt.now||Date.now();const ns=clone(st);const p={n:v.slot.n,round:v.slot.round,owner,tid:String(tid),ts:now};
+  if(opt.auto)p.auto=true;if(opt.sim)p.sim=true;ns.picks.push(p);
+  if(ns.picks.length>=totalPicks(ns)){ns.status='done';ns.deadline=null;ns.pausedLeft=null;ns.paused=false}
+  else{ns.deadline=ns.clockSecs?now+ns.clockSecs*1000:null}
+  return{state:ns,pick:p}}
+function undoLast(st,now){if(!st.picks.length)return{error:'Nothing to undo.'};now=now||Date.now();const ns=clone(st);const p=ns.picks.pop();ns.status='live';
+  if(ns.paused){ns.pausedLeft=ns.clockSecs?ns.clockSecs*1000:null;ns.deadline=null}else ns.deadline=ns.clockSecs?now+ns.clockSecs*1000:null;return{state:ns,undone:p}}
+function startDraft(st,now){if(st.status!=='setup')return{error:'The draft already started.'};now=now||Date.now();const ns=clone(st);ns.status='live';ns.paused=false;ns.pausedLeft=null;ns.startedAt=now;ns.deadline=ns.clockSecs?now+ns.clockSecs*1000:null;return{state:ns}}
+function setPause(st,pause,now){if(st.status!=='live')return{error:'Draft is not live.'};now=now||Date.now();const ns=clone(st);
+  if(pause){if(ns.paused)return{error:'Already paused.'};ns.paused=true;ns.pausedLeft=ns.deadline?Math.max(0,ns.deadline-now):null;ns.deadline=null}
+  else{if(!ns.paused)return{error:'Not paused.'};ns.paused=false;ns.deadline=ns.clockSecs?now+(ns.pausedLeft!=null?ns.pausedLeft:ns.clockSecs*1000):null;ns.pausedLeft=null}
+  return{state:ns}}
+function setClock(st,secs,now){now=now||Date.now();const ns=clone(st);ns.clockSecs=+secs||0;
+  if(ns.status==='live'){if(ns.paused)ns.pausedLeft=ns.clockSecs?ns.clockSecs*1000:null;else ns.deadline=ns.clockSecs?now+ns.clockSecs*1000:null}return{state:ns}}
+function picksAway(st,owner){if(st.status!=='live')return null;const cur=st.picks.length+1,tot=totalPicks(st);for(let n=cur;n<=tot;n++){const s=slot(st,n);if(s.owner===owner)return n-cur}return null}
+function nextPickNo(st,owner){const a=picksAway(st,owner);return a==null?null:st.picks.length+1+a}
+function autoReason(st,now,graceMs){const s=onClock(st);if(!s||st.paused)return null;if(st.auto&&st.auto[s.owner])return'auto';
+  if(st.clockSecs&&st.deadline&&now>st.deadline+(graceMs||0))return'expired';return null}
+function autoChoice(st,owner,poolArr,rng){const taken=takenMap(st);const q=(st.queues&&st.queues[owner])||[];
+  for(const t of q)if(!taken[t]&&poolArr.indexOf(String(t))>=0)return{tid:String(t),from:'queue'};
+  const avail=poolArr.filter(t=>!taken[t]);if(!avail.length)return null;
+  const ranked=avail.filter(t=>rankOf(t)>0).sort((a,b)=>rankOf(a)-rankOf(b));
+  if(ranked.length)return{tid:ranked[0],from:'rank'};
+  rng=rng||Math.random;return{tid:avail[Math.floor(rng()*avail.length)],from:'random'}}
+function toggleQueue(st,owner,tid){const ns=clone(st);ns.queues=ns.queues||{};const q=(ns.queues[owner]=ns.queues[owner]||[]);const i=q.indexOf(String(tid));if(i>=0)q.splice(i,1);else q.push(String(tid));return{state:ns}}
+function moveQueue(st,owner,tid,dir){const ns=clone(st);const q=ns.queues[owner]||[];const i=q.indexOf(String(tid));const j=i+dir;if(i<0||j<0||j>=q.length)return{error:'cannot move'};[q[i],q[j]]=[q[j],q[i]];ns.queues[owner]=q;return{state:ns}}
+function shuffled(a,rng){a=a.slice();rng=rng||Math.random;for(let i=a.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function moveOrder(st,owner,dir){if(st.status!=='setup'||st.picks.length)return{error:'Order is locked once the draft starts.'};const ns=clone(st);const i=ns.order.indexOf(owner),j=i+dir;if(i<0||j<0||j>=ns.order.length)return{error:'cannot move'};[ns.order[i],ns.order[j]]=[ns.order[j],ns.order[i]];return{state:ns}}
+/* ---------- chat ---------- */
+const CHAT_CAP=100;
+function normChat(d){const c=(d&&typeof d==='object'&&!Array.isArray(d))?d:{};if(!Array.isArray(c.msgs))c.msgs=[];c.version=+c.version||0;return c}
+function addMsg(c,msg){const n=clone(c);n.msgs.push(msg);if(n.msgs.length>CHAT_CAP)n.msgs=n.msgs.slice(-CHAT_CAP);return n}
+function toggleReact(c,id,emoji,who){const n=clone(c);const m=n.msgs.find(x=>x.id===id);if(!m)return{error:'message gone'};m.r=m.r||{};const a=(m.r[emoji]=m.r[emoji]||[]);const i=a.indexOf(who);if(i>=0)a.splice(i,1);else a.push(who);if(!a.length)delete m.r[emoji];return{state:n}}
+/* ---------- humor ---------- */
+const ROAST={
+curse:["{o} just drafted {t}. The Grand Canyon curse has entered the chat. 🏜️","{t}?! Bold. The curse of the Canyon rides at dawn.","A desert wind just whispered '{o}…'. Grand Canyon curse: ACTIVE.","{o} took {t}. We'll check on the curse at the Final Four. If we get there.","Condolences in advance to {o}. The Canyon is gonna Canyon."],
+steal:["{o} snagging {t} at #{n}?? That's a STEAL.","Highway robbery: {t} at pick {n}. {o} brought a ski mask.","{t} at #{n} is a gift. {o} says thanks; everyone else says 'oops'.","Somebody check {o}'s pockets. {t} that late is theft.","You all let {t} slide to #{n}? {o} is laughing."],
+reach:["{o} grabbed {t} at #{n}. Reach? Maybe. Confidence? Definitely.","Interesting: {t} at #{n}. {o} sees something the rankings don't. Or doesn't.","{o} reached for {t} like it was the last slice of pizza.","Bold: {t} at #{n}. The spreadsheet is crying.","{t} that early? {o} had better be right.","We'll call {t} at #{n} a 'conviction pick'. Time will tell."],
+fair:["{o} takes {t}. Solid. Boring. Respectable.","{t} at #{n}: fair price, no notes.","{o} goes with {t}. The {m} are in good hands. Probably.","Chalk-ish pick from {o}. {t} fits right about here.","{o} → {t}. Nobody's mad. Nobody's thrilled.","Pick {n}: {t}. A perfectly cromulent decision."],
+dart:["{o} throws a dart and hits {t}. Respect the chaos.","Deep cut alert: {t} at #{n}. {o} reads the fine print.","{o} drafting {t}? Mid-major energy. We love to see it.","Nobody saw {t} coming. Least of all {o}'s opponents.","{t} at #{n}: either genius or a typo. {o} isn't saying."],
+auto:["The robots picked {t} for {o}. {o} was busy. Or asleep. Or both.","Auto-pick: {t} for {o}. The clock ran out; the vibes did not.","{o} was away from the keyboard, so {t} it is. No take-backs (ask the commish).","Autopilot engaged: {o} now owns {t}. Hope you like it!"],
+first:["#1 overall: {t} to {o}. History starts now.","And we're off! {o} kicks things off with {t}."],
+last:["Last pick of the draft: {t} to {o}. Mr. Irrelevant energy. 🎉","{o} closes the book with {t}. That's a wrap!"]};
+function verdictFor(n,tid){if(String(tid)===CURSE_TID)return'curse';const r=rankOf(tid);
+  if(r){const d=n-r;if(d>=10)return'steal';if(d<=-10)return'reach';return'fair'}
+  if(n<=24)return'reach';if(n>=33)return'dart';return'fair'}
+function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function fillTpl(s,v){return s.replace(/\{(\w)\}/g,(_,k)=>v[k]==null?'':v[k])}
+function pickCategory(p,total){if(String(p.tid)===CURSE_TID)return'curse';if(p.n===1)return'first';if(p.n===total)return'last';if(p.auto)return'auto';return verdictFor(p.n,p.tid)}
+/* returns [{n,cat,line}] ; deterministic; never the same line twice in a row */
+function roasts(picks,teamInfo,total){const out=[];let prev='';
+  picks.forEach(p=>{const cat=pickCategory(p,total);const pool=ROAST[cat];const rng=mulberry(p.n*7919+(parseInt(p.tid,10)||1));
+    let cands=pool.filter(l=>l!==prev);if(!cands.length)cands=pool;const tpl=cands[Math.floor(rng()*cands.length)];prev=tpl;
+    const ti=teamInfo(p.tid)||{};out.push({n:p.n,cat,line:fillTpl(tpl,{o:p.owner,t:ti.short||ti.name||p.tid,m:ti.mascot||'squad',n:p.n})})});return out}
+function rotPick(pool,last,rng){let c=pool.filter(l=>l!==last);if(!c.length)c=pool;return c[Math.floor((rng||Math.random)()*c.length)]}
+/* ---------- recap ---------- */
+function ownerStats(st,owner){const mine=st.picks.filter(p=>p.owner===owner);let steals=0,reaches=0,unr=0,top10=0,sum=0,rc=0,curse=false;
+  mine.forEach(p=>{const v=verdictFor(p.n,p.tid);if(v==='steal')steals++;if(v==='reach')reaches++;if(String(p.tid)===CURSE_TID)curse=true;const r=rankOf(p.tid);if(r){rc++;sum+=r;if(r<=10)top10++}else unr++});
+  return{owner,n:mine.length,steals,reaches,unranked:unr,top10,avgRank:rc?Math.round(sum/rc*10)/10:null,curse}}
+const FALLBACK_HEADS=[['Beige Flag Energy 🟫','Perfectly balanced. Suspiciously reasonable.'],['Vibes-Only Strategist ✨','Spreadsheet? Never heard of her.'],['Agent of Chaos 🌀','Nobody, including the owner, knows the plan.'],['Quiet Menace 🤫','Draft looks calm. Looks.'],['Certified Gambler 🎰','The odds? Unclear. The confidence? Immense.'],['Mystery Box 📦','We\'ll find out in March.'],['The Dark Horse 🐎','Too boring to hate. Too decent to ignore.'],['Last-Place Insurance 🛟','Has a backup plan for the backup plan.']];
+const AWARDS=[
+ {k:'curse',test:s=>s.curse,score:s=>1,head:'Grand Canyon Survivor 🏜️',line:'Drafted the cursed one on purpose. Respect, or a cry for help.'},
+ {k:'chalk',test:s=>s.top10>=2,score:s=>s.top10*100-(s.avgRank||99),head:'Chalk Merchant 🧈',line:s=>s.top10+' top-10 teams. Bold strategy: take the good ones.'},
+ {k:'cinderella',test:s=>s.unranked>=4,score:s=>s.unranked,head:'Cinderella Hunter 👠',line:s=>s.unranked+' off-the-radar teams. Glass slipper not included.'},
+ {k:'steal',test:s=>s.steals>=1,score:s=>s.steals,head:'Grand Larceny 🕵️',line:s=>s.steals+' steal'+(s.steals>1?'s':'')+'. Lock your doors.'},
+ {k:'reach',test:s=>s.reaches>=1,score:s=>s.reaches,head:'Reach Champion 🏆',line:s=>s.reaches+' reach'+(s.reaches>1?'es':'')+'. Stretch goals are a lifestyle.'}];
+function recap(st){const stats=st.order.map(o=>ownerStats(st,o));const res={};const used={};
+  AWARDS.forEach(a=>{const c=stats.filter(s=>!res[s.owner]&&a.test(s)).sort((x,y)=>a.score(y)-a.score(x))[0];if(c){res[c.owner]={head:a.head,line:typeof a.line==='function'?a.line(c):a.line,stats:c}}});
+  let fi=0;stats.forEach(s=>{if(!res[s.owner]){const f=FALLBACK_HEADS[fi++%FALLBACK_HEADS.length];res[s.owner]={head:f[0],line:f[1],stats:s}}});return res}
+
+/* =====================================================================
+   HARDENING LAYER (draft room v2): append-only pick log, derived state,
+   passcode, server-time offset, team-list views.  All pure / testable.
+   ===================================================================== */
+/* ---------- server time offset (from a same-origin HTTP Date header) ---------- */
+/* textdb.dev sends an empty Access-Control-Expose-Headers, so JS cannot read ITS Date header; the page's own origin can be read. */
+function offsetFromDate(dateHdr,t0,t1){const d=Date.parse(dateHdr);if(!isFinite(d))return null;
+  /* Date has 1 s resolution: the true time is in [d, d+1000); use the middle, minus half the round trip */
+  const mid=(t0+t1)/2;return Math.round(d+500-mid)}
+function sane(off){return typeof off==='number'&&isFinite(off)&&Math.abs(off)<=24*3600*1000}
+/* ---------- passcode (friendly lock, NOT security) ---------- */
+function randHex(n,rng){let s='';rng=rng||(()=>{try{const a=new Uint8Array(n);globalThis.crypto.getRandomValues(a);let i=0;return()=>a[i++%n]/256}catch(e){return Math.random}})();for(let i=0;i<n;i++)s+=Math.floor(rng()*16).toString(16);return s}
+async function sha256Hex(str){const c=globalThis.crypto;if(!c||!c.subtle)throw new Error('nosubtle');const b=await c.subtle.digest('SHA-256',new TextEncoder().encode(str));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')}
+async function makePass(pass,salt){salt=salt||randHex(16);return{salt,hash:await sha256Hex(salt+':'+String(pass))}}
+function passOk(p){return typeof p==='string'&&p.trim().length>=4&&p.length<=64}
+async function checkPass(meta,pass){if(!meta||!meta.pass)return false;try{return(await sha256Hex(meta.pass.salt+':'+String(pass)))===meta.pass.hash}catch(e){return false}}
+function isUnlocked(meta,token){return!!(meta&&meta.pass&&token&&token===meta.pass.hash)}
+/* ---------- room keys ---------- */
+function slug(s){return String(s).toLowerCase().replace(/[^a-z0-9]+/g,'')||'x'}
+function pickKey(base,epoch,n){return base+'-e'+epoch+'-p'+n}
+function prefKey(base,owner){return base+'-u-'+slug(owner)}
+/* ---------- meta (commissioner-controlled doc) ---------- */
+function defaultMeta(order){return{v:2,version:0,epoch:1,order:order.slice(),status:'setup',mode:'test',clockSecs:0,paused:false,pausedLeft:null,startedAt:null,resumeAt:null,voided:[],pass:null,updated:new Date().toISOString()}}
+function normalizeMeta(d,ownerNames){const m=Object.assign(defaultMeta(ownerNames),(d&&typeof d==='object'&&!Array.isArray(d))?d:{});
+  const okOrder=Array.isArray(m.order)&&m.order.length===ownerNames.length&&ownerNames.every(o=>m.order.indexOf(o)>=0);if(!okOrder)m.order=ownerNames.slice();
+  m.epoch=Math.max(1,+m.epoch||1);m.version=+m.version||0;m.clockSecs=+m.clockSecs||0;m.paused=!!m.paused;m.mode='test';
+  if(['setup','live'].indexOf(m.status)<0)m.status=(m.status==='done'?'live':'setup');
+  if(!Array.isArray(m.voided))m.voided=[];m.voided=m.voided.slice(-300);
+  if(!(m.pass&&typeof m.pass.salt==='string'&&typeof m.pass.hash==='string'))m.pass=null;
+  delete m.picks;delete m.queues;delete m.auto;delete m.deadline;return m}
+/* ---------- pick entries and replay ---------- */
+function makeEntry(n,owner,tid,o){o=o||{};const by=o.by||'owner';
+  return{id:o.id||((by==='auto')?('a'+o.epoch+'-'+n+'-'+tid):(Math.random().toString(36).slice(2,10)+n)),n,owner,tid:String(tid),ts:o.now,by,w:o.writer||'?',e:o.epoch}}
+function parseEntry(txt){if(!txt||!String(txt).trim())return null;try{let d=JSON.parse(txt);if(typeof d==='string')d=JSON.parse(d);
+  if(d&&typeof d==='object'&&typeof d.id==='string'&&+d.n>0&&typeof d.owner==='string'&&d.tid!=null){d.tid=String(d.tid);d.n=+d.n;return d}}catch(e){}return null}
+/* why is entry e NOT valid for slot n given already-accepted picks? returns null if valid */
+function entryProblem(meta,e,n,taken,pool){if(!e)return'empty';if(meta.voided.indexOf(e.id)>=0)return'voided';if(e.n!==n)return'wrong-slot';
+  if(e.e!=null&&+e.e!==meta.epoch)return'old-epoch';
+  const sl=slot({order:meta.order},n);if(!sl)return'beyond';if(e.owner!==sl.owner)return'wrong-owner';
+  if(pool&&!pool.has(e.tid))return'not-in-pool';if(taken[e.tid])return'duplicate-team';return null}
+/* state = longest valid prefix of the log. entries: {n: entry|null}. rejected: [{n,entry,why}] for entries seen but not accepted */
+function replay(meta,entries,pool){const picks=[],taken={},rejected=[];const tot=meta.order.length*ROUNDS;
+  for(let n=1;n<=tot;n++){const e=entries[n];if(!e)break;const why=entryProblem(meta,e,n,taken,pool);
+    if(why){if(why!=='voided'&&why!=='old-epoch')rejected.push({n,entry:e,why});break}
+    const sl=slot({order:meta.order},n);picks.push({n,round:sl.round,owner:e.owner,tid:e.tid,ts:e.ts,id:e.id,auto:e.by==='auto'||undefined,sim:e.by==='sim'||undefined,by:e.by});taken[e.tid]=1}
+  return{picks,rejected}}
+function deadlineOf(meta,picks){if(meta.status!=='live'||meta.paused||!meta.clockSecs)return null;if(picks.length>=meta.order.length*ROUNDS)return null;
+  const base=Math.max(picks.length?(+picks[picks.length-1].ts||0):(+meta.startedAt||0),+meta.resumeAt||0);return base?base+meta.clockSecs*1000:null}
+/* derive the same state shape the UI always used */
+function deriveState(meta,entries,prefs,pool){const r=replay(meta,entries,pool);const st=defaultState(meta.order);
+  st.version=meta.version;st.updated=meta.updated;st.order=meta.order.slice();st.picks=r.picks;st.clockSecs=meta.clockSecs;st.paused=meta.paused;st.pausedLeft=meta.pausedLeft;st.startedAt=meta.startedAt;
+  st.status=meta.status==='live'&&r.picks.length>=meta.order.length*ROUNDS?'done':meta.status;st.deadline=deadlineOf(meta,r.picks);
+  st.auto={};st.queues={};Object.keys(prefs||{}).forEach(o=>{const p=prefs[o]||{};st.auto[o]=!!p.auto;st.queues[o]=Array.isArray(p.queue)?p.queue.map(String):[]});
+  st.pass=meta.pass;st.epoch=meta.epoch;st.rejected=r.rejected;return st}
+/* the outcome of OUR attempt: 'landed' | 'beaten' (someone else holds the slot) | 'missing' (write did not stick) */
+function claimOutcome(slotEntry,mine,meta){if(!slotEntry||(meta&&meta.voided.indexOf(slotEntry.id)>=0))return'missing';return slotEntry.id===mine.id?'landed':'beaten'}
+/* may we write into this slot right now? existing = parsed entry currently in the key */
+function slotWritable(meta,existing,n,taken,pool){return!existing||entryProblem(meta,existing,n,taken||{},pool)!==null}
+/* ---------- commissioner actions on meta (pure) ---------- */
+function mStart(m,now){if(m.status!=='setup')return{error:'The draft already started.'};const n=clone(m);n.status='live';n.paused=false;n.pausedLeft=null;n.startedAt=now;n.resumeAt=now;return{state:n}}
+function mPause(m,st,pause,now){if(m.status!=='live'||st.status==='done')return{error:'Draft is not live.'};const n=clone(m);
+  if(pause){if(n.paused)return{error:'Already paused.'};n.paused=true;n.pausedLeft=st.deadline?Math.max(0,st.deadline-now):null}
+  else{if(!n.paused)return{error:'Not paused.'};n.paused=false;n.resumeAt=n.clockSecs&&n.pausedLeft!=null?now-(n.clockSecs*1000-n.pausedLeft):now;n.pausedLeft=null}return{state:n}}
+function mUndo(m,st,expectN,now){if(!st.picks.length)return{error:'Nothing to undo.'};const last=st.picks[st.picks.length-1];
+  if(expectN!=null&&last.n!==expectN)return{error:'The board changed — look again before undoing.'};const n=clone(m);n.voided.push(last.id);n.status='live';n.resumeAt=now;
+  if(n.paused)n.pausedLeft=n.clockSecs?n.clockSecs*1000:null;return{state:n,undone:last}}
+function mClock(m,secs,now){const n=clone(m);n.clockSecs=+secs||0;n.resumeAt=now;if(n.paused)n.pausedLeft=n.clockSecs?n.clockSecs*1000:null;return{state:n}}
+function mOrder(m,st,owner,dir){if(m.status!=='setup'||st.picks.length)return{error:'Order is locked once the draft starts.'};const n=clone(m);const i=n.order.indexOf(owner),j=i+dir;if(i<0||j<0||j>=n.order.length)return{error:'cannot move'};[n.order[i],n.order[j]]=[n.order[j],n.order[i]];return{state:n}}
+function mRandom(m,st,rng){if(m.status!=='setup'||st.picks.length)return{error:'Order is locked once the draft starts.'};const n=clone(m);n.order=shuffled(m.order,rng);return{state:n}}
+/* reset = new epoch: old pick keys are simply never read again (nothing is deleted); passcode kept */
+function mReset(m){const n=defaultMeta(m.order);n.epoch=m.epoch+1;n.clockSecs=m.clockSecs;n.pass=m.pass;n.version=m.version;return{state:n}}
+function mSetPass(m,pass,requireEmpty){if(requireEmpty&&m.pass)return{error:'A commissioner passcode is already set.'};const n=clone(m);n.pass=pass;return{state:n}}
+/* ---------- chat merge: never lose a message we sent, never drop someone else's ---------- */
+function mergeChat(remote,pending){let c=normChat(clone(remote));const have=new Set(c.msgs.map(m=>m.id));pending.forEach(m=>{if(!have.has(m.id))c.msgs.push(m)});
+  c.msgs.sort((a,b)=>(a.ts||0)-(b.ts||0));if(c.msgs.length>CHAT_CAP)c.msgs=c.msgs.slice(-CHAT_CAP);return c}
+/* ---------- team list: sort / group / search / watchlist ---------- */
+const TIERS=[{k:'elite',label:'Elite',max:12,note:'power rank 1–12'},{k:'solid',label:'Solid',max:30,note:'13–30'},{k:'sleeper',label:'Sleeper',max:Infinity,note:'31+ (modeled)'},{k:'longshot',label:'Longshot',note:'not in our model'}];
+function tierOf(p){if(!p)return TIERS[3];for(const t of TIERS)if(t.max!=null&&p<=t.max&&t.k!=='longshot')return t;return TIERS[2]}
+function seedNum(m){const s=m&&m.s;return(s==null||!isFinite(+s))?null:+s}
+function recParse(r){const x=/^(\d+)-(\d+)$/.exec(r||'');if(!x)return null;const w=+x[1],l=+x[2];return(w+l)?{w,l,pct:w/(w+l)}:null}
+function searchMatch(t,m,q){q=(q||'').trim().toLowerCase();if(!q)return true;return[t.name,t.short,t.abbr,t.mascot,m&&m.c].filter(Boolean).join(' ').toLowerCase().indexOf(q)>=0}
+const TMODES=[['power','Power rank'],['alpha','A–Z'],['conf','Conference'],['seed','Proj. seed'],['record','Last season'],['tiers','Tiers']];
+/* returns [{key,label,note,tids}] ; starred ("My Picks") teams always first (own group in grouped modes, floated in flat modes) */
+function teamView(o){const TEAMS=o.teams,META=o.meta||{},pool=o.pool,taken=o.taken||{},watch=o.watch||new Set(),q=o.q||'',mode=o.mode||'power';
+  const nm=t=>TEAMS[t].short||TEAMS[t].name;const alpha=(a,b)=>nm(a).localeCompare(nm(b));
+  const P=t=>(META[t]&&META[t].p)||0;
+  let ids=pool.filter(t=>{if(!TEAMS[t])return false;if(o.hideDrafted&&taken[t])return false;if(o.onlyWatch&&!watch.has(t))return false;if(o.onlyQueue&&(o.queue||[]).indexOf(t)<0)return false;return searchMatch(TEAMS[t],META[t],q)});
+  const cmps={power:(a,b)=>(P(a)||9999)-(P(b)||9999)||alpha(a,b),alpha,
+    seed:(a,b)=>{const x=seedNum(META[a]),y=seedNum(META[b]);return(x==null?99:x)-(y==null?99:y)||(P(a)||9999)-(P(b)||9999)||alpha(a,b)},
+    record:(a,b)=>{const x=recParse(META[a]&&META[a].r),y=recParse(META[b]&&META[b].r);return(y?y.pct:-1)-(x?x.pct:-1)||(y?y.w:-1)-(x?x.w:-1)||alpha(a,b)},
+    conf:(a,b)=>(P(a)||9999)-(P(b)||9999)||alpha(a,b),tiers:(a,b)=>(P(a)||9999)-(P(b)||9999)||alpha(a,b)};
+  const cmp=cmps[mode]||cmps.power;const stars=ids.filter(t=>watch.has(t)).sort(cmp),rest=ids.filter(t=>!watch.has(t)).sort(cmp);const groups=[];
+  if(mode==='conf'||mode==='tiers'||mode==='seed'){
+    if(stars.length)groups.push({key:'watch',label:'⭐ My Picks',tids:stars});
+    const map=new Map();
+    rest.forEach(t=>{let k,l,note='';
+      if(mode==='conf'){k=(META[t]&&META[t].c)||'~—';l=(META[t]&&META[t].c)||'Conference unknown'}
+      else if(mode==='tiers'){const ti=tierOf(P(t));k=ti.k;l=ti.label;note=ti.note}
+      else{const s=seedNum(META[t]);k=s==null?'~—':String(s).padStart(4,'0');l=s==null?'No projected seed':'Seed '+s}
+      if(!map.has(k))map.set(k,{key:k,label:l,note,tids:[]});map.get(k).tids.push(t)});
+    let gs=Array.from(map.values());
+    if(mode==='tiers'){const ord=TIERS.map(x=>x.k);gs.sort((a,b)=>ord.indexOf(a.key)-ord.indexOf(b.key))}
+    else gs.sort((a,b)=>a.key<b.key?-1:a.key>b.key?1:0);
+    gs.forEach(g=>groups.push(g))}
+  else{const all=stars.concat(rest);if(all.length)groups.push({key:'all',label:'',tids:all,flat:true})}
+  return groups}
+function watchToggle(arr,tid){const a=(arr||[]).slice();const i=a.indexOf(String(tid));if(i>=0)a.splice(i,1);else a.push(String(tid));return a}
+function rowValue(mode,t,META){const m=META[t]||{};
+  if(mode==='power'||mode==='tiers')return m.p?'#'+m.p:'—';if(mode==='seed'){const s=seedNum(m);return s==null?'—':'S'+s}
+  if(mode==='record')return m.r||'—';if(mode==='conf')return m.c||'—';return m.p?'#'+m.p:'—'}
+
+/* ---------- the write protocol, with injectable IO so it can be unit-tested against a fake textdb ----------
+   io: {read(url)->text, write(url,obj), sleep(ms), adopt(n,entryOrNull) = optimistic local view, later(fn) = fire-and-forget re-check, alert(n,entry) = our pick was later displaced}
+   o:  {meta, url, n, entry, taken = teams taken by slots before n, pool, fast}  */
+async function submitSlot(io,o){const NOCONN="Can't reach the draft server. Check your connection and try again.";
+  for(let attempt=0;attempt<3;attempt++){
+    let ex;try{ex=parseEntry(await io.read(o.url))}catch(e){return{ok:false,msg:NOCONN}}
+    if(ex&&ex.id===o.entry.id)break;
+    if(!slotWritable(o.meta,ex,o.n,o.taken,o.pool)){io.adopt(o.n,ex);return{ok:false,beaten:true,by:ex}}
+    try{await io.write(o.url,o.entry)}catch(e){if(attempt===2)return{ok:false,msg:'Save failed (server hiccup). Nothing was changed — try again.'};await io.sleep(400);continue}
+    io.adopt(o.n,o.entry);
+    if(o.fast)return{ok:true,pick:o.entry,unverified:true};
+    await io.sleep(600);let chk=null;try{chk=parseEntry(await io.read(o.url))}catch(e){return{ok:true,pick:o.entry,unverified:true}}
+    const out=claimOutcome(chk,o.entry,o.meta);
+    if(out==='landed'){io.later(async()=>{await io.sleep(1800);try{const c2=parseEntry(await io.read(o.url));if(claimOutcome(c2,o.entry,o.meta)!=='landed'){io.adopt(o.n,c2);io.alert(o.n,o.entry)}}catch(e){}});return{ok:true,pick:o.entry}}
+    if(out==='beaten'){io.adopt(o.n,chk);return{ok:false,beaten:true,by:chk}}
+  }
+  return{ok:false,msg:'Could not confirm your pick landed. Check the board before trying again.'}}
+/*LOGIC-END*/
+
+/* ===================== CONFIG ===================== */
+const CFG={
+  url:'https://textdb.dev/api/data/stoopids-draft2-ff4dac2bc4128b72',            // META key; pick slots / owner prefs are derived keys: <url>-e{epoch}-p{n}, <url>-u-{owner}
+  chatUrl:'https://textdb.dev/api/data/stoopids-draft2-chat-64dd9060436573b9',    // chat blob (separate key => chat never races with picks)
+  pollMs:3000,graceMs:1800,dataUrl:'../data.json',
+  redraft:{enabled:false,maxDrop:2,maxAdd:2,order:'standings-last-place-first'}   // STUB only (Jan 20 redraft)
+};
+const LS='stoopidsDraft.';
+const lsGet=k=>{try{return localStorage.getItem(LS+k)}catch(e){return null}};
+const lsSet=(k,v)=>{try{if(v==null)localStorage.removeItem(LS+k);else localStorage.setItem(LS+k,v)}catch(e){}};
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const $=id=>document.getElementById(id);
+
+/* ===================== DATA ===================== */
+let TEAMS={},OWNERS=[],POOL=[],POOLSET=new Set(),ONAMES=[];
+function loadFrom(teamsObj,owners){
+  TEAMS={};POOL=[];
+  Object.keys(teamsObj).forEach(k=>{const t=teamsObj[k];if(!t||!t.name||!t.color)return;TEAMS[k]=Object.assign({},t,{espn_id:t.espn_id||k});POOL.push(k)});
+  POOL.sort((a,b)=>TEAMS[a].short.localeCompare(TEAMS[b].short));POOLSET=new Set(POOL);
+  OWNERS=owners.map(o=>({name:o.name,emoji:o.emoji||'🏀',team_name:o.team_name||o.name}));ONAMES=OWNERS.map(o=>o.name)}
+function embedded(){const e=window.EMBED;const t={};e.teams.forEach(r=>t[r[0]]={espn_id:r[0],name:r[1],short:r[2],abbr:r[3],color:r[4],alt:r[5],logo:r[6],mascot:r[7]});return{teams:t,owners:e.owners}}
+async function loadData(){
+  try{const ac=new AbortController();const to=setTimeout(()=>ac.abort(),4000);
+    const r=await fetch(CFG.dataUrl,{cache:'no-store',signal:ac.signal});clearTimeout(to);
+    if(!r.ok)throw 0;const d=await r.json();
+    if(!d||!d.teams||!Array.isArray(d.owners)||d.owners.length<2)throw 0;
+    loadFrom(d.teams,d.owners);if(POOL.length<20)throw 0;return'../data.json'
+  }catch(e){const d=embedded();loadFrom(d.teams,d.owners);return'embedded'}}
+const own=n=>OWNERS.find(o=>o.name===n)||{name:n,emoji:'🏀',team_name:n};
+const ti=tid=>TEAMS[tid];
+
+/* ===================== UI HELPERS ===================== */
+function hex2rgb(h){h=(h||'').replace('#','');if(h.length===3)h=h.split('').map(c=>c+c).join('');if(!/^[0-9a-f]{6}$/i.test(h))return null;return[0,2,4].map(i=>parseInt(h.substr(i,2),16))}
+function lum(rgb){const f=v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)};return .2126*f(rgb[0])+.7152*f(rgb[1])+.0722*f(rgb[2])}
+function textOn(hex){const r=hex2rgb(hex);if(!r)return'#fff';const L=lum(r);return(1.05)/(L+.05)>(L+.05)/.05?'#fff':'#111'}
+function chip(tid,opt){opt=opt||{};const t=TEAMS[tid]||{};const bg='#'+((t.color||'').replace('#','')||'3a4256');const alt='#'+((t.alt||'').replace('#','')||'ffffff');
+  const fg=textOn(bg);const logo=t.logo?`<img src="${esc(t.logo)}" alt="" loading="lazy" onerror="this.outerHTML='<span class=nologo></span>'">`:'<span class="nologo"></span>';
+  const url='https://www.espn.com/mens-college-basketball/team/_/id/'+encodeURIComponent(t.espn_id||tid);
+  const label=opt.abbr?(t.abbr||t.short):(t.short||t.name||tid);
+  return `<a class="chip${opt.big?' big':''}${opt.sm?' sm':''}" href="${url}" target="_blank" rel="noopener" title="Open ${esc(t.name||tid)} on ESPN" onclick="event.stopPropagation()" style="background:${bg};color:${fg};border-color:${alt}">${logo}${esc(label)}</a>`}
+let toastT=null;
+function toast(msg,ms){const t=$('toast');t.textContent=msg;t.classList.remove('hide');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.add('hide'),ms||3800)}
+function openSheet(html){const w=$('sheetwrap');w.innerHTML=`<div class="sheetbg" data-a="sheetbg"><div class="sheet">${html}</div></div>`}
+function closeSheet(){$('sheetwrap').innerHTML=''}
+function fmtClock(ms){ms=Math.max(0,Math.ceil(ms/1000));return Math.floor(ms/60)+':'+String(ms%60).padStart(2,'0')}
+function ordinal(n){const s=['th','st','nd','rd'],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0])}
+
+/* ===================== IDENTITY ===================== */
+const SPEC='__spec';
+let me=lsGet('me');
+(function(){const p=new URLSearchParams(location.search);
+  if(!me&&p.get('watch'))me=SPEC;            // spectator link (session only, not saved)
+  window._asParam=p.get('as')})();
+function isSpec(){return me===SPEC}
+function commish(){return isUnlocked(M,lsGet('cmtok'))}
+function renderWho(){const w=$('who');if(!me){w.innerHTML='';return}
+  const o=isSpec()?{emoji:'👀',name:'Spectator'}:own(me);
+  w.innerHTML=`${esc(o.emoji)} ${esc(o.name)}${commish()?' · 👑':''} <button class="link" data-a="switch">switch</button>`}
+function showIdentity(){
+  $('overlay').innerHTML=`<div class="ov"><h2>Who are you?</h2><div class="mut" style="text-align:center">Name-only join. No password to play. (Friends-pool grade.)</div>
+  <div class="who8">${OWNERS.map(o=>`<button data-a="iam" data-n="${esc(o.name)}"><span>${esc(o.emoji)}</span>${esc(o.name)}</button>`).join('')}</div>
+  <button class="btn" data-a="iam" data-n="${SPEC}">👀 Just watching (spectator)</button></div>`}
+function hideIdentity(){$('overlay').innerHTML=''}
+
+/* ===================== STATE + NETWORK (v2: append-only pick log) =====================
+   textdb gives us only GET/POST on one key (whole-document overwrite, no ETag, no append).  So:
+   - meta   (CFG.url)                    commissioner-controlled doc: order, clock, status, epoch, voided ids, passcode hash
+   - picks  (CFG.url-e{epoch}-p{n})      ONE KEY PER PICK SLOT.  Only the on-clock owner / auto / commissioner may write slot n.
+   - prefs  (CFG.url-u-{owner})          per-owner queue + auto flag; only that owner ever writes it
+   - chat   (CFG.chatUrl)                separate blob; merge-by-id + verify/retry
+   State is DERIVED by replaying the pick log (longest valid prefix): first valid pick for a slot wins. */
+let M=null,Mraw='',S=null,C=normChat(null),Craw='',loaded=false,lastOk=0,failCount=0,polling=false,pendingKick=false,dataSrc='';
+let ENT={},ENTraw={},PREF={},PREFraw={},epochSeen=0,pollNo=0,sweepAt=0,srvOff=0,srvSync=0,srvInfo='device clock',pendingChat=[],lastSig='';
+const WRITER=lsGet('writer')||(function(){const w=randHex(6);lsSet('writer',w);return w})();
+const nowSrv=()=>Date.now()+srvOff;
+async function readRaw(url){const r=await fetch(url,{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);return await r.text()}
+function parseJ(txt){if(!txt||!txt.trim())return null;let d=JSON.parse(txt);if(typeof d==='string')d=JSON.parse(d);return d}
+async function postJ(url,obj){const r=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(obj)});if(!r.ok)throw new Error('HTTP '+r.status)}
+const normM=txt=>{let d=null;try{d=parseJ(txt)}catch(e){}return normalizeMeta(d,ONAMES)};
+const normC=txt=>{let d=null;try{d=parseJ(txt)}catch(e){}return normChat(d)};
+const slotUrl=n=>pickKey(CFG.url,M.epoch,n);
+/* shared time basis: the Date header of THIS page's own origin (textdb's CORS config hides its Date header from JS) */
+async function syncTime(){try{const t0=Date.now();const r=await fetch(location.href.split('#')[0],{method:'HEAD',cache:'no-store'});const t1=Date.now();
+  const off=offsetFromDate(r.headers.get('Date'),t0,t1);if(off!=null&&sane(off)){srvOff=off;srvSync=Date.now();srvInfo=Math.abs(off)<1500?'in sync with server time':'device clock is '+(off>0?'behind':'ahead')+' by '+Math.round(Math.abs(off)/1000)+'s (corrected)'}}catch(e){}}
+function signature(){return Mraw+'|'+Object.keys(ENTraw).map(k=>k+':'+ENTraw[k]).join(',')+'|'+JSON.stringify(PREF)}
+function rebuild(force){const sig=signature();if(!force&&sig===lastSig)return;lastSig=sig;
+  M=normM(Mraw);const prev=S;S=deriveState(M,ENT,PREF,POOLSET);onState(prev,S);renderAll()}
+async function fetchSlot(n){const raw=await readRaw(slotUrl(n));if(ENTraw[n]===raw)return false;ENTraw[n]=raw;ENT[n]=parseEntry(raw);return true}
+async function syncLog(){const tot=M.order.length*ROUNDS;let ch=false;
+  const k=replay(M,ENT,POOLSET).picks.length;const reread=[];
+  if(k>=1)reread.push(k);if(k>=2&&pollNo%4===0)reread.push(k-1);
+  if(pollNo%12===0&&k>2){sweepAt=(sweepAt%(k-2))+1;reread.push(sweepAt)}   /* slow sweep over older slots catches a late overwrite */
+  const batch=loaded?1:8;let from=k+1;
+  for(let g=0;g<20&&from<=tot;g++){const ns=[];for(let i=0;i<batch&&from+i<=tot;i++)ns.push(from+i);
+    if(g===0)reread.forEach(n=>{if(ns.indexOf(n)<0)ns.push(n)});
+    const rs=await Promise.all(ns.map(fetchSlot));if(rs.some(Boolean))ch=true;
+    const nk=replay(M,ENT,POOLSET).picks.length;if(nk>=from+batch-1&&nk>=from){from=nk+1}else break}
+  return ch}
+async function readPref(owner){const raw=await readRaw(prefKey(CFG.url,owner));if(PREFraw[owner]===raw&&PREF[owner])return false;PREFraw[owner]=raw;let d=null;try{d=parseJ(raw)}catch(e){}PREF[owner]=(d&&typeof d==='object')?{queue:Array.isArray(d.queue)?d.queue.map(String):[],auto:!!d.auto,v:+d.v||0}:{queue:[],auto:false,v:0};return true}
+async function syncPrefs(){const want=new Set();if(me&&!isSpec()&&ONAMES.indexOf(me)>=0)want.add(me);
+  const cl=M.status==='live'?slot({order:M.order},replay(M,ENT,POOLSET).picks.length+1):null;if(cl)want.add(cl.owner);
+  const rs=await Promise.all(Array.from(want).map(readPref));return rs.some(Boolean)}
+async function pollOnce(){
+  if(polling){pendingKick=true;return}polling=true;
+  try{
+    pollNo++;
+    const [a,b]=await Promise.all([readRaw(CFG.url),readRaw(CFG.chatUrl)]);
+    lastOk=Date.now();failCount=0;let changed=!loaded;
+    if(a!==Mraw||!M){Mraw=a;M=normM(a);changed=true}
+    if(epochSeen!==M.epoch){ENT={};ENTraw={};epochSeen=M.epoch;changed=true}
+    if(await syncLog())changed=true;
+    if(await syncPrefs())changed=true;
+    if(changed){loaded=true;rebuild(true)}
+    if(b!==Craw||pendingChat.length){Craw=b;const pc=C;C=mergeChat(normC(b),pendingChat);onChat(pc,C)}
+  }catch(e){failCount++}
+  finally{polling=false;renderConn();if(pendingKick){pendingKick=false;pollOnce()}}}
+function kick(){pollOnce()}
+async function loop(){await pollOnce();setTimeout(loop,CFG.pollMs)}
+function renderConn(){const c=$('conn');const ok=failCount===0&&Date.now()-lastOk<CFG.pollMs*3+2000&&lastOk>0;
+  c.className='pill '+(ok?'live':'bad');c.innerHTML=ok?'<i></i>Live':(lastOk?'<i></i>Reconnecting…':'<i></i>Connecting…')}
+const NOCONN="Can't reach the draft server. Check your connection and try again.";
+/* ---- meta writes (commissioner actions): re-read -> apply to the FRESH copy -> POST -> verify -> retry if overwritten ---- */
+async function mutateMeta(fn,verify){
+  for(let attempt=0;attempt<3;attempt++){
+    let raw;try{raw=await readRaw(CFG.url)}catch(e){return{ok:false,msg:NOCONN}}
+    const cur=normM(raw);const r=fn(cur,deriveState(cur,ENT,PREF,POOLSET));
+    if(r.error)return{ok:false,invalid:true,msg:r.error};
+    if(r.noop)return{ok:true,noop:true};
+    const ns=r.state;ns.version=(cur.version||0)+1;ns.updated=new Date().toISOString();
+    try{await postJ(CFG.url,ns)}catch(e){return{ok:false,msg:'Save failed (server hiccup). Nothing was changed — try again.'}}
+    Mraw=JSON.stringify(ns);rebuild();
+    await sleep(650);
+    try{const chk=normM(await readRaw(CFG.url));if(verify(chk,ns)){Mraw=JSON.stringify(chk);rebuild();return{ok:true,state:ns,undone:r.undone}}}catch(e){return{ok:true,state:ns,unverified:true}}
+  }
+  return{ok:false,lost:true,msg:'Someone else saved at the same moment and your change did not stick. Look at the screen and try again.'}}
+/* ---- per-owner prefs (queue/auto): single writer per key, so a plain read-modify-write is safe ---- */
+async function mutatePref(owner,fn,verify){
+  for(let attempt=0;attempt<2;attempt++){
+    const url=prefKey(CFG.url,owner);let cur;try{await readPref(owner);cur=clone(PREF[owner]||{queue:[],auto:false,v:0})}catch(e){return{ok:false,msg:NOCONN}}
+    const ns=fn(cur);ns.v=(cur.v||0)+1;
+    try{await postJ(url,ns)}catch(e){return{ok:false,msg:'Save failed — try again.'}}
+    PREF[owner]=ns;PREFraw[owner]=JSON.stringify(ns);rebuild(true);
+    await sleep(500);try{const t=await readRaw(url);const d=parseJ(t);if(d&&verify(d))return{ok:true}}catch(e){return{ok:true}}}
+  return{ok:false,msg:'Could not save that setting — try again.'}}
+/* ---- one pick = one key.  check slot -> write -> re-read to confirm -> retry if the write vanished ---- */
+async function submitPick(n,owner,tid,by,o){o=o||{};
+  const entry=makeEntry(n,owner,tid,{by,now:nowSrv(),writer:WRITER,epoch:M.epoch});
+  const io={read:readRaw,write:postJ,sleep,adopt:(k,e)=>{ENT[k]=e||null;ENTraw[k]=e?JSON.stringify(e):'';rebuild()},later:fn=>{fn()},alert:(k)=>toast('⚠️ Pick #'+k+' was replaced by a simultaneous write — check the board.',6000)};
+  return submitSlot(io,{meta:M,url:slotUrl(n),n,entry,taken:takenMap({picks:S.picks.filter(p=>p.n<n)}),pool:POOLSET,fast:o.fast})}
+/* ---- chat: separate blob; merge by id; never drop a message we sent until it is seen on the server ---- */
+async function chatWrite(fn,verify){
+  for(let attempt=0;attempt<4;attempt++){
+    let raw;try{raw=await readRaw(CFG.chatUrl)}catch(e){return{ok:false,msg:NOCONN}}
+    const cur=normC(raw);const r=fn(cur);if(r.error)return{ok:false,msg:r.error};
+    const ns=r.state;ns.version=(cur.version||0)+1;
+    try{await postJ(CFG.chatUrl,ns)}catch(e){return{ok:false,msg:'Message not sent (server hiccup).'}}
+    Craw=JSON.stringify(ns);const pc=C;C=mergeChat(ns,pendingChat);onChat(pc,C);
+    await sleep(600);try{const chk=normC(await readRaw(CFG.chatUrl));if(verify(chk,ns)){pendingChat=pendingChat.filter(m=>!chk.msgs.some(x=>x.id===m.id));Craw=JSON.stringify(chk);const p2=C;C=mergeChat(chk,pendingChat);onChat(p2,C);return{ok:true}}}catch(e){return{ok:true}}
+  }
+  return{ok:false,msg:'Message may not have been delivered (busy server). It will retry on the next refresh.'}}
+
+/* ===================== ACTIONS ===================== */
+const tn=tid=>(TEAMS[tid]&&(TEAMS[tid].short||TEAMS[tid].name))||tid;
+let busy=false;
+function needUnlock(){if(commish())return true;toast('🔒 Commissioner tools are locked. Unlock them in the Admin tab.',4500);return false}
+async function doPick(tid,forOwner,opt){opt=opt||{};if(busy)return;busy=true;
+  try{
+    await pollOnce();                         /* merge everything we have not seen yet BEFORE judging the pick */
+    const v=validatePick(S,forOwner,String(tid),{pool:POOLSET});
+    if(v.error){const tk=takenMap(S)[String(tid)];
+      if(tk)toast('😬 Someone beat you to it: '+tn(tid)+' was just taken by '+tk.owner+' (pick #'+tk.n+'). Pick another.',6000);
+      else if(v.turn){const s=onClock(S);toast("😬 It's "+(s?s.owner:'someone else')+"'s turn now (pick #"+(s?s.n:'?')+'). The board moved while you were choosing.',6000)}
+      else toast('⚠️ '+v.error,5000);return false}
+    if(forOwner!==me&&!opt.auto&&!opt.sim&&!needUnlock())return false;
+    const by=opt.auto?'auto':opt.sim?'sim':(forOwner!==me?'commish':'owner');
+    const res=await submitPick(v.slot.n,forOwner,tid,by);
+    if(res.ok){toast('✅ '+own(forOwner).emoji+' '+forOwner+' drafted '+tn(tid)+' (#'+res.pick.n+')');return true}
+    if(res.beaten){const w=res.by||{};toast('😬 Someone beat you to it: pick #'+v.slot.n+' was just made ('+tn(w.tid)+' by '+(w.owner||'someone')+'). Check the board.',6500);showConflict(v.slot.n,tid,w);return false}
+    toast('⚠️ '+res.msg,5000);return false;
+  }finally{busy=false}}
+let conflictMsg='';
+function showConflict(n,tid,w){conflictMsg='😬 <b>Someone beat you to it.</b> Pick #'+n+' was already made — <b>'+esc(tn(w.tid))+'</b> by '+esc(w.owner||'another device')+'. Your pick of '+esc(tn(tid))+' was <b>not</b> saved.';renderBanner();setTimeout(()=>{conflictMsg='';renderBanner()},12000)}
+async function simpleMeta(fn,okMsg,verify){const res=await mutateMeta(fn,verify);if(!res.ok&&!res.noop)toast('⚠️ '+res.msg,5000);else if(okMsg)toast(okMsg);return res}
+const actStart=()=>needUnlock()&&simpleMeta((m)=>mStart(m,nowSrv()),'🏀 Draft is LIVE!',chk=>chk.status==='live');
+const actPause=p=>needUnlock()&&simpleMeta((m,st)=>mPause(m,st,p,nowSrv()),p?'⏸ Paused':'▶️ Resumed',chk=>chk.paused===p);
+const actUndo=()=>{if(!needUnlock())return;const last=S.picks[S.picks.length-1];return simpleMeta((m,st)=>mUndo(m,st,last?last.n:null,nowSrv()),'↩️ Last pick undone',(chk,ns)=>chk.voided.length>=ns.voided.length)};
+const actClock=s=>needUnlock()&&simpleMeta(m=>mClock(m,s,nowSrv()),s?'⏱ Pick clock: '+s+'s':'Pick clock off',(chk,ns)=>chk.clockSecs===ns.clockSecs);
+const actOrder=(o,d)=>needUnlock()&&simpleMeta((m,st)=>mOrder(m,st,o,d),null,(chk,ns)=>JSON.stringify(chk.order)===JSON.stringify(ns.order));
+const actRandom=()=>needUnlock()&&simpleMeta((m,st)=>mRandom(m,st),'🎲 Order randomized',(chk,ns)=>JSON.stringify(chk.order)===JSON.stringify(ns.order));
+const actQueue=(owner,tid)=>mutatePref(owner,cur=>{cur.queue=watchToggle(cur.queue,tid);return cur},d=>true).then(r=>{if(!r.ok)toast('⚠️ '+r.msg)});
+const actQMove=(owner,tid,d)=>mutatePref(owner,cur=>{const q=cur.queue,i=q.indexOf(String(tid)),j=i+d;if(i>=0&&j>=0&&j<q.length)[q[i],q[j]]=[q[j],q[i]];return cur},d=>true).then(r=>{if(!r.ok)toast('⚠️ '+r.msg)});
+const actAuto=(owner,on)=>mutatePref(owner,cur=>{cur.auto=!!on;return cur},d=>!!d.auto===!!on).then(r=>{if(!r.ok)toast('⚠️ '+r.msg);else toast(on?'🤖 Auto-pick ON for '+owner:'Auto-pick off')});
+async function actSim(n){if(!needUnlock())return;await pollOnce();if(S.status!=='live'){toast('⚠️ Start the draft first, then simulate.');return}
+  busy=true;let k=0;try{while(k<n&&S.status==='live'){const s=onClock(S);const taken=takenMap(S);const av=POOL.filter(t=>!taken[t]);if(!av.length)break;
+    const t=av[Math.floor(Math.random()*av.length)];const r=await submitPick(s.n,s.owner,t,'sim',{fast:true});if(!r.ok){toast('⚠️ '+(r.msg||'Simulation stopped: someone else picked.'));break}k++}}finally{busy=false}
+  toast('🎲 '+k+' simulated pick'+(k===1?'':'s')+' added');kick()}
+async function actReset(){if(!needUnlock())return;
+  const r=await mutateMeta(m=>mReset(m),chk=>chk.epoch>0);toast(r.ok?'🧹 Test draft reset (old picks are kept in the log, just no longer used)':'⚠️ '+r.msg)}
+/* ---- commissioner passcode ---- */
+async function actSetPass(pass,requireEmpty){if(!passOk(pass))return{ok:false,msg:'Use at least 4 characters.'};
+  let p;try{p=await makePass(pass)}catch(e){return{ok:false,msg:'This browser cannot hash passcodes here (Web Crypto needs https:// or localhost).'}}
+  const r=await mutateMeta(m=>mSetPass(m,p,requireEmpty),chk=>!!chk.pass&&chk.pass.hash===p.hash);
+  if(r.ok){lsSet('cmtok',p.hash)}return r}
+let pinTries=0,pinLock=0;
+async function actUnlock(pass){if(Date.now()<pinLock)return{ok:false,msg:'Too many wrong tries. Wait '+Math.ceil((pinLock-Date.now())/1000)+'s.'};
+  if(!M||!M.pass)return{ok:false,msg:'No passcode is set yet.'};
+  if(await checkPass(M,pass)){pinTries=0;lsSet('cmtok',M.pass.hash);return{ok:true}}
+  pinTries++;if(pinTries>=5){pinLock=Date.now()+30000;pinTries=0;return{ok:false,msg:'Wrong passcode. Locked for 30 seconds.'}}
+  return{ok:false,msg:'Wrong passcode. Try again ('+(5-pinTries)+' left).'}}
+/* auto-pick executor: any client may run it; the slot key + verify make duplicates harmless (auto entries are deterministic) */
+let autoPlan={n:0,at:0},autoBusy=false;
+function autoTick(){if(!S||!loaded||autoBusy||busy)return;const s=onClock(S);if(!s){autoPlan={n:0,at:0};return}
+  const reason=autoReason(S,nowSrv(),CFG.graceMs);if(!reason){autoPlan={n:0,at:0};return}
+  if(autoPlan.n!==s.n){autoPlan={n:s.n,at:Date.now()+(reason==='auto'?900:0)+Math.random()*1500};return}
+  if(Date.now()<autoPlan.at)return;
+  autoBusy=true;autoPlan.at=Date.now()+5000;const n=s.n;
+  (async()=>{await pollOnce();const s2=onClock(S);if(!s2||s2.n!==n||!autoReason(S,nowSrv(),CFG.graceMs-200))return;
+    const ch=autoChoice(S,s2.owner,POOL,mulberry(n*7919));if(!ch)return;
+    const r=await submitPick(n,s2.owner,ch.tid,'auto');if(r&&r.ok)toast('🤖 Auto-pick: '+tn(ch.tid)+' for '+s2.owner)})().finally(()=>{autoBusy=false})}
+/* chat */
+async function sendMsg(text){text=(text||'').trim().slice(0,280);if(!text||!me||isSpec())return;
+  const id=Math.random().toString(36).slice(2,10);const msg={id,ts:nowSrv(),who:me,text};pendingChat.push(msg);
+  const pc=C;C=mergeChat(C,pendingChat);onChat(pc,C);
+  const r=await chatWrite(cur=>({state:addMsg(cur,msg)}),chk=>chk.msgs.some(m=>m.id===id));if(!r.ok)toast('⚠️ '+r.msg)}
+async function react(id,emoji){if(!me||isSpec()){toast('Pick your owner name to react.');return}
+  const r=await chatWrite(cur=>toggleReact(cur,id,emoji,me),(chk,ns)=>{const a=((ns.msgs.find(m=>m.id===id)||{}).r||{})[emoji]||[];const b=((chk.msgs.find(m=>m.id===id)||{}).r||{})[emoji]||[];return a.includes(me)===b.includes(me)});
+  if(!r.ok)toast('⚠️ '+r.msg)}
+
+/* ===================== ALERTS ===================== */
+let alertOn=false,flashT=null,seenChat=+(lsGet('seenChat')||0),lastBanner={},bannerLine='',bannerKey='',swReg=null;
+const B_ME=["Tick tock. The group chat is watching.","Pick wisely. Or don't. We'll roast you either way.","No pressure. (Pressure.)","Your future self is judging this pick.","Remember: Grand Canyon is cursed. Allegedly.","The trophy engraver is on standby.","Go with your gut. Your gut has been wrong before.","Somewhere, a rival is hoping you panic."];
+const B_OTHER=["{o} is thinking. Dangerous.","{o} is staring at the screen like it owes money.","Place your bets: will {o} reach?","{o} is Googling mascots.","{o} has a plan. The plan has holes.","{o} just whispered 'trust the process'.","Rumor: {o} drafts by vibes alone.","{o} is consulting the spreadsheet of lies."];
+const B_SETUP=["Warming up. Stretch those pick fingers.","Waiting for the commish to blow the whistle.","Everyone is undefeated. Enjoy it.","Rosters are empty and so are the excuses."];
+function setFavicon(emoji){const l=$('fav');if(!emoji){l.href='icon-192.png';return}try{const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d');x.fillStyle='#ffd23f';x.beginPath();x.arc(32,32,32,0,7);x.fill();x.font='40px serif';x.textAlign='center';x.textBaseline='middle';x.fillText(emoji,32,36);l.href=c.toDataURL('image/png')}catch(e){}}
+function notify(title,body){try{if(!('Notification' in window)||Notification.permission!=='granted'||!document.hidden)return;
+  if(swReg&&swReg.showNotification)swReg.showNotification(title,{body,icon:'icon-192.png',tag:'stoopids-draft',renotify:true});else new Notification(title,{body,icon:'icon-192.png',tag:'stoopids-draft'})}catch(e){}}
+function vib(p){try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}}
+function setAlertBar(html){$('alertbar').innerHTML=html?`<div class="alertbar">${html}</div>`:''}
+function onState(prev,next){
+  if(!prev)return;
+  for(let i=0;i<Math.min(prev.picks.length,next.picks.length);i++){if(prev.picks[i].id&&prev.picks[i].id!==next.picks[i].id){toast('⚠️ Pick #'+next.picks[i].n+' changed to '+tn(next.picks[i].tid)+' ('+next.picks[i].owner+') — a simultaneous write was resolved.',6500);break}}
+  if(prev.epoch!==next.epoch)toast('🧹 The draft was reset by the commissioner.',5000);
+  const wasLive=prev.status==='live',nowLive=next.status==='live';
+  if(prev.status==='setup'&&nowLive)toast('🏀 The draft is LIVE!');
+  if(next.status==='done'&&prev.status!=='done')toast('🏁 Draft complete! Recap on the Board tab.',6000);
+  if(me&&!isSpec()&&nowLive){
+    const a=picksAway(next,me),pa=wasLive?picksAway(prev,me):null;
+    if(a===0&&pa!==0){vib([250,120,250,120,500]);notify("💩 YOU'RE ON THE CLOCK","Pick #"+(next.picks.length+1)+' — make it count');setAlertBar('')}
+    else if(a===2&&pa!==2){vib([120,80,120]);notify('⚡ 2 picks away','You are up in 2 picks.');setAlertBar('⚡ <b>You\'re 2 picks away.</b> Start thinking — queue a few teams.');setTimeout(()=>{if(picksAway(S,me)!==0)setAlertBar('')},9000)}
+    if(a!==0&&pa===0)setAlertBar('');
+  }
+  if(me&&nowLive===false)setAlertBar('');
+  updateTitle()}
+function onChat(prev,next){if(tab==='chat'&&chatSub==='chat'){seenChat=next.msgs.length;lsSet('seenChat',String(seenChat))}
+  if(prev&&next.msgs.length>prev.msgs.length&&tab!=='chat'){const m=next.msgs[next.msgs.length-1];if(m&&m.who!==me)toast('💬 '+m.who+': '+m.text.slice(0,60))}
+  renderTabs();updateChatView()}
+function updateTitle(){
+  const base='STOOPIDS Draft';const mineNow=S&&me&&!isSpec()&&picksAway(S,me)===0;
+  clearInterval(flashT);flashT=null;
+  if(mineNow){setFavicon('💩');if(document.hidden){let k=0;flashT=setInterval(()=>{document.title=(k++%2)?base:'🔔 YOUR PICK!'},900);document.title='🔔 YOUR PICK!'}else document.title="🔔 Your pick! · "+base}
+  else{setFavicon(null);document.title=S&&S.status==='live'?base+' · #'+(S.picks.length+1):base+' (TEST)'}}
+async function enableAlerts(){if(!('Notification' in window)){toast('This browser has no Notification API — vibration + title flash still work.');return}
+  const p=await Notification.requestPermission();toast(p==='granted'?'🔔 Alerts on (while the app is open or in the background)':'Alerts blocked in browser settings');renderView()}
+
+/* ===================== RENDER ===================== */
+let tab=lsGet('tab')||'board',chatSub='chat',viewOwner=null,reactOpen=null,simN=4;
+const TABS=[['board','🧩','Board'],['teams','🏀','Teams'],['my','👤','My Team'],['chat','💬','Chat'],['admin','⚙️','Admin']];
+function renderTabs(){const unread=Math.max(0,C.msgs.length-seenChat);$('tabs').innerHTML=TABS.map(t=>`<button class="${tab===t[0]?'on':''}" data-a="tab" data-t="${t[0]}"><span>${t[1]}</span>${t[2]}${t[0]==='chat'&&unread&&tab!=='chat'?`<i class="bd">${unread>9?'9+':unread}</i>`:''}</button>`).join('')}
+function canPick(){if(!S||!me)return false;const s=onClock(S);if(!s||S.paused)return false;return(!isSpec()&&s.owner===me)||commish()}
+function remaining(){if(!S||!S.clockSecs)return null;if(S.paused)return S.pausedLeft;return S.deadline?S.deadline-nowSrv():null}
+function renderBanner(){renderBanner0();if(conflictMsg&&$('banner'))$('banner').insertAdjacentHTML('beforeend',`<div class="cflict" id="conflict">${conflictMsg}</div>`)}
+function renderBanner0(){
+  const b=$('banner');if(!loaded||!S){b.innerHTML=`<div class="banner"><div class="em">⏳</div><div class="bm"><div class="nm">Connecting…</div><div class="sb">Reaching the draft server</div></div></div>`;return}
+  if(S.status==='setup'){const key='setup';if(bannerKey!==key){bannerKey=key;bannerLine=rotPick(B_SETUP,lastBanner.s);lastBanner.s=bannerLine}
+    b.innerHTML=`<div class="banner"><div class="em">🪑</div><div class="bm"><div class="lbl">LOBBY</div><div class="nm">Draft not started</div><div class="sb">${esc(bannerLine)}</div></div></div>`;return}
+  if(S.status==='done'){b.innerHTML=`<div class="banner"><div class="em">🏁</div><div class="bm"><div class="lbl">FINAL</div><div class="nm">Draft complete!</div><div class="sb">${S.picks.length} picks. Scroll the Board for the recap cards.</div></div></div>`;return}
+  const s=onClock(S),o=own(s.owner),mine=!isSpec()&&me===s.owner;
+  const key='live'+s.n+(mine?'m':'o');if(bannerKey!==key){bannerKey=key;const pool=mine?B_ME:B_OTHER;const l=rotPick(pool,lastBanner[mine?'m':'o']);lastBanner[mine?'m':'o']=l;bannerLine=fillTpl(l,{o:s.owner})}
+  const myA=(!isSpec()&&me)?picksAway(S,me):null;
+  let sub=bannerLine;
+  if(!mine&&myA!=null)sub+=` · <b>${myA===1?'You\'re up NEXT':'You\'re '+myA+' picks away'}</b> (#${nextPickNo(S,me)})`;
+  const rem=remaining();let cd='';
+  if(S.clockSecs){cd=S.paused?`<div class="cd">⏸<small>PAUSED ${rem!=null?fmtClock(rem):''}</small></div>`:`<div class="cd${rem!=null&&rem<10000?' low':''}" id="cdv">${rem!=null?(rem<=0?'⏰':fmtClock(rem)):'–'}<small>${rem!=null&&rem<=0?'AUTO-PICKING':'PICK CLOCK'}</small></div>`}
+  else if(S.paused)cd=`<div class="cd">⏸<small>PAUSED</small></div>`;
+  const autoTag=S.auto[s.owner]?' 🤖 auto':'';
+  b.innerHTML=`<div class="banner${mine?' me':''}${myA!=null&&myA<=2&&!mine?' near':''}"><div class="em">${esc(o.emoji)}</div><div class="bm"><div class="lbl">${mine?"YOU'RE ON THE CLOCK "+esc(o.emoji):'ON THE CLOCK'}</div><div class="nm">${mine?"Make your pick, "+esc(o.name):esc(o.name)+esc(autoTag)}</div><div class="sb">Pick #${s.n} · Round ${s.round} of ${ROUNDS} ${mine?'· '+esc(bannerLine):'· '+sub}</div></div>${cd}</div>`}
+function tickClock(){const el=$('cdv');if(!el||!S)return;const rem=remaining();if(rem==null)return;
+  el.firstChild.nodeValue=rem<=0?'⏰':fmtClock(rem);el.classList.toggle('low',rem<10000);const sm=el.querySelector('small');if(sm)sm.textContent=rem<=0?'AUTO-PICKING':'PICK CLOCK'}
+function renderTicker(){if(!S)return;const ps=S.picks.slice(-10).reverse();
+  $('ticker').innerHTML=ps.map(p=>`<div class="tk"><b>#${p.n}</b> ${esc(own(p.owner).emoji)} ${chip(p.tid,{sm:true,abbr:true})}</div>`).join('');
+  const full=S.picks.length?roasts(S.picks,ti,totalPicks(S)):[];const last=full[full.length-1];
+  $('roastline').innerHTML=last?`<div class="roastline">💬 ${esc(last.line)}</div>`:''}
+/* ---- board ---- */
+function viewBoard(){
+  if(!S)return'<div class="card mut">Loading…</div>';
+  const cur=onClock(S);const tot=totalPicks(S);const L=S.order.length;let h='';
+  if(S.status==='done')h+=recapHTML();
+  h+=`<div class="small mut" style="margin:4px 2px">Snake draft · ${L} owners × ${ROUNDS} rounds = ${tot} picks · order reverses each round</div><div class="bwrap"><table class="board"><thead><tr><th class="rh">Rd</th>${S.order.map((o,i)=>`<th class="${o===me?'me':''}"><span class="oe">${esc(own(o).emoji)}</span>${esc(o)}<div class="mut">#${i+1}</div></th>`).join('')}</tr></thead><tbody>`;
+  for(let r=0;r<ROUNDS;r++){h+=`<tr><td class="rh">${r+1}<br>${r%2?'←':'→'}</td>`;
+    for(let c=0;c<L;c++){const n=r*L+(r%2?L-1-c:c)+1;const p=S.picks[n-1];const isCur=cur&&cur.n===n;
+      h+=`<td class="${isCur?'cur':''}${p&&p.owner===me?' mine':''}"><span class="pn">${n}</span>${p?(p.auto?'<span class="au" title="auto-pick">🤖</span>':'')+chip(p.tid,{sm:true,abbr:true}):`<span class="dim">${isCur?'🕒':'·'}</span>`}</td>`}
+    h+='</tr>'}
+  return h+'</tbody></table></div>'}
+function recapHTML(){const rc=recap(S);const roastsAll=roasts(S.picks,ti,totalPicks(S));
+  return `<div class="card recap"><div class="hd">🏁 Draft recap</div><div class="mut small">Verdicts use a rough built-in preseason power rank — for jokes only.</div></div>`+
+  S.order.map(o=>{const r=rc[o],st=r.stats,mine=S.picks.filter(p=>p.owner===o);
+    return `<div class="card"><div class="hd" style="font-size:16px;font-weight:900">${esc(own(o).emoji)} ${esc(o)} — <span style="color:var(--acc)">${esc(r.head)}</span></div><div class="mut small">${esc(r.line)}</div><div class="st"><span class="tag steal">${st.steals} steals</span><span class="tag reach">${st.reaches} reaches</span><span class="tag dart">${st.unranked} off-radar</span><span class="tag fair">avg rank ${st.avgRank==null?'—':st.avgRank}</span></div><div class="chips" style="display:flex;flex-wrap:wrap;gap:5px">${mine.map(p=>chip(p.tid)).join('')}</div></div>`}).join('')+
+  `<button class="btn pri" data-a="sharerecap">📤 Share recap</button>`}
+/* ---- teams ---- */
+let WATCH=new Set((()=>{try{return JSON.parse(lsGet('watch')||'[]')}catch(e){return[]}})());
+function saveWatch(){lsSet('watch',JSON.stringify(Array.from(WATCH)))}
+const TF={q:'',mode:(lsGet('tmode')&&TMODES.some(m=>m[0]===lsGet('tmode')))?lsGet('tmode'):'power',hide:lsGet('thide')!=='0',watch:false,queue:false};
+function viewTeams(){return `<div class="ctl"><input type="search" id="tq" placeholder="Search team, mascot, conference…" value="${esc(TF.q)}" autocomplete="off"><div class="row2" style="margin-top:6px"><select id="tmode" aria-label="Sort and group">${TMODES.map(m=>`<option value="${m[0]}" ${TF.mode===m[0]?'selected':''}>Sort: ${m[1]}</option>`).join('')}</select></div><div class="pills" id="tpills"></div></div><div id="tlist"></div>`}
+function modeNote(){const m=TF.mode;
+  if(m==='power')return 'Power rank = our pool model (expected points, preseason). 61 draftable teams are ranked; the rest show —.';
+  if(m==='tiers')return 'Tiers from power rank: <b>Elite</b> 1–12 · <b>Solid</b> 13–30 · <b>Sleeper</b> 31+ (modeled) · <b>Longshot</b> = not in our model.';
+  if(m==='seed')return 'Projected 2027 seed from our model (an estimate, not an official seed). — = not modeled.';
+  if(m==='record')return 'Last season’s final overall record (ESPN standings, 2025-26). Best win % first.';
+  if(m==='conf')return 'Conference membership for 2026-27 (ESPN standings).';return ''}
+function updateTeams(){const pills=$('tpills');if(!pills)return;
+  pills.innerHTML=`<button class="${TF.hide?'on':''}" data-a="thide">Hide drafted</button><button class="${TF.watch?'on':''}" data-a="twatch">⭐ My Picks${WATCH.size?' ('+WATCH.size+')':''}</button><button class="${TF.queue?'on':''}" data-a="tqueue">Queue</button>`;
+  if(!S){$('tlist').innerHTML='';return}
+  const taken=takenMap(S);const q=((S.queues&&S.queues[me])||[]);
+  const groups=teamView({teams:TEAMS,meta:window.TEAMMETA||{},pool:POOL,taken,watch:WATCH,q:TF.q,mode:TF.mode,hideDrafted:TF.hide,onlyWatch:TF.watch,onlyQueue:TF.queue,queue:q});
+  const can=canPick();const s=onClock(S);const META=window.TEAMMETA||{};
+  const head=can&&s?`<div class="card" style="margin:6px 0;border-color:var(--acc)">${s.owner===me?"🔔 It's <b>your</b> pick — tap a team to draft it.":'👑 Commissioner: picking for <b>'+esc(s.owner)+'</b>.'}</div>`:(!isSpec()&&me?`<div class="small mut" style="margin:6px 2px">Not your turn yet — ⭐ saves a team to My Picks (this device only); <b>Q</b> adds it to your auto-pick queue.</div>`:`<div class="small mut" style="margin:6px 2px">👀 Spectating. Tap a team chip to open it on ESPN.</div>`);
+  const note=`<div class="small mut" style="margin:4px 2px">${modeNote()}</div>`;
+  const total=groups.reduce((a,g)=>a+g.tids.length,0);
+  const row=t=>{const x=TEAMS[t],tk=taken[t],m=META[t]||{};const inq=q.indexOf(t)>=0,w=WATCH.has(t);
+    const sub=[x.mascot||'',m.c||'',m.r?m.r:''].filter(Boolean).join(' · ');
+    const lab={power:'rank',tiers:'rank',alpha:'rank',seed:'proj',record:'2025-26',conf:'conf'}[TF.mode];
+    return `<div class="trow${tk?' taken':''}${can&&!tk?' go':''}" ${can&&!tk?`data-a="draftrow" data-t="${t}"`:''}><button class="wstar${w?' on':''}" data-a="watch" data-t="${t}" title="My Picks (this device)" aria-label="${w?'Remove from':'Add to'} My Picks">${w?'★':'☆'}</button><div class="tm">${chip(t)}<small>${esc(sub)}${tk?' · <span class="dr">✔ '+esc(own(tk.owner).emoji)+' '+esc(tk.owner)+' #'+tk.n+'</span>':''}</small></div><div class="rk" title="${esc(lab)}">${esc(rowValue(TF.mode,t,META))}<small>${lab}</small></div>${tk||isSpec()||!me?'':`<button class="qbtn${inq?' on':''}" data-a="q" data-t="${t}" title="Auto-pick queue" aria-label="Queue">${inq?'Q✓':'Q+'}</button>`}${tk||!can?'':`<button class="btn pri sm" data-a="draftrow" data-t="${t}">Draft</button>`}</div>`};
+  $('tlist').innerHTML=head+note+(groups.map(g=>(g.flat?'':`<div class="grp"><span>${esc(g.label)}</span><small>${g.note?esc(g.note)+' · ':''}${g.tids.length} team${g.tids.length===1?'':'s'}</small></div>`)+g.tids.map(row).join('')).join('')||'<div class="card mut">No teams match.'+(TF.hide?' (Drafted teams are hidden — tap “Hide drafted” to show them.)':'')+'</div>')+`<div class="small mut" style="margin:6px 2px">${total} team${total===1?'':'s'} shown</div>`}
+function confirmDraft(tid){if(!S||!canPick())return;const s=onClock(S);if(!s)return;const taken=takenMap(S);if(taken[tid]){toast('Already taken by '+taken[tid].owner);return}
+  const x=TEAMS[tid],r=rankOf(tid);const onBehalf=s.owner!==me;
+  openSheet(`<h2>Draft ${esc(x.name)}?</h2><div style="margin:8px 0">${chip(tid,{big:true})}</div><div class="mut small">Pick #${s.n} · Round ${s.round}${r?' · rough power rank #'+r:' · off the radar'}${tid===CURSE_TID?' · ⚠️ <b>Grand Canyon curse</b> applies':''}</div>${onBehalf?`<div class="alertbar" style="margin-top:8px">👑 Commissioner pick on behalf of ${esc(own(s.owner).emoji)} <b>${esc(s.owner)}</b></div>`:''}<div class="grid2" style="margin-top:14px"><button class="btn pri" style="flex:1;padding:12px" data-a="confirm" data-t="${tid}" data-o="${esc(s.owner)}">✅ Draft it</button><button class="btn" style="flex:1;padding:12px" data-a="sheetbg">Cancel</button></div>`)}
+/* ---- my team ---- */
+function viewMy(){if(!S)return'<div class="card mut">Loading…</div>';
+  const who=viewOwner&&ONAMES.indexOf(viewOwner)>=0?viewOwner:(me&&!isSpec()?me:S.order[0]);const o=own(who);const mine=S.picks.filter(p=>p.owner===who);const rs=roasts(S.picks,ti,totalPicks(S));const isMe=!isSpec()&&who===me;
+  let h=`<div class="opills">${S.order.map(n=>`<button class="${n===who?'on':''}" data-a="vo" data-n="${esc(n)}">${esc(own(n).emoji)} ${esc(n)}${n===me?' (you)':''}</button>`).join('')}</div>`;
+  h+=`<div class="card"><h3>${esc(o.emoji)} ${esc(o.team_name)} <span class="mut small">— ${esc(who)}</span></h3><div class="mut small">${mine.length}/${ROUNDS} teams drafted${S.status==='live'?' · '+(picksAway(S,who)===0?'<b style="color:var(--acc)">on the clock now</b>':picksAway(S,who)==null?'no picks left':'next pick #'+nextPickNo(S,who)+' · '+picksAway(S,who)+' pick(s) away'):''}</div></div>`;
+  h+=mine.length?mine.map(p=>{const r=rs.find(x=>x.n===p.n);return `<div class="trow"><span class="qn">${p.round}</span><div class="tm">${chip(p.tid,{big:true})}<small>Pick #${p.n}${p.auto?' · 🤖 auto':''}${p.sim?' · 🎲 sim':''} · ${esc(ti(p.tid).mascot||'')}</small></div>${r?`<span class="tag ${r.cat}">${r.cat.toUpperCase()}</span>`:''}</div>`}).join(''):'<div class="card mut">No picks yet.</div>';
+  if(mine.length<ROUNDS&&S.status!=='done')h+=`<div class="small mut" style="margin:4px 2px">${ROUNDS-mine.length} empty slot(s) left.</div>`;
+  if(isMe){const q=((S.queues&&S.queues[me])||[]).filter(t=>!takenMap(S)[t]);const au=!!S.auto[me];
+    h+=`<div class="card"><h3>⭐ My pick queue</h3><label class="sw"><input type="checkbox" data-a="autotog" ${au?'checked':''}> 🤖 Auto-pick for me <span class="mut small" style="font-weight:600">(uses queue top → else best available)</span></label><div class="small mut" style="margin:6px 0">If the pick clock runs out, the queue is used automatically — with auto off too. Add teams with ☆ in the Teams tab.</div>`;
+    h+=q.length?q.map((t,i)=>`<div class="qrow"><span class="qn">${i+1}</span>${chip(t)}<span style="flex:1"></span><button class="btn sm" data-a="qm" data-t="${t}" data-d="-1">▲</button><button class="btn sm" data-a="qm" data-t="${t}" data-d="1">▼</button><button class="btn sm bad" data-a="q" data-t="${t}">✕</button></div>`).join(''):'<div class="mut small">Queue is empty — falls back to best-available by rough power rank.</div>';
+    h+='</div>'}
+  else if(!isSpec())h+=`<div class="small mut" style="margin:6px 2px">Rosters are public. Queues are private-ish (not shown here).</div>`;
+  return h}
+/* ---- chat ---- */
+function viewChat(){return `<div class="seg"><button data-a="csub" data-v="chat" class="${chatSub==='chat'?'on':''}">💬 Chat</button><button data-a="csub" data-v="picks" class="${chatSub==='picks'?'on':''}">📜 Pick feed</button></div><div id="chatbody"></div>${chatSub==='chat'?(isSpec()||!me?'<div class="card mut small">👀 Spectators can read. Switch to an owner name to chat and react.</div>':`<div class="chatbox"><input type="text" id="cin" maxlength="280" placeholder="Trash talk responsibly…" autocomplete="off"><button class="btn pri" data-a="send">Send</button></div>`):''}`}
+const REACTS=['👍','😂','💩','🔥','💀','🫡'];
+function updateChatView(){const el=$('chatbody');if(!el||tab!=='chat')return;
+  if(chatSub==='chat'){const near=(document.documentElement.scrollHeight-window.scrollY-window.innerHeight)<160;const h=C.msgs.map(m=>{const rx=Object.keys(m.r||{}).map(e=>`<button class="${(m.r[e]||[]).includes(me)?'on':''}" data-a="rx" data-id="${m.id}" data-e="${e}">${e} ${m.r[e].length}</button>`).join('');
+    return `<div class="msg${m.who===me?' mine':''}"><div class="who">${esc(own(m.who).emoji)} ${esc(m.who)} <span class="mut" style="font-weight:600">${new Date(m.ts).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}</span></div><div class="tx">${esc(m.text)}</div><div class="rx">${rx}${reactOpen===m.id?REACTS.map(e=>`<button data-a="rx" data-id="${m.id}" data-e="${e}">${e}</button>`).join(''):`<button data-a="ropen" data-id="${m.id}">＋☺</button>`}</div></div>`}).join('');
+    el.innerHTML=h||'<div class="card mut">No messages yet. Say something chaotic. (Picks are NOT mixed in here — see the 📜 Pick feed tab.)</div>';if(near)window.scrollTo(0,document.documentElement.scrollHeight)}
+  else{if(!S){el.innerHTML='';return}const rs=roasts(S.picks,ti,totalPicks(S));
+    el.innerHTML=S.picks.length?S.picks.slice().reverse().map(p=>{const r=rs.find(x=>x.n===p.n);return `<div class="card" style="padding:9px 11px"><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><b style="color:var(--acc)">#${p.n}</b> R${p.round} ${esc(own(p.owner).emoji)} <b>${esc(p.owner)}</b> ${chip(p.tid)}<span class="tag ${r.cat}">${r.cat.toUpperCase()}</span>${p.auto?'<span class="tag auto">🤖 AUTO</span>':''}</div><div class="small" style="margin-top:4px;color:#dfe5f3">${esc(r.line)}</div></div>`}).join(''):'<div class="card mut">No picks yet.</div>'}}
+/* ---- admin ---- */
+function viewAdmin(){if(!S)return'<div class="card mut">Loading…</div>';const cm=commish();const pm=('Notification' in window)?Notification.permission:'n/a';
+  let h=`<div class="card"><h3>📨 Join / invite</h3><div class="mut small">Friends join with name only — no accounts. Spectators can watch without picking a name.</div><div class="grid2" style="margin-top:8px"><button class="btn pri" data-a="invite">Share / QR</button><button class="btn" data-a="switch">Switch who I am</button><button class="btn" data-a="alerts">🔔 Turn alerts: ${esc(pm)}</button></div><div class="small mut" style="margin-top:6px">Alerts: banner + vibration + title/icon flash always; system notifications only while the app is open/backgrounded (true background push needs a server — future).</div></div>`;
+  if(!S.pass)h+=`<div class="card lockcard"><h3>🔒 Set the commissioner passcode</h3><div class="small mut">No passcode is set for this room yet. Whoever sets it first becomes the commissioner. Admin tools stay locked until then.</div><input type="text" id="newpin" class="pin" placeholder="passcode" autocomplete="off" style="margin:8px 0"><div class="errtxt" id="pinerr"></div><button class="btn pri" data-a="setpass">Set passcode</button></div>`;
+  else if(!cm)h+=`<div class="card lockcard" id="lockcard"><h3>🔒 Commissioner tools are locked</h3><div class="small mut">Start, pause, undo, reset, order and clock changes need the commissioner passcode. (Friends-pool lock: it stops accidents, not attackers.)</div><button class="btn pri" style="margin-top:8px" data-a="unlockui">🔑 Unlock</button></div>`;
+  else h+=`<div class="card" id="unlockedcard"><h3>🔓 Commissioner tools unlocked</h3><div class="small mut">Unlocked on this device only.</div><div class="grid2" style="margin-top:8px"><button class="btn" data-a="lock">🔒 Lock now</button><button class="btn" data-a="chpass">Change passcode</button></div></div>`;
+  h+=`<div class="card"><h3>Draft order ${S.status==='setup'?'':'<span class="mut small">(locked)</span>'}</h3>${S.order.map((o,i)=>`<div class="rrow"><span class="no">${i+1}</span><span>${esc(own(o).emoji)}</span><b style="flex:1">${esc(o)}</b>${cm&&S.status==='setup'?`<button class="btn sm" data-a="om" data-n="${esc(o)}" data-d="-1">▲</button><button class="btn sm" data-a="om" data-n="${esc(o)}" data-d="1">▼</button>`:''}</div>`).join('')}
+  <div class="small mut" style="margin-top:6px">Default order = owners in data order. Round 2 reverses, round 3 flips back, etc.${cm?'':' Changing the order needs the passcode.'}</div></div>`;
+  if(cm){h+=`<div class="card"><h3>🎮 Draft controls</h3><div class="grid2">`+
+   (S.status==='setup'?`<button class="btn pri" data-a="start">▶️ Start draft</button><button class="btn" data-a="rand">🎲 Randomize order</button>`:'')+
+   (S.status==='live'?`<button class="btn" data-a="${S.paused?'resume':'pause'}">${S.paused?'▶️ Resume':'⏸ Pause'}</button>`:'')+
+   (S.picks.length?`<button class="btn" data-a="undo">↩️ Undo last pick</button>`:'')+
+   `<button class="btn bad" data-a="reset">🧹 Reset test draft…</button></div>
+   <div style="margin-top:10px" class="grid2"><span class="small mut">Pick clock (countdown + auto-pick on expiry):</span><select id="clk" data-a="clk"><option value="0">Off</option>${[30,60,90,120].map(v=>`<option value="${v}" ${S.clockSecs===v?'selected':''}>${v}s</option>`).join('')}</select></div>
+   <div class="small mut" style="margin-top:4px">When the clock hits 0, any connected phone auto-picks the top of that owner's queue (else best available). The deadline is computed from the last pick's server-synced time.</div></div>
+   <div class="card"><h3>🧪 Mock draft helper</h3><div class="grid2"><span class="small mut">Auto-pick random teams for the next</span><select id="simn">${[1,4,8,16,64].map(v=>`<option value="${v}" ${simN===v?'selected':''}>${v===64?'ALL':v}</option>`).join('')}</select><span class="small mut">picks</span><button class="btn pri" data-a="sim">Simulate picks…</button></div><div class="small mut" style="margin-top:4px">Requires a live draft. Commissioner can also pick on behalf of whoever is on the clock from the Teams tab.</div></div>`}
+  else if(S.pass)h+=`<div class="card mut small">Unlock commissioner tools above to start/pause/undo/reset, change the order or clock, or simulate picks.</div>`;
+  h+=`<div class="card stub"><h3>🔄 January redraft (stub — not built)</h3><div class="small mut">Planned: <b>Jan 20 redraft</b>. Each owner keeps their previous roster; may <b>drop up to ${CFG.redraft.maxDrop}</b> and <b>add up to ${CFG.redraft.maxAdd}</b>. Order is snake by <b>standings, last place picks first</b>.</div><div class="grid2" style="margin-top:8px"><button class="btn" disabled>Start redraft (coming later)</button></div></div>`;
+  h+=`<div class="small mut" style="padding:8px 2px">Data: ${esc(dataSrc)} · ${POOL.length} draftable teams · room v${M?M.version:0} · round log #${S.epoch} · clock: ${esc(srvInfo)} · key …${esc(CFG.url.slice(-8))}</div>`;return h}
+/* ---- confirm + unlock sheets ---- */
+let confirmCb=null;
+function askConfirm(o){confirmCb=o.onYes;openSheet(`<h2>${esc(o.title)}</h2><div class="mut small" style="margin:6px 0 10px">${o.body}</div>${o.typed?`<input type="text" id="cft" placeholder='Type ${esc(o.typed)} to confirm' autocomplete="off" autocapitalize="characters"><div class="errtxt" id="cferr"></div>`:''}<div class="grid2" style="margin-top:10px"><button class="btn ${o.danger?'bad':'pri'}" style="flex:1;padding:12px" data-a="cfyes" ${o.typed?`data-typed="${esc(o.typed)}"`:''}>${esc(o.label)}</button><button class="btn" style="flex:1;padding:12px" data-a="sheetbg">Cancel</button></div>`)}
+function showUnlock(change){openSheet(`<h2>${change?'🔑 Change passcode':'🔑 Commissioner unlock'}</h2><div class="mut small">${change?'Enter the NEW passcode (4+ characters). Other devices will need to unlock again.':'Enter the commissioner passcode to start, pause, undo, reset or edit the order.'}</div><input type="${change?'text':'password'}" id="pin" class="pin" placeholder="passcode" autocomplete="off" style="margin:10px 0 4px"><div class="errtxt" id="pinerr"></div><div class="grid2"><button class="btn pri" style="flex:1;padding:12px" data-a="${change?'dochpass':'dounlock'}">${change?'Save passcode':'Unlock'}</button><button class="btn" style="flex:1;padding:12px" data-a="sheetbg">Cancel</button></div><div class="small mut" style="margin-top:8px">This is a friendly lock for a friends pool, not real security — see the README note.</div>`);setTimeout(()=>{const i=$('pin');if(i)i.focus()},50)}
+/* ---- view plumbing ---- */
+function renderView(){const v=$('view');
+  if(tab==='teams'){if(!$('tq')){v.innerHTML=viewTeams()}updateTeams();return}
+  if(tab==='chat'){if(!$('chatbody')){v.innerHTML=viewChat()}updateChatView();return}
+  const old=tab==='board'?document.querySelector('.bwrap'):null,sl=old?old.scrollLeft:null,st=old?old.scrollTop:null;
+  v.innerHTML=tab==='board'?viewBoard():tab==='my'?viewMy():viewAdmin();
+  if(tab==='board')centerBoard(sl,st)}
+let boardCenteredFor=-1;
+function centerBoard(sl,st){const w=document.querySelector('.bwrap');if(!w||!S)return;const key=S.picks.length;
+  if(sl!=null&&key===boardCenteredFor){w.scrollLeft=sl;w.scrollTop=st;return}
+  boardCenteredFor=key;const c=w.querySelector('td.cur')||w.querySelector('td.mine');if(c){w.scrollLeft=Math.max(0,c.offsetLeft-38-(w.clientWidth-38)/2+c.offsetWidth/2);w.scrollTop=Math.max(0,c.offsetTop-w.clientHeight/2)}}
+function renderAll(){document.body.dataset.tab=tab;renderWho();renderBanner();renderTicker();renderTabs();renderView();updateTitle()}
+function setTab(t){tab=t;document.body.dataset.tab=t;lsSet('tab',t);$('view').innerHTML='';if(t==='chat'){seenChat=C.msgs.length;lsSet('seenChat',String(seenChat))}renderTabs();renderView();window.scrollTo(0,0)}
+/* ---- invite ---- */
+function roomUrl(extra){const u=new URL(location.href);u.search='';u.hash='';return u.toString().replace(/index\.html$/,'')+(extra||'')}
+function showInvite(){const url=roomUrl(),spec=roomUrl('?watch=1');let qr='';
+  try{const q=qrcode(0,'M');q.addData(url);q.make();qr=q.createSvgTag({scalable:true,margin:0})}catch(e){qr='<span style="color:#000;line-height:1.2;font-size:12px">QR unavailable</span>'}
+  openSheet(`<h2>📨 Invite friends</h2><div class="mut small">Scan, tap Share, or copy the link. They pick their owner name and they're in.</div><div style="text-align:center;margin:10px 0"><div class="qr">${qr}</div></div><div class="urlbox">${esc(url)}</div><div class="grid2"><button class="btn pri" data-a="share" data-u="${esc(url)}">📤 Share…</button><button class="btn" data-a="copy" data-u="${esc(url)}">Copy link</button><button class="btn" data-a="copy" data-u="${esc(spec)}">Copy spectator link</button><button class="btn" data-a="sheetbg">Close</button></div><div class="small mut" style="margin-top:8px">Tip: on iPhone, Share → "Add to Home Screen" installs it like an app.</div>`)}
+async function doShare(url){const data={title:'STOOPIDS Draft Room (test)',text:'Join the Stoopids snake draft (TEST) 🏀',url};
+  if(navigator.share){try{await navigator.share(data);return}catch(e){if(e&&e.name==='AbortError')return}}
+  doCopy(url)}
+async function doCopy(text){try{await navigator.clipboard.writeText(text);toast('🔗 Copied')}catch(e){const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast('🔗 Copied')}catch(e2){toast('Copy failed — long-press the link')}ta.remove()}}
+function recapText(){if(!S||S.status!=='done')return'';const rc=recap(S);return 'STOOPIDS DRAFT RECAP (test)\n'+S.order.map(o=>`${own(o).emoji} ${o}: ${rc[o].head} — ${S.picks.filter(p=>p.owner===o).map(p=>tn(p.tid)).join(', ')}`).join('\n')}
+/* ===================== EVENTS ===================== */
+const ACT={
+  tab:el=>setTab(el.dataset.t),
+  iam:el=>{me=el.dataset.n;if(me!==SPEC)lsSet('me',me);else lsSet('me',null);hideIdentity();viewOwner=null;renderAll();kick()},
+  switch:()=>{showIdentity()},
+  invite:()=>showInvite(),share:el=>doShare(el.dataset.u),copy:el=>doCopy(el.dataset.u),
+  sheetbg:(el,e)=>{if(e&&e.target!==el)return;confirmCb=null;closeSheet()},
+  alerts:()=>enableAlerts(),
+  thide:()=>{TF.hide=!TF.hide;lsSet('thide',TF.hide?'1':'0');updateTeams()},twatch:()=>{TF.watch=!TF.watch;updateTeams()},tqueue:()=>{TF.queue=!TF.queue;updateTeams()},
+  watch:(el,e)=>{if(e)e.stopPropagation();const t=el.dataset.t;if(WATCH.has(t))WATCH.delete(t);else WATCH.add(t);saveWatch();updateTeams()},
+  draftrow:el=>confirmDraft(el.dataset.t),
+  confirm:async el=>{closeSheet();await doPick(el.dataset.t,el.dataset.o)},
+  q:(el,e)=>{if(e)e.stopPropagation();actQueue(me,el.dataset.t)},qm:el=>actQMove(me,el.dataset.t,+el.dataset.d),
+  autotog:el=>actAuto(me,el.checked),
+  vo:el=>{viewOwner=el.dataset.n;renderView()},
+  csub:el=>{chatSub=el.dataset.v;$('view').innerHTML='';renderView()},
+  send:()=>{const i=$('cin');const t=i.value;i.value='';sendMsg(t)},
+  rx:el=>{reactOpen=null;react(el.dataset.id,el.dataset.e)},ropen:el=>{reactOpen=el.dataset.id;updateChatView()},
+  /* commissioner lock */
+  unlockui:()=>showUnlock(false),chpass:()=>{if(needUnlock())showUnlock(true)},lock:()=>{lsSet('cmtok',null);toast('🔒 Locked');renderAll()},
+  dounlock:async()=>{const v=($('pin')||{}).value||'';const r=await actUnlock(v);if(r.ok){closeSheet();toast('🔓 Unlocked on this device');renderAll()}else{const e=$('pinerr');if(e)e.textContent=r.msg;const i=$('pin');if(i){i.value='';i.focus()}}},
+  dochpass:async()=>{const v=($('pin')||{}).value||'';const r=await actSetPass(v,false);if(r.ok){closeSheet();toast('🔑 Passcode changed. Other devices must unlock again.');renderAll()}else{const e=$('pinerr');if(e)e.textContent=r.msg}},
+  setpass:async()=>{const v=($('newpin')||{}).value||'';const r=await actSetPass(v,true);if(r.ok){toast('🔑 Passcode set — this device is unlocked');renderAll()}else{const e=$('pinerr');if(e)e.textContent=r.msg}},
+  cfyes:el=>{const need=el.dataset.typed;if(need){const v=(($('cft')||{}).value||'').trim().toUpperCase();if(v!==need){const e=$('cferr');if(e)e.textContent='Type '+need+' exactly to continue.';return}}const cb=confirmCb;confirmCb=null;closeSheet();if(cb)cb()},
+  /* admin actions (each re-checks the unlock; destructive ones ask first) */
+  start:()=>actStart(),pause:()=>actPause(true),resume:()=>actPause(false),
+  undo:()=>{if(!needUnlock())return;const l=S.picks[S.picks.length-1];askConfirm({title:'Undo the last pick?',body:l?('Pick #'+l.n+' ('+esc(tn(l.tid))+' by '+esc(l.owner)+') will be removed and the clock restarts.'):'',label:'↩️ Undo pick',danger:true,onYes:actUndo})},
+  reset:()=>{if(!needUnlock())return;askConfirm({title:'Reset the TEST draft?',body:'This <b>clears every pick</b> and returns the room to the lobby for everyone. The passcode is kept. Old pick records stay on the server but are never used again.',label:'🧹 Reset draft',typed:'RESET',danger:true,onYes:actReset})},
+  rand:()=>{if(needUnlock())askConfirm({title:'Randomize the draft order?',body:'Everyone sees the new order immediately.',label:'🎲 Randomize',onYes:actRandom})},
+  om:el=>actOrder(el.dataset.n,+el.dataset.d),
+  sim:()=>{if(needUnlock())askConfirm({title:'Simulate '+(simN===64?'ALL':simN)+' pick(s)?',body:'Random teams are drafted for whoever is on the clock. Use undo or reset to take them back.',label:'🎲 Simulate',danger:true,onYes:()=>actSim(simN)})},
+  sharerecap:()=>{const t=recapText();if(navigator.share)navigator.share({title:'Stoopids draft recap',text:t}).catch(()=>{});else doCopy(t)}
+};
+document.addEventListener('click',e=>{if(e.target.closest('a.chip'))return;const el=e.target.closest('[data-a]');if(!el)return;const f=ACT[el.dataset.a];if(f){if(el.tagName==='INPUT'&&el.type==='checkbox'){f(el)}else f(el,e)}});
+document.addEventListener('change',e=>{const el=e.target;if(el.id==='clk')actClock(+el.value);if(el.id==='simn')simN=+el.value;if(el.id==='tmode'){TF.mode=el.value;lsSet('tmode',TF.mode);updateTeams()}});
+document.addEventListener('input',e=>{if(e.target.id==='tq'){TF.q=e.target.value;updateTeams()}});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='pin'){e.preventDefault();(S&&S.pass&&document.querySelector('[data-a=dochpass]')?ACT.dochpass:ACT.dounlock)()}if(e.key==='Enter'&&e.target.id==='newpin'){e.preventDefault();ACT.setpass()}});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='cin'){e.preventDefault();ACT.send()}});
+/* full refetch whenever the phone wakes up / comes back online (fixes stale board after screen lock) */
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){kick();updateTitle();renderBanner()}else updateTitle()});
+window.addEventListener('focus',()=>{kick();syncTime()});window.addEventListener('online',kick);window.addEventListener('pageshow',kick);
+let lastTick=Date.now();
+setInterval(()=>{const now=Date.now();if(now-lastTick>6000){kick();syncTime()}lastTick=now;if(now-srvSync>300000)syncTime();tickClock();autoTick();renderConn();
+  },1000);
+/* ===================== BOOT ===================== */
+(async function boot(){
+  dataSrc=await loadData();
+  if(window._asParam&&!me&&ONAMES.indexOf(window._asParam)>=0){me=window._asParam;lsSet('me',me)}
+  M=normalizeMeta(null,ONAMES);S=deriveState(M,{},{},POOLSET);renderAll();syncTime();
+  if(!me)showIdentity();
+  if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').then(r=>{swReg=r}).catch(()=>{})}
+  loop();
+})();
+
+</script>
+</body>
+</html>
