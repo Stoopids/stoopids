@@ -37,6 +37,20 @@ nav button:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
 @media (max-width:370px){nav{padding:6px 2px;gap:1px}nav button{font-size:8.8px;letter-spacing:-.025em}}
 @media (min-width:900px){nav{padding:8px 10px;gap:5px}nav button{flex:1 1 auto;flex-direction:row;gap:6px;border-radius:99px;padding:8px 10px;min-height:40px;font-size:13px;letter-spacing:0}nav button .ni{font-size:14px}nav button .nl.f{display:block}nav button .nl.s{display:none}}
 /*</NAV-ONE-ROW>*/
+/*<DRAFT-TAB>*/
+/* "Draft" is an external link (<a class="nd">) styled like the tab buttons. 10 items now: phone labels get shorter (see NAVSHORT below), full labels only from 1040px. */
+nav a.nd{position:relative;flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:var(--card);color:var(--tx);border:1px dashed var(--acc);border-radius:9px;padding:4px 0;min-height:46px;font:inherit;font-size:9.5px;font-weight:800;letter-spacing:-.01em;line-height:1.05;white-space:nowrap;cursor:pointer;text-decoration:none}
+nav a.nd .ni{font-size:17px;line-height:1}
+nav a.nd .nl{display:block;max-width:100%;overflow:hidden;text-overflow:clip}
+nav a.nd .nl.f{display:none}
+nav a.nd:hover{background:var(--card2)}
+nav a.nd:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
+@media (max-width:420px){nav{padding:6px 2px;gap:1px}}
+@media (max-width:370px){nav a.nd{font-size:8.8px;letter-spacing:-.025em}}
+@media (max-width:340px){nav button,nav a.nd{font-size:8.2px;letter-spacing:-.03em}}
+@media (min-width:600px) and (max-width:1039px){nav{padding:6px 4px;gap:2px}nav button,nav a.nd{flex:1 1 0;flex-direction:column;gap:2px;border-radius:9px;padding:4px 0;min-height:46px;font-size:11.5px;letter-spacing:-.01em}nav button .ni,nav a.nd .ni{font-size:19px}nav button .nl.f,nav a.nd .nl.f{display:none}nav button .nl.s,nav a.nd .nl.s{display:block}}
+@media (min-width:1040px){nav{padding:8px 8px;gap:3px}nav button,nav a.nd{flex:1 1 auto;flex-direction:row;gap:4px;border-radius:99px;padding:8px 8px;min-height:40px;font-size:12.5px;letter-spacing:0}nav button .ni,nav a.nd .ni{font-size:14px}nav button .nl.f,nav a.nd .nl.f{display:block}nav button .nl.s,nav a.nd .nl.s{display:none}}
+/*</DRAFT-TAB>*/
 main{max-width:1000px;margin:0 auto;padding:12px 10px 60px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin:10px 0;overflow-wrap:anywhere}
 .lb{display:flex;align-items:center;gap:10px;cursor:pointer}
@@ -54,6 +68,25 @@ main{max-width:1000px;margin:0 auto;padding:12px 10px 60px}
 .chip .nologo{display:inline-flex;align-items:center;justify-content:center;background:#e2e8f0;color:#1e293b;font-size:9px;font-weight:900;letter-spacing:-.02em;line-height:1}
 .chip.big .nologo{font-size:11px}
 .chip:hover{filter:brightness(1.12)}
+/*<RANK-CHIPS>*/
+/* Ranks tab: row 1 = rank | name + team-name subtitle | points (right); the team chips sit below it as a full-width wrapped grid (4 columns on phones = 4x2 for 8 teams, 3 columns below 340px, 4 columns from 700px, 8 in one row from 1000px; chips >=32px tall). Markup/links unchanged, CSS only (+ class "oc" on the card, per-owner quip dropped from these cards). */
+.card.oc{display:grid;grid-template-columns:46px minmax(0,1fr) auto;grid-template-areas:"rank who pts" "bar bar bar" "chips chips chips";column-gap:10px;align-items:center}
+.card.oc .lb{display:contents}
+.card.oc .rank{grid-area:rank}
+.card.oc .who{grid-area:who}
+.card.oc .pts{grid-area:pts}
+.card.oc .bar{grid-area:bar}
+.card.oc .chips{grid-area:chips;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;margin-top:8px;align-self:stretch}
+.card.oc .chip{display:block;min-width:0;max-width:none;padding:1px 2px 1px 1px;font-size:10px;line-height:26px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card.oc .chip img,.card.oc .chip .nologo{width:20px;height:20px;display:inline-block;vertical-align:middle;margin-right:2px}
+.card.oc .chip .nologo{display:inline-flex;font-size:8px}
+@media (max-width:339px){.card.oc .chips{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (min-width:700px){
+  .card.oc .chips{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+  .card.oc .chip{font-size:12.5px;padding:1px 8px 1px 1px;margin:0}
+}
+@media (min-width:1000px){.card.oc .chips{grid-template-columns:repeat(8,minmax(0,1fr));gap:4px}.card.oc .chip{font-size:11px;padding:1px 2px 1px 1px}}
+/*</RANK-CHIPS>*/
 .chip.big{font-size:15px;padding:3px 11px 3px 3px}
 .chip.big img{width:30px;height:30px}
 .chip.out{opacity:.55;text-decoration:line-through}
@@ -115,24 +148,8 @@ pre.js{background:#0b0e14;border:1px solid var(--line);border-radius:10px;paddin
 .pill.warn{background:#4b3a0b;border-color:#8a6d12;color:#ffe08a}
 footer{max-width:1000px;margin:0 auto;padding:0 14px 40px;color:var(--mut);font-size:12px}
 
-/* ---------- who's online strip + "Who are you?" ---------- */
-#presence{max-width:1000px;margin:-30px auto 16px;padding:0 10px}
-#presence[hidden]{display:none}
-.pr{display:flex;flex-wrap:wrap;align-items:center;gap:5px 6px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:7px 9px;min-width:0}
-.pr .prl{font-size:12px;font-weight:800;color:var(--acc);margin-right:2px;white-space:nowrap}
-.pc{display:inline-flex;align-items:center;gap:5px;max-width:100%;min-width:0;padding:3px 9px;border-radius:99px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font:inherit;font-size:12.5px;font-weight:700;line-height:1.2}
-.pc .pn{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pc .pd{width:8px;height:8px;border-radius:50%;background:var(--good);box-shadow:0 0 0 2px rgba(74,222,128,.22);flex:none}
-.pc.on{border-color:#2f6b47}
-.pc.off{opacity:.78;background:transparent;border-style:dashed;color:var(--mut)}
-.pc.off .pd{background:#5b6578;box-shadow:none}
-.pc.off{padding:2px 9px}
-.pc .pt{display:flex;flex-direction:column;min-width:0}
-.pc small{font-size:10.5px;font-weight:600;color:var(--mut);white-space:nowrap;line-height:1.15}
-.pc.me{cursor:pointer;border-color:var(--acc)}
-.pc.me .pe{font-size:10px;color:var(--acc);font-weight:800}
-.pg{font-size:12px;font-weight:700;color:var(--mut);padding:0 3px}
-button.pc{cursor:pointer}
+/* ---------- "Who are you?" modal (the online list now lives in the chat bar) ---------- */
+/* the old standalone 'Online now' strip CSS (#presence/.pr/.pc/.pg) was removed: that info now lives in the merged chat bar (CHAT-BAR) */
 .pwho{position:fixed;inset:0;z-index:50;background:rgba(5,7,12,.78);display:flex;align-items:center;justify-content:center;padding:14px}
 .pwho .box{width:100%;max-width:360px;max-height:100%;overflow:auto;background:var(--card);border:2px solid var(--acc);border-radius:18px;padding:16px 14px 14px;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.55)}
 .pwho h2{margin:0;color:var(--acc);font-size:24px;font-weight:900}
@@ -160,11 +177,32 @@ a.wa:hover,a.wa:focus-visible{color:var(--tx);border-color:#2f6b47}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .chat{max-width:1000px;margin:0 auto 18px;padding:0 10px}
 .chat[hidden]{display:none}
-.chat-t{display:flex;align-items:center;gap:8px;width:100%;min-height:44px;background:var(--card);border:1px solid var(--line);border-radius:12px;color:var(--tx);font:inherit;font-weight:800;padding:0 12px;cursor:pointer;text-align:left}
-.chat-t:focus-visible,.chat-f button:focus-visible,.chat-f input:focus-visible,.chat-p button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
-.chat-t .cn{margin-left:auto;color:var(--mut);font-size:12px;font-weight:600;white-space:nowrap}
-.chat-t .cdot{width:10px;height:10px;border-radius:50%;background:var(--acc);box-shadow:0 0 0 3px rgba(255,210,63,.25);flex:none}
+/*<CHAT-BAR>*/
+.chat-t{display:flex;align-items:center;gap:8px;width:100%;min-height:54px;background:var(--card);border:1px solid var(--line);border-radius:12px;color:var(--tx);font:inherit;padding:6px 12px;cursor:pointer;text-align:left}
+.chat.top{margin-top:10px}
+.cbm{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.cb1,.cb2{display:block;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cb1{font-size:12px;font-weight:700;color:var(--mut);line-height:1.25}
+.cb1 .cbo{color:var(--tx);margin-right:9px;white-space:nowrap}
+.cb1 .cbf,.cb1 .cbg{color:var(--mut);font-weight:600;margin-right:9px;white-space:nowrap}
+.cb1 .pd{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--good);box-shadow:0 0 0 2px rgba(74,222,128,.22);margin-right:4px;vertical-align:0}
+.cb2{font-size:13.5px;font-weight:600;color:#c3cbdc;line-height:1.3}
+.cb2.un{color:var(--tx);font-weight:800}
+.cb2.ty{color:var(--acc);font-weight:700;font-style:italic}
+.cb2.mut{color:var(--mut);font-weight:500}
+.chat-t .cdot{flex:none;min-width:26px;height:26px;padding:0 8px;border-radius:99px;background:#ff3b5c;color:#fff;font-size:14px;font-weight:900;font-style:normal;line-height:26px;text-align:center;box-shadow:0 0 0 3px rgba(255,59,92,.3)}
 .chat-t .cdot[hidden]{display:none}
+.chat.unread .chat-t{border-color:var(--acc);background:#2b2510;animation:cbpulse 2.2s ease-in-out infinite}
+@keyframes cbpulse{0%,100%{box-shadow:0 0 0 0 rgba(255,210,63,0)}50%{box-shadow:0 0 0 5px rgba(255,210,63,.32),0 0 16px rgba(255,210,63,.3)}}
+@media (prefers-reduced-motion:reduce){.chat.unread .chat-t{animation:none;box-shadow:0 0 0 3px rgba(255,210,63,.5)}}
+.chat-h{display:flex;gap:6px;align-items:center;justify-content:space-between;margin:0 0 6px}
+.chat-h button{min-height:40px;padding:0 10px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--mut);font:inherit;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.chat-h button[aria-pressed=true]{color:var(--acc);border-color:var(--acc)}
+.chat-h button[hidden]{display:none}
+nav button.hasu .nb{font-size:0;padding:0;width:9px;height:9px;top:3px;right:3px}   /* chat count present: the existing 'new' bet pill shrinks to a dot so the two never overlap */
+nav button .nu{position:absolute;top:1px;left:2px;min-width:15px;background:#ff3b5c;color:#fff;border-radius:99px;font-size:9px;font-weight:900;line-height:1;padding:2px 4px;text-align:center;pointer-events:none}
+/*</CHAT-BAR>*/
+.chat-t:focus-visible,.chat-f button:focus-visible,.chat-f input:focus-visible,.chat-p button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 .chat-t .ca{color:var(--acc);font-size:12px;flex:none}
 .chat-b{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-top:6px;padding:8px;min-width:0}
 .chat-b[hidden]{display:none}
@@ -187,6 +225,18 @@ a.wa:hover,a.wa:focus-visible{color:var(--tx);border-color:#2f6b47}
 .chat-m .bad{color:var(--bad)}
 .chat-m button{min-height:40px;padding:0 10px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font:inherit;font-size:12px;cursor:pointer}
 /*</CHAT-CSS>*/
+/*<REFRESH-NOW>*/
+.lv{display:flex;flex-wrap:wrap;align-items:center;column-gap:2px;width:fit-content;max-width:100%;min-height:40px;margin:-14px 0 -8px;font-size:12px;line-height:1.3;color:var(--mut);opacity:.7}
+.lv[hidden],.lvA[hidden]{display:none}
+.lv button{min-width:40px;min-height:40px;padding:0 8px;border:0;background:none;color:inherit;font:inherit;cursor:pointer;border-radius:8px;display:inline-flex;align-items:center;gap:5px;-webkit-tap-highlight-color:transparent}
+.lv button:hover{opacity:.85;text-decoration:underline}
+.lv button:focus-visible{outline:1px dashed var(--mut);outline-offset:-2px}
+.lv button[disabled]{cursor:default;text-decoration:none;opacity:.8}
+.lv .lvsp{width:11px;height:11px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;display:inline-block;animation:lvspin .8s linear infinite}
+@keyframes lvspin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.lv .lvsp{animation:none}}
+.lvA{margin:0 0 4px;font-size:11px;color:var(--mut);opacity:.7;word-break:break-word}
+/*</REFRESH-NOW>*/
 </style>
 </head>
 <body>
@@ -194,15 +244,16 @@ a.wa:hover,a.wa:focus-visible{color:var(--tx);border-color:#2f6b47}
   <div class="hero" role="img" aria-label="The STOOPIDS crew"></div>
   <div class="titlebar"><h1>STOOP<span>IDS</span></h1>
   <div id="fresh" class="fresh" role="button" tabindex="0" hidden onclick="freshToggle()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();freshToggle()}"><span></span></div>
+  <!--<REFRESH-NOW>--><div id="live" class="lv" hidden><span id="lvT" aria-live="polite"></span><button id="lvB" type="button" aria-label="Refresh live scores" onclick="lvManual()">&#8635; Refresh</button></div><div id="lvA" class="lvA" hidden></div><!--</REFRESH-NOW>-->
   <p class="tag" id="tag"></p></div>
   <div class="sub" id="badges" style="margin:0"></div>
 </header>
 <nav id="nav"></nav>
 <main id="main"><div class="card">Loading the stoopidity…</div></main>
-<div id="presence" hidden></div>
 <!--<CHAT>--><section id="chat" class="chat" aria-label="Live chat" hidden>
-  <button type="button" id="chatT" class="chat-t" aria-expanded="false" aria-controls="chatB"><span class="ca" aria-hidden="true">▸</span><span>💬 Chat</span><i class="cdot" hidden title="New messages"></i><span class="cn" id="chatN"></span></button>
+  <!--<CHAT-BAR>--><button type="button" id="chatT" class="chat-t" aria-expanded="false" aria-controls="chatB"><span class="ca" aria-hidden="true">▸</span><span class="cbm"><span class="cb1" id="chatOn"></span><span class="cb2 mut" id="chatPv"></span></span><i class="cdot" hidden title="New messages"></i></button><!--</CHAT-BAR>-->
   <div id="chatB" class="chat-b" hidden>
+    <!--<CHAT-BAR>--><div class="chat-h"><button type="button" id="chatWho" hidden>You · change</button><button type="button" id="chatSnd" aria-pressed="false" title="Soft blip when someone else posts. Off by default.">🔕 Sound off</button></div><!--</CHAT-BAR>-->
     <div id="chatL" class="chat-l" role="log" aria-live="polite" aria-label="Chat messages" tabindex="0"></div>
     <form id="chatF" class="chat-f" autocomplete="off" hidden><label for="chatI" class="sr">Your message</label><input id="chatI" type="text" maxlength="200" enterkeyhint="send" autocomplete="off" autocapitalize="sentences" placeholder="Say something Stoopid…"><button type="submit" id="chatS">Send</button></form>
     <div id="chatP" class="chat-p" hidden><button type="button" id="chatPb">👋 Pick who you are to chat</button></div>
@@ -220,6 +271,15 @@ const ADMIN=params.has('admin');   // ?admin=1 shows developer-facing details (w
 let D=null,tab=params.get('tab')||'standings',ownerSel=null,openTeam={};
 const TABS=[['standings','🏆 Standings'],['games','📅 Games'],['rosters','👥 Rosters'],['bets','🎲 Side bets'],['teams','🏀 All teams'],['checklist','✅ Postseason'],['redraft','🔄 Jan 20 redraft'],['archive','🗂️ Archive'],['about','📖 Rules']];
 /*<NAV-ONE-ROW>*/const NAVSHORT={standings:'Ranks',games:'Games',rosters:'Rosters',bets:'Bets',teams:'Teams',checklist:'Post',redraft:'Redraft',archive:'Archive',about:'Rules'};/*</NAV-ONE-ROW>*/   // short phone labels (the full name is each button's aria-label)
+/*<DRAFT-TAB>*/
+const DRAFT_URL='https://stoopids.github.io/stoopids/draft2/';   // the new draft room: a full separate app, so a normal same-tab link (the browser Back button returns here); no target=_blank
+Object.assign(NAVSHORT,{rosters:'Squads',redraft:'Jan 20',archive:'Past'});   // shorter phone labels so 10 items fit one row (full names stay in each button's aria-label)
+function draftNavLink(){   // appended LAST in the nav after every render(); not part of TABS, so tab switching / ?tab= routing never sees it
+  const nav=document.getElementById('nav');if(!nav||nav.querySelector('a.nd'))return;
+  const a=document.createElement('a');a.className='nd';a.href=DRAFT_URL;a.rel='external noopener';a.setAttribute('aria-label','Draft room (opens the draft app)');
+  a.innerHTML='<span class="ni" aria-hidden="true">\u{1F4DD}</span><span class="nl f">Draft</span><span class="nl s" aria-hidden="true">Draft</span>';nav.appendChild(a);
+}
+/*</DRAFT-TAB>*/
 
 /* ---------- color helpers (auto contrast) ---------- */
 function hex2rgb(h){h=(h||'').replace('#','');if(h.length===3)h=h.split('').map(c=>c+c).join('');if(!/^[0-9a-f]{6}$/i.test(h))return null;return[0,2,4].map(i=>parseInt(h.substr(i,2),16))}
@@ -306,12 +366,13 @@ function relAgo(ms){   // elapsed milliseconds -> "just now" / "5 min ago" / "3 
 /*</FRESH-CORE>*/
 const FR={exact:false,timer:null,vis:false};
 function freshTick(){   // text only, no re-render
+  /*<REFRESH-NOW>*/try{lvUI()}catch(_){}/*</REFRESH-NOW>*/
   const el=document.getElementById('fresh');if(!el)return;
   const d=D?genDate():null,rel=d?relAgo(Date.now()-d.getTime()):null;
   if(!d||rel===null){el.hidden=true;return}
-  const ex=stampET(),txt='Updated '+(FR.exact?ex:rel),sp=el.firstElementChild;
+  const ex=stampET(),lead=/*<REFRESH-NOW>*/(typeof LV!=='undefined'&&LV.lastOk?'Standings updated ':'Updated ')/*</REFRESH-NOW>*/,txt=lead+(FR.exact?ex:rel),sp=el.firstElementChild;
   if(sp.textContent!==txt)sp.textContent=txt;
-  el.title='Updated '+ex+' (tap to '+(FR.exact?'show how long ago':'show the exact time')+')';
+  el.title=lead+ex+' (tap to '+(FR.exact?'show how long ago':'show the exact time')+')';
   el.hidden=false;
 }
 function freshToggle(){FR.exact=!FR.exact;freshTick()}
@@ -320,15 +381,207 @@ function freshStart(){   // (re)start the 30 s ticker; called from render(), so 
   if(!FR.vis){FR.vis=true;document.addEventListener('visibilitychange',()=>{if(!document.hidden)freshTick()})}
   freshTick();
 }
+/*<REFRESH-NOW>*/
+/* ---------- LIVE SCORES (REFRESH-NOW) ----------
+   Reads ESPN's public scoreboard straight from the browser (the same endpoint refresh.py uses; it sends access-control-allow-origin: *),
+   and overlays live scores / status / finals on the games already in the published data, in memory only.
+   - Standings, points, records and bonuses are NEVER recomputed here: they only change when the site data updates (score.py).
+   - Safe by design: GET only (no custom headers = no CORS preflight), no cookies, no writes anywhere, every error is swallowed. */
+const LVC={url:'https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard',
+  minGap:20000,     // never start two fetches less than 20 s apart (also debounces the Refresh button)
+  fastMs:45000,     // poll interval while a game is live or tips off within 30 min (or ended recently and is not yet seen final)
+  fastBigMs:60000,  // same, but on huge slates (>100 events = ~200 KB per answer) ask only once a minute
+  slowMs:300000,    // poll interval otherwise
+  maxFails:5,       // consecutive failures before polling stops (until the tab is shown again or Refresh is tapped)
+  backMax:600000,   // back-off ceiling
+  timeoutMs:10000,
+  aheadMs:30*60000, // "starting soon" window
+  behindMs:8*3600000, // a game that tipped off up to 8 h ago and is not final yet still counts as active
+  maxDays:2};       // at most 2 scoreboard days (sequential requests) per poll
+const LV={on:false,started:false,busy:false,timer:null,lastStart:0,lastOk:0,fails:0,paused:false,err:null,polls:0,events:0,matched:0,changed:0,days:[],ov:{},nextAt:0,mode:'slow'};
+const LV_RANK={scheduled:0,live:1,final:2};
+/* ESPN status -> our status: line-for-line port of status_of() in refresh.py */
+function lvStatus(e){
+  const n=((((e||{}).status||{}).type)||{}).name||'';
+  const m={STATUS_FINAL:'final',STATUS_SCHEDULED:'scheduled',STATUS_POSTPONED:'postponed',STATUS_CANCELED:'canceled',STATUS_SUSPENDED:'postponed',STATUS_DELAYED:'live'};
+  if(Object.prototype.hasOwnProperty.call(m,n))return m[n];
+  return /PROGRESS|HALF|END_|OVERTIME/.test(n)?'live':'other';
+}
+/* one ESPN event -> {id,status,detail,start,home,away} (port of norm_event(): preseason skipped, exactly 2 competitors, int scores, NCAA seeds) */
+function lvParse(e){
+  try{
+    const c=(e.competitions||[])[0];if(!c)return null;
+    const stype=(e.season||{}).type;if(stype===1)return null;
+    const note=(((c.notes||[])[0])||{}).headline||'';
+    const ncaa=stype===3&&note.indexOf("NCAA Men's Basketball Championship")===0;
+    const comps=c.competitors||[];if(comps.length!==2)return null;
+    const side=x=>{const t=x.team||{};let sc=x.score;sc=(sc!=null&&/^-?\d+$/.test(String(sc).trim()))?parseInt(sc,10):null;
+      const seed=(x.curatedRank||{}).current;
+      return {id:t.id?String(t.id):null,score:sc,win:!!x.winner,seed:(ncaa&&seed&&seed<99)?seed:null}};
+    const home=comps.find(x=>x.homeAway==='home')||comps[0],away=comps.find(x=>x.homeAway==='away')||comps[1];
+    const st=e.status||{},ty=st.type||{};
+    return {id:String(e.id),status:lvStatus(e),detail:String(ty.shortDetail||ty.detail||''),start:e.date||null,home:side(home),away:side(away)};
+  }catch(_){return null}
+}
+const lvSame=(g,ev)=>{const a=[String(g.home.id),String(g.away.id)].sort().join('|'),b=[String(ev.home.id),String(ev.away.id)].sort().join('|');return a===b};
+function lvFind(ev){
+  const games=(D&&D.games)||[];
+  for(const g of games)if(String(g.id)===ev.id)return lvSame(g,ev)?g:null;   // same id but different teams: never touch it
+  const t=ev.start?Date.parse(ev.start):NaN,c=games.filter(g=>lvSame(g,ev)&&g.start&&!isNaN(t)&&Math.abs(Date.parse(g.start)-t)<=18*3600000);   // other id (e.g. ncaa.com fallback ids): same two teams, same night
+  return c.length===1?c[0]:null;
+}
+function lvSide(g,id){return String(g.home.id)===String(id)?g.home:String(g.away.id)===String(id)?g.away:null}
+/* write one parsed event onto the in-memory game(s); returns true if anything displayed changed */
+function lvApply(ev){
+  const g=lvFind(ev);if(!g)return false;
+  if(ev.status==='other')return false;
+  const cur=g.status;
+  if(cur==='final'&&!g._lv)return false;                                      // published finals are the truth
+  if(!g._lv&&LV_RANK[ev.status]!=null&&LV_RANK[cur]!=null&&LV_RANK[ev.status]<LV_RANK[cur])return false;   // never walk a published game backwards
+  const before=JSON.stringify([g.status,g.home.score,g.away.score,g.home.win,g.away.win,g.home.seed,g.away.seed,g._lv&&g._lv.detail]);
+  g.status=ev.status;
+  const show=ev.status==='live'||ev.status==='final';
+  [g.home,g.away].forEach(s=>{
+    const src=String(ev.home.id)===String(s.id)?ev.home:ev.away;
+    if(show&&src.score!=null)s.score=src.score;
+    s.win=ev.status==='final'?src.win:false;
+    if(src.seed!=null&&s.seed==null)s.seed=src.seed});
+  if(show)g._lv={detail:ev.detail,status:ev.status};else if(g._lv)g._lv=null;
+  const after=JSON.stringify([g.status,g.home.score,g.away.score,g.home.win,g.away.win,g.home.seed,g.away.seed,g._lv&&g._lv.detail]);
+  // the same game inside each rostered team's game list (Rosters tab: last games / up next)
+  [g.home,g.away].forEach(s=>{const tg=(D.team_games||{})[String(s.id)]||[];tg.forEach(x=>{
+    if(String(x.id)!==String(g.id))return;
+    x.status=g.status;const us=lvSide(g,s.id),them=us===g.home?g.away:g.home;
+    if(show&&us.score!=null&&them.score!=null){x.us=us.score;x.them=them.score;if(g.status==='final'&&us.score!==them.score)x.res=us.score>them.score?'W':'L'}
+    x._lv=show?true:null})});
+  return before!==after;
+}
+/* a batch of ESPN events -> overlay + stats */
+function lvRun(events){
+  let matched=0,changed=0;const ov={};
+  (events||[]).forEach(e=>{const ev=lvParse(e);if(!ev)return;const g=lvFind(ev);if(!g)return;matched++;
+    if(lvApply(ev))changed++;
+    if(ev.status==='live'||ev.status==='final'||ev.status==='postponed'||ev.status==='canceled')ov[ev.id]=ev;else if(ev.status==='scheduled')delete LV.ov[ev.id]});
+  LV.ov=Object.assign(LV.ov,ov);
+  return {events:(events||[]).length,matched,changed};
+}
+/* after data.js reloads (every 5 min) D is a fresh object: lay the live overlay back on top (published finals win) */
+function lvReapply(){
+  if(!LV.on||!D)return 0;let n=0;
+  Object.keys(LV.ov).forEach(id=>{const ev=LV.ov[id],g=lvFind(ev);
+    if(!g||(g.status==='final'&&!g._lv)){delete LV.ov[id];return}
+    if(lvApply(ev))n++});
+  return n;
+}
+/* which ET game days to ask for, and whether a game is "hot" (live / about to start / ended recently but not seen final) */
+function lvHot(g,now){
+  if(!g||g.status==='final'&&!g._lv)return false;
+  if(g.status==='live')return true;
+  if(g.status!=='scheduled'&&g.status!=='other')return false;
+  const t=g.start?Date.parse(g.start):NaN;if(isNaN(t)||isTBD(g))return false;
+  return t-now<=LVC.aheadMs&&now-t<=LVC.behindMs;
+}
+function lvDays(now){
+  const today=ETK.format(new Date(now)),hot=((D&&D.games)||[]).filter(g=>lvHot(g,now)),set=[...new Set(hot.map(g=>g.day).filter(Boolean))];
+  if(!set.length)return [today];
+  set.sort((a,b)=>Math.abs(Date.parse(a)-Date.parse(today))-Math.abs(Date.parse(b)-Date.parse(today)));
+  return set.slice(0,LVC.maxDays).sort();
+}
+const lvActive=now=>((D&&D.games)||[]).some(g=>lvHot(g,now));
+function lvDelay(now){
+  const base=lvActive(now)?(LV.events>100?LVC.fastBigMs:LVC.fastMs):LVC.slowMs,back=Math.min(LVC.backMax,base*Math.pow(2,Math.min(LV.fails,6)));
+  return Math.round(back*(0.9+Math.random()*0.2));
+}
+async function lvFetchDay(day){
+  const ctl=typeof AbortController!=='undefined'?new AbortController():null,tm=ctl?setTimeout(()=>ctl.abort(),LVC.timeoutMs):null;
+  try{
+    const r=await fetch(LVC.url+'?dates='+day.replace(/-/g,'')+'&groups=50&limit=500',{credentials:'omit',signal:ctl?ctl.signal:undefined});   // plain GET with no extra request header, so the browser sends no CORS preflight
+    if(!r.ok){const e=new Error('http '+r.status);e.status=r.status;throw e}
+    const j=await r.json();
+    if(!j||!Array.isArray(j.events))throw new Error('bad payload');
+    return j.events;
+  }finally{if(tm)clearTimeout(tm)}
+}
+async function lvCheck(manual){
+  if(!LV.on||!D||LV.busy)return 'busy';
+  const now=Date.now();
+  if(now-LV.lastStart<LVC.minGap){if(!LV.timer)lvSchedule();lvUI();return 'debounced'}
+  LV.busy=true;LV.lastStart=now;LV.polls++;lvUI();
+  let events=[],ok=false;
+  try{
+    LV.days=lvDays(now);
+    for(const day of LV.days)events=events.concat(await lvFetchDay(day));   // sequential, never parallel
+    ok=true;
+  }catch(e){LV.err=(e&&e.status===429)?'rate':'net';LV.fails+=(e&&e.status===429)?2:1}
+  if(ok){
+    LV.fails=0;LV.err=null;LV.paused=false;LV.lastOk=Date.now();
+    try{const r=lvRun(events);LV.events=r.events;LV.matched=r.matched;LV.changed=r.changed;if(r.changed)lvRerender()}catch(_){}
+  }
+  LV.busy=false;lvSchedule();lvUI();
+  try{freshTick()}catch(_){}   // MERGE FIX: the 'Standings updated' lead-in switches right after the first live check, even if no re-render happens (e.g. Standings tab)
+  return ok?'ok':'fail';
+}
+function lvSchedule(){
+  clearTimeout(LV.timer);LV.timer=null;
+  if(!LV.on||document.hidden)return;
+  if(LV.fails>=LVC.maxFails){LV.paused=true;return}
+  const now=Date.now(),d=lvDelay(now);LV.mode=lvActive(now)?'fast':'slow';LV.nextAt=now+d;
+  LV.timer=setTimeout(()=>{LV.timer=null;lvCheck(false).catch(()=>{})},d);
+}
+function lvManual(){LV.fails=0;LV.paused=false;lvCheck(true).catch(()=>{})}
+function lvRerender(){   // redraw only the tabs that show games, and never while someone is typing in / choosing from a control
+  const a=document.activeElement,t=a&&a.tagName;
+  if(t==='INPUT'||t==='TEXTAREA'||t==='SELECT')return;
+  if(tab==='games'||tab==='rosters')render();
+}
+function lvInit(){
+  if(LV.started||!D)return;LV.started=true;
+  LV.on=!DEMO&&!(D.meta&&D.meta.mode==='demo');
+  if(!LV.on){lvUI();return}
+  document.addEventListener('visibilitychange',()=>{
+    if(document.hidden){clearTimeout(LV.timer);LV.timer=null;return}
+    LV.fails=0;LV.paused=false;lvCheck(false).catch(()=>{});});   // back on screen: one immediate (debounced) check
+  if(!document.hidden)lvCheck(false).catch(()=>{});
+  lvUI();
+}
+function lvNote(g){   // text appended to a game card: marks live-feed games as unofficial; flags upsets by seed (same seed is never an upset) and underdog wins
+  if(!g||!g._lv)return '';
+  let s=' <span class="mut">· live ESPN feed, unofficial until the next data update</span>';
+  if(g.status==='final'){
+    const w=g.home.win?g.home:g.away.win?g.away:null,l=w===g.home?g.away:g.home;
+    if(w&&g.kind==='ncaa'&&w.seed!=null&&l.seed!=null){if(+w.seed>+l.seed)s+=' <span class="up ns">😱 UPSET (by seed, no points until the next data update)</span>'}
+    else if(w&&g.line&&String(g.line.dog)===String(w.id))s+=' <span class="up ns">🐶 Underdog win</span>';
+  }
+  return s;
+}
+function lvUI(){
+  const el=document.getElementById('live'),t=document.getElementById('lvT'),b=document.getElementById('lvB'),A=document.getElementById('lvA');
+  if(!el||!t||!b)return;
+  if(!LV.on||!D){el.hidden=true;if(A)A.hidden=true;return}
+  const now=Date.now(),ago=LV.lastOk?relAgo(now-LV.lastOk):null;
+  let txt,btn='\u21BB Refresh';
+  if(LV.busy){txt='Checking live scores\u2026';btn='<i class="lvsp" aria-hidden="true"></i>Checking\u2026'}
+  else if(LV.err){txt='Couldn\u2019t reach ESPN right now'+(LV.paused?' \u00B7 paused':ago?' \u00B7 last checked '+ago:'');}
+  else if(ago){txt=LV.mode==='fast'?'Scores live \u00B7 checked '+ago:'Scores checked '+ago}   // 'live' only while actually polling at the 45-60 s cadence (a live / starting / just-ended game); idle days (5-min cadence) just say when it was last checked
+  else txt='Live scores: not checked yet';
+  if(t.textContent!==txt)t.textContent=txt;
+  const bh=LV.busy?btn:'\u21BB Refresh';if(b.innerHTML!==bh)b.innerHTML=bh;
+  b.disabled=!!LV.busy;
+  el.title='Live scores come straight from ESPN and are unofficial until the next data update. Standings and points only change when the site data updates.';
+  el.hidden=false;
+  if(A){if(ADMIN){const n=LV.nextAt?Math.max(0,Math.round((LV.nextAt-now)/1000)):null;
+    A.textContent='live feed: ESPN scoreboard days '+(LV.days.join(', ')||'-')+' \u00B7 polls '+LV.polls+' \u00B7 last: '+LV.events+' events, '+LV.matched+' matched, '+LV.changed+' changed \u00B7 fails '+LV.fails+(LV.err?' ('+LV.err+')':'')+' \u00B7 mode '+(LV.paused?'paused':LV.mode)+(n!=null&&LV.timer?' \u00B7 next in '+n+'s':'')+' \u00B7 overlay '+Object.keys(LV.ov).length+' game(s)';A.hidden=false}else A.hidden=true}
+}
+/*</REFRESH-NOW>*/
 /* ---------- views ---------- */
 const NOPTS=['No points yet. Everyone starts somewhere (0).','Zero points. Pure potential.','Nothing on the board yet. Dream big.','0 points and no evidence of poor drafting.','Spotless record, because nothing has happened.','No points yet. The comeback story starts here.','Blank scoreboard. Peak optimism.','Zero points, zero regrets.','The ledger is clean. Enjoy it while it lasts.','Not a single point lost, either.'];
 function noPts(n){const idx=Math.max(0,(D.owners||[]).findIndex(o=>o.name===n));return shuf(NOPTS,TSEED+7)[idx%NOPTS.length]}
 const rankTxt=o=>(D.owners.filter(x=>x.rank===o.rank).length>1?'T-':'')+o.rank;
 function vStandings(){
   const mx=Math.max(10,...D.owners.map(o=>o.total));
-  return D.owners.map((o,i)=>`<div class="card"><div class="lb" onclick="goOwner('${esc(o.name)}')">
+  return D.owners.map((o,i)=>`<div class="card${/*<RANK-CHIPS>*/' oc'/*</RANK-CHIPS>*/}"><div class="lb" onclick="goOwner('${esc(o.name)}')">
     <div class="rank">${rankTxt(o)}</div>
-    <div class="who"><b>${esc(o.emoji)} ${esc(o.name)}</b><small>${esc(o.team_name)}</small><div class="quip">${esc(quip(o,i,D.owners.length))}</div></div>
+    <div class="who"><b>${esc(o.emoji)} ${esc(o.name)}</b><small>${esc(o.team_name)}</small>${/*<RANK-CHIPS>*/''/*per-owner quip no longer shown on these cards (quip() itself is untouched; Rosters still uses it)*//*</RANK-CHIPS>*/}</div>
     <div class="pts">${o.total}<small>points</small></div></div>
     <div class="bar"><i style="width:${Math.max(0,o.total)/mx*100}%"></i></div>
     <div class="chips">${o.teams.map(t=>chip(t.tid,{out:t.status==='dropped'})).join('')}</div></div>`).join('')+
@@ -359,7 +612,7 @@ function gameCard(g){
   const row=(s,other)=>{
     const lose=fin&&!s.win;const tag=g.line?(String(dog)===String(s.id)?' <span title="betting underdog">🐶</span>':(String(g.line.fav)===String(s.id)?' <span title="betting favorite">⭐</span>':'')):'';
     return `<div class="gside${lose?' lose':''}"><div class="nm">${chip(s.id,{big:1,name:s.short})}${s.seed?`<span class="seed">(${s.seed})</span>`:''}${tag}${opills(s.owners)}</div><div class="sc2">${(fin||live)&&s.score!=null?s.score:''}</div></div>`};
-  let head=`<span>${fin?'FINAL':live?'<b class="good">LIVE</b>':'<b>'+etTime(g)+'</b>'}</span>`;
+  let head=`<span>${fin?'FINAL':live?'<b class="good">LIVE</b>'/*<REFRESH-NOW>*/+(g._lv&&g._lv.detail?' <span class="mut">'+esc(g._lv.detail)+'</span>':'')/*</REFRESH-NOW>*/:'<b>'+etTime(g)+'</b>'}</span>`;
   if(g.round)head+=`<span>· ${esc(g.round)}</span>`;else if(g.kind==='conf')head+='<span>· Conf tournament</span>';
   if(g.neutral)head+='<span>· neutral site</span>';
   if(g.h2h)head+=`<span class="h2b">🥊 ${esc(g.away.owners.join('/'))} vs ${esc(g.home.owners.join('/'))}</span>`;
@@ -369,6 +622,7 @@ function gameCard(g){
   if(fin&&g.upset){const u=g.upset;
     if(g.kind==='ncaa'){if(u.is)foot+=` <span class="up${u.scored?'':' ns'}">😱 UPSET${u.scored?' +'+D.meta.points.upset:' (no bonus)'}</span>`;else if(u.is===false)foot+=' <span class="mut">· no upset</span>'}
     else if(u.is)foot+=' <span class="up ns">🐶 Underdog win</span>';}
+  /*<REFRESH-NOW>*/foot+=lvNote(g);/*</REFRESH-NOW>*/
   return `<div class="gm${g.h2h||g.civil?' h2h':''}"><div class="gh">${head}</div>${row(g.away)}${row(g.home)}<div class="gl">${foot}</div></div>`}
 let gOwner='all',gMode=null,gDay='all',gH2H=params.has('h2h');
 function vGames(){
@@ -870,8 +1124,8 @@ function vRosters(){
       if(bonusItems.length)h+=`<ul class="it">${bonusItems.map(i=>`<li><b class="${i.pts<0?'bad':'good'}">${sign(i.pts)}</b> ${esc(i.note)} <span class="mut">${esc(fmtDate(i.day))}${i.auto===false?' ✍️ commissioner ruling':''}</span></li>`).join('')}</ul>`;
       const gs=(D.team_games[t.tid]||[]).filter(g=>g.status==='final').slice(-8).reverse();
       const nx=(D.team_games[t.tid]||[]).filter(g=>g.status!=='final'&&g.status!=='postponed'&&g.status!=='canceled').slice(0,3);
-      if(gs.length)h+=`<div class="note" style="margin-top:6px">Last games</div>`+gs.map(g=>`<div style="margin:3px 0">${g.res==='W'?'<b class="good">W</b>':'<b class="bad">L</b>'} ${g.us}-${g.them} ${g.site==='A'?'@':g.site==='N'?'vs (N)':'vs'} ${esc(g.opp)} <span class="mut">${esc(fmtDate(g.day))}${g.round?' · '+esc(g.round):''}</span>${gameLine(g)}</div>`).join('');
-      if(nx.length)h+=`<div class="note" style="margin-top:6px">Up next</div>`+nx.map(g=>`<div style="margin:3px 0">${g.site==='A'?'@':'vs'} ${esc(g.opp)} <span class="mut">${esc(g.start?etLabel(etKey(g))+', '+etTime(g):fmtDate(g.day))}</span>${gameLine(g)}</div>`).join('');
+      if(gs.length)h+=`<div class="note" style="margin-top:6px">Last games</div>`+gs.map(g=>`<div style="margin:3px 0">${g.res==='W'?'<b class="good">W</b>':'<b class="bad">L</b>'} ${g.us}-${g.them} ${g.site==='A'?'@':g.site==='N'?'vs (N)':'vs'} ${esc(g.opp)} <span class="mut">${esc(fmtDate(g.day))}${g.round?' · '+esc(g.round):''}</span>${/*<REFRESH-NOW>*/g._lv?' <span class="mut">· live ESPN feed, unofficial</span>':''/*</REFRESH-NOW>*/}${gameLine(g)}</div>`).join('');
+      if(nx.length)h+=`<div class="note" style="margin-top:6px">Up next</div>`+nx.map(g=>`<div style="margin:3px 0">${/*<REFRESH-NOW>*/g.status==='live'?'<b class="good">LIVE '+g.us+'-'+g.them+'</b> ':''/*</REFRESH-NOW>*/}${g.site==='A'?'@':'vs'} ${esc(g.opp)} <span class="mut">${esc(g.start?etLabel(etKey(g))+', '+etTime(g):fmtDate(g.day))}</span>${gameLine(g)}</div>`).join('');
       h+=`</div></td></tr>`}
   });
   h+=`</table></div>`;return h}
@@ -1003,6 +1257,8 @@ function render(){
   $('#main').innerHTML=(VIEWS[tab]||vStandings)();
   $('#foot').innerHTML=`STOOPIDS · times in Eastern (ET) · ${DEMO?'<a href="?">back to the live season</a>':'<a href="?demo=1">see the demo (last season replay)</a>'}${ADMIN?' · scores ESPN (fallback ncaa.com)':''}`;
   freshStart();
+  /*<DRAFT-TAB>*/try{draftNavLink()}catch(_){}/*</DRAFT-TAB>*/
+  /*<CHAT-BAR>*/try{chatAfterRender()}catch(_){}/*</CHAT-BAR>*/
 }
 /*<NEWBET>*/
 /* "Recently added bet" alert. Detects bets that show up in the shared ledger AFTER this page has loaded (compares bet keys with the set seen at first load).
@@ -1080,38 +1336,20 @@ const presOwners=()=>(D&&D.owners||[]);
 function presWho(){const w=lsGet('stoopids_who');if(!w)return null;if(w===PRES.guestKey)return w;return presOwners().some(o=>o.name===w)?w:null}
 const presMyKey=()=>PS.who===PRES.guestKey?'g-'+presDev():PS.who;
 function presAgo(ms){const m=Math.floor(ms/60000);if(m<1)return 'just now';if(m<60)return m+'m ago';const h=Math.floor(m/60);if(h<24)return h+'h ago';if(h<48)return 'yesterday';return Math.floor(h/24)+'d ago'}
-function presParse(txt){try{if(!txt||!txt.trim())return {};let d=JSON.parse(txt);if(typeof d==='string')d=JSON.parse(d);if(!d||typeof d!=='object'||Array.isArray(d))return {};const o={};for(const k in d){const t=d[k]&&Number(d[k].t);if(isFinite(t)&&t>0)o[k]={t}}return o}catch(e){return {}}}
+function presParse(txt){try{if(!txt||!txt.trim())return {};let d=JSON.parse(txt);if(typeof d==='string')d=JSON.parse(d);if(!d||typeof d!=='object'||Array.isArray(d))return {};const o={};for(const k in d){const t=d[k]&&Number(d[k].t);if(isFinite(t)&&t>0){o[k]={t};/*<CHAT-BAR>*/const y=Number(d[k].y);if(isFinite(y)&&y>0)o[k].y=y;/*</CHAT-BAR>*/}}return o}catch(e){return {}}}
 async function presBeat(){
   if(PS.busy||!PS.who||document.hidden)return;PS.busy=true;
   try{
     const r=await fetch(PRES.url,{cache:'no-store'});if(!r.ok)throw 0;
     const m=presParse(await r.text());const now=Date.now();
-    m[presMyKey()]={t:now};
+    m[presMyKey()]=/*<CHAT-BAR>*/chatMyEntry(now)/*</CHAT-BAR>*/;
     for(const k in m)if(k.indexOf('g-')===0&&now-m[k].t>PRES.guestKeepMs)delete m[k];
     const w=await fetch(PRES.url,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(m)});if(!w.ok)throw 0;
     PS.map=m;PS.lastOk=now;
   }catch(e){PS.lastOk=0}
   PS.busy=false;presDraw();
 }
-function presDraw(){
-  const el=$('#presence');if(!el)return;
-  const now=Date.now();
-  if(!PS.who||!PS.lastOk||now-PS.lastOk>PRES.beatMs*4){el.hidden=true;el.innerHTML='';return}
-  const m=PS.map,me=PS.who,on=[],off=[];let g=0;
-  presOwners().forEach(o=>{const e=m[o.name];if(!e)return;const age=now-e.t;
-    if(age<=PRES.onlineMs||o.name===me)on.push(o);else off.push([o,age])});
-  for(const k in m)if(k.indexOf('g-')===0&&now-m[k].t<=PRES.onlineMs)g++;
-  off.sort((a,b)=>a[1]-b[1]);
-  const chip=(o,isOn,age)=>{const mine=o.name===me;const lab=esc(o.emoji)+' '+esc(o.name);
-    const inner=`<i class="pd"></i>`+(isOn?`<span class="pn">${lab}</span>`:`<span class="pt"><span class="pn">${lab}</span><small>last seen ${presAgo(age)}</small></span>`)+(mine?'<span class="pe">you · change</span>':'');
-    return mine?`<button type="button" class="pc me on" onclick="presAsk()" title="Not you? Tap to change">${inner}</button>`:`<span class="pc ${isOn?'on':'off'}">${inner}</span>`};
-  let h='<div class="pr"><span class="prl">👀 Online now</span>'+on.map(o=>chip(o,true)).join('');
-  if(g)h+=`<span class="pg">+${g} guest${g>1?'s':''}</span>`;
-  if(me===PRES.guestKey)h+='<button type="button" class="pc me on" onclick="presAsk()" title="Tap to pick your name"><i class="pd"></i><span class="pn">You: guest</span><span class="pe">pick name</span></button>';
-  h+=off.map(x=>chip(x[0],false,x[1])).join('')+'</div>';
-  if(!on.length&&!g&&!off.length){el.hidden=true;return}
-  el.hidden=false;el.innerHTML=h;
-}
+function presDraw(){/*<CHAT-BAR>*/try{chatBarDraw()}catch(e){}/*</CHAT-BAR>*/}   // the standalone 'Online now' strip is gone: the merged chat bar draws it (see CHAT-BAR)
 function presAsk(first){
   const cur=PS.who,old=document.getElementById('pwho');if(old)old.remove();
   const d=document.createElement('div');d.id='pwho';d.className='pwho';d.setAttribute('role','dialog');d.setAttribute('aria-label','Who are you?');
@@ -1139,8 +1377,9 @@ function presInit(){
    Stored: {"v":1,"m":[{"i":randomId,"w":poolName,"t":ms,"x":text}]} - pool names only, last 50 messages, capped in size.
    textdb has no append/compare-and-set, so a write = re-read -> add my message -> POST the whole blob -> read back; if my message got lost to a concurrent writer, retry once.
    Not a secure channel: anyone with the key can post/edit it directly. Client-side guards only. Remove everything between the CHAT markers (CSS, markup, JS, load hook) to drop it. */
-const CHAT={url:PRES.url.replace('stoopids-presence-','stoopids-chat-'),max:50,maxBytes:12000,maxLen:200,gapMs:2000,openMs:9000,idleMs:60000,seenKey:'stoopids_chat_seen'};
-const CH={list:[],pend:[],open:false,started:false,busy:false,sending:false,last:0,fails:0,timer:null,seen:null,unread:false,msg:'',msgT:null,tick:null};
+const CHAT={url:PRES.url.replace('stoopids-presence-','stoopids-chat-'),max:50,maxBytes:12000,maxLen:200,gapMs:2000,/*<CHAT-BAR>*/pollMs:7000,/*</CHAT-BAR>*/seenKey:'stoopids_chat_seen'};
+const CH={list:[],pend:[],open:false,started:false,busy:false,sending:false,last:0,fails:0,timer:null,msg:'',msgT:null,tick:null,
+  /*<CHAT-BAR>*/seenIds:null,known:null,nUnread:0,ty:{},typeAt:0,typeSent:0,typeT:null,snd:false,ctx:null/*</CHAT-BAR>*/};
 function chatClean(t){
   t=String(t==null?'':t).replace(/[\u0000-\u001f\u007f-\u009f\u200b-\u200f\u202a-\u202e\u2060-\u2069\ufeff]/g,' ').replace(/\s+/g,' ').trim();
   t=t.replace(/[A-Z0-9._%+\-]+@[A-Z0-9.\-]+\.[A-Z]{2,}/gi,'[hidden]');                       // e-mail addresses
@@ -1170,13 +1409,6 @@ function chatTime(ms,now){const d=new Date(ms),tm=chatETfmt.format(d);return cha
 function chatWho(){const w=PS.who||lsGet('stoopids_who');return w&&presOwners().some(o=>o.name===w)?w:null}
 const chatName=w=>presOwners().some(o=>o.name===w)?w:'guest';
 const chatRid=()=>{const a=new Uint8Array(6);(window.crypto||window.msCrypto).getRandomValues(a);return 'm'+Array.from(a,b=>('0'+b.toString(16)).slice(-2)).join('')};
-function chatOnlineCount(){
-  const m=PS.map||{},now=Date.now();let n=0;
-  if(!PS.who||!PS.lastOk)return 0;
-  presOwners().forEach(o=>{const e=m[o.name];if(e&&(now-e.t<=PRES.onlineMs||o.name===PS.who))n++});
-  for(const k in m)if(k.indexOf('g-')===0&&now-m[k].t<=PRES.onlineMs)n++;
-  return n;
-}
 function chatSay(t,bad){CH.msg=t||'';const e=$('#chatM');if(e){e.textContent=CH.msg;e.className=bad?'bad':''}clearTimeout(CH.msgT);if(t)CH.msgT=setTimeout(()=>chatSay(''),5000)}
 function chatDrawList(){
   const L=$('#chatL');if(!L)return;
@@ -1208,21 +1440,133 @@ function chatUI(){
   const sec=$('#chat');if(!sec||sec.hidden)return;
   const who=chatWho(),f=$('#chatF'),p=$('#chatP');
   f.hidden=!who;p.hidden=!!who;
-  $('#chatN').textContent=(()=>{const n=chatOnlineCount();return n?n+' online':''})();
-  sec.querySelector('.cdot').hidden=!(CH.unread&&!CH.open);
   const A=$('#chatA');A.textContent='';
   if(ADMIN&&CH.open){const b=document.createElement('button');b.type='button';b.textContent='Clear chat (admin)';b.onclick=chatClear;A.appendChild(b)}
+  /*<CHAT-BAR>*/chatBarDraw();/*</CHAT-BAR>*/
 }
-function chatNewest(){return CH.list.length?CH.list[CH.list.length-1].t:0}
-function chatMarkSeen(){const n=chatNewest();if(n){CH.seen=n;lsSet(CHAT.seenKey,String(n))}CH.unread=false}
-function chatUnreadCheck(){const me=chatWho();CH.unread=CH.seen!=null&&CH.list.some(x=>x.t>CH.seen&&x.w!==me)}
+/*<CHAT-BAR>*/
+/* ===== Merged bar: who's online (line 1) + latest message / typing (line 2) + unread badge. ONE element (#chat), ONE poller (chatPoll), ONE state (CH).
+   On the Side bets tab the same element is moved to the top of the tab (chatPlace); on every other tab it sits above the footer. Never two bars. ===== */
+const CB={typeGapMs:3000,typeShowMs:5000,typeFreshMs:15000,prev:40,prevUn:60,firstLookMs:86400000,idsKey:'stoopids_chat_seen_ids',sndKey:'stoopids_chat_snd',offMax:3};
+const chatCtl=/[\u0000-\u001f\u007f-\u009f\u200b-\u200f\u202a-\u202e\u2060-\u2069\ufeff]/g;
+const chatCount=n=>n>99?'99+':String(n);
+function chatSnip(t,n){t=String(t==null?'':t).replace(chatCtl,' ').replace(/\s+/g,' ').trim();const a=Array.from(t);return a.length>n?a.slice(0,n).join('').replace(/\s+$/,'')+'\u2026':t}
+/* unread = messages from someone else whose id this browser has not seen while the panel was open+visible. Ids (not timestamps) so a slow sender clock can't hide a message. */
+function chatSeenLoad(){CH.seenIds=null;try{const v=JSON.parse(lsGet(CB.idsKey));if(Array.isArray(v))CH.seenIds=new Set(v.filter(x=>typeof x==='string'))}catch(e){}}
+function chatSeenSave(){lsSet(CB.idsKey,JSON.stringify(Array.from(CH.seenIds).slice(-100)))}
+function chatSeenInit(){      // first look on this browser: old history is not "unread"; anything from the last 24h (or newer than the old v1 watermark) is
+  const old=parseInt(lsGet(CHAT.seenKey),10),cut=isFinite(old)?old:Date.now()-CB.firstLookMs;
+  CH.seenIds=new Set(CH.list.filter(x=>x.t<=cut).map(x=>x.i));chatSeenSave();
+}
+const chatSeenNow=()=>CH.open&&!document.hidden;                 // last-seen only moves while the panel is open AND the tab is visible
+function chatMarkSeen(){if(!CH.seenIds)CH.seenIds=new Set();CH.list.forEach(x=>CH.seenIds.add(x.i));chatSeenSave();CH.nUnread=0}
+function chatUnreadCheck(){const me=chatWho();CH.nUnread=CH.seenIds?CH.list.filter(x=>x.w!==me&&!CH.seenIds.has(x.i)).length:0}
+/* soft two-tone blip, OFF by default. The AudioContext is only created/resumed from a user gesture (toggle click, or the first tap/key after a reload with sound on). */
+function chatAudioWake(){try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;if(!CH.ctx)CH.ctx=new AC();if(CH.ctx.state==='suspended'&&CH.ctx.resume)return CH.ctx.resume()}catch(e){}}
+function chatBeep(){
+  const c=CH.ctx;if(!c||c.state!=='running')return;
+  try{const t=c.currentTime;[[660,0],[880,.14]].forEach(([f,d])=>{const o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.value=f;
+    g.gain.setValueAtTime(.0001,t+d);g.gain.exponentialRampToValueAtTime(.06,t+d+.02);g.gain.exponentialRampToValueAtTime(.0001,t+d+.16);
+    o.connect(g);g.connect(c.destination);o.start(t+d);o.stop(t+d+.18)})}catch(e){}
+}
+function chatSndSet(on){
+  CH.snd=!!on;lsSet(CB.sndKey,CH.snd?'1':'0');
+  if(CH.snd){const r=chatAudioWake();if(r&&r.then)r.then(chatBeep,()=>{});else chatBeep()}      // tiny preview blip, inside the click
+  chatBarDraw();
+}
+function chatIncoming(list){      // call with a fresh list: blip once for ids never seen in this page session, from others only, never on the first poll
+  const me=chatWho();
+  if(CH.known&&CH.snd&&list.some(x=>x.w!==me&&!CH.known.has(x.i)))chatBeep();
+  CH.known=CH.known||new Set();list.forEach(x=>CH.known.add(x.i));
+}
+/* typing: a short-lived 'y' (last keystroke, ms) on MY existing presence entry {t,y}. Readers see it on their poll; only a CHANGED y counts and it is timed on the reader's own clock. */
+const chatMyEntry=now=>CH.typeAt&&now-CH.typeAt<=CB.typeShowMs?{t:now,y:CH.typeAt}:{t:now};
+function chatTypingNote(){
+  const i=$('#chatI'),who=chatWho();if(!i||!who||document.hidden)return;
+  if(!i.value.trim()){CH.typeAt=0;return}
+  const now=Date.now();CH.typeAt=now;
+  if(now-CH.typeSent<CB.typeGapMs)return;                       // at most one presence write per 3 s of typing
+  CH.typeSent=now;chatTypeWrite(now);
+}
+async function chatTypeWrite(now){
+  if(PS.busy||!PS.who){CH.typeSent=0;return}                   // a heartbeat is mid-flight: the next keystroke retries
+  PS.busy=true;
+  try{
+    const r=await fetch(PRES.url,{cache:'no-store'});if(!r.ok)throw 0;
+    const m=presParse(await r.text());m[presMyKey()]={t:now,y:now};
+    for(const k in m)if(k.indexOf('g-')===0&&now-m[k].t>PRES.guestKeepMs)delete m[k];
+    const w=await fetch(PRES.url,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(m)});if(!w.ok)throw 0;
+    PS.map=m;PS.lastOk=now;                                      // doubles as a heartbeat
+  }catch(e){}
+  PS.busy=false;presDraw();
+}
+function chatPresMerge(txt){
+  const m=presParse(txt),now=Date.now(),mine=PS.who&&presMyKey();
+  if(mine&&PS.map[mine]&&(!m[mine]||PS.map[mine].t>m[mine].t))m[mine]=PS.map[mine];
+  presOwners().forEach(o=>{const e=m[o.name];if(!e||!e.y)return;const d=now-e.y,p=CH.ty[o.name];
+    if(d>-30000&&d<=CB.typeFreshMs&&(!p||p.y!==e.y))CH.ty[o.name]={y:e.y,at:now}});
+  PS.map=m;
+}
+function chatTypers(){
+  const now=Date.now(),me=chatWho();
+  return presOwners().filter(o=>{if(o.name===me)return false;const p=CH.ty[o.name];if(!p||now-p.at>CB.typeShowMs)return false;
+    return !CH.list.some(x=>x.w===o.name&&x.t>=p.y)}).map(o=>o.name);      // they already sent it -> not typing any more
+}
+function chatTypingText(a){return a.length===1?a[0]+' is typing\u2026':a.length===2?a[0]+' and '+a[1]+' are typing\u2026':a[0]+', '+a[1]+' and '+(a.length-2)+' more are typing\u2026'}
+function chatBarOnline(el){
+  el.textContent='';const now=Date.now(),m=PS.map||{},me=PS.who;
+  const add=(c,t,pd)=>{const e=document.createElement('span');e.className=c;if(pd){const d=document.createElement('i');d.className='pd';e.appendChild(d)}e.appendChild(document.createTextNode(t));el.appendChild(e)};
+  if(!PS.who||!PS.lastOk||now-PS.lastOk>PRES.beatMs*4){add('cbg','\u{1F4AC} Chat');return}
+  const on=[],off=[];let g=0;
+  presOwners().forEach(o=>{const e=m[o.name];if(!e)return;const age=now-e.t;if(age<=PRES.onlineMs||o.name===me)on.push(o);else off.push([o,age])});
+  for(const k in m)if(k.indexOf('g-')===0&&now-m[k].t<=PRES.onlineMs)g++;
+  off.sort((a,b)=>a[1]-b[1]);
+  if(!on.length&&!g&&!off.length){add('cbg','\u{1F4AC} Chat');return}
+  add('cbg','\u{1F440}');el.lastChild.title='Online now';
+  on.forEach(o=>add('cbo',o.emoji+' '+o.name,true));
+  if(g)add('cbg','+'+g+' guest'+(g>1?'s':''));
+  off.slice(0,CB.offMax).forEach(x=>add('cbf',x[0].emoji+' '+x[0].name+' '+presAgo(x[1])));
+}
+function chatBarDraw(){
+  const sec=$('#chat');if(!sec)return;
+  chatBarOnline($('#chatOn'));
+  const pv=$('#chatPv'),ty=chatTypers(),n=CH.nUnread,last=CH.list.length?CH.list[CH.list.length-1]:null;
+  clearTimeout(CH.typeT);CH.typeT=null;
+  if(ty.length){pv.textContent=chatTypingText(ty);pv.className='cb2 ty';
+    const now=Date.now(),left=Math.min.apply(null,ty.map(k=>CH.ty[k].at+CB.typeShowMs-now));CH.typeT=setTimeout(()=>{try{chatBarDraw()}catch(e){}},Math.max(50,left+30))}
+  else if(last){pv.textContent=chatName(last.w)+': '+chatSnip(last.x,n?CB.prevUn:CB.prev);pv.className='cb2'+(n?' un':'')}
+  else{pv.textContent='No messages yet. Say something Stoopid.';pv.className='cb2 mut'}
+  const d=sec.querySelector('.cdot');d.hidden=!n;d.textContent=n?chatCount(n):'';d.title=n?n+' new message'+(n>1?'s':''):'New messages';
+  sec.classList.toggle('unread',n>0);
+  $('#chatT').setAttribute('aria-label','Chat'+(n?', '+n+' unread':'')+'. '+pv.textContent);
+  const w=chatWho(),wb=$('#chatWho');wb.hidden=!PS.who;wb.textContent=PS.who===PRES.guestKey?'You: guest \u00b7 pick name':'You: '+(w||'?')+' \u00b7 change';
+  const sb=$('#chatSnd');sb.setAttribute('aria-pressed',CH.snd?'true':'false');sb.textContent=CH.snd?'\u{1F514} Sound on':'\u{1F515} Sound off';
+  chatTitle();chatNavBadge();
+}
+function chatTitle(){const base=document.title.replace(/^\((?:\d+|99\+)\) /,''),n=CH.nUnread,t=n?'('+chatCount(n)+') '+base:base;if(document.title!==t)document.title=t}
+function chatNavBadge(){
+  const nav=$('#nav');if(!nav||!D)return;const i=TABS.findIndex(t=>t[0]==='bets'),b=nav.children[i];if(!b)return;
+  const n=CH.nUnread,full=TABS[i][1].slice(TABS[i][1].indexOf(' ')+1);let e=b.querySelector('.nu');
+  b.classList.toggle('hasu',!!n);
+  if(!n){if(e)e.remove();b.setAttribute('aria-label',full);return}
+  if(!e){e=document.createElement('b');e.className='nu';e.setAttribute('aria-hidden','true');b.appendChild(e)}
+  e.textContent=chatCount(n);b.setAttribute('aria-label',full+', '+n+' unread chat message'+(n>1?'s':''));
+}
+function chatPlace(){      // the one bar: top of the Side bets tab, otherwise above the footer
+  const s=$('#chat'),par=s&&s.parentNode;if(!par)return;const want=tab==='bets'?$('#main'):$('#foot');
+  if(want&&s.nextElementSibling!==want)par.insertBefore(s,want);
+  s.classList.toggle('top',tab==='bets');
+}
+function chatAfterRender(){chatPlace();chatNavBadge()}      // called at the end of render()
+/*</CHAT-BAR>*/
 async function chatPoll(){
   if(CH.busy||document.hidden)return;CH.busy=true;
   try{
-    const r=await fetch(CHAT.url,{cache:'no-store'});if(!r.ok)throw 0;
-    CH.list=chatParse(await r.text());CH.fails=0;
-    if(CH.seen==null){chatMarkSeen()}                   // first ever look: existing history is not "unread"
-    else if(CH.open)chatMarkSeen();else chatUnreadCheck();
+    /*<CHAT-BAR>*/const [r,pr]=await Promise.all([fetch(CHAT.url,{cache:'no-store'}),PS.who?fetch(PRES.url,{cache:'no-store'}).catch(()=>null):null]);if(!r.ok)throw 0;
+    const list=chatParse(await r.text());let pt=null;try{if(pr&&pr.ok)pt=await pr.text()}catch(e){}
+    CH.list=list;CH.fails=0;chatIncoming(list);if(pt!=null)chatPresMerge(pt);
+    if(!CH.seenIds)chatSeenInit();
+    if(chatSeenNow())chatMarkSeen();else chatUnreadCheck();/*</CHAT-BAR>*/
     chatDrawList();chatUI();
   }catch(e){CH.fails=Math.min(CH.fails+1,5)}
   CH.busy=false;chatSchedule();
@@ -1230,8 +1574,7 @@ async function chatPoll(){
 function chatSchedule(){
   clearTimeout(CH.timer);CH.timer=null;
   if(document.hidden)return;                                   // paused while the tab is hidden
-  const base=CH.open?CHAT.openMs:CHAT.idleMs;                  // open: ~9s; collapsed: a slow 60s peek just to light the unread dot
-  CH.timer=setTimeout(chatPoll,base*Math.pow(2,CH.fails));     // back off on errors (x2 each, max x32)
+  CH.timer=setTimeout(chatPoll,/*<CHAT-BAR>*/CHAT.pollMs/*</CHAT-BAR>*/*Math.pow(2,CH.fails));     // ~7 s open or collapsed; back off on errors (x2 each, max x32)
 }
 async function chatSend(text){
   const txt=chatClean(text),who=chatWho();
@@ -1239,7 +1582,7 @@ async function chatSend(text){
   if(!txt){chatSay('Nothing to send.',true);return false}
   const now=Date.now();if(now-CH.last<CHAT.gapMs){chatSay('Easy there: one message every 2 seconds.',true);return false}
   if(CH.sending)return false;
-  CH.last=now;CH.sending=true;
+  CH.last=now;CH.sending=true;/*<CHAT-BAR>*/CH.typeAt=0;/*</CHAT-BAR>*/      // sending clears my typing stamp (readers also drop it once my message shows up)
   const m={i:chatRid(),w:who,t:now,x:txt};CH.pend.push(m);chatDrawList();
   let ok=false;
   try{
@@ -1251,7 +1594,7 @@ async function chatSend(text){
       const w=await fetch(CHAT.url,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({v:1,m:cur})});if(!w.ok)throw 0;
       const c=await fetch(CHAT.url,{cache:'no-store'});if(!c.ok)throw 0;
       const back=chatParse(await c.text());
-      if(back.some(x=>x.i===m.i)){CH.list=back;ok=true}
+      if(back.some(x=>x.i===m.i)){CH.list=back;ok=true;/*<CHAT-BAR>*/chatIncoming(back);if(chatSeenNow())chatMarkSeen();/*</CHAT-BAR>*/}
     }
   }catch(e){}
   CH.pend=CH.pend.filter(x=>x!==m);CH.sending=false;
@@ -1261,22 +1604,25 @@ async function chatSend(text){
 }
 async function chatClear(){
   if(!ADMIN||!window.confirm('Delete ALL chat messages for everyone?'))return;
-  try{const w=await fetch(CHAT.url,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({v:1,m:[]})});if(!w.ok)throw 0;CH.list=[];chatDrawList();chatSay('Chat cleared.')}catch(e){chatSay("Couldn't clear the chat.",true)}
+  try{const w=await fetch(CHAT.url,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({v:1,m:[]})});if(!w.ok)throw 0;CH.list=[];/*<CHAT-BAR>*/CH.nUnread=0;/*</CHAT-BAR>*/chatDrawList();chatSay('Chat cleared.')}catch(e){chatSay("Couldn't clear the chat.",true)}
 }
 function chatToggle(open){
   CH.open=open==null?!CH.open:!!open;
   $('#chatB').hidden=!CH.open;$('#chatT').setAttribute('aria-expanded',CH.open?'true':'false');$('#chatT .ca').textContent=CH.open?'▾':'▸';
   document.body.classList.toggle('chatopen',CH.open);
-  if(CH.open){chatMarkSeen();chatDrawList();CH.fails=0;clearTimeout(CH.timer);chatPoll();const L=$('#chatL');L.scrollTop=L.scrollHeight}
+  if(CH.open){/*<CHAT-BAR>*/if(!document.hidden)chatMarkSeen();/*</CHAT-BAR>*/chatDrawList();CH.fails=0;clearTimeout(CH.timer);chatPoll();const L=$('#chatL');L.scrollTop=L.scrollHeight}
   else chatSchedule();
   chatUI();
 }
 function chatInit(){
   if(CH.started||DEMO||!D||!D.owners)return;CH.started=true;
   const sec=$('#chat');if(!sec)return;sec.hidden=false;
-  const sv=parseInt(lsGet(CHAT.seenKey),10);CH.seen=isFinite(sv)?sv:null;
+  /*<CHAT-BAR>*/chatSeenLoad();CH.snd=lsGet(CB.sndKey)==='1';/*</CHAT-BAR>*/
   $('#chatT').onclick=()=>chatToggle();
   $('#chatPb').onclick=()=>presAsk();
+  /*<CHAT-BAR>*/$('#chatWho').onclick=()=>presAsk();$('#chatSnd').onclick=()=>chatSndSet(!CH.snd);$('#chatI').addEventListener('input',chatTypingNote);
+  ['pointerdown','keydown','touchend'].forEach(e=>document.addEventListener(e,()=>{if(CH.snd&&(!CH.ctx||CH.ctx.state==='suspended'))chatAudioWake()},{passive:true}));   // autoplay rules: only after a gesture
+  chatPlace();/*</CHAT-BAR>*/
   $('#chatF').addEventListener('submit',async ev=>{ev.preventDefault();const i=$('#chatI');const v=i.value;const sent=await chatSend(v);if(sent&&i.value===v)i.value=''});
   document.addEventListener('visibilitychange',()=>{if(document.hidden){clearTimeout(CH.timer);CH.timer=null}else{chatPoll()}});
   const pp=presPick;presPick=function(w){pp(w);try{chatUI();chatDrawList()}catch(e){}};   // refresh the compose box right after the 'Who are you?' pick
@@ -1286,7 +1632,7 @@ function chatInit(){
 /*</CHAT>*/
 function load(){
   const s=document.createElement('script');s.src=(DEMO?'demo/':'')+'data.js?v='+Date.now();
-  s.onload=()=>{D=window.STOOPIDS_DATA;D._base=D.bets;applyShared();render();try{presInit()}catch(e){}try{chatInit()}catch(e){}};   /* chatInit = CHAT hook */
+  s.onload=()=>{D=window.STOOPIDS_DATA;D._base=D.bets;applyShared();/*<REFRESH-NOW>*/try{lvReapply()}catch(e){}/*</REFRESH-NOW>*/render();try{presInit()}catch(e){}try{chatInit()}catch(e){}/*<REFRESH-NOW>*/try{lvInit()}catch(e){}/*</REFRESH-NOW>*/};   /* chatInit = CHAT hook */
   s.onerror=()=>{if(!D)$('#main').innerHTML='<div class="card">Couldn\u2019t load the latest data. Try reloading the page.'+(ADMIN?' (data.js missing: run <code>python3 refresh.py</code> first.)':'')+'</div>'};
   document.head.appendChild(s);
 }
