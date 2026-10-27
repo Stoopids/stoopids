@@ -9,6 +9,6 @@
     "_example": "\"401856529\": false   (ESPN event id -> true forces an upset bonus for the winner, false denies it)"
   },
   "adjustments": [],
-  "adjustments_example": [{"owner": "Poo", "team": "UConn", "pts": 4, "date": "2027-03-20", "note": "commissioner ruling"}],
+  "adjustments_example": [{"owner": "Party Paul", "team": "UConn", "pts": 4, "date": "2027-03-20", "note": "commissioner ruling"}],
   "field_locked": null
 }

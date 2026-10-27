@@ -447,8 +447,8 @@
     {
      "person": "Paul",
      "label": "PAUL",
-     "team_name": "💩 🎉 POO PARTY",
-     "current_owner": "Poo",
+     "team_name": "💩 🎉 PARTY PAUL",
+     "current_owner": "Party Paul",
      "total": 225,
      "total_source": "sheet",
      "teams": [
@@ -1187,8 +1187,8 @@
     {
      "person": "Paul",
      "label": "PAUL",
-     "team_name": "💩 🎉 POO PARTY",
-     "current_owner": "Poo",
+     "team_name": "💩 🎉 PARTY PAUL",
+     "current_owner": "Party Paul",
      "total": 182,
      "total_source": "sheet",
      "teams": [
@@ -1676,8 +1676,8 @@
     {
      "person": "Paul",
      "label": "PAUL",
-     "team_name": "💩 POO PARTY 🎉",
-     "current_owner": "Poo",
+     "team_name": "💩 PARTY PAUL 🎉",
+     "current_owner": "Party Paul",
      "total": 209,
      "total_source": "sheet",
      "teams": [
@@ -3665,7 +3665,7 @@
      "person": "Paul",
      "label": "PAUL",
      "team_name": "THE DUD",
-     "current_owner": "Poo",
+     "current_owner": "Party Paul",
      "total": 172,
      "total_source": "sheet",
      "teams": [
@@ -4062,7 +4062,7 @@
      "person": "Paul",
      "label": "PAUL",
      "team_name": "POOLHalls",
-     "current_owner": "Poo",
+     "current_owner": "Party Paul",
      "total": 266,
      "total_source": "sheet",
      "teams": [
@@ -4602,7 +4602,7 @@
      "person": "Paul",
      "label": "PAUL",
      "team_name": "POOLHalls",
-     "current_owner": "Poo",
+     "current_owner": "Party Paul",
      "total": 250,
      "total_source": "sheet",
      "teams": [
@@ -5294,7 +5294,7 @@
      "person": "Paul",
      "label": "Paul",
      "team_name": "POOLHalls",
-     "current_owner": "Poo",
+     "current_owner": "Party Paul",
      "total": 255,
      "total_source": "sheet",
      "teams": [
@@ -6536,14 +6536,14 @@
   },
   {
    "person": "Paul",
-   "current_owner": "Poo",
+   "current_owner": "Party Paul",
    "titles": 0,
    "titles_no_tourney": 0,
    "title_seasons": [],
    "seasons": 7,
    "team_names": [
-    "💩 🎉 POO PARTY",
-    "💩 POO PARTY 🎉",
+    "💩 🎉 PARTY PAUL",
+    "💩 PARTY PAUL 🎉",
     "THE DUD",
     "POOLHalls"
    ]

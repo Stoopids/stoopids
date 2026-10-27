@@ -1386,11 +1386,12 @@ const PS={map:{},lastOk:0,timer:null,busy:false,started:false,dev:null,who:null}
 const lsGet=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
 const lsSet=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
 function presDev(){if(PS.dev)return PS.dev;let d=lsGet('stoopids_dev');if(!d||!/^[0-9a-f]{12}$/.test(d)){const a=new Uint8Array(6);(window.crypto||window.msCrypto).getRandomValues(a);d=Array.from(a,b=>('0'+b.toString(16)).slice(-2)).join('');lsSet('stoopids_dev',d)}return PS.dev=d}
+const LEGACY_OWNER={'Poo':'Party Paul'};const legacyOwner=n=>(typeof n==='string'&&Object.prototype.hasOwnProperty.call(LEGACY_OWNER,n))?LEGACY_OWNER[n]:n;   /* owner renamed Poo -> Party Paul: old saved identity / textdb records (presence, chat, 2026-27 bets) still resolve to the new name */
 const presOwners=()=>(D&&D.owners||[]);
-function presWho(){const w=lsGet('stoopids_who');if(!w)return null;if(w===PRES.guestKey)return w;return presOwners().some(o=>o.name===w)?w:null}
+function presWho(){const w=legacyOwner(lsGet('stoopids_who'));if(!w)return null;if(w===PRES.guestKey)return w;return presOwners().some(o=>o.name===w)?w:null}
 const presMyKey=()=>PS.who===PRES.guestKey?'g-'+presDev():PS.who;
 function presAgo(ms){const m=Math.floor(ms/60000);if(m<1)return 'just now';if(m<60)return m+'m ago';const h=Math.floor(m/60);if(h<24)return h+'h ago';if(h<48)return 'yesterday';return Math.floor(h/24)+'d ago'}
-function presParse(txt){try{if(!txt||!txt.trim())return {};let d=JSON.parse(txt);if(typeof d==='string')d=JSON.parse(d);if(!d||typeof d!=='object'||Array.isArray(d))return {};const o={};for(const k in d){const t=d[k]&&Number(d[k].t);if(isFinite(t)&&t>0){o[k]={t};/*<CHAT-BAR>*/const y=Number(d[k].y);if(isFinite(y)&&y>0)o[k].y=y;/*</CHAT-BAR>*/}}return o}catch(e){return {}}}
+function presParse(txt){try{if(!txt||!txt.trim())return {};let d=JSON.parse(txt);if(typeof d==='string')d=JSON.parse(d);if(!d||typeof d!=='object'||Array.isArray(d))return {};const o={};for(const k0 in d){const k=legacyOwner(k0),t=d[k0]&&Number(d[k0].t);if(isFinite(t)&&t>0&&!(o[k]&&o[k].t>=t)){o[k]={t};/*<CHAT-BAR>*/const y=Number(d[k0].y);if(isFinite(y)&&y>0)o[k].y=y;/*</CHAT-BAR>*/}}return o}catch(e){return {}}}
 async function presBeat(){
   if(PS.busy||!PS.who||document.hidden)return;PS.busy=true;
   try{
@@ -1447,7 +1448,7 @@ function chatParse(txt){
     for(const x of arr){
       if(!x||typeof x.i!=='string'||!/^[a-z0-9]{6,20}$/.test(x.i)||ids.has(x.i))continue;
       const t=Number(x.t);if(!isFinite(t)||t<=0||typeof x.x!=='string'||typeof x.w!=='string')continue;
-      ids.add(x.i);out.push({i:x.i,w:x.w.slice(0,30),t,x:Array.from(x.x).slice(0,CHAT.maxLen).join('')});
+      ids.add(x.i);out.push({i:x.i,w:legacyOwner(x.w.slice(0,30)),t,x:Array.from(x.x).slice(0,CHAT.maxLen).join('')});
     }
     return out.sort((a,b)=>a.t-b.t);
   }catch(e){return []}
@@ -1460,7 +1461,7 @@ function chatTrim(list){
 const chatETfmt=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',hour:'numeric',minute:'2-digit'});
 const chatETday=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',month:'short',day:'numeric'});
 function chatTime(ms,now){const d=new Date(ms),tm=chatETfmt.format(d);return chatETday.format(d)===chatETday.format(new Date(now==null?Date.now():now))?tm:chatETday.format(d)+', '+tm}
-function chatWho(){const w=PS.who||lsGet('stoopids_who');return w&&presOwners().some(o=>o.name===w)?w:null}
+function chatWho(){const w=PS.who||legacyOwner(lsGet('stoopids_who'));return w&&presOwners().some(o=>o.name===w)?w:null}
 const chatName=w=>presOwners().some(o=>o.name===w)?w:'guest';
 const chatRid=()=>{const a=new Uint8Array(6);(window.crypto||window.msCrypto).getRandomValues(a);return 'm'+Array.from(a,b=>('0'+b.toString(16)).slice(-2)).join('')};
 function chatSay(t,bad){CH.msg=t||'';const e=$('#chatM');if(e){e.textContent=CH.msg;e.className=bad?'bad':''}clearTimeout(CH.msgT);if(t)CH.msgT=setTimeout(()=>chatSay(''),5000)}
@@ -1731,6 +1732,7 @@ function b27Clean(t,max){
 const b27OwnerNames=()=>(D&&D.owners||[]).map(o=>o.name);
 function b27Valid(x,names){
   if(!x||typeof x!=='object')return null;
+  x=Object.assign({},x,{backer:legacyOwner(x.backer),other:legacyOwner(x.other)});   // 2026-27 bets saved before the rename say "Poo"
   const st=Number(x.amt),a=x.odds&&Number(x.odds.a),b=x.odds&&Number(x.odds.b),n=Number(x.n),t=Date.parse(x.created_at);
   if(typeof x.id!=='string'||!/^[a-z0-9]{6,24}$/.test(x.id))return null;
   if(!names.includes(x.backer)||!names.includes(x.other)||x.backer===x.other)return null;
@@ -1768,7 +1770,7 @@ function b27Tally(bets){
   return {owes,per,openTotal:openC,openCount:openN};
 }
 /* ---- state / network (own key only) ---- */
-const b27Who=()=>{const w=PS.who||lsGet('stoopids_who');return b27OwnerNames().includes(w)?w:null};
+const b27Who=()=>{const w=PS.who||legacyOwner(lsGet('stoopids_who'));return b27OwnerNames().includes(w)?w:null};
 const b27Rid=()=>{const a=new Uint8Array(7);(window.crypto||window.msCrypto).getRandomValues(a);return 'p'+Array.from(a,b=>('0'+b.toString(16)).slice(-2)).join('')};
 const b27Day=ms=>new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',year:'numeric'}).format(new Date(ms));
 const b27MaxN=bets=>bets.reduce((m,b)=>Math.max(m,b.n),0);

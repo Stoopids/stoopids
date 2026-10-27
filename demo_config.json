@@ -8,7 +8,7 @@
   "redraft": {
     "date": "2026-01-20",
     "moves": {
-      "Poo": {"drop": ["Howard", "Wichita State"], "add": ["Duke", "Houston"]},
+      "Party Paul": {"drop": ["Howard", "Wichita State"], "add": ["Duke", "Houston"]},
       "Stockman": {"drop": ["Duke", "Tennessee State"], "add": ["Howard", "Wichita State"]}
     }
   }

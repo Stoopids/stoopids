@@ -64,9 +64,10 @@
       "name": "Paul",
       "aliases": [
         "Eck",
-        "Poo"
+        "Poo",
+        "Party Paul"
       ],
-      "pool_owner": "Poo"
+      "pool_owner": "Party Paul"
     },
     {
       "id": "jim",

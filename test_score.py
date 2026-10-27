@@ -174,7 +174,7 @@ class GamesView(unittest.TestCase):
         w = {o["name"]: [] for o in CFG["owners"]}
         w["Dirty Draymond"] = [{"tid": "1", "start": None, "end": None}]
         w["Kurmoji"] = [{"tid": "2", "start": None, "end": None}]
-        w["Poo"] = [{"tid": "3", "start": None, "end": None}, {"tid": "4", "start": None, "end": None}]
+        w["Party Paul"] = [{"tid": "3", "start": None, "end": None}, {"tid": "4", "start": None, "end": None}]
         return w
 
     def test_view_lines_h2h_and_upset(self):
