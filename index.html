@@ -181,10 +181,6 @@ footer{max-width:1000px;margin:0 auto;padding:0 14px 40px;color:var(--mut);font-
 body.chatopen .nbt{bottom:auto;top:64px}
 nav button .nb{position:absolute;top:1px;right:2px;background:var(--acc);color:#111;border-radius:99px;font-size:9px;font-weight:900;line-height:1;padding:2px 4px;pointer-events:none}
 /*</NEWBET-CSS>*/
-/*<WA-SHARE-CSS>*/
-a.wa{display:inline-flex;align-items:center;gap:6px;min-height:40px;margin-top:6px;padding:0 12px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--mut);font-size:13px;font-weight:700;text-decoration:none}
-a.wa:hover,a.wa:focus-visible{color:var(--tx);border-color:#2f6b47}
-/*</WA-SHARE-CSS>*/
 /*<CHAT-CSS>*/
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .chat{max-width:1000px;margin:0 auto 18px;padding:0 10px}
@@ -237,12 +233,14 @@ nav button .nu{position:absolute;top:1px;left:2px;min-width:15px;background:#ff3
 .chat-m .bad{color:var(--bad)}
 .chat-m button{min-height:40px;padding:0 10px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font:inherit;font-size:12px;cursor:pointer}
 /*</CHAT-CSS>*/
+/*<OWNED-GAMES>*/.gUn{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:12px;color:var(--mut);cursor:pointer;min-height:28px}.gUn input{width:16px;height:16px;margin:0}/*</OWNED-GAMES>*/
 /*<REFRESH-NOW>*/
 .lv{display:flex;flex-wrap:wrap;align-items:center;column-gap:2px;width:fit-content;max-width:100%;min-height:40px;margin:-14px 0 -8px;font-size:12px;line-height:1.3;color:var(--mut);opacity:.7}
 .lv[hidden],.lvA[hidden]{display:none}
 .lv button{min-width:40px;min-height:40px;padding:0 8px;border:0;background:none;color:inherit;font:inherit;cursor:pointer;border-radius:8px;display:inline-flex;align-items:center;gap:5px;-webkit-tap-highlight-color:transparent}
 /*<NO-CHECKED-LINE>*/.lv #lvT:empty+button{margin-left:-8px}   /* no status text: the Refresh button lines up with the Updated line above it (cancels its 8px padding) */
 .lv #lvT:empty{display:none}/*</NO-CHECKED-LINE>*/
+.lv .lvU{font-size:12px;white-space:nowrap;margin-left:4px;opacity:.9}.lv .lvU[hidden]{display:none}.lv button{white-space:nowrap}
 .lv button:hover{opacity:.85;text-decoration:underline}
 .lv button:focus-visible{outline:1px dashed var(--mut);outline-offset:-2px}
 .lv button[disabled]{cursor:default;text-decoration:none;opacity:.8}
@@ -273,13 +271,19 @@ nav button .nu{position:absolute;top:1px;left:2px;min-width:15px;background:#ff3
 .b27-b{min-height:44px;padding:0 12px}
 .b27-t{margin:4px 0;font-size:15px;overflow-wrap:anywhere}.b27-m{font-size:13.5px}
 /*<MULTI-BET>*/
-.b27-opps{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:6px}
-.b27-opps .b27-chip{min-height:46px;min-width:0;padding:4px 8px;display:flex;align-items:center;justify-content:center;gap:4px;line-height:1.15;text-align:center;overflow:hidden}
-.b27-chip.op .ck{display:none;font-weight:900}.b27-chip.op[aria-pressed=true] .ck{display:inline}
-.b27-chip.op .nm{min-width:0;overflow-wrap:anywhere}
-.b27-selbar{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:6px}
-.b27-selbar .b27-sm{min-height:40px;min-width:88px;padding:0 12px;border-radius:10px;border:2px solid var(--line);background:var(--card2);color:var(--tx);font:inherit;font-weight:700;font-size:14px;cursor:pointer}
-.b27-selbar .cnt{font-size:13px;color:var(--mut)}
+.b27-opps{display:grid;grid-template-columns:repeat(var(--n,7),minmax(0,1fr));gap:6px}   /* all opponents on ONE row at every width (7 equal columns; short names + smaller type on narrower screens, see media below) */
+.b27-opps .b27-chip{position:relative;min-height:58px;min-width:0;padding:6px 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;line-height:1.15;text-align:center;overflow:hidden;font-size:13px}
+.b27-chip.op .ck{display:none;position:absolute;top:2px;right:5px;font-weight:900;font-size:11px;line-height:1}.b27-chip.op[aria-pressed=true] .ck{display:block}
+.b27-chip.op .em{font-size:18px;line-height:1.1;white-space:nowrap}
+.b27-chip.op .nm{display:block;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.b27-chip.op .nm .sh,.b27-chip.op .nm .xs{display:none}
+@media (max-width:899px){.b27-chip.op .nm .f{display:none}.b27-chip.op .nm .sh{display:inline}.b27-opps .b27-chip{font-size:12.5px}}
+@media (max-width:599px){.b27-chip.op .nm .sh{display:none}.b27-chip.op .nm .xs{display:inline}.b27-opps{gap:3px}.b27-opps .b27-chip{min-height:52px;padding:4px 0;border-width:1.5px;border-radius:9px;font-size:10px;letter-spacing:-.02em}.b27-chip.op .em{font-size:16px}.b27-chip.op .ck{top:1px;right:3px;font-size:9px}}   /* phones: all 7 chips stay on ONE row (equal 1/7 columns, short names, small type) */
+@media (max-width:399px){.b27-amt.cu{font-size:11px;letter-spacing:-.03em;white-space:nowrap;min-width:0;overflow:hidden}}
+@media (max-width:359px){.b27-opps .b27-chip{font-size:9px}.b27-chip.op .em{font-size:14px}}
+.b27-selbar{display:flex;flex-wrap:nowrap;align-items:center;gap:8px;margin-top:8px}
+.b27-selbar .b27-sm{min-height:40px;min-width:88px;white-space:nowrap;padding:0 12px;border-radius:10px;border:2px solid var(--line);background:var(--card2);color:var(--tx);font:inherit;font-weight:700;font-size:14px;cursor:pointer}
+.b27-selbar .cnt{font-size:13px;color:var(--mut);margin-left:auto;white-space:nowrap}
 /*</MULTI-BET>*/
 .b27-owe{padding:6px 0;border-bottom:1px solid var(--line);font-size:15px}
 .b27-ok{border-color:#2f6b47}.b27-bad{border-color:#8a2d2d}
@@ -295,7 +299,7 @@ nav button .nu{position:absolute;top:1px;left:2px;min-width:15px;background:#ff3
   <div class="hero" role="img" aria-label="The STOOPIDS crew"></div>
   <div class="titlebar"><h1>STOOP<span>IDS</span></h1>
   <div id="fresh" class="fresh" role="button" tabindex="0" hidden onclick="freshToggle()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();freshToggle()}"><span></span></div>
-  <!--<REFRESH-NOW>--><div id="live" class="lv" hidden><span id="lvT" aria-live="polite"></span><button id="lvB" type="button" aria-label="Refresh live scores" onclick="lvManual()">&#8635; Refresh</button></div><div id="lvA" class="lvA" hidden></div><!--</REFRESH-NOW>-->
+  <!--<REFRESH-NOW>--><div id="live" class="lv" hidden><span id="lvT" aria-live="polite"></span><button id="lvB" type="button" aria-label="Refresh live games" onclick="lvManual()">&#8635; Refresh Live Games</button><span id="lvU" class="lvU" hidden></span></div><div id="lvA" class="lvA" hidden></div><!--</REFRESH-NOW>-->
   <p class="tag" id="tag"></p></div>
   <div class="sub" id="badges" style="margin:0"></div>
 </header>
@@ -605,13 +609,15 @@ function lvNote(g){   // text appended to a game card: marks live-feed games as 
   }
   return s;
 }
+/*<LAST-UPDATED>*/const LVET=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',hour:'numeric',minute:'2-digit',hour12:true});
+function lvEtTime(ms){try{return LVET.format(new Date(ms)).replace(/\u202f/g,' ')+' ET'}catch(e){return ''}}   // e.g. "9:42 PM ET" (when live games were last fetched OK from ESPN)/*</LAST-UPDATED>*/
 function lvUI(){
   const el=document.getElementById('live'),t=document.getElementById('lvT'),b=document.getElementById('lvB'),A=document.getElementById('lvA');
   if(!el||!t||!b)return;
   if(!LV.on||!D){el.hidden=true;if(A)A.hidden=true;return}
   const now=Date.now(),ago=LV.lastOk?relAgo(now-LV.lastOk):null;
-  let txt,btn='\u21BB Refresh';
-  if(LV.busy){txt='Checking live scores\u2026';btn='<i class="lvsp" aria-hidden="true"></i>Checking\u2026'}
+  let txt,btn='\u21BB Refresh Live Games';
+  if(LV.busy){txt='Checking live scores\u2026';btn='<i class="lvsp" aria-hidden="true"></i>Refreshing\u2026'}
   else if(LV.err){txt='Couldn\u2019t reach ESPN right now'+(LV.paused?' \u00B7 paused':ago?' \u00B7 last checked '+ago:'');}
   else if(ago){txt=LV.mode==='fast'?'Scores live \u00B7 checked '+ago:'Scores checked '+ago}   // 'live' only while actually polling at the 45-60 s cadence (a live / starting / just-ended game); idle days (5-min cadence) just say when it was last checked
   else txt='Live scores: not checked yet';
@@ -619,7 +625,8 @@ function lvUI(){
   txt=LV.err?'Couldn\u2019t reach ESPN right now'+(LV.paused?' \u00B7 paused':''):'';
   /*</NO-CHECKED-LINE>*/
   if(t.textContent!==txt)t.textContent=txt;
-  const bh=LV.busy?btn:'\u21BB Refresh';if(b.innerHTML!==bh)b.innerHTML=bh;
+  const bh=LV.busy?btn:'\u21BB Refresh Live Games';if(b.innerHTML!==bh)b.innerHTML=bh;
+  /*<LAST-UPDATED>*/{const u=document.getElementById('lvU');if(u){const lu=LV.lastOk?'Last updated '+lvEtTime(LV.lastOk):'';if(u.textContent!==lu)u.textContent=lu;u.hidden=!lu}}/*</LAST-UPDATED>*/
   b.disabled=!!LV.busy;
   el.title='Live scores come straight from ESPN and are unofficial until the next data update. Standings and points only change when the site data updates.';
   el.hidden=false;
@@ -679,8 +686,11 @@ function gameCard(g){
   /*<REFRESH-NOW>*/foot+=lvNote(g);/*</REFRESH-NOW>*/
   return `<div class="gm${g.h2h||g.civil?' h2h':''}"><div class="gh">${head}</div>${row(g.away)}${row(g.home)}<div class="gl">${foot}</div></div>`}
 let gOwner='all',gMode=null,gDay='all',gH2H=params.has('h2h');
+/*<OWNED-GAMES>*/let gAll=false;   // 'Show unowned games' toggle: OFF by default
+/* a game is owned when at least one of its two teams belongs to one of the owners ON THAT GAME DAY (home/away.owners comes from the owners' team windows). The build keeps every game that touches ANY pool team, so a pool team whose owner window does not cover the day can leave a game with nobody's name on it: those are hidden unless the toggle is on. */
+const gOwned=g=>!!(g&&((g.home&&g.home.owners&&g.home.owners.length)||(g.away&&g.away.owners&&g.away.owners.length)));/*</OWNED-GAMES>*/
 function vGames(){
-  const all=D.games||[];
+  /*<OWNED-GAMES>*/const every=D.games||[],nHidden=every.filter(g=>!gOwned(g)).length;if(!nHidden)gAll=false;const all=gAll?every:every.filter(gOwned);/*</OWNED-GAMES>*/
   const ups=all.filter(g=>g.status!=='final'),fin=all.filter(g=>g.status==='final');
   if(!gMode)gMode=ups.length?'upcoming':'scores';
   let list=(gMode==='upcoming'?ups:fin.slice().reverse());
@@ -693,9 +703,9 @@ function vGames(){
   let h=`<div class="card"><div class="tabs" style="margin:0 0 8px"><button class="${gMode==='upcoming'?'on':''}" onclick="gMode='upcoming';gDay='all';render()">⏭ Upcoming (${ups.length})</button><button class="${gMode==='scores'?'on':''}" onclick="gMode='scores';gDay='all';render()">✅ Scores (${fin.length})</button></div>
    <div class="tabs" style="margin:0"><select onchange="gOwner=this.value;render()"><option value="all">All owners</option>${D.owners.map(o=>`<option value="${esc(o.name)}"${o.name===gOwner?' selected':''}>${esc(o.emoji)} ${esc(o.name)}</option>`).join('')}</select>
    <select onchange="gDay=this.value;render()"><option value="all">All days</option>${days.map(k=>`<option value="${k}"${k===gDay?' selected':''}>${esc(etLabel(k))}</option>`).join('')}</select>
-   <button class="${gH2H?'on':''}" onclick="gH2H=!gH2H;render()">🥊 Pool vs pool only</button></div>
+   <button class="${gH2H?'on':''}" onclick="gH2H=!gH2H;render()">🥊 Pool vs pool only</button></div>${/*<OWNED-GAMES>*/nHidden?`<label class="gUn"><input type="checkbox" id="gUnowned"${gAll?' checked':''} onchange="gAll=this.checked;render()"> Show unowned games <span class="mut">(${nHidden} hidden)</span></label>`:''/*</OWNED-GAMES>*/}
    <div class="note" style="margin-top:6px">Times in Eastern (ET). ⭐ = betting favorite, 🐶 = underdog. Betting lines posted so far: ${D.meta.games_view.n_with_line} of ${D.meta.games_view.n_games} games${ADMIN?' ('+esc((D.meta.sources||{}).odds||'')+')':' (DraftKings, via ESPN)'}.</div></div>`;
-  if(!list.length)return h+`<div class="card">${all.length?'Nothing matches those filters.':'No games for rostered teams yet. Check back when the schedule fills in.'}</div>`;
+  if(!list.length)return h+`<div class="card">${all.length?'Nothing matches those filters.':nHidden/*<OWNED-GAMES>*/?'No games with an owned team right now 🏀 Check back soon. (Games where nobody in the pool owns either team are hidden.)'/*</OWNED-GAMES>*/:'No games for rostered teams yet. Check back when the schedule fills in.'}</div>`;
   if(gMode==='upcoming'&&D.meta.mode==='preseason')h+=`<div class="card note">Preseason: only the first few nights of the schedule are loaded, and sportsbooks have posted lines for just some of them so far. Everything refreshes automatically.</div>`;
   let cur=null;
   list.forEach(g=>{const k=etKey(g);if(k!==cur){cur=k;h+=`<div class="gday">${esc(etLabel(k))}</div>`}h+=gameCard(g)});
@@ -1107,7 +1117,7 @@ function vBets(){
   h+=L.slice().reverse().slice(0,150).map(b=>`<div class="card"><div><b>#${esc(b.n)}</b> <span class="st ${b.status}">${b.status==='unparsed'?'⚠ not in tally':(SBL[b.status]||b.status)}</span> <span class="mut" style="font-size:12px">${b.src==='imported'?'2025-26':esc(b.season||'')}</span></div>
     <div style="margin:4px 0">${esc(b.text)}</div>${b.outcome?`<div class="note">Outcome: ${esc(b.outcome)}</div>`:''}
     ${b.entries.length?`<div style="margin-top:4px">${b.entries.map(e=>`<span class="pill">${esc(P(e.from).name)} → ${esc(P(e.to).name)} <b>${e.amount!=null?money(e.amount):esc(e.item)}</b>${e.paid?' ✓paid':''}</span>`).join('')}</div>`:''}
-    ${b.notes&&b.notes.length&&b.status!=='open'?`<div class="note ${b.status==='unparsed'?'bad':''}">${b.status==='unparsed'?'Needs checking: ':'Assumed: '}${b.notes.map(esc).join('; ')}</div>`:''}${waBtn(b)}</div>`).join('');
+    ${b.notes&&b.notes.length&&b.status!=='open'?`<div class="note ${b.status==='unparsed'?'bad':''}">${b.status==='unparsed'?'Needs checking: ':'Assumed: '}${b.notes.map(esc).join('; ')}</div>`:''}</div>`).join('');
   if(L.length>150)h+=`<p class="note">Showing the latest 150 of ${L.length}. Use the filters.</p>`;
   if(cov)h+=`<div class="card"><b>2025-26 bets: what was counted</b>${ADMIN?` <span class="note">(imported ${esc(fmtDate((B.imported_at||'').slice(0,10)))})</span>`:''}<div class="note">${cov.total} bets were read from last season’s sheet. <b>${cov.settled}</b> are counted in the totals${cov.settled_with_assumptions?` (${cov.settled_with_assumptions} of those rest on a stated assumption)`:''}, ${cov.wash} washes, ${cov.open} still open (no outcome written), and <b class="bad">${cov.unparsed}</b> couldn’t be read safely and are <b>not in the totals</b> (set Status to “Couldn’t read” to see them).${ADMIN?' Source: the “NEW BETS” block; payment-detail columns of the sheet are never read.':''}</div></div>`;
   return h}
@@ -1367,19 +1377,6 @@ function nbShow(list){
 function nbHide(){clearTimeout(NB.timer);NB.pending=[];if(NB.el)NB.el.hidden=true}
 try{nbEnsure()}catch(_){}
 /*</NEWBET>*/
-/*<WA-SHARE>*/
-/* "Share to WhatsApp": a plain wa.me link with a prefilled text. The user taps send inside WhatsApp; nothing is sent by this page and no phone numbers are involved. Remove this block + ${waBtn(b)} in vBets + the WA-SHARE-CSS to drop the feature. */
-const WA_SITE='https://stoopids.github.io/stoopids/';
-function waText(b){
-  const clean=t=>String(t==null?'':t).replace(/[\u0000-\u001f\u007f]+/g,' ').replace(/\s+/g,' ').trim();
-  const cut=(t,n)=>{const a=Array.from(t);return a.length>n?a.slice(0,n-1).join('').trim()+'\u2026':t};
-  const [a,c]=nbSides(b),nm=ids=>ids.map(i=>P(i).name).join(' & ');
-  const who=(c&&a.length&&c.length)?nm(a)+' vs '+nm(c):(a.length?a.map(i=>P(i).name).join(', '):'');
-  return 'Stoopids side bet #'+clean(b.n)+(who?': '+who:'')+' \u2014 '+cut(clean(b.text),100)+' '+WA_SITE;
-}
-const waUrl=b=>'https://wa.me/?text='+encodeURIComponent(waText(b));
-const waBtn=b=>`<a class="wa" href="${esc(waUrl(b))}" target="_blank" rel="noopener" aria-label="Share bet #${esc(b.n)} to WhatsApp">\u{1F4AC} Share to WhatsApp</a>`;
-/*</WA-SHARE>*/
 /* ---------- who's online (anonymous shared blob; no passwords, anyone can pick any name) ---------- */
 const PRES={url:'https://textdb.dev/api/data/stoopids-presence-23658198955328729a557ddb',beatMs:30000,onlineMs:75000,guestKeepMs:600000,guestKey:'__guest__'};
 const PS={map:{},lastOk:0,timer:null,busy:false,started:false,dev:null,who:null};
@@ -1689,7 +1686,10 @@ function chatInit(){
 /* Bets 2026-27: a SEPARATE little ledger counted in plain whole numbers (no money anywhere; the unit is named once, in the disclaimer constant).
    It lives in its OWN textdb key (stoopids-bets-2627), so the existing Side bets ledger (config.json blob), bets.json and the shared ledger are never read, written or summed.
    It only RECORDS agreed bets and who owes whom.
-   Record: {id,n,backer,other,amt,odds:{a,b},text,created_at,status,settled_at}  status: open | backer | other | push | void
+   Record: {id,n,backer,other,amt,odds:{a,b},text,created_at,status,settled_at[,opponents]}  status: open | backer | other | push | void
+   BUNDLED BET (<BUNDLE>): one record against 2+ managers: `opponents:[...]` (array, 2..7 names) and `other` = opponents[0] (so older readers still see a valid bet). ONE result for the whole bundle:
+   status 'backer' = backer right (EVERY listed opponent owes the backer round(amt x a/b)); 'other' = backer wrong (the backer owes EACH opponent `amt`); 'push' = whole bet washed. Same amt and odds for each opponent.
+   A record without `opponents` (every bet placed before the bundle change, and every single-opponent bet) is simply a bet with ONE opponent = [other]. Legacy separate bets (shared group id `g`) keep working as independent records.
    Odds a-b: the BACKER ("I say...") bets `amt` (whole number, 5..1000); if the backer is right the other owes round(amt x a/b), if wrong the backer owes `amt`.
    Rounding rule: all maths is integer; amt x a/b is rounded HALF UP to a whole number (7.5 -> 8, 3.33 -> 3), and never below 1; the card says so when it happened.
    Remove everything between the BETS-2627 markers (CSS, JS, load hook) to drop the tab. */
@@ -1735,20 +1735,30 @@ function b27Valid(x,names){
   x=Object.assign({},x,{backer:legacyOwner(x.backer),other:legacyOwner(x.other)});   // 2026-27 bets saved before the renames say "Poo" or "Party Paul"
   const st=Number(x.amt),a=x.odds&&Number(x.odds.a),b=x.odds&&Number(x.odds.b),n=Number(x.n),t=Date.parse(x.created_at);
   if(typeof x.id!=='string'||!/^[a-z0-9]{6,24}$/.test(x.id))return null;
+  /*<BUNDLE>*/let opps=Array.isArray(x.opponents)&&x.opponents.length?x.opponents.map(o=>legacyOwner(o)):[x.other];   // `opponents` array (bundle) or the single `other` string (all older bets)
+  if(opps.length>Math.max(1,names.length-1)||opps.some(o=>typeof o!=='string'||!names.includes(o)||o===x.backer)||new Set(opps).size!==opps.length)return null;
+  x.other=opps[0];/*</BUNDLE>*/
   if(!names.includes(x.backer)||!names.includes(x.other)||x.backer===x.other)return null;
   if(!Number.isInteger(st)||st<PULK.minAmt||st>PULK.maxAmt)return null;
   if(!Number.isInteger(a)||!Number.isInteger(b)||a<1||b<1||a>PULK.maxOdds||b>PULK.maxOdds)return null;
   if(!Number.isInteger(n)||n<1||!isFinite(t)||typeof x.text!=='string')return null;
   const status=['open','backer','other','push','void'].includes(x.status)?x.status:'open';
-  return {id:x.id,n,backer:x.backer,other:x.other,amt:st,odds:{a,b},text:b27Clean(x.text),created_at:new Date(t).toISOString(),status,settled_at:x.settled_at&&isFinite(Date.parse(x.settled_at))?new Date(x.settled_at).toISOString():null/*<MULTI-BET>*/,g:typeof x.g==='string'&&/^[a-z0-9]{6,24}$/.test(x.g)?x.g:undefined/*</MULTI-BET>*/};
+  return {id:x.id,n,backer:x.backer,other:x.other,/*<BUNDLE>*/...(opps.length>1?{opponents:opps}:{}),/*</BUNDLE>*/amt:st,odds:{a,b},text:b27Clean(x.text),created_at:new Date(t).toISOString(),status,settled_at:x.settled_at&&isFinite(Date.parse(x.settled_at))?new Date(x.settled_at).toISOString():null/*<MULTI-BET>*/,g:typeof x.g==='string'&&/^[a-z0-9]{6,24}$/.test(x.g)?x.g:undefined/*</MULTI-BET>*/};
 }
 function b27Parse(txt,names){
   try{if(!txt||!txt.trim())return [];let d=JSON.parse(txt);if(typeof d==='string')d=JSON.parse(d);
     const seen=new Set(),out=[];for(const x of (d&&Array.isArray(d.bets)?d.bets:[])){const v=b27Valid(x,names);if(v&&!seen.has(v.id)){seen.add(v.id);out.push(v)}}
     return out.sort((p,q)=>p.n-q.n)}catch(e){return []}
 }
+/*<BUNDLE>*/const b27Opps=b=>Array.isArray(b.opponents)&&b.opponents.length?b.opponents:[b.other];   // every opponent of a bet (1 for a normal bet, 2+ for a bundle)
+const b27IsBundle=b=>b27Opps(b).length>1;/*</BUNDLE>*/
 const b27Pay=b=>({ifBackerRight:b27Win(b.amt,b.odds.a,b.odds.b),ifOtherRight:b.amt});     // what the loser owes
 function b27Lines(b){const p=b27Pay(b);
+  /*<BUNDLE>*/if(b27IsBundle(b)){const o=b27Opps(b).join(', ');
+    return {top:b.backer+' backs it: '+b27Num(b.amt)+' each '+b27OddsShort(b.odds.a,b.odds.b)+'.',
+      win:'If '+b.backer+' is right: '+o+' each owe '+b.backer+' '+b27Num(p.ifBackerRight)+'.',
+      lose:'If '+b.backer+' is wrong: '+b.backer+' owes each of them '+b27Num(p.ifOtherRight)+(' ('+b27Num(p.ifOtherRight*b27Opps(b).length)+' in all).'),
+      rounded:b27Rounded(b.amt,b.odds.a,b.odds.b)}}/*</BUNDLE>*/
   return {top:b.backer+' backs it: '+b27Num(b.amt)+' '+b27OddsShort(b.odds.a,b.odds.b)+'.',
     win:'If '+b.backer+' is right, '+b.other+' owes '+b.backer+' '+b27Num(p.ifBackerRight)+'.',
     lose:'If '+b.other+' is right, '+b.backer+' owes '+b.other+' '+b27Num(p.ifOtherRight)+'.',
@@ -1757,13 +1767,17 @@ function b27Tally(bets){
   const pair={},per={};let openC=0,openN=0;
   const P=n=>per[n]||(per[n]={net:0,bets:0});
   for(const b of bets){
-    if(b.status==='open'){openN++;openC+=b.amt;continue}
-    if(b.status==='push'){P(b.backer).bets++;P(b.other).bets++;continue}
+    const opps=/*<BUNDLE>*/b27Opps(b)/*</BUNDLE>*/;      // a bundle counts as ONE bet per person, but every opponent carries the same amount / odds
+    if(b.status==='open'){openN++;openC+=b.amt*opps.length;continue}
+    if(b.status==='push'){P(b.backer).bets++;opps.forEach(o=>P(o).bets++);continue}
     if(b.status!=='backer'&&b.status!=='other')continue;
-    const p=b27Pay(b),win=b.status==='backer'?b.backer:b.other,lose=b.status==='backer'?b.other:b.backer,c=b.status==='backer'?p.ifBackerRight:p.ifOtherRight;
-    P(win).net+=c;P(lose).net-=c;P(win).bets++;P(lose).bets++;
-    const k=[win,lose].sort().join('|');pair[k]=pair[k]||{x:k.split('|')[0],y:k.split('|')[1],net:0};     // net = what y owes x
-    pair[k].net+=(win===pair[k].x?c:-c);
+    const p=b27Pay(b);P(b.backer).bets++;
+    for(const o of opps){
+      const win=b.status==='backer'?b.backer:o,lose=b.status==='backer'?o:b.backer,c=b.status==='backer'?p.ifBackerRight:p.ifOtherRight;
+      P(win).net+=c;P(lose).net-=c;P(o).bets++;
+      const k=[win,lose].sort().join('|');pair[k]=pair[k]||{x:k.split('|')[0],y:k.split('|')[1],net:0};     // net = what y owes x
+      pair[k].net+=(win===pair[k].x?c:-c);
+    }
   }
   const owes=[];Object.values(pair).forEach(p=>{if(p.net>0)owes.push({from:p.y,to:p.x,num:p.net});else if(p.net<0)owes.push({from:p.x,to:p.y,num:-p.net})});
   owes.sort((a,b)=>b.num-a.num||a.from.localeCompare(b.from));
@@ -1792,7 +1806,7 @@ function b27Apply(list,fromPoll){
   if(lsGet(PULK.seenKey)==null)lsSet(PULK.seenKey,String(U.maxN));
   if(tab==='bets27')b27Seen();
   const fresh=added.filter(b=>!U.mine.has(b.id)&&b.status==='open');
-  if(fresh.length&&typeof nbShow==='function'){nbShow(fresh.map(b=>({n:b.n,_msg:b.backer+' just bet '+b27Num(b.amt)+' '+b27OddsShort(b.odds.a,b.odds.b)+' with '+b.other})))}
+  if(fresh.length&&typeof nbShow==='function'){nbShow(fresh.map(b=>({n:b.n,_msg:b.backer+' just bet '+b27Num(b.amt)+(b27IsBundle(b)?' each ':' ')+b27OddsShort(b.odds.a,b.odds.b)+' with '+b27Opps(b).join(', ')})))}
   if(first||added.length||fromPoll==='force'){const ae=document.activeElement;if(tab==='bets27'){if(!(ae&&ae.closest&&ae.closest('#main')&&/INPUT|TEXTAREA/.test(ae.tagName)))render()}else if(b27Badge())setTimeout(render,0)}
 }
 function b27Seen(){if(U.state==='ok'&&U.maxN)lsSet(PULK.seenKey,String(Math.max(U.maxN,parseInt(lsGet(PULK.seenKey),10)||0)))}
@@ -1817,9 +1831,9 @@ function b27FormOK(){
   if(!(U.odds&&U.odds[0]>=1&&U.odds[1]>=1))return 'Pick the odds.';
   return '';
 }
-/*<MULTI-BET>*//* one separate bet per selected opponent: same text, amount and odds; with 2+ they share a group id `g` (used only by the group undo). Ids are kept across a failed save so a retry never double-posts. */
-function b27BetsFromForm(){const many=U.opps.length>1;if(many&&!U.gid)U.gid=b27Rid();
-  return U.opps.map(o=>({id:U.fids[o]||(U.fids[o]=b27Rid()),backer:b27Who(),other:o,amt:U.amt,odds:{a:U.odds[0],b:U.odds[1]},text:b27Clean(U.text),status:'open',g:many?U.gid:undefined}))}
+/*<MULTI-BET>*//* ONE bet record however many opponents are ticked (<BUNDLE>): with 2+ it carries `opponents:[...]` (other = the first one); with 1 it is the plain single-opponent record, exactly as before. The id is kept across a failed save (per selection) so a retry never double-posts. */
+function b27BetsFromForm(){const k=U.opps.join('|');
+  return [Object.assign({id:U.fids[k]||(U.fids[k]=b27Rid()),backer:b27Who(),other:U.opps[0]},U.opps.length>1?{opponents:U.opps.slice()}:{},{amt:U.amt,odds:{a:U.odds[0],b:U.odds[1]},text:b27Clean(U.text),status:'open'})]}
 const b27Others=()=>b27OwnerNames().filter(n=>n!==b27Who());
 function b27Opp(i){const n=b27Others()[i];if(!n)return;const k=U.opps.indexOf(n);if(k>=0)U.opps.splice(k,1);else{U.opps.push(n);const o=b27Others();U.opps.sort((x,y)=>o.indexOf(x)-o.indexOf(y))}b27Sync()}
 function b27OppAll(){U.opps=b27Others().slice();b27Sync()}
@@ -1843,8 +1857,8 @@ function b27Edit(){U.confirm=false;render()}
       return cur.concat(miss.map(b=>Object.assign({},b,{n:++n,created_at:at,settled_at:null})))},cur=>ids.every(id=>cur.some(b=>b.id===id)));
     ids.forEach(id=>U.mine.add(id));b27Apply(back);
     const mine=ids.map(id=>back.find(b=>b.id===id)).filter(Boolean);
-    U.msg=mine.length>1?'Placed! '+mine.length+' separate bets of '+b27Num(U.amt)+' each ('+mine.map(b=>'#'+b.n).join(', ')+') are open. You can undo all '+mine.length+' for 30 seconds.':'Placed! Bet #'+(mine[0]?mine[0].n:'')+' is open. You can undo it for 30 seconds.';U.msgBad=false;
-    U.undoG=mine.length>1?(mine[0].g||null):null;
+    {const m=mine[0],k=m?b27Opps(m).length:1;U.msg='Placed! Bet #'+(m?m.n:'')+(k>1?' against '+k+' managers ('+b27Num(U.amt)+' each)':'')+' is open. You can undo it for 30 seconds.';U.msgBad=false}
+    U.undoG=null;
     U.opps=[];U.amt=null;U.amtCustom=false;U.amtTxt='';U.amtErr='';U.odds=[1,1];U.custom=false;U.customTxt='';U.oddsErr='';U.text='';U.confirm=false;U.fids={};U.gid=null;
     clearTimeout(U.undoT);U.undoT=setTimeout(()=>{if(tab==='bets27')render()},PULK.undoMs+300);
   }catch(e){U.msg=e&&e.message==='full'?'The bets ledger is full.':'Couldn’t save. Check your connection and tap Place bet again (it won’t double-post).';U.msgBad=true;U.confirm=true}
@@ -1892,36 +1906,39 @@ function b27SyncDom(){
   const hint=document.getElementById('b27Hint');if(hint)hint.textContent=err&&(U.opps.length||U.text||U.amt)?err:'';
 }
 function b27Sync(){try{b27SyncDom()}catch(e){}}
-/*<MULTI-BET>*/const b27SelTxt=()=>U.opps.length?U.opps.length+' selected':'None selected';
+/*<MULTI-BET>*//* narrow chip label: short names (several words = the last word when it is 4-9 chars: "Dirty Draymond" -> "Draymond", "En Fuego" -> "Fuego"; else <=9 chars as is, else the first word, else cut with an ellipsis). The full name is always in aria-label and data-b27-name. */
+const b27ShortName=n=>{n=String(n);const w=n.split(/\s+/).filter(Boolean),l=w[w.length-1];if(w.length>1&&l.length>=4&&l.length<=9)return l;if(n.length<=9)return n;if(w.length>1&&w[0].length<=9)return w[0];return n.slice(0,8)+'…'};
+const b27TinyName=n=>{const t=b27ShortName(n);return t.length<=7?t:t.slice(0,4)};   // phones (7 chips in one row): max 7 chars, long ones cut to 4 letters ("Draymond" -> "Dray")
+const b27SelTxt=()=>U.opps.length?U.opps.length+' selected':'None selected';
 /* "3 bets of 10 each" / "1 bet of 10" */
-const b27CountTxt=()=>{const n=U.opps.length;return n+' bet'+(n===1?'':'s')+' of '+(U.amt?b27Num(U.amt):'?')+(n>1?' each':'')};
+const b27CountTxt=()=>{const n=U.opps.length;return n>1?(U.amt?b27Num(U.amt):'?')+' each':n+' bet of '+(U.amt?b27Num(U.amt):'?')};   // bundle: "10 each" / single: "1 bet of 10"
 function b27Summary(){const me=b27Who()||'You',o=U.opps.length?U.opps.join(', '):'…',od=U.odds?b27OddsShort(U.odds[0],U.odds[1]).replace(/^at /,''):'?',t=b27Clean(U.text);
   return me+' vs '+o+' · '+(U.opps.length?b27CountTxt():(U.amt?b27Num(U.amt):'?'))+' · '+od+(t?' · '+t:'')}/*</MULTI-BET>*/
 function b27LiveHtml(){
   const me=b27Who();if(!me||!U.opps.length||!U.amt||!U.odds)return '<span class="mut">Pick one or more opponents, an amount and the odds to see who owes what.</span>';
   const L=b27Lines({backer:me,other:U.opps[0],amt:U.amt,odds:{a:U.odds[0],b:U.odds[1]}});
-  /*<MULTI-BET>*/if(U.opps.length>1){const p=b27Pay({amt:U.amt,odds:{a:U.odds[0],b:U.odds[1]}});
-    return '<b>'+esc(b27CountTxt())+'</b> · '+esc(b27OddsShort(U.odds[0],U.odds[1]))+'<div class="mut b27-r">'+U.opps.length+' separate bets, one per opponent. Each one is settled on its own.</div><div class="b27-w">'+esc('If '+me+' is right on one, that opponent owes '+me+' '+b27Num(p.ifBackerRight)+'.')+'</div><div class="b27-l">'+esc('If an opponent is right, '+me+' owes that opponent '+b27Num(p.ifOtherRight)+'.')+'</div>'+(L.rounded?'<div class="mut b27-r">Rounded to a whole number.</div>':'')}/*</MULTI-BET>*/
+  /*<MULTI-BET>*/if(U.opps.length>1){
+    const B={backer:me,other:U.opps[0],opponents:U.opps,amt:U.amt,odds:{a:U.odds[0],b:U.odds[1]}},BL=b27Lines(B);
+    return '<b>'+esc(BL.top)+'</b><div class="mut b27-r">One bet against '+U.opps.length+' managers, one result for all of them.</div><div class="b27-w">'+esc(BL.win)+'</div><div class="b27-l">'+esc(BL.lose)+'</div>'+(BL.rounded?'<div class="mut b27-r">Rounded to a whole number.</div>':'')}/*</MULTI-BET>*/
   return '<b>'+esc(L.top)+'</b><div class="b27-w">'+esc(L.win)+'</div><div class="b27-l">'+esc(L.lose)+'</div>'+(L.rounded?'<div class="mut b27-r">Rounded to a whole number.</div>':'');
 }
 function b27Card(b,me){
-  const L=b27Lines(b),isP=me&&(b.backer===me||b.other===me),st=b.status;
+  const L=b27Lines(b),OP=b27Opps(b),BU=OP.length>1,isP=me&&(b.backer===me||OP.includes(me)),st=b.status;
   const stTxt={open:'Open',backer:'Settled',other:'Settled',push:'Wash',void:'Cancelled'}[st];
-  const res=st==='backer'?b.backer+' won ('+esc(b.other)+' owes '+b27Num(b27Pay(b).ifBackerRight)+')':st==='other'?b.other+' won ('+esc(b.backer)+' owes '+b27Num(b27Pay(b).ifOtherRight)+')':st==='push'?'Wash: nobody owes anything':'';
-  let h=`<div class="card b27-c"><div><b>Bet #${b.n}</b> <span class="st ${st==='open'?'open':st==='push'?'wash':st==='void'?'unparsed':'settled'}">${stTxt}</span> <span class="mut" style="font-size:12px">${esc(b27Day(Date.parse(b.created_at)))}</span>${/*<MULTI-BET>*/b.g&&U.doc.bets.filter(x=>x.g===b.g).length>1?` <span class="mut" style="font-size:12px">· 1 of ${U.doc.bets.filter(x=>x.g===b.g).length} placed together</span>`:''/*</MULTI-BET>*/}</div>
-   <div class="b27-t">${esc(b.text)}</div><div class="b27-m"><b>${esc(b.backer)}</b> vs <b>${esc(b.other)}</b> · <b>${b27Num(b.amt)}</b> · ${esc(b27OddsLabel(b.odds.a,b.odds.b))}</div>
+  const res=BU?(st==='backer'?b.backer+' won ('+OP.join(', ')+' each owe '+b.backer+' '+b27Num(b27Pay(b).ifBackerRight)+')':st==='other'?'Managers won ('+b.backer+' owes each of them '+b27Num(b27Pay(b).ifOtherRight)+')':st==='push'?'Wash: whole bet cancelled, nobody owes anything':'')
+   :st==='backer'?b.backer+' won ('+esc(b.other)+' owes '+b27Num(b27Pay(b).ifBackerRight)+')':st==='other'?b.other+' won ('+esc(b.backer)+' owes '+b27Num(b27Pay(b).ifOtherRight)+')':st==='push'?'Wash: nobody owes anything':'';
+  let h=`<div class="card b27-c"><div><b>Bet #${b.n}</b> <span class="st ${st==='open'?'open':st==='push'?'wash':st==='void'?'unparsed':'settled'}">${stTxt}</span> <span class="mut" style="font-size:12px">${esc(b27Day(Date.parse(b.created_at)))}</span>${BU?` <span class="mut" style="font-size:12px">· ${OP.length} managers, one result</span>`:''}${/*<MULTI-BET>*/b.g&&U.doc.bets.filter(x=>x.g===b.g).length>1?` <span class="mut" style="font-size:12px">· 1 of ${U.doc.bets.filter(x=>x.g===b.g).length} placed together</span>`:''/*</MULTI-BET>*/}</div>
+   <div class="b27-t">${esc(b.text)}</div><div class="b27-m"><b>${esc(b.backer)}</b> vs <b>${esc(OP.join(', '))}</b> · <b>${b27Num(b.amt)}</b>${BU?' each':''} · ${esc(b27OddsLabel(b.odds.a,b.odds.b))}</div>
    <div class="b27-w">${esc(L.win)}</div><div class="b27-l">${esc(L.lose)}</div>${L.rounded?'<div class="mut b27-r">Rounded to a whole number.</div>':''}${res?`<div class="note" style="margin-top:4px"><b>Result:</b> ${esc(res)}</div>`:''}`;
   if(st==='open'&&(isP||ADMIN)){
     const ask=w=>U.askSettle&&U.askSettle.id===b.id&&U.askSettle.what===w;
     const btn=(w,label)=>`<button type="button" class="btn sec b27-b" onclick="${ask(w)?`b27SetStatus('${b.id}','${w}')`:`b27Ask('${b.id}','${w}')`}"${U.busy?' disabled':''}>${ask(w)?'Tap again to confirm':label}</button>`;
-    h+=`<div class="b27-act"><span class="note">Who won?</span>${btn('backer',esc(b.backer)+' won')}${btn('other',esc(b.other)+' won')}${btn('push','Wash')}</div>`;
+    h+=`<div class="b27-act"><span class="note">Who won?</span>${btn('backer',esc(b.backer)+' won')}${btn('other',BU?'Managers won':esc(b.other)+' won')}${btn('push','Wash')}</div>`;
     /*<MULTI-BET>*/const gu=b.g?b27GroupUndoable(b.g):[];
     if(b27CanUndo(b)&&b.g&&gu.length>1){if(U.doc.bets.filter(x=>x.g===b.g&&b27CanUndo(x)).sort((p,q)=>q.n-p.n)[0].id===b.id)h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27UndoGroup('${b.g}')"${U.busy?' disabled':''}>↩ Undo all ${gu.length} bets placed together (30 s)</button></div>`}
     else /*</MULTI-BET>*/if(b27CanUndo(b))h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27SetStatus('${b.id}','void')"${U.busy?' disabled':''}>↩ Undo this bet (30 s)</button></div>`;
     else if(ADMIN)h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27SetStatus('${b.id}','void')"${U.busy?' disabled':''}>Cancel bet (admin)</button></div>`;
   }
-  if(typeof waUrl==='function'){const txt='Stoopids bet #'+b.n+': '+b.backer+' vs '+b.other+' \u2014 '+b27Num(b.amt)+' '+b27OddsShort(b.odds.a,b.odds.b)+' \u2014 '+Array.from(b.text).slice(0,100).join('')+' '+WA_SITE;
-    h+=`<a class="wa" href="${esc('https://wa.me/?text='+encodeURIComponent(txt))}" target="_blank" rel="noopener" aria-label="Share bet #${b.n} to WhatsApp">\u{1F4AC} Share to WhatsApp</a>`}
   return h+'</div>';
 }
 function vB27(){
@@ -1938,7 +1955,7 @@ function vB27(){
   }else{
     const oc=U.odds?U.odds.join('-'):'';
     h+=`<div class="card b27-form"><b>New bet</b> <span class="note">· you are <b>${esc(me)}</b> <a href="#" onclick="presAsk();return false">(change)</a></span>
-     ${/*<MULTI-BET>*/''/*opponents: multi-select*/}<div class="b27-q">1. Who are you betting against? <span class="note">Tap one or more. Each gets its own bet.</span></div><div class="b27-opps" role="group" aria-label="Opponents">${others.map((n,i)=>{const o=(D.owners.find(x=>x.name===n)||{});const on=U.opps.includes(n);return `<button type="button" class="b27-chip op" data-b27-opp="${i}" aria-pressed="${on}" onclick="b27Opp(${i})"><span class="ck" aria-hidden="true">✓</span><span class="nm">${esc(o.emoji||'')} ${esc(n)}</span></button>`}).join('')}</div>
+     ${/*<MULTI-BET>*/''/*opponents: multi-select*/}<div class="b27-q">1. Who are you betting against? <span class="note">Tap one or more. Several = one bet, one result.</span></div><div class="b27-opps" role="group" aria-label="Opponents" style="--n:${others.length}">${others.map((n,i)=>{const o=(D.owners.find(x=>x.name===n)||{});const on=U.opps.includes(n);return `<button type="button" class="b27-chip op" data-b27-opp="${i}" data-b27-name="${esc(n)}" aria-label="${esc(n)}" aria-pressed="${on}" onclick="b27Opp(${i})"><span class="ck" aria-hidden="true">✓</span><span class="em" aria-hidden="true">${esc(o.emoji||'')}</span><span class="nm" aria-hidden="true"><span class="f">${esc(n)}</span><span class="sh">${esc(b27ShortName(n))}</span><span class="xs">${esc(b27TinyName(n))}</span></span></button>`}).join('')}</div>
      <div class="b27-selbar"><button type="button" class="b27-sm" data-b27-all="1" onclick="b27OppAll()">Select all</button><button type="button" class="b27-sm" data-b27-clear="1" onclick="b27OppClear()">Clear</button><span class="cnt" id="b27SelCnt" aria-live="polite">${esc(b27SelTxt())}</span></div>
      ${''/*</MULTI-BET>*/}<div class="b27-q"><label for="b27Text">2. What’s the bet? <span class="note">I say…</span></label></div><input id="b27Text" class="sb-in b27-in" maxlength="${PULK.maxText}" autocomplete="off" enterkeyhint="go" placeholder="e.g. Kansas beats Duke" value="${esc(U.text)}" oninput="b27Text(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();b27Place()}">
      <div class="b27-q">3. Amount <span class="note">(minimum ${PULK.minAmt})</span></div><div class="b27-amts" role="group" aria-label="Amount">${PULK.amounts.map(a=>`<button type="button" class="b27-amt" data-b27-amt="${a}" aria-pressed="${!U.amtCustom&&a===U.amt}" onclick="b27Amt(${a})">${a}</button>`).join('')}<button type="button" class="b27-amt cu" data-b27-amtcustom="1" aria-pressed="${U.amtCustom}" onclick="b27AmtCustomOpen()">Custom</button></div>
