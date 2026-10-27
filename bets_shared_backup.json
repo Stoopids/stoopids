@@ -1,5 +1,23 @@
 {
  "_note": "Automatic snapshot of the shared side-bets ledger (written by refresh.py). Restore by pasting the 'bets' list into the shared document or into bets.json.",
  "source": "textdb",
- "bets": []
+ "bets": [
+  {
+   "type": "versus",
+   "text": "Nasty bets Dirty Draymond 100K that the Brewers sweep the Rays",
+   "side_a": [
+    "jim"
+   ],
+   "side_b": [
+    "mark"
+   ],
+   "stake": "100K",
+   "winner": null,
+   "id": "bmvqlsw2qd3xyq",
+   "n": "1",
+   "season": "2026-27",
+   "date": "2026-10-27",
+   "created_at": "2026-10-27T11:30:02.978Z"
+  }
+ ]
 }
