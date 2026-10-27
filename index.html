@@ -260,6 +260,10 @@ nav button .nu{position:absolute;top:1px;left:2px;min-width:15px;background:#ff3
 .b27-r{font-size:12px}
 .b27-amt{font-size:18px;padding:0}
 .b27-in{font-size:16px;min-height:46px}
+/*<POOL>*/.b27-pool .b27-t{font-weight:600}
+.oq tr.oqh td{font-size:12px;color:var(--mut);padding:9px 2px 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-bottom:0}
+.b27-form textarea.b27-in{min-height:84px;resize:vertical;margin-top:8px}
+/*</POOL>*/
 .b27-cw{margin-top:8px}
 .b27-bad-t{color:var(--bad);font-size:13px;min-height:16px;margin-top:4px}
 .b27-livebox,.b27-confirm #b27Live{margin-top:12px;padding:10px;border-radius:12px;background:var(--card2);border:1px solid var(--line);font-size:14px}
@@ -285,6 +289,20 @@ nav button .nu{position:absolute;top:1px;left:2px;min-width:15px;background:#ff3
 .b27-selbar .b27-sm{min-height:40px;min-width:88px;white-space:nowrap;padding:0 12px;border-radius:10px;border:2px solid var(--line);background:var(--card2);color:var(--tx);font:inherit;font-weight:700;font-size:14px;cursor:pointer}
 .b27-selbar .cnt{font-size:13px;color:var(--mut);margin-left:auto;white-space:nowrap}
 /*</MULTI-BET>*/
+/*<OWES-TABLE>*/
+/* "Who owes who" (Bets 26-27): pair nets + per-manager nets, names never wrap (emoji + name; a short name on phones, ellipsis as the last resort). */
+.oq{width:100%;max-width:560px;border-collapse:collapse;table-layout:fixed;font-size:14px}
+.oq td,.oq th{padding:7px 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-bottom:1px solid var(--line);text-align:left}
+.oq th{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.04em}
+.oq .n{text-align:right;font-variant-numeric:tabular-nums}
+.oq .ow{color:var(--mut);text-align:center;padding:7px 0}
+.oq.oqx col.a,.oq.oqx col.b{width:35%}.oq.oqx col.m{width:14%}.oq.oqx col.v{width:16%}
+.oq.oqp col.a{width:52%}.oq.oqp col.v{width:24%}
+.oqn{white-space:nowrap}.oqn::before{content:attr(data-em) " "}.oqn .s{display:none}
+.oqs{font-size:12px;color:var(--mut);margin:2px 0 6px}
+@media (max-width:599px){.oqn.hs .f{display:none}.oqn.hs .s{display:inline}.oq td,.oq th{padding:7px 2px}.oqn::before{content:attr(data-e1) " "}}
+@media (max-width:359px){.oq{font-size:13px}.oq.oqx col.a,.oq.oqx col.b{width:33%}.oq.oqx col.m{width:12%}.oq.oqx col.v{width:22%}}
+/*</OWES-TABLE>*/
 .b27-owe{padding:6px 0;border-bottom:1px solid var(--line);font-size:15px}
 .b27-ok{border-color:#2f6b47}.b27-bad{border-color:#8a2d2d}
 /* Bets 26-27 tab: nav now has 11 items (10 tabs + Draft): phones size each item by its label (short labels give room to the longer ones); stacked icon+label up to 1239px; full-label pills only from 1240px in a wider nav. Overrides the earlier NAV-ONE-ROW/DRAFT-TAB rules; drop this block together with the tab. */
@@ -1696,6 +1714,7 @@ function chatInit(){
 const BETS_DISCLAIMER="Bets here are just for fun and are settled in pullups, not money. Betting is Stoopid, and we don't endorse or facilitate gambling for money.";   // the ONLY place the unit word appears in the tab; rendered once above the form
 const PULK={url:'https://textdb.dev/api/data/stoopids-bets-2627-9eaa4f66',amounts:[5,10,20,50,100],minAmt:5,maxAmt:1000,oddsChips:[[1,1],[2,1],[3,1],[4,1],[5,1]],maxOdds:100,maxText:140,maxBets:300,undoMs:30000,seenKey:'stoopids_bets2627_seen',pollMs:45000,pollOpenMs:15000};
 const U={state:'init',doc:{bets:[]},known:null,maxN:0,mine:new Set(),opps:[],amt:null,amtCustom:false,amtTxt:'',amtErr:'',odds:[1,1],custom:false,customTxt:'',oddsErr:'',text:'',confirm:false,busy:false,msg:'',msgBad:false,fids:{},gid:null,askSettle:null,fails:0,timer:null,started:false,undoT:null};
+/*<POOL>*/Object.assign(U,{kind:'bet',pp:[],entry:'',backTxt:'',poolTxt:{},poolErr:{}});/*</POOL>*/
 /* ---- pure helpers (unit-tested) ---- */
 const b27Num=n=>{const neg=n<0;n=Math.abs(Math.round(n));return (neg?'-':'')+n.toLocaleString('en-US')};      // plain whole number, thousands separator, no unit
 const b27Signed=n=>(n>0?'+':'')+b27Num(n);
@@ -1732,6 +1751,7 @@ function b27Clean(t,max){
 const b27OwnerNames=()=>(D&&D.owners||[]).map(o=>o.name);
 function b27Valid(x,names){
   if(!x||typeof x!=='object')return null;
+  /*<POOL>*/if(x.kind==='pool')return b27PoolValid(x,names);/*</POOL>*/
   x=Object.assign({},x,{backer:legacyOwner(x.backer),other:legacyOwner(x.other)});   // 2026-27 bets saved before the renames say "Poo" or "Party Paul"
   const st=Number(x.amt),a=x.odds&&Number(x.odds.a),b=x.odds&&Number(x.odds.b),n=Number(x.n),t=Date.parse(x.created_at);
   if(typeof x.id!=='string'||!/^[a-z0-9]{6,24}$/.test(x.id))return null;
@@ -1750,7 +1770,7 @@ function b27Parse(txt,names){
     const seen=new Set(),out=[];for(const x of (d&&Array.isArray(d.bets)?d.bets:[])){const v=b27Valid(x,names);if(v&&!seen.has(v.id)){seen.add(v.id);out.push(v)}}
     return out.sort((p,q)=>p.n-q.n)}catch(e){return []}
 }
-/*<BUNDLE>*/const b27Opps=b=>Array.isArray(b.opponents)&&b.opponents.length?b.opponents:[b.other];   // every opponent of a bet (1 for a normal bet, 2+ for a bundle)
+/*<BUNDLE>*/const b27Opps=b=>/*<POOL>*/b.kind==='pool'?b.parts.filter(p=>p!==b.backer):/*</POOL>*/Array.isArray(b.opponents)&&b.opponents.length?b.opponents:[b.other];   // every opponent of a bet (1 for a normal bet, 2+ for a bundle)
 const b27IsBundle=b=>b27Opps(b).length>1;/*</BUNDLE>*/
 const b27Pay=b=>({ifBackerRight:b27Win(b.amt,b.odds.a,b.odds.b),ifOtherRight:b.amt});     // what the loser owes
 function b27Lines(b){const p=b27Pay(b);
@@ -1764,9 +1784,12 @@ function b27Lines(b){const p=b27Pay(b);
     lose:'If '+b.other+' is right, '+b.backer+' owes '+b.other+' '+b27Num(p.ifOtherRight)+'.',
     rounded:b27Rounded(b.amt,b.odds.a,b.odds.b)}}
 function b27Tally(bets){
-  const pair={},per={};let openC=0,openN=0;
+  const pair={},per={};let openC=0,openN=0;/*<POOL>*/const poolOwes=[];/*</POOL>*/
   const P=n=>per[n]||(per[n]={net:0,bets:0});
   for(const b of bets){
+    /*<POOL>*/if(b.kind==='pool'){if(b.status!=='open')continue;
+      if(!b.back){openN++;openC+=b.amt*b.parts.length;continue}
+      const nets=b27PoolNets(b);nets.forEach(([p,v])=>{P(p).net+=v;P(p).bets++});b27Greedy(nets).forEach(s=>poolOwes.push({n:b.n,from:s.from,to:s.to,num:s.num,text:b.text}));continue}/*</POOL>*/
     const opps=/*<BUNDLE>*/b27Opps(b)/*</BUNDLE>*/;      // a bundle counts as ONE bet per person, but every opponent carries the same amount / odds
     if(b.status==='open'){openN++;openC+=b.amt*opps.length;continue}
     if(b.status==='push'){P(b.backer).bets++;opps.forEach(o=>P(o).bets++);continue}
@@ -1781,7 +1804,7 @@ function b27Tally(bets){
   }
   const owes=[];Object.values(pair).forEach(p=>{if(p.net>0)owes.push({from:p.y,to:p.x,num:p.net});else if(p.net<0)owes.push({from:p.x,to:p.y,num:-p.net})});
   owes.sort((a,b)=>b.num-a.num||a.from.localeCompare(b.from));
-  return {owes,per,openTotal:openC,openCount:openN};
+  return {owes,per,openTotal:openC,openCount:openN/*<POOL>*/,poolOwes/*</POOL>*/};
 }
 /* ---- state / network (own key only) ---- */
 const b27Who=()=>{const w=PS.who||legacyOwner(lsGet('stoopids_who'));return b27OwnerNames().includes(w)?w:null};
@@ -1802,12 +1825,13 @@ async function b27Write(mutate,verify){
 function b27Apply(list,fromPoll){
   const first=U.known===null;
   const added=first?[]:list.filter(b=>!U.known.has(b.id));
+  const changed=/*<OWES-TABLE>*/!first&&JSON.stringify(U.doc.bets)!==JSON.stringify(list)/*</OWES-TABLE>*/;   // a bet was settled / cancelled elsewhere: redraw so the owes table and cards follow
   U.doc={bets:list};U.state='ok';U.maxN=b27MaxN(list);U.known=new Set(list.map(b=>b.id));
   if(lsGet(PULK.seenKey)==null)lsSet(PULK.seenKey,String(U.maxN));
   if(tab==='bets27')b27Seen();
   const fresh=added.filter(b=>!U.mine.has(b.id)&&b.status==='open');
-  if(fresh.length&&typeof nbShow==='function'){nbShow(fresh.map(b=>({n:b.n,_msg:b.backer+' just bet '+b27Num(b.amt)+(b27IsBundle(b)?' each ':' ')+b27OddsShort(b.odds.a,b.odds.b)+' with '+b27Opps(b).join(', ')})))}
-  if(first||added.length||fromPoll==='force'){const ae=document.activeElement;if(tab==='bets27'){if(!(ae&&ae.closest&&ae.closest('#main')&&/INPUT|TEXTAREA/.test(ae.tagName)))render()}else if(b27Badge())setTimeout(render,0)}
+  if(fresh.length&&typeof nbShow==='function'){nbShow(fresh.map(b=>({n:b.n,_msg:/*<POOL>*/b.kind==='pool'?PT('toast',{who:b.backer,names:b27Opps(b).join(', ')}):/*</POOL>*/b.backer+' just bet '+b27Num(b.amt)+(b27IsBundle(b)?' each ':' ')+b27OddsShort(b.odds.a,b.odds.b)+' with '+b27Opps(b).join(', ')})))}
+  if(first||added.length||changed||fromPoll==='force'){const ae=document.activeElement;if(tab==='bets27'){if(!(ae&&ae.closest&&ae.closest('#main')&&/INPUT|TEXTAREA/.test(ae.tagName)))render()}else if(b27Badge())setTimeout(render,0)}
 }
 function b27Seen(){if(U.state==='ok'&&U.maxN)lsSet(PULK.seenKey,String(Math.max(U.maxN,parseInt(lsGet(PULK.seenKey),10)||0)))}
 function b27Badge(){if(tab==='bets27'||U.state!=='ok')return '';const s=parseInt(lsGet(PULK.seenKey),10);return isFinite(s)&&U.maxN>s?'<b class="nb" aria-hidden="true">new</b>':''}
@@ -1845,10 +1869,10 @@ function b27Odds(a,b){U.custom=false;U.oddsErr='';U.odds=[a,b];b27Sync()}
 function b27CustomOpen(){U.custom=true;b27CustomApply(U.customTxt,true);b27Sync();const i=document.getElementById('b27Co');if(i)i.focus()}
 function b27CustomApply(t,quiet){U.customTxt=t;const r=b27ParseOdds(t);if(r.ok){U.odds=[r.a,r.b];U.oddsErr=''}else{U.odds=null;U.oddsErr=quiet&&!t?'':r.err}}
 function b27Text(t){U.text=t;b27Sync()}
-function b27Place(){const e=b27FormOK();if(e){b27Err(e);render();return}U.msg='';U.confirm=true;render()}
+function b27Place(){/*<POOL>*/if(U.kind==='pool')return b27PoolPlace();/*</POOL>*/const e=b27FormOK();if(e){b27Err(e);render();return}U.msg='';U.confirm=true;render()}
 function b27Edit(){U.confirm=false;render()}
 /*<MULTI-BET>*/async function b27Confirm(){
-  if(U.busy)return;const e=b27FormOK();if(e){b27Err(e);U.confirm=false;render();return}
+  if(U.busy)return;/*<POOL>*/if(U.kind==='pool')return b27PoolConfirm();/*</POOL>*/const e=b27FormOK();if(e){b27Err(e);U.confirm=false;render();return}
   U.busy=true;U.msg='Saving…';U.msgBad=false;render();
   const nbs=b27BetsFromForm(),ids=nbs.map(b=>b.id);
   try{
@@ -1884,6 +1908,153 @@ async function b27UndoGroup(g){
   U.busy=false;render();
 }
 function b27Ask(id,what){U.askSettle=U.askSettle&&U.askSettle.id===id&&U.askSettle.what===what?null:{id,what};render()}
+/*<POOL>*/
+/* ===== POOL (Bets 26-27): a group entry where each participant gets some back when it is done. ONE record in the same ledger key: {id,n,kind:'pool',backer:<who built it>,parts:[names],amt:<buy-in each>,back:null|{name:amount},text,created_at,status:'open'|'void',settled_at}.
+   Counts as soon as the amounts back are entered (they must add up to buy-in x participants); each person's net = back - buy-in. Blank = open, entered later on the card. ===== */
+/* ALL Pool wording lives here (the old Side bets pool form's own text; swap the wording in this one place). {x} = filled in by PT(). */
+const POOL_TXT={
+  toggle:'Pool / buy-in', toggleBet:'One side vs another',
+  intro:'Fill in the terms, hit "Build". Leave the result blank for an open bet; settle it later below.',
+  terms:'Terms, in words (e.g. Kurmoji bets Ken 100K that Duke covers -4.5)',
+  participants:'Participants', youIn:'(you are in automatically)',
+  fBuy:'Buy-in each: 250K', fPay:'Payouts when done (total received), e.g. kurt:800K, mark:1.2mil',
+  help:'Winner and runner-up money-back are just payouts (e.g. winner 1mil, 2nd 200K back). Payouts must add up to the pot. Use these short names for payouts: {keys}',
+  build:'Build',
+  eMe:'Pick who you are first.', eTerms:'Write the terms of the pool first.', ePeople:'a pool needs 2+ participants', eBuy:'pool needs a buy-in like 250K',
+  eBuyMin:'buy-in must be a whole number of at least {min} (like 250K)', eBadPay:"can't read one of the payouts (try 800K, 1.2mil)", eFmt:'Write each payout as name:amount, like kurt:800K.',
+  eSum:'payouts add up to {sum} but the pot is {total}', eUnknown:'Unknown name "{x}". Use these short names for payouts: {keys}', eNotIn:'"{x}" is not in this pool.', eDup:'"{x}" is listed twice.', eEmptyPay:'Fill in the payouts first.',
+  confirmTitle:'Check it, then confirm', sum:'Pool of {names} · buy-in {buy} each · total {tot}', open:'Payouts left open: it stays open until someone fills them in below.',
+  row:'{name}: gets {got}, net {net}', settleUp:'{from} owes {to} {n}', go:'✅ Yes, build it', change:'← Change',
+  placed:'Built! Pool #{n} is open until the payouts are entered. You can undo it for 30 seconds.', placedDone:'Built! Pool #{n} counts now. You can undo it for 30 seconds.',
+  word:'Pool', stOpen:'Open', stDone:'Settled', stVoid:'Cancelled', who:'{n} managers', with:'With: {names}',
+  line:'Buy-in each {buy} · total {tot}', noPay:'Payouts not entered yet.',
+  save:'Save payouts', again:'Tap again to confirm', cancel:'Cancel this pool', undo:'↩ Undo this pool (30 s)', adminCancel:'Cancel pool (admin)', result:'Result',
+  already:'Already settled.', saved:'Saved.',
+  tHead:'Pool settle-up', tNote:'From each settled pool, the biggest loser owes the biggest winner, then the next. Net per manager includes pools.', tTag:'Pool #{n}: {text}',
+  toast:'{who} just built a pool with {names}', cantSave:'Couldn’t save. Check your connection and tap Build again (it won’t double-post).'
+};
+const PT=(k,v)=>String(POOL_TXT[k]).replace(/\{(\w+)\}/g,(_,n)=>v&&n in v?v[n]:'');
+const POOL_MAX=1e9;
+const b27Key=n=>String(n).toLowerCase().replace(/[^a-z0-9]+/g,'');
+function b27PoolKeys(names){const m={};names.forEach(n=>{const w=String(n).split(/\s+/).filter(Boolean);m[n]=b27Key(w[w.length-1]||n)});const c={};Object.values(m).forEach(k=>c[k]=(c[k]||0)+1);names.forEach(n=>{if(c[m[n]]>1)m[n]=b27Key(n)});return m}
+const b27PoolKeyList=()=>{const ns=b27OwnerNames(),k=b27PoolKeys(ns);return ns.map(n=>k[n]).join(', ')};
+/* amounts: the old form's own shorthand (K / mil / juta ...) via parseAmount, but a bare number stays as typed ("50" = 50); whole numbers only */
+function b27PoolNum(s){const v=parseAmount(String(s==null?'':s).trim(),false);return v!==null&&Number.isInteger(v)&&v>=0&&v<=POOL_MAX?v:null}
+/* parts = everybody in the pool; buyTxt = entry each text; txt = amounts-back text. -> {ok,err} or {ok:true,amt,back:null|{name:n}} */
+function b27PoolParse(parts,buyTxt,txt){
+  if(parts.length<2)return {ok:false,err:PT('ePeople')};
+  if(!String(buyTxt==null?'':buyTxt).trim())return {ok:false,err:PT('eBuy')};
+  const amt=b27PoolNum(buyTxt);if(amt===null||amt<PULK.minAmt)return {ok:false,err:amt===null&&parseAmount(String(buyTxt).trim(),false)===null?PT('eBuy'):PT('eBuyMin',{min:PULK.minAmt})};
+  const sz=amt*parts.length;let back=null;
+  if(String(txt==null?'':txt).trim()){
+    const names=b27OwnerNames(),keys=b27PoolKeys(names);back={};
+    for(const raw of String(txt).split(/[,;\n]+/)){const x=raw.trim();if(!x)continue;const i=x.search(/[:=]/);if(i<1)return {ok:false,err:PT('eFmt')};
+      const k=b27Key(x.slice(0,i)),vv=x.slice(i+1).trim();
+      const hit=names.filter(n=>keys[n]===k||b27Key(n)===k||b27Key(String(n).split(/\s+/)[0])===k);
+      if(hit.length!==1)return {ok:false,err:PT('eUnknown',{x:x.slice(0,i).trim(),keys:b27PoolKeyList()})};
+      const who=hit[0];if(!parts.includes(who))return {ok:false,err:PT('eNotIn',{x:who})};
+      if(Object.prototype.hasOwnProperty.call(back,who))return {ok:false,err:PT('eDup',{x:who})};
+      const v=b27PoolNum(vv);if(v===null)return {ok:false,err:PT('eBadPay')};back[who]=v}
+    for(const p of parts)if(!Object.prototype.hasOwnProperty.call(back,p))back[p]=0;
+    const tot=parts.reduce((s,p)=>s+back[p],0);if(tot!==sz)return {ok:false,err:PT('eSum',{sum:b27Num(tot),total:b27Num(sz)})};
+  }
+  return {ok:true,amt,back};
+}
+/* settle-up from nets [[name,net],...] (sum 0): the biggest loser owes the biggest winner, repeat */
+function b27Greedy(nets){const d=nets.filter(x=>x[1]<0).map(x=>[x[0],-x[1]]),c=nets.filter(x=>x[1]>0).map(x=>[x[0],x[1]]),out=[];const srt=a=>a.sort((p,q)=>q[1]-p[1]||p[0].localeCompare(q[0]));
+  while(d.length&&c.length){srt(d);srt(c);const m=Math.min(d[0][1],c[0][1]);out.push({from:d[0][0],to:c[0][0],num:m});d[0][1]-=m;c[0][1]-=m;if(!d[0][1])d.shift();if(!c[0][1])c.shift()}
+  return out}
+const b27PoolNets=b=>b.parts.map(p=>[p,((b.back&&b.back[p])||0)-b.amt]);
+function b27PoolValid(x,names){
+  const n=Number(x.n),t=Date.parse(x.created_at),amt=Number(x.amt),backer=legacyOwner(x.backer),has=(o,k)=>Object.prototype.hasOwnProperty.call(o,k);
+  if(typeof x.id!=='string'||!/^[a-z0-9]{6,24}$/.test(x.id)||!Array.isArray(x.parts)||typeof x.text!=='string')return null;
+  const parts=x.parts.map(legacyOwner);
+  if(parts.length<2||parts.length>names.length||parts.some(p=>typeof p!=='string'||!names.includes(p))||new Set(parts).size!==parts.length||!parts.includes(backer))return null;
+  if(!Number.isInteger(amt)||amt<PULK.minAmt||amt>POOL_MAX||!Number.isInteger(n)||n<1||!isFinite(t))return null;
+  let back=null;
+  if(x.back&&typeof x.back==='object'&&!Array.isArray(x.back)){const raw={};for(const k of Object.keys(x.back))raw[legacyOwner(k)]=x.back[k];const bk={};let ok=true;
+    for(const k of Object.keys(raw)){if(!parts.includes(k)||!Number.isInteger(raw[k])||raw[k]<0||raw[k]>POOL_MAX)ok=false;else bk[k]=raw[k]}
+    if(ok){parts.forEach(p=>{if(!has(bk,p))bk[p]=0});if(parts.reduce((s,p)=>s+bk[p],0)===amt*parts.length)back=bk}}
+  return {id:x.id,n,kind:'pool',backer,parts,amt,back,text:b27Clean(x.text),created_at:new Date(t).toISOString(),status:['open','void'].includes(x.status)?x.status:'open',settled_at:x.settled_at&&isFinite(Date.parse(x.settled_at))?new Date(x.settled_at).toISOString():null};
+}
+/* ---- the form (same components / classes as the live New bet form) ---- */
+function b27Kind(k){U.kind=k;U.msg='';U.confirm=false;render()}
+const b27KindTabs=()=>`<div class="tabs" style="margin:8px 0"><button type="button" class="${U.kind==='bet'?'on':''}" onclick="b27Kind('bet')">${esc(POOL_TXT.toggleBet)}</button><button type="button" class="${U.kind==='pool'?'on':''}" onclick="b27Kind('pool')">${esc(POOL_TXT.toggle)}</button></div>`;
+const b27PoolParts=()=>{const me=b27Who();return b27OwnerNames().filter(n=>n===me||U.pp.includes(n))};
+function b27PoolFormOK(){
+  const me=b27Who();if(!me)return PT('eMe');
+  if(!b27Clean(U.text))return PT('eTerms');
+  const r=b27PoolParse(b27PoolParts(),U.entry,U.backTxt);return r.ok?'':r.err;
+}
+function b27PoolPP(i){const n=b27Others()[i];if(!n)return;const k=U.pp.indexOf(n);if(k>=0)U.pp.splice(k,1);else U.pp.push(n);b27PSync()}
+function b27PoolAll(){U.pp=b27Others().slice();b27PSync()}
+function b27PoolClear(){U.pp=[];b27PSync()}
+function b27PSync(){try{const m=document.getElementById('main');if(!m)return;
+  m.querySelectorAll('[data-b27-pp]').forEach(b=>b.setAttribute('aria-pressed',String(U.pp.includes(b27Others()[+b.getAttribute('data-b27-pp')]))));
+  const sc=document.getElementById('b27SelCnt');if(sc)sc.textContent=U.pp.length?U.pp.length+' selected':'None selected';
+  const err=b27PoolFormOK(),pb=document.getElementById('b27Place');if(pb){pb.disabled=!!err||U.busy;pb.setAttribute('aria-disabled',String(!!err))}
+  const hint=document.getElementById('b27Hint');if(hint)hint.textContent=err&&(U.pp.length||U.text||U.entry||U.backTxt)?err:''}catch(e){}}
+function b27PoolForm(me){const others=b27Others();
+  return `<div class="card b27-form"><b>New bet</b> <span class="note">· you are <b>${esc(me)}</b> <a href="#" onclick="presAsk();return false">(change)</a></span>${b27KindTabs()}
+   <div class="note">${esc(PT('intro'))}</div>
+   <textarea id="b27Text" class="sb-in b27-in" rows="3" maxlength="${PULK.maxText}" placeholder="${esc(PT('terms'))}" oninput="U.text=this.value;b27PSync()">${esc(U.text)}</textarea>
+   <div class="b27-q">${esc(POOL_TXT.participants)} <span class="note">${esc(POOL_TXT.youIn)}</span></div><div class="b27-opps" role="group" aria-label="${esc(POOL_TXT.participants)}" style="--n:${others.length}">${others.map((n,i)=>{const o=(D.owners.find(x=>x.name===n)||{});const on=U.pp.includes(n);return `<button type="button" class="b27-chip op" data-b27-pp="${i}" data-b27-name="${esc(n)}" aria-label="${esc(n)}" aria-pressed="${on}" onclick="b27PoolPP(${i})"><span class="ck" aria-hidden="true">✓</span><span class="em" aria-hidden="true">${esc(o.emoji||'')}</span><span class="nm" aria-hidden="true"><span class="f">${esc(n)}</span><span class="sh">${esc(b27ShortName(n))}</span><span class="xs">${esc(b27TinyName(n))}</span></span></button>`}).join('')}</div>
+   <div class="b27-selbar"><button type="button" class="b27-sm" onclick="b27PoolAll()">Select all</button><button type="button" class="b27-sm" onclick="b27PoolClear()">Clear</button><span class="cnt" id="b27SelCnt" aria-live="polite">${U.pp.length?U.pp.length+' selected':'None selected'}</span></div>
+   <div class="b27-cw"><label for="b27En" class="sr">${esc(POOL_TXT.fBuy)}</label><input id="b27En" class="sb-in b27-in" autocomplete="off" placeholder="${esc(POOL_TXT.fBuy)}" value="${esc(U.entry)}" oninput="U.entry=this.value;b27PSync()"></div>
+   <div class="b27-cw"><label for="b27Bk" class="sr">${esc(POOL_TXT.fPay)}</label><textarea id="b27Bk" class="sb-in b27-in" rows="2" autocomplete="off" placeholder="${esc(POOL_TXT.fPay)}" oninput="U.backTxt=this.value;b27PSync()">${esc(U.backTxt)}</textarea></div>
+   <div class="note" style="margin-top:6px">${esc(PT('help',{keys:b27PoolKeyList()}))}</div>
+   <div class="b27-bad-t" id="b27Hint"></div><button type="button" id="b27Place" class="btn b27-big" onclick="b27Place()"${b27PoolFormOK()?' disabled':''}>${esc(POOL_TXT.build)}</button></div>`}
+function b27PoolSummary(){const ps=b27PoolParts(),r=b27PoolParse(ps,U.entry,U.backTxt);return r.ok?PT('sum',{names:ps.join(', '),buy:b27Num(r.amt),tot:b27Num(r.amt*ps.length)}):''}
+function b27PoolResultLines(parts,amt,back){if(!back)return [PT('open')];const nets=parts.map(p=>[p,back[p]-amt]);
+  return nets.map(([p,v])=>PT('row',{name:p,got:b27Num(back[p]),net:b27Signed(v)})).concat(b27Greedy(nets).map(s=>PT('settleUp',{from:s.from,to:s.to,n:b27Num(s.num)})))}
+function b27PoolConfirmHtml(){const ps=b27PoolParts(),r=b27PoolParse(ps,U.entry,U.backTxt);if(!r.ok)return '';
+  return `<div class="card b27-confirm"><b>${esc(POOL_TXT.confirmTitle)}</b><div class="b27-sum">${esc(b27PoolSummary())}</div><div id="b27Live">${b27PoolResultLines(ps,r.amt,r.back).map((l,i,a)=>`<div class="${r.back&&i>=ps.length?'b27-l':'b27-w'}">${esc(l)}</div>`).join('')}</div>
+   <div class="b27-act"><button type="button" class="btn b27-big" onclick="b27Confirm()"${U.busy?' disabled':''}>${U.busy?'Saving…':esc(POOL_TXT.go)}</button><button type="button" class="btn sec b27-big" onclick="b27Edit()"${U.busy?' disabled':''}>${esc(POOL_TXT.change)}</button></div></div>`}
+function b27PoolPlace(){const e=b27PoolFormOK();if(e){b27Err(e);render();return}U.msg='';U.confirm=true;render()}
+function b27PoolRecord(){const ps=b27PoolParts(),r=b27PoolParse(ps,U.entry,U.backTxt),k='pool|'+ps.join('|')+'|'+r.amt+'|'+JSON.stringify(r.back)+'|'+b27Clean(U.text),me=b27Who();
+  return {id:U.fids[k]||(U.fids[k]=b27Rid()),kind:'pool',backer:me,parts:ps,amt:r.amt,back:r.back,text:b27Clean(U.text),status:'open'}}
+async function b27PoolConfirm(){
+  if(U.busy)return;const e=b27PoolFormOK();if(e){b27Err(e);U.confirm=false;render();return}
+  U.busy=true;U.msg='Saving…';U.msgBad=false;render();const nb=b27PoolRecord();
+  try{
+    const back=await b27Write(cur=>{if(cur.some(c=>c.id===nb.id))return cur;if(cur.length+1>PULK.maxBets)throw new Error('full');const at=new Date().toISOString();return cur.concat([Object.assign({},nb,{n:b27MaxN(cur)+1,created_at:at,settled_at:null})])},cur=>cur.some(b=>b.id===nb.id));
+    U.mine.add(nb.id);b27Apply(back);const m=back.find(b=>b.id===nb.id);
+    U.msg=PT(m&&m.back?'placedDone':'placed',{n:m?m.n:''});U.msgBad=false;U.opps=[];U.pp=[];U.entry='';U.backTxt='';U.text='';U.confirm=false;U.fids={};
+    clearTimeout(U.undoT);U.undoT=setTimeout(()=>{if(tab==='bets27')render()},PULK.undoMs+300);
+  }catch(e){U.msg=e&&e.message==='full'?'The bets ledger is full.':PT('cantSave');U.msgBad=true;U.confirm=true}
+  U.busy=false;render();
+}
+/* ---- settle later: any participant (or admin) enters the amounts back ---- */
+const b27PoolCanSettle=(b,me)=>b.status==='open'&&!b.back&&((me&&b.parts.includes(me))||ADMIN);
+function b27PoolGo(id){const b=U.doc.bets.find(x=>x.id===id);if(!b||U.busy)return;
+  if(U.askSettle&&U.askSettle.id===id&&U.askSettle.what==='pool'){b27PoolSettle(id);return}
+  const r=b27PoolParse(b.parts,String(b.amt),U.poolTxt[id]||'');U.poolErr[id]=r.ok?(r.back?'':PT('eEmptyPay')):r.err;U.askSettle=U.poolErr[id]?null:{id,what:'pool'};render()}
+async function b27PoolSettle(id){
+  if(U.busy)return;const b=U.doc.bets.find(x=>x.id===id);if(!b)return;const r=b27PoolParse(b.parts,String(b.amt),U.poolTxt[id]||'');if(!r.ok||!r.back)return;
+  U.busy=true;U.askSettle=null;render();
+  try{const back=await b27Write(cur=>cur.map(x=>x.id!==id||x.status!=='open'||x.back?x:Object.assign({},x,{back:r.back,settled_at:new Date().toISOString()})),cur=>{const x=cur.find(y=>y.id===id);return !x||x.status!=='open'||!!x.back});
+    b27Apply(back,'force');const x=back.find(y=>y.id===id);U.msg=x&&x.back&&JSON.stringify(x.back)===JSON.stringify(r.back)?PT('saved'):PT('already');U.msgBad=false;U.poolTxt[id]='';
+  }catch(e){U.msg='Couldn’t save that. Try again.';U.msgBad=true}
+  U.busy=false;render();
+}
+function b27PoolCard(b,me){
+  const st=b.status,done=st==='open'&&!!b.back;
+  const stTxt=st==='void'?POOL_TXT.stVoid:b.back?POOL_TXT.stDone:POOL_TXT.stOpen;
+  let h=`<div class="card b27-c b27-pool"><div><b>${esc(POOL_TXT.word)} #${b.n}</b> <span class="st ${st==='void'?'unparsed':done?'settled':'open'}">${esc(stTxt)}</span> <span class="mut" style="font-size:12px">${esc(b27Day(Date.parse(b.created_at)))}</span> <span class="mut" style="font-size:12px">· ${esc(PT('who',{n:b.parts.length}))}</span></div>
+   <div class="b27-t">${esc(b.text)}</div><div class="b27-m">${esc(PT('line',{buy:b27Num(b.amt),tot:b27Num(b.amt*b.parts.length)}))}</div><div class="b27-m">${esc(PT('with',{names:b.parts.join(', ')}))}</div>`;
+  if(st==='open'&&!b.back)h+=`<div class="note" style="margin-top:6px">${esc(POOL_TXT.noPay)}</div>`;
+  if(done)h+=`<div class="note" style="margin-top:6px"><b>${esc(POOL_TXT.result)}:</b></div>`+b27PoolResultLines(b.parts,b.amt,b.back).map((l,i)=>`<div class="${i>=b.parts.length?'b27-l':'b27-w'}" style="margin-top:2px">${esc(l)}</div>`).join('');
+  if(b27PoolCanSettle(b,me)){const ask=U.askSettle&&U.askSettle.id===b.id&&U.askSettle.what==='pool';
+    h+=`<div class="b27-cw"><label for="pb_${b.id}" class="sr">${esc(POOL_TXT.fPay)}</label><textarea id="pb_${b.id}" class="sb-in b27-in" rows="2" autocomplete="off" placeholder="${esc(POOL_TXT.fPay)}" oninput="U.poolTxt['${b.id}']=this.value;U.poolErr['${b.id}']='';U.askSettle=null">${esc(U.poolTxt[b.id]||'')}</textarea></div>${U.poolErr[b.id]?`<div class="b27-bad-t" role="alert">${esc(U.poolErr[b.id])}</div>`:''}
+     <div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27PoolGo('${b.id}')"${U.busy?' disabled':''}>${esc(ask?POOL_TXT.again:POOL_TXT.save)}</button></div>`}
+  if(st==='open'&&(me===b.backer||ADMIN)){
+    if(b27CanUndo(b))h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27SetStatus('${b.id}','void')"${U.busy?' disabled':''}>${esc(POOL_TXT.undo)}</button></div>`;
+    else if((me===b.backer&&!done)||ADMIN)h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27SetStatus('${b.id}','void')"${U.busy?' disabled':''}>${esc(me===b.backer?POOL_TXT.cancel:POOL_TXT.adminCancel)}</button></div>`}
+  return h+'</div>'}
+function b27PoolOwesHtml(T){if(!T.poolOwes.length)return '';
+  const rows=[];let last=null;T.poolOwes.forEach(o=>{if(o.n!==last){last=o.n;rows.push(`<tr class="oqh"><td colspan="4">${esc(PT('tTag',{n:o.n,text:o.text}))}</td></tr>`)}rows.push(`<tr><td>${b27Nm(o.from)}</td><td class="ow">owes</td><td>${b27Nm(o.to)}</td><td class="n"><b>${b27Num(o.num)}</b></td></tr>`)});
+  return `<div class="b27-q">${esc(POOL_TXT.tHead)}</div><div class="oqs">${esc(POOL_TXT.tNote)}</div><table class="oq oqx" aria-label="${esc(POOL_TXT.tHead)}"><colgroup><col class="a"><col class="m"><col class="b"><col class="v"></colgroup><tr><th>Who</th><th></th><th>To</th><th class="n">Net</th></tr>${rows.join('')}</table>`}
+/*</POOL>*/
 function b27CanUndo(b){return b.status==='open'&&b.backer===b27Who()&&Date.now()-Date.parse(b.created_at)<PULK.undoMs}
 /* ---- view ---- */
 function b27SyncDom(){
@@ -1941,6 +2112,21 @@ function b27Card(b,me){
   }
   return h+'</div>';
 }
+/*<OWES-TABLE>*/
+const b27E1=e=>{e=String(e||'');try{return new Intl.Segmenter(undefined,{granularity:'grapheme'}).segment(e)[Symbol.iterator]().next().value.segment}catch(_){return Array.from(e)[0]||''}};   // first emoji only (phones: two-emoji names stay short)
+const b27Nm=n=>{const o=(D&&D.owners||[]).find(x=>x.name===n)||{},sh=b27ShortName(n);return `<span class="oqn${sh!==n?' hs':''}" data-em="${esc(o.emoji||'')}" data-e1="${esc(b27E1(o.emoji))}"><span class="f">${esc(n)}</span>${sh!==n?`<span class="s">${esc(sh)}</span>`:''}</span>`};
+/* the single "who owes who" block: (1) every pair with a non-zero net of SETTLED bets ("A owes B n"), (2) each manager's net (+ is owed, - owes; 0 shown). Reads b27Tally (a bundle already counts once per opponent there); no extra network calls. Opens the card; the caller closes it. */
+function b27OwesHtml(T){
+  const ppl=Object.entries(T.per).sort((a,b)=>b[1].net-a[1].net||a[0].localeCompare(b[0]));
+  let h=`<h2 id="b27Owes">Who owes who <span class="note">(settled bets only)</span></h2><div class="card">`;
+  if(!ppl.length)return h+'<div class="note">Nothing settled yet. Settled bets show up here.</div>';
+  h+=`<div class="b27-q" style="margin-top:0">Between two managers</div>`;
+  h+=T.owes.length?`<table class="oq oqx" aria-label="Who owes who, pair by pair"><colgroup><col class="a"><col class="m"><col class="b"><col class="v"></colgroup><tr><th>Who</th><th></th><th>To</th><th class="n">Net</th></tr>${T.owes.map(o=>`<tr><td>${b27Nm(o.from)}</td><td class="ow">owes</td><td>${b27Nm(o.to)}</td><td class="n"><b>${b27Num(o.num)}</b></td></tr>`).join('')}</table>`:'<div class="note">Everyone is square: no pair owes anything.</div>';
+  h+=/*<POOL>*/b27PoolOwesHtml(T)/*</POOL>*/;
+  h+=`<div class="b27-q">Net per manager</div><div class="oqs">Plus = is owed, minus = owes.</div><div class="sc"><table class="oq oqp"><colgroup><col class="a"><col class="v"><col class="v"></colgroup><tr><th>Person</th><th class="n">Net</th><th class="n">Bets</th></tr>${ppl.map(([n,p])=>`<tr><td>${b27Nm(n)}</td><td class="n"><b class="${p.net>0?'good':p.net<0?'bad':''}">${b27Signed(p.net)}</b></td><td class="n">${p.bets}</td></tr>`).join('')}</table></div>`;
+  return h;
+}
+/*</OWES-TABLE>*/
 function vB27(){
   b27Seen();
   const me=b27Who(),names=b27OwnerNames(),others=names.filter(n=>n!==me);
@@ -1948,13 +2134,14 @@ function vB27(){
    <div class="note" id="b27Top" style="margin-top:6px">${U.state==='ok'?'<span class="good">● live</span> · anyone with the link can add bets (no logins). Play nice.':U.state==='error'?'<span class="bad">● can’t reach the bets ledger right now</span>':'Connecting…'}</div></div>`;
   if(U.msg)h+=`<div class="card ${U.msgBad?'b27-bad':'b27-ok'}" role="status">${esc(U.msg)}${/*<MULTI-BET>*/U.undoG&&b27GroupUndoable(U.undoG).length>1?`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27UndoGroup('${U.undoG}')"${U.busy?' disabled':''}>↩ Undo all ${b27GroupUndoable(U.undoG).length} bets (30 s)</button></div>`:''/*</MULTI-BET>*/}</div>`;
   if(!me){h+=`<div class="card"><button type="button" class="btn b27-big" onclick="presAsk()">👋 Pick who you are to bet</button></div>`}
+  /*<POOL>*/else if(U.confirm&&U.kind==='pool'){h+=b27PoolConfirmHtml()}/*</POOL>*/
   else if(U.confirm){
     const e=b27FormOK();
     h+=`<div class="card b27-confirm"><b>Check it, then confirm</b><div class="b27-sum">${esc(b27Summary())}</div><div id="b27Live">${b27LiveHtml()}</div>
      <div class="b27-act"><button type="button" class="btn b27-big" onclick="b27Confirm()"${U.busy?' disabled':''}>${U.busy?'Saving…':'✅ Yes, place it'}</button><button type="button" class="btn sec b27-big" onclick="b27Edit()"${U.busy?' disabled':''}>← Change</button></div></div>`;
   }else{
     const oc=U.odds?U.odds.join('-'):'';
-    h+=`<div class="card b27-form"><b>New bet</b> <span class="note">· you are <b>${esc(me)}</b> <a href="#" onclick="presAsk();return false">(change)</a></span>
+    h+=/*<POOL>*/U.kind==='pool'?b27PoolForm(me):/*</POOL>*/`<div class="card b27-form"><b>New bet</b> <span class="note">· you are <b>${esc(me)}</b> <a href="#" onclick="presAsk();return false">(change)</a></span>${/*<POOL>*/b27KindTabs()/*</POOL>*/}
      ${/*<MULTI-BET>*/''/*opponents: multi-select*/}<div class="b27-q">1. Who are you betting against? <span class="note">Tap one or more. Several = one bet, one result.</span></div><div class="b27-opps" role="group" aria-label="Opponents" style="--n:${others.length}">${others.map((n,i)=>{const o=(D.owners.find(x=>x.name===n)||{});const on=U.opps.includes(n);return `<button type="button" class="b27-chip op" data-b27-opp="${i}" data-b27-name="${esc(n)}" aria-label="${esc(n)}" aria-pressed="${on}" onclick="b27Opp(${i})"><span class="ck" aria-hidden="true">✓</span><span class="em" aria-hidden="true">${esc(o.emoji||'')}</span><span class="nm" aria-hidden="true"><span class="f">${esc(n)}</span><span class="sh">${esc(b27ShortName(n))}</span><span class="xs">${esc(b27TinyName(n))}</span></span></button>`}).join('')}</div>
      <div class="b27-selbar"><button type="button" class="b27-sm" data-b27-all="1" onclick="b27OppAll()">Select all</button><button type="button" class="b27-sm" data-b27-clear="1" onclick="b27OppClear()">Clear</button><span class="cnt" id="b27SelCnt" aria-live="polite">${esc(b27SelTxt())}</span></div>
      ${''/*</MULTI-BET>*/}<div class="b27-q"><label for="b27Text">2. What’s the bet? <span class="note">I say…</span></label></div><input id="b27Text" class="sb-in b27-in" maxlength="${PULK.maxText}" autocomplete="off" enterkeyhint="go" placeholder="e.g. Kansas beats Duke" value="${esc(U.text)}" oninput="b27Text(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();b27Place()}">
@@ -1968,12 +2155,9 @@ function vB27(){
   }
   const bets=U.doc.bets.slice().sort((a,b)=>b.n-a.n),T=b27Tally(bets);
   const ppl=Object.entries(T.per).sort((a,b)=>b[1].net-a[1].net);
-  h+=`<h2>Net tally <span class="note">(settled bets only)</span></h2><div class="card">`;
-  if(ppl.length)h+=`<div class="sc"><table><tr><th>Person</th><th class="n">Net</th><th class="n">Bets</th></tr>${ppl.map(([n,p])=>`<tr><td>${esc(n)}</td><td class="n"><b class="${p.net>0?'good':p.net<0?'bad':''}">${b27Signed(p.net)}</b></td><td class="n">${p.bets}</td></tr>`).join('')}</table></div>`;
-  else h+='<div class="note">Nothing settled yet. Settled bets show up here.</div>';
-  if(T.owes.length)h+=`<div class="b27-q">Who owes who</div>`+T.owes.map(o=>`<div class="b27-owe"><b>${esc(o.from)}</b> owes <b>${esc(o.to)}</b> <b>${b27Num(o.num)}</b></div>`).join('');
+  /*<OWES-TABLE>*/h+=b27OwesHtml(T);/*</OWES-TABLE>*/
   h+=`<div class="note" style="margin-top:6px">Still open: ${T.openCount} bet${T.openCount===1?'':'s'}, ${b27Num(T.openTotal)} in total.</div></div>`;
-  h+=`<h2>Bets (${bets.length})</h2>`+(bets.length?bets.slice(0,60).map(b=>b27Card(b,me)).join(''):'<div class="card note">No bets yet. Be the first.</div>');
+  h+=`<h2>Bets (${bets.length})</h2>`+(bets.length?bets.slice(0,60).map(b=>/*<POOL>*/b.kind==='pool'?b27PoolCard(b,me):/*</POOL>*/b27Card(b,me)).join(''):'<div class="card note">No bets yet. Be the first.</div>');
   if(bets.length>60)h+='<p class="note">Showing the latest 60.</p>';
   return h;
 }
@@ -1982,7 +2166,7 @@ function vB27(){
   const i=TABS.findIndex(t=>t[0]==='bets');TABS.splice(i<0?TABS.length:i+1,0,['bets27','💪 Bets 26-27']);   // right after Side bets; the Draft link stays last
   VIEWS.bets27=vB27;NAVSHORT.bets27='26-27';
   if(typeof nbBadge==='function'){const _b=nbBadge;nbBadge=function(k){return k==='bets27'?b27Badge():_b(k)}}      // 'new' badge on this tab (own watermark)
-  const pp=presPick;presPick=function(w){pp(w);try{U.opps=[];if(tab==='bets27')render()}catch(e){}};
+  const pp=presPick;presPick=function(w){pp(w);try{U.opps=[];/*<POOL>*/U.pp=[];/*</POOL>*/if(tab==='bets27')render()}catch(e){}};
   /* toast: own text, and 'View' opens this tab when every pending item is a Bets 26-27 bet (wraps the existing functions; nothing in them is edited) */
   const _nt=nbText;nbText=function(b){return b&&b._msg?b._msg:_nt(b)};
   const allP=()=>NB.pending.length>0&&NB.pending.every(x=>x&&x._msg);
