@@ -698,11 +698,12 @@ function vUpsets(){
   return h}
 function vRedraft(){
   const r=D.meta.redraft;const any=Object.values(r.moves).some(m=>(m.drop||[]).length||(m.add||[]).length);
-  let h=`<div class="card"><b>Redraft date: ${esc(r.date)}</b><div class="note">Each owner has the option to drop up to 2 teams and add up to 2. Wins before ${esc(r.date)} don't count for added teams. Wins on ${esc(r.date)} don't count for dropped teams. Dropped teams keep the points they earned before the date for their old owner.</div></div>
-  <div class="card"><b>🐍 How the redraft works</b><ul class="it">
-   <li>The Jan 20 redraft is a <b>snake draft</b>, ordered by where everyone places in the standings as of Jan 20.</li>
-   <li>Last place gets to choose where they draft, then the next-worst owner picks from what's left, and so on up the standings. Being bad finally pays off.</li>
-   <li><b>Tiebreaker:</b> if owners are tied in the standings, the one with the shittiest team (the fewest total wins) ranks lower.</li></ul></div>`;
+  const dd=new Date(r.date+'T12:00:00Z').toLocaleDateString('en-GB',{timeZone:'UTC',day:'numeric',month:'long',year:'numeric'});
+  let h=`<div class="card"><b>\u{1F4C5} Redraft: ${esc(dd)}</b><ul class="it">
+   <li><b>Snake draft</b> in standings order as of ${esc(dd)}. <b>Last place</b> chooses where they draft, then it moves up the standings. Being bad finally pays off.</li>
+   <li><b>Tiebreaker:</b> fewest total wins ranks lower.</li>
+   <li>Each owner has the <b>option</b> to drop up to 2 teams and add up to 2.</li>
+   <li>Added teams score only from ${esc(dd)} on. Dropped teams keep their earlier points for the old owner, and wins on ${esc(dd)} don\u2019t count for them.</li></ul></div>`;
   if(!any)h+=`<div class="card">No redraft moves yet. Each owner\u2019s drops and adds will show up here after the Jan 20 redraft.</div>`;
   h+=D.owners.map(o=>{const m=r.moves[o.name]||{};return `<div class="card"><b>${esc(o.emoji)} ${esc(o.name)}</b>
     <div class="note">Drops: ${(m.drop||[]).map(esc).join(', ')||'—'} &nbsp;|&nbsp; Adds: ${(m.add||[]).map(esc).join(', ')||'—'}</div>
