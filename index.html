@@ -703,7 +703,7 @@ function vRedraft(){
    <li>The Jan 20 redraft is a <b>snake draft</b>, ordered by where everyone places in the standings as of Jan 20.</li>
    <li>Last place gets to choose where they draft, then the next-worst owner picks from what's left, and so on up the standings. Being bad finally pays off.</li>
    <li><b>Tiebreaker:</b> if owners are tied in the standings, the one with the shittiest team (the fewest total wins) ranks lower.</li></ul></div>`;
-  if(!any)h+=`<div class="card">No moves entered yet. After the redraft, put each owner's 2 drops and 2 adds in <code>config.json → redraft → moves</code> and refresh — the ownership windows below update automatically.</div>`;
+  if(!any)h+=`<div class="card">No redraft moves yet. Each owner\u2019s drops and adds will show up here after the Jan 20 redraft.</div>`;
   h+=D.owners.map(o=>{const m=r.moves[o.name]||{};return `<div class="card"><b>${esc(o.emoji)} ${esc(o.name)}</b>
     <div class="note">Drops: ${(m.drop||[]).map(esc).join(', ')||'—'} &nbsp;|&nbsp; Adds: ${(m.add||[]).map(esc).join(', ')||'—'}</div>
     <div class="chips">${o.teams.map(t=>chip(t.tid,{out:t.status==='dropped'})+`<span class="note" style="align-self:center">${t.window.start?'from '+esc(t.window.start):''}${t.window.end?'until '+esc(t.window.end):''}</span>`).join('')}</div></div>`}).join('');
