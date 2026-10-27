@@ -1386,7 +1386,7 @@ const PS={map:{},lastOk:0,timer:null,busy:false,started:false,dev:null,who:null}
 const lsGet=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
 const lsSet=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
 function presDev(){if(PS.dev)return PS.dev;let d=lsGet('stoopids_dev');if(!d||!/^[0-9a-f]{12}$/.test(d)){const a=new Uint8Array(6);(window.crypto||window.msCrypto).getRandomValues(a);d=Array.from(a,b=>('0'+b.toString(16)).slice(-2)).join('');lsSet('stoopids_dev',d)}return PS.dev=d}
-const LEGACY_OWNER={'Poo':'Party Paul'};const legacyOwner=n=>(typeof n==='string'&&Object.prototype.hasOwnProperty.call(LEGACY_OWNER,n))?LEGACY_OWNER[n]:n;   /* owner renamed Poo -> Party Paul: old saved identity / textdb records (presence, chat, 2026-27 bets) still resolve to the new name */
+const LEGACY_OWNER={'Poo':'Paul','Party Paul':'Paul'};const legacyOwner=n=>(typeof n==='string'&&Object.prototype.hasOwnProperty.call(LEGACY_OWNER,n))?LEGACY_OWNER[n]:n;   /* owner was "Poo", then "Party Paul", now "Paul": old saved identity / textdb records (presence, chat, 2026-27 bets) under either old name still resolve to "Paul" (merged, never two Pauls) */
 const presOwners=()=>(D&&D.owners||[]);
 function presWho(){const w=legacyOwner(lsGet('stoopids_who'));if(!w)return null;if(w===PRES.guestKey)return w;return presOwners().some(o=>o.name===w)?w:null}
 const presMyKey=()=>PS.who===PRES.guestKey?'g-'+presDev():PS.who;
@@ -1732,7 +1732,7 @@ function b27Clean(t,max){
 const b27OwnerNames=()=>(D&&D.owners||[]).map(o=>o.name);
 function b27Valid(x,names){
   if(!x||typeof x!=='object')return null;
-  x=Object.assign({},x,{backer:legacyOwner(x.backer),other:legacyOwner(x.other)});   // 2026-27 bets saved before the rename say "Poo"
+  x=Object.assign({},x,{backer:legacyOwner(x.backer),other:legacyOwner(x.other)});   // 2026-27 bets saved before the renames say "Poo" or "Party Paul"
   const st=Number(x.amt),a=x.odds&&Number(x.odds.a),b=x.odds&&Number(x.odds.b),n=Number(x.n),t=Date.parse(x.created_at);
   if(typeof x.id!=='string'||!/^[a-z0-9]{6,24}$/.test(x.id))return null;
   if(!names.includes(x.backer)||!names.includes(x.other)||x.backer===x.other)return null;

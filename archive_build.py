@@ -40,7 +40,7 @@ TABS = [
 # The sheet labels each owner's total with a first name ("KEN points"). In the
 # 2025-26 tab those labels sit under the same team headers as config.json's
 # owners (KENTUT/KEN, PEACOCK/JIM, KURMOJI/KURT, EN FUEGO/SCOTT, STOCK RISING/JAKE,
-# PARTY PAUL/PAUL, MURFCOCK/NEAL, DRAYMOND/MARK), and the 2025-26 "Live standings"
+# POO PARTY/PAUL (the sheet's header; the owner is now "Paul"), MURFCOCK/NEAL, DRAYMOND/MARK), and the 2025-26 "Live standings"
 # uses Stock/Burns/Murf/Mark/... for the same people. We use that as the bridge.
 # "Matthew" (Michael Finley BBC) and "Mac" (Book Club) are not current owners.
 PERSON_ALIASES = {  # lower-case label -> canonical person
@@ -50,7 +50,7 @@ PERSON_ALIASES = {  # lower-case label -> canonical person
 }
 PERSON_TO_CURRENT = {  # canonical person -> config.json owner name
     "Mark": "Dirty Draymond", "Jake": "Stock", "Kurt": "Kurmoji", "Ken": "Kentut",
-    "Neal": "Murf", "Paul": "Party Paul", "Jim": "Nasty", "Scott": "En Fuego",
+    "Neal": "Murf", "Paul": "Paul", "Jim": "Nasty", "Scott": "En Fuego",
 }
 
 # Seasons with a known quirk we want to flag (all verified against the CSVs).
