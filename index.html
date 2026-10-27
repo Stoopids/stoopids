@@ -297,9 +297,38 @@ nav button .nu{position:absolute;top:1px;left:2px;min-width:15px;background:#ff3
 .oq .n{text-align:right;font-variant-numeric:tabular-nums}
 .oq .ow{color:var(--mut);text-align:center;padding:7px 0}
 .oq.oqx col.a,.oq.oqx col.b{width:35%}.oq.oqx col.m{width:14%}.oq.oqx col.v{width:16%}
-.oq.oqp col.a{width:52%}.oq.oqp col.v{width:24%}
 .oqn{white-space:nowrap}.oqn::before{content:attr(data-em) " "}.oqn .s{display:none}
 .oqs{font-size:12px;color:var(--mut);margin:2px 0 6px}
+/*<OWES-CHART>*/
+.oqg-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:10px}
+.oqg{border-collapse:separate;border-spacing:0;table-layout:fixed;width:100%;min-width:522px;font-size:13px;font-variant-numeric:tabular-nums}
+.oqg th{text-transform:none;letter-spacing:0}
+.oqg col.f{width:96px}.oqg col.t{width:58px}.oqg col:not(.f):not(.t){width:46px}
+.oqg th,.oqg td{padding:7px 2px;text-align:center;white-space:nowrap;border-right:1px solid rgba(0,0,0,.35);border-bottom:1px solid rgba(0,0,0,.35)}
+.oqg thead th{background:var(--card2);color:var(--mut);font-size:9.5px;font-weight:700;padding:5px 0;line-height:1.15}
+.oqg .ch .e{display:block;font-size:15px;line-height:1.2}.oqg .ch .t{display:block;overflow:hidden}
+.oqg .rl{text-align:left;padding:7px 6px;font-weight:700;position:sticky;left:0;z-index:1;color:var(--tx);overflow:hidden}
+.oqg .c0{text-align:left;padding-left:6px;position:sticky;left:0;z-index:2}
+.oqg td.w{font-size:10px;letter-spacing:-.3px}.oqg td{color:var(--tx)}.oqg td.z{opacity:.55}.oqg td.nz{font-weight:800}
+.oqg .dg{background:#000!important;color:#fff;font-size:9.5px;font-weight:600}
+.oqg tbody .tt,.oqg tfoot th,.oqg tfoot td:not(.dg),.oqg thead .tt{background:#4b5260;color:#fff;font-weight:800}
+.oqg thead .tt{font-size:10px;white-space:normal;line-height:1.1}
+.oqg tfoot th{position:sticky;left:0;z-index:1}
+.oqg tr.r0>*:not(.dg):not(.tt){background:#4a4217}.oqg tr.r1>*:not(.dg):not(.tt){background:#5a4614}.oqg tr.r2>*:not(.dg):not(.tt){background:#69470f}.oqg tr.r3>*:not(.dg):not(.tt){background:#6f3a10}
+.oqg tr.r4>*:not(.dg):not(.tt){background:#6e2c1b}.oqg tr.r5>*:not(.dg):not(.tt){background:#6a2733}.oqg tr.r6>*:not(.dg):not(.tt){background:#5d2d4a}.oqg tr.r7>*:not(.dg):not(.tt){background:#482f5a}
+.oqc{display:flex;flex-direction:column;gap:5px;margin-top:6px}
+.oqc .cr{display:grid;grid-template-columns:96px minmax(0,1fr) 54px;align-items:center;gap:6px}
+.oqc .cn{white-space:nowrap;font-size:13.5px}
+.oqc .ct{position:relative;height:20px;display:block}
+.oqc .ct::before{content:"";position:absolute;left:50%;top:-2px;bottom:-2px;width:2px;margin-left:-1px;background:var(--mut);opacity:.7}
+.oqc .cb{position:absolute;top:3px;bottom:3px;width:calc(var(--w) * 50%);border-radius:3px}
+.oqc .cb.pos{left:50%;background:var(--good);border-radius:0 4px 4px 0}.oqc .cb.neg{right:50%;background:var(--bad);border-radius:4px 0 0 4px}
+.oqc .cv{text-align:right;font-size:13.5px;font-variant-numeric:tabular-nums}
+.b27-pd{margin-top:12px;border-top:1px solid var(--line);padding-top:8px}.b27-pd summary{cursor:pointer;font-weight:800;min-height:32px;list-style:none}.b27-pd summary::-webkit-details-marker{display:none}.b27-pd summary::before{content:'▸ ';color:var(--acc)}.b27-pd[open] summary::before{content:'▾ '}
+@media (min-width:600px){.oqg col:not(.f):not(.t){width:auto}.oqg col.f{width:170px}.oqg{font-size:14px}.oqg thead th{font-size:12px}.oqc .cr{grid-template-columns:170px minmax(0,1fr) 64px}}
+@media (max-width:599px){.oqg .dg span{display:none}.oqg thead .ch .t{font-size:9px;font-weight:600;letter-spacing:-.2px}}
+/*</OWES-CHART>*/
+
 @media (max-width:599px){.oqn.hs .f{display:none}.oqn.hs .s{display:inline}.oq td,.oq th{padding:7px 2px}.oqn::before{content:attr(data-e1) " "}}
 @media (max-width:359px){.oq{font-size:13px}.oq.oqx col.a,.oq.oqx col.b{width:33%}.oq.oqx col.m{width:12%}.oq.oqx col.v{width:22%}}
 /*</OWES-TABLE>*/
@@ -2053,7 +2082,7 @@ function b27PoolCard(b,me){
   return h+'</div>'}
 function b27PoolOwesHtml(T){if(!T.poolOwes.length)return '';
   const rows=[];let last=null;T.poolOwes.forEach(o=>{if(o.n!==last){last=o.n;rows.push(`<tr class="oqh"><td colspan="4">${esc(PT('tTag',{n:o.n,text:o.text}))}</td></tr>`)}rows.push(`<tr><td>${b27Nm(o.from)}</td><td class="ow">owes</td><td>${b27Nm(o.to)}</td><td class="n"><b>${b27Num(o.num)}</b></td></tr>`)});
-  return `<div class="b27-q">${esc(POOL_TXT.tHead)}</div><div class="oqs">${esc(POOL_TXT.tNote)}</div><table class="oq oqx" aria-label="${esc(POOL_TXT.tHead)}"><colgroup><col class="a"><col class="m"><col class="b"><col class="v"></colgroup><tr><th>Who</th><th></th><th>To</th><th class="n">Net</th></tr>${rows.join('')}</table>`}
+  return `<details class="b27-pd"${/*<OWES-CHART>*/U.poolOpen?' open':''/*</OWES-CHART>*/} ontoggle="U.poolOpen=this.open"><summary>${esc(POOL_TXT.tHead)}</summary><div class="oqs">${esc(POOL_TXT.tNote)}</div><table class="oq oqx" aria-label="${esc(POOL_TXT.tHead)}"><colgroup><col class="a"><col class="m"><col class="b"><col class="v"></colgroup><tr><th>Who</th><th></th><th>To</th><th class="n">Net</th></tr>${rows.join('')}</table></details>`}
 /*</POOL>*/
 function b27CanUndo(b){return b.status==='open'&&b.backer===b27Who()&&Date.now()-Date.parse(b.created_at)<PULK.undoMs}
 /* ---- view ---- */
@@ -2115,17 +2144,23 @@ function b27Card(b,me){
 /*<OWES-TABLE>*/
 const b27E1=e=>{e=String(e||'');try{return new Intl.Segmenter(undefined,{granularity:'grapheme'}).segment(e)[Symbol.iterator]().next().value.segment}catch(_){return Array.from(e)[0]||''}};   // first emoji only (phones: two-emoji names stay short)
 const b27Nm=n=>{const o=(D&&D.owners||[]).find(x=>x.name===n)||{},sh=b27ShortName(n);return `<span class="oqn${sh!==n?' hs':''}" data-em="${esc(o.emoji||'')}" data-e1="${esc(b27E1(o.emoji))}"><span class="f">${esc(n)}</span>${sh!==n?`<span class="s">${esc(sh)}</span>`:''}</span>`};
-/* the single "who owes who" block: (1) every pair with a non-zero net of SETTLED bets ("A owes B n"), (2) each manager's net (+ is owed, - owes; 0 shown). Reads b27Tally (a bundle already counts once per opponent there); no extra network calls. Opens the card; the caller closes it. */
+/*<OWES-CHART>*/
+/* "Who owes who" card: (1) a spreadsheet-style GRID of the pair nets of SETTLED one-vs-one bets (row = who owes, column = who is owed, 0 shown, diagonal black, "Total owes" per row, "Total won" per column; a pair is netted so only one direction is non-zero; pools are NOT in the grid), (2) ONE bar chart of every manager's net INCLUDING pools (the old Net per manager numbers), (3) the pool settle-up folded away. Reads b27Tally only; no extra network calls. Opens the card; the caller closes it. */
+Object.assign(U,{poolOpen:false});
 function b27OwesHtml(T){
   const ppl=Object.entries(T.per).sort((a,b)=>b[1].net-a[1].net||a[0].localeCompare(b[0]));
   let h=`<h2 id="b27Owes">Who owes who <span class="note">(settled bets only)</span></h2><div class="card">`;
   if(!ppl.length)return h+'<div class="note">Nothing settled yet. Settled bets show up here.</div>';
-  h+=`<div class="b27-q" style="margin-top:0">Between two managers</div>`;
-  h+=T.owes.length?`<table class="oq oqx" aria-label="Who owes who, pair by pair"><colgroup><col class="a"><col class="m"><col class="b"><col class="v"></colgroup><tr><th>Who</th><th></th><th>To</th><th class="n">Net</th></tr>${T.owes.map(o=>`<tr><td>${b27Nm(o.from)}</td><td class="ow">owes</td><td>${b27Nm(o.to)}</td><td class="n"><b>${b27Num(o.num)}</b></td></tr>`).join('')}</table>`:'<div class="note">Everyone is square: no pair owes anything.</div>';
+  const own=b27OwnerNames(),cell={},rt={},ct={};own.forEach(n=>{cell[n]={};rt[n]=0;ct[n]=0});
+  T.owes.forEach(o=>{if(cell[o.from]&&o.to in cell){cell[o.from][o.to]=o.num;rt[o.from]+=o.num;ct[o.to]+=o.num}});
+  const e1=n=>{const o=(D&&D.owners||[]).find(x=>x.name===n)||{};return esc(o.emoji||'')},wc=v=>b27Num(v).length>6?' w':'';   // wc: 7+ characters (100,000) get a smaller font so they stay inside the cell
+  h+=`<div class="oqg-wrap" role="region" aria-label="Who owes who, grid" tabindex="0"><table class="oqg"><colgroup><col class="f">${own.map(()=>'<col>').join('')}<col class="t"></colgroup><thead><tr><th class="c0">Owes</th>${own.map(n=>`<th class="ch" title="${esc(n)}"><span class="e">${e1(n)}</span><span class="t">${esc(b27ShortName(n))}</span></th>`).join('')}<th class="ch tt">Total owes</th></tr></thead><tbody>${own.map((r,i)=>`<tr class="r${i%8}"><th scope="row" class="rl">${b27Nm(r)}</th>${own.map(c=>c===r?'<td class="dg"><span>owes &gt;&gt;&gt;</span></td>':`<td class="${cell[r][c]?'nz':'z'}${wc(cell[r][c]||0)}">${b27Num(cell[r][c]||0)}</td>`).join('')}<td class="tt${wc(rt[r])}">${b27Num(rt[r])}</td></tr>`).join('')}</tbody><tfoot><tr><th scope="row" class="rl">Total won</th>${own.map(c=>`<td class="${wc(ct[c]).trim()}">${b27Num(ct[c])}</td>`).join('')}<td class="dg"></td></tr></tfoot></table></div>`;
+  const mx=Math.max(1,...ppl.map(([n,p])=>Math.abs(p.net)));
+  h+=`<div class="b27-q">Net per manager${T.poolOwes.length?' <span class="note">incl. pools</span>':''}</div><div class="oqc" role="list" aria-label="Net per manager">${ppl.map(([n,p])=>{const w=p.net?Math.max(.03,Math.abs(p.net)/mx):0;return `<div class="cr" role="listitem"><span class="cn">${b27Nm(n)}</span><span class="ct"><i class="cb ${p.net>0?'pos':'neg'}" style="--w:${w.toFixed(3)}"></i></span><b class="cv ${p.net>0?'good':p.net<0?'bad':''}">${b27Signed(p.net)}</b></div>`}).join('')}</div>`;
   h+=/*<POOL>*/b27PoolOwesHtml(T)/*</POOL>*/;
-  h+=`<div class="b27-q">Net per manager</div><div class="oqs">Plus = is owed, minus = owes.</div><div class="sc"><table class="oq oqp"><colgroup><col class="a"><col class="v"><col class="v"></colgroup><tr><th>Person</th><th class="n">Net</th><th class="n">Bets</th></tr>${ppl.map(([n,p])=>`<tr><td>${b27Nm(n)}</td><td class="n"><b class="${p.net>0?'good':p.net<0?'bad':''}">${b27Signed(p.net)}</b></td><td class="n">${p.bets}</td></tr>`).join('')}</table></div>`;
   return h;
 }
+/*</OWES-CHART>*/
 /*</OWES-TABLE>*/
 function vB27(){
   b27Seen();
