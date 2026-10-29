@@ -349,6 +349,45 @@ nav button .nu{position:absolute;top:1px;left:2px;min-width:15px;background:#ff3
 @media (min-width:1040px) and (max-width:1239px){nav{padding:6px 4px;gap:2px}nav button,nav a.nd{flex:1 1 0;flex-direction:column;gap:2px;border-radius:9px;padding:4px 0;min-height:46px;font-size:11.5px;letter-spacing:-.01em}nav button .ni,nav a.nd .ni{font-size:19px}nav button .nl.f,nav a.nd .nl.f{display:none}nav button .nl.s,nav a.nd .nl.s{display:block}}
 @media (min-width:1240px){nav{max-width:1180px}}
 /*</BETS-2627>*/
+
+/*<S24-EDIT> s24 port: tabs are <a class="nt"> (same look as the old tab buttons), link / share buttons, deep-link highlight, Edit + Fix result */
+nav a.nt{position:relative;flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:9px;padding:4px 0;min-height:46px;font:inherit;font-size:9.5px;font-weight:800;letter-spacing:-.01em;line-height:1.05;white-space:nowrap;cursor:pointer}
+nav a.nt .ni{font-size:17px;line-height:1}
+nav a.nt .nl{display:block;max-width:100%;overflow:hidden;text-overflow:clip}
+nav a.nt .nl.f{display:none}
+nav a.nt.on{background:var(--acc);color:#111;border-color:var(--acc)}
+nav a.nt:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
+@media (max-width:370px){nav a.nt{font-size:8.8px;letter-spacing:-.025em}}
+@media (min-width:900px){nav a.nt{flex:1 1 auto;flex-direction:row;gap:6px;border-radius:99px;padding:8px 10px;min-height:40px;font-size:13px;letter-spacing:0}nav a.nt .ni{font-size:14px}nav a.nt .nl.f{display:block}nav a.nt .nl.s{display:none}}
+@media (max-width:340px){nav a.nt{font-size:8.2px;letter-spacing:-.03em}}
+@media (min-width:600px) and (max-width:1039px){nav a.nt{flex:1 1 0;flex-direction:column;gap:2px;border-radius:9px;padding:4px 0;min-height:46px;font-size:11.5px;letter-spacing:-.01em}nav a.nt .ni{font-size:19px}nav a.nt .nl.f{display:none}nav a.nt .nl.s{display:block}}
+@media (min-width:1040px){nav a.nt{flex:1 1 auto;flex-direction:row;gap:4px;border-radius:99px;padding:8px 8px;min-height:40px;font-size:12.5px;letter-spacing:0}nav a.nt .ni{font-size:14px}nav a.nt .nl.f{display:block}nav a.nt .nl.s{display:none}}
+/* new-bet toast sits just above the fixed chat bar (at the top while the chat panel is open) *//*</CHAT-BOTTOM>*/
+nav a.nt .nb{position:absolute;top:1px;right:2px;background:var(--acc);color:#111;border-radius:99px;font-size:9px;font-weight:900;line-height:1;padding:2px 4px;pointer-events:none}
+nav a.nt.hasu .nb{font-size:0;padding:0;width:9px;height:9px;top:3px;right:3px}
+/* chat count present: the existing 'new' bet pill shrinks to a dot so the two never overlap */
+nav a.nt .nu{position:absolute;top:1px;left:2px;min-width:15px;background:#ff3b5c;color:#fff;border-radius:99px;font-size:9px;font-weight:900;line-height:1;padding:2px 4px;text-align:center;pointer-events:none}
+@media (max-width:599px){nav a.nt{flex:1 1 auto}}
+@media (min-width:1040px) and (max-width:1239px){nav a.nt{flex:1 1 0;flex-direction:column;gap:2px;border-radius:9px;padding:4px 0;min-height:46px;font-size:11.5px;letter-spacing:-.01em}nav a.nt .ni{font-size:19px}nav a.nt .nl.f{display:none}nav a.nt .nl.s{display:block}}
+nav a.nt{text-decoration:none}
+.s24lb{display:flex;justify-content:flex-end;gap:6px;margin:0 0 6px}
+.s24lk{display:inline-flex;align-items:center;justify-content:center;gap:4px;min-height:44px;min-width:44px;padding:6px 12px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--tx);font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.s24lk.i{padding:4px 8px;font-size:15px;margin-left:auto}
+.s24lk:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
+.b27-c .s24hd,.gm .gh{position:relative}
+.s24hd{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.gm .gh .s24lk.i{min-height:44px;margin:-8px -6px -8px auto}
+.dl-hl{outline:3px solid var(--acc)!important;outline-offset:2px;animation:s24hl 2.6s ease-out}
+@keyframes s24hl{0%{box-shadow:0 0 0 10px rgba(255,210,63,.55)}100%{box-shadow:0 0 0 0 rgba(255,210,63,0)}}
+#s24t{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--chatH,0px) + 14px);z-index:60;max-width:min(92vw,520px);background:var(--acc);color:#111;font-weight:800;padding:10px 16px;border-radius:12px;box-shadow:0 4px 18px rgba(0,0,0,.4);word-break:break-all;font-size:14px}
+#s24t[hidden]{display:none}
+.s24nf{border-color:var(--acc)}
+.s24fb .row2{flex-wrap:nowrap}.s24fb .row2>*{flex:1 1 0;min-width:0}   /* the Bets filter: Person, Status and search on ONE row at every width */
+.b27-fx{margin-top:6px;padding:8px;border:1px dashed var(--acc);border-radius:10px}
+.b27-fxh{margin-top:6px;font-size:12px}.b27-fxh li{margin:2px 0}
+.st.fixd{background:var(--acc);color:#111}
+.b27-edn{margin:6px 0;padding:8px;border:1px dashed var(--acc);border-radius:10px}
+/*</S24-EDIT>*/
 </style>
 </head>
 <body>
@@ -742,7 +781,7 @@ function gameCard(g){
     if(g.kind==='ncaa'){if(u.is)foot+=` <span class="up${u.scored?'':' ns'}">😱 UPSET${u.scored?' +'+D.meta.points.upset:' (no bonus)'}</span>`;else if(u.is===false)foot+=' <span class="mut">· no upset</span>'}
     else if(u.is)foot+=' <span class="up ns">🐶 Underdog win</span>';}
   /*<REFRESH-NOW>*/foot+=lvNote(g);/*</REFRESH-NOW>*/
-  return `<div class="gm${g.h2h||g.civil?' h2h':''}"><div class="gh">${head}</div>${row(g.away)}${row(g.home)}<div class="gl">${foot}</div>${/*<QUICK-BET>*/qbHtml(g)/*</QUICK-BET>*/}</div>`}
+  return `<div class="gm${g.h2h||g.civil?' h2h':''}"${/*<S24-EDIT>*/s24Attr('g',g.id)/*</S24-EDIT>*/}><div class="gh">${head}${/*<S24-EDIT>*/s24LinkBtn('games',g.id,'game')/*</S24-EDIT>*/}</div>${row(g.away)}${row(g.home)}<div class="gl">${foot}</div>${/*<QUICK-BET>*/qbHtml(g)/*</QUICK-BET>*/}</div>`}
 /*<QUICK-BET>*/
 /* "Quick bet" on a Games-tab card (only when the two teams belong to DIFFERENT owners and the game has not started). The picker lists the sides of up to three bet types: Spread (posted line), Winner (just who wins, EVEN odds, no moneyline odds used) and Over/under (posted total); spread / over-under are left out when no line / total is posted. Tapping a side only PREFILLS the existing 2026-27 New bet form (U state: opponent, text, amount, even odds) and switches to Bets > 2026-27. Nothing is created or saved until the person presses Place bet and confirms, exactly as before. Amount chips 5 / 10 are two of the form's own amounts (PULK.amounts). */
 let qbG=null,qbAmt=5,qbMe=null,qbMsg='';
@@ -1430,7 +1469,7 @@ function render(){
   try{nbSeen()}catch(_){}   // NEWBET hook: opening Side bets clears the 'new' badge
   /*<NAV-ONE-ROW>*/
   $('#nav').innerHTML=TABS.map(t=>{const sp=t[1].indexOf(' '),ic=t[1].slice(0,sp),full=t[1].slice(sp+1),on=t[0]===tab||/*<ONE-BETS>*/(t[0]==='bets27'&&tab==='bets')/*</ONE-BETS>*/;
-    return `<button class="${on?'on':''}" aria-label="${esc(full)}"${on?' aria-current="page"':''} onclick="tab='${t[0]}';render()"><span class="ni" aria-hidden="true">${ic}</span><span class="nl f">${esc(full)}</span><span class="nl s" aria-hidden="true">${esc(NAVSHORT[t[0]]||full)}</span>${nbBadge(t[0])}</button>`}).join('');
+    return /*<S24-EDIT>*/`<a class="nt${on?' on':''}" href="${esc(s24Href(t[0]))}" data-tab="${t[0]}" aria-label="${esc(full)}"${on?' aria-current="page"':''} onclick="return s24NavClick(event,'${t[0]}')"><span class="ni" aria-hidden="true">${ic}</span><span class="nl f">${esc(full)}</span><span class="nl s" aria-hidden="true">${esc(NAVSHORT[t[0]]||full)}</span>${nbBadge(t[0])}</a>`/*</S24-EDIT>*/}).join('');
   /*</NAV-ONE-ROW>*/
   $('#main').innerHTML=(VIEWS[tab]||vStandings)();
   $('#foot').innerHTML=`STOOPIDS · times in Eastern (ET) · ${DEMO?'<a href="?">back to the live season</a>':'<a href="?demo=1">see the demo (last season replay)</a>'}${ADMIN?' · scores ESPN (fallback ncaa.com)':''}`;
@@ -1876,7 +1915,7 @@ function b27Valid(x,names){
   if(!Number.isInteger(a)||!Number.isInteger(b)||a<1||b<1||a>PULK.maxOdds||b>PULK.maxOdds)return null;
   if(!Number.isInteger(n)||n<1||!isFinite(t)||typeof x.text!=='string')return null;
   const status=['open','backer','other','push','void'].includes(x.status)?x.status:'open';
-  return {id:x.id,n,backer:x.backer,other:x.other,/*<BUNDLE>*/...(opps.length>1?{opponents:opps}:{}),/*</BUNDLE>*/amt:st,odds:{a,b},text:b27Clean(x.text),created_at:new Date(t).toISOString(),status,settled_at:x.settled_at&&isFinite(Date.parse(x.settled_at))?new Date(x.settled_at).toISOString():null/*<MULTI-BET>*/,g:typeof x.g==='string'&&/^[a-z0-9]{6,24}$/.test(x.g)?x.g:undefined/*</MULTI-BET>*/};
+  return {id:x.id,n,backer:x.backer,other:x.other,/*<BUNDLE>*/...(opps.length>1?{opponents:opps}:{}),/*</BUNDLE>*/amt:st,odds:{a,b},text:b27Clean(x.text),created_at:new Date(t).toISOString(),status,settled_at:x.settled_at&&isFinite(Date.parse(x.settled_at))?new Date(x.settled_at).toISOString():null/*<MULTI-BET>*/,g:typeof x.g==='string'&&/^[a-z0-9]{6,24}$/.test(x.g)?x.g:undefined/*</MULTI-BET>*//*<S24-EDIT>*/,...s24ValidExtra(x,status,opps)/*</S24-EDIT>*/};
 }
 function b27Parse(txt,names){
   try{if(!txt||!txt.trim())return [];let d=JSON.parse(txt);if(typeof d==='string')d=JSON.parse(d);
@@ -1990,15 +2029,17 @@ function b27Edit(){U.confirm=false;render()}
   const nbs=b27BetsFromForm(),ids=nbs.map(b=>b.id);
   try{
     /* ONE read-modify-write for the whole batch (+ read-back, one retry): only the bets whose id is not there yet are added; done when every id is present */
+    /*<S24-EDIT>*/const edOf=U.editOf||null,meE=b27Who();if(edOf)nbs.forEach(b=>{b.ed=edOf});/*</S24-EDIT>*/
     const back=await b27Write(cur=>{const miss=nbs.filter(b=>!cur.some(c=>c.id===b.id));if(cur.length+miss.length>PULK.maxBets)throw new Error('full');let n=b27MaxN(cur);const at=new Date().toISOString();
-      return cur.concat(miss.map(b=>Object.assign({},b,{n:++n,created_at:at,settled_at:null})))},cur=>ids.every(id=>cur.some(b=>b.id===id)));
+      /*<S24-EDIT>*/if(edOf&&miss.length){const old=cur.find(c=>c.id===edOf);if(!old||old.status!=='open'||old.backer!==meE||old.kind==='pool')throw new Error('late');cur=cur.map(c=>c.id===edOf?Object.assign({},c,{status:'void',settled_at:at,edTo:nbs[0].id}):c)}/*</S24-EDIT>*/
+      return cur.concat(miss.map(b=>Object.assign({},b,{n:++n,created_at:at,settled_at:null})))},cur=>ids.every(id=>cur.some(b=>b.id===id))/*<S24-EDIT>*/&&(!edOf||!cur.some(c=>c.id===edOf&&c.status==='open'))/*</S24-EDIT>*/);
     ids.forEach(id=>U.mine.add(id));b27Apply(back);
     const mine=ids.map(id=>back.find(b=>b.id===id)).filter(Boolean);
     {const m=mine[0],k=m?b27Opps(m).length:1;U.msg='Placed! Bet #'+(m?m.n:'')+(k>1?' against '+k+' managers ('+b27Num(U.amt)+' each)':'')+' is open. You can undo it for 30 seconds.';U.msgBad=false}
-    U.undoG=null;
+    U.undoG=null;/*<S24-EDIT>*/if(edOf){const o=back.find(x=>x.id===edOf);U.msg+=o?' It replaces bet #'+o.n+' (now cancelled).':'';U.editOf=null}/*</S24-EDIT>*/
     U.opps=[];U.amt=null;U.amtCustom=false;U.amtTxt='';U.amtErr='';U.odds=[1,1];U.custom=false;U.customTxt='';U.oddsErr='';U.text='';U.confirm=false;U.fids={};U.gid=null;
     clearTimeout(U.undoT);U.undoT=setTimeout(()=>{if(tab==='bets27')render()},PULK.undoMs+300);
-  }catch(e){U.msg=e&&e.message==='full'?'The bets ledger is full.':'Couldn’t save. Check your connection and tap Place bet again (it won’t double-post).';U.msgBad=true;U.confirm=true}
+  }catch(e){/*<S24-EDIT>*/if(e&&e.message==='late'){const o=U.doc.bets.find(x=>x.id===U.editOf);U.editOf=null;U.confirm=false;U.busy=false;U.msg='Too late to edit: bet'+(o?' #'+o.n:'')+' was already settled or cancelled. Nothing was saved; your changes are still in the form.';U.msgBad=true;b27Poll();render();return}/*</S24-EDIT>*/U.msg=e&&e.message==='full'?'The bets ledger is full.':'Couldn’t save. Check your connection and tap Place bet again (it won’t double-post).';U.msgBad=true;U.confirm=true}
   U.busy=false;render();
 }
 /* group undo: voids every still-open bet of the group that is mine and inside the 30 s window, in ONE write */
@@ -2153,7 +2194,7 @@ async function b27PoolSettle(id){
 function b27PoolCard(b,me){
   const st=b.status,done=st==='open'&&!!b.back;
   const stTxt=st==='void'?POOL_TXT.stVoid:b.back?POOL_TXT.stDone:POOL_TXT.stOpen;
-  let h=`<div class="card b27-c b27-pool"><div><b>${esc(POOL_TXT.word)} #${b.n}</b> <span class="st ${st==='void'?'unparsed':done?'settled':'open'}">${esc(stTxt)}</span> <span class="mut" style="font-size:12px">${esc(b27Day(Date.parse(b.created_at)))}</span> <span class="mut" style="font-size:12px">· ${esc(PT('who',{n:b.parts.length}))}</span></div>
+  let h=`<div class="card b27-c b27-pool"${/*<S24-EDIT>*/s24Attr('b',b.id)/*</S24-EDIT>*/}><div class="s24hd"><b>${esc(POOL_TXT.word)} #${b.n}</b> <span class="st ${st==='void'?'unparsed':done?'settled':'open'}">${esc(stTxt)}</span> <span class="mut" style="font-size:12px">${esc(b27Day(Date.parse(b.created_at)))}</span> <span class="mut" style="font-size:12px">· ${esc(PT('who',{n:b.parts.length}))}</span>${/*<S24-EDIT>*/s24LinkBtn('bets',b.id,'pool')/*</S24-EDIT>*/}</div>
    <div class="b27-t">${esc(b.text)}</div><div class="b27-m">${esc(PT('line',{buy:b27Num(b.amt),tot:b27Num(b.amt*b.parts.length)}))}</div><div class="b27-m">${esc(PT('with',{names:b.parts.join(', ')}))}</div>`;
   if(st==='open'&&!b.back)h+=`<div class="note" style="margin-top:6px">${esc(POOL_TXT.noPay)}</div>`;
   if(done)h+=`<div class="note" style="margin-top:6px"><b>${esc(POOL_TXT.result)}:</b></div>`+b27PoolResultLines(b.parts,b.amt,b.back).map((l,i)=>`<div class="${i>=b.parts.length?'b27-l':'b27-w'}" style="margin-top:2px">${esc(l)}</div>`).join('');
@@ -2211,7 +2252,7 @@ function b27Card(b,me){
   const stTxt={open:'Open',backer:'Settled',other:'Settled',push:'Wash',void:'Cancelled'}[st];
   const res=BU?(st==='backer'?b.backer+' won ('+OP.join(', ')+' each owe '+b.backer+' '+b27Num(b27Pay(b).ifBackerRight)+')':st==='other'?'Managers won ('+b.backer+' owes each of them '+b27Num(b27Pay(b).ifOtherRight)+')':st==='push'?'Wash: whole bet cancelled, nobody owes anything':'')
    :st==='backer'?b.backer+' won ('+esc(b.other)+' owes '+b27Num(b27Pay(b).ifBackerRight)+')':st==='other'?b.other+' won ('+esc(b.backer)+' owes '+b27Num(b27Pay(b).ifOtherRight)+')':st==='push'?'Wash: nobody owes anything':'';
-  let h=`<div class="card b27-c"><div><b>Bet #${b.n}</b> <span class="st ${st==='open'?'open':st==='push'?'wash':st==='void'?'unparsed':'settled'}">${stTxt}</span> <span class="mut" style="font-size:12px">${esc(b27Day(Date.parse(b.created_at)))}</span>${BU?` <span class="mut" style="font-size:12px">· ${OP.length} managers, one result</span>`:''}${/*<MULTI-BET>*/b.g&&U.doc.bets.filter(x=>x.g===b.g).length>1?` <span class="mut" style="font-size:12px">· 1 of ${U.doc.bets.filter(x=>x.g===b.g).length} placed together</span>`:''/*</MULTI-BET>*/}</div>
+  let h=`<div class="card b27-c"${/*<S24-EDIT>*/s24Attr('b',b.id)/*</S24-EDIT>*/}><div class="s24hd"><b>Bet #${b.n}</b>${/*<S24-EDIT>*/s24FixBadge(b)/*</S24-EDIT>*/} <span class="st ${st==='open'?'open':st==='push'?'wash':st==='void'?'unparsed':'settled'}">${stTxt}</span> <span class="mut" style="font-size:12px">${esc(b27Day(Date.parse(b.created_at)))}</span>${BU?` <span class="mut" style="font-size:12px">· ${OP.length} managers, one result</span>`:''}${/*<MULTI-BET>*/b.g&&U.doc.bets.filter(x=>x.g===b.g).length>1?` <span class="mut" style="font-size:12px">· 1 of ${U.doc.bets.filter(x=>x.g===b.g).length} placed together</span>`:''/*</MULTI-BET>*/}${/*<S24-EDIT>*/s24LinkBtn('bets',b.id,'bet')/*</S24-EDIT>*/}</div>
    <div class="b27-t">${esc(b.text)}</div><div class="b27-m"><b>${esc(b.backer)}</b> vs <b>${esc(OP.join(', '))}</b> · <b>${b27Num(b.amt)}</b>${BU?' each':''} · ${esc(b27OddsLabel(b.odds.a,b.odds.b))}</div>
    <div class="b27-w">${esc(L.win)}</div><div class="b27-l">${esc(L.lose)}</div>${L.rounded?'<div class="mut b27-r">Rounded to a whole number.</div>':''}${res?`<div class="note" style="margin-top:4px"><b>Result:</b> ${esc(res)}</div>`:''}`;
   if(st==='open'&&(isP||ADMIN)){
@@ -2222,7 +2263,9 @@ function b27Card(b,me){
     if(b27CanUndo(b)&&b.g&&gu.length>1){if(U.doc.bets.filter(x=>x.g===b.g&&b27CanUndo(x)).sort((p,q)=>q.n-p.n)[0].id===b.id)h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27UndoGroup('${b.g}')"${U.busy?' disabled':''}>↩ Undo all ${gu.length} bets placed together (30 s)</button></div>`}
     else /*</MULTI-BET>*/if(b27CanUndo(b))h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27SetStatus('${b.id}','void')"${U.busy?' disabled':''}>↩ Undo this bet (30 s)</button></div>`;
     else if(ADMIN)h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27SetStatus('${b.id}','void')"${U.busy?' disabled':''}>Cancel bet (admin)</button></div>`;
+    /*<S24-EDIT>*/if(me&&me===b.backer)h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" data-s24-edit="${b.id}" onclick="s24EditStart('${b.id}')"${U.busy?' disabled':''}>✏️ Edit</button><span class="note">only while nobody has settled it</span></div>`;/*</S24-EDIT>*/
   }
+  /*<S24-EDIT>*/h+=s24EditedNote(b)+s24FixHtml(b,me);/*</S24-EDIT>*/
   return h+'</div>';
 }
 /*<OWES-TABLE>*/
@@ -2256,11 +2299,11 @@ function vB27(){
   /*<POOL>*/else if(U.confirm&&U.kind==='pool'){h+=b27PoolConfirmHtml()}/*</POOL>*/
   else if(U.confirm){
     const e=b27FormOK();
-    h+=`<div class="card b27-confirm"><b>Check it, then confirm</b><div class="b27-sum">${esc(b27Summary())}</div><div id="b27Live">${b27LiveHtml()}</div>
+    h+=`<div class="card b27-confirm"><b>Check it, then confirm</b>${/*<S24-EDIT>*/s24EditHint()/*</S24-EDIT>*/}<div class="b27-sum">${esc(b27Summary())}</div><div id="b27Live">${b27LiveHtml()}</div>
      <div class="b27-act"><button type="button" class="btn b27-big" onclick="b27Confirm()"${U.busy?' disabled':''}>${U.busy?'Saving…':'✅ Yes, place it'}</button><button type="button" class="btn sec b27-big" onclick="b27Edit()"${U.busy?' disabled':''}>← Change</button></div></div>`;
   }else{
     const oc=U.odds?U.odds.join('-'):'';
-    h+=/*<POOL>*/U.kind==='pool'?b27PoolForm(me):/*</POOL>*/`<div class="card b27-form"><b>New bet</b> <span class="note">· you are <b>${esc(me)}</b> <a href="#" onclick="presAsk();return false">(change)</a></span>${/*<QUICK-BET>*/qbHint()/*</QUICK-BET>*/}${/*<POOL>*/b27KindTabs()/*</POOL>*/}
+    h+=/*<POOL>*/U.kind==='pool'?b27PoolForm(me):/*</POOL>*/`<div class="card b27-form"><b>New bet</b> <span class="note">· you are <b>${esc(me)}</b> <a href="#" onclick="presAsk();return false">(change)</a></span>${/*<QUICK-BET>*/qbHint()/*</QUICK-BET>*/}${/*<S24-EDIT>*/s24EditHint()/*</S24-EDIT>*/}${/*<POOL>*/U.editOf?'':b27KindTabs()/*</POOL>*/}
      ${/*<MULTI-BET>*/''/*opponents: multi-select*/}<div class="b27-q">1. Who are you betting against? <span class="note">Tap one or more. Several = one bet, one result.</span></div><div class="b27-opps" role="group" aria-label="Opponents" style="--n:${others.length}">${others.map((n,i)=>{const o=(D.owners.find(x=>x.name===n)||{});const on=U.opps.includes(n);return `<button type="button" class="b27-chip op" data-b27-opp="${i}" data-b27-name="${esc(n)}" aria-label="${esc(n)}" aria-pressed="${on}" onclick="b27Opp(${i})"><span class="ck" aria-hidden="true">✓</span><span class="em" aria-hidden="true">${esc(o.emoji||'')}</span><span class="nm" aria-hidden="true"><span class="f">${esc(n)}</span><span class="sh">${esc(b27ShortName(n))}</span><span class="xs">${esc(b27TinyName(n))}</span></span></button>`}).join('')}</div>
      <div class="b27-selbar"><button type="button" class="b27-sm" data-b27-all="1" onclick="b27OppAll()">Select all</button><button type="button" class="b27-sm" data-b27-clear="1" onclick="b27OppClear()">Clear</button><span class="cnt" id="b27SelCnt" aria-live="polite">${esc(b27SelTxt())}</span></div>
      ${''/*</MULTI-BET>*/}<div class="b27-q"><label for="b27Text">2. What’s the bet? <span class="note">I say…</span></label></div><input id="b27Text" class="sb-in b27-in" maxlength="${PULK.maxText}" autocomplete="off" enterkeyhint="go" placeholder="e.g. Kansas beats Duke" value="${esc(U.text)}" oninput="b27Text(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();b27Place()}">
@@ -2276,7 +2319,8 @@ function vB27(){
   const ppl=Object.entries(T.per).sort((a,b)=>b[1].net-a[1].net);
   /*<OWES-TABLE>*/h+=b27OwesHtml(T);/*</OWES-TABLE>*/
   h+=`<div class="note" style="margin-top:6px">Still open: ${T.openCount} bet${T.openCount===1?'':'s'}, ${b27Num(T.openTotal)} in total.</div></div>`;
-  h+=`<h2>Bets (${bets.length})</h2>`+(bets.length?bets.slice(0,60).map(b=>/*<POOL>*/b.kind==='pool'?b27PoolCard(b,me):/*</POOL>*/b27Card(b,me)).join(''):'<div class="card note">No bets yet. Be the first.</div>');
+  /*<S24-EDIT>*/{const FL=s24Filter(bets,me);
+  h+=`<h2>Bets (${FL.length}${FL.length!==bets.length?' of '+bets.length:''})</h2>`+s24FilterBar(bets,me)+(FL.length?FL.slice(0,60).concat(S24.sub&&tab==='bets27'?FL.slice(60).filter(b=>b.id===S24.sub):[]).map(b=>/*<POOL>*/b.kind==='pool'?b27PoolCard(b,me):/*</POOL>*/b27Card(b,me)).join(''):bets.length?'<div class="card note s24fe">No bets match this filter.</div>':'<div class="card note">No bets yet. Be the first.</div>');}/*</S24-EDIT>*/
   if(bets.length>60)h+='<p class="note">Showing the latest 60.</p>';
   return h;
 }
@@ -2314,10 +2358,183 @@ function obOldNote(){   // read-only replacement of the old shared-ledger card (
 })();
 function b27Init(){if(U.started||DEMO)return;U.started=true;b27Poll()}
 /*</BETS-2627>*/
+/*<S24-EDIT>*/
+/* ===== s24 port (League site s24 -> STOOPIDS). Everything here is NEW code; existing functions are only wrapped (render) or called.
+   1) Edit a bet nobody has settled yet (creator only): the form opens filled in; on Place bet ONE write cancels the old bet (status void + edTo) and adds the new one (ed = old id). Too late if it was settled first.
+   2) Fix result: a settled bet's result changes only when BOTH sides agree. Optional fields on the bet record: fx {i,by,r,at} = the open request, fxh [...] = history (max 20). The status (and so every total) changes only on a confirm from the side that did NOT ask.
+   3) Hash per tab (#standings #games #rosters #bets #bets-2025-26 #teams #postseason #redraft #archive #rules); ?tab=bets / ?tab=bets27 still work.
+   4) Deep links #bets/<betId> and #games/<gameId>: open, scroll, highlight ~2.6 s; "not found" note otherwise.
+   5) Copy link / Share: built ONLY from origin + path (+ ?demo=1 in the demo) + the route hash. Never ?admin, never names, never ledger keys.
+   6) Tabs are <a href>: plain click switches in place (pushState), modifier / middle / right click = browser default. */
+const S24={sub:null,last:null,route0:false,prep:null,done:null,hlUntil:0,nf:null};
+const S24_H2T={standings:'standings',ranks:'standings',games:'games',schedule:'games',scores:'games',rosters:'rosters',squads:'rosters',bets:'@bets',bets27:'@bets','bets-2025-26':'bets',bets2526:'bets',teams:'teams',postseason:'checklist',checklist:'checklist',redraft:'redraft',archive:'archive',rules:'about',about:'about'};
+const s24HasNew=()=>typeof VIEWS!=='undefined'&&!!VIEWS.bets27;
+const s24IdOK=v=>typeof v==='string'&&/^[A-Za-z0-9_-]{1,40}$/.test(v);
+function s24TabFromHash(h){const t=S24_H2T[h];if(!t)return null;if(t==='@bets')return s24HasNew()?'bets27':'bets';return t}
+function s24HashOf(t){return ({bets27:'bets',bets:s24HasNew()?'bets-2025-26':'bets',checklist:'postseason',about:'rules'})[t]||t}
+function s24Read(h){const m=/^#?([a-z0-9-]+)(?:\/([A-Za-z0-9_-]{1,40}))?(?:$|[&?\/])/i.exec(String(h||''));if(!m)return null;const t=s24TabFromHash(m[1].toLowerCase());if(!t)return null;
+  return {t,sub:m[2]&&(t==='bets27'||t==='games')?m[2]:null}}
+const s24RouteHash=()=>s24HashOf(tab)+(S24.sub?'/'+S24.sub:'');
+/* address-bar / href URL: path + (?demo=1) + (?admin=1 only in the address bar of an admin, never in shared links) + hash */
+function s24Url(h,share){const q=new URLSearchParams();if(DEMO)q.set('demo','1');if(!share&&ADMIN)q.set('admin','1');const s=q.toString();return location.pathname+(s?'?'+s:'')+(h?'#'+h:'')}
+const s24Href=t=>s24Url(s24HashOf(t),true);
+function s24ShareUrl(kind,id){const h=kind&&s24IdOK(String(id))?(kind==='games'?'games/':s24HashOf('bets27')+'/')+id:s24HashOf(tab);return location.origin+s24Url(h,true)}
+function s24Put(push){try{const want=s24Url(s24RouteHash());try{sessionStorage.setItem('stoopids.tab',s24RouteHash())}catch(_){}if(location.pathname+location.search+location.hash===want)return;history[push?'pushState':'replaceState'](null,'',want)}catch(e){}}
+function s24NavClick(e,t){if(e&&(e.button>0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey))return true;if(e&&e.preventDefault)e.preventDefault();tab=t;S24.sub=null;render();window.scrollTo(0,0);return false}
+function s24OnNav(){const r=s24Read(location.hash);if(!r&&location.hash.length>1)return;const R=r||{t:'standings',sub:null};if(R.t===tab&&R.sub===S24.sub)return;
+  tab=R.t;S24.sub=R.sub;S24.prep=null;S24.done=null;S24.nf=null;S24.last=tab;try{sessionStorage.setItem('stoopids.tab',s24RouteHash())}catch(_){}render();if(!R.sub)window.scrollTo(0,0)}
+window.addEventListener('popstate',s24OnNav);window.addEventListener('hashchange',s24OnNav);
+/* first load: the hash wins over ?tab=; a reload that lost its hash falls back to this browser tab's last route; plain URLs are left alone */
+(function(){let r=s24Read(location.hash);
+  if(!r&&!params.has('tab')){try{const nv=performance.getEntriesByType&&performance.getEntriesByType('navigation')[0];if(nv&&nv.type==='reload'){const x=s24Read(sessionStorage.getItem('stoopids.tab')||'');if(x)r=x}}catch(e){}}
+  if(r){tab=r.t;S24.sub=r.sub;S24.route0=true;S24.last=tab;s24Put(false)}
+  else{S24.last=tab;if(location.hash.length>1)try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}}   // a stray / private fragment is never kept
+})();
+/* ---- share / copy ---- */
+const s24CanShare=()=>!!(navigator.share&&window.isSecureContext);
+function s24Toast(msg,ms){let t=document.getElementById('s24t');if(!t){t=document.createElement('div');t.id='s24t';t.setAttribute('role','status');t.setAttribute('aria-live','polite');document.body.appendChild(t)}
+  t.textContent=msg;t.hidden=false;clearTimeout(S24.tt);S24.tt=setTimeout(()=>{t.hidden=true},ms||2600)}
+function s24Copy(url){const done=()=>s24Toast('Link copied',2600),fall=()=>{try{const ta=document.createElement('textarea');ta.value=url;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();const ok=document.execCommand&&document.execCommand('copy');ta.remove();if(ok){done();return}}catch(e){}s24Toast('Copy this link: '+url,8000)};
+  try{if(navigator.clipboard&&navigator.clipboard.writeText&&window.isSecureContext){navigator.clipboard.writeText(url).then(done,fall);return}}catch(e){}fall()}
+function s24Share(kind,id){const url=s24ShareUrl(kind,id);S24.lastUrl=url;
+  if(s24CanShare()){navigator.share({title:'STOOPIDS',url}).catch(e=>{if(!(e&&e.name==='AbortError'))s24Copy(url)})}else s24Copy(url)}
+function s24Attr(k,id){id=String(id==null?'':id);return k==='g'?` id="g-${esc(id)}" data-gid="${esc(id)}"`:` id="bet-${esc(id)}" data-bid="${esc(id)}"`}
+function s24LinkBtn(kind,id,what){id=String(id==null?'':id);if(!s24IdOK(id))return '';if(kind==='bets'&&!s24HasNew())return '';const sh=s24CanShare();
+  return `<button type="button" class="s24lk i" data-s24-link="${esc(kind+'/'+id)}" aria-label="${sh?'Share':'Copy link to'} this ${esc(what)}" title="${sh?'Share':'Copy link to'} this ${esc(what)}" onclick="s24Share('${kind}','${esc(id)}')">🔗</button>`}
+/* ---- render hook: hash in step with the tab, link bar, deep link ---- */
+const s24Render0=render;
+render=function(){s24Render0.apply(this,arguments);try{s24After()}catch(e){}};
+function s24After(){
+  if(!D)return;
+  if(tab!==S24.last){if(S24.sub&&S24.prep!==tab+'/'+S24.sub)S24.sub=null;S24.last=tab;S24.nf=null;s24Put(true)}
+  const m=document.getElementById('main');if(!m)return;
+  const seg=m.querySelector(':scope > .ob-seg');(seg||m).insertAdjacentHTML(seg?'afterend':'afterbegin',`<div class="s24lb"><button type="button" class="s24lk" data-s24-share="tab" onclick="s24Share()">🔗 ${s24CanShare()?'Share':'Copy link'}</button></div>`+(S24.nf&&S24.nf.t===tab?`<div class="card s24nf note" role="status">${esc(S24.nf.msg)}</div>`:''));
+  s24DeepGo();
+}
+function s24NotFound(what){S24.nf={t:tab,msg:'That '+what+' wasn’t found (the link may be old or wrong). Showing the whole tab.'};const k=tab+'/'+S24.sub;S24.sub=null;S24.done=k;s24Put(false);render()}
+function s24DeepGo(){
+  const sub=S24.sub;if(!sub){return}
+  const key=tab+'/'+sub;
+  if(tab==='games'){
+    const g=(D.games||[]).find(x=>String(x.id)===sub);if(!g){s24NotFound('game');return}
+    if(S24.prep!==key){S24.prep=key;gOwner='all';gDay='all';gH2H=false;gMode=g.status==='final'?'scores':'upcoming';try{if(!gOwned(g))gAll=true}catch(_){}render();return}
+  }else if(tab==='bets27'){
+    if(U.state==='init')return;                       // ledger not loaded yet: b27Apply re-renders
+    if(!U.doc.bets.some(b=>b.id===sub)){s24NotFound('bet');return}
+    S24.prep=key;
+  }else return;
+  const el=document.querySelector('#main [data-'+(tab==='games'?'gid':'bid')+'="'+sub+'"]');if(!el)return;
+  if(S24.done!==key){S24.done=key;S24.hlUntil=Date.now()+2600;try{el.scrollIntoView({block:'center'})}catch(_){}clearTimeout(S24.ht);S24.ht=setTimeout(()=>{document.querySelectorAll('.dl-hl').forEach(e=>e.classList.remove('dl-hl'))},2650)}
+  if(Date.now()<S24.hlUntil)el.classList.add('dl-hl');
+}
+function s24AfterLoad(){if(S24.sub)s24DeepGo()}
+/* ---- 1) Edit ---- */
+function s24ResetForm(){Object.assign(U,{opps:[],amt:null,amtCustom:false,amtTxt:'',amtErr:'',odds:[1,1],custom:false,customTxt:'',oddsErr:'',text:'',confirm:false,fids:{},qb:null})}
+function s24EditStart(id){
+  const b=U.doc.bets.find(x=>x.id===id),me=b27Who();
+  if(!b||b.kind==='pool'||b.status!=='open'||b.backer!==me){U.msg='Too late to edit: that bet was already settled or cancelled.';U.msgBad=true;render();return}
+  const inA=PULK.amounts.includes(b.amt),inO=PULK.oddsChips.some(([a,c])=>a===b.odds.a&&c===b.odds.b);
+  Object.assign(U,{kind:'bet',confirm:false,msg:'',msgBad:false,opps:b27Opps(b).slice(),pp:[],text:b.text,amt:b.amt,amtCustom:!inA,amtTxt:inA?'':String(b.amt),amtErr:'',odds:[b.odds.a,b.odds.b],custom:!inO,customTxt:inO?'':b.odds.a+'-'+b.odds.b,oddsErr:'',editOf:id,fids:{},qb:null});
+  tab='bets27';S24.sub=null;render();
+  setTimeout(()=>{try{const f=document.querySelector('.b27-form');if(f)f.scrollIntoView({block:'start'})}catch(_){}},30)}
+function s24EditCancel(){U.editOf=null;s24ResetForm();U.msg='';render()}
+function s24EditHint(){if(!U.editOf)return '';const o=U.doc.bets.find(x=>x.id===U.editOf),n=o?'#'+o.n:'';
+  const late=!o||o.status!=='open';
+  return `<div class="b27-edn note" role="status" data-s24-editing="${esc(U.editOf)}">✏️ Editing bet ${n}. ${late?'<b class="bad">It was already settled or cancelled, so it can’t be edited any more.</b>':`Nothing changes until you place it: then bet ${n} is cancelled and this one replaces it.`} <a href="#" onclick="s24EditCancel();return false">Cancel edit</a></div>`}
+function s24EditedNote(b){let h='';
+  if(b.edTo){const n=U.doc.bets.find(x=>x.id===b.edTo);h+=`<div class="note" style="margin-top:4px">✏️ Edited: replaced by ${n?'bet #'+n.n:'a newer bet'}.</div>`}
+  if(b.ed){const o=U.doc.bets.find(x=>x.id===b.ed);h+=`<div class="note" style="margin-top:4px">✏️ Edited version of ${o?'bet #'+o.n:'an earlier bet'}.</div>`}
+  return h}
+/* ---- 2) Fix result (two-sided) ---- */
+const S24R=['backer','other','push'];
+const s24Side=(b,n)=>!n?null:n===b.backer?'b':b27Opps(b).includes(n)?'o':null;
+const s24ResLbl=(b,r)=>r==='backer'?b.backer+' won':r==='other'?(b27IsBundle(b)?'Managers won':b.other+' won'):r==='push'?'Wash':String(r);
+const s24When=t=>{try{return new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}).format(new Date(t)).replace(/\u202f/g,' ')+' ET'}catch(e){return ''}};
+/* keeps the optional s24 fields when a record is read (anything malformed is dropped; old records simply have none) */
+function s24ValidExtra(x,status,opps){
+  const o={},rid=v=>typeof v==='string'&&/^[a-z0-9]{6,24}$/.test(v),nm=v=>typeof v==='string'&&(v===x.backer||opps.includes(v)),sd=v=>v===x.backer?'b':'o',ts=v=>v&&isFinite(Date.parse(v))?new Date(v).toISOString():null;
+  if(rid(x.ed))o.ed=x.ed;
+  if(rid(x.edTo)&&status==='void')o.edTo=x.edTo;
+  if(Array.isArray(x.fxh)){const h=x.fxh.filter(e=>e&&typeof e==='object'&&rid(e.i)&&nm(e.by)&&S24R.includes(e.r)&&S24R.includes(e.from)&&e.r!==e.from&&['confirmed','declined','withdrawn','replaced'].includes(e.out)&&(e.out==='confirmed'||e.out==='declined'?nm(e.ans)&&sd(e.ans)!==sd(e.by):!e.ans)).slice(-20)
+      .map(e=>Object.assign({i:e.i,by:e.by,from:e.from,r:e.r,at:ts(e.at),out:e.out},e.ans?{ans:e.ans}:{},{at2:ts(e.at2)}));if(h.length)o.fxh=h}
+  if(x.fx&&typeof x.fx==='object'&&S24R.includes(status)){const f=x.fx;if(rid(f.i)&&nm(f.by)&&S24R.includes(f.r)&&f.r!==status)o.fx={i:f.i,by:f.by,r:f.r,at:ts(f.at)}}
+  return o}
+/* pure: apply one fix event by `me` to bet b. Returns {b:newRecord|null, ok, err}. null = nothing to do (already done, not allowed, stale). */
+function s24FixApply(b,me,op,a,at){
+  const s=s24Side(b,me);if(!b||b.kind==='pool'||!s||!S24R.includes(b.status))return {b:null,err:'Only the two sides of a settled bet can change its result.'};
+  const fx=b.fx,h=(b.fxh||[]).slice(),seen=id=>(fx&&fx.i===id)||h.some(e=>e.i===id);
+  const close=(f,out,ans)=>Object.assign({i:f.i,by:f.by,from:b.status,r:f.r,at:f.at,out},ans?{ans}:{},{at2:at});
+  const fin=(nb)=>{if(h.length)nb.fxh=h.slice(-20);else delete nb.fxh;return nb};
+  if(op==='req'){
+    if(!a||seen(a.i))return {b:null,err:''};
+    if(!S24R.includes(a.r)||a.r===b.status)return {b:null,err:'Pick a different result.'};
+    if(fx){if(s24Side(b,fx.by)!==s&&fx.r===a.r){h.push(close(fx,'confirmed',me));const nb=fin(Object.assign({},b,{status:fx.r}));delete nb.fx;return {b:nb,ok:'agreed'}}   // other side asked the same: that is agreement
+      h.push(close(fx,'replaced'))}                                                                                                        // one open request at a time: a newer one replaces it
+    return {b:fin(Object.assign({},b,{fx:{i:a.i,by:me,r:a.r,at}})),ok:'asked'}}
+  if(!fx||!a||fx.i!==a.i)return {b:null,err:'That change request is no longer open.'};
+  const mine=s24Side(b,fx.by)===s;
+  if(op==='ok'){if(mine)return {b:null,err:'The other side has to confirm.'};h.push(close(fx,'confirmed',me));const nb=fin(Object.assign({},b,{status:fx.r}));delete nb.fx;return {b:nb,ok:'confirmed'}}
+  if(op==='no'){h.push(close(fx,mine?'withdrawn':'declined',mine?null:me));const nb=fin(Object.assign({},b));delete nb.fx;return {b:nb,ok:mine?'withdrawn':'declined'}}
+  return {b:null,err:''}}
+async function s24Fix(id,op,i,r){
+  if(U.busy)return;const me=b27Who();if(!me){presAsk();return}
+  const a={i:i||b27Rid(),r};let last=null;
+  const pre=U.doc.bets.find(x=>x.id===id);const chk=pre&&s24FixApply(pre,me,op,a,new Date().toISOString());if(chk&&!chk.b){U.msg=chk.err||'Already done.';U.msgBad=!!chk.err;render();return}
+  U.busy=true;U.fixOpen=null;render();
+  try{
+    const back=await b27Write(cur=>cur.map(b=>{if(b.id!==id)return b;const x=s24FixApply(b,me,op,a,new Date().toISOString());if(x.b)last=x;return x.b||b}),
+      cur=>{const b=cur.find(x=>x.id===id);return !b||!s24FixApply(b,me,op,a,new Date().toISOString()).b});
+    b27Apply(back,'force');const b=back.find(x=>x.id===id);
+    const ok=last&&last.ok;
+    U.msg=!b?'That bet is gone.':ok==='asked'?'Change asked: '+s24ResLbl(b,a.r)+'. The result stays '+s24ResLbl(b,b.status)+' until the other side confirms.':ok==='confirmed'||ok==='agreed'?'Result corrected to '+s24ResLbl(b,b.status)+'. Totals updated.':ok==='declined'?'Change declined. The result stays '+s24ResLbl(b,b.status)+'.':ok==='withdrawn'?'Change request withdrawn.':'Saved.';U.msgBad=false;
+  }catch(e){U.msg='Couldn’t save that. Try again.';U.msgBad=true}
+  U.busy=false;render()}
+function s24FixBadge(b){return b.fxh&&b.fxh.some(e=>e.out==='confirmed')?' <span class="st fixd">Corrected</span>':''}
+function s24FixHtml(b,me){
+  if(b.kind==='pool')return '';
+  const s=s24Side(b,me),fx=b.fx,set=S24R.includes(b.status),dis=U.busy?' disabled':'';let h='';
+  if(set&&fx){const fs=s24Side(b,fx.by),other=fs==='b'?b27Opps(b).join(' or '):b.backer;
+    h+=`<div class="b27-fx" data-s24-fx="${b.id}"><div><b>🛠 Result change asked</b> by ${esc(fx.by)}: ${esc(s24ResLbl(b,b.status))} → <b>${esc(s24ResLbl(b,fx.r))}</b>. Nothing changes until ${esc(other)} confirms.</div>`;
+    if(s&&s!==fs)h+=`<div class="b27-act"><button type="button" class="btn b27-b" data-s24-fxok="${b.id}" onclick="s24Fix('${b.id}','ok','${fx.i}')"${dis}>✅ Confirm change</button><button type="button" class="btn sec b27-b" data-s24-fxno="${b.id}" onclick="s24Fix('${b.id}','no','${fx.i}')"${dis}>✖ Decline</button></div>`;
+    else if(s)h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" data-s24-fxno="${b.id}" onclick="s24Fix('${b.id}','no','${fx.i}')"${dis}>Withdraw my request</button></div>`;
+    h+='</div>'}
+  if(set&&s){const open=U.fixOpen===b.id;
+    h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" data-s24-fix="${b.id}" aria-expanded="${open}" onclick="U.fixOpen=U.fixOpen==='${b.id}'?null:'${b.id}';render()"${dis}>✏️ Fix result</button></div>`;
+    if(open)h+=`<div class="b27-fx" data-s24-fixpick="${b.id}"><div class="note">Wrong result? Now: <b>${esc(s24ResLbl(b,b.status))}</b>. Pick the right one. It only counts when ${esc(s==='b'?b27Opps(b).join(' or '):b.backer)} confirms.</div><div class="b27-act">${S24R.filter(r=>r!==b.status&&!(fx&&fx.r===r&&s24Side(b,fx.by)===s)).map(r=>`<button type="button" class="btn sec b27-b" data-s24-fxr="${r}" onclick="s24Fix('${b.id}','req',null,'${r}')"${dis}>${esc(s24ResLbl(b,r))}</button>`).join('')}</div></div>`}
+  if(b.fxh&&b.fxh.length){const W={confirmed:'confirmed',declined:'declined',withdrawn:'withdrawn',replaced:'replaced by a newer request'};
+    h+=`<details class="b27-fxh"><summary>Result changes (${b.fxh.length})</summary><ul>${b.fxh.slice().reverse().map(e=>`<li>${esc(e.by)} asked ${esc(s24ResLbl(b,e.from))} → ${esc(s24ResLbl(b,e.r))}${e.at?' · '+esc(s24When(e.at)):''} — <b>${esc(W[e.out])}</b>${e.ans?' by '+esc(e.ans):''}${e.at2?' · '+esc(s24When(e.at2)):''}</li>`).join('')}</ul></details>`}
+  return h}
+/* ---- Bets filter (2026-27 view): the older STOOPIDS two-select design (Wagers list: Everyone / person + status), plus "Me" and "Waiting on me".
+   Remembered per device in localStorage (stoopids_b27_person / stoopids_b27_status): only the filter value ("me" is stored as the word me, never a name for it). ---- */
+const S24FS=[['all','Any status'],['open','Open'],['settled','Settled'],['wash','Wash'],['wait','Waiting on me']],S24FPK='stoopids_b27_person',S24FSK='stoopids_b27_status';
+const s24FP=()=>{const v=lsGet(S24FPK);return v==='me'||b27OwnerNames().includes(v)?v:'all'};
+const s24FSt=()=>{const v=lsGet(S24FSK);return S24FS.some(x=>x[0]===v)?v:'all'};
+function s24FSetP(v){lsSet(S24FPK,v==='me'||b27OwnerNames().includes(v)?v:'all');render()}
+function s24FSetS(v){lsSet(S24FSK,S24FS.some(x=>x[0]===v)?v:'all');render()}
+const s24InBet=(b,n)=>!!n&&(b.backer===n||b.other===n||b27Opps(b).includes(n)||(b.kind==='pool'&&Array.isArray(b.parts)&&b.parts.includes(n)));
+const s24IsOpen=b=>b.status==='open'&&!(b.kind==='pool'&&b.back);
+/* "Waiting on me": an open bet someone else placed against me (nobody has settled it yet), an open pool I'm in with no payouts, or a Fix result request from the other side that I have to confirm */
+function s24Waiting(b,me){if(!me)return false;
+  if(b.fx&&S24R.includes(b.status)){const s=s24Side(b,me);if(s&&s!==s24Side(b,b.fx.by))return true}
+  if(b.status!=='open')return false;
+  if(b.kind==='pool')return !b.back&&b.backer!==me&&Array.isArray(b.parts)&&b.parts.includes(me);
+  return b.backer!==me&&b27Opps(b).includes(me)}
+let s24Q='';   // search text: this page view only, not stored
+const s24Hay=b=>[b.text,b.backer,b.other,...b27Opps(b),...(Array.isArray(b.parts)?b.parts:[])].join(' ').toLowerCase();
+function s24FSetQ(v){s24Q=String(v||'').slice(0,80);render()}
+function s24Filter(bets,me){const p=s24FP(),st=s24FSt(),who=p==='me'?me:p==='all'?null:p,q=s24Q.trim().toLowerCase();
+  return bets.filter(b=>(S24.sub&&b.id===S24.sub)||((!q||s24Hay(b).includes(q))&&(p==='all'||s24InBet(b,who))&&(st==='all'||(st==='wait'?s24Waiting(b,me):st==='open'?s24IsOpen(b):st==='settled'?(b.status==='backer'||b.status==='other'||(b.kind==='pool'&&b.status==='open'&&!!b.back)):st==='wash'?b.status==='push':true))))}
+/* same markup + classes as the old 2025-26 Wagers filter (card > row2 > select, select, input.sb-in), all on one row */
+function s24FilterBar(bets,me){const p=s24FP(),st=s24FSt(),n=bets.filter(b=>s24Waiting(b,me)).length;
+  return `<div class="card s24fb"><div class="row2"><select id="sbPerson" aria-label="Person" onchange="s24FSetP(this.value)"><option value="all"${p==='all'?' selected':''}>Everyone</option><option value="me"${p==='me'?' selected':''}>Me</option>${b27OwnerNames().map(o=>`<option value="${esc(o)}"${o===p?' selected':''}>${esc(o)}</option>`).join('')}</select>
+   <select id="sbStatus" aria-label="Status" onchange="s24FSetS(this.value)">${S24FS.map(([k,t])=>`<option value="${k}"${k===st?' selected':''}>${esc(t)}${k==='wait'&&n?' ('+n+')':''}</option>`).join('')}</select>
+   <input id="sbQ" class="sb-in" aria-label="Search bets" placeholder="search terms…" value="${esc(s24Q)}" onchange="s24FSetQ(this.value)"></div>${(p==='me'||st==='wait')&&!me?'<div class="note" style="margin-top:6px">Pick who you are to use “Me” / “Waiting on me”.</div>':''}</div>`}
+
+/*</S24-EDIT>*/
 function load(){
   const s=document.createElement('script');s.src=(DEMO?'demo/':'')+'data.js?v='+Date.now();
   s.onload=()=>{D=window.STOOPIDS_DATA;D._base=D.bets;applyShared();/*<REFRESH-NOW>*/try{lvReapply()}catch(e){}/*</REFRESH-NOW>*/render();try{presInit()}catch(e){}try{chatInit()}catch(e){}/*<REFRESH-NOW>*/try{lvInit()}catch(e){}/*</REFRESH-NOW>*/
-    /*<BETS-2627>*/try{b27Init()}catch(e){}/*</BETS-2627>*/};   /* chatInit = CHAT hook */
+    /*<BETS-2627>*/try{b27Init()}catch(e){}/*</BETS-2627>*//*<S24-EDIT>*/try{s24AfterLoad()}catch(e){}/*</S24-EDIT>*/};   /* chatInit = CHAT hook */
   s.onerror=()=>{if(!D)$('#main').innerHTML='<div class="card">Couldn\u2019t load the latest data. Try reloading the page.'+(ADMIN?' (data.js missing: run <code>python3 refresh.py</code> first.)':'')+'</div>'};
   document.head.appendChild(s);
 }
