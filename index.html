@@ -2292,8 +2292,9 @@ function b27OwesHtml(T){
 function vB27(){
   b27Seen();
   const me=b27Who(),names=b27OwnerNames(),others=names.filter(n=>n!==me);
-  let h=`<div class="card"><b>💪 Bets 2026-27</b><div class="note b27-note" id="b27Note">${esc(BETS_DISCLAIMER)}</div><div class="note" style="margin-top:6px">This page just <b>records</b> who bet what and who owes whom. Separate from the 2025-26 bets (toggle above).</div>
-   <div class="note" id="b27Top" style="margin-top:6px">${U.state==='ok'?'<span class="good">● live</span> · anyone with the link can add bets (no logins). Play nice.':U.state==='error'?'<span class="bad">● can’t reach the bets ledger right now</span>':'Connecting…'}</div></div>`;
+  /*<BETS-INTRO-BOTTOM>*/let h='';   // headline removed: New bet sits right under the season toggle + Share row
+  const introBottom=`<div class="card b27-intro"><div class="note b27-note" id="b27Note">${esc(BETS_DISCLAIMER)}</div><div class="note" style="margin-top:6px">This page just <b>records</b> who bet what and who owes whom. Separate from the 2025-26 bets (toggle above).</div>
+   <div class="note" id="b27Top" style="margin-top:6px">${U.state==='ok'?'<span class="good">● live</span> · anyone with the link can add bets (no logins). Play nice.':U.state==='error'?'<span class="bad">● can’t reach the bets ledger right now</span>':'Connecting…'}</div></div>`;/*</BETS-INTRO-BOTTOM>*/
   if(U.msg)h+=`<div class="card ${U.msgBad?'b27-bad':'b27-ok'}" role="status">${esc(U.msg)}${/*<MULTI-BET>*/U.undoG&&b27GroupUndoable(U.undoG).length>1?`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27UndoGroup('${U.undoG}')"${U.busy?' disabled':''}>↩ Undo all ${b27GroupUndoable(U.undoG).length} bets (30 s)</button></div>`:''/*</MULTI-BET>*/}</div>`;
   if(!me){h+=`<div class="card"><button type="button" class="btn b27-big" onclick="presAsk()">👋 Pick who you are to bet</button></div>`}
   /*<POOL>*/else if(U.confirm&&U.kind==='pool'){h+=b27PoolConfirmHtml()}/*</POOL>*/
@@ -2322,6 +2323,7 @@ function vB27(){
   /*<S24-EDIT>*/{const FL=s24Filter(bets,me);
   h+=`<h2>Bets (${FL.length}${FL.length!==bets.length?' of '+bets.length:''})</h2>`+s24FilterBar(bets,me)+(FL.length?FL.slice(0,60).concat(S24.sub&&tab==='bets27'?FL.slice(60).filter(b=>b.id===S24.sub):[]).map(b=>/*<POOL>*/b.kind==='pool'?b27PoolCard(b,me):/*</POOL>*/b27Card(b,me)).join(''):bets.length?'<div class="card note s24fe">No bets match this filter.</div>':'<div class="card note">No bets yet. Be the first.</div>');}/*</S24-EDIT>*/
   if(bets.length>60)h+='<p class="note">Showing the latest 60.</p>';
+  /*<BETS-INTRO-BOTTOM>*/h+=introBottom;/*</BETS-INTRO-BOTTOM>*/
   return h;
 }
 /*<ONE-BETS>*/
