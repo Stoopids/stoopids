@@ -58,6 +58,7 @@ main{max-width:1000px;margin:0 auto;padding:12px 10px 60px}
 .who{flex:1;min-width:0}
 .who b{font-size:17px}
 .who small{display:block;color:var(--mut)}
+.who .gold{display:block;font-size:12px;line-height:1.3;color:var(--mut);font-weight:400;white-space:nowrap;letter-spacing:1px}
 .pts{font-size:28px;font-weight:900;text-align:right}
 .pts small{display:block;font-size:11px;color:var(--mut);font-weight:600}
 .bar{height:6px;background:var(--card2);border-radius:9px;margin-top:8px;overflow:hidden}
@@ -84,6 +85,9 @@ main{max-width:1000px;margin:0 auto;padding:12px 10px 60px}
 .card.oc .chip .cn.one{display:block;white-space:nowrap;text-overflow:ellipsis}
 @media (max-width:339px){.card.oc .chips{grid-template-columns:repeat(3,minmax(0,1fr));--rows:3}}
 /*</RANK-CHIPS>*/
+/*<WHO-CENTER>*/@media (max-width:600px){.card.oc .who{text-align:center;overflow-wrap:anywhere}.card.oc .who small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}/*</WHO-CENTER>*/
+/*<RK-TITLE>*/@media (max-width:600px){body:has(.rkwrap) .titlebar h1{text-align:center}}/*</RK-TITLE>*/
+/*<QB-BOLT>*/.qb-bolt{display:inline-block;vertical-align:-.125em;flex:none;margin-right:.35em}/*</QB-BOLT>*/
 /*<RANK-BESIDE>*/
 /* >=700px only: one shared 4-column track set (rank | name | points | chips) for the whole list via subgrid, so names, points and chip grids line up in every card; name column is as wide as the longest name (max 230px), points column right-aligned. */
 @media (min-width:700px){
@@ -1129,11 +1133,13 @@ function lvUI(){
 const NOPTS=['No points yet. Everyone starts somewhere (0).','Zero points. Pure potential.','Nothing on the board yet. Dream big.','0 points and no evidence of poor drafting.','Spotless record, because nothing has happened.','No points yet. The comeback story starts here.','Blank scoreboard. Peak optimism.','Zero points, zero regrets.','The ledger is clean. Enjoy it while it lasts.','Not a single point lost, either.'];
 function noPts(n){const idx=Math.max(0,(D.owners||[]).findIndex(o=>o.name===n));return shuf(NOPTS,TSEED+7)[idx%NOPTS.length]}
 const rankTxt=o=>(D.owners.filter(x=>x.rank===o.rank).length>1?'T-':'')+o.rank;
+/*<GOLD-LINE>*/ // gold = championship seasons from archive.js alltime[].title_seasons (current_owner match), cancelled 2019-20 not counted, same rule as Archive Titles
+function goldN(n){const A=window.ARCHIVE;if(!A||!A.alltime||!A.seasons)return 0;const p=A.alltime.find(x=>x.current_owner===n);if(!p||!p.title_seasons)return 0;return p.title_seasons.filter(y=>!((A.seasons.find(s=>s.season===y)||{}).no_tournament)).length}/*</GOLD-LINE>*/
 function vStandings(){/*<RANKINGS>*/const sv=rkView();if(sv==='apnet')return rkSeg()+vRankings();/*</RANKINGS>*/
   const mx=Math.max(10,...D.owners.map(o=>o.total));
   return /*<RANKINGS>*/rkSeg()+/*</RANKINGS>*//*<RANK-CHIPS>*/'<div class="ocl">'/*</RANK-CHIPS>*/+D.owners.map((o,i)=>`<div class="card${/*<RANK-CHIPS>*/' oc'/*</RANK-CHIPS>*/}"><div class="lb" onclick="goOwner('${esc(o.name)}')">
     <div class="rank">${rankTxt(o)}</div>
-    <div class="who"><b>${esc(o.emoji)} ${esc(o.name)}</b><small>${esc(o.team_name)}</small>${/*<RANK-CHIPS>*/''/*per-owner quip no longer shown on these cards (quip() itself is untouched; Rosters still uses it)*//*</RANK-CHIPS>*/}</div>
+    <div class="who"><b>${esc(o.emoji)} ${esc(o.name)}</b>${/*<GOLD-LINE>*/goldN(o.name)?`<span class="gold" role="img" aria-label="${goldN(o.name)} title${goldN(o.name)>1?'s':''}" title="${goldN(o.name)} title${goldN(o.name)>1?'s':''}">${'🏆'.repeat(goldN(o.name))}</span>`:''/*</GOLD-LINE>*/}<small>${esc(o.team_name)}</small>${/*<RANK-CHIPS>*/''/*per-owner quip no longer shown on these cards (quip() itself is untouched; Rosters still uses it)*//*</RANK-CHIPS>*/}</div>
     <div class="pts">${o.total}<small>points</small></div></div>
     <div class="bar"><i style="width:${Math.max(0,o.total)/mx*100}%"></i></div>
     <div class="chips">${o.teams.map(t=>/*<CHIP-RECORD>*/chipRec/*</CHIP-RECORD>*/(t.tid,{out:t.status==='dropped',cn:1})).join('')}</div></div>`).join('')+'</div>'+
@@ -1205,7 +1211,7 @@ function qbOpts(g){
   return o}
 function qbHtml(g){
   if(!qbOk(g))return '';const id=String(g.id),open=qbG===id;
-  let h=`<div class="qbw"><button type="button" class="qb-btn" aria-expanded="${open}" aria-label="Quick bet: ${esc(qbNm(g.away))} vs ${esc(qbNm(g.home))}" onclick="qbToggle('${esc(id)}')">⚡ Quick bet</button></div>`;
+  let h=`<div class="qbw"><button type="button" class="qb-btn" aria-expanded="${open}" aria-label="Quick bet: ${esc(qbNm(g.away))} vs ${esc(qbNm(g.home))}" onclick="qbToggle('${esc(id)}')"><svg class="qb-bolt" viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg> Quick bet</button></div>`;
   if(!open)return h;
   const oa=qbOwn(g.away),oh=qbOwn(g.home),me=b27Who(),need=me!==oa&&me!==oh;
   h+=`<div class="qb-pick" role="group" aria-label="Quick bet picker">`;
@@ -2450,10 +2456,10 @@ function b27Opp(i){const n=b27Others()[i];if(!n)return;const k=U.opps.indexOf(n)
 function b27OppAll(){U.opps=b27Others().slice();b27Sync()}
 function b27OppClear(){U.opps=[];b27Sync()}/*</MULTI-BET>*/
 function b27Amt(v){U.amtCustom=false;U.amtErr='';U.amt=PULK.amounts.includes(v)?v:null;b27Sync()}
-function b27AmtCustomOpen(){U.amtCustom=true;b27AmtApply(U.amtTxt,true);b27Sync();const i=document.getElementById('b27Ao');if(i)i.focus()}
+function b27AmtCustomOpen(){U.amtCustom=true;b27AmtApply(U.amtTxt,true);b27Sync();const i=document.getElementById('b27Ao');if(i)i.focus({preventScroll:true})}
 function b27AmtApply(t,quiet){U.amtTxt=t;const r=b27ParseAmt(t);if(r.ok){U.amt=r.n;U.amtErr=''}else{U.amt=null;U.amtErr=quiet&&!String(t||'').trim()?'':r.err}}
 function b27Odds(a,b){U.custom=false;U.oddsErr='';U.odds=[a,b];b27Sync()}
-function b27CustomOpen(){U.custom=true;b27CustomApply(U.customTxt,true);b27Sync();const i=document.getElementById('b27Co');if(i)i.focus()}
+function b27CustomOpen(){U.custom=true;b27CustomApply(U.customTxt,true);b27Sync();const i=document.getElementById('b27Co');if(i)i.focus({preventScroll:true})}
 function b27CustomApply(t,quiet){U.customTxt=t;const r=b27ParseOdds(t);if(r.ok){U.odds=[r.a,r.b];U.oddsErr=''}else{U.odds=null;U.oddsErr=quiet&&!t?'':r.err}}
 function b27Text(t){U.text=t;b27Sync()}
 function b27Place(){/*<POOL>*/if(U.kind==='pool')return b27PoolPlace();/*</POOL>*/const e=b27FormOK();if(e){b27Err(e);render();return}U.msg='';U.confirm=true;render()}
@@ -2834,6 +2840,9 @@ function s24NavClick(e,t){if(e&&(e.button>0||e.metaKey||e.ctrlKey||e.shiftKey||e
 function s24OnNav(){const r=s24Read(location.hash);if(!r&&location.hash.length>1)return;const R=r||{t:'standings',sub:null};if(R.t===tab&&R.sub===S24.sub)return;
   tab=R.t;S24.sub=R.sub;S24.prep=null;S24.done=null;S24.nf=null;S24.last=tab;try{sessionStorage.setItem('stoopids.tab',s24RouteHash())}catch(_){}render();if(!R.sub)window.scrollTo(0,0)}
 window.addEventListener('popstate',s24OnNav);window.addEventListener('hashchange',s24OnNav);
+/*<TAB-TOP>*/ // every tab switch opens at the top; the browser must not restore an old scroll position on reload/back. Only a link to one bet/game (#bets/<id>) scrolls to it.
+try{if('scrollRestoration' in history)history.scrollRestoration='manual'}catch(e){}
+window.addEventListener('pageshow',()=>{if(!S24.sub)window.scrollTo(0,0)});/*</TAB-TOP>*/
 /* first load: the hash wins over ?tab=; a reload that lost its hash falls back to this browser tab's last route; plain URLs are left alone */
 (function(){let r=s24Read(location.hash);
   if(!r&&!params.has('tab')){try{const nv=performance.getEntriesByType&&performance.getEntriesByType('navigation')[0];if(nv&&nv.type==='reload'){const x=s24Read(sessionStorage.getItem('stoopids.tab')||'');if(x)r=x}}catch(e){}}
@@ -2856,7 +2865,8 @@ const s24Render0=render;
 render=function(){s24Render0.apply(this,arguments);try{s24After()}catch(e){}};
 function s24After(){
   if(!D)return;
-  if(tab!==S24.last){if(S24.sub&&S24.prep!==tab+'/'+S24.sub)S24.sub=null;S24.last=tab;S24.nf=null;s24Put(true)}
+  if(tab!==S24.last){if(S24.sub&&S24.prep!==tab+'/'+S24.sub)S24.sub=null;S24.last=tab;S24.nf=null;s24Put(true)/*<TAB-TOP>*/;if(!S24.sub)window.scrollTo(0,0)/*</TAB-TOP>*/}
+  /*<TAB-TOP>*/if(!S24.top0){S24.top0=1;if(!S24.sub)window.scrollTo(0,0)}/*</TAB-TOP>*/
   const m=document.getElementById('main');if(!m)return;
   const seg=m.querySelector(':scope > .ob-seg');(seg||m).insertAdjacentHTML(seg?'afterend':'afterbegin',`<div class="s24lb"><button type="button" class="s24lk" data-s24-share="tab" onclick="s24Share()">🔗 ${s24CanShare()?'Share':'Copy link'}</button></div>`+(S24.nf&&S24.nf.t===tab?`<div class="card s24nf note" role="status">${esc(S24.nf.msg)}</div>`:''));
   s24DeepGo();
@@ -2877,7 +2887,7 @@ function s24DeepGo(){
   if(S24.done!==key){S24.done=key;S24.hlUntil=Date.now()+2600;try{el.scrollIntoView({block:'center'})}catch(_){}clearTimeout(S24.ht);S24.ht=setTimeout(()=>{document.querySelectorAll('.dl-hl').forEach(e=>e.classList.remove('dl-hl'))},2650)}
   if(Date.now()<S24.hlUntil)el.classList.add('dl-hl');
 }
-function s24AfterLoad(){if(S24.sub)s24DeepGo()}
+function s24AfterLoad(){if(S24.sub)s24DeepGo()/*<TAB-TOP>*/;else window.scrollTo(0,0)/*</TAB-TOP>*/}
 /* ---- 1) Edit ---- */
 function s24ResetForm(){Object.assign(U,{/*<S25>*/rdEd:null,rdOpen:false,/*</S25>*/opps:[],amt:null,amtCustom:false,amtTxt:'',amtErr:'',odds:[1,1],custom:false,customTxt:'',oddsErr:'',text:'',confirm:false,fids:{},qb:null})}
 function s24EditStart(id){
