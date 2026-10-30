@@ -245,7 +245,7 @@ let OPEN=null;   // the open picker {el, close}
 function closeOpen(){if(OPEN){const o=OPEN;OPEN=null;o.close()}}
 let wired=false;function wire(doc){if(wired)return;wired=true;
   doc.addEventListener('pointerdown',ev=>{if(OPEN&&!OPEN.el.contains(ev.target))closeOpen()},true);
-  doc.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&OPEN){const a=OPEN.el.querySelector('.s25add');closeOpen();if(a)a.focus()}},true)}
+  doc.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&OPEN){const a=OPEN.el.querySelector('.s25add');closeOpen();if(a)a.focus({preventScroll:true})}},true)}
 S25.closePicker=closeOpen;
 S25.renderReactions=function(el,counts,mine,onToggle,opts){if(!el||!el.ownerDocument)return;opts=opts||{};const doc=el.ownerDocument,EM=opts.emojis||S25.REACTIONS,ro=!!opts.readOnly;ensureCss(doc);wire(doc);
   if(OPEN&&OPEN.el===el)OPEN=null;
