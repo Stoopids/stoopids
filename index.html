@@ -20,6 +20,10 @@ header{max-width:1000px;margin:0 auto;padding:0 0 8px}
 .fresh:focus-visible{opacity:.9;outline:1px dashed var(--mut);outline-offset:-2px;border-radius:6px}
 .sub{padding:0 14px}
 @media (max-width:640px){.hero{aspect-ratio:16/10;background-image:url(assets/hero-mobile.jpg?v=4);background-position:center 8%}}
+/*<S26F-SHORT-HERO>*/ /* header photo capped to under half its old height (was 992/340 desktop = ~343px, 16/10 phone = ~244px at 390); same cover-cropped background as before, only the height changes */
+.hero{aspect-ratio:auto;height:clamp(110px,15vw,160px);background-position:center 32%}
+@media (max-width:640px){.hero{aspect-ratio:auto;height:clamp(84px,29vw,118px);background-position:center 18%}}
+/*</S26F-SHORT-HERO>*/
 h1{color:var(--acc);margin:0;font-size:clamp(34px,9vw,56px);letter-spacing:.04em;font-weight:900;line-height:1}
 h1 span{color:var(--acc)}
 .tag{color:var(--mut);margin:6px 0 0}
@@ -535,6 +539,17 @@ nav a.nt{text-decoration:none}
 .tap .aprk{display:none}.tap .chip,.tap .chip *{overflow-wrap:normal;word-break:normal;hyphens:none}
 .tap td:first-child .chip{max-width:100%}.tap td:nth-child(2){overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tap tr.drop td{opacity:.7}
 /*</S26E>*/
+.b27-lb{display:flex;align-items:center;gap:8px;margin:14px 0 6px;font-weight:700;font-size:15px}.b27-lb .note{font-weight:400}
+.s26n{flex:none;width:24px;height:24px;border-radius:50%;background:var(--acc);color:#111;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:800}
+.s26st .b27-in{margin-top:0}.s26st textarea.b27-in{min-height:64px}
+.b27-errbox{outline:2px solid var(--bad);outline-offset:0;border-color:var(--bad)!important}
+.s26err{color:var(--bad);font-size:13px;margin-top:4px}.s26err:empty{display:none}
+.s26pot{margin-top:6px;font-weight:700}.s26sum{margin-top:6px;font-size:14px;color:var(--mut)}.s26sum.ok{color:var(--good,#5cd17a)}
+.s26pr{display:grid;grid-template-columns:minmax(64px,30%) minmax(0,1fr) 40px;gap:8px;align-items:center;margin-top:8px}
+.s26pl{font-weight:700;font-size:14px;min-width:0}.s26pi,.s26ps{min-height:44px;width:100%;min-width:0;font-size:16px}
+.s26px{width:40px;height:40px;border-radius:10px;border:2px solid var(--line);background:var(--card2);color:var(--tx);font-size:20px;cursor:pointer}
+.s26add{margin-top:10px;min-height:44px;padding:0 14px;border-radius:10px;border:2px solid var(--line);background:var(--card2);color:var(--tx);font:inherit;font-weight:700;font-size:14px;cursor:pointer}.s26set{margin-top:8px}.s26set .s26pr{grid-template-columns:minmax(80px,38%) minmax(0,1fr)}
+.s26terms{margin:8px 0 2px;font-size:17px;font-weight:800;line-height:1.3;overflow-wrap:anywhere}
 </style>
 </head>
 <body>
@@ -885,7 +900,7 @@ const DEMO=params.has('demo');
 const ADMIN=params.has('admin');
 /*<BALL-LOADER>*/function ballLoader(label){const b='<span class="bl-b"><i>🏀</i><s></s></span>';return '<div class="bl" role="status" aria-live="polite"><div class="bl-row" aria-hidden="true">'+b+b+b+'</div><div class="bl-t">'+esc(label||'Loading…')+'</div></div>'}/*</BALL-LOADER>*/   // ?admin=1 shows developer-facing details (warnings, data health, config/overrides notes, JSON export)
 let D=null,tab=params.get('tab')||'standings',ownerSel=null,openTeam={};
-const TABS=/*<TAB-ORDER>*/[['standings','🏆 Standings'],['games','📅 Games'],['bets','💵 Bets'],['rosters','👥 Rosters'],['teams','🏀 All teams'],['checklist','✅ Postseason'],['redraft','🔄 Jan 20 redraft'],['about','📖 Rules'],['archive','🗂️ Archive']]/*</TAB-ORDER>*/;
+const TABS=/*<TAB-ORDER>*/[['standings','🏆 Standings'],['games','📅 Games'],['bets','💵 Bets'],['teams','🏀 All teams'],['checklist','✅ Postseason'],['redraft','🔄 Jan 20 redraft'],['about','📖 Rules'],['archive','🗂️ Archive']]/*</TAB-ORDER>*/;
 /*<NAV-ONE-ROW>*/const NAVSHORT={standings:'Ranks',games:'Games',rosters:'Rosters',bets:'Bets',teams:'Teams',checklist:'Post',redraft:'Redraft',archive:'Archive',about:'Rules'};/*</NAV-ONE-ROW>*/   // short phone labels (the full name is each button's aria-label)
 /*<DRAFT-TAB>*/
 const DRAFT_URL='https://stoopids.github.io/stoopids/draft2/';   // the new draft room: a full separate app, so a normal same-tab link (the browser Back button returns here); no target=_blank
@@ -1187,7 +1202,7 @@ function vStandings(){/*<RANKINGS>*/const sv=rkView();if(sv==='points')return rk
     <div class="bar"><i style="width:${Math.max(0,o.total)/mx*100}%"></i></div>
     <div class="chips">${o.teams.map(t=>/*<CHIP-RECORD>*/chipRec/*</CHIP-RECORD>*/(t.tid,{out:t.status==='dropped',cn:1})).join('')}</div></div>`).join('')+'</div>'+
     `<p class="note">Tap an owner for the full breakdown. Struck-through teams were dropped in the Jan 20 redraft.</p>`}
-function goOwner(n){ownerSel=n;tab='rosters';render();window.scrollTo(0,0)}
+function goOwner(n){/*<S26F-NOROSTERS>*/ownerSel=n;tab='standings';s26eView('points');S24.sub=null;render();try{s24Put(true)}catch(e){}const c=[...document.querySelectorAll('.pcard')].find(x=>x.getAttribute('data-pc')===n);if(c)c.scrollIntoView({block:'start'});else window.scrollTo(0,0)/*</S26F-NOROSTERS>*/}
 
 /* ---------- games tab ---------- */
 const ETK=new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York'});
@@ -1912,7 +1927,7 @@ const VIEWS={standings:/*<HDR-CENTER>*/()=>vStandings()+'<div id="fresh" class="
 function s26eView(v){try{localStorage.setItem('standingsView',v)}catch(e){}}
 /* old AP / NET links (?tab=apnet, ?tab=rankings, ?tab=standings&view=apnet, #apnet, #standings/apnet) -> All teams, which now has AP and NET columns. ?tab=points / ?view=points -> Standings > Points. Rosters and Postseason tabs are unchanged. */
 (function(){const q=String(tab||'').toLowerCase(),v=String(params.get('view')||params.get('sub')||'').toLowerCase();
-  if(q==='points'){s26eView('points');tab='standings'}
+  if(/^(points|breakdown|rosters|squads|owner)$/.test(q)){s26eView('points');tab='standings'}
   else if(/^(apnet|ap-net|ap|net|polls|rankings)$/.test(q)||(q==='standings'&&/^(apnet|ap-net|rankings)$/.test(v)))tab='teams';
   else if(q==='standings'&&v==='points')s26eView('points')})();
 /* All teams: team, owner, record, AP, NET. Best record first (win %, then more wins, then NET). AP = live ESPN AP Top 25 (RK.ap, same feed as the old AP / NET view), NET = data/net.json (RK.net); '—' when unranked or not loaded. */
@@ -1927,7 +1942,7 @@ function vTeamsAP(){const netBy={};(RK.net||[]).forEach(x=>{if(x.tid)netBy[Strin
 const PCOLS=[['W','Regular-season wins',b=>b.win],['Conf','Conference champ (regular season + tournament)',b=>(b.conf_reg||0)+(b.conf_tourn||0)],['NCAA','Made the NCAA field',b=>b.ncaa_entry],['PI','Play-in win',b=>b.playin_win],['NW','NCAA tournament wins',b=>b.ncaa_win],['Up','Upsets',b=>b.upset],['F4','Final Four',b=>b.final4],['Ch','National champ',b=>b.champ],['±','Missed the Big Dance / commissioner adjustment',b=>(b.missed_dance||0)+(b.adjust||0)]];
 const pCell=v=>v?`<b class="${v<0?'bad':''}">${v>0?v:'\u2212'+(-v)}</b>`:'<span class="mut">\u2014</span>';
 function vPoints(){const hd='<div class="pg ph">'+PCOLS.map(c=>`<span title="${esc(c[1])}">${c[0]}</span>`).join('')+'<span title="Team total">Tot</span></div>';
-  return '<div class="orl">'+D.owners.map(o=>`<div class="card pcard"><div class="orh" onclick="goOwner('${esc(o.name)}')"><span class="rank">${rankTxt(o)}</span><div class="who"><b>${esc(o.emoji)} ${esc(TN(o.name))}</b><small>${esc(PN(o.name))}</small></div><div class="pts">${o.total}<small>points</small></div></div>${hd}`+
+  return '<div class="orl">'+D.owners.map(o=>`<div class="card pcard" data-pc="${esc(o.name)}"><div class="orh" onclick="goOwner('${esc(o.name)}')"><span class="rank">${rankTxt(o)}</span><div class="who"><b>${esc(o.emoji)} ${esc(TN(o.name))}</b><small>${esc(PN(o.name))}</small></div><div class="pts">${o.total}<small>points</small></div></div>${hd}`+
    (o.teams||[]).map(t=>{const b=t.by||{};return `<div class="prow${t.status==='dropped'?' drop':''}"><div class="pchip">${chip(t.tid,{out:t.status==='dropped'})}</div><div class="pg pv">${PCOLS.map(c=>`<span>${pCell(c[2](b)||0)}</span>`).join('')}<span class="ptot">${t.total}</span></div></div>`}).join('')+'</div>').join('')+'</div>'+
   `<p class="note">Points each team earned for its manager, by category; \u2014 = none yet. ${PCOLS.map(c=>`<b>${c[0]}</b> ${esc(c[1])}`).join(' · ')} · <b>Tot</b> team total. Team totals add up to the manager total shown in League. Struck-through teams were dropped in the redraft; the points they earned before still count. Tap a manager for the game-by-game breakdown.</p>`}
 /*</S26E>*/
@@ -1978,7 +1993,7 @@ function render(){
   $('#badges').innerHTML=(m.mode==='demo'?'<span class="badge warn">DEMO DATA</span>':'')+(ADMIN?'<span class="badge">ADMIN VIEW</span>':'')+(ADMIN&&m.warnings.length?'<span class="badge warn">⚠ '+m.warnings.length+' warning(s) — see Rules</span>':'');
   try{nbSeen()}catch(_){}   // NEWBET hook: opening Side bets clears the 'new' badge
   /*<BETS-TALLY>*/if(typeof SHOW_OLD_BETS!=='undefined'&&!SHOW_OLD_BETS&&(tab==='bets'||tab==='bets2526'||tab==='bets-2025-26')&&VIEWS.bets27)tab='bets27';/*</BETS-TALLY>*/
-  /*<TAB-WINDOWS>*/if(!tabVisible(tab==='bets'?'bets27':tab))tab='standings';/*</TAB-WINDOWS>*/
+  /*<TAB-WINDOWS>*/if(tab==='rosters'||tab==='squads'){tab='standings';s26eView('points')}/*S26F-NOROSTERS*/if(!tabVisible(tab==='bets'?'bets27':tab))tab='standings';/*</TAB-WINDOWS>*/
   /*<NAV-ONE-ROW>*/
   $('#nav').innerHTML=TABS/*<TAB-WINDOWS>*/.filter(t=>tabVisible(t[0]))/*</TAB-WINDOWS>*/.map(t=>{const sp=t[1].indexOf(' '),ic=t[1].slice(0,sp),full=t[1].slice(sp+1),on=t[0]===tab||/*<ONE-BETS>*/(t[0]==='bets27'&&tab==='bets')/*</ONE-BETS>*/;
     return /*<S24-EDIT>*/`<a class="nt${on?' on':''}" href="${esc(s24Href(t[0]))}" data-tab="${t[0]}" aria-label="${esc(full)}"${on?' aria-current="page"':''} onclick="return s24NavClick(event,'${t[0]}')"><span class="ni" aria-hidden="true">${ic}</span><span class="nl f">${esc(full)}</span><span class="nl s" aria-hidden="true">${esc(NAVSHORT[t[0]]||full)}</span>${nbBadge(t[0])}</a>`/*</S24-EDIT>*/}).join('');
@@ -2610,8 +2625,8 @@ const POOL_TXT={
   intro:'Fill in the terms, hit "Build". Leave the result blank for an open bet; settle it later below.',
   terms:'Terms, in words (e.g. Kurmoji bets Ken 100K that Duke covers -4.5)',
   participants:'Participants', youIn:'(you are in automatically)',
-  fBuy:'Buy-in each: 250K', fPay:'Payouts when done (total received), e.g. kurt:800K, mark:1.2mil',
-  help:'Winner and runner-up money-back are just payouts (e.g. winner 1mil, 2nd 200K back). Payouts must add up to the pot. Use these short names for payouts: {keys}',
+  fBuy:'Buy-in each: 250K', fPay:'Payouts when done (total received), e.g. kurt:800K, mark:1.2mil', s1:'What’s the pool?', s2:'Who’s in?', s3:'Buy-in per person', s4:'Payouts by place', termsPh:'e.g. STOOPIDS season-long tournament pool', buyPh:'e.g. 50', potLine:'Pot: {n} × {buy} = {pot}', potWait:'Pot: pick who’s in and a buy-in', addPlace:'+ Add place', payOpt:'Optional: leave blank to fill in when it’s over.', sumLine:'Adds up to {sum} of {pot}', ePlaceSum:'Payouts add up to {sum} but the pot is {pot} ({diff} {way}).', short:'short', over:'over', ePlaceNum:'Use whole numbers for the payouts (like 400).', pickWho:'Who finished where?', pickOne:'Pick…', ePickAll:'Pick someone for every place.', payLine:'Payouts: {x}',
+  help:'Winner and runner-up money-back are just payouts (e.g. winner 1mil, 2nd 200K back). Payouts must add up to the pot. Use these short names for payouts: {keys}', helpPl:'Amounts only; you pick who finished where when you settle it. They must add up to the pot.',
   build:'Build',
   eMe:'Pick who you are first.', eTerms:'Write the terms of the pool first.', ePeople:'a pool needs 2+ participants', eBuy:'pool needs a buy-in like 250K',
   eBuyMin:'buy-in must be a whole number of at least {min} (like 250K)', eBadPay:"can't read one of the payouts (try 800K, 1.2mil)", eFmt:'Write each payout as name:amount, like kurt:800K.',
@@ -2653,6 +2668,49 @@ function b27PoolParse(parts,buyTxt,txt){
   }
   return {ok:true,amt,back};
 }
+/*<S26F-POOL>*/
+/* Pool form as labeled steps: 1 Terms, 2 Who's in, 3 Buy-in (live pot line), 4 Payouts by PLACE (amounts only, no names).
+   New optional record field places:[amount by place] (Winner first), must add up to the pot. At settle time the creator picks a participant
+   for each place; that becomes the usual back:{name:amount} (same field/format old pools use), so totals, owes and old pools are unchanged.
+   Old pools without places keep the old name:amount box. Payouts are optional: leave every place blank for an open pool. */
+const S26F_PL=['Winner','2nd','3rd','4th','5th','6th','7th','8th','9th','10th'];
+const s26fPlaceName=i=>S26F_PL[i]||((i+1)+'th');
+if(!Array.isArray(U.places))U.places=['',''];
+function s26fPoolCheck(){const e={},parts=b27PoolParts();
+  if(!b27Clean(U.text))e.terms=PT('eTerms');
+  if(parts.length<2)e.people=PT('ePeople');
+  let amt=null;const bt=String(U.entry==null?'':U.entry).trim();
+  if(!bt)e.buy=PT('eBuy');else{amt=b27PoolNum(bt);if(amt===null||amt<PULK.minAmt){e.buy=amt===null&&parseAmount(bt,false)===null?PT('eBuy'):PT('eBuyMin',{min:PULK.minAmt});amt=null}}
+  const pot=amt!==null&&parts.length>=2?amt*parts.length:null;
+  const vals=U.places.map(s=>String(s==null?'':s).trim());let places=null,sum=0,bad=false;
+  vals.forEach(v=>{if(!v)return;const n=b27PoolNum(v);if(n===null)bad=true;else sum+=n});
+  if(bad)e.pay=PT('ePlaceNum');
+  else if(vals.some(Boolean)){places=vals.map(v=>v?b27PoolNum(v):0);while(places.length&&!places[places.length-1])places.pop();
+    if(pot!==null&&sum!==pot)e.pay=PT('ePlaceSum',{sum:b27Num(sum),pot:b27Num(pot),diff:b27Num(Math.abs(pot-sum)),way:sum<pot?PT('short'):PT('over')})}
+  return {e,parts,amt,pot,sum,places:places&&places.length?places:null}}
+const s26fFirstErr=c=>c.e.terms||c.e.people||c.e.buy||c.e.pay||'';
+function s26fPotLine(c){return c.pot!==null?PT('potLine',{n:c.parts.length,buy:b27Num(c.amt),pot:b27Num(c.pot)}):PT('potWait')}
+function s26fSumLine(c){if(c.pot===null||!U.places.some(s=>String(s).trim()))return PT('payOpt');return PT('sumLine',{sum:b27Num(c.sum),pot:b27Num(c.pot)})+(c.sum===c.pot?' ✓':'')}
+function s26fPlaceRows(){return U.places.map((v,i)=>`<div class="s26pr"><label for="s26p${i}" class="s26pl">${esc(s26fPlaceName(i))}</label><input id="s26p${i}" class="sb-in s26pi" inputmode="decimal" autocomplete="off" placeholder="0" value="${esc(v)}" oninput="U.places[${i}]=this.value;b27PSync()">${i>=2?`<button type="button" class="s26px" aria-label="Remove ${esc(s26fPlaceName(i))}" onclick="s26fDelPlace(${i})">×</button>`:'<span class="s26px0"></span>'}</div>`).join('')}
+function s26fAddPlace(){if(U.places.length<10)U.places.push('');render();const x=document.getElementById('s26p'+(U.places.length-1));if(x)try{x.focus({preventScroll:false})}catch(e){}}
+function s26fDelPlace(i){U.places.splice(i,1);render()}
+function s26fPaint(show){const c=s26fPoolCheck(),sh=U.showErr||{};const set=(id,t)=>{const el=document.getElementById(id);if(el&&el.textContent!==t)el.textContent=t};
+  set('s26eTerms',sh.terms&&c.e.terms?c.e.terms:'');set('s26ePeople',sh.people&&c.e.people?c.e.people:'');set('s26eBuy',(sh.buy||String(U.entry).trim())&&c.e.buy?c.e.buy:'');
+  set('s26ePay',c.e.pay&&(sh.pay||c.e.pay)?c.e.pay:'');set('s26Pot',s26fPotLine(c));set('s26Sum',s26fSumLine(c));
+  const sumEl=document.getElementById('s26Sum');if(sumEl)sumEl.classList.toggle('ok',c.pot!==null&&c.sum===c.pot&&U.places.some(s=>String(s).trim()));
+  [['b27Text','terms'],['b27En','buy']].forEach(([id,k])=>{const el=document.getElementById(id);if(el){const on=!!(c.e[k]&&(sh[k]||(k==='buy'&&String(U.entry).trim())));el.classList.toggle('b27-errbox',on);el.setAttribute('aria-invalid',String(on))}});
+  document.querySelectorAll('.s26pi').forEach(el=>el.classList.toggle('b27-errbox',!!c.e.pay));return c}
+function s26fFocus(id){const box=document.getElementById(id);if(!box)return;try{box.scrollIntoView({block:'center'})}catch(e){}try{box.focus({preventScroll:true})}catch(e){box.focus()}}
+/* settle by place: the creator picks who finished in each place */
+function s26fSettleHtml(b){const sel=U.placeWho[b.id]||(U.placeWho[b.id]=[]);const ask=U.askSettle&&U.askSettle.id===b.id&&U.askSettle.what==='pool';
+  return `<div class="s26set"><div class="b27-lb">${esc(PT('pickWho'))}</div>${b.places.map((a,i)=>`<div class="s26pr"><label for="s26w_${b.id}_${i}" class="s26pl">${esc(s26fPlaceName(i))} <span class="mut">${esc(b27Num(a))}</span></label><select id="s26w_${b.id}_${i}" class="sb-in s26ps" onchange="U.placeWho['${b.id}'][${i}]=this.value;U.poolErr['${b.id}']='';U.askSettle=null"><option value="">${esc(PT('pickOne'))}</option>${b.parts.map(p=>`<option value="${esc(p)}"${sel[i]===p?' selected':''}>${esc(PN(p))}</option>`).join('')}</select></div>`).join('')}
+   ${U.poolErr[b.id]?`<div class="b27-bad-t" role="alert">${esc(U.poolErr[b.id])}</div>`:''}<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="s26fPlaceGo('${b.id}')"${U.busy?' disabled':''}>${esc(ask?POOL_TXT.again:POOL_TXT.save)}</button></div></div>`}
+function s26fPlaceGo(id){const b=U.doc.bets.find(x=>x.id===id);if(!b||!b.places)return;const sel=U.placeWho[id]||[];
+  if(b.places.some((a,i)=>!sel[i])){U.poolErr[id]=PT('ePickAll');U.askSettle=null;render();return}
+  const tot={};b.places.forEach((a,i)=>{tot[sel[i]]=(tot[sel[i]]||0)+a});const keys=b27PoolKeys(b27OwnerNames());
+  U.poolTxt[id]=Object.keys(tot).map(n=>keys[n]+':'+tot[n]).join(', ');b27PoolGo(id)}
+/*</S26F-POOL>*/
+
 /* settle-up from nets [[name,net],...] (sum 0): the biggest loser owes the biggest winner, repeat */
 function b27Greedy(nets){const d=nets.filter(x=>x[1]<0).map(x=>[x[0],-x[1]]),c=nets.filter(x=>x[1]>0).map(x=>[x[0],x[1]]),out=[];const srt=a=>a.sort((p,q)=>q[1]-p[1]||p[0].localeCompare(q[0]));
   while(d.length&&c.length){srt(d);srt(c);const m=Math.min(d[0][1],c[0][1]);out.push({from:d[0][0],to:c[0][0],num:m});d[0][1]-=m;c[0][1]-=m;if(!d[0][1])d.shift();if(!c[0][1])c.shift()}
@@ -2668,7 +2726,7 @@ function b27PoolValid(x,names){
   if(x.back&&typeof x.back==='object'&&!Array.isArray(x.back)){const raw={};for(const k of Object.keys(x.back))raw[legacyOwner(k)]=x.back[k];const bk={};let ok=true;
     for(const k of Object.keys(raw)){if(!parts.includes(k)||!Number.isInteger(raw[k])||raw[k]<0||raw[k]>POOL_MAX)ok=false;else bk[k]=raw[k]}
     if(ok){parts.forEach(p=>{if(!has(bk,p))bk[p]=0});if(parts.reduce((s,p)=>s+bk[p],0)===amt*parts.length)back=bk}}
-  return {id:x.id,n,kind:'pool',backer,parts,amt,back,text:b27Clean(x.text),created_at:new Date(t).toISOString(),status:['open','void'].includes(x.status)?x.status:'open',settled_at:x.settled_at&&isFinite(Date.parse(x.settled_at))?new Date(x.settled_at).toISOString():null/*<S25C-RX>*/,...(s25ValidExtra(x,names,'open').rx?{rx:s25ValidExtra(x,names,'open').rx}:{})/*</S25C-RX>*/};
+  return {id:x.id,n,kind:'pool',backer,parts,amt,back,text:b27Clean(x.text),created_at:new Date(t).toISOString(),status:['open','void'].includes(x.status)?x.status:'open',settled_at:x.settled_at&&isFinite(Date.parse(x.settled_at))?new Date(x.settled_at).toISOString():null/*<S26F-POOL>*/,...(Array.isArray(x.places)&&x.places.length&&x.places.length<=10&&x.places.every(v=>Number.isInteger(v)&&v>=0&&v<=POOL_MAX)&&x.places.reduce((s,v)=>s+v,0)===amt*parts.length?{places:x.places.slice()}:{})/*</S26F-POOL>*//*<S25C-RX>*/,...(s25ValidExtra(x,names,'open').rx?{rx:s25ValidExtra(x,names,'open').rx}:{})/*</S25C-RX>*/};
 }
 /* ---- the form (same components / classes as the live New bet form) ---- */
 function b27Kind(k){U.kind=k;U.msg='';U.confirm=false;render()}
@@ -2676,8 +2734,7 @@ const b27KindTabs=()=>`<div class="tabs" style="margin:8px 0"><button type="butt
 const b27PoolParts=()=>{const me=b27Who();return b27OwnerNames().filter(n=>n===me||U.pp.includes(n))};
 function b27PoolFormOK(){
   const me=b27Who();if(!me)return PT('eMe');
-  if(!b27Clean(U.text))return PT('eTerms');
-  const r=b27PoolParse(b27PoolParts(),U.entry,U.backTxt);return r.ok?'':r.err;
+  /*<S26F-POOL>*/return s26fFirstErr(s26fPoolCheck())/*</S26F-POOL>*/;
 }
 function b27PoolPP(i){const n=b27Others()[i];if(!n)return;const k=U.pp.indexOf(n);if(k>=0)U.pp.splice(k,1);else U.pp.push(n);b27PSync()}
 function b27PoolAll(){U.pp=b27Others().slice();b27PSync()}
@@ -2685,34 +2742,32 @@ function b27PoolClear(){U.pp=[];b27PSync()}
 function b27PSync(){try{const m=document.getElementById('main');if(!m)return;
   m.querySelectorAll('[data-b27-pp]').forEach(b=>b.setAttribute('aria-pressed',String(U.pp.includes(b27Others()[+b.getAttribute('data-b27-pp')]))));
   const sc=document.getElementById('b27SelCnt');if(sc)sc.textContent=U.pp.length?U.pp.length+' selected':'None selected';
-  const err=b27PoolFormOK(),pb=document.getElementById('b27Place');if(pb){pb.disabled=!!err||U.busy;pb.setAttribute('aria-disabled',String(!!err))}
-  const hint=document.getElementById('b27Hint');if(hint)hint.textContent=err&&(U.pp.length||U.text||U.entry||U.backTxt)?err:''}catch(e){}}
-function b27PoolForm(me){const others=b27Others();
+  /*<S26F-POOL>*/const pb=document.getElementById('b27Place');if(pb){pb.disabled=!!U.busy;pb.removeAttribute('aria-disabled')}s26fPaint()/*</S26F-POOL>*/}catch(e){}}
+function b27PoolForm(me){const others=b27Others();/*<S26F-POOL>*/setTimeout(()=>{try{s26fPaint()}catch(e){}},0);/*</S26F-POOL>*/
   return `<div class="card b27-form"><b>New bet</b> <span class="note">· you are <b>${esc(PN(me))}</b> <a href="#" onclick="presAsk();return false">(change)</a></span>${b27KindTabs()}
-   <div class="note">${esc(PT('intro'))}</div>
-   <textarea id="b27Text" class="sb-in b27-in" rows="3" maxlength="${PULK.maxText}" placeholder="${esc(PT('terms'))}" oninput="U.text=this.value;b27PSync()">${esc(U.text)}</textarea>
-   <div class="b27-q">${esc(POOL_TXT.participants)} <span class="note">${esc(POOL_TXT.youIn)}</span></div><div class="b27-opps" role="group" aria-label="${esc(POOL_TXT.participants)}" style="--n:${others.length}">${others.map((n,i)=>{const o=(D.owners.find(x=>x.name===n)||{});const on=U.pp.includes(n);return `<button type="button" class="b27-chip op" data-b27-pp="${i}" data-b27-name="${esc(n)}" aria-label="${esc(TN(n))}" aria-pressed="${on}" onclick="b27PoolPP(${i})"><span class="ck" aria-hidden="true">✓</span><span class="em" aria-hidden="true">${esc(o.emoji||'')}</span><span class="nm" aria-hidden="true"><span class="f">${esc(TN(n))}</span><span class="sh">${esc(b27ShortT(n))}</span><span class="xs">${esc(b27TinyT(n))}</span></span></button>`}).join('')}</div>
+   <div class="s26st"><label for="b27Text" class="b27-lb"><span class="s26n">1</span>${esc(PT('s1'))}</label><textarea id="b27Text" class="sb-in b27-in" rows="2" maxlength="${PULK.maxText}" placeholder="${esc(PT('termsPh'))}" aria-describedby="s26eTerms" oninput="U.text=this.value;b27PSync()">${esc(U.text)}</textarea><div id="s26eTerms" class="s26err" role="alert"></div></div>
+   <div class="s26st"><div class="b27-lb" id="s26lPeople"><span class="s26n">2</span>${esc(PT('s2'))} <span class="note">${esc(POOL_TXT.youIn)}</span></div><div class="b27-opps" role="group" aria-labelledby="s26lPeople" style="--n:${others.length}">${others.map((n,i)=>{const o=(D.owners.find(x=>x.name===n)||{});const on=U.pp.includes(n);return `<button type="button" class="b27-chip op" data-b27-pp="${i}" data-b27-name="${esc(n)}" aria-label="${esc(TN(n))}" aria-pressed="${on}" onclick="b27PoolPP(${i})"><span class="ck" aria-hidden="true">✓</span><span class="em" aria-hidden="true">${esc(o.emoji||'')}</span><span class="nm" aria-hidden="true"><span class="f">${esc(TN(n))}</span><span class="sh">${esc(b27ShortT(n))}</span><span class="xs">${esc(b27TinyT(n))}</span></span></button>`}).join('')}</div>
    <div class="b27-selbar"><button type="button" class="b27-sm" onclick="b27PoolAll()">Select all</button><button type="button" class="b27-sm" onclick="b27PoolClear()">Clear</button><span class="cnt" id="b27SelCnt" aria-live="polite">${U.pp.length?U.pp.length+' selected':'None selected'}</span></div>
-   <div class="b27-cw"><label for="b27En" class="sr">${esc(POOL_TXT.fBuy)}</label><input id="b27En" class="sb-in b27-in" autocomplete="off" placeholder="${esc(POOL_TXT.fBuy)}" value="${esc(U.entry)}" oninput="U.entry=this.value;b27PSync()"></div>
-   <div class="b27-cw"><label for="b27Bk" class="sr">${esc(POOL_TXT.fPay)}</label><textarea id="b27Bk" class="sb-in b27-in" rows="2" autocomplete="off" placeholder="${esc(POOL_TXT.fPay)}" oninput="U.backTxt=this.value;b27PSync()">${esc(U.backTxt)}</textarea></div>
-   <div class="note" style="margin-top:6px">${esc(PT('help',{keys:b27PoolKeyList()}))}</div>
-   <div class="b27-bad-t" id="b27Hint"></div><button type="button" id="b27Place" class="btn b27-big" onclick="b27Place()"${b27PoolFormOK()?' disabled':''}>${esc(POOL_TXT.build)}</button></div>`}
-function b27PoolSummary(){const ps=b27PoolParts(),r=b27PoolParse(ps,U.entry,U.backTxt);return r.ok?PT('sum',{names:ps.map(PN).join(', '),buy:b27Num(r.amt),tot:b27Num(r.amt*ps.length)}):''}
+   <div id="s26ePeople" class="s26err" role="alert"></div></div>
+   <div class="s26st"><label for="b27En" class="b27-lb"><span class="s26n">3</span>${esc(PT('s3'))}</label><input id="b27En" class="sb-in b27-in s26buy" inputmode="decimal" autocomplete="off" placeholder="${esc(PT('buyPh'))}" value="${esc(U.entry)}" aria-describedby="s26Pot s26eBuy" oninput="U.entry=this.value;b27PSync()"><div id="s26Pot" class="s26pot" aria-live="polite"></div><div id="s26eBuy" class="s26err" role="alert"></div></div>
+   <div class="s26st"><div class="b27-lb"><span class="s26n">4</span>${esc(PT('s4'))}</div><div class="note">${esc(PT('helpPl'))}</div>${s26fPlaceRows()}<button type="button" class="b27-sm s26add" onclick="s26fAddPlace()"${U.places.length>=10?' disabled':''}>${esc(PT('addPlace'))}</button><div id="s26Sum" class="s26sum" aria-live="polite"></div><div id="s26ePay" class="s26err" role="alert"></div></div>
+   <button type="button" id="b27Place" class="btn b27-big" onclick="b27Place()">${esc(POOL_TXT.build)}</button></div>`}
+function b27PoolSummary(){const ps=b27PoolParts(),r=/*<S26F-POOL>*/(c=>({ok:!s26fFirstErr(c),amt:c.amt}))(s26fPoolCheck())/*</S26F-POOL>*/;return r.ok?PT('sum',{names:ps.map(PN).join(', '),buy:b27Num(r.amt),tot:b27Num(r.amt*ps.length)}):''}
 function b27PoolResultLines(parts,amt,back){if(!back)return [PT('open')];const nets=parts.map(p=>[p,back[p]-amt]);
   return nets.map(([p,v])=>PT('row',{name:PN(p),got:b27Num(back[p]),net:b27Signed(v)})).concat(b27Greedy(nets).map(s=>PT('settleUp',{from:PN(s.from),to:PN(s.to),n:b27Num(s.num)})))}
-function b27PoolConfirmHtml(){const ps=b27PoolParts(),r=b27PoolParse(ps,U.entry,U.backTxt);if(!r.ok)return '';
-  return `<div class="card b27-confirm"><b>${esc(POOL_TXT.confirmTitle)}</b><div class="b27-sum">${esc(b27PoolSummary())}</div><div id="b27Live">${b27PoolResultLines(ps,r.amt,r.back).map((l,i,a)=>`<div class="${r.back&&i>=ps.length?'b27-l':'b27-w'}">${esc(l)}</div>`).join('')}</div>
+function b27PoolConfirmHtml(){const ps=b27PoolParts(),c=s26fPoolCheck(),r={ok:!s26fFirstErr(c),amt:c.amt,back:null,places:c.places};if(!r.ok)return '';
+  return `<div class="card b27-confirm"><b>${esc(POOL_TXT.confirmTitle)}</b>${b27Clean(U.text)?`<div class="s26terms">${esc(b27Clean(U.text))}</div>`:''}<div class="b27-sum">${esc(b27PoolSummary())}</div>${r.places?`<div class="b27-m">${esc(PT('payLine',{x:r.places.map((a,i)=>s26fPlaceName(i)+' '+b27Num(a)).join(' · ')}))}</div>`:''}<div id="b27Live">${b27PoolResultLines(ps,r.amt,r.back).map((l,i,a)=>`<div class="${r.back&&i>=ps.length?'b27-l':'b27-w'}">${esc(l)}</div>`).join('')}</div>
    <div class="b27-act"><button type="button" class="btn b27-big" onclick="b27Confirm()"${U.busy?' disabled':''}>${U.busy?'Saving…':esc(POOL_TXT.go)}</button><button type="button" class="btn sec b27-big" onclick="b27Edit()"${U.busy?' disabled':''}>${esc(POOL_TXT.change)}</button></div></div>`}
-function b27PoolPlace(){const e=b27PoolFormOK();if(e){b27Err(e);render();return}U.msg='';U.confirm=true;render()}
-function b27PoolRecord(){const ps=b27PoolParts(),r=b27PoolParse(ps,U.entry,U.backTxt),k='pool|'+ps.join('|')+'|'+r.amt+'|'+JSON.stringify(r.back)+'|'+b27Clean(U.text),me=b27Who();
-  return {id:U.fids[k]||(U.fids[k]=b27Rid()),kind:'pool',backer:me,parts:ps,amt:r.amt,back:r.back,text:b27Clean(U.text),status:'open'}}
+function b27PoolPlace(){const e=b27PoolFormOK();/*<S26F-POOL>*/if(e){U.msg='';U.showErr={terms:1,people:1,buy:1,pay:1};render();const c=s26fPoolCheck();s26fFocus(c.e.terms?'b27Text':c.e.people?'s26lPeople':c.e.buy?'b27En':'s26p0');return}/*</S26F-POOL>*/U.msg='';U.confirm=true;render()}
+function b27PoolRecord(){const ps=b27PoolParts(),c=s26fPoolCheck(),r={amt:c.amt,back:null,places:c.places},k='pool|'+ps.join('|')+'|'+r.amt+'|'+JSON.stringify(r.places)+'|'+b27Clean(U.text),me=b27Who();
+  return Object.assign({id:U.fids[k]||(U.fids[k]=b27Rid()),kind:'pool',backer:me,parts:ps,amt:r.amt,back:null,text:b27Clean(U.text),status:'open'},r.places?{places:r.places}:{})}
 async function b27PoolConfirm(){
   if(U.busy)return;const e=b27PoolFormOK();if(e){b27Err(e);U.confirm=false;render();return}
   U.busy=true;U.msg='Saving…';U.msgBad=false;render();const nb=b27PoolRecord();
   try{
     const back=await b27Write(cur=>{if(cur.some(c=>c.id===nb.id))return cur;if(cur.length+1>PULK.maxBets)throw new Error('full');const at=new Date().toISOString();return cur.concat([Object.assign({},nb,{n:b27MaxN(cur)+1,created_at:at,settled_at:/*<V25>*/nb.back?s25At():/*</V25>*/null})])},cur=>cur.some(b=>b.id===nb.id));
     U.mine.add(nb.id);b27Apply(back);const m=back.find(b=>b.id===nb.id);
-    U.msg=PT(m&&m.back?'placedDone':'placed',{n:m?m.n:''});/*<S25C-FX>*/s25PlacedFx(nb.id);/*</S25C-FX>*/U.msgBad=false;U.opps=[];U.pp=[];U.entry='';U.backTxt='';U.text='';U.confirm=false;U.fids={};
+    U.msg=PT(m&&m.back?'placedDone':'placed',{n:m?m.n:''});/*<S25C-FX>*/s25PlacedFx(nb.id);/*</S25C-FX>*/U.msgBad=false;U.opps=[];U.pp=[];U.entry='';U.backTxt='';U.text='';U.places=['',''];U.showErr={};U.confirm=false;U.fids={};
     clearTimeout(U.undoT);U.undoT=setTimeout(()=>{if(tab==='bets27')render()},PULK.undoMs+300);
   }catch(e){U.msg=e&&e.message==='full'?'The bets ledger is full.':PT('cantSave');U.msgBad=true;U.confirm=true}
   U.busy=false;render();
@@ -2737,10 +2792,12 @@ function b27PoolCard(b,me){
   const stTxt=st==='void'?POOL_TXT.stVoid:b.back?POOL_TXT.stDone:POOL_TXT.stOpen;
   let h=`<div class="card b27-c b27-pool"${/*<S24-EDIT>*/s24Attr('b',b.id)/*</S24-EDIT>*/}><div class="s24hd"><b>${esc(POOL_TXT.word)} #${b.n}</b> <span class="st ${st==='void'?'unparsed':done?'settled':'open'}">${esc(stTxt)}</span> <span class="mut" style="font-size:12px">${esc(b27Day(Date.parse(b.created_at)))}</span> <span class="mut" style="font-size:12px">· ${esc(PT('who',{n:b.parts.length}))}</span>${/*<S24-EDIT>*/s24LinkBtn('bets',b.id,'pool')/*</S24-EDIT>*/}</div>
    <div class="b27-t">${esc(b.text)}</div><div class="b27-m">${esc(PT('line',{buy:b27Num(b.amt),tot:b27Num(b.amt*b.parts.length)}))}</div><div class="b27-m">${esc(PT('with',{names:b.parts.map(PN).join(', ')}))}</div>`;
+  /*<S26F-POOL>*/if(b.places)h+=`<div class="b27-m">${esc(PT('payLine',{x:b.places.map((a,i)=>s26fPlaceName(i)+' '+b27Num(a)).join(' · ')}))}</div>`;/*</S26F-POOL>*/
   if(st==='open'&&!b.back)h+=`<div class="note" style="margin-top:6px">${esc(POOL_TXT.noPay)}</div>`;
   if(done)h+=`<div class="note" style="margin-top:6px"><b>${esc(POOL_TXT.result)}:</b></div>`+b27PoolResultLines(b.parts,b.amt,b.back).map((l,i)=>`<div class="${i>=b.parts.length?'b27-l':'b27-w'}" style="margin-top:2px">${esc(l)}</div>`).join('');
   /*<S25D-TS>*/h+='<div class="s25sp" aria-hidden="true"></div>'+s25dTsHtml(b);/*</S25D-TS>*/
-  if(b27PoolCanSettle(b,me)){const ask=U.askSettle&&U.askSettle.id===b.id&&U.askSettle.what==='pool';
+  if(b27PoolCanSettle(b,me)&&b.places){if(!U.placeWho)U.placeWho={};h+=s26fSettleHtml(b)}
+  else if(b27PoolCanSettle(b,me)){const ask=U.askSettle&&U.askSettle.id===b.id&&U.askSettle.what==='pool';
     h+=`<div class="b27-cw"><label for="pb_${b.id}" class="sr">${esc(POOL_TXT.fPay)}</label><textarea id="pb_${b.id}" class="sb-in b27-in" rows="2" autocomplete="off" placeholder="${esc(POOL_TXT.fPay)}" oninput="U.poolTxt['${b.id}']=this.value;U.poolErr['${b.id}']='';U.askSettle=null">${esc(U.poolTxt[b.id]||'')}</textarea></div>${U.poolErr[b.id]?`<div class="b27-bad-t" role="alert">${esc(U.poolErr[b.id])}</div>`:''}
      <div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27PoolGo('${b.id}')"${U.busy?' disabled':''}>${esc(ask?POOL_TXT.again:POOL_TXT.save)}</button></div>`}
   if(st==='open'&&(me===b.backer||ADMIN)){
@@ -2854,7 +2911,7 @@ function vB27(){
   /*<POOL>*/else if(U.confirm&&U.kind==='pool'){h+=b27PoolConfirmHtml()}/*</POOL>*/
   else if(U.confirm){
     const e=b27FormOK();
-    h+=`<div class="card b27-confirm"><b>Check it, then confirm</b>${/*<S24-EDIT>*/s24EditHint()/*</S24-EDIT>*/}<div class="b27-sum">${esc(b27Summary())}</div>${/*<S25>*/s25ConfirmLine()/*</S25>*/}<div id="b27Live">${b27LiveHtml()}</div>
+    h+=`<div class="card b27-confirm"><b>Check it, then confirm</b>${/*<S24-EDIT>*/s24EditHint()/*</S24-EDIT>*/}${/*<S26F-TERMS>*/b27Clean(U.text)?`<div class="s26terms">${esc(b27Clean(U.text))}</div>`:''/*</S26F-TERMS>*/}<div class="b27-sum">${esc(b27Summary())}</div>${/*<S25>*/s25ConfirmLine()/*</S25>*/}<div id="b27Live">${b27LiveHtml()}</div>
      <div class="b27-act"><button type="button" class="btn b27-big" onclick="b27Confirm()"${U.busy?' disabled':''}>${U.busy?'Saving…':'✅ Yes, place it'}</button><button type="button" class="btn sec b27-big" onclick="b27Edit()"${U.busy?' disabled':''}>← Change</button></div></div>`;
   }else{
     const oc=U.odds?U.odds.join('-'):'';
@@ -2873,8 +2930,8 @@ function vB27(){
   const bets=U.doc.bets.slice().sort((a,b)=>b.n-a.n),T=b27Tally(bets);
   const ppl=Object.entries(T.per).sort((a,b)=>b[1].net-a[1].net);
   /*<BALL-LOADER>*/if(U.state==='init'){h+=ballLoader();h+=introBottom;return h}   // ledger still loading: loader instead of an empty owes table / "No bets yet/*</BALL-LOADER>*/
-  /*<OWES-TABLE>*/h+=b27OwesHtml(T);/*</OWES-TABLE>*/
-  h+=`<div class="note" style="margin-top:6px">Still open: ${T.openCount} bet${T.openCount===1?'':'s'}, ${b27Num(T.openTotal)} in total.</div></div>`;
+  /*<OWES-TABLE>*//*<S26F-WIU>*/// Write it Up: no Who Owes Who grid / Net per manager here; they live on Tally only (vTally, unchanged)/*</S26F-WIU>*//*</OWES-TABLE>*/
+  /*<S26F-WIU> 'Still open' line removed from Write it Up (its closing </div> belonged to the removed owes card) </S26F-WIU>*/
   /*<S24-EDIT>*/{const FL=s24Filter(bets,me);
   h+=`<h2>Bets (${FL.length}${FL.length!==bets.length?' of '+bets.length:''})${/*<S25>*/s25MuteBtn()/*</S25>*/}</h2>`+s24FilterBar(bets,me)+(FL.length?FL.slice(0,60).concat(S24.sub&&tab==='bets27'?FL.slice(60).filter(b=>b.id===S24.sub):[]).map(b=>/*<POOL>*/b.kind==='pool'?b27PoolCard(b,me):/*</POOL>*/b27Card(b,me)).join('')/*<S25>*/.replace(/^/,'<div class="b27-grid">')+'</div>'/*</S25>*/:bets.length?'<div class="card note s24fe">No bets match this filter.</div>':'<div class="card note">No bets yet. Be the first.</div>');}/*</S24-EDIT>*/
   if(bets.length>60)h+='<p class="note">Showing the latest 60.</p>';
@@ -2946,13 +3003,13 @@ const tMoney=v=>b27Num(v/((D.bets.currency||{}).display_unit||1000));   // displ
    5) Copy link / Share: built ONLY from origin + path (+ ?demo=1 in the demo) + the route hash. Never ?admin, never names, never ledger keys.
    6) Tabs are <a href>: plain click switches in place (pushState), modifier / middle / right click = browser default. */
 const S24={sub:null,last:null,route0:false,prep:null,done:null,hlUntil:0,nf:null};
-const S24_H2T={standings:'standings',ranks:'standings',games:'games',schedule:'games',scores:'games',rosters:'rosters',squads:'rosters',points:'@points',rankings:'teams',apnet:'teams','ap-net':'teams',ap:'teams',net:'teams',polls:'teams',bets:'@bets',bets27:'@bets','bets-2025-26':'bets',bets2526:'bets',teams:'teams',postseason:'checklist',checklist:'checklist',redraft:'redraft',archive:'archive',rules:'about',about:'about'};
+const S24_H2T={standings:'standings',ranks:'standings',games:'games',schedule:'games',scores:'games',rosters:'@points',squads:'@points',owner:'@points',points:'@points',rankings:'teams',apnet:'teams','ap-net':'teams',ap:'teams',net:'teams',polls:'teams',bets:'@bets',bets27:'@bets','bets-2025-26':'bets',bets2526:'bets',teams:'teams',postseason:'checklist',checklist:'checklist',redraft:'redraft',archive:'archive',rules:'about',about:'about'};
 const s24HasNew=()=>typeof VIEWS!=='undefined'&&!!VIEWS.bets27;
 const s24IdOK=v=>typeof v==='string'&&/^[A-Za-z0-9_-]{1,40}$/.test(v);
 function s24TabFromHash(h){const t=S24_H2T[h];if(!t)return null;/*<S26E>*/if(t==='@points'){s26eView('points');return 'standings'}/*</S26E>*/if(t==='@bets')return s24HasNew()?'bets27':'bets';return t}
 function s24HashOf(t){return ({bets27:'bets',bets:s24HasNew()?'bets-2025-26':'bets',checklist:'postseason',about:'rules'})[t]||t}
 function s24Read(h){const m=/^#?([a-z0-9-]+)(?:\/([A-Za-z0-9_-]{1,40}))?(?:$|[&?\/])/i.exec(String(h||''));if(!m)return null;let t=s24TabFromHash(m[1].toLowerCase());if(!t)return null;
-  /*<S26E>*/if(t==='standings'&&m[2]){const s=m[2].toLowerCase();if(/^(apnet|ap-net|ap|net|rankings|polls)$/.test(s))t='teams';else if(s==='points')s26eView('points');else if(s==='league')s26eView('league')}/*</S26E>*/
+  /*<S26E>*/if(t==='standings'&&m[2]){const s=m[2].toLowerCase();if(/^(apnet|ap-net|ap|net|rankings|polls)$/.test(s))t='teams';else if(/^(points|breakdown|rosters|squads)$/.test(s))s26eView('points');else if(s==='league')s26eView('league')}/*</S26E>*/
   return {t,sub:m[2]&&(t==='bets27'||t==='games')?m[2]:null}}
 const s24RouteHash=()=>s24HashOf(tab)+(S24.sub?'/'+S24.sub:'');
 /* address-bar / href URL: path + (?demo=1) + (?admin=1 only in the address bar of an admin, never in shared links) + hash */
@@ -3006,7 +3063,7 @@ function s24After(){
   if(tab!==S24.last){if(S24.sub&&S24.prep!==tab+'/'+S24.sub)S24.sub=null;S24.last=tab;S24.nf=null;s24Put(true)/*<TAB-TOP>*/;if(!S24.sub)window.scrollTo(0,0)/*</TAB-TOP>*/}
   /*<TAB-TOP>*/if(!S24.top0){S24.top0=1;if(!S24.sub)window.scrollTo(0,0)}/*</TAB-TOP>*/
   const m=document.getElementById('main');if(!m)return;
-  const seg=m.querySelector(':scope > .ob-seg');(seg||m).insertAdjacentHTML(seg?'afterend':'afterbegin',`<div class="s24lb">${/*<OWES-RESTORE>*/tab==='bets27'&&!(typeof OB_VIEW!=='undefined'&&OB_VIEW==='tally')?'<button type="button" class="s24lk owes-jump" data-owes-jump="1" onclick="owesJump()">💸 Who Owes Who ↓</button>':''/*</OWES-RESTORE>*/}<button type="button" class="s24lk" data-s24-share="tab" onclick="s24Share()">🔗 ${s24CanShare()?'Share':'Copy link'}</button></div>`+(S24.nf&&S24.nf.t===tab?`<div class="card s24nf note" role="status">${esc(S24.nf.msg)}</div>`:''));
+  const seg=m.querySelector(':scope > .ob-seg');(seg||m).insertAdjacentHTML(seg?'afterend':'afterbegin',`<div class="s24lb">${/*<OWES-RESTORE>*/false/*<S26F-WIU> jump button removed </S26F-WIU>*/?'<button type="button" class="s24lk owes-jump" data-owes-jump="1" onclick="owesJump()">💸 Who Owes Who ↓</button>':''/*</OWES-RESTORE>*/}<button type="button" class="s24lk" data-s24-share="tab" onclick="s24Share()">🔗 ${s24CanShare()?'Share':'Copy link'}</button></div>`+(S24.nf&&S24.nf.t===tab?`<div class="card s24nf note" role="status">${esc(S24.nf.msg)}</div>`:''));
   s24DeepGo();
 }
 function s24NotFound(what){S24.nf={t:tab,msg:'That '+what+' wasn’t found (the link may be old or wrong). Showing the whole tab.'};const k=tab+'/'+S24.sub;S24.sub=null;S24.done=k;s24Put(false);render()}

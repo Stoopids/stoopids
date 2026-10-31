@@ -1,0 +1,24 @@
+STOOPIDS s26d1: STAGED ONLY, NOT PUBLISHED. Built 2026-10-31 WIB.
+Base: s26d index.html c7644cc1d95dd0337269e28f365688d5 (live). Only change: bouncing-basketball loader 3x (CSS block S26E-BIG-LOADER before </style>): ball clamp(56px,22vw,120px) = 70px@320, 86px@390, 120px desktop; bounce height, shadow, gaps and text (clamp 15-24px) scale with it; reduced-motion pose scaled. Draft Room's loader (fantasy-bball-releases s26c3-league/s26c/s25-full league-app.css) is still the old 30px, so nothing to match.
+
+s26e (2026-10-31 WIB): STAGED ONLY. Base s26d1 index.html 4f9e22c3d0493fe1004357dc6bf72236 (live, big loader kept). Diff: /workspace/audit/s26e/s26d1_to_s26e.diff.
+ - Standings switch 'League | Points' (AP / NET option removed). League unchanged. Points = per manager: o.total header, then each team's t.by points per category (W, Conf = conf_reg+conf_tourn, NCAA, PI, NW, Up, F4, Ch, ± missed dance/adjustments), '—' for none, team total t.total. Verified rows = team totals, team totals = manager total = League (live and ?demo=1).
+ - All teams: columns Team, Owner, Rec, AP (live ESPN AP Top 25, same feed as before), NET (data/net.json); best record first (win %, wins, then NET); '—' unranked; fits 320 (in-chip AP badge hidden in this table only, since AP has its own column).
+ - Nav unchanged from live (Rosters/Squads and the date-windowed Postseason checklist tab both kept as live). No Rankings tab.
+ - Redirects: ?tab=apnet / rankings, #apnet, #rankings, #standings/apnet, ?tab=standings&view=apnet -> All teams. ?tab=points, #points, #standings/points -> Standings > Points. Rosters/squads/checklist links behave exactly as live.
+
+s26f (2026-10-31 WIB): STAGED ONLY. Base s26e2 index.html c59767ecaf8c9d33a425658f3ed7b0b1 (live). Only change: header photo height (CSS block S26F-SHORT-HERO): desktop clamp(110px,15vw,160px) (was ~343px), phone clamp(84px,29vw,118px) (was ~244px at 390); same cover background, crop moved to center 32% desktop / 18% phone. Markup unchanged. Diff: /workspace/audit/s26f/s26e2_to_s26f.diff.
+ - Pool form rebuilt as 4 labeled steps (1 What's the pool / 2 Who's in / 3 Buy-in per person + live 'Pot: N × buy = pot' / 4 Payouts by place: Winner, 2nd, '+ Add place', amounts only, live 'Adds up to X of pot', mismatch error next to the payouts). Errors show next to their own field; Build focuses the first bad field. Payouts optional.
+   New optional record field places:[amount by place]; settle = creator picks a participant per place -> the usual back:{name:amount}. Old pools (no places) still render and settle with the name:amount box; existing records read identically (tested).
+ - 'Check it, then confirm' shows the terms at the top for pool, one-side and multi-opponent bets.
+ - Write it Up: Who Owes Who grid, Net per manager and the 'Who Owes Who' jump button removed (Tally unchanged, tested identical).
+ - Rosters/Squads tab removed; ?tab=rosters|squads, #rosters, #squads, #owner, #standings/rosters -> Standings > Breakdown; tapping a manager card opens Breakdown scrolled to that manager.
+ Tests: textdb stubbed in-browser (GET seeded from a read-only snapshot, POST captured locally); 0 real network writes; 0 page errors.
+s26f additions (2026-10-31 WIB, STAGED ONLY):
+ - Pool/buy-in form as 4 labeled steps: 1 What's the pool (Terms), 2 Who's in, 3 Buy-in per person with live 'Pot: N × buy = pot', 4 Payouts by place (Winner, 2nd, + Add place; amounts only) with live 'Adds up to X of pot' and per-field errors (red outline + focus). Payouts optional.
+ - New optional pool field places:[amounts by place] (must sum to pot). Settle: creator picks a participant per place -> the usual back:{name:amount}. Old pools (no places) keep the name:amount box; old records read/settle unchanged.
+ - Confirm card shows the terms at the top (pool, one-side and bundle bets).
+ - Write it Up: Who Owes Who grid, Net per manager and the 'Who Owes Who ↓' jump button removed (Tally unchanged).
+ - Rosters/Squads view and nav tab removed; ?tab=rosters/squads, #rosters, #squads, #standings/rosters, #owner -> Standings > Breakdown; tapping a manager card opens Breakdown scrolled to that manager.
+ Tests stubbed textdb (0 real network writes).
+s26f: removed 'Still open: N bets, X in total.' line from Write it Up only (Tally has no copy). index.html md5 e3b543531171d2050ae9a351153ea2a0
