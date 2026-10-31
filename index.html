@@ -513,6 +513,16 @@ nav a.nt{text-decoration:none}
 .d27g{flex:none;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.25em;background:#f5c518;color:#111}.d27g.tbd{background:rgba(255,255,255,.15);color:inherit}
 .d27c p{margin:.5em 0 0;font-size:.92em}.d27soon{opacity:.65;font-style:italic}.d27c details summary{cursor:pointer;margin-top:.4em;opacity:.8}
 /*</S26D-DRAFT>*/
+/*<S26E-BIG-LOADER>*/ /* 3x loader: ball = --bs (120px desktop, shrinks with vw on phones); every px of the old 30px loader is scaled by --bs/30 */
+.bl{--bs:clamp(56px,22vw,120px);gap:calc(var(--bs)*.27);padding:calc(var(--bs)*.85) 0 calc(var(--bs)*.65);max-width:100%;overflow:hidden}
+.bl-row{gap:calc(var(--bs)*.45)}
+.bl-b{width:var(--bs);height:calc(var(--bs)*2.2)}
+.bl-b i{width:var(--bs);height:var(--bs);font-size:calc(var(--bs)*.9);line-height:var(--bs)}
+.bl-b s{left:calc(var(--bs)*.1);width:calc(var(--bs)*.8);height:calc(var(--bs)*.2);box-shadow:0 0 calc(var(--bs)*.13) rgba(255,255,255,.12)}
+.bl-t{font-size:clamp(15px,4.6vw,24px);font-weight:600}
+@keyframes blBounce{0%,100%{transform:translateY(0) scale(1,1);animation-timing-function:cubic-bezier(.4,0,.9,.6)}46%{transform:translateY(calc(var(--bs)*1.1)) scale(1,1)}50%{transform:translateY(calc(var(--bs)*1.133)) scale(1.14,.84);animation-timing-function:cubic-bezier(.1,.4,.6,1)}56%{transform:translateY(calc(var(--bs)*1.033)) scale(.94,1.08)}}
+@media (prefers-reduced-motion:reduce){.bl-b i{transform:translateY(calc(var(--bs)*1.133))}}
+/*</S26E-BIG-LOADER>*/
 </style>
 </head>
 <body>
