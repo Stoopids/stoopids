@@ -523,6 +523,18 @@ nav a.nt{text-decoration:none}
 @keyframes blBounce{0%,100%{transform:translateY(0) scale(1,1);animation-timing-function:cubic-bezier(.4,0,.9,.6)}46%{transform:translateY(calc(var(--bs)*1.1)) scale(1,1)}50%{transform:translateY(calc(var(--bs)*1.133)) scale(1.14,.84);animation-timing-function:cubic-bezier(.1,.4,.6,1)}56%{transform:translateY(calc(var(--bs)*1.033)) scale(.94,1.08)}}
 @media (prefers-reduced-motion:reduce){.bl-b i{transform:translateY(calc(var(--bs)*1.133))}}
 /*</S26E-BIG-LOADER>*/
+/*<S26E>*/
+.orl{display:grid;gap:8px}.pcard{padding:10px;min-width:0}
+.orh{display:flex;align-items:center;gap:8px;cursor:pointer}.orh .who{flex:1;min-width:0}.orh .who b{display:block;overflow-wrap:anywhere}.orh .who small{display:block;opacity:.7}
+.orh .pts{text-align:right;font-weight:800;font-size:1.3em}.orh .pts small{display:block;font-size:.55em;font-weight:400;opacity:.7}
+.prow{border-top:1px solid rgba(255,255,255,.08);padding:6px 0 4px;margin-top:6px}.pchip{min-width:0}.pchip .chip{max-width:100%}
+.pg{display:grid;grid-template-columns:repeat(9,minmax(0,1fr)) minmax(0,1.25fr);text-align:center;font-size:12px;line-height:1.5}
+.ph{margin-top:4px;font-size:10px;opacity:.6;letter-spacing:.01em}.ph span{overflow:hidden;white-space:nowrap}
+.pv span{min-width:0}.ptot{font-weight:800;color:#FFD400}.prow.drop .pv{opacity:.7}
+.tap{padding:6px 4px}.tap table{width:100%;border-collapse:collapse;table-layout:fixed}.tap th,.tap td{padding:5px 3px;font-size:13px}.tap th{white-space:nowrap;font-size:11px;letter-spacing:0}.tap th:nth-child(1){width:46%}.tap th:nth-child(2){width:18%}.tap th:nth-child(3){width:13%}.tap th:nth-child(4),.tap th:nth-child(5){width:11.5%}.tap td{font-size:12px}.tap td.n{white-space:nowrap}
+.tap .aprk{display:none}.tap .chip,.tap .chip *{overflow-wrap:normal;word-break:normal;hyphens:none}
+.tap td:first-child .chip{max-width:100%}.tap td:nth-child(2){overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tap tr.drop td{opacity:.7}
+/*</S26E>*/
 </style>
 </head>
 <body>
@@ -1166,7 +1178,7 @@ function ownerKey(n){return typeof legacyOwner==='function'?legacyOwner(n):n}
 function PN(n){const k=ownerKey(n);return OWNER_DISP[k]?OWNER_DISP[k].person:n}   // person name (any place that shows one name)
 function TN(n){const k=ownerKey(n);const o=D&&D.owners&&D.owners.find(x=>x.name===k);return OWNER_DISP[k]?OWNER_DISP[k].team:(o&&o.team_name)||n}   // team name
 /*</OWNER-NAMES>*/
-function vStandings(){/*<RANKINGS>*/const sv=rkView();if(sv==='apnet')return rkSeg()+vRankings();/*</RANKINGS>*/
+function vStandings(){/*<RANKINGS>*/const sv=rkView();if(sv==='points')return rkSeg()+vPoints();/*</RANKINGS>*/
   const mx=Math.max(10,...D.owners.map(o=>o.total));
   return /*<RANKINGS>*/rkSeg()+/*</RANKINGS>*//*<RANK-CHIPS>*/'<div class="ocl">'/*</RANK-CHIPS>*/+D.owners.map((o,i)=>`<div class="card${/*<RANK-CHIPS>*/' oc'/*</RANK-CHIPS>*/}"><div class="lb" onclick="goOwner('${esc(o.name)}')">
     <div class="rank">${rankTxt(o)}</div>
@@ -1780,7 +1792,8 @@ function vRosters(){
       h+=`</div></td></tr>`}
   });
   h+=`</table></div>`;return h}
-function vTeams(){
+function vTeams(){return vTeamsAP()}
+function vTeams0(){
   const rows=[];D.owners.forEach(o=>o.teams.forEach(t=>rows.push({o:o.name,t})));
   rows.sort((a,b)=>b.t.total-a.t.total||a.t.tid.localeCompare(b.t.tid));
   return `<div class="card sc"><table><tr><th>Team</th><th>Owner</th><th class="n">Record</th><th class="n">Pts</th></tr>${rows.map(r=>`<tr><td>${chip(r.t.tid,{out:r.t.status==='dropped'})}</td><td>${esc(r.o)}</td><td class="n">${rec(r.t.tid)}</td><td class="n"><b>${r.t.total}</b></td></tr>`).join('')}</table></div><p class="note">Record = full season record (regular season + conference tournaments + postseason as ESPN counts it). Points only count inside each owner's ownership window.</p>`}
@@ -1892,6 +1905,32 @@ function vArchive(){
       archTeams(o)+`</div>`).join('')+`</div>`;
   return h+archAllTime(A)}
 const VIEWS={standings:/*<HDR-CENTER>*/()=>vStandings()+'<div id="fresh" class="fresh stfoot" hidden><span></span></div>'/*</HDR-CENTER>*/,games:vGames,bets:vBets,rosters:vRosters,teams:vTeams,checklist:vChecklist,redraft:vRedraft,archive:vArchive,about:vAbout};
+/*<S26E>*/
+/* Standings > Points: per-manager breakdown. Every number is the page's own scoring output from data.js (the same fields the League view and the owner breakdown use):
+   cell = t.by[category] (points that team earned for that owner, inside its redraft window), team total = t.total, manager total = o.total.
+   Conf = conf_reg + conf_tourn. Missed dance (-1) and commissioner adjustments have their own column so every row adds up to its total. */
+function s26eView(v){try{localStorage.setItem('standingsView',v)}catch(e){}}
+/* old AP / NET links (?tab=apnet, ?tab=rankings, ?tab=standings&view=apnet, #apnet, #standings/apnet) -> All teams, which now has AP and NET columns. ?tab=points / ?view=points -> Standings > Points. Rosters and Postseason tabs are unchanged. */
+(function(){const q=String(tab||'').toLowerCase(),v=String(params.get('view')||params.get('sub')||'').toLowerCase();
+  if(q==='points'){s26eView('points');tab='standings'}
+  else if(/^(apnet|ap-net|ap|net|polls|rankings)$/.test(q)||(q==='standings'&&/^(apnet|ap-net|rankings)$/.test(v)))tab='teams';
+  else if(q==='standings'&&v==='points')s26eView('points')})();
+/* All teams: team, owner, record, AP, NET. Best record first (win %, then more wins, then NET). AP = live ESPN AP Top 25 (RK.ap, same feed as the old AP / NET view), NET = data/net.json (RK.net); '—' when unranked or not loaded. */
+function tRec(tid){const r=(D.records||{})[tid]||{w:0,l:0};return {w:r.w||0,l:r.l||0}}
+function vTeamsAP(){const netBy={};(RK.net||[]).forEach(x=>{if(x.tid)netBy[String(x.tid)]=x.net});
+  const apOf=tid=>{if(!RK.ap)return null;const t=(D.teams||{})[tid]||{};return RK.ap[String(t.espn_id||tid)]||null};
+  const rows=[];D.owners.forEach(o=>o.teams.forEach(t=>{const r=tRec(t.tid),g=r.w+r.l;rows.push({o:o.name,t,r,pct:g?r.w/g:0,ap:apOf(t.tid),net:netBy[String(t.tid)]||null})}));
+  rows.sort((a,b)=>b.pct-a.pct||b.r.w-a.r.w||(a.net||999)-(b.net||999)||a.t.tid.localeCompare(b.t.tid));
+  const d=v=>v?'#'+v:'<span class="mut">\u2014</span>';
+  return `<div class="card tap"><table><tr><th>Team</th><th>Owner</th><th class="n">Rec</th><th class="n" title="AP Top 25">AP</th><th class="n" title="NCAA NET">NET</th></tr>${rows.map(x=>`<tr${x.t.status==='dropped'?' class="drop"':''}><td>${chip(x.t.tid,{out:x.t.status==='dropped'})}</td><td>${esc(PN(x.o))}</td><td class="n">${x.r.w}-${x.r.l}</td><td class="n">${d(x.ap)}</td><td class="n">${d(x.net)}</td></tr>`).join('')}</table></div>`+
+   `<p class="note">Sorted by best record. Rec = full season record (regular season + conference tournaments + postseason as ESPN counts it). AP = ${RK.ap?'AP Top 25'+(RK.apDate?' ('+esc(fmtDate(String(RK.apDate).slice(0,10)))+')':'')+', live from ESPN':'AP Top 25 (not loaded right now)'}. NET = ${RK.net?esc(RK.netSeason||'NCAA NET')+(RK.netAsOf?', '+esc(RK.netAsOf):''):'NCAA NET (not loaded right now)'}. \u2014 = unranked.</p>`}
+const PCOLS=[['W','Regular-season wins',b=>b.win],['Conf','Conference champ (regular season + tournament)',b=>(b.conf_reg||0)+(b.conf_tourn||0)],['NCAA','Made the NCAA field',b=>b.ncaa_entry],['PI','Play-in win',b=>b.playin_win],['NW','NCAA tournament wins',b=>b.ncaa_win],['Up','Upsets',b=>b.upset],['F4','Final Four',b=>b.final4],['Ch','National champ',b=>b.champ],['±','Missed the Big Dance / commissioner adjustment',b=>(b.missed_dance||0)+(b.adjust||0)]];
+const pCell=v=>v?`<b class="${v<0?'bad':''}">${v>0?v:'\u2212'+(-v)}</b>`:'<span class="mut">\u2014</span>';
+function vPoints(){const hd='<div class="pg ph">'+PCOLS.map(c=>`<span title="${esc(c[1])}">${c[0]}</span>`).join('')+'<span title="Team total">Tot</span></div>';
+  return '<div class="orl">'+D.owners.map(o=>`<div class="card pcard"><div class="orh" onclick="goOwner('${esc(o.name)}')"><span class="rank">${rankTxt(o)}</span><div class="who"><b>${esc(o.emoji)} ${esc(TN(o.name))}</b><small>${esc(PN(o.name))}</small></div><div class="pts">${o.total}<small>points</small></div></div>${hd}`+
+   (o.teams||[]).map(t=>{const b=t.by||{};return `<div class="prow${t.status==='dropped'?' drop':''}"><div class="pchip">${chip(t.tid,{out:t.status==='dropped'})}</div><div class="pg pv">${PCOLS.map(c=>`<span>${pCell(c[2](b)||0)}</span>`).join('')}<span class="ptot">${t.total}</span></div></div>`}).join('')+'</div>').join('')+'</div>'+
+  `<p class="note">Points each team earned for its manager, by category; \u2014 = none yet. ${PCOLS.map(c=>`<b>${c[0]}</b> ${esc(c[1])}`).join(' · ')} · <b>Tot</b> team total. Team totals add up to the manager total shown in League. Struck-through teams were dropped in the redraft; the points they earned before still count. Tap a manager for the game-by-game breakdown.</p>`}
+/*</S26E>*/
 /*<S26D-DRAFT>*/
 /* 2026-27 draft results. Teams ALWAYS come from the live rosters (D.owners[].teams); DRAFT27 only sets slot order and pick order (Paul's list, snake). */
 const DRAFT27={season:'2026-27',slots:[['Dirty Draymond','mark'],['Stock','jake'],['Kurmoji','kurt'],['Kentut','ken'],['Murf','neal'],['Paul','paul'],['Nasty','jim'],['En Fuego','scott']],
@@ -2907,12 +2946,13 @@ const tMoney=v=>b27Num(v/((D.bets.currency||{}).display_unit||1000));   // displ
    5) Copy link / Share: built ONLY from origin + path (+ ?demo=1 in the demo) + the route hash. Never ?admin, never names, never ledger keys.
    6) Tabs are <a href>: plain click switches in place (pushState), modifier / middle / right click = browser default. */
 const S24={sub:null,last:null,route0:false,prep:null,done:null,hlUntil:0,nf:null};
-const S24_H2T={standings:'standings',ranks:'standings',games:'games',schedule:'games',scores:'games',rosters:'rosters',squads:'rosters',bets:'@bets',bets27:'@bets','bets-2025-26':'bets',bets2526:'bets',teams:'teams',postseason:'checklist',checklist:'checklist',redraft:'redraft',archive:'archive',rules:'about',about:'about'};
+const S24_H2T={standings:'standings',ranks:'standings',games:'games',schedule:'games',scores:'games',rosters:'rosters',squads:'rosters',points:'@points',rankings:'teams',apnet:'teams','ap-net':'teams',ap:'teams',net:'teams',polls:'teams',bets:'@bets',bets27:'@bets','bets-2025-26':'bets',bets2526:'bets',teams:'teams',postseason:'checklist',checklist:'checklist',redraft:'redraft',archive:'archive',rules:'about',about:'about'};
 const s24HasNew=()=>typeof VIEWS!=='undefined'&&!!VIEWS.bets27;
 const s24IdOK=v=>typeof v==='string'&&/^[A-Za-z0-9_-]{1,40}$/.test(v);
-function s24TabFromHash(h){const t=S24_H2T[h];if(!t)return null;if(t==='@bets')return s24HasNew()?'bets27':'bets';return t}
+function s24TabFromHash(h){const t=S24_H2T[h];if(!t)return null;/*<S26E>*/if(t==='@points'){s26eView('points');return 'standings'}/*</S26E>*/if(t==='@bets')return s24HasNew()?'bets27':'bets';return t}
 function s24HashOf(t){return ({bets27:'bets',bets:s24HasNew()?'bets-2025-26':'bets',checklist:'postseason',about:'rules'})[t]||t}
-function s24Read(h){const m=/^#?([a-z0-9-]+)(?:\/([A-Za-z0-9_-]{1,40}))?(?:$|[&?\/])/i.exec(String(h||''));if(!m)return null;const t=s24TabFromHash(m[1].toLowerCase());if(!t)return null;
+function s24Read(h){const m=/^#?([a-z0-9-]+)(?:\/([A-Za-z0-9_-]{1,40}))?(?:$|[&?\/])/i.exec(String(h||''));if(!m)return null;let t=s24TabFromHash(m[1].toLowerCase());if(!t)return null;
+  /*<S26E>*/if(t==='standings'&&m[2]){const s=m[2].toLowerCase();if(/^(apnet|ap-net|ap|net|rankings|polls)$/.test(s))t='teams';else if(s==='points')s26eView('points');else if(s==='league')s26eView('league')}/*</S26E>*/
   return {t,sub:m[2]&&(t==='bets27'||t==='games')?m[2]:null}}
 const s24RouteHash=()=>s24HashOf(tab)+(S24.sub?'/'+S24.sub:'');
 /* address-bar / href URL: path + (?demo=1) + (?admin=1 only in the address bar of an admin, never in shared links) + hash */
@@ -3134,10 +3174,10 @@ let S25_UPSET_STARTED=false;   // fetched once per load, only when the header ac
 /* AP Top 25 (ESPN rankings API, read-only GET, cached ~1 h in sessionStorage) as a '#N' badge on every team chip; NET from data/net.json
    (NCAA.com sends no CORS header, so the page reads a saved copy with its as-of date). Real data only: when a source fails, nothing is shown. */
 const RK={ap:null,apList:[],apDate:'',net:null,netAsOf:'',netSeason:'',started:false};
-const rkView=()=>{try{return localStorage.getItem('standingsView')==='apnet'?'apnet':'league'}catch(e){return 'league'}};
+const rkView=()=>{/*<S26E>*/try{return localStorage.getItem('standingsView')==='points'?'points':'league'}catch(e){return 'league'}/*</S26E>*/};
 function rkSet(v){try{localStorage.setItem('standingsView',v)}catch(e){}render()}
 function rkSeg(){const v=rkView(),b=(k,l)=>`<button type="button" class="rkseg-b${v===k?' on':''}" aria-pressed="${v===k}" onclick="rkSet('${k}')">${l}</button>`;
-  return `<div class="rkseg" role="group" aria-label="Standings view">${b('league','League')}${b('apnet','AP / NET')}</div>`}
+  return `<div class="rkseg" role="group" aria-label="Standings view">${b('league','League')}${b('points','Breakdown')}</div>`}
 function apBadge(tid){if(!RK.ap)return '';const t=(D.teams||{})[tid]||{},r=RK.ap[String(t.espn_id||tid)];return r?`<span class="aprk" title="AP Top 25: #${r}">#${r}</span>`:''}
 const rkOwner=tid=>{const o=(D.owners||[]).find(o=>(o.teams||[]).some(t=>String(t.tid)===String(tid)&&t.status!=='dropped'));return o?`<span class="opill">${esc(o.emoji)} ${esc(PN(o.name))}</span>`:'<span class="mut">·</span>'};
 const rkTeam=(tid,name)=>tid&&(D.teams||{})[tid]?chip(tid,{}):esc(name);
