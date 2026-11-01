@@ -228,23 +228,81 @@ def daterange(a, b):
         x += dt.timedelta(1)
 
 
+def near_window(cfg, today):
+    """(lo, hi) ISO days re-pulled on every run. refresh.near_days = [days_back, days_ahead] or an int (ahead; back=2)."""
+    r = cfg.get("refresh", {})
+    nd = r.get("near_days", [2, r.get("lookahead_days", 10)])
+    back, ahead = (nd if isinstance(nd, (list, tuple)) else (2, nd))
+    t = dt.date.fromisoformat(today)
+    return (t - dt.timedelta(int(back))).isoformat(), (t + dt.timedelta(int(ahead))).isoformat()
+
+
+def _cache_age_hours(c, path, now):
+    try:
+        ts = dt.datetime.fromisoformat(c["fetched"])
+        if ts.tzinfo is None:
+            ts = ts.replace(tzinfo=dt.timezone.utc)
+    except Exception:
+        try:
+            ts = dt.datetime.fromtimestamp(os.path.getmtime(path), dt.timezone.utc)
+        except Exception:
+            return None
+    return (now - ts).total_seconds() / 3600.0
+
+
+def day_refresh_decision(day, cached, near_lo, near_hi, now, far_refresh_hours=24, path=None):
+    """Option B: should this scoreboard day be re-pulled this run?  Returns (fetch: bool, reason: str).
+      no cache            -> fetch
+      near window         -> fetch every run
+      past (before near)  -> only if something on it is unfinished or it came from the fallback source
+      far future          -> at most once per far_refresh_hours (cache 'fetched' stamp, else file mtime)"""
+    if cached is None:
+        return True, "missing"
+    if near_lo <= day <= near_hi:
+        return True, "near"
+    if day < near_lo:
+        if cached.get("src") != "espn" or any(g.get("status") in ("scheduled", "live", "other") for g in cached.get("games", [])):
+            return True, "past-unsettled"
+        return False, "past-final"
+    age = _cache_age_hours(cached, path, now)
+    if age is None or age >= far_refresh_hours or cached.get("src") != "espn":
+        return True, "far-stale"
+    return False, "far-fresh"
+
+
 def load_games(cfg, cache_dir, today, offline, name_index, start=None, end=None):
     year = cfg["espn_season_year"]
+    rcfg = cfg.get("refresh", {})
     sd = start or cfg["season_start"]
-    ed = min(end or cfg["season_end"], (dt.date.fromisoformat(today) + dt.timedelta(cfg["refresh"]["lookahead_days"])).isoformat())
+    ed = end or cfg["season_end"]          # Option B: whole schedule through season_end
     days = list(daterange(sd, ed)) if sd <= ed else []
-    stats = {"days_total": len(days), "days_fetched": 0, "days_cached": 0, "days_espn_failed": 0, "days_ncaa_fallback": 0, "days_failed_both": 0, "probe": None}
+    near_lo, near_hi = near_window(cfg, today)
+    far_h = float(rcfg.get("far_refresh_hours", 24))
+    max_far = int(rcfg.get("far_max_fetch_per_run", 200))   # hard cap per run (first-run cost bound)
+    workers = int(rcfg.get("fetch_workers", 6))
+    stats = {"days_total": len(days), "days_fetched": 0, "days_cached": 0, "days_espn_failed": 0, "days_ncaa_fallback": 0, "days_failed_both": 0,
+             "probe": None, "near": [near_lo, near_hi], "far_refresh_hours": far_h, "reasons": {}, "far_deferred": 0}
     sbdir = os.path.join(cache_dir, "sb", str(year))
     os.makedirs(sbdir, exist_ok=True)
-    cutoff = (dt.date.fromisoformat(today) - dt.timedelta(2)).isoformat()
-
-    def one(day):
+    now = dt.datetime.now(dt.timezone.utc)
+    plan, far_budget = {}, max_far
+    for day in days:
         p = os.path.join(sbdir, day.replace("-", "") + ".json")
         c = jload(p)
-        if c is not None:
-            stale = day >= cutoff or any(g["status"] in ("scheduled", "live", "other") for g in c["games"]) or c.get("src") != "espn"
-            if offline or not stale:
-                return day, c["games"], "cached"
+        fetch, why = day_refresh_decision(day, c, near_lo, near_hi, now, far_h, p)
+        if fetch and why in ("far-stale",) and c is not None:
+            if far_budget <= 0:
+                fetch, why = False, "far-deferred"
+                stats["far_deferred"] += 1
+            else:
+                far_budget -= 1
+        stats["reasons"][why] = stats["reasons"].get(why, 0) + 1
+        plan[day] = (p, c, fetch)
+
+    def one(day):
+        p, c, fetch = plan[day]
+        if c is not None and (offline or not fetch):
+            return day, c["games"], "cached"
         if offline:
             return day, [], "missing"
         try:
@@ -253,6 +311,8 @@ def load_games(cfg, cache_dir, today, offline, name_index, start=None, end=None)
             return day, games, "fetched"
         except Exception as ex:
             log("ESPN failed", day, ex)
+        if day > near_hi and c is not None:      # far day: keep yesterday's copy rather than hit the relay
+            return day, c["games"], "failed"
         try:
             games = fetch_ncaa_day(day, name_index)
             jsave(p, {"fetched": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"), "src": "ncaa", "games": games})
@@ -261,11 +321,12 @@ def load_games(cfg, cache_dir, today, offline, name_index, start=None, end=None)
             log("NCAA fallback failed", day, ex)
             return day, (c["games"] if c else []), "failed"
     games = {}
-    with ThreadPoolExecutor(8) as ex:
+    with ThreadPoolExecutor(workers) as ex:
         for day, gl, how in ex.map(one, days):
             stats["days_fetched" if how == "fetched" else "days_cached" if how == "cached" else "days_ncaa_fallback" if how == "ncaa" else "days_failed_both"] += 1
             for g in gl:
                 games[g["id"]] = g
+    stats["days_with_games"] = len({g["day"] for g in games.values()})
     if not offline:  # connectivity probe so preseason still proves the feed is alive
         try:
             _, n = fetch_espn_day(today)
@@ -321,7 +382,7 @@ def load_lines(cfg, games, pool_tids, cache_dir, offline, ov, today):
     scope = set(cfg["rules"]["upset_games"])
     gv = cfg.get("games_view", {})
     lo = (dt.date.fromisoformat(today) - dt.timedelta(gv.get("recent_days", 14))).isoformat()
-    hi = (dt.date.fromisoformat(today) + dt.timedelta(gv.get("upcoming_days", 10))).isoformat()
+    hi = near_window(cfg, today)[1]       # Option B: lines only for near-window games
     need = {}
     for g in games:
         if g["src"] != "espn" or g["status"] in ("canceled", "postponed"):
@@ -514,7 +575,10 @@ def _refresh():
             side["d1"] = str(side.get("id")) in by_id
     resolve = lambda n: name_index.get(norm(n))  # noqa
     gv = cfg.get("games_view", {})
-    view = S.build_games_view(cfg, ov, today, games, lines, windows, gv.get("recent_days", 14), gv.get("upcoming_days", 10))
+    up_days = gv.get("upcoming_days", 10)
+    if up_days == "season_end":
+        up_days = max(0, (dt.date.fromisoformat(cfg["season_end"]) - dt.date.fromisoformat(today)).days)
+    view = S.build_games_view(cfg, ov, today, games, lines, windows, gv.get("recent_days", 14), up_days)
     show_tids = set(pool_tids)
     for it in view:
         for k in ("home", "away"):
@@ -550,7 +614,7 @@ def _refresh():
         "points": cfg["points"], "rules": cfg["rules"], "redraft": {"date": redraft_date, "moves": cfg["redraft"]["moves"]},
         "overrides_active": {k: v for k, v in ov.items() if not k.startswith("_") and v and v != {} and not (isinstance(v, dict) and all(str(x).startswith("_") for x in v))},
         "field": res["field"],
-        "games_view": {"recent_days": gv.get("recent_days", 14), "upcoming_days": gv.get("upcoming_days", 10), "n_games": len(view),
+        "games_view": {"recent_days": gv.get("recent_days", 14), "upcoming_days": up_days, "upcoming_through": cfg["season_end"] if gv.get("upcoming_days") == "season_end" else None, "line_window": list(near_window(cfg, today)), "n_games": len(view),
                        "n_upcoming": sum(1 for x in view if x["status"] != "final"), "n_with_line": sum(1 for x in view if x["line"]),
                        "n_upcoming_with_line": sum(1 for x in view if x["status"] != "final" and x["line"])},
     }

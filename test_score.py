@@ -219,5 +219,57 @@ class OddsParsing(unittest.TestCase):
         self.assertIsNone(R.pick_line(gm, [], []))
 
 
+class NearFarRefresh(unittest.TestCase):
+    """Option B scoreboard refresh decision (refresh.day_refresh_decision / near_window)."""
+    def setUp(self):
+        import refresh as R
+        import datetime as _dt
+        self.R, self.dt = R, _dt
+        self.now = _dt.datetime(2026, 11, 1, 12, tzinfo=_dt.timezone.utc)
+        self.lo, self.hi = R.near_window({"refresh": {"near_days": [2, 10]}}, "2026-11-01")
+
+    def c(self, hours_ago, status="scheduled", src="espn"):
+        ts = (self.now - self.dt.timedelta(hours=hours_ago)).isoformat(timespec="seconds")
+        return {"fetched": ts, "src": src, "games": [{"status": status}]}
+
+    def d(self, day, cached, hours=24):
+        return self.R.day_refresh_decision(day, cached, self.lo, self.hi, self.now, hours)
+
+    def test_window(self):
+        self.assertEqual((self.lo, self.hi), ("2026-10-30", "2026-11-11"))
+        self.assertEqual(self.R.near_window({"refresh": {"lookahead_days": 7}}, "2026-11-01"), ("2026-10-30", "2026-11-08"))
+        self.assertEqual(self.R.near_window({"refresh": {"near_days": 5}}, "2026-11-01")[1], "2026-11-06")
+
+    def test_missing_always_fetched(self):
+        self.assertEqual(self.d("2027-03-20", None), (True, "missing"))
+
+    def test_near_every_run(self):
+        for day in ("2026-10-30", "2026-11-01", "2026-11-11"):
+            self.assertEqual(self.d(day, self.c(0.01, "final")), (True, "near"))
+
+    def test_far_once_a_day(self):
+        self.assertEqual(self.d("2026-11-12", self.c(1)), (False, "far-fresh"))
+        self.assertEqual(self.d("2027-04-06", self.c(23.9)), (False, "far-fresh"))
+        self.assertEqual(self.d("2027-04-06", self.c(24.1)), (True, "far-stale"))
+        self.assertEqual(self.d("2027-04-06", self.c(5), hours=4), (True, "far-stale"))
+        self.assertEqual(self.d("2027-04-06", self.c(1, src="ncaa")), (True, "far-stale"))
+
+    def test_far_mtime_fallback(self):
+        import tempfile, time as _t
+        f = tempfile.NamedTemporaryFile(delete=False); f.close()
+        old = self.now.timestamp() - 30 * 3600
+        os.utime(f.name, (old, old))
+        nostamp = {"src": "espn", "games": []}
+        self.assertEqual(self.R.day_refresh_decision("2027-01-05", nostamp, self.lo, self.hi, self.now, 24, f.name), (True, "far-stale"))
+        os.utime(f.name, (self.now.timestamp() - 3600,) * 2)
+        self.assertEqual(self.R.day_refresh_decision("2027-01-05", nostamp, self.lo, self.hi, self.now, 24, f.name), (False, "far-fresh"))
+        os.unlink(f.name)
+
+    def test_past_only_if_unsettled(self):
+        self.assertEqual(self.d("2026-10-29", self.c(500, "final")), (False, "past-final"))
+        self.assertEqual(self.d("2026-10-29", self.c(500, "scheduled")), (True, "past-unsettled"))
+        self.assertEqual(self.d("2026-10-29", self.c(500, "final", src="ncaa")), (True, "past-unsettled"))
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

@@ -644,6 +644,7 @@ nav a.nt{text-decoration:none}
 .card.tap td.cf{font-size:12px;white-space:nowrap}
 @media (max-width:340px){.card.tap{padding:4px 2px}.card.tap th,.card.tap td{padding:5px 2px}.card.tap td.n{font-size:13px}.card.tap td.cf{font-size:11px}.card.tap .to{max-width:5ch}.card.tap td:first-child .chip{max-width:108px}.tapf button{padding:4px 6px;font-size:11px}}
 /*</S26P-TAP>*/
+/*<S26U-MONTH-JUMP>*/.gmon{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0 0;max-width:100%}.gmon button{flex:1 1 0;min-width:0;padding:5px 2px;font-size:13px;border-radius:999px;border:1px solid rgba(255,255,255,.25);background:transparent;color:inherit;cursor:pointer}.gmon button.on{background:rgba(255,210,63,.22);border-color:rgb(255,210,63)}.gmon button:disabled{opacity:.35;cursor:default}.gmore{text-align:center}/*</S26U-MONTH-JUMP>*/
 </style>
 </head>
 <body>
@@ -1409,17 +1410,21 @@ function vGames(){
   const days=[...new Set(list.map(etKey))];
   if(gDay!=='all'&&!days.includes(gDay))gDay='all';
   if(gDay!=='all')list=list.filter(g=>etKey(g)===gDay);
+  /*<S26U-MONTH-JUMP>*/const GMON=[['11','Nov'],['12','Dec'],['01','Jan'],['02','Feb'],['03','Mar'],['04','Apr']],firstIn=m=>days.slice().sort().find(k=>k.slice(5,7)===m),curMon=gDay!=='all'?gDay.slice(5,7):'';
+  const monHtml=`<div class="gmon" role="group" aria-label="Jump to month">${GMON.map(([m,l])=>{const f=firstIn(m);return `<button type="button" data-mon="${m}" class="${m===curMon?'on':''}"${f?` onclick="gDay='${f}';render()"`:' disabled'} title="${f?'First game day: '+esc(etLabel(f)):'No games'}">${l}</button>`}).join('')}</div>`;
+  let gCapped=0;if(gDay==='all'&&gMode==='upcoming'){const near=days.slice().sort().slice(0,12),ns=new Set(near),n0=list.length;list=list.filter(g=>ns.has(etKey(g)));gCapped=n0-list.length}   // full schedule is loaded: 'All days' shows the next 12 game days; later days via the day list or month chips/*</S26U-MONTH-JUMP>*/
   if(gMode==='upcoming'){const sk=g=>etKey(g)+(isTBD(g)?'~':' ')+(g.start||'');list.sort((a,b)=>sk(a).localeCompare(sk(b)))}   // 'time TBD' games last within their day
   let h=`<div class="card"><div class="tabs" style="margin:0 0 8px"><button class="${gMode==='upcoming'?'on':''}" onclick="gMode='upcoming';gDay='all';render()">⏭ Upcoming (${ups.length})</button><button class="${gMode==='scores'?'on':''}" onclick="gMode='scores';gDay='all';render()">✅ Scores (${fin.length})</button></div>
    <div class="tabs" style="margin:0"><select onchange="gOwner=this.value;render()"><option value="all">All owners</option>${D.owners.map(o=>`<option value="${esc(o.name)}"${o.name===gOwner?' selected':''}>${esc(o.emoji)} ${esc(PN(o.name))}</option>`).join('')}</select>
    <select onchange="gDay=this.value;render()"><option value="all">All days</option>${days.map(k=>`<option value="${k}"${k===gDay?' selected':''}>${esc(etLabel(k))}</option>`).join('')}</select>
-   <button class="${gH2H?'on':''}" onclick="gH2H=!gH2H;render()">🥊 Pool vs pool only</button></div>${/*<OWNED-GAMES>*/nHidden?`<label class="gUn"><input type="checkbox" id="gUnowned"${gAll?' checked':''} onchange="gAll=this.checked;render()"> Show unowned games <span class="mut">(${nHidden} hidden)</span></label>`:''/*</OWNED-GAMES>*/}
+   <button class="${gH2H?'on':''}" onclick="gH2H=!gH2H;render()">🥊 Pool vs pool only</button></div>${monHtml}${/*<OWNED-GAMES>*/nHidden?`<label class="gUn"><input type="checkbox" id="gUnowned"${gAll?' checked':''} onchange="gAll=this.checked;render()"> Show unowned games <span class="mut">(${nHidden} hidden)</span></label>`:''/*</OWNED-GAMES>*/}
    <div class="note" style="margin-top:6px">Times in your time zone (${esc(gZone())}). ⭐ = betting favorite, 🐶 = underdog. Betting lines posted so far: ${D.meta.games_view.n_with_line} of ${D.meta.games_view.n_games} games${ADMIN?' ('+esc((D.meta.sources||{}).odds||'')+')':' (DraftKings, via ESPN)'}.</div></div>`;
   if(!list.length)return h+`<div class="card">${all.length?'Nothing matches those filters.':nHidden/*<OWNED-GAMES>*/?'No games with an owned team right now 🏀 Check back soon. (Games where nobody in the pool owns either team are hidden.)'/*</OWNED-GAMES>*/:'No games for rostered teams yet. Check back when the schedule fills in.'}</div>`;
-  if(gMode==='upcoming'&&D.meta.mode==='preseason')h+=`<div class="card note">Preseason: only the first few nights of the schedule are loaded, and sportsbooks have posted lines for just some of them so far. Everything refreshes automatically.</div>`;
+  if(gMode==='upcoming'&&D.meta.mode==='preseason')h+=`<div class="card note">Preseason: sportsbooks have posted lines for just some of the next few nights so far (lines are pulled for about the next 10 days). Everything refreshes automatically.</div>`;
   let cur=null;
   list.forEach(g=>{const k=etKey(g);if(k!==cur){if(cur!==null)h+='</div>';cur=k;h+=`<div class="gday">${esc(etLabel(k))}</div><div class="ggrid">`}h+=gameCard(g)});
   if(cur!==null)h+='</div>';
+  /*<S26U-MONTH-JUMP>*/if(gCapped)h+=`<div class="card note gmore">+${gCapped} more games later in the season. Pick a day or a month above.</div>`;/*</S26U-MONTH-JUMP>*/
   return h}
 function gameLine(g){/* compact line for a team-row game (roster tab) */
   const fin=g.status==='final';let up='';
