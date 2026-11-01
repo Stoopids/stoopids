@@ -493,6 +493,17 @@ nav a.nt{text-decoration:none}
 .gsum:focus-visible{outline:2px solid var(--acc)}.gsum .gst{font-size:11.5px;font-weight:800;color:var(--mut)}.gsum .w{font-weight:900}.gsum .gch{margin-left:auto;color:var(--mut)}
 .gfin .gbody{padding:0 10px 8px}.gfin .gbody[hidden]{display:none}
 /*</GAMES-LOCAL>*/
+/*<GAMES-EVEN>*/
+.ggrid .gside .nm{flex-wrap:nowrap}
+.ggrid .gside .chip{flex:none;width:260px;height:40px;max-width:calc(100% - 44px);box-sizing:border-box;overflow:hidden;white-space:nowrap}
+.ggrid .gside .chip img,.ggrid .gside .chip .nologo{flex:none}
+.ggrid .gside .chip .cn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ggrid .gside .nm>span{flex:none}
+.ggrid .gow{height:20px;overflow:hidden;white-space:nowrap;display:flex;gap:4px;align-items:center;padding-left:2px}
+.ggrid .gow .opill{flex:none;line-height:16px}
+.ggrid:not(:has(>.gfin)){row-gap:0}   /* all-upcoming day: each card spans 9 shared rows (subgrid) so header, pills, owner lines and Quick bet line up across a row; days with collapsed finals keep the flex card */
+.ggrid:not(:has(>.gfin))>.gm{display:grid;grid-row:span 9;grid-template-rows:subgrid;grid-template-columns:minmax(0,1fr);row-gap:0;margin-bottom:12px;align-content:start}
+/*</GAMES-EVEN>*/
 /*<RANKINGS>*/
 .aprk{display:inline-block;font-size:.72em;font-weight:700;padding:1px 5px;border-radius:999px;background:#FFD400;color:#111;line-height:1.2;margin-right:4px;flex:none}
 .chip .aprk{margin-right:-1px}   /* chip gap 5px: 4px before the name */
@@ -538,6 +549,18 @@ nav a.nt{text-decoration:none}
 .pg{display:grid;grid-template-columns:repeat(9,minmax(0,1fr)) minmax(0,1.25fr);text-align:center;font-size:12px;line-height:1.5}
 .ph{margin-top:4px;font-size:10px;opacity:.6;letter-spacing:.01em}.ph span{overflow:hidden;white-space:nowrap}
 .pv span{min-width:0}.ptot{font-weight:800;color:#FFD400}.prow.drop .pv{opacity:.7}
+/*<S26Q-PTAB>*/.orl.q{justify-items:center}.orl.q .pcard{width:fit-content;max-width:100%;box-sizing:border-box}
+.ptw{overflow-x:auto;max-width:100%;margin-top:6px;-webkit-overflow-scrolling:touch}
+.ptab{border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:12px;line-height:1.3}
+.ptab th,.ptab td{padding:3px 5px;text-align:center;white-space:nowrap;min-width:22px}
+.ptab th{font-size:10px;font-weight:600;opacity:.65}.ptab tr+tr td{border-top:1px solid rgba(255,255,255,.08)}
+.ptab .pn{position:sticky;left:0;z-index:1;background:var(--card,#1b2130);text-align:left;padding-left:0;width:150px;min-width:150px;max-width:150px}
+.ptab .pn .chip{display:flex;width:150px;max-width:150px;box-sizing:border-box;overflow:hidden}
+.ptab .pn .chip .cn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.ptab td.ptot,.ptab th.ptot{text-align:right;padding-right:2px;font-weight:800}.ptab td.ptot{color:#FFD400}
+.ptab tr.drop td:not(.pn){opacity:.7}
+@media (max-width:480px){.orl.q{justify-items:stretch}.orl.q .pcard{width:auto}.ptab th,.ptab td{padding:3px 3px;min-width:16px;font-size:11px}.ptab th{font-size:9.5px}.ptab .pn,.ptab .pn .chip{width:112px;min-width:112px;max-width:112px}.ptab .pn .chip{font-size:11px}}
+@media (max-width:340px){.ptab th,.ptab td{padding:3px 1px;min-width:13px;font-size:10.5px}.ptab th{font-size:8.5px;letter-spacing:-.03em}.ptab .pn,.ptab .pn .chip{width:90px;min-width:90px;max-width:90px}.ptab .pn .chip{font-size:10.5px}}/*</S26Q-PTAB>*/
 .tap{padding:6px 4px}.tap table{width:100%;border-collapse:collapse;table-layout:fixed}.tap th,.tap td{padding:5px 3px;font-size:13px}.tap th{white-space:nowrap;font-size:11px;letter-spacing:0}.tap th:nth-child(1){width:46%}.tap th:nth-child(2){width:18%}.tap th:nth-child(3){width:13%}.tap th:nth-child(4),.tap th:nth-child(5){width:11.5%}.tap td{font-size:12px}.tap td.n{white-space:nowrap}
 .tap .aprk{display:none}.tap .chip,.tap .chip *{overflow-wrap:normal;word-break:normal;hyphens:none}
 .tap td:first-child .chip{max-width:100%}.tap td:nth-child(2){overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tap tr.drop td{opacity:.7}
@@ -553,6 +576,24 @@ nav a.nt{text-decoration:none}
 .s26px{width:40px;height:40px;border-radius:10px;border:2px solid var(--line);background:var(--card2);color:var(--tx);font-size:20px;cursor:pointer}
 .s26add{margin-top:10px;min-height:44px;padding:0 14px;border-radius:10px;border:2px solid var(--line);background:var(--card2);color:var(--tx);font:inherit;font-weight:700;font-size:14px;cursor:pointer}.s26set{margin-top:8px}.s26set .s26pr{grid-template-columns:minmax(80px,38%) minmax(0,1fr)}
 .s26terms{margin:8px 0 2px;font-size:17px;font-weight:800;line-height:1.3;overflow-wrap:anywhere}
+/*<S26O-TAP>*/
+/* All teams table: compact, centered, bold tabular numbers, narrow owner column. */
+.card.tap{width:fit-content;max-width:100%;margin-left:auto;margin-right:auto;box-sizing:border-box;overflow-x:auto}
+.card.tap table{width:auto}
+.card.tap th,.card.tap td{padding:6px 7px}
+.card.tap td.n{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.card.tap .to{max-width:8ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card.tap td:first-child .chip{max-width:170px}
+@media (max-width:400px){.card.tap th,.card.tap td{padding:6px 4px}.card.tap .to{max-width:6ch}.card.tap td:first-child .chip{max-width:140px}}
+/*<S26P-TAP>*/
+/* All teams: Pts + Conf columns and an owner filter chip row. */
+.tapf{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin:0 auto 8px;max-width:100%}
+.tapf button{font:inherit;font-size:12px;line-height:1;padding:5px 8px;border-radius:999px;border:1px solid rgba(127,127,127,.4);background:transparent;color:inherit;cursor:pointer;white-space:nowrap}
+.tapf button.on{background:#ffd400;border-color:#ffd400;color:#111;font-weight:700}
+.card.tap table{table-layout:auto}.card.tap th{width:auto!important}
+.card.tap td.cf{font-size:12px;white-space:nowrap}
+@media (max-width:340px){.card.tap{padding:4px 2px}.card.tap th,.card.tap td{padding:5px 2px}.card.tap td.n{font-size:13px}.card.tap td.cf{font-size:11px}.card.tap .to{max-width:5ch}.card.tap td:first-child .chip{max-width:108px}.tapf button{padding:4px 6px;font-size:11px}}
+/*</S26P-TAP>*/
 </style>
 </head>
 <body>
@@ -1241,7 +1282,8 @@ function gameCard(g){
   const dog=g.line&&g.line.dog;
   const row=(s,other)=>{
     const lose=fin&&!s.win;const tag=g.line?(String(dog)===String(s.id)?' <span title="betting underdog">🐶</span>':(String(g.line.fav)===String(s.id)?' <span title="betting favorite">⭐</span>':'')):'';
-    return `<div class="gside${lose?' lose':''}"><div class="nm">${chip(s.id,{big:1,name:s.short})}${s.seed?`<span class="seed">(${s.seed})</span>`:''}${tag}${opills(s.owners)}</div><div class="sc2">${(fin||live)&&s.score!=null?s.score:''}</div></div>`};
+    /*<GAMES-EVEN>*/const fn=esc((D.teams[s.id]||{}).name||s.name||s.short||s.id);/*</GAMES-EVEN>*/
+    return `<div class="gside${lose?' lose':''}"><div class="nm">${/*<GAMES-EVEN>*/chip(s.id,{big:1,name:s.short,cn:1}).replace('<span class="cn','<span title="'+fn+'" class="cn')/*</GAMES-EVEN>*/}${s.seed?`<span class="seed">(${s.seed})</span>`:''}${tag}</div><div class="sc2">${(fin||live)&&s.score!=null?s.score:''}</div></div>${/*<GAMES-EVEN>*/`<div class="gow"${s.owners&&s.owners.length?'':' aria-hidden="true"'}>${opills(s.owners)||'&nbsp;'}</div>`/*</GAMES-EVEN>*/}`};
   let head=`<span>${fin?'FINAL':live?'<b class="good">LIVE</b>'/*<REFRESH-NOW>*/+(g._lv&&g._lv.detail?' <span class="mut">'+esc(g._lv.detail)+'</span>':'')/*</REFRESH-NOW>*/:'<b>'+/*<GAMES-LOCAL>*/gTime(g)/*</GAMES-LOCAL>*/+'</b>'}</span>`;
   if(g.round)head+=`<span>· ${esc(g.round)}</span>`;else if(g.kind==='conf')head+='<span>· Conf tournament</span>';
   if(g.neutral)head+='<span>· neutral site</span>';
@@ -1939,18 +1981,25 @@ function s26eView(v){try{localStorage.setItem('standingsView',v)}catch(e){}}
   else if(q==='standings'&&v==='points')s26eView('points')})();
 /* All teams: team, owner, record, AP, NET. Best record first (win %, then more wins, then NET). AP = live ESPN AP Top 25 (RK.ap, same feed as the old AP / NET view), NET = data/net.json (RK.net); '—' when unranked or not loaded. */
 function tRec(tid){const r=(D.records||{})[tid]||{w:0,l:0};return {w:r.w||0,l:r.l||0}}
+/*<S26P-TAP>*/function tapF(b){const v=b.getAttribute('data-o')||'';try{localStorage.setItem('tapOwner',v)}catch(e){}b.parentNode.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));const c=b.parentNode.nextElementSibling;if(c)c.querySelectorAll('tr[data-o]').forEach(r=>{r.hidden=!!v&&r.getAttribute('data-o')!==v})}/*</S26P-TAP>*/
 function vTeamsAP(){const netBy={};(RK.net||[]).forEach(x=>{if(x.tid)netBy[String(x.tid)]=x.net});
   const apOf=tid=>{if(!RK.ap)return null;const t=(D.teams||{})[tid]||{};return RK.ap[String(t.espn_id||tid)]||null};
   const rows=[];D.owners.forEach(o=>o.teams.forEach(t=>{const r=tRec(t.tid),g=r.w+r.l;rows.push({o:o.name,t,r,pct:g?r.w/g:0,ap:apOf(t.tid),net:netBy[String(t.tid)]||null})}));
   rows.sort((a,b)=>b.pct-a.pct||b.r.w-a.r.w||(a.net||999)-(b.net||999)||a.t.tid.localeCompare(b.t.tid));
   const d=v=>v?'#'+v:'<span class="mut">\u2014</span>';
-  return `<div class="card tap"><table><tr><th>Team</th><th>Owner</th><th class="n">Rec</th><th class="n" title="AP Top 25">AP</th><th class="n" title="NCAA NET">NET</th></tr>${rows.map(x=>`<tr${x.t.status==='dropped'?' class="drop"':''}><td>${chip(x.t.tid,{out:x.t.status==='dropped'})}</td><td>${esc(PN(x.o))}</td><td class="n">${x.r.w}-${x.r.l}</td><td class="n">${d(x.ap)}</td><td class="n">${d(x.net)}</td></tr>`).join('')}</table></div>`+
-   `<p class="note">Sorted by best record. Rec = full season record (regular season + conference tournaments + postseason as ESPN counts it). AP = ${RK.ap?'AP Top 25'+(RK.apDate?' ('+esc(fmtDate(String(RK.apDate).slice(0,10)))+')':'')+', live from ESPN':'AP Top 25 (not loaded right now)'}. NET = ${RK.net?esc(RK.netSeason||'NCAA NET')+(RK.netAsOf?', '+esc(RK.netAsOf):''):'NCAA NET (not loaded right now)'}. \u2014 = unranked.</p>`}
+  /*<S26P-TAP>*/const cfBy={};(RK.net||[]).forEach(x=>{if(x.tid&&x.conf)cfBy[String(x.tid)]=String(x.conf)});
+  const CFS={'Big Ten':'B10','Big 12':'B12','Big East':'BE','Atlantic 10':'A10','Mountain West':'MWC','American':'AAC','Ivy League':'Ivy','America East':'AE','Big South':'BSo','Big West':'BWC','Big Sky':'BSky','Sun Belt':'SBC','Summit League':'Sum','Horizon':'Hor','Southland':'SLC','Patriot':'Pat'};
+  const cf=t=>{const c=cfBy[String(t)];return c?`<span title="${esc(c)}">${esc(CFS[c]||c)}</span>`:'<span class="mut">\u2014</span>'};
+  let fo='';try{fo=localStorage.getItem('tapOwner')||''}catch(e){}if(!D.owners.some(o=>o.name===fo))fo='';
+  const fb=(v,l)=>`<button type="button" data-o="${esc(v)}" class="${v===fo?'on':''}" onclick="tapF(this)">${esc(l)}</button>`;/*</S26P-TAP>*/
+  return `<div class="tapf" role="group" aria-label="Filter by owner">${fb('','All')}${D.owners.map(o=>fb(o.name,PN(o.name))).join('')}</div><div class="card tap"><table><tr><th>Team</th><th class="to">Owner</th><th class="n">Rec</th><th class="n" title="STOOPIDS points this season (same as Standings > Points)">Pts</th><th title="Conference">Conf</th><th class="n" title="AP Top 25">AP</th><th class="n" title="NCAA NET">NET</th></tr>${rows.map(x=>`<tr data-o="${esc(x.o)}"${x.t.status==='dropped'?' class="drop"':''}${fo&&fo!==x.o?' hidden':''}><td>${chip(x.t.tid,{out:x.t.status==='dropped'})}</td><td class="to" title="${esc(PN(x.o))}">${esc(PN(x.o))}</td><td class="n">${x.r.w}-${x.r.l}</td><td class="n">${x.t.total||0}</td><td class="cf">${cf(x.t.tid)}</td><td class="n">${d(x.ap)}</td><td class="n">${d(x.net)}</td></tr>`).join('')}</table></div>`+
+   `<p class="note">Sorted by best record. Rec = full season record (regular season + conference tournaments + postseason as ESPN counts it). AP = ${RK.ap?'AP Top 25'+(RK.apDate?' ('+esc(fmtDate(String(RK.apDate).slice(0,10)))+')':'')+', live from ESPN':'AP Top 25 (not loaded right now)'}. Pts = STOOPIDS points this season (team totals from Standings > Points). Conf = conference as listed in the NCAA NET file (${esc(RK.netSeason||'NCAA NET')}). NET = ${RK.net?esc(RK.netSeason||'NCAA NET')+(RK.netAsOf?', '+esc(RK.netAsOf):''):'NCAA NET (not loaded right now)'}. \u2014 = unranked.</p>`}
 const PCOLS=[['W','Regular-season wins',b=>b.win],['Conf','Conference champ (regular season + tournament)',b=>(b.conf_reg||0)+(b.conf_tourn||0)],['NCAA','Made the NCAA field',b=>b.ncaa_entry],['PI','Play-in win',b=>b.playin_win],['NW','NCAA tournament wins',b=>b.ncaa_win],['Up','Upsets',b=>b.upset],['F4','Final Four',b=>b.final4],['Ch','National champ',b=>b.champ],['±','Missed the Big Dance / commissioner adjustment',b=>(b.missed_dance||0)+(b.adjust||0)]];
 const pCell=v=>v?`<b class="${v<0?'bad':''}">${v>0?v:'\u2212'+(-v)}</b>`:'<span class="mut">\u2014</span>';
-function vPoints(){const hd='<div class="pg ph">'+PCOLS.map(c=>`<span title="${esc(c[1])}">${c[0]}</span>`).join('')+'<span title="Team total">Tot</span></div>';
-  return '<div class="orl">'+D.owners.map(o=>`<div class="card pcard" data-pc="${esc(o.name)}"><div class="orh" onclick="goOwner('${esc(o.name)}')"><span class="rank">${rankTxt(o)}</span><div class="who"><b>${esc(o.emoji)} ${esc(TN(o.name))}</b><small>${esc(PN(o.name))}</small>${/*<S26H-TROPHY>*/goldTag(o.name)/*</S26H-TROPHY>*/}</div><div class="pts">${o.total}<small>points</small></div></div>${hd}`+
-   (o.teams||[]).map(t=>{const b=t.by||{};return `<div class="prow${t.status==='dropped'?' drop':''}"><div class="pchip">${chip(t.tid,{out:t.status==='dropped'})}</div><div class="pg pv">${PCOLS.map(c=>`<span>${pCell(c[2](b)||0)}</span>`).join('')}<span class="ptot">${t.total}</span></div></div>`}).join('')+'</div>').join('')+'</div>'+
+function vPoints(){/*<S26Q-PTAB>*/const hd='<tr><th class="pn" scope="col"><span class="sr">Team</span></th>'+PCOLS.map(c=>`<th scope="col" title="${esc(c[1])}">${c[0]}</th>`).join('')+'<th class="ptot" scope="col" title="Team total">Tot</th></tr>';
+  const tn=tid=>{const t=(D.teams||{})[tid]||{};return t.name||t.short||tid};
+  return '<div class="orl q">'+D.owners.map(o=>`<div class="card pcard" data-pc="${esc(o.name)}"><div class="orh" onclick="goOwner('${esc(o.name)}')"><span class="rank">${rankTxt(o)}</span><div class="who"><b>${esc(o.emoji)} ${esc(TN(o.name))}</b><small>${esc(PN(o.name))}</small>${/*<S26H-TROPHY>*/goldTag(o.name)/*</S26H-TROPHY>*/}</div><div class="pts">${o.total}<small>points</small></div></div><div class="ptw"><table class="ptab">${hd}`+
+   (o.teams||[]).map(t=>{const b=t.by||{};return `<tr class="prow${t.status==='dropped'?' drop':''}"><td class="pn" title="${esc(tn(t.tid))}">${chip(t.tid,{out:t.status==='dropped',cn:true})}</td>${PCOLS.map(c=>`<td>${pCell(c[2](b)||0)}</td>`).join('')}<td class="ptot">${t.total}</td></tr>`}).join('')+'</table></div></div>').join('')+'</div>'+/*</S26Q-PTAB>*/
   `<p class="note">Points each team earned for its manager, by category; \u2014 = none yet. ${PCOLS.map(c=>`<b>${c[0]}</b> ${esc(c[1])}`).join(' · ')} · <b>Tot</b> team total. Team totals add up to the manager total shown in League. Struck-through teams were dropped in the redraft; the points they earned before still count. Tap a manager for the game-by-game breakdown.</p>`+goldNote()}
 /*</S26E>*/
 /*<S26D-DRAFT>*/
