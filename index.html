@@ -1,6 +1,25 @@
 <!doctype html>
 <html lang="en">
 <head>
+<!--<VIEW-ONLY>--><script>
+/* View-only mode (s26t): ?view=1 (kept per tab in sessionStorage stoopids_view=1). Forces guest WITHOUT touching localStorage stoopids_who, and blocks every write. */
+var VIEW_ONLY=(function(){try{if(/(?:^|[?&])view=1(?:&|$)/.test(location.search))sessionStorage.setItem('stoopids_view','1');return sessionStorage.getItem('stoopids_view')==='1'}catch(e){return /(?:^|[?&])view=1(?:&|$)/.test(location.search)}})();
+if(VIEW_ONLY){(function(){
+  var SP=Storage.prototype,g=SP.getItem,s=SP.setItem,rm=SP.removeItem;
+  SP.getItem=function(k){if(this===window.localStorage&&k==='stoopids_who')return '__guest__';return g.apply(this,arguments)};
+  SP.setItem=function(k){if(this===window.localStorage&&k==='stoopids_who')return;return s.apply(this,arguments)};
+  SP.removeItem=function(k){if(this===window.localStorage&&k==='stoopids_who')return;return rm.apply(this,arguments)};
+  var isW=function(u,m){m=String(m||'GET').toUpperCase();u=String(u||'');return m!=='GET'&&m!=='HEAD'||(/textdb/i.test(u)&&/[?&\/](set|update|write|put|delete|post)\b/i.test(u.replace(/^https?:\/\/[^\/]+\/api\/data\//,'')))};
+  var f0=window.fetch;window.fetch=function(i,o){var u=typeof i==='string'?i:(i&&i.url),m=(o&&o.method)||(i&&typeof i==='object'&&i.method);if(isW(u,m)||/stoopids-presence-/.test(String(u||'')))return Promise.reject(new Error('view-only'));return f0.apply(this,arguments)};
+  var xo=XMLHttpRequest.prototype.open,xs=XMLHttpRequest.prototype.send;XMLHttpRequest.prototype.open=function(m,u){this.__vw=isW(u,m);return xo.apply(this,arguments)};XMLHttpRequest.prototype.send=function(){if(this.__vw)throw new Error('view-only');return xs.apply(this,arguments)};
+  if(navigator.sendBeacon)navigator.sendBeacon=function(){return false};
+  document.documentElement.classList.add('viewonly');
+})()}
+</script>
+<style>
+html.viewonly #chatF,html.viewonly #chatP,html.viewonly #chatWho,html.viewonly #pwho,html.viewonly .qbw,html.viewonly .qb-btn,html.viewonly .qb-pick,html.viewonly .b27-form,html.viewonly .b27-confirm,html.viewonly .b27-act,html.viewonly .b27-b,html.viewonly .b27-big,html.viewonly .s26k-m,html.viewonly .s25rxr,html.viewonly .s25rx,html.viewonly [class*="rx-add"],html.viewonly .pwho{display:none!important}
+#vob{display:none}html.viewonly #vob{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;font:600 12px/1.5 system-ui,sans-serif;background:#333;color:#eee;border:1px solid #666;vertical-align:middle}
+</style><!--</VIEW-ONLY>-->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>STOOPIDS — NCAA Stoopids Pool</title>
@@ -196,7 +215,9 @@ footer{max-width:1000px;margin:0 auto;padding:0 14px 40px;color:var(--mut);font-
 .pwho button{font:inherit;font-weight:800;font-size:14px;color:var(--tx);background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:10px 6px;cursor:pointer;min-width:0;line-height:1.15}
 .pwho button:active,.pwho button:hover{border-color:var(--acc);color:var(--acc)}
 .pwho button.cur{background:var(--acc);color:#111;border-color:var(--acc)}
-.pwho button.guest{width:100%;margin-top:9px;background:transparent;border-style:dashed;color:var(--mut);font-weight:700}
+.pwho button.guest{display:block;width:100%;margin:2px 0 0;background:#2f6fde;border:2px solid #2f6fde;border-style:solid;color:#fff;font-size:19px;font-weight:900;padding:15px 10px;border-radius:14px;box-shadow:0 4px 14px rgba(47,111,222,.35)}
+.pwho button.guest:hover,.pwho button.guest:active{background:#3d7ff0;border-color:#fff;color:#fff}.pwho button.guest.cur{background:var(--acc);border-color:var(--acc);color:#111}
+.pwho .gsep{display:flex;align-items:center;gap:8px;margin:14px 0 10px;color:var(--mut);font-size:12.5px;font-weight:700}.pwho .gsep::before,.pwho .gsep::after{content:'';flex:1;border-top:1px solid var(--line)}
 .pwho .skip{display:block;margin:10px auto 0;background:none;border:0;color:var(--mut);font-size:12.5px;font-weight:600;text-decoration:underline;padding:4px}
 /*<NEWBET-CSS>*/
 .nbt{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:40;width:calc(100% - 20px);max-width:420px;display:flex;align-items:center;gap:6px;background:var(--card2);color:var(--tx);border:1px solid var(--acc);border-radius:14px;padding:6px 6px 6px 12px;box-shadow:0 8px 28px rgba(0,0,0,.55);font-size:14px;font-weight:700}
@@ -2157,9 +2178,9 @@ function presDraw(){/*<CHAT-BAR>*/try{chatBarDraw()}catch(e){}/*</CHAT-BAR>*/}  
 function presAsk(first){
   const cur=PS.who,old=document.getElementById('pwho');if(old)old.remove();
   const d=document.createElement('div');d.id='pwho';d.className='pwho';d.setAttribute('role','dialog');d.setAttribute('aria-label','Who are you?');
-  d.innerHTML=`<div class="box"><h2>Who are you? 👋</h2><p>Tap your name so the crew can see who\u2019s around. No password needed.</p><div class="grid">`+
+  d.innerHTML=`<div class="box"><h2>Who are you? 👋</h2><p>Tap your name so the crew can see who\u2019s around. No password needed.</p><button type="button" data-w="${PRES.guestKey}" class="guest${cur===PRES.guestKey?' cur':''}">👀 Just watching (guest)</button><div class="gsep">or pick your name</div><div class="grid">`+
     presOwners().map(o=>`<button type="button" data-w="${esc(o.name)}" class="${o.name===cur?'cur':''}">${esc(o.emoji)} ${esc(PN(o.name))}</button>`).join('')+
-    `</div><button type="button" data-w="${PRES.guestKey}" class="guest${cur===PRES.guestKey?' cur':''}">👀 Just watching (guest)</button>`+(first?'':'<button type="button" class="skip" data-w="">Cancel</button>')+`</div>`;
+    `</div>`+(first?'':'<button type="button" class="skip" data-w="">Cancel</button>')+`</div>`;
   d.addEventListener('click',e=>{const b=e.target.closest('button[data-w]');if(b){presPick(b.getAttribute('data-w'));return}if(e.target===d&&!first)d.remove()});
   document.body.appendChild(d);
 }
@@ -3437,5 +3458,15 @@ function s26kModal(c){return c?`<div class="s26k-bd" onclick="if(event.target===
  document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&document.querySelector('.s26k-m')&&!U.busy){ev.preventDefault();b27Edit()}})}
 /*</S26K-MODAL>*/
 </script>
+<!--<VIEW-ONLY>--><script>
+if(VIEW_ONLY){(function(){
+  var no=function(){return false},na=function(){return Promise.resolve(false)};
+  ['presAsk','presPick','qbPick','qbToggle','qbSetAmt','b27Place','b27PoolPlace','b27PoolGo','b27Opp','b27Amt','b27Odds','b27Text','b27Edit','sbSettle'].forEach(function(n){if(typeof window[n]==='function')window[n]=no});
+  ['presBeat','chatTypeWrite','chatSend','chatClear','b27Write','b27Confirm','b27PoolConfirm','b27PoolSettle','b27UndoGroup','sbSave','sbSaveShared','sbSettleShared','sbSettleGo','sbShared','sharedWrite'].forEach(function(n){if(typeof window[n]==='function')window[n]=na});
+  try{clearInterval(PS.timer);PS.timer=null;presTick=no}catch(e){}
+  var put=function(){var h=document.querySelector('.titlebar h1');if(h&&!document.getElementById('vob')){var b=document.createElement('span');b.id='vob';b.setAttribute('role','status');b.textContent='👀 View only';h.insertAdjacentElement('afterend',b)}};
+  put();document.addEventListener('DOMContentLoaded',put);
+})()}
+</script><!--</VIEW-ONLY>-->
 </body>
 </html>
