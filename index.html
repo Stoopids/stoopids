@@ -2013,7 +2013,7 @@ function d27Board(){const n=DRAFT27.slots.length,rows=[];const live={};(D.owners
   const R=Math.max(0,...lists.map(l=>l.length));
   for(let r=0;r<R;r++){const row=[];for(let c=0;c<n;c++){const s=r%2?n-1-c:c;row.push({slot:s,owner:DRAFT27.slots[s][0],tid:lists[s][r],overall:r*n+c+1,round:r+1,pick:c+1})}rows.push(row)}return rows}
 function d27Grade(nm,id){const g=DRAFT27_RESULTS&&DRAFT27_RESULTS.grades;if(!g)return null;return g[id]||g[nm]||g[ownerKey(nm)]||g[TN(nm)]||g[PN(nm)]||g[String(PN(nm)).toLowerCase()]||null}
-function d27When(){if(!d27Done())return '';const t=DRAFT27_RESULTS&&(DRAFT27_RESULTS.draft_completed_at||DRAFT27_RESULTS.completed_at||DRAFT27_RESULTS.draft_date);if(!t||!isFinite(Date.parse(t)))return '';
+function d27When(){const t=DRAFT27_RESULTS&&(DRAFT27_RESULTS.draft_completed_at||DRAFT27_RESULTS.completed_at||DRAFT27_RESULTS.draft_date);if(!t||!isFinite(Date.parse(t)))return '';
   return ' · drafted '+esc(new Date(t).toLocaleString(undefined,{weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}))+' ('+esc(S25.zoneLabel())+')'}
 /*<S26N-DRAFT-RECAP>*/
 /* s26n2: the real 2026-27 draft is Sun Nov 1 2026 20:00 WIB (13:00 UTC). The inlined 64 picks were rebuilt on 2026-10-30 from the
@@ -2024,18 +2024,16 @@ function d27Done(){const r=DRAFT27_RESULTS;if(!r)return false;const t=r.draft_co
   return isFinite(ms)&&ms>=Date.parse(D27_START)&&Array.isArray(r.picks)&&r.picks.length===D27_TOTAL}
 /* Weekly write-ups for the Recap tab: Monday recaps + milestone specials. Newest first by date. Add entries like {date:'2026-11-09',title:'Week 1',kind:'weekly',body:'...'} (kind 'weekly' | 'special'). body is plain text (escaped). */
 const RECAPS=[];
-function vDraftTab(){const room=esc(DRAFT_URL);
-  if(!d27Done())return `<section class="card dgo"><a class="btn dgob" href="${room}" rel="noopener">Go to draft room</a><p>The draft board shows up here once the draft is done.</p></section>`;
-  return vDraft27()}   /* s26n4: post-draft Draft tab = pick board only (no 'Draft room' link) */
-function vRecap(){const top=d27Done()?`<section class="d27"><h2 class="d27r">🎓 Draft Recap</h2><div class="d27cs">${d27Cards()}</div></section>`:'<h2>🎓 Draft Recap</h2><p class="card note">Draft grades come after the draft.</p>';
+function vDraftTab(){return vDraft27()}   /* s26s: STOOPIDS drafted by hand; board always shows, no gate, no draft-room button */
+function vRecap(){const top=`<section class="d27"><h2 class="d27r">🎓 Draft Recap</h2><div class="d27cs">${d27Cards()}</div></section>`;
   const L=RECAPS.filter(x=>x&&x.title).slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
   const list=L.length?'<div class="rcl">'+L.map(x=>`<article class="card rci"><small>${esc(x.kind==='special'?'Special':'Weekly')}${x.date?' · '+esc(fmtDate(String(x.date).slice(0,10))):''}</small><h3>${esc(x.title)}</h3><p>${esc(x.body||'')}</p></article>`).join('')+'</div>':'<div class="card rcnone">First recap coming after opening week</div>';
-  return top+`<section class="rcw"><h2>Weekly write-ups</h2>${list}</section>`+`<p class="droom rcroom"><a href="${esc(DRAFT_URL)}" rel="noopener">Draft room →</a></p>`}   /* s26n4: quiet same-tab room link, always at the very bottom of Recap */
+  return top+`<section class="rcw"><h2>Weekly write-ups</h2>${list}</section>`}   /* s26s: removed the quiet 'Draft room →' link (no STOOPIDS draft room) */
 /*</S26N-DRAFT-RECAP>*/
 function vDraft27(){const rows=d27Board();
   const head=DRAFT27.slots.map(([nm],i)=>`<th><b>${i+1}</b><span>${esc(TN(nm))}</span></th>`).join('');
   const body=rows.map(row=>'<tr>'+[...row].sort((a,b)=>a.slot-b.slot).map(p=>`<td><div class="d27n">${p.round}.${p.pick} <i>#${p.overall}</i></div>${p.tid?chip(p.tid):'<span class="d27e">—</span>'}</td>`).join('')+'</tr>').join('');
-  return `<section class="d27"><h2>📝 ${DRAFT27.season} Draft</h2><p class="d27sub">8 owners · snake draft · ${rows.length} rounds${d27When()}. Tap a team for ESPN.</p>
+  return `<section class="d27"><h2>Draft results (by roster)</h2><p class="d27sub">8 owners · snake draft · ${rows.length} rounds${d27When()}. Tap a team for ESPN.</p>
 <div class="d27w"><table class="d27t"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div></section>`}
 function d27Cards(){return DRAFT27.slots.map(([nm,id],i)=>{const g=d27Grade(nm,id);const gr=g&&g.grade?String(g.grade).trim().slice(0,3):'';
     return `<div class="d27c"><div class="d27h"><span class="d27g${gr?'':' tbd'}">${gr?esc(gr):'?'}</span><div><b>${esc(TN(nm))}</b><small>${esc(PN(nm))} · slot ${i+1}</small></div></div>`+
