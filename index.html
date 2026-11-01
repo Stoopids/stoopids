@@ -1,6 +1,32 @@
 <!doctype html>
 <html lang="en">
 <head>
+<!--<S26W-TOP>--><script>
+/* s26w: the page always opens at the top. Only a bet/game link (#bets/<id>, #games/<id>) opened fresh (not reload / back-forward / restored tab)
+   and not opened before on this device scrolls to its card, once. A repeat open of the same saved link is cleaned to the tab hash. */
+(function(){var W=window.S26W={deep:false,user:false,t0:Date.now()};
+  try{if('scrollRestoration' in history)history.scrollRestoration='manual'}catch(e){}
+  try{var m=/^#(bets|bets-2025-26|games)\/([A-Za-z0-9_-]{1,40})(?:$|[&?\/])/i.exec(location.hash||'');
+    if(m){var nv=performance.getEntriesByType&&performance.getEntriesByType('navigation')[0],fresh=!nv||nv.type==='navigate',seen={};
+      try{seen=JSON.parse(localStorage.getItem('stoopids_linkseen')||'{}')||{}}catch(e){seen={}}
+      var k=m[1].toLowerCase()+'/'+m[2];
+      if(fresh&&!seen[k]){W.deep=true;seen[k]=Date.now();var ks=Object.keys(seen).sort(function(a,b){return seen[b]-seen[a]}).slice(0,200),o={};ks.forEach(function(x){o[x]=seen[x]});try{localStorage.setItem('stoopids_linkseen',JSON.stringify(o))}catch(e){}}
+      else history.replaceState(null,'',location.pathname+location.search+'#'+m[1])}
+    try{var t=sessionStorage.getItem('stoopids.tab');if(t&&t.indexOf('/')>0&&/^(bets|bets-2025-26|games)\//i.test(t))sessionStorage.setItem('stoopids.tab',t.split('/')[0])}catch(e){}
+  }catch(e){}
+  /* installed app (Install / Create shortcut): a launch with no hash opens the tab it was installed from (or the shortcut's #tab); a plain browser open is unchanged */
+  try{var sa=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||(window.matchMedia&&matchMedia('(display-mode: minimal-ui)').matches)||navigator.standalone===true,at=localStorage.getItem('stoopids_app_tab');
+    if(sa&&(!location.hash||location.hash.length<2)&&at&&/^[a-z0-9-]{2,20}$/.test(at))history.replaceState(null,'',location.pathname+location.search+'#'+at)}catch(e){}
+  var appTab=function(){try{var h=(location.hash||'').replace(/^#/,'').split('/')[0].toLowerCase();if(/^[a-z0-9-]{2,20}$/.test(h))localStorage.setItem('stoopids_app_tab',h);else localStorage.removeItem('stoopids_app_tab')}catch(e){}};
+  addEventListener('beforeinstallprompt',appTab);addEventListener('appinstalled',appTab);
+  var stop=function(){W.user=true};['touchstart','wheel','keydown','mousedown'].forEach(function(e){addEventListener(e,stop,{capture:true,passive:true})});
+  W.top=function(force){if(W.deep||W.user)return;if(!force&&Date.now()-W.t0>3500)return;if(window.scrollY!==0||document.documentElement.scrollTop!==0)window.scrollTo(0,0)};
+  document.addEventListener('DOMContentLoaded',function(){W.top()});addEventListener('load',function(){W.top()});
+  addEventListener('pageshow',function(e){if(e.persisted){W.t0=Date.now();W.deep=false;W.user=false}W.top()});
+  var iv=setInterval(function(){if(Date.now()-W.t0>3500){clearInterval(iv);return}W.top()},100);
+  if('serviceWorker' in navigator&&navigator.serviceWorker.getRegistrations)navigator.serviceWorker.getRegistrations().then(function(r){r.forEach(function(x){x.unregister()})}).catch(function(){});
+})();
+</script><!--</S26W-TOP>-->
 <!--<VIEW-ONLY>--><script>
 /* View-only mode (s26t): ?view=1 (kept per tab in sessionStorage stoopids_view=1). Forces guest WITHOUT touching localStorage stoopids_who, and blocks every write. */
 var VIEW_ONLY=(function(){try{if(/(?:^|[?&])view=1(?:&|$)/.test(location.search))sessionStorage.setItem('stoopids_view','1');return sessionStorage.getItem('stoopids_view')==='1'}catch(e){return /(?:^|[?&])view=1(?:&|$)/.test(location.search)}})();
@@ -21,6 +47,8 @@ html.viewonly #chatF,html.viewonly #chatP,html.viewonly #chatWho,html.viewonly #
 #vob{display:none}html.viewonly #vob{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;font:600 12px/1.5 system-ui,sans-serif;background:#333;color:#eee;border:1px solid #666;vertical-align:middle}
 </style><!--</VIEW-ONLY>-->
 <meta charset="utf-8">
+<meta http-equiv="Cache-Control" content="no-cache"><!--S26W-->
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#10131a"><!--S26W-->
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>STOOPIDS — NCAA Stoopids Pool</title>
 <!--<FAVICON>--><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%23ffd23f%27/%3E%3Ctext x=%2732%27 y=%2749%27 font-family=%27Arial Black,Arial,sans-serif%27 font-size=%2748%27 font-weight=%27900%27 text-anchor=%27middle%27 fill=%27%23111%27%3ES%3C/text%3E%3C/svg%3E"><!--</FAVICON>-->
@@ -403,6 +431,7 @@ nav a.nt .nu{position:absolute;top:1px;left:2px;min-width:15px;background:#ff3b5
 @media (min-width:1040px) and (max-width:1239px){nav a.nt{flex:1 1 0;flex-direction:column;gap:2px;border-radius:9px;padding:4px 0;min-height:46px;font-size:11.5px;letter-spacing:-.01em}nav a.nt .ni{font-size:19px}nav a.nt .nl.f{display:none}nav a.nt .nl.s{display:block}}
 nav a.nt{text-decoration:none}
 .s24lb{display:flex;justify-content:flex-end;gap:6px;margin:0 0 6px}
+/*<S26W-ROW>*/.s26w-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 10px;min-width:0}.s26w-row>.s24lb{margin:0;flex:0 0 auto}.s26w-row>:first-child{flex:0 1 auto;min-width:0;margin-top:0;margin-bottom:0}.s26w-row>.ob-seg{flex:1 1 auto}.tabs.s26w-in{display:flex;flex-wrap:nowrap;align-items:center;gap:6px}.tabs.s26w-in>button{min-width:0}.tabs.s26w-in>.s24lb{margin:0 0 0 auto;flex:0 0 auto}@media(max-width:360px){.s26w-row .s24lb .s24lk{padding-left:10px;padding-right:10px}}/*</S26W-ROW>*/
 .s24lk{display:inline-flex;align-items:center;justify-content:center;gap:4px;min-height:44px;min-width:44px;padding:6px 12px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--tx);font:inherit;font-size:13px;font-weight:700;cursor:pointer}
 .s24lk.i{padding:4px 8px;font-size:15px;margin-left:auto}
 .s24lk:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
@@ -3107,9 +3136,11 @@ const s24RouteHash=()=>s24HashOf(tab)+(S24.sub&&S24.done!==tab+'/'+S24.sub?'/'+S
 function s24Url(h,share){const q=new URLSearchParams();if(DEMO)q.set('demo','1');if(!share&&ADMIN)q.set('admin','1');const s=q.toString();return location.pathname+(s?'?'+s:'')+(h?'#'+h:'')}
 const s24Href=t=>s24Url(s24HashOf(t),true);
 function s24ShareUrl(kind,id){const h=kind&&s24IdOK(String(id))?(kind==='games'?'games/':s24HashOf('bets27')+'/')+id:s24HashOf(tab);return location.origin+s24Url(h,true)}
-function s24Put(push){try{const want=s24Url(s24RouteHash());try{sessionStorage.setItem('stoopids.tab',s24HashOf(tab))}catch(_){}if(location.pathname+location.search+location.hash===want)return;history[push?'pushState':'replaceState'](null,'',want)}catch(e){}}
+/*<S26W-MANIFEST>*/ // Install / Add to home screen from any tab opens that tab: the manifest link points at a per-tab manifest whose start_url is ./#<tab>
+const S26W_MT=["standings", "games", "bets", "bets-2025-26", "teams", "draft", "recap", "rules", "archive", "postseason", "redraft", "rosters", "points"];function s26wMan(h){try{h=String(h||'').split('/')[0];const l=document.querySelector('link[rel=manifest]');if(!l)return;const want=S26W_MT.includes(h)?'manifest-'+h+'.webmanifest':'manifest.webmanifest';if(l.getAttribute('href')!==want)l.setAttribute('href',want)}catch(e){}}/*</S26W-MANIFEST>*/
+function s24Put(push){try{s26wMan(s24HashOf(tab));const want=s24Url(s24RouteHash());try{sessionStorage.setItem('stoopids.tab',s24HashOf(tab))}catch(_){}if(location.pathname+location.search+location.hash===want)return;history[push?'pushState':'replaceState'](null,'',want)}catch(e){}}
 function s24NavClick(e,t){if(e&&(e.button>0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey))return true;if(e&&e.preventDefault)e.preventDefault();tab=t;S24.sub=null;render();window.scrollTo(0,0);return false}
-function s24OnNav(){const r=s24Read(location.hash);if(!r&&location.hash.length>1)return;const R=r||{t:'standings',sub:null};if(R.t===tab&&R.sub===S24.sub)return;
+function s24OnNav(){const r=s24Read(location.hash);/*<S26W>*/try{if(r&&r.sub&&window.S26W)S26W.deep=true}catch(_){}/*</S26W>*/if(!r&&location.hash.length>1)return;const R=r||{t:'standings',sub:null};if(R.t===tab&&R.sub===S24.sub)return;/*<S26W>*/if(R.t===tab&&!R.sub&&S24.sub&&S24.done===tab+'/'+S24.sub)return;/*</S26W> the deep link just cleaned its own hash: popstate after hashchange must not undo the jump */
   tab=R.t;S24.sub=R.sub;S24.prep=null;S24.done=null;S24.nf=null;S24.last=tab;try{sessionStorage.setItem('stoopids.tab',s24HashOf(tab))}catch(_){}render();if(!R.sub)window.scrollTo(0,0)}
 window.addEventListener('popstate',s24OnNav);window.addEventListener('hashchange',s24OnNav);
 /*<TAB-TOP>*/ // every tab switch opens at the top; the browser must not restore an old scroll position on reload/back. Only a link to one bet/game (#bets/<id>) scrolls to it.
@@ -3120,7 +3151,7 @@ window.addEventListener('pageshow',()=>{if(!S24.sub)window.scrollTo(0,0)});/*</T
   if(!r&&!params.has('tab')){try{const nv=performance.getEntriesByType&&performance.getEntriesByType('navigation')[0];if(nv&&nv.type==='reload'){const x=s24Read(sessionStorage.getItem('stoopids.tab')||'');if(x)r=x}}catch(e){}}
   /*<S26V>*/try{const nv=performance.getEntriesByType&&performance.getEntriesByType('navigation')[0];if(r&&r.sub&&nv&&nv.type!=='navigate')r.sub=null}catch(e){}/*</S26V>*/
   if(r){tab=r.t;S24.sub=r.sub;S24.route0=true;S24.last=tab;s24Put(false)}
-  else{S24.last=tab;if(location.hash.length>1)try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}}   // a stray / private fragment is never kept
+  else{S24.last=tab;if(location.hash.length>1)try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}/*<S26W>*/s24Put(false)/*</S26W>*/}   // a stray / private fragment is never kept
 })();
 /* ---- share / copy ---- */
 const s24CanShare=()=>!!(navigator.share&&window.isSecureContext);
@@ -3156,6 +3187,8 @@ function s24After(){
   /*<TAB-TOP>*/if(!S24.top0){S24.top0=1;if(!S24.sub)window.scrollTo(0,0)}/*</TAB-TOP>*/
   const m=document.getElementById('main');if(!m)return;
   const seg=m.querySelector(':scope > .ob-seg');(seg||m).insertAdjacentHTML(seg?'afterend':'afterbegin',`<div class="s24lb">${/*<OWES-RESTORE>*/false/*<S26F-WIU> jump button removed </S26F-WIU>*/?'<button type="button" class="s24lk owes-jump" data-owes-jump="1" onclick="owesJump()">💸 Who Owes Who ↓</button>':''/*</OWES-RESTORE>*/}<button type="button" class="s24lk" data-s24-share="tab" onclick="s24Share()">🔗 ${s24CanShare()?'Share':'Copy link'}</button></div>`+(S24.nf&&S24.nf.t===tab?`<div class="card s24nf note" role="status">${esc(S24.nf.msg)}</div>`:''));
+  /*<S26W-ROW>*/ // the tab's view toggle (League/Breakdown, bets views...) and the Share button share ONE row: toggle left, Share right
+  try{const lb=m.querySelector(':scope > .s24lb');const tg=m.querySelector(':scope > .rkseg, :scope > .ob-seg, :scope > [role=group]');if(lb&&tg&&!lb.contains(tg)){const row=document.createElement('div');row.className='s26w-row';tg.parentNode.insertBefore(row,tg);row.appendChild(tg);row.appendChild(lb)}else if(lb&&!tg){const c=lb.nextElementSibling,t2=c&&c.matches('.card')&&c.firstElementChild&&c.firstElementChild.matches('.tabs')?c.firstElementChild:null;if(t2){t2.classList.add('s26w-in');t2.appendChild(lb)}}}catch(_){}/*</S26W-ROW>*/
   s24DeepGo();
 }
 function s24NotFound(what){S24.nf={t:tab,msg:'That '+what+' wasn’t found (the link may be old or wrong). Showing the whole tab.'};const k=tab+'/'+S24.sub;S24.sub=null;S24.done=k;s24Put(false);render()}
@@ -3174,7 +3207,7 @@ function s24DeepGo(){
   if(S24.done!==key){S24.done=key;S24.hlUntil=Date.now()+2600;try{el.scrollIntoView({block:'center'})}catch(_){}/*<S26V>*/s24Put(false);/*</S26V>*/clearTimeout(S24.ht);S24.ht=setTimeout(()=>{document.querySelectorAll('.dl-hl').forEach(e=>e.classList.remove('dl-hl'));/*<S26G>*/if(tab+'/'+S24.sub===key){S24.sub=null;s24Put(false)}/*</S26G>*/},2650)}
   if(Date.now()<S24.hlUntil)el.classList.add('dl-hl');
 }
-function s24AfterLoad(){/*<NO-JUMP>*/const first=!S24.al;S24.al=1;/*</NO-JUMP>*/if(S24.sub)s24DeepGo()/*<TAB-TOP>*/;else if(first)window.scrollTo(0,0)/*</TAB-TOP>*/}   // the 5-min reload never scrolls
+function s24AfterLoad(){/*<NO-JUMP>*/const first=!S24.al;S24.al=1;/*</NO-JUMP>*/if(S24.sub)s24DeepGo()/*<TAB-TOP>*/;else if(first)window.scrollTo(0,0)/*</TAB-TOP>*//*<S26W>*/;try{window.S26W&&S26W.top()}catch(_){}/*</S26W>*/}   // the 5-min reload never scrolls
 /* ---- 1) Edit ---- */
 function s24ResetForm(){Object.assign(U,{/*<S25>*/rdEd:null,rdOpen:false,/*</S25>*/opps:[],amt:null,amtCustom:false,amtTxt:'',amtErr:'',odds:[1,1],custom:false,customTxt:'',oddsErr:'',text:'',confirm:false,fids:{},qb:null})}
 function s24EditStart(id){
