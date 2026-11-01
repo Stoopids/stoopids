@@ -298,6 +298,7 @@ nav button .nu{position:absolute;top:1px;left:2px;min-width:15px;background:#ff3
 /*</POOL>*/
 .b27-cw{margin-top:8px}
 .b27-bad-t{color:var(--bad);font-size:13px;min-height:16px;margin-top:4px}
+/*<S26K-MODAL>*/.s26k-bd{position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:12px;box-sizing:border-box}.s26k-m{width:100%;max-width:520px;max-height:85vh;overflow-y:auto;overscroll-behavior:contain;border-radius:16px}.s26k-m>.card{margin:0}body.s26k-lock{overflow:hidden}/*</S26K-MODAL>*/
 .b27-livebox,.b27-confirm #b27Live{margin-top:12px;padding:10px;border-radius:12px;background:var(--card2);border:1px solid var(--line);font-size:14px}
 .b27-w{color:var(--good);font-size:13.5px;margin-top:3px}.b27-l{color:#fbbf24;font-size:13.5px;margin-top:2px}
 .b27-sum{margin:10px 0 6px;font-weight:800;overflow-wrap:anywhere}
@@ -511,11 +512,13 @@ nav a.nt{text-decoration:none}
 .d27t th{font-size:.72em;text-align:left;vertical-align:bottom;min-width:96px;padding:2px 4px}.d27t th b{display:block;opacity:.6}.d27t th span{display:block;line-height:1.15}
 .d27t td{vertical-align:top;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:4px;min-width:96px}
 .d27n{font-size:.68em;opacity:.7;margin-bottom:2px}.d27n i{font-style:normal;opacity:.8}.d27e{opacity:.5}
-.d27cs{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px}
+.d27cs{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(250px,100%),1fr));gap:8px}
+@media (max-width:640px){.d27{display:flex;flex-direction:column;min-width:0}.d27>*{min-width:0;max-width:100%}.d27 .d27r,.d27 .d27cs{order:-1}.d27>h2:first-child,.d27 .d27sub{order:-2}.d27w{max-width:100%;margin-top:.6em}.d27c p{overflow-wrap:anywhere}}   /* phones: the Draft Recap cards come right under the header, ABOVE the 977px-wide pick board (which scrolls inside .d27w), instead of ~2 screens down */
 .d27c{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px}
 .d27h{display:flex;gap:10px;align-items:center}.d27h small{display:block;opacity:.7}
 .d27g{flex:none;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.25em;background:#f5c518;color:#111}.d27g.tbd{background:rgba(255,255,255,.15);color:inherit}
 .d27c p{margin:.5em 0 0;font-size:.92em}.d27soon{opacity:.65;font-style:italic}.d27c details summary{cursor:pointer;margin-top:.4em;opacity:.8}
+/*<S26N-DRAFT-RECAP>*/.dgo{text-align:center;padding:48px 16px}.dgo p{opacity:.75;margin:.8em 0 0}.dgob{display:inline-block;font-size:1.25em;padding:16px 28px;text-decoration:none;max-width:100%;box-sizing:border-box}.droom{font-size:.9em;margin:0 0 .6em}.rcw{margin-top:18px}.rcw h2{margin:.4em 0}.rcl{display:grid;gap:8px}.rci{min-width:0}.rci small{opacity:.7}.rci p{overflow-wrap:anywhere;white-space:pre-line}.rcnone{text-align:center;opacity:.7;font-style:italic;padding:20px}/*</S26N-DRAFT-RECAP>*/
 /*</S26D-DRAFT>*/
 /*<S26E-BIG-LOADER>*/ /* 3x loader: ball = --bs (120px desktop, shrinks with vw on phones); every px of the old 30px loader is scaled by --bs/30 */
 .bl{--bs:clamp(56px,22vw,120px);gap:calc(var(--bs)*.27);padding:calc(var(--bs)*.85) 0 calc(var(--bs)*.65);max-width:100%;overflow:hidden}
@@ -1185,8 +1188,12 @@ function lvUI(){
 const NOPTS=['No points yet. Everyone starts somewhere (0).','Zero points. Pure potential.','Nothing on the board yet. Dream big.','0 points and no evidence of poor drafting.','Spotless record, because nothing has happened.','No points yet. The comeback story starts here.','Blank scoreboard. Peak optimism.','Zero points, zero regrets.','The ledger is clean. Enjoy it while it lasts.','Not a single point lost, either.'];
 function noPts(n){const idx=Math.max(0,(D.owners||[]).findIndex(o=>o.name===n));return shuf(NOPTS,TSEED+7)[idx%NOPTS.length]}
 const rankTxt=o=>(D.owners.filter(x=>x.rank===o.rank).length>1?'T-':'')+o.rank;
-/*<GOLD-LINE>*/ // gold = championship seasons from archive.js alltime[].title_seasons (current_owner match), cancelled 2019-20 not counted, same rule as Archive Titles
+/*<GOLD-LINE>*/ // gold = championship seasons from archive.js alltime[].title_seasons (current_owner match), cancelled 2019-20 not counted here (S26I: shown separately as 🏆* predicted via goldP), same rule as Archive Titles
 function goldN(n){const A=window.ARCHIVE;if(!A||!A.alltime||!A.seasons)return 0;const p=A.alltime.find(x=>x.current_owner===n);if(!p||!p.title_seasons)return 0;return p.title_seasons.filter(y=>!((A.seasons.find(s=>s.season===y)||{}).no_tournament)).length}/*</GOLD-LINE>*/
+/*<S26H-TROPHY>*/ // one 🏆 per league title (goldN: archive.js champions of COMPLETED seasons only). Shown in League AND Breakdown. Current-season leaders never get one: 2026-27 is not in the archive until it is finished.
+/*<S26I-COVID>*/function goldP(n){const A=window.ARCHIVE;if(!A||!A.alltime||!A.seasons)return 0;const p=A.alltime.find(x=>x.current_owner===n);if(!p||!p.title_seasons)return 0;return p.title_seasons.some(y=>((A.seasons.find(s=>s.season===y)||{}).no_tournament))?1:0}   // 2019-20 (no_tournament) title from archive title_seasons = predicted winner (rank 1 / champ in the 2019-20 sheet when play stopped)
+const goldNote=()=>(window.ARCHIVE&&D&&D.owners&&D.owners.some(o=>goldP(o.name)))?'<p class="fine gfoot">* 2019-20 cancelled (COVID), predicted winner</p>':'';
+function goldTag(n){const g=goldN(n),c=goldP(n);if(!g&&!c)return '';const t=(g?g+' league title'+(g>1?'s':''):'')+(c?(g?' + ':'')+'2019-20 predicted (COVID)':'');return `<span class="gold" role="img" aria-label="${t}" title="${t}">${'🏆'.repeat(g)}${c?'🏆*':''}</span>`}/*</S26I-COVID>*//*</S26H-TROPHY>*/
 /*<OWNER-NAMES>*/ // display names only: the internal owner key (config/data.json owners[].name) is unchanged, so bets, trophies, sign-in, chat, reactions and presence stay attached.
 const OWNER_DISP={'Dirty Draymond':{team:'Dirty Draymond',person:'Mark'},'Stock':{team:'Stock Rising',person:'Jake'},'Kurmoji':{team:'Kurmoji',person:'Kurt'},'Kentut':{team:'Kentut',person:'Ken'},'Murf':{team:'Murfcockchalkrock',person:'Murf'},'Paul':{team:'Party Paul',person:'Paul'},'Nasty':{team:'Nasty Peacock',person:'Jim'},'En Fuego':{team:'En Fuego',person:'Scotty'}};
 function ownerKey(n){return typeof legacyOwner==='function'?legacyOwner(n):n}
@@ -1197,11 +1204,11 @@ function vStandings(){/*<RANKINGS>*/const sv=rkView();if(sv==='points')return rk
   const mx=Math.max(10,...D.owners.map(o=>o.total));
   return /*<RANKINGS>*/rkSeg()+/*</RANKINGS>*//*<RANK-CHIPS>*/'<div class="ocl">'/*</RANK-CHIPS>*/+D.owners.map((o,i)=>`<div class="card${/*<RANK-CHIPS>*/' oc'/*</RANK-CHIPS>*/}"><div class="lb" onclick="goOwner('${esc(o.name)}')">
     <div class="rank">${rankTxt(o)}</div>
-    <div class="who"><b>${esc(o.emoji)} ${esc(/*<OWNER-NAMES>*/TN(o.name)/*</OWNER-NAMES>*/)}</b>${/*<GOLD-LINE>*/goldN(o.name)?`<span class="gold" role="img" aria-label="${goldN(o.name)} title${goldN(o.name)>1?'s':''}" title="${goldN(o.name)} title${goldN(o.name)>1?'s':''}">${'🏆'.repeat(goldN(o.name))}</span>`:''/*</GOLD-LINE>*/}<small>${esc(/*<OWNER-NAMES>*/PN(o.name)/*</OWNER-NAMES>*/)}</small>${/*<RANK-CHIPS>*/''/*per-owner quip no longer shown on these cards (quip() itself is untouched; Rosters still uses it)*//*</RANK-CHIPS>*/}</div>
+    <div class="who"><b>${esc(o.emoji)} ${esc(/*<OWNER-NAMES>*/TN(o.name)/*</OWNER-NAMES>*/)}</b><small>${esc(/*<OWNER-NAMES>*/PN(o.name)/*</OWNER-NAMES>*/)}</small>${/*<GOLD-LINE>*/goldTag(o.name)/*</GOLD-LINE>*/}${/*<RANK-CHIPS>*/''/*per-owner quip no longer shown on these cards (quip() itself is untouched; Rosters still uses it)*//*</RANK-CHIPS>*/}</div>
     <div class="pts">${o.total}<small>points</small></div></div>
     <div class="bar"><i style="width:${Math.max(0,o.total)/mx*100}%"></i></div>
     <div class="chips">${o.teams.map(t=>/*<CHIP-RECORD>*/chipRec/*</CHIP-RECORD>*/(t.tid,{out:t.status==='dropped',cn:1})).join('')}</div></div>`).join('')+'</div>'+
-    `<p class="note">Tap an owner for the full breakdown. Struck-through teams were dropped in the Jan 20 redraft.</p>`}
+    `<p class="note">Tap an owner for the full breakdown. Struck-through teams were dropped in the Jan 20 redraft.</p>`+goldNote()}
 function goOwner(n){/*<S26F-NOROSTERS>*/ownerSel=n;tab='standings';s26eView('points');S24.sub=null;render();try{s24Put(true)}catch(e){}const c=[...document.querySelectorAll('.pcard')].find(x=>x.getAttribute('data-pc')===n);if(c)c.scrollIntoView({block:'start'});else window.scrollTo(0,0)/*</S26F-NOROSTERS>*/}
 
 /* ---------- games tab ---------- */
@@ -1829,7 +1836,7 @@ function vUpsets(){
   h+=`<div class="card sc"><table><tr><th>Date</th><th>Game</th><th>Line (pre-game)</th><th>Upset?</th></tr>${A.map(a=>{const l=a.line;const ls=l?`${esc(l.provider)}: ${esc(l.details||'')} · Moneyline ${l.home_ml}/${l.away_ml} <span class="mut">(home/away; underdog ${esc(a.winnerId==l.underdog_id?a.winner:a.loser)})</span>`:'<span class="mut">no line</span>';
     return `<tr><td>${esc(fmtDate(a.day))}<div class="note">${esc(a.round)}</div></td><td>${a.winnerSeed?'('+a.winnerSeed+') ':''}<b>${esc(a.winner)}</b> ${a.winnerScore}-${a.loserScore} ${a.loserSeed?'('+a.loserSeed+') ':''}${esc(a.loser)}</td><td>${ls}</td><td>${a.upset?'<b class="good">YES +'+D.meta.points.upset+'</b>':a.upset===false?'no':'?'}<div class="note">${esc(a.basis)}</div></td></tr>`}).join('')}</table></div>`;
   return h}
-function vRedraft(){/*<TAB-WINDOWS>*/const pr=REDRAFT_MOCK_URL?`<div class="card"><a class="btn" href="${esc(REDRAFT_MOCK_URL)}" target="_blank" rel="noopener">🎯 Practice the redraft</a></div>`:'';return pr+vRedraft0()}
+function vRedraft(){/*<TAB-WINDOWS>*/const go=`<section class="card dgo"><a class="btn dgob" href="${esc(DRAFT_URL)}" rel="noopener">Go to draft room</a></section>`;/* s26n4: own same-tab room link while the redraft tab is visible */const pr=REDRAFT_MOCK_URL?`<div class="card"><a class="btn" href="${esc(REDRAFT_MOCK_URL)}" target="_blank" rel="noopener">🎯 Practice the redraft</a></div>`:'';return go+pr+vRedraft0()}
 function vRedraft0(){/*</TAB-WINDOWS>*/
   const r=D.meta.redraft;const any=Object.values(r.moves).some(m=>(m.drop||[]).length||(m.add||[]).length);
   const dd=fmtDateLong(r.date);
@@ -1942,9 +1949,9 @@ function vTeamsAP(){const netBy={};(RK.net||[]).forEach(x=>{if(x.tid)netBy[Strin
 const PCOLS=[['W','Regular-season wins',b=>b.win],['Conf','Conference champ (regular season + tournament)',b=>(b.conf_reg||0)+(b.conf_tourn||0)],['NCAA','Made the NCAA field',b=>b.ncaa_entry],['PI','Play-in win',b=>b.playin_win],['NW','NCAA tournament wins',b=>b.ncaa_win],['Up','Upsets',b=>b.upset],['F4','Final Four',b=>b.final4],['Ch','National champ',b=>b.champ],['±','Missed the Big Dance / commissioner adjustment',b=>(b.missed_dance||0)+(b.adjust||0)]];
 const pCell=v=>v?`<b class="${v<0?'bad':''}">${v>0?v:'\u2212'+(-v)}</b>`:'<span class="mut">\u2014</span>';
 function vPoints(){const hd='<div class="pg ph">'+PCOLS.map(c=>`<span title="${esc(c[1])}">${c[0]}</span>`).join('')+'<span title="Team total">Tot</span></div>';
-  return '<div class="orl">'+D.owners.map(o=>`<div class="card pcard" data-pc="${esc(o.name)}"><div class="orh" onclick="goOwner('${esc(o.name)}')"><span class="rank">${rankTxt(o)}</span><div class="who"><b>${esc(o.emoji)} ${esc(TN(o.name))}</b><small>${esc(PN(o.name))}</small></div><div class="pts">${o.total}<small>points</small></div></div>${hd}`+
+  return '<div class="orl">'+D.owners.map(o=>`<div class="card pcard" data-pc="${esc(o.name)}"><div class="orh" onclick="goOwner('${esc(o.name)}')"><span class="rank">${rankTxt(o)}</span><div class="who"><b>${esc(o.emoji)} ${esc(TN(o.name))}</b><small>${esc(PN(o.name))}</small>${/*<S26H-TROPHY>*/goldTag(o.name)/*</S26H-TROPHY>*/}</div><div class="pts">${o.total}<small>points</small></div></div>${hd}`+
    (o.teams||[]).map(t=>{const b=t.by||{};return `<div class="prow${t.status==='dropped'?' drop':''}"><div class="pchip">${chip(t.tid,{out:t.status==='dropped'})}</div><div class="pg pv">${PCOLS.map(c=>`<span>${pCell(c[2](b)||0)}</span>`).join('')}<span class="ptot">${t.total}</span></div></div>`}).join('')+'</div>').join('')+'</div>'+
-  `<p class="note">Points each team earned for its manager, by category; \u2014 = none yet. ${PCOLS.map(c=>`<b>${c[0]}</b> ${esc(c[1])}`).join(' · ')} · <b>Tot</b> team total. Team totals add up to the manager total shown in League. Struck-through teams were dropped in the redraft; the points they earned before still count. Tap a manager for the game-by-game breakdown.</p>`}
+  `<p class="note">Points each team earned for its manager, by category; \u2014 = none yet. ${PCOLS.map(c=>`<b>${c[0]}</b> ${esc(c[1])}`).join(' · ')} · <b>Tot</b> team total. Team totals add up to the manager total shown in League. Struck-through teams were dropped in the redraft; the points they earned before still count. Tap a manager for the game-by-game breakdown.</p>`+goldNote()}
 /*</S26E>*/
 /*<S26D-DRAFT>*/
 /* 2026-27 draft results. Teams ALWAYS come from the live rosters (D.owners[].teams); DRAFT27 only sets slot order and pick order (Paul's list, snake). */
@@ -1957,18 +1964,34 @@ function d27Board(){const n=DRAFT27.slots.length,rows=[];const live={};(D.owners
   const R=Math.max(0,...lists.map(l=>l.length));
   for(let r=0;r<R;r++){const row=[];for(let c=0;c<n;c++){const s=r%2?n-1-c:c;row.push({slot:s,owner:DRAFT27.slots[s][0],tid:lists[s][r],overall:r*n+c+1,round:r+1,pick:c+1})}rows.push(row)}return rows}
 function d27Grade(nm,id){const g=DRAFT27_RESULTS&&DRAFT27_RESULTS.grades;if(!g)return null;return g[id]||g[nm]||g[ownerKey(nm)]||g[TN(nm)]||g[PN(nm)]||g[String(PN(nm)).toLowerCase()]||null}
-function d27When(){const t=DRAFT27_RESULTS&&(DRAFT27_RESULTS.draft_completed_at||DRAFT27_RESULTS.completed_at||DRAFT27_RESULTS.draft_date);if(!t||!isFinite(Date.parse(t)))return '';
+function d27When(){if(!d27Done())return '';const t=DRAFT27_RESULTS&&(DRAFT27_RESULTS.draft_completed_at||DRAFT27_RESULTS.completed_at||DRAFT27_RESULTS.draft_date);if(!t||!isFinite(Date.parse(t)))return '';
   return ' · drafted '+esc(new Date(t).toLocaleString(undefined,{weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}))+' ('+esc(S25.zoneLabel())+')'}
+/*<S26N-DRAFT-RECAP>*/
+/* s26n2: the real 2026-27 draft is Sun Nov 1 2026 20:00 WIB (13:00 UTC). The inlined 64 picks were rebuilt on 2026-10-30 from the
+   pre-draft site rosters + Paul's lists (draft_date null, no completed_at), so they are NOT the real draft.
+   Real total = 8 owners x D27_ROUNDS teams per owner. D27_ROUNDS=8 (64 picks), confirmed by PM; rounds 9-10 come at the Jan 20 redraft. */
+const D27_START='2026-11-01T13:00:00Z',D27_OWNERS=8,D27_ROUNDS=8,D27_TOTAL=D27_OWNERS*D27_ROUNDS;
+function d27Done(){const r=DRAFT27_RESULTS;if(!r)return false;const t=r.draft_completed_at||r.completed_at,ms=t?Date.parse(t):NaN;
+  return isFinite(ms)&&ms>=Date.parse(D27_START)&&Array.isArray(r.picks)&&r.picks.length===D27_TOTAL}
+/* Weekly write-ups for the Recap tab: Monday recaps + milestone specials. Newest first by date. Add entries like {date:'2026-11-09',title:'Week 1',kind:'weekly',body:'...'} (kind 'weekly' | 'special'). body is plain text (escaped). */
+const RECAPS=[];
+function vDraftTab(){const room=esc(DRAFT_URL);
+  if(!d27Done())return `<section class="card dgo"><a class="btn dgob" href="${room}" rel="noopener">Go to draft room</a><p>The draft board shows up here once the draft is done.</p></section>`;
+  return vDraft27()}   /* s26n4: post-draft Draft tab = pick board only (no 'Draft room' link) */
+function vRecap(){const top=d27Done()?`<section class="d27"><h2 class="d27r">🎓 Draft Recap</h2><div class="d27cs">${d27Cards()}</div></section>`:'<h2>🎓 Draft Recap</h2><p class="card note">Draft grades come after the draft.</p>';
+  const L=RECAPS.filter(x=>x&&x.title).slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
+  const list=L.length?'<div class="rcl">'+L.map(x=>`<article class="card rci"><small>${esc(x.kind==='special'?'Special':'Weekly')}${x.date?' · '+esc(fmtDate(String(x.date).slice(0,10))):''}</small><h3>${esc(x.title)}</h3><p>${esc(x.body||'')}</p></article>`).join('')+'</div>':'<div class="card rcnone">First recap coming after opening week</div>';
+  return top+`<section class="rcw"><h2>Weekly write-ups</h2>${list}</section>`+`<p class="droom rcroom"><a href="${esc(DRAFT_URL)}" rel="noopener">Draft room →</a></p>`}   /* s26n4: quiet same-tab room link, always at the very bottom of Recap */
+/*</S26N-DRAFT-RECAP>*/
 function vDraft27(){const rows=d27Board();
   const head=DRAFT27.slots.map(([nm],i)=>`<th><b>${i+1}</b><span>${esc(TN(nm))}</span></th>`).join('');
   const body=rows.map(row=>'<tr>'+[...row].sort((a,b)=>a.slot-b.slot).map(p=>`<td><div class="d27n">${p.round}.${p.pick} <i>#${p.overall}</i></div>${p.tid?chip(p.tid):'<span class="d27e">—</span>'}</td>`).join('')+'</tr>').join('');
-  const cards=DRAFT27.slots.map(([nm,id],i)=>{const g=d27Grade(nm,id);const gr=g&&g.grade?String(g.grade).trim().slice(0,3):'';
+  return `<section class="d27"><h2>📝 ${DRAFT27.season} Draft</h2><p class="d27sub">8 owners · snake draft · ${rows.length} rounds${d27When()}. Tap a team for ESPN.</p>
+<div class="d27w"><table class="d27t"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div></section>`}
+function d27Cards(){return DRAFT27.slots.map(([nm,id],i)=>{const g=d27Grade(nm,id);const gr=g&&g.grade?String(g.grade).trim().slice(0,3):'';
     return `<div class="d27c"><div class="d27h"><span class="d27g${gr?'':' tbd'}">${gr?esc(gr):'?'}</span><div><b>${esc(TN(nm))}</b><small>${esc(PN(nm))} · slot ${i+1}</small></div></div>`+
-     (g?(g.summary4?`<p>${esc(g.summary4)}</p>`:'')+(g.deep?`<details><summary>More</summary><p>${esc(g.deep)}</p></details>`:''):'<p class="d27soon">Grades coming soon.</p>')+'</div>'}).join('');
-  return `<section class="d27"><h2>📋 ${DRAFT27.season} Draft Results</h2><p class="d27sub">8 owners · snake draft · ${rows.length} rounds${d27When()}. Tap a team for ESPN.</p>
-<div class="d27w"><table class="d27t"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>
-<h2 class="d27r">🎓 Draft Recap</h2><div class="d27cs">${cards}</div></section>`}
-VIEWS.draft27=vDraft27;TABS.splice(4,0,['draft27','📋 Draft results']);NAVSHORT.draft27='Picks';
+     (g?(g.summary4?`<p>${esc(g.summary4)}</p>`:'')+(g.deep?`<details><summary>More</summary><p>${esc(g.deep)}</p></details>`:''):'<p class="d27soon">Grades coming soon.</p>')+'</div>'}).join('');}
+/*<S26N-DRAFT-RECAP>*/VIEWS.draft=vDraftTab;VIEWS.recap=vRecap;TABS.splice(4,0,['draft','📝 Draft'],['recap','🎓 Recap']);NAVSHORT.draft='Draft';NAVSHORT.recap='Recap';/*</S26N-DRAFT-RECAP>*/
 /*</S26D-DRAFT>*/
 /*<CHIP-FIT>*/
 const CHIPFIT_MIN=9;
@@ -1993,6 +2016,7 @@ function render(){
   $('#badges').innerHTML=(m.mode==='demo'?'<span class="badge warn">DEMO DATA</span>':'')+(ADMIN?'<span class="badge">ADMIN VIEW</span>':'')+(ADMIN&&m.warnings.length?'<span class="badge warn">⚠ '+m.warnings.length+' warning(s) — see Rules</span>':'');
   try{nbSeen()}catch(_){}   // NEWBET hook: opening Side bets clears the 'new' badge
   /*<BETS-TALLY>*/if(typeof SHOW_OLD_BETS!=='undefined'&&!SHOW_OLD_BETS&&(tab==='bets'||tab==='bets2526'||tab==='bets-2025-26')&&VIEWS.bets27)tab='bets27';/*</BETS-TALLY>*/
+  /*<S26N-DRAFT-RECAP>*/if(/^(draft27|draft-results|draftresults|picks|results)$/.test(tab))tab='recap';/*</S26N-DRAFT-RECAP>*/
   /*<TAB-WINDOWS>*/if(tab==='rosters'||tab==='squads'){tab='standings';s26eView('points')}/*S26F-NOROSTERS*/if(!tabVisible(tab==='bets'?'bets27':tab))tab='standings';/*</TAB-WINDOWS>*/
   /*<NAV-ONE-ROW>*/
   $('#nav').innerHTML=TABS/*<TAB-WINDOWS>*/.filter(t=>tabVisible(t[0]))/*</TAB-WINDOWS>*/.map(t=>{const sp=t[1].indexOf(' '),ic=t[1].slice(0,sp),full=t[1].slice(sp+1),on=t[0]===tab||/*<ONE-BETS>*/(t[0]==='bets27'&&tab==='bets')/*</ONE-BETS>*/;
@@ -2001,7 +2025,6 @@ function render(){
   $('#main').innerHTML=(VIEWS[tab]||vStandings)();
   $('#foot').innerHTML=`STOOPIDS · times in your time zone (${esc(S25.zoneLabel())}) · ${DEMO?'<a href="?">back to the live season</a>':'<a href="?demo=1">see the demo (last season replay)</a>'}${ADMIN?' · scores ESPN (fallback ncaa.com)':''}`;
   freshStart();
-  /*<DRAFT-TAB>*/try{draftNavLink()}catch(_){}/*</DRAFT-TAB>*/
   /*<CHIP-FIT>*/try{chipFit()}catch(_){}/*</CHIP-FIT>*/
   /*<CHAT-BAR>*/try{chatAfterRender()}catch(_){}/*</CHAT-BAR>*/
 }
@@ -2908,11 +2931,11 @@ function vB27(){
    <div class="note" id="b27Top" style="margin-top:6px">${U.state==='ok'?'<span class="good">● live</span> · anyone with the link can add bets (no logins). Play nice.':U.state==='error'?'<span class="bad">● can’t reach the bets ledger right now</span>':/*<BALL-LOADER>*/''/*</BALL-LOADER>*/}</div></div>`;/*</BETS-INTRO-BOTTOM>*/
   if(U.msg)h+=`<div class="card ${U.msgBad?'b27-bad':'b27-ok'}" role="status">${esc(U.msg)}${/*<MULTI-BET>*/U.undoG&&b27GroupUndoable(U.undoG).length>1?`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27UndoGroup('${U.undoG}')"${U.busy?' disabled':''}>↩ Undo all ${b27GroupUndoable(U.undoG).length} bets (30 s)</button></div>`:''/*</MULTI-BET>*/}</div>`;
   if(!me){h+=`<div class="card"><button type="button" class="btn b27-big" onclick="presAsk()">👋 Pick who you are to bet</button></div>`}
-  /*<POOL>*/else if(U.confirm&&U.kind==='pool'){h+=b27PoolConfirmHtml()}/*</POOL>*/
+  /*<POOL>*/else if(U.confirm&&U.kind==='pool'){h+=s26kModal(b27PoolConfirmHtml())}/*</POOL>*/
   else if(U.confirm){
     const e=b27FormOK();
-    h+=`<div class="card b27-confirm"><b>Check it, then confirm</b>${/*<S24-EDIT>*/s24EditHint()/*</S24-EDIT>*/}${/*<S26F-TERMS>*/b27Clean(U.text)?`<div class="s26terms">${esc(b27Clean(U.text))}</div>`:''/*</S26F-TERMS>*/}<div class="b27-sum">${esc(b27Summary())}</div>${/*<S25>*/s25ConfirmLine()/*</S25>*/}<div id="b27Live">${b27LiveHtml()}</div>
-     <div class="b27-act"><button type="button" class="btn b27-big" onclick="b27Confirm()"${U.busy?' disabled':''}>${U.busy?'Saving…':'✅ Yes, place it'}</button><button type="button" class="btn sec b27-big" onclick="b27Edit()"${U.busy?' disabled':''}>← Change</button></div></div>`;
+    h+=s26kModal(`<div class="card b27-confirm"><b>Check it, then confirm</b>${/*<S24-EDIT>*/s24EditHint()/*</S24-EDIT>*/}${/*<S26F-TERMS>*/b27Clean(U.text)?`<div class="s26terms">${esc(b27Clean(U.text))}</div>`:''/*</S26F-TERMS>*/}<div class="b27-sum">${esc(b27Summary())}</div>${/*<S25>*/s25ConfirmLine()/*</S25>*/}<div id="b27Live">${b27LiveHtml()}</div>
+     <div class="b27-act"><button type="button" class="btn b27-big" onclick="b27Confirm()"${U.busy?' disabled':''}>${U.busy?'Saving…':'✅ Yes, place it'}</button><button type="button" class="btn sec b27-big" onclick="b27Edit()"${U.busy?' disabled':''}>← Change</button></div></div>`);
   }else{
     const oc=U.odds?U.odds.join('-'):'';
     h+=/*<POOL>*/U.kind==='pool'?b27PoolForm(me):/*</POOL>*/`<div class="card b27-form"><b>New bet</b> <span class="note">· you are <b>${esc(PN(me))}</b> <a href="#" onclick="presAsk();return false">(change)</a></span>${/*<QUICK-BET>*/qbHint()/*</QUICK-BET>*/}${/*<S24-EDIT>*/s24EditHint()/*</S24-EDIT>*/}${/*<POOL>*/U.editOf?'':b27KindTabs()/*</POOL>*/}
@@ -3003,7 +3026,7 @@ const tMoney=v=>b27Num(v/((D.bets.currency||{}).display_unit||1000));   // displ
    5) Copy link / Share: built ONLY from origin + path (+ ?demo=1 in the demo) + the route hash. Never ?admin, never names, never ledger keys.
    6) Tabs are <a href>: plain click switches in place (pushState), modifier / middle / right click = browser default. */
 const S24={sub:null,last:null,route0:false,prep:null,done:null,hlUntil:0,nf:null};
-const S24_H2T={standings:'standings',ranks:'standings',games:'games',schedule:'games',scores:'games',rosters:'@points',squads:'@points',owner:'@points',points:'@points',rankings:'teams',apnet:'teams','ap-net':'teams',ap:'teams',net:'teams',polls:'teams',bets:'@bets',bets27:'@bets','bets-2025-26':'bets',bets2526:'bets',teams:'teams',postseason:'checklist',checklist:'checklist',redraft:'redraft',archive:'archive',rules:'about',about:'about'};
+const S24_H2T={standings:'standings',ranks:'standings',games:'games',schedule:'games',scores:'games',rosters:'@points',squads:'@points',owner:'@points',points:'@points',rankings:'teams',apnet:'teams','ap-net':'teams',ap:'teams',net:'teams',polls:'teams',bets:'@bets',bets27:'@bets','bets-2025-26':'bets',bets2526:'bets',teams:'teams',postseason:'checklist',checklist:'checklist',redraft:'redraft',archive:'archive',rules:'about',about:'about'/*<S26N-DRAFT-RECAP>*/,draft:'draft',recap:'recap',draft27:'recap','draft-results':'recap',draftresults:'recap',picks:'recap',results:'recap'/*</S26N-DRAFT-RECAP>*/};
 const s24HasNew=()=>typeof VIEWS!=='undefined'&&!!VIEWS.bets27;
 const s24IdOK=v=>typeof v==='string'&&/^[A-Za-z0-9_-]{1,40}$/.test(v);
 function s24TabFromHash(h){const t=S24_H2T[h];if(!t)return null;/*<S26E>*/if(t==='@points'){s26eView('points');return 'standings'}/*</S26E>*/if(t==='@bets')return s24HasNew()?'bets27':'bets';return t}
@@ -3079,7 +3102,7 @@ function s24DeepGo(){
     S24.prep=key;
   }else return;
   const el=document.querySelector('#main [data-'+(tab==='games'?'gid':'bid')+'="'+sub+'"]');if(!el)return;
-  if(S24.done!==key){S24.done=key;S24.hlUntil=Date.now()+2600;try{el.scrollIntoView({block:'center'})}catch(_){}clearTimeout(S24.ht);S24.ht=setTimeout(()=>{document.querySelectorAll('.dl-hl').forEach(e=>e.classList.remove('dl-hl'))},2650)}
+  if(S24.done!==key){S24.done=key;S24.hlUntil=Date.now()+2600;try{el.scrollIntoView({block:'center'})}catch(_){}clearTimeout(S24.ht);S24.ht=setTimeout(()=>{document.querySelectorAll('.dl-hl').forEach(e=>e.classList.remove('dl-hl'));/*<S26G>*/if(tab+'/'+S24.sub===key){S24.sub=null;s24Put(false)}/*</S26G>*/},2650)}
   if(Date.now()<S24.hlUntil)el.classList.add('dl-hl');
 }
 function s24AfterLoad(){/*<NO-JUMP>*/const first=!S24.al;S24.al=1;/*</NO-JUMP>*/if(S24.sub)s24DeepGo()/*<TAB-TOP>*/;else if(first)window.scrollTo(0,0)/*</TAB-TOP>*/}   // the 5-min reload never scrolls
@@ -3361,6 +3384,11 @@ function load(){
   document.head.appendChild(s);
 }
 load();setInterval(load,5*60*1000);
+/*<S26K-MODAL>*//* bet confirm card as a centered modal: backdrop tap / Esc = ← Change (b27Edit keeps the form values) */
+function s26kModal(c){return c?`<div class="s26k-bd" onclick="if(event.target===this&&!U.busy)b27Edit()"><div class="s26k-m" role="dialog" aria-modal="true" aria-label="Check it, then confirm">${c}</div></div>`:''}
+{const r0=render;let was=false;render=function(){const x=r0.apply(this,arguments);const m=document.querySelector('.s26k-m');document.body.classList.toggle('s26k-lock',!!m);if(m&&!was){const b=m.querySelector('.b27-act .btn');if(b)b.focus({preventScroll:true})}was=!!m;return x};
+ document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&document.querySelector('.s26k-m')&&!U.busy){ev.preventDefault();b27Edit()}})}
+/*</S26K-MODAL>*/
 </script>
 </body>
 </html>
