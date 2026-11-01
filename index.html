@@ -3102,15 +3102,15 @@ function s24HashOf(t){return ({bets27:'bets',bets:s24HasNew()?'bets-2025-26':'be
 function s24Read(h){const m=/^#?([a-z0-9-]+)(?:\/([A-Za-z0-9_-]{1,40}))?(?:$|[&?\/])/i.exec(String(h||''));if(!m)return null;let t=s24TabFromHash(m[1].toLowerCase());if(!t)return null;
   /*<S26E>*/if(t==='standings'&&m[2]){const s=m[2].toLowerCase();if(/^(apnet|ap-net|ap|net|rankings|polls)$/.test(s))t='teams';else if(/^(points|breakdown|rosters|squads)$/.test(s))s26eView('points');else if(s==='league')s26eView('league')}/*</S26E>*/
   return {t,sub:m[2]&&(t==='bets27'||t==='games')?m[2]:null}}
-const s24RouteHash=()=>s24HashOf(tab)+(S24.sub?'/'+S24.sub:'');
+const s24RouteHash=()=>s24HashOf(tab)+(S24.sub&&S24.done!==tab+'/'+S24.sub?'/'+S24.sub:'');/*<S26V> a used deep link never stays in the URL </S26V>*/
 /* address-bar / href URL: path + (?demo=1) + (?admin=1 only in the address bar of an admin, never in shared links) + hash */
 function s24Url(h,share){const q=new URLSearchParams();if(DEMO)q.set('demo','1');if(!share&&ADMIN)q.set('admin','1');const s=q.toString();return location.pathname+(s?'?'+s:'')+(h?'#'+h:'')}
 const s24Href=t=>s24Url(s24HashOf(t),true);
 function s24ShareUrl(kind,id){const h=kind&&s24IdOK(String(id))?(kind==='games'?'games/':s24HashOf('bets27')+'/')+id:s24HashOf(tab);return location.origin+s24Url(h,true)}
-function s24Put(push){try{const want=s24Url(s24RouteHash());try{sessionStorage.setItem('stoopids.tab',s24RouteHash())}catch(_){}if(location.pathname+location.search+location.hash===want)return;history[push?'pushState':'replaceState'](null,'',want)}catch(e){}}
+function s24Put(push){try{const want=s24Url(s24RouteHash());try{sessionStorage.setItem('stoopids.tab',s24HashOf(tab))}catch(_){}if(location.pathname+location.search+location.hash===want)return;history[push?'pushState':'replaceState'](null,'',want)}catch(e){}}
 function s24NavClick(e,t){if(e&&(e.button>0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey))return true;if(e&&e.preventDefault)e.preventDefault();tab=t;S24.sub=null;render();window.scrollTo(0,0);return false}
 function s24OnNav(){const r=s24Read(location.hash);if(!r&&location.hash.length>1)return;const R=r||{t:'standings',sub:null};if(R.t===tab&&R.sub===S24.sub)return;
-  tab=R.t;S24.sub=R.sub;S24.prep=null;S24.done=null;S24.nf=null;S24.last=tab;try{sessionStorage.setItem('stoopids.tab',s24RouteHash())}catch(_){}render();if(!R.sub)window.scrollTo(0,0)}
+  tab=R.t;S24.sub=R.sub;S24.prep=null;S24.done=null;S24.nf=null;S24.last=tab;try{sessionStorage.setItem('stoopids.tab',s24HashOf(tab))}catch(_){}render();if(!R.sub)window.scrollTo(0,0)}
 window.addEventListener('popstate',s24OnNav);window.addEventListener('hashchange',s24OnNav);
 /*<TAB-TOP>*/ // every tab switch opens at the top; the browser must not restore an old scroll position on reload/back. Only a link to one bet/game (#bets/<id>) scrolls to it.
 try{if('scrollRestoration' in history)history.scrollRestoration='manual'}catch(e){}
@@ -3118,6 +3118,7 @@ window.addEventListener('pageshow',()=>{if(!S24.sub)window.scrollTo(0,0)});/*</T
 /* first load: the hash wins over ?tab=; a reload that lost its hash falls back to this browser tab's last route; plain URLs are left alone */
 (function(){let r=s24Read(location.hash);
   if(!r&&!params.has('tab')){try{const nv=performance.getEntriesByType&&performance.getEntriesByType('navigation')[0];if(nv&&nv.type==='reload'){const x=s24Read(sessionStorage.getItem('stoopids.tab')||'');if(x)r=x}}catch(e){}}
+  /*<S26V>*/try{const nv=performance.getEntriesByType&&performance.getEntriesByType('navigation')[0];if(r&&r.sub&&nv&&nv.type!=='navigate')r.sub=null}catch(e){}/*</S26V>*/
   if(r){tab=r.t;S24.sub=r.sub;S24.route0=true;S24.last=tab;s24Put(false)}
   else{S24.last=tab;if(location.hash.length>1)try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}}   // a stray / private fragment is never kept
 })();
@@ -3170,7 +3171,7 @@ function s24DeepGo(){
     S24.prep=key;
   }else return;
   const el=document.querySelector('#main [data-'+(tab==='games'?'gid':'bid')+'="'+sub+'"]');if(!el)return;
-  if(S24.done!==key){S24.done=key;S24.hlUntil=Date.now()+2600;try{el.scrollIntoView({block:'center'})}catch(_){}clearTimeout(S24.ht);S24.ht=setTimeout(()=>{document.querySelectorAll('.dl-hl').forEach(e=>e.classList.remove('dl-hl'));/*<S26G>*/if(tab+'/'+S24.sub===key){S24.sub=null;s24Put(false)}/*</S26G>*/},2650)}
+  if(S24.done!==key){S24.done=key;S24.hlUntil=Date.now()+2600;try{el.scrollIntoView({block:'center'})}catch(_){}/*<S26V>*/s24Put(false);/*</S26V>*/clearTimeout(S24.ht);S24.ht=setTimeout(()=>{document.querySelectorAll('.dl-hl').forEach(e=>e.classList.remove('dl-hl'));/*<S26G>*/if(tab+'/'+S24.sub===key){S24.sub=null;s24Put(false)}/*</S26G>*/},2650)}
   if(Date.now()<S24.hlUntil)el.classList.add('dl-hl');
 }
 function s24AfterLoad(){/*<NO-JUMP>*/const first=!S24.al;S24.al=1;/*</NO-JUMP>*/if(S24.sub)s24DeepGo()/*<TAB-TOP>*/;else if(first)window.scrollTo(0,0)/*</TAB-TOP>*/}   // the 5-min reload never scrolls
