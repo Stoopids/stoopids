@@ -1,0 +1,2775 @@
+{
+ "source": "fantasy-bball-releases/s28f/assets/teams.js (built 2026-10-28) meta.p; NET aliases from ncaa-api relay names",
+ "teams": {
+  "103": {
+   "net_names": [
+    "Boston College"
+   ],
+   "school": "Boston College",
+   "stoopid": null
+  },
+  "104": {
+   "net_names": [
+    "Boston U",
+    "Boston U.",
+    "Boston University"
+   ],
+   "school": "Boston University",
+   "stoopid": null
+  },
+  "107": {
+   "net_names": [
+    "Holy Cross"
+   ],
+   "school": "Holy Cross",
+   "stoopid": null
+  },
+  "108": {
+   "net_names": [
+    "Harvard"
+   ],
+   "school": "Harvard",
+   "stoopid": null
+  },
+  "111": {
+   "net_names": [
+    "Northeastern"
+   ],
+   "school": "Northeastern",
+   "stoopid": null
+  },
+  "112358": {
+   "net_names": [
+    "LIU",
+    "Long Island University"
+   ],
+   "school": "Long Island University",
+   "stoopid": 83
+  },
+  "113": {
+   "net_names": [
+    "Massachusetts",
+    "UMass"
+   ],
+   "school": "Massachusetts",
+   "stoopid": null
+  },
+  "116": {
+   "net_names": [
+    "Mount St Marys",
+    "Mount St. Mary's"
+   ],
+   "school": "Mount St. Mary's",
+   "stoopid": null
+  },
+  "119": {
+   "net_names": [
+    "Towson"
+   ],
+   "school": "Towson",
+   "stoopid": null
+  },
+  "12": {
+   "net_names": [
+    "Arizona"
+   ],
+   "school": "Arizona",
+   "stoopid": 6
+  },
+  "120": {
+   "net_names": [
+    "Maryland"
+   ],
+   "school": "Maryland",
+   "stoopid": null
+  },
+  "127": {
+   "net_names": [
+    "Michigan St",
+    "Michigan St.",
+    "Michigan State"
+   ],
+   "school": "Michigan State",
+   "stoopid": 11
+  },
+  "13": {
+   "net_names": [
+    "Cal Poly"
+   ],
+   "school": "Cal Poly",
+   "stoopid": null
+  },
+  "130": {
+   "net_names": [
+    "Michigan"
+   ],
+   "school": "Michigan",
+   "stoopid": 26
+  },
+  "135": {
+   "net_names": [
+    "Minnesota"
+   ],
+   "school": "Minnesota",
+   "stoopid": null
+  },
+  "139": {
+   "net_names": [
+    "Saint Louis"
+   ],
+   "school": "Saint Louis",
+   "stoopid": 31
+  },
+  "140": {
+   "net_names": [
+    "Kansas City"
+   ],
+   "school": "Kansas City",
+   "stoopid": null
+  },
+  "142": {
+   "net_names": [
+    "Missouri"
+   ],
+   "school": "Missouri",
+   "stoopid": 46
+  },
+  "145": {
+   "net_names": [
+    "Ole Miss"
+   ],
+   "school": "Ole Miss",
+   "stoopid": null
+  },
+  "147": {
+   "net_names": [
+    "Montana St.",
+    "Montana State"
+   ],
+   "school": "Montana State",
+   "stoopid": 53
+  },
+  "149": {
+   "net_names": [
+    "Montana"
+   ],
+   "school": "Montana",
+   "stoopid": null
+  },
+  "150": {
+   "net_names": [
+    "Duke"
+   ],
+   "school": "Duke",
+   "stoopid": 1
+  },
+  "151": {
+   "net_names": [
+    "East Carolina"
+   ],
+   "school": "East Carolina",
+   "stoopid": null
+  },
+  "152": {
+   "net_names": [
+    "NC State"
+   ],
+   "school": "NC State",
+   "stoopid": 40
+  },
+  "153": {
+   "net_names": [
+    "North Carolina"
+   ],
+   "school": "North Carolina",
+   "stoopid": 58
+  },
+  "154": {
+   "net_names": [
+    "Wake Forest"
+   ],
+   "school": "Wake Forest",
+   "stoopid": null
+  },
+  "155": {
+   "net_names": [
+    "North Dakota"
+   ],
+   "school": "North Dakota",
+   "stoopid": null
+  },
+  "156": {
+   "net_names": [
+    "Creighton"
+   ],
+   "school": "Creighton",
+   "stoopid": 73
+  },
+  "158": {
+   "net_names": [
+    "Nebraska"
+   ],
+   "school": "Nebraska",
+   "stoopid": 16
+  },
+  "159": {
+   "net_names": [
+    "Dartmouth"
+   ],
+   "school": "Dartmouth",
+   "stoopid": null
+  },
+  "16": {
+   "net_names": [
+    "Sacramento St",
+    "Sacramento St.",
+    "Sacramento State"
+   ],
+   "school": "Sacramento State",
+   "stoopid": null
+  },
+  "160": {
+   "net_names": [
+    "New Hampshire"
+   ],
+   "school": "New Hampshire",
+   "stoopid": null
+  },
+  "161": {
+   "net_names": [
+    "FDU",
+    "Fairleigh Dickinson"
+   ],
+   "school": "Fairleigh Dickinson",
+   "stoopid": null
+  },
+  "163": {
+   "net_names": [
+    "Princeton"
+   ],
+   "school": "Princeton",
+   "stoopid": null
+  },
+  "164": {
+   "net_names": [
+    "Rutgers"
+   ],
+   "school": "Rutgers",
+   "stoopid": null
+  },
+  "166": {
+   "net_names": [
+    "New Mexico St",
+    "New Mexico St.",
+    "New Mexico State"
+   ],
+   "school": "New Mexico State",
+   "stoopid": null
+  },
+  "167": {
+   "net_names": [
+    "New Mexico"
+   ],
+   "school": "New Mexico",
+   "stoopid": 34
+  },
+  "171": {
+   "net_names": [
+    "Columbia"
+   ],
+   "school": "Columbia",
+   "stoopid": null
+  },
+  "172": {
+   "net_names": [
+    "Cornell"
+   ],
+   "school": "Cornell",
+   "stoopid": null
+  },
+  "179": {
+   "net_names": [
+    "St Bonaventure",
+    "St. Bonaventure"
+   ],
+   "school": "St. Bonaventure",
+   "stoopid": null
+  },
+  "183": {
+   "net_names": [
+    "Syracuse"
+   ],
+   "school": "Syracuse",
+   "stoopid": null
+  },
+  "189": {
+   "net_names": [
+    "Bowling Green"
+   ],
+   "school": "Bowling Green",
+   "stoopid": null
+  },
+  "193": {
+   "net_names": [
+    "Miami (OH)"
+   ],
+   "school": "Miami (OH)",
+   "stoopid": 32
+  },
+  "194": {
+   "net_names": [
+    "Ohio St.",
+    "Ohio State"
+   ],
+   "school": "Ohio State",
+   "stoopid": 37
+  },
+  "195": {
+   "net_names": [
+    "Ohio"
+   ],
+   "school": "Ohio",
+   "stoopid": null
+  },
+  "197": {
+   "net_names": [
+    "Oklahoma St",
+    "Oklahoma St.",
+    "Oklahoma State"
+   ],
+   "school": "Oklahoma State",
+   "stoopid": null
+  },
+  "198": {
+   "net_names": [
+    "Oral Roberts"
+   ],
+   "school": "Oral Roberts",
+   "stoopid": null
+  },
+  "2": {
+   "net_names": [
+    "Auburn"
+   ],
+   "school": "Auburn",
+   "stoopid": 74
+  },
+  "2000": {
+   "net_names": [
+    "Abilene Christian",
+    "Abilene Chrstn"
+   ],
+   "school": "Abilene Christian",
+   "stoopid": null
+  },
+  "2005": {
+   "net_names": [
+    "Air Force"
+   ],
+   "school": "Air Force",
+   "stoopid": null
+  },
+  "2006": {
+   "net_names": [
+    "Akron"
+   ],
+   "school": "Akron",
+   "stoopid": 49
+  },
+  "201": {
+   "net_names": [
+    "Oklahoma"
+   ],
+   "school": "Oklahoma",
+   "stoopid": 43
+  },
+  "2010": {
+   "net_names": [
+    "Alabama A&M"
+   ],
+   "school": "Alabama A&M",
+   "stoopid": null
+  },
+  "2011": {
+   "net_names": [
+    "Alabama St",
+    "Alabama St.",
+    "Alabama State"
+   ],
+   "school": "Alabama State",
+   "stoopid": null
+  },
+  "2016": {
+   "net_names": [
+    "Alcorn",
+    "Alcorn St",
+    "Alcorn State"
+   ],
+   "school": "Alcorn State",
+   "stoopid": null
+  },
+  "202": {
+   "net_names": [
+    "Tulsa"
+   ],
+   "school": "Tulsa",
+   "stoopid": null
+  },
+  "2026": {
+   "net_names": [
+    "App State"
+   ],
+   "school": "App State",
+   "stoopid": null
+  },
+  "2029": {
+   "net_names": [
+    "AR-Pine Bluff",
+    "Ark.-Pine Bluff",
+    "Arkansas-Pine Bluff"
+   ],
+   "school": "Arkansas-Pine Bluff",
+   "stoopid": null
+  },
+  "2031": {
+   "net_names": [
+    "Little Rock"
+   ],
+   "school": "Little Rock",
+   "stoopid": null
+  },
+  "2032": {
+   "net_names": [
+    "Arkansas St",
+    "Arkansas St.",
+    "Arkansas State"
+   ],
+   "school": "Arkansas State",
+   "stoopid": null
+  },
+  "204": {
+   "net_names": [
+    "Oregon St",
+    "Oregon St.",
+    "Oregon State"
+   ],
+   "school": "Oregon State",
+   "stoopid": null
+  },
+  "2046": {
+   "net_names": [
+    "Austin Peay"
+   ],
+   "school": "Austin Peay",
+   "stoopid": null
+  },
+  "2050": {
+   "net_names": [
+    "Ball St.",
+    "Ball State"
+   ],
+   "school": "Ball State",
+   "stoopid": null
+  },
+  "2057": {
+   "net_names": [
+    "Belmont"
+   ],
+   "school": "Belmont",
+   "stoopid": null
+  },
+  "2065": {
+   "net_names": [
+    "Bethune",
+    "Bethune-Cookman"
+   ],
+   "school": "Bethune-Cookman",
+   "stoopid": 82
+  },
+  "2066": {
+   "net_names": [
+    "Binghamton"
+   ],
+   "school": "Binghamton",
+   "stoopid": null
+  },
+  "2083": {
+   "net_names": [
+    "Bucknell"
+   ],
+   "school": "Bucknell",
+   "stoopid": null
+  },
+  "2084": {
+   "net_names": [
+    "Buffalo"
+   ],
+   "school": "Buffalo",
+   "stoopid": null
+  },
+  "2086": {
+   "net_names": [
+    "Butler"
+   ],
+   "school": "Butler",
+   "stoopid": null
+  },
+  "2097": {
+   "net_names": [
+    "Campbell"
+   ],
+   "school": "Campbell",
+   "stoopid": null
+  },
+  "2099": {
+   "net_names": [
+    "Canisius"
+   ],
+   "school": "Canisius",
+   "stoopid": null
+  },
+  "21": {
+   "net_names": [
+    "San Diego St",
+    "San Diego St.",
+    "San Diego State"
+   ],
+   "school": "San Diego State",
+   "stoopid": 69
+  },
+  "2110": {
+   "net_names": [
+    "Central Ark.",
+    "Central Arkansas"
+   ],
+   "school": "Central Arkansas",
+   "stoopid": 80
+  },
+  "2115": {
+   "net_names": [
+    "C Connecticut",
+    "Central Conn. St.",
+    "Central Connecticut"
+   ],
+   "school": "Central Connecticut",
+   "stoopid": null
+  },
+  "2116": {
+   "net_names": [
+    "UCF"
+   ],
+   "school": "UCF",
+   "stoopid": null
+  },
+  "2117": {
+   "net_names": [
+    "C Michigan",
+    "Central Mich.",
+    "Central Michigan"
+   ],
+   "school": "Central Michigan",
+   "stoopid": null
+  },
+  "2127": {
+   "net_names": [
+    "Charleston So",
+    "Charleston So.",
+    "Charleston Southern"
+   ],
+   "school": "Charleston Southern",
+   "stoopid": null
+  },
+  "213": {
+   "net_names": [
+    "Penn St.",
+    "Penn State"
+   ],
+   "school": "Penn State",
+   "stoopid": null
+  },
+  "2130": {
+   "net_names": [
+    "Chicago St",
+    "Chicago St.",
+    "Chicago State"
+   ],
+   "school": "Chicago State",
+   "stoopid": null
+  },
+  "2132": {
+   "net_names": [
+    "Cincinnati"
+   ],
+   "school": "Cincinnati",
+   "stoopid": 50
+  },
+  "2142": {
+   "net_names": [
+    "Colgate"
+   ],
+   "school": "Colgate",
+   "stoopid": null
+  },
+  "2154": {
+   "net_names": [
+    "Coppin St",
+    "Coppin St.",
+    "Coppin State"
+   ],
+   "school": "Coppin State",
+   "stoopid": null
+  },
+  "2166": {
+   "net_names": [
+    "Davidson"
+   ],
+   "school": "Davidson",
+   "stoopid": null
+  },
+  "2168": {
+   "net_names": [
+    "Dayton"
+   ],
+   "school": "Dayton",
+   "stoopid": 54
+  },
+  "2169": {
+   "net_names": [
+    "Delaware St",
+    "Delaware St.",
+    "Delaware State"
+   ],
+   "school": "Delaware State",
+   "stoopid": null
+  },
+  "2172": {
+   "net_names": [
+    "Denver"
+   ],
+   "school": "Denver",
+   "stoopid": null
+  },
+  "2174": {
+   "net_names": [
+    "Detroit Mercy"
+   ],
+   "school": "Detroit Mercy",
+   "stoopid": null
+  },
+  "218": {
+   "net_names": [
+    "Temple"
+   ],
+   "school": "Temple",
+   "stoopid": null
+  },
+  "2181": {
+   "net_names": [
+    "Drake"
+   ],
+   "school": "Drake",
+   "stoopid": null
+  },
+  "2182": {
+   "net_names": [
+    "Drexel"
+   ],
+   "school": "Drexel",
+   "stoopid": null
+  },
+  "2184": {
+   "net_names": [
+    "Duquesne"
+   ],
+   "school": "Duquesne",
+   "stoopid": null
+  },
+  "219": {
+   "net_names": [
+    "Penn",
+    "Pennsylvania"
+   ],
+   "school": "Pennsylvania",
+   "stoopid": 72
+  },
+  "2193": {
+   "net_names": [
+    "ETSU",
+    "East Tennessee State"
+   ],
+   "school": "East Tennessee State",
+   "stoopid": null
+  },
+  "2197": {
+   "net_names": [
+    "E Illinois",
+    "Eastern Ill.",
+    "Eastern Illinois"
+   ],
+   "school": "Eastern Illinois",
+   "stoopid": null
+  },
+  "2198": {
+   "net_names": [
+    "E Kentucky",
+    "Eastern Kentucky",
+    "Eastern Ky."
+   ],
+   "school": "Eastern Kentucky",
+   "stoopid": null
+  },
+  "2199": {
+   "net_names": [
+    "E Michigan",
+    "Eastern Mich.",
+    "Eastern Michigan"
+   ],
+   "school": "Eastern Michigan",
+   "stoopid": null
+  },
+  "221": {
+   "net_names": [
+    "Pitt",
+    "Pittsburgh"
+   ],
+   "school": "Pittsburgh",
+   "stoopid": null
+  },
+  "2210": {
+   "net_names": [
+    "Elon"
+   ],
+   "school": "Elon",
+   "stoopid": null
+  },
+  "2217": {
+   "net_names": [
+    "Fairfield"
+   ],
+   "school": "Fairfield",
+   "stoopid": null
+  },
+  "222": {
+   "net_names": [
+    "Villanova"
+   ],
+   "school": "Villanova",
+   "stoopid": 39
+  },
+  "2226": {
+   "net_names": [
+    "FAU",
+    "Fla. Atlantic",
+    "Florida Atlantic"
+   ],
+   "school": "Florida Atlantic",
+   "stoopid": null
+  },
+  "2229": {
+   "net_names": [
+    "FIU",
+    "Florida International"
+   ],
+   "school": "Florida International",
+   "stoopid": null
+  },
+  "2230": {
+   "net_names": [
+    "Fordham"
+   ],
+   "school": "Fordham",
+   "stoopid": null
+  },
+  "2239": {
+   "net_names": [
+    "Cal St. Fullerton",
+    "Cal State Fullerton",
+    "Fullerton"
+   ],
+   "school": "Cal State Fullerton",
+   "stoopid": null
+  },
+  "2241": {
+   "net_names": [
+    "Gardner-Webb"
+   ],
+   "school": "Gardner-Webb",
+   "stoopid": null
+  },
+  "2244": {
+   "net_names": [
+    "George Mason"
+   ],
+   "school": "George Mason",
+   "stoopid": null
+  },
+  "2247": {
+   "net_names": [
+    "Georgia St",
+    "Georgia St.",
+    "Georgia State"
+   ],
+   "school": "Georgia State",
+   "stoopid": null
+  },
+  "225": {
+   "net_names": [
+    "Brown"
+   ],
+   "school": "Brown",
+   "stoopid": null
+  },
+  "2250": {
+   "net_names": [
+    "Gonzaga"
+   ],
+   "school": "Gonzaga",
+   "stoopid": 3
+  },
+  "2253": {
+   "net_names": [
+    "Grand Canyon"
+   ],
+   "school": "Grand Canyon",
+   "stoopid": 12
+  },
+  "2261": {
+   "net_names": [
+    "Hampton"
+   ],
+   "school": "Hampton",
+   "stoopid": null
+  },
+  "227": {
+   "net_names": [
+    "Rhode Island"
+   ],
+   "school": "Rhode Island",
+   "stoopid": null
+  },
+  "2272": {
+   "net_names": [
+    "High Point"
+   ],
+   "school": "High Point",
+   "stoopid": 9
+  },
+  "2275": {
+   "net_names": [
+    "Hofstra"
+   ],
+   "school": "Hofstra",
+   "stoopid": null
+  },
+  "2277": {
+   "net_names": [
+    "Hou Christian",
+    "Houston Christian"
+   ],
+   "school": "Houston Christian",
+   "stoopid": null
+  },
+  "228": {
+   "net_names": [
+    "Clemson"
+   ],
+   "school": "Clemson",
+   "stoopid": 65
+  },
+  "2287": {
+   "net_names": [
+    "Illinois St",
+    "Illinois St.",
+    "Illinois State"
+   ],
+   "school": "Illinois State",
+   "stoopid": null
+  },
+  "2294": {
+   "net_names": [
+    "Iowa"
+   ],
+   "school": "Iowa",
+   "stoopid": null
+  },
+  "2296": {
+   "net_names": [
+    "Jackson St",
+    "Jackson St.",
+    "Jackson State"
+   ],
+   "school": "Jackson State",
+   "stoopid": null
+  },
+  "23": {
+   "net_names": [
+    "San Jose St.",
+    "San Jos\u00e9 St",
+    "San Jos\u00e9 State"
+   ],
+   "school": "San Jos\u00e9 State",
+   "stoopid": null
+  },
+  "2305": {
+   "net_names": [
+    "Kansas"
+   ],
+   "school": "Kansas",
+   "stoopid": 10
+  },
+  "2306": {
+   "net_names": [
+    "Kansas St",
+    "Kansas St.",
+    "Kansas State"
+   ],
+   "school": "Kansas State",
+   "stoopid": null
+  },
+  "2309": {
+   "net_names": [
+    "Kent St.",
+    "Kent State"
+   ],
+   "school": "Kent State",
+   "stoopid": null
+  },
+  "231": {
+   "net_names": [
+    "Furman"
+   ],
+   "school": "Furman",
+   "stoopid": 47
+  },
+  "232": {
+   "net_names": [
+    "Charleston",
+    "Col. of Charleston"
+   ],
+   "school": "Charleston",
+   "stoopid": null
+  },
+  "2320": {
+   "net_names": [
+    "Lamar",
+    "Lamar University"
+   ],
+   "school": "Lamar",
+   "stoopid": null
+  },
+  "2325": {
+   "net_names": [
+    "La Salle"
+   ],
+   "school": "La Salle",
+   "stoopid": null
+  },
+  "2329": {
+   "net_names": [
+    "Lehigh"
+   ],
+   "school": "Lehigh",
+   "stoopid": null
+  },
+  "233": {
+   "net_names": [
+    "South Dakota"
+   ],
+   "school": "South Dakota",
+   "stoopid": null
+  },
+  "2330": {
+   "net_names": [
+    "Le Moyne"
+   ],
+   "school": "Le Moyne",
+   "stoopid": null
+  },
+  "2335": {
+   "net_names": [
+    "Liberty"
+   ],
+   "school": "Liberty",
+   "stoopid": 71
+  },
+  "2344": {
+   "net_names": [
+    "Longwood"
+   ],
+   "school": "Longwood",
+   "stoopid": null
+  },
+  "2348": {
+   "net_names": [
+    "Louisiana Tech"
+   ],
+   "school": "Louisiana Tech",
+   "stoopid": null
+  },
+  "2349": {
+   "net_names": [
+    "UMass Lowell"
+   ],
+   "school": "UMass Lowell",
+   "stoopid": null
+  },
+  "235": {
+   "net_names": [
+    "Memphis"
+   ],
+   "school": "Memphis",
+   "stoopid": null
+  },
+  "2350": {
+   "net_names": [
+    "Loyola Chicago"
+   ],
+   "school": "Loyola Chicago",
+   "stoopid": null
+  },
+  "2351": {
+   "net_names": [
+    "LMU",
+    "LMU (CA)",
+    "Loyola Marymount"
+   ],
+   "school": "Loyola Marymount",
+   "stoopid": null
+  },
+  "2352": {
+   "net_names": [
+    "Loyola MD",
+    "Loyola Maryland"
+   ],
+   "school": "Loyola Maryland",
+   "stoopid": null
+  },
+  "236": {
+   "net_names": [
+    "Chattanooga"
+   ],
+   "school": "Chattanooga",
+   "stoopid": null
+  },
+  "2363": {
+   "net_names": [
+    "Manhattan"
+   ],
+   "school": "Manhattan",
+   "stoopid": null
+  },
+  "2368": {
+   "net_names": [
+    "Marist"
+   ],
+   "school": "Marist",
+   "stoopid": null
+  },
+  "2377": {
+   "net_names": [
+    "McNeese"
+   ],
+   "school": "McNeese",
+   "stoopid": 20
+  },
+  "2378": {
+   "net_names": [
+    "UMBC"
+   ],
+   "school": "UMBC",
+   "stoopid": null
+  },
+  "2379": {
+   "net_names": [
+    "MD Eastern",
+    "Maryland Eastern Shore",
+    "UMES"
+   ],
+   "school": "Maryland Eastern Shore",
+   "stoopid": null
+  },
+  "238": {
+   "net_names": [
+    "Vanderbilt"
+   ],
+   "school": "Vanderbilt",
+   "stoopid": 19
+  },
+  "2382": {
+   "net_names": [
+    "Mercer"
+   ],
+   "school": "Mercer",
+   "stoopid": null
+  },
+  "2385": {
+   "net_names": [
+    "Mercyhurst"
+   ],
+   "school": "Mercyhurst",
+   "stoopid": null
+  },
+  "239": {
+   "net_names": [
+    "Baylor"
+   ],
+   "school": "Baylor",
+   "stoopid": 75
+  },
+  "2390": {
+   "net_names": [
+    "Miami",
+    "Miami (FL)"
+   ],
+   "school": "Miami",
+   "stoopid": 14
+  },
+  "2393": {
+   "net_names": [
+    "MTSU",
+    "Middle Tenn.",
+    "Middle Tennessee"
+   ],
+   "school": "Middle Tennessee",
+   "stoopid": null
+  },
+  "24": {
+   "net_names": [
+    "Stanford"
+   ],
+   "school": "Stanford",
+   "stoopid": null
+  },
+  "2400": {
+   "net_names": [
+    "Miss Valley St",
+    "Mississippi Val.",
+    "Mississippi Valley State"
+   ],
+   "school": "Mississippi Valley State",
+   "stoopid": null
+  },
+  "2405": {
+   "net_names": [
+    "Monmouth"
+   ],
+   "school": "Monmouth",
+   "stoopid": null
+  },
+  "2413": {
+   "net_names": [
+    "Morehead St",
+    "Morehead St.",
+    "Morehead State"
+   ],
+   "school": "Morehead State",
+   "stoopid": null
+  },
+  "2415": {
+   "net_names": [
+    "Morgan St",
+    "Morgan St.",
+    "Morgan State"
+   ],
+   "school": "Morgan State",
+   "stoopid": null
+  },
+  "242": {
+   "net_names": [
+    "Rice"
+   ],
+   "school": "Rice",
+   "stoopid": null
+  },
+  "2426": {
+   "net_names": [
+    "Navy"
+   ],
+   "school": "Navy",
+   "stoopid": null
+  },
+  "2427": {
+   "net_names": [
+    "UNC Asheville"
+   ],
+   "school": "UNC Asheville",
+   "stoopid": null
+  },
+  "2428": {
+   "net_names": [
+    "N.C. Central",
+    "NC Central",
+    "North Carolina Central"
+   ],
+   "school": "North Carolina Central",
+   "stoopid": null
+  },
+  "2429": {
+   "net_names": [
+    "Charlotte"
+   ],
+   "school": "Charlotte",
+   "stoopid": null
+  },
+  "2430": {
+   "net_names": [
+    "UNC Greensboro"
+   ],
+   "school": "UNC Greensboro",
+   "stoopid": null
+  },
+  "2433": {
+   "net_names": [
+    "UL Monroe",
+    "ULM"
+   ],
+   "school": "UL Monroe",
+   "stoopid": null
+  },
+  "2437": {
+   "net_names": [
+    "Omaha"
+   ],
+   "school": "Omaha",
+   "stoopid": null
+  },
+  "2439": {
+   "net_names": [
+    "UNLV"
+   ],
+   "school": "UNLV",
+   "stoopid": null
+  },
+  "2440": {
+   "net_names": [
+    "Nevada"
+   ],
+   "school": "Nevada",
+   "stoopid": 60
+  },
+  "2441": {
+   "net_names": [
+    "New Haven"
+   ],
+   "school": "New Haven",
+   "stoopid": null
+  },
+  "2443": {
+   "net_names": [
+    "LSU N Orleans",
+    "LSU New Orleans",
+    "New Orleans"
+   ],
+   "school": "LSU New Orleans",
+   "stoopid": null
+  },
+  "2447": {
+   "net_names": [
+    "Nicholls"
+   ],
+   "school": "Nicholls",
+   "stoopid": null
+  },
+  "2448": {
+   "net_names": [
+    "N.C. A&T",
+    "NC A&T",
+    "North Carolina A&T"
+   ],
+   "school": "North Carolina A&T",
+   "stoopid": null
+  },
+  "2449": {
+   "net_names": [
+    "N Dakota St",
+    "North Dakota St.",
+    "North Dakota State"
+   ],
+   "school": "North Dakota State",
+   "stoopid": null
+  },
+  "245": {
+   "net_names": [
+    "Texas A&M"
+   ],
+   "school": "Texas A&M",
+   "stoopid": 36
+  },
+  "2450": {
+   "net_names": [
+    "Norfolk St",
+    "Norfolk St.",
+    "Norfolk State"
+   ],
+   "school": "Norfolk State",
+   "stoopid": null
+  },
+  "2453": {
+   "net_names": [
+    "North Ala.",
+    "North Alabama"
+   ],
+   "school": "North Alabama",
+   "stoopid": null
+  },
+  "2454": {
+   "net_names": [
+    "North Florida"
+   ],
+   "school": "North Florida",
+   "stoopid": null
+  },
+  "2458": {
+   "net_names": [
+    "N Colorado",
+    "Northern Colo.",
+    "Northern Colorado"
+   ],
+   "school": "Northern Colorado",
+   "stoopid": null
+  },
+  "2459": {
+   "net_names": [
+    "N Illinois",
+    "NIU",
+    "Northern Illinois"
+   ],
+   "school": "Northern Illinois",
+   "stoopid": null
+  },
+  "2460": {
+   "net_names": [
+    "Northern Iowa",
+    "UNI"
+   ],
+   "school": "Northern Iowa",
+   "stoopid": null
+  },
+  "2463": {
+   "net_names": [
+    "CSU Northridge",
+    "CSUN",
+    "Cal State Northridge"
+   ],
+   "school": "Cal State Northridge",
+   "stoopid": null
+  },
+  "2464": {
+   "net_names": [
+    "N Arizona",
+    "Northern Ariz.",
+    "Northern Arizona"
+   ],
+   "school": "Northern Arizona",
+   "stoopid": null
+  },
+  "2466": {
+   "net_names": [
+    "N'Western St",
+    "Northwestern St.",
+    "Northwestern State"
+   ],
+   "school": "Northwestern State",
+   "stoopid": null
+  },
+  "2473": {
+   "net_names": [
+    "Oakland"
+   ],
+   "school": "Oakland",
+   "stoopid": null
+  },
+  "248": {
+   "net_names": [
+    "Houston"
+   ],
+   "school": "Houston",
+   "stoopid": 7
+  },
+  "2483": {
+   "net_names": [
+    "Oregon"
+   ],
+   "school": "Oregon",
+   "stoopid": null
+  },
+  "249": {
+   "net_names": [
+    "North Texas"
+   ],
+   "school": "North Texas",
+   "stoopid": null
+  },
+  "2492": {
+   "net_names": [
+    "Pepperdine"
+   ],
+   "school": "Pepperdine",
+   "stoopid": null
+  },
+  "25": {
+   "net_names": [
+    "California"
+   ],
+   "school": "California",
+   "stoopid": null
+  },
+  "250": {
+   "net_names": [
+    "UT Arlington"
+   ],
+   "school": "UT Arlington",
+   "stoopid": null
+  },
+  "2501": {
+   "net_names": [
+    "Portland"
+   ],
+   "school": "Portland",
+   "stoopid": null
+  },
+  "2502": {
+   "net_names": [
+    "Portland St",
+    "Portland St.",
+    "Portland State"
+   ],
+   "school": "Portland State",
+   "stoopid": null
+  },
+  "2504": {
+   "net_names": [
+    "Prairie View",
+    "Prairie View A&M"
+   ],
+   "school": "Prairie View A&M",
+   "stoopid": null
+  },
+  "2506": {
+   "net_names": [
+    "Presbyterian"
+   ],
+   "school": "Presbyterian",
+   "stoopid": null
+  },
+  "2507": {
+   "net_names": [
+    "Providence"
+   ],
+   "school": "Providence",
+   "stoopid": 78
+  },
+  "2509": {
+   "net_names": [
+    "Purdue"
+   ],
+   "school": "Purdue",
+   "stoopid": 45
+  },
+  "251": {
+   "net_names": [
+    "Texas"
+   ],
+   "school": "Texas",
+   "stoopid": 15
+  },
+  "2511": {
+   "net_names": [
+    "Queens (NC)",
+    "Queens University"
+   ],
+   "school": "Queens University",
+   "stoopid": 81
+  },
+  "2514": {
+   "net_names": [
+    "Quinnipiac"
+   ],
+   "school": "Quinnipiac",
+   "stoopid": null
+  },
+  "2515": {
+   "net_names": [
+    "Radford"
+   ],
+   "school": "Radford",
+   "stoopid": null
+  },
+  "252": {
+   "net_names": [
+    "BYU"
+   ],
+   "school": "BYU",
+   "stoopid": 41
+  },
+  "2520": {
+   "net_names": [
+    "Rider"
+   ],
+   "school": "Rider",
+   "stoopid": null
+  },
+  "2523": {
+   "net_names": [
+    "Robert Morris"
+   ],
+   "school": "Robert Morris",
+   "stoopid": null
+  },
+  "2529": {
+   "net_names": [
+    "Sacred Heart"
+   ],
+   "school": "Sacred Heart",
+   "stoopid": null
+  },
+  "253": {
+   "net_names": [
+    "Southern Utah"
+   ],
+   "school": "Southern Utah",
+   "stoopid": null
+  },
+  "2534": {
+   "net_names": [
+    "Sam Houston"
+   ],
+   "school": "Sam Houston",
+   "stoopid": null
+  },
+  "2535": {
+   "net_names": [
+    "Samford"
+   ],
+   "school": "Samford",
+   "stoopid": null
+  },
+  "2539": {
+   "net_names": [
+    "San Francisco"
+   ],
+   "school": "San Francisco",
+   "stoopid": null
+  },
+  "254": {
+   "net_names": [
+    "Utah"
+   ],
+   "school": "Utah",
+   "stoopid": null
+  },
+  "2540": {
+   "net_names": [
+    "UC Santa Barbara"
+   ],
+   "school": "UC Santa Barbara",
+   "stoopid": 44
+  },
+  "2541": {
+   "net_names": [
+    "Santa Clara"
+   ],
+   "school": "Santa Clara",
+   "stoopid": 57
+  },
+  "2545": {
+   "net_names": [
+    "SE Louisiana",
+    "Southeastern La."
+   ],
+   "school": "SE Louisiana",
+   "stoopid": null
+  },
+  "2546": {
+   "net_names": [
+    "SE Missouri",
+    "Southeast Missouri State",
+    "Southeast Mo. St."
+   ],
+   "school": "Southeast Missouri State",
+   "stoopid": null
+  },
+  "2547": {
+   "net_names": [
+    "Seattle U"
+   ],
+   "school": "Seattle U",
+   "stoopid": null
+  },
+  "2550": {
+   "net_names": [
+    "Seton Hall"
+   ],
+   "school": "Seton Hall",
+   "stoopid": null
+  },
+  "256": {
+   "net_names": [
+    "James Madison"
+   ],
+   "school": "James Madison",
+   "stoopid": 66
+  },
+  "2561": {
+   "net_names": [
+    "Siena"
+   ],
+   "school": "Siena",
+   "stoopid": null
+  },
+  "2565": {
+   "net_names": [
+    "SIU Edwardsville",
+    "SIUE"
+   ],
+   "school": "SIU Edwardsville",
+   "stoopid": null
+  },
+  "2567": {
+   "net_names": [
+    "SMU"
+   ],
+   "school": "SMU",
+   "stoopid": null
+  },
+  "2569": {
+   "net_names": [
+    "SC State",
+    "South Carolina St.",
+    "South Carolina State"
+   ],
+   "school": "South Carolina State",
+   "stoopid": null
+  },
+  "257": {
+   "net_names": [
+    "Richmond"
+   ],
+   "school": "Richmond",
+   "stoopid": null
+  },
+  "2571": {
+   "net_names": [
+    "S Dakota St",
+    "South Dakota St.",
+    "South Dakota State"
+   ],
+   "school": "South Dakota State",
+   "stoopid": null
+  },
+  "2572": {
+   "net_names": [
+    "Southern Miss",
+    "Southern Miss."
+   ],
+   "school": "Southern Miss",
+   "stoopid": null
+  },
+  "2579": {
+   "net_names": [
+    "South Carolina"
+   ],
+   "school": "South Carolina",
+   "stoopid": null
+  },
+  "258": {
+   "net_names": [
+    "Virginia"
+   ],
+   "school": "Virginia",
+   "stoopid": 8
+  },
+  "2582": {
+   "net_names": [
+    "Southern",
+    "Southern U."
+   ],
+   "school": "Southern",
+   "stoopid": null
+  },
+  "259": {
+   "net_names": [
+    "Virginia Tech"
+   ],
+   "school": "Virginia Tech",
+   "stoopid": null
+  },
+  "2599": {
+   "net_names": [
+    "St John's",
+    "St. John's",
+    "St. John's (NY)"
+   ],
+   "school": "St. John's",
+   "stoopid": 17
+  },
+  "26": {
+   "net_names": [
+    "UCLA"
+   ],
+   "school": "UCLA",
+   "stoopid": 42
+  },
+  "2603": {
+   "net_names": [
+    "Saint Joseph's"
+   ],
+   "school": "Saint Joseph's",
+   "stoopid": null
+  },
+  "2608": {
+   "net_names": [
+    "Saint Mary's",
+    "Saint Mary's (CA)"
+   ],
+   "school": "Saint Mary's",
+   "stoopid": 23
+  },
+  "261": {
+   "net_names": [
+    "Vermont"
+   ],
+   "school": "Vermont",
+   "stoopid": 64
+  },
+  "2612": {
+   "net_names": [
+    "Saint Peter's"
+   ],
+   "school": "Saint Peter's",
+   "stoopid": null
+  },
+  "2617": {
+   "net_names": [
+    "SFA",
+    "Stephen F. Austin"
+   ],
+   "school": "Stephen F. Austin",
+   "stoopid": 55
+  },
+  "2619": {
+   "net_names": [
+    "Stony Brook"
+   ],
+   "school": "Stony Brook",
+   "stoopid": null
+  },
+  "2623": {
+   "net_names": [
+    "Missouri St",
+    "Missouri St.",
+    "Missouri State"
+   ],
+   "school": "Missouri State",
+   "stoopid": null
+  },
+  "2627": {
+   "net_names": [
+    "Tarleton St",
+    "Tarleton St.",
+    "Tarleton State"
+   ],
+   "school": "Tarleton State",
+   "stoopid": null
+  },
+  "2628": {
+   "net_names": [
+    "TCU"
+   ],
+   "school": "TCU",
+   "stoopid": null
+  },
+  "2630": {
+   "net_names": [
+    "UT Martin"
+   ],
+   "school": "UT Martin",
+   "stoopid": null
+  },
+  "2633": {
+   "net_names": [
+    "Tennessee"
+   ],
+   "school": "Tennessee",
+   "stoopid": 21
+  },
+  "2634": {
+   "net_names": [
+    "Tennessee St",
+    "Tennessee St.",
+    "Tennessee State"
+   ],
+   "school": "Tennessee State",
+   "stoopid": 79
+  },
+  "2635": {
+   "net_names": [
+    "Tennessee Tech"
+   ],
+   "school": "Tennessee Tech",
+   "stoopid": null
+  },
+  "2636": {
+   "net_names": [
+    "UTSA"
+   ],
+   "school": "UTSA",
+   "stoopid": null
+  },
+  "2638": {
+   "net_names": [
+    "UTEP"
+   ],
+   "school": "UTEP",
+   "stoopid": null
+  },
+  "264": {
+   "net_names": [
+    "Washington"
+   ],
+   "school": "Washington",
+   "stoopid": null
+  },
+  "2640": {
+   "net_names": [
+    "Texas Southern"
+   ],
+   "school": "Texas Southern",
+   "stoopid": null
+  },
+  "2641": {
+   "net_names": [
+    "Texas Tech"
+   ],
+   "school": "Texas Tech",
+   "stoopid": 25
+  },
+  "2643": {
+   "net_names": [
+    "The Citadel"
+   ],
+   "school": "The Citadel",
+   "stoopid": null
+  },
+  "2649": {
+   "net_names": [
+    "Toledo"
+   ],
+   "school": "Toledo",
+   "stoopid": null
+  },
+  "265": {
+   "net_names": [
+    "Washington St",
+    "Washington St.",
+    "Washington State"
+   ],
+   "school": "Washington State",
+   "stoopid": null
+  },
+  "2653": {
+   "net_names": [
+    "Troy"
+   ],
+   "school": "Troy",
+   "stoopid": null
+  },
+  "2655": {
+   "net_names": [
+    "Tulane"
+   ],
+   "school": "Tulane",
+   "stoopid": null
+  },
+  "2670": {
+   "net_names": [
+    "VCU"
+   ],
+   "school": "VCU",
+   "stoopid": 24
+  },
+  "2674": {
+   "net_names": [
+    "Valparaiso"
+   ],
+   "school": "Valparaiso",
+   "stoopid": null
+  },
+  "2678": {
+   "net_names": [
+    "VMI"
+   ],
+   "school": "VMI",
+   "stoopid": null
+  },
+  "2681": {
+   "net_names": [
+    "Wagner"
+   ],
+   "school": "Wagner",
+   "stoopid": null
+  },
+  "269": {
+   "net_names": [
+    "Marquette"
+   ],
+   "school": "Marquette",
+   "stoopid": 52
+  },
+  "2692": {
+   "net_names": [
+    "Weber St",
+    "Weber St.",
+    "Weber State"
+   ],
+   "school": "Weber State",
+   "stoopid": null
+  },
+  "2697": {
+   "net_names": [
+    "West Florida"
+   ],
+   "school": "West Florida",
+   "stoopid": null
+  },
+  "2698": {
+   "net_names": [
+    "West Ga.",
+    "West Georgia"
+   ],
+   "school": "West Georgia",
+   "stoopid": null
+  },
+  "27": {
+   "net_names": [
+    "UC Riverside"
+   ],
+   "school": "UC Riverside",
+   "stoopid": null
+  },
+  "270": {
+   "net_names": [
+    "Milwaukee"
+   ],
+   "school": "Milwaukee",
+   "stoopid": null
+  },
+  "2710": {
+   "net_names": [
+    "W Illinois",
+    "Western Ill.",
+    "Western Illinois"
+   ],
+   "school": "Western Illinois",
+   "stoopid": null
+  },
+  "2711": {
+   "net_names": [
+    "W Michigan",
+    "Western Mich.",
+    "Western Michigan"
+   ],
+   "school": "Western Michigan",
+   "stoopid": null
+  },
+  "2717": {
+   "net_names": [
+    "W Carolina",
+    "Western Caro.",
+    "Western Carolina"
+   ],
+   "school": "Western Carolina",
+   "stoopid": null
+  },
+  "2724": {
+   "net_names": [
+    "Wichita St",
+    "Wichita St.",
+    "Wichita State"
+   ],
+   "school": "Wichita State",
+   "stoopid": 27
+  },
+  "2729": {
+   "net_names": [
+    "William & Mary"
+   ],
+   "school": "William & Mary",
+   "stoopid": null
+  },
+  "2737": {
+   "net_names": [
+    "Winthrop"
+   ],
+   "school": "Winthrop",
+   "stoopid": null
+  },
+  "2739": {
+   "net_names": [
+    "Green Bay"
+   ],
+   "school": "Green Bay",
+   "stoopid": null
+  },
+  "2747": {
+   "net_names": [
+    "Wofford"
+   ],
+   "school": "Wofford",
+   "stoopid": null
+  },
+  "275": {
+   "net_names": [
+    "Wisconsin"
+   ],
+   "school": "Wisconsin",
+   "stoopid": 77
+  },
+  "2750": {
+   "net_names": [
+    "Wright St",
+    "Wright St.",
+    "Wright State"
+   ],
+   "school": "Wright State",
+   "stoopid": 70
+  },
+  "2751": {
+   "net_names": [
+    "Wyoming"
+   ],
+   "school": "Wyoming",
+   "stoopid": null
+  },
+  "2752": {
+   "net_names": [
+    "Xavier"
+   ],
+   "school": "Xavier",
+   "stoopid": null
+  },
+  "2754": {
+   "net_names": [
+    "Youngstown St",
+    "Youngstown St.",
+    "Youngstown State"
+   ],
+   "school": "Youngstown State",
+   "stoopid": null
+  },
+  "2755": {
+   "net_names": [
+    "Grambling"
+   ],
+   "school": "Grambling",
+   "stoopid": null
+  },
+  "276": {
+   "net_names": [
+    "Marshall"
+   ],
+   "school": "Marshall",
+   "stoopid": null
+  },
+  "277": {
+   "net_names": [
+    "West Virginia"
+   ],
+   "school": "West Virginia",
+   "stoopid": 76
+  },
+  "2771": {
+   "net_names": [
+    "Merrimack"
+   ],
+   "school": "Merrimack",
+   "stoopid": 67
+  },
+  "278": {
+   "net_names": [
+    "Fresno St",
+    "Fresno St.",
+    "Fresno State"
+   ],
+   "school": "Fresno State",
+   "stoopid": null
+  },
+  "279": {
+   "net_names": [
+    "Pacific"
+   ],
+   "school": "Pacific",
+   "stoopid": null
+  },
+  "28": {
+   "net_names": [
+    "UC San Diego"
+   ],
+   "school": "UC San Diego",
+   "stoopid": null
+  },
+  "2803": {
+   "net_names": [
+    "Bryant"
+   ],
+   "school": "Bryant",
+   "stoopid": null
+  },
+  "2815": {
+   "net_names": [
+    "Lindenwood"
+   ],
+   "school": "Lindenwood",
+   "stoopid": null
+  },
+  "282": {
+   "net_names": [
+    "Indiana St",
+    "Indiana St.",
+    "Indiana State"
+   ],
+   "school": "Indiana State",
+   "stoopid": null
+  },
+  "2837": {
+   "net_names": [
+    "East Texas A&M"
+   ],
+   "school": "East Texas A&M",
+   "stoopid": null
+  },
+  "284": {
+   "net_names": [
+    "Stonehill"
+   ],
+   "school": "Stonehill",
+   "stoopid": null
+  },
+  "2856": {
+   "net_names": [
+    "CA Baptist",
+    "California Baptist"
+   ],
+   "school": "California Baptist",
+   "stoopid": null
+  },
+  "2870": {
+   "net_names": [
+    "Purdue FW",
+    "Purdue Fort Wayne"
+   ],
+   "school": "Purdue Fort Wayne",
+   "stoopid": null
+  },
+  "288": {
+   "net_names": [
+    "Lipscomb"
+   ],
+   "school": "Lipscomb",
+   "stoopid": null
+  },
+  "2885": {
+   "net_names": [
+    "NJIT"
+   ],
+   "school": "NJIT",
+   "stoopid": null
+  },
+  "290": {
+   "net_names": [
+    "GA Southern",
+    "Ga. Southern",
+    "Georgia Southern"
+   ],
+   "school": "Georgia Southern",
+   "stoopid": null
+  },
+  "2900": {
+   "net_names": [
+    "St. Thomas",
+    "St. Thomas (MN)"
+   ],
+   "school": "St. Thomas",
+   "stoopid": 56
+  },
+  "2908": {
+   "net_names": [
+    "SC Upstate",
+    "South Carolina Upstate",
+    "USC Upstate"
+   ],
+   "school": "South Carolina Upstate",
+   "stoopid": null
+  },
+  "2916": {
+   "net_names": [
+    "Incarnate Word",
+    "UIW"
+   ],
+   "school": "Incarnate Word",
+   "stoopid": null
+  },
+  "292": {
+   "net_names": [
+    "UT Rio Grande",
+    "UT Rio Grande Valley",
+    "UTRGV"
+   ],
+   "school": "UT Rio Grande Valley",
+   "stoopid": null
+  },
+  "2934": {
+   "net_names": [
+    "Bakersfield",
+    "CSU Bakersfield",
+    "Cal State Bakersfield"
+   ],
+   "school": "Cal State Bakersfield",
+   "stoopid": null
+  },
+  "294": {
+   "net_names": [
+    "Jacksonville"
+   ],
+   "school": "Jacksonville",
+   "stoopid": null
+  },
+  "295": {
+   "net_names": [
+    "Old Dominion"
+   ],
+   "school": "Old Dominion",
+   "stoopid": null
+  },
+  "299": {
+   "net_names": [
+    "Long Beach St",
+    "Long Beach St.",
+    "Long Beach State"
+   ],
+   "school": "Long Beach State",
+   "stoopid": null
+  },
+  "30": {
+   "net_names": [
+    "Southern California",
+    "USC"
+   ],
+   "school": "USC",
+   "stoopid": 38
+  },
+  "300": {
+   "net_names": [
+    "UC Irvine"
+   ],
+   "school": "UC Irvine",
+   "stoopid": 63
+  },
+  "301": {
+   "net_names": [
+    "San Diego"
+   ],
+   "school": "San Diego",
+   "stoopid": null
+  },
+  "302": {
+   "net_names": [
+    "UC Davis"
+   ],
+   "school": "UC Davis",
+   "stoopid": null
+  },
+  "304": {
+   "net_names": [
+    "Idaho St",
+    "Idaho St.",
+    "Idaho State"
+   ],
+   "school": "Idaho State",
+   "stoopid": null
+  },
+  "305": {
+   "net_names": [
+    "DePaul"
+   ],
+   "school": "DePaul",
+   "stoopid": null
+  },
+  "3084": {
+   "net_names": [
+    "Utah Valley"
+   ],
+   "school": "Utah Valley",
+   "stoopid": null
+  },
+  "309": {
+   "net_names": [
+    "Louisiana"
+   ],
+   "school": "Louisiana",
+   "stoopid": null
+  },
+  "3101": {
+   "net_names": [
+    "Utah Tech"
+   ],
+   "school": "Utah Tech",
+   "stoopid": null
+  },
+  "311": {
+   "net_names": [
+    "Maine"
+   ],
+   "school": "Maine",
+   "stoopid": null
+  },
+  "314": {
+   "net_names": [
+    "Iona"
+   ],
+   "school": "Iona",
+   "stoopid": null
+  },
+  "315": {
+   "net_names": [
+    "Niagara"
+   ],
+   "school": "Niagara",
+   "stoopid": null
+  },
+  "322": {
+   "net_names": [
+    "Lafayette"
+   ],
+   "school": "Lafayette",
+   "stoopid": null
+  },
+  "324": {
+   "net_names": [
+    "Coastal",
+    "Coastal Carolina"
+   ],
+   "school": "Coastal Carolina",
+   "stoopid": null
+  },
+  "325": {
+   "net_names": [
+    "Cleveland St",
+    "Cleveland St.",
+    "Cleveland State"
+   ],
+   "school": "Cleveland State",
+   "stoopid": null
+  },
+  "326": {
+   "net_names": [
+    "Texas St",
+    "Texas St.",
+    "Texas State"
+   ],
+   "school": "Texas State",
+   "stoopid": null
+  },
+  "328": {
+   "net_names": [
+    "Utah St.",
+    "Utah State"
+   ],
+   "school": "Utah State",
+   "stoopid": 30
+  },
+  "331": {
+   "net_names": [
+    "E Washington",
+    "Eastern Wash.",
+    "Eastern Washington"
+   ],
+   "school": "Eastern Washington",
+   "stoopid": null
+  },
+  "333": {
+   "net_names": [
+    "Alabama"
+   ],
+   "school": "Alabama",
+   "stoopid": 29
+  },
+  "338": {
+   "net_names": [
+    "Kennesaw St",
+    "Kennesaw St.",
+    "Kennesaw State"
+   ],
+   "school": "Kennesaw State",
+   "stoopid": null
+  },
+  "339": {
+   "net_names": [
+    "Evansville"
+   ],
+   "school": "Evansville",
+   "stoopid": null
+  },
+  "344": {
+   "net_names": [
+    "Mississippi St",
+    "Mississippi St.",
+    "Mississippi State"
+   ],
+   "school": "Mississippi State",
+   "stoopid": null
+  },
+  "349": {
+   "net_names": [
+    "Army",
+    "Army West Point"
+   ],
+   "school": "Army",
+   "stoopid": null
+  },
+  "350": {
+   "net_names": [
+    "UNC Wilmington",
+    "UNCW"
+   ],
+   "school": "UNC Wilmington",
+   "stoopid": 33
+  },
+  "356": {
+   "net_names": [
+    "Illinois"
+   ],
+   "school": "Illinois",
+   "stoopid": 5
+  },
+  "357": {
+   "net_names": [
+    "A&M-Corpus Christi",
+    "Texas A&M-CC",
+    "Texas A&M-Corpus Christi"
+   ],
+   "school": "Texas A&M-Corpus Christi",
+   "stoopid": null
+  },
+  "36": {
+   "net_names": [
+    "Colorado St",
+    "Colorado St.",
+    "Colorado State"
+   ],
+   "school": "Colorado State",
+   "stoopid": null
+  },
+  "38": {
+   "net_names": [
+    "Colorado"
+   ],
+   "school": "Colorado",
+   "stoopid": null
+  },
+  "399": {
+   "net_names": [
+    "UAlbany"
+   ],
+   "school": "UAlbany",
+   "stoopid": null
+  },
+  "41": {
+   "net_names": [
+    "UConn"
+   ],
+   "school": "UConn",
+   "stoopid": 4
+  },
+  "43": {
+   "net_names": [
+    "Yale"
+   ],
+   "school": "Yale",
+   "stoopid": null
+  },
+  "44": {
+   "net_names": [
+    "American",
+    "American University"
+   ],
+   "school": "American University",
+   "stoopid": 68
+  },
+  "45": {
+   "net_names": [
+    "G Washington",
+    "George Washington"
+   ],
+   "school": "George Washington",
+   "stoopid": null
+  },
+  "46": {
+   "net_names": [
+    "Georgetown"
+   ],
+   "school": "Georgetown",
+   "stoopid": null
+  },
+  "47": {
+   "net_names": [
+    "Howard"
+   ],
+   "school": "Howard",
+   "stoopid": 28
+  },
+  "48": {
+   "net_names": [
+    "Delaware"
+   ],
+   "school": "Delaware",
+   "stoopid": null
+  },
+  "5": {
+   "net_names": [
+    "UAB"
+   ],
+   "school": "UAB",
+   "stoopid": null
+  },
+  "50": {
+   "net_names": [
+    "Florida A&M"
+   ],
+   "school": "Florida A&M",
+   "stoopid": null
+  },
+  "52": {
+   "net_names": [
+    "Florida St",
+    "Florida St.",
+    "Florida State"
+   ],
+   "school": "Florida State",
+   "stoopid": null
+  },
+  "526": {
+   "net_names": [
+    "FGCU",
+    "Florida Gulf Coast"
+   ],
+   "school": "Florida Gulf Coast",
+   "stoopid": null
+  },
+  "55": {
+   "net_names": [
+    "Jacksonville St.",
+    "Jacksonville State",
+    "Jax State"
+   ],
+   "school": "Jacksonville State",
+   "stoopid": null
+  },
+  "56": {
+   "net_names": [
+    "Stetson"
+   ],
+   "school": "Stetson",
+   "stoopid": null
+  },
+  "57": {
+   "net_names": [
+    "Florida"
+   ],
+   "school": "Florida",
+   "stoopid": 2
+  },
+  "58": {
+   "net_names": [
+    "South Fla.",
+    "South Florida"
+   ],
+   "school": "South Florida",
+   "stoopid": null
+  },
+  "59": {
+   "net_names": [
+    "Georgia Tech"
+   ],
+   "school": "Georgia Tech",
+   "stoopid": null
+  },
+  "6": {
+   "net_names": [
+    "South Alabama"
+   ],
+   "school": "South Alabama",
+   "stoopid": null
+  },
+  "61": {
+   "net_names": [
+    "Georgia"
+   ],
+   "school": "Georgia",
+   "stoopid": 61
+  },
+  "62": {
+   "net_names": [
+    "Hawai'i",
+    "Hawaii"
+   ],
+   "school": "Hawai'i",
+   "stoopid": null
+  },
+  "66": {
+   "net_names": [
+    "Iowa St.",
+    "Iowa State"
+   ],
+   "school": "Iowa State",
+   "stoopid": 13
+  },
+  "68": {
+   "net_names": [
+    "Boise St",
+    "Boise St.",
+    "Boise State"
+   ],
+   "school": "Boise State",
+   "stoopid": null
+  },
+  "70": {
+   "net_names": [
+    "Idaho"
+   ],
+   "school": "Idaho",
+   "stoopid": null
+  },
+  "71": {
+   "net_names": [
+    "Bradley"
+   ],
+   "school": "Bradley",
+   "stoopid": null
+  },
+  "77": {
+   "net_names": [
+    "Northwestern"
+   ],
+   "school": "Northwestern",
+   "stoopid": null
+  },
+  "79": {
+   "net_names": [
+    "S Illinois",
+    "Southern Ill.",
+    "Southern Illinois"
+   ],
+   "school": "Southern Illinois",
+   "stoopid": null
+  },
+  "8": {
+   "net_names": [
+    "Arkansas"
+   ],
+   "school": "Arkansas",
+   "stoopid": 22
+  },
+  "82": {
+   "net_names": [
+    "UIC"
+   ],
+   "school": "UIC",
+   "stoopid": 48
+  },
+  "84": {
+   "net_names": [
+    "Indiana"
+   ],
+   "school": "Indiana",
+   "stoopid": 51
+  },
+  "85": {
+   "net_names": [
+    "IU Indianapolis",
+    "IU Indy"
+   ],
+   "school": "IU Indianapolis",
+   "stoopid": null
+  },
+  "87": {
+   "net_names": [
+    "Notre Dame"
+   ],
+   "school": "Notre Dame",
+   "stoopid": null
+  },
+  "88": {
+   "net_names": [
+    "S Indiana",
+    "Southern Ind.",
+    "Southern Indiana"
+   ],
+   "school": "Southern Indiana",
+   "stoopid": null
+  },
+  "9": {
+   "net_names": [
+    "Arizona St",
+    "Arizona St.",
+    "Arizona State"
+   ],
+   "school": "Arizona State",
+   "stoopid": null
+  },
+  "91": {
+   "net_names": [
+    "Bellarmine"
+   ],
+   "school": "Bellarmine",
+   "stoopid": null
+  },
+  "93": {
+   "net_names": [
+    "Murray St",
+    "Murray St.",
+    "Murray State"
+   ],
+   "school": "Murray State",
+   "stoopid": 62
+  },
+  "94": {
+   "net_names": [
+    "N Kentucky",
+    "Northern Kentucky",
+    "Northern Ky."
+   ],
+   "school": "Northern Kentucky",
+   "stoopid": null
+  },
+  "96": {
+   "net_names": [
+    "Kentucky"
+   ],
+   "school": "Kentucky",
+   "stoopid": 35
+  },
+  "97": {
+   "net_names": [
+    "Louisville"
+   ],
+   "school": "Louisville",
+   "stoopid": 18
+  },
+  "98": {
+   "net_names": [
+    "Western Kentucky",
+    "Western Ky."
+   ],
+   "school": "Western Kentucky",
+   "stoopid": 59
+  },
+  "99": {
+   "net_names": [
+    "LSU"
+   ],
+   "school": "LSU",
+   "stoopid": null
+  }
+ }
+}

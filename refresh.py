@@ -626,6 +626,12 @@ def _refresh():
     problems = sanity_problems(out, gstats, sheet_ok, rosters, a, prev)
     if problems:
         raise Hold("; ".join(problems))
+    if not a.demo:                           # s30r ranks (once per ET day; keeps last good values; never fails the refresh)
+        try:
+            import ranks_live
+            ranks_live.apply(out, prev, out_dir=out_dir, provider=(lambda c, d: ({}, {})) if a.offline else None)
+        except Exception as ex:
+            log("ranks: skipped (%s)" % ex)
     write_data(out_dir, out)
     if not a.demo and not a.offline:        # fail-soft backup of the shared side-bets ledger (repo keeps the history)
         try:
