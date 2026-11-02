@@ -123,6 +123,34 @@ def net_rows(teams, team_map, old):
     return sorted(rows, key=lambda x: x["net"])
 
 
+def looks_last_final(rows, month):
+    """s29e: don't trust the source's season label. NET rows are last season's final while any team has played
+    more than 25 games in Nov/Dec, or while the W-L totals look like a full season (median >= 28 games) from Oct to Jan."""
+    gp = []
+    for r in rows:
+        try:
+            w, l = (int(x) for x in str(r.get("record", "")).split("-")[:2])
+            gp.append(w + l)
+        except Exception:
+            pass
+    if not gp:
+        return False
+    gp.sort()
+    return (month in (11, 12) and gp[-1] > 25) or (month in (10, 11, 12, 1) and gp[len(gp) // 2] >= 28)
+
+
+def net_season_label(rows, fetched_at):
+    """-> (season, as_of) for data/net.json. The season starts in November (Oct counts as the new season's preseason)."""
+    y, m = int(fetched_at[:4]), int(fetched_at[5:7])
+    start = y if m >= 10 else y - 1
+    cur = "%d-%02d" % (start, (start + 1) % 100)
+    if looks_last_final(rows, m):
+        last = "%d-%02d" % (start - 1, start % 100)
+        return (last + " (final NET; the " + cur + " NET is not published yet)",
+                "Last season's final NET (" + last + "), fetched " + fetched_at[:10])
+    return cur, "Fetched " + fetched_at[:10]
+
+
 def write_net_if_changed(path, teams, team_map, fetched_at):
     old = None
     try:
@@ -134,8 +162,9 @@ def write_net_if_changed(path, teams, team_map, fetched_at):
         return False
     if old and {(r.get("tid"), r.get("net")) for r in old.get("rows", [])} == {(r["tid"], r["net"]) for r in rows}:
         return False
-    blob = {"source": "https://www.ncaa.com/rankings/basketball-men/d1/ncaa-mens-basketball-net-rankings", "as_of": "Fetched " + fetched_at[:10],
-            "season": "2026-27", "fetched_at": fetched_at, "rows": rows}
+    season, as_of = net_season_label(rows, fetched_at)
+    blob = {"source": "https://www.ncaa.com/rankings/basketball-men/d1/ncaa-mens-basketball-net-rankings", "as_of": as_of,
+            "season": season, "fetched_at": fetched_at, "rows": rows}
     tmp = path + ".tmp"
     with open(tmp, "w", encoding="utf-8") as f:
         json.dump(blob, f, ensure_ascii=False, separators=(",", ":"))

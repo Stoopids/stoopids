@@ -27,7 +27,7 @@ S25.TAGLINES=[
 ];
 S25.TAG_EPOCH='2026-11-01';S25.TAG_EPOCH_ET=S25.TAG_EPOCH;   // day 0 (viewer's local calendar date); the line changes every 2 local days
 const LD=new Intl.DateTimeFormat('en-CA',{year:'numeric',month:'2-digit',day:'2-digit'});
-const LT=new Intl.DateTimeFormat('en-US',{hour:'numeric',minute:'2-digit',timeZoneName:'short'});
+const LT=new Intl.DateTimeFormat('en-US',{hour:'numeric',minute:'2-digit'});   // s29e: no zone label anywhere
 S25.localDay=function(d){d=d instanceof Date?d:new Date(d);if(isNaN(d))return null;const p={};LD.formatToParts(d).forEach(x=>p[x.type]=x.value);return p.year+'-'+p.month+'-'+p.day};
 S25.localTime=function(d){d=d instanceof Date?d:new Date(d);return isNaN(d)?'':LT.format(d)};
 /* s25e (QA F1): ESPN scoreboard days are ET calendar days, so the bet reader, the 'Game date (ET)' default and every scoreboard dates= query use S25.etDay (America/New_York).
@@ -200,7 +200,7 @@ S25.reducedMotion=function(){try{return !!(G.matchMedia&&G.matchMedia('(prefers-
 /* display times: always the viewer's device time zone with a short label (Intl). Day boundaries use the device zone too. */
 const ZFIX={'Asia/Jakarta':'WIB','Asia/Pontianak':'WIB','Asia/Makassar':'WITA','Asia/Jayapura':'WIT'};
 S25.zoneLabel=function(d){try{const z=Intl.DateTimeFormat().resolvedOptions().timeZone;if(ZFIX[z])return ZFIX[z];const p=new Intl.DateTimeFormat('en-US',{timeZoneName:'short'}).formatToParts(d||new Date()).find(x=>x.type==='timeZoneName');return p?p.value:''}catch(e){return ''}};
-S25.localTime=function(d){d=d instanceof Date?d:new Date(d);if(isNaN(d))return '';return new Intl.DateTimeFormat('en-US',{hour:'numeric',minute:'2-digit'}).format(d).replace(/\u202f/g,' ')+' '+S25.zoneLabel(d)};
+S25.localTime=function(d){d=d instanceof Date?d:new Date(d);if(isNaN(d))return '';return new Intl.DateTimeFormat('en-US',{hour:'numeric',minute:'2-digit'}).format(d).replace(/\u202f/g,' ')};
 /* original swish: white noise through a band-pass that sweeps up then settles, ~0.45 s. Works with AudioContext and OfflineAudioContext. */
 S25.SWISH_LEN=0.5;
 S25.swish=function(ctx,dest,t0){if(!ctx)return 0;t0=t0==null?ctx.currentTime:t0;dest=dest||ctx.destination;const sr=ctx.sampleRate,n=Math.floor(sr*0.48),buf=ctx.createBuffer(1,n,sr),d=buf.getChannelData(0);

@@ -28,6 +28,7 @@
 })();
 </script><!--</S26W-TOP>-->
 <!--<VIEW-ONLY>--><script>
+/*<S29E-PASTE>*/var PASTE_BET=false;   // 'Paste a bet' box (s29e item 5): OFF until Paul says it's ready. Only the box is gated; postedBy, Posted line and full-card Copy stay on. The preview kit turns it on for preview builds./*</S29E-PASTE>*/
 /* View-only mode (s26t): ?view=1 (kept per tab in sessionStorage stoopids_view=1). Forces guest WITHOUT touching localStorage stoopids_who, and blocks every write. */
 var VIEW_ONLY=(function(){try{if(/(?:^|[?&])view=1(?:&|$)/.test(location.search))sessionStorage.setItem('stoopids_view','1');return sessionStorage.getItem('stoopids_view')==='1'}catch(e){return /(?:^|[?&])view=1(?:&|$)/.test(location.search)}})();
 if(VIEW_ONLY){(function(){
@@ -47,14 +48,14 @@ html.viewonly #chatF,html.viewonly #chatP,html.viewonly #chatWho,html.viewonly #
 #vob{display:none}html.viewonly #vob{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;font:600 12px/1.5 system-ui,sans-serif;background:#333;color:#eee;border:1px solid #666;vertical-align:middle}
 /*<S29C-HERO>*/ /* s29d: kicker ~68% of title; s29c: bigger title + 'Stoopids presents' kicker, shared rules proposed with League Site */
 .titlebar h1{font-size:clamp(34px,10.5vw,72px)}
-.s27-pres{font-size:clamp(23px,7.1vw,49px);font-weight:900;letter-spacing:.08em;line-height:1.1;font-variant:small-caps;text-transform:lowercase;margin:0 0 4px;color:var(--mut);text-align:center}
+.s27-pres{font-size:clamp(17px,5.25vw,36px);font-weight:900;letter-spacing:.08em;line-height:1.1;font-variant:small-caps;text-transform:lowercase;margin:0 0 4px;color:var(--mut);text-align:center}
 /*</S29C-HERO>*/
 </style><!--</VIEW-ONLY>-->
 <meta charset="utf-8">
 <meta http-equiv="Cache-Control" content="no-cache"><!--S26W-->
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#10131a"><!--S26W-->
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>STOOPIDS — NCAA Stoopids Pool</title>
+<title>STOOPIDS · NCAA Fantasy</title>
 <!--<FAVICON>--><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%23ffd23f%27/%3E%3Ctext x=%2732%27 y=%2749%27 font-family=%27Arial Black,Arial,sans-serif%27 font-size=%2748%27 font-weight=%27900%27 text-anchor=%27middle%27 fill=%27%23111%27%3ES%3C/text%3E%3C/svg%3E"><!--</FAVICON>-->
 <style>
 :root{--bg:#10131a;--card:#1a1f2b;--card2:#222939;--line:#2d3548;--tx:#eef1f7;--mut:#9aa6bd;--acc:#ffd23f;--good:#4ade80;--bad:#f87171}
@@ -411,7 +412,7 @@ nav button .nu{position:absolute;top:1px;left:2px;min-width:15px;background:#ff3
 /* Bets 26-27 tab: nav now has 11 items (10 tabs + Draft): phones size each item by its label (short labels give room to the longer ones); stacked icon+label up to 1239px; full-label pills only from 1240px in a wider nav. Overrides the earlier NAV-ONE-ROW/DRAFT-TAB rules; drop this block together with the tab. */
 @media (max-width:599px){nav button,nav a.nd{flex:1 1 auto}}
 @media (min-width:1040px) and (max-width:1239px){nav{padding:6px 4px;gap:2px}nav button,nav a.nd{flex:1 1 0;flex-direction:column;gap:2px;border-radius:9px;padding:4px 0;min-height:46px;font-size:11.5px;letter-spacing:-.01em}nav button .ni,nav a.nd .ni{font-size:19px}nav button .nl.f,nav a.nd .nl.f{display:none}nav button .nl.s,nav a.nd .nl.s{display:block}}
-@media (min-width:1240px){nav{max-width:1180px}}
+
 /*</BETS-2627>*/
 
 /*<S24-EDIT> s24 port: tabs are <a class="nt"> (same look as the old tab buttons), link / share buttons, deep-link highlight, Edit + Fix result */
@@ -522,8 +523,7 @@ nav a.nt{text-decoration:none}
 .tabs.s29-kind>button{white-space:nowrap;min-height:48px;padding:11px 4px;font-size:min(1.1em,4.1vw);line-height:1.2}
 /*</S29D-KIND>*/
 /*<S29D-GGRID>*/ /* Games cards: phones 1 col, 700px+ 2 cols (unchanged); laptops 1100px+ 3 cols; 1400px+ 4 cols with the Games tab widened to 1400px. Games tab only (#main[data-tab=games]). */
-@media (min-width:1100px){#main[data-tab=games] .ggrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media (min-width:1400px){main#main[data-tab=games]{max-width:1400px}#main[data-tab=games] .ggrid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
 /*</S29D-GGRID>*/
 /*<S29D-NEWBETS>*/ /* Bets tab: yellow new-bets count top-right, red chat count with a small 💬 top-left (existing .nu, label prefixed) */
 nav a.nt .s29nb{position:absolute;top:1px;right:2px;min-width:15px;background:#FFD400;color:#111;border-radius:99px;font-size:9px;font-weight:900;line-height:1;padding:2px 4px;text-align:center;pointer-events:none}
@@ -559,8 +559,6 @@ nav a.nt .s29nb{position:absolute;top:1px;right:2px;min-width:15px;background:#F
 /*<GAMES-LOCAL>*/
 /* s25c games: same grid as the bet cards (1 col, 2 from 700px, 3 from 1400px, gap 12px), equal-height cards, tighter padding, big Quick bet at the bottom, finished games collapse */
 .ggrid{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;align-items:stretch;margin:6px 0 10px}
-@media (min-width:700px){.ggrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (min-width:1400px){.ggrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .ggrid>.gm{margin:0;padding:8px 10px;display:flex;flex-direction:column;box-sizing:border-box;min-width:0}
 .ggrid>.gm>*{flex:none}.ggrid>.gm>.gsp{margin-top:auto;height:0}
 .ggrid .gm .gh{margin-bottom:2px}.ggrid .gside{padding:1px 0}.ggrid .gside .sc2{font-size:19px}.ggrid .gl{margin-top:4px;padding-top:4px;font-size:12.5px}
@@ -727,6 +725,22 @@ html.bd-a .orl.q .ptab .pn,html.bd-a .orl.q .ptab .pn .chip{width:220px;min-widt
 .hero{height:clamp(130px,22vw,235px);background-position:center 40%}
 @media (max-width:640px){.hero{height:clamp(104px,37vw,150px);background-position:center 22%}}
 /*</S27>*/
+/*<S29E-WIDTH>*/ /* Shared with Draft Room / League (s29e): nav and every tab's content use one width. */
+:root{--nav-max:1080px;--content-max:1012px}   /* content column = 1012 - 2x16 padding = 980px, the live Standings card column (measured 2026-11-02 at 1280/1440) */
+@media (min-width:1700px){:root{--nav-max:1440px}}
+nav{max-width:var(--nav-max);margin-inline:auto}
+main,#main{max-width:var(--content-max);margin-inline:auto}
+.gtop,footer{max-width:var(--content-max)}
+main,#main{padding-left:16px;padding-right:16px}
+.ggrid{grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+@media (max-width:351px){.ggrid{grid-template-columns:minmax(0,1fr)}} /* phones narrower than 320px of content + 2x16px padding: one full-width column, no sideways scroll */
+.b27-pool .s24hd{padding-right:72px}.b27-pool .s24hd>.s27-copy{position:absolute;top:-5px;right:0;margin:0}.b27-pool .s24hd>.mut{white-space:nowrap}
+/* s29e item 8: tables fill the capped content width; each scrolls sideways in its own wrapper on phones */
+#main table{width:100%}
+#main .card.tap{width:auto;max-width:none;margin-left:0;margin-right:0}
+#main .card:has(>table),#main .sc,#main .swipe{max-width:100%;overflow-x:auto}
+#main th,#main td{min-width:2.5em}
+/*</S29E-WIDTH>*/
 </style>
 </head>
 <body>
@@ -782,7 +796,7 @@ S25.TAGLINES=[
 ];
 S25.TAG_EPOCH='2026-11-01';S25.TAG_EPOCH_ET=S25.TAG_EPOCH;   // day 0 (viewer's local calendar date); the line changes every 2 local days
 const LD=new Intl.DateTimeFormat('en-CA',{year:'numeric',month:'2-digit',day:'2-digit'});
-const LT=new Intl.DateTimeFormat('en-US',{hour:'numeric',minute:'2-digit',timeZoneName:'short'});
+const LT=new Intl.DateTimeFormat('en-US',{hour:'numeric',minute:'2-digit'});   /*<S29E-NOZONE>*/// s29e item 11: no zone label anywhere (on screen or copied); times are still the viewer's device zone/*</S29E-NOZONE>*/
 S25.localDay=function(d){d=d instanceof Date?d:new Date(d);if(isNaN(d))return null;const p={};LD.formatToParts(d).forEach(x=>p[x.type]=x.value);return p.year+'-'+p.month+'-'+p.day};
 S25.localTime=function(d){d=d instanceof Date?d:new Date(d);return isNaN(d)?'':LT.format(d)};
 /* s25e (QA F1): ESPN scoreboard days are ET calendar days, so the bet reader, the 'Game date (ET)' default and every scoreboard dates= query use S25.etDay (America/New_York).
@@ -955,7 +969,7 @@ S25.reducedMotion=function(){try{return !!(G.matchMedia&&G.matchMedia('(prefers-
 /* display times: always the viewer's device time zone with a short label (Intl). Day boundaries use the device zone too. */
 const ZFIX={'Asia/Jakarta':'WIB','Asia/Pontianak':'WIB','Asia/Makassar':'WITA','Asia/Jayapura':'WIT'};
 S25.zoneLabel=function(d){try{const z=Intl.DateTimeFormat().resolvedOptions().timeZone;if(ZFIX[z])return ZFIX[z];const p=new Intl.DateTimeFormat('en-US',{timeZoneName:'short'}).formatToParts(d||new Date()).find(x=>x.type==='timeZoneName');return p?p.value:''}catch(e){return ''}};
-S25.localTime=function(d){d=d instanceof Date?d:new Date(d);if(isNaN(d))return '';return new Intl.DateTimeFormat('en-US',{hour:'numeric',minute:'2-digit'}).format(d).replace(/\u202f/g,' ')+' '+S25.zoneLabel(d)};
+S25.localTime=function(d){d=d instanceof Date?d:new Date(d);if(isNaN(d))return '';return new Intl.DateTimeFormat('en-US',{hour:'numeric',minute:'2-digit'}).format(d).replace(/\u202f/g,' ')};
 /* original swish: white noise through a band-pass that sweeps up then settles, ~0.45 s. Works with AudioContext and OfflineAudioContext. */
 S25.SWISH_LEN=0.5;
 S25.swish=function(ctx,dest,t0){if(!ctx)return 0;t0=t0==null?ctx.currentTime:t0;dest=dest||ctx.destination;const sr=ctx.sampleRate,n=Math.floor(sr*0.48),buf=ctx.createBuffer(1,n,sr),d=buf.getChannelData(0);
@@ -1121,7 +1135,7 @@ function quip(o,i,n){
 /* "Tue, Oct 27, 2026, 9:14 PM WIB" from the build time (UTC), in the viewer's zone */
 function genDate(){const u=D&&D.meta&&D.meta.generated_at_utc,d=u?new Date(u):null;return d&&!isNaN(d)?d:null}   // the data's last-updated stamp (same field as About > Updated)
 /*<LOCAL-TIME>*/const LSTAMP=new Intl.DateTimeFormat('en-US',{weekday:'short',year:'numeric',month:'numeric',day:'numeric',hour:'numeric',minute:'2-digit',hour12:true});
-function stampET(){const d=genDate();if(!d)return (D.meta&&D.meta.generated_at_wib)||'';const p={};LSTAMP.formatToParts(d).forEach(x=>p[x.type]=x.value);return p.weekday+', '+MON[+p.month-1]+' '+(+p.day)+', '+p.year+', '+p.hour+':'+p.minute+' '+p.dayPeriod+' '+S25.zoneLabel(d)}   // name kept; shows the viewer's zone/*</LOCAL-TIME>*/
+function stampET(){const d=genDate();if(!d)return (D.meta&&D.meta.generated_at_wib)||'';const p={};LSTAMP.formatToParts(d).forEach(x=>p[x.type]=x.value);return p.weekday+', '+MON[+p.month-1]+' '+(+p.day)+', '+p.year+', '+p.hour+':'+p.minute+' '+p.dayPeriod}   // name kept; shows the viewer's zone/*</LOCAL-TIME>*/
 /* ---------- rotating "Stoopid tagline" (header slot #tag): same line for everyone, changes every 2 days at 00:00 ET (s25) ---------- */
 const TAGLINE_MODES=['preseason'];   // data modes whose header slot shows the rotating tagline (add 'live' to use it in-season too)
 /*<TAGLINE-CORE>*/
@@ -1397,6 +1411,7 @@ function etTime(g){return gTime(g)}   /*<LOCAL-TIME>*/// display: viewer's zone/
 /* Games page shows the viewer's own device time zone (Intl). isTBD stays on ESPN's ET placeholders; Quick bet text keeps the ET game date (what the auto-settle reader matches). */
 function gZone(){return S25.zoneLabel()}
 const LTK=new Intl.DateTimeFormat('en-CA');
+/*<S29E-TODAY>*/function s29eDayPfx(k){const t=LTK.format(new Date()),m=LTK.format(new Date(Date.now()+864e5));return k===t?'Today · ':k===m?'Tomorrow · ':''}   // viewer's local calendar day (same zone as the cards)/*</S29E-TODAY>*/
 function gKey(g){if(g.start){const d=new Date(g.start);if(!isNaN(d))return LTK.format(d)}return g.day}   // local calendar date: day headers group by it
 function gTime(g){return isTBD(g)?'time TBD':S25.localTime(new Date(g.start))}   // label for that date (EST vs EDT)
 const gOpen=new Set();function gFin(id){id=String(id);gOpen.has(id)?gOpen.delete(id):gOpen.add(id);render()}
@@ -1501,7 +1516,7 @@ function vGames(){
   if(!list.length)return h+`<div class="card">${all.length?'Nothing matches those filters.':nHidden/*<OWNED-GAMES>*/?'No games with an owned team right now 🏀 Check back soon. (Games where nobody in the pool owns either team are hidden.)'/*</OWNED-GAMES>*/:'No games for rostered teams yet. Check back when the schedule fills in.'}</div>`;
   if(gMode==='upcoming'&&D.meta.mode==='preseason')h+=`<div class="card note">Preseason: sportsbooks have posted lines for just some of the next few nights so far (lines are pulled for about the next 10 days). Everything refreshes automatically.</div>`;
   let cur=null;
-  list.forEach(g=>{const k=etKey(g);if(k!==cur){if(cur!==null)h+='</div>';cur=k;h+=`<div class="gday">${esc(etLabel(k))}</div><div class="ggrid">`}h+=gameCard(g)});
+  list.forEach(g=>{const k=etKey(g);if(k!==cur){if(cur!==null)h+='</div>';cur=k;h+=`<div class="gday">${esc(/*<S29E-TODAY>*/s29eDayPfx(k)+/*</S29E-TODAY>*/etLabel(k))}</div><div class="ggrid">`}h+=gameCard(g)});
   if(cur!==null)h+='</div>';
   /*<S26U-MONTH-JUMP>*/if(gCapped)h+=`<div class="card note gmore">+${gCapped} more games later in the season. Pick a day or a month above.</div>`;/*</S26U-MONTH-JUMP>*/
   return h}
@@ -2151,7 +2166,7 @@ function d27Board(){const n=DRAFT27.slots.length,rows=[];const live={};(D.owners
   for(let r=0;r<R;r++){const row=[];for(let c=0;c<n;c++){const s=r%2?n-1-c:c;row.push({slot:s,owner:DRAFT27.slots[s][0],tid:lists[s][r],overall:r*n+c+1,round:r+1,pick:c+1})}rows.push(row)}return rows}
 function d27Grade(nm,id){const g=DRAFT27_RESULTS&&DRAFT27_RESULTS.grades;if(!g)return null;return g[id]||g[nm]||g[ownerKey(nm)]||g[TN(nm)]||g[PN(nm)]||g[String(PN(nm)).toLowerCase()]||null}
 function d27When(){const t=DRAFT27_RESULTS&&(DRAFT27_RESULTS.draft_completed_at||DRAFT27_RESULTS.completed_at||DRAFT27_RESULTS.draft_date);if(!t||!isFinite(Date.parse(t)))return '';
-  return ' · drafted '+esc(new Date(t).toLocaleString(undefined,{weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}))+' ('+esc(S25.zoneLabel())+')'}
+  return ' · drafted '+esc(new Date(t).toLocaleString(undefined,{weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}))}
 /*<S26N-DRAFT-RECAP>*/
 /* s26n2: the real 2026-27 draft is Sun Nov 1 2026 20:00 WIB (13:00 UTC). The inlined 64 picks were rebuilt on 2026-10-30 from the
    pre-draft site rosters + Paul's lists (draft_date null, no completed_at), so they are NOT the real draft.
@@ -2175,7 +2190,7 @@ function vDraft27(){const rows=d27Board();
 function d27Cards(){return DRAFT27.slots.map(([nm,id],i)=>{const g=d27Grade(nm,id);const gr=g&&g.grade?String(g.grade).trim().slice(0,3):'';
     return `<div class="d27c"><div class="d27h"><span class="d27g${gr?'':' tbd'}">${gr?esc(gr):'?'}</span><div><b>${esc(TN(nm))}</b><small>${esc(PN(nm))} · slot ${i+1}</small></div></div>`+
      (g?(g.summary4?`<p>${esc(g.summary4)}</p>`:'')+(g.deep?`<details><summary>More</summary><p>${esc(g.deep)}</p></details>`:''):'<p class="d27soon">Grades coming soon.</p>')+'</div>'}).join('');}
-/*<S26N-DRAFT-RECAP>*/VIEWS.draft=vDraftTab;VIEWS.recap=vRecap;/*<S27-TABS>*/TABS.splice(4,0,['recap','🎓 Recap']);{const ix=TABS.findIndex(t=>t[0]==='about');const ab=TABS.splice(ix,1)[0];TABS.splice(TABS.findIndex(t=>t[0]==='archive'),0,ab)}NAVSHORT.recap='Recap';/*</S27-TABS>*//*<S29B-SHARE>*/TABS.push(['share','🔗 Share']);NAVSHORT.share='Share';VIEWS.share=vShare;/*</S29B-SHARE>*//*</S26N-DRAFT-RECAP>*/
+/*<S26N-DRAFT-RECAP>*/VIEWS.draft=vDraftTab;VIEWS.recap=vRecap;/*<S27-TABS>*/TABS.splice(4,0,['recap','🎓 Recap']);{const ix=TABS.findIndex(t=>t[0]==='about');const ab=TABS.splice(ix,1)[0];TABS.splice(TABS.findIndex(t=>t[0]==='archive'),0,ab)}NAVSHORT.recap='Recap';/*</S27-TABS>*//*<S29B-SHARE>*/TABS.push(['profile','👤 Profile']);NAVSHORT.profile='Profile';VIEWS.profile=vProfile;VIEWS.share=vProfile;/*<S29E-PROFILE> Share is now part of Profile; #share is an alias *//*</S29B-SHARE>*//*</S26N-DRAFT-RECAP>*/
 /*</S26D-DRAFT>*/
 /*<S27>*/
 /* s27: header Share, bet text copy, form tips, How to bet page, All teams STOOPID + KenPom ranks. */
@@ -2193,33 +2208,42 @@ function s29GameBtn(g){const id=String(g&&g.id||'');if(!s24IdOK(id))return '';S2
 function s29GameText(g){const L=[],tn=s=>{const t=D.teams[s.id]||{};const rk=s.seed?'('+s.seed+') ':(s.rank||t.rank||t.ap)?'#'+(s.rank||t.rank||t.ap)+' ':'';const ln=g.line;const mk=ln?(String(ln.fav)===String(s.id)?' ⭐':String(ln.dog)===String(s.id)?' 🐶':''):'';return rk+(t.name||s.short||s.name||s.id)+mk};
   const fin=g.status==='final',live=g.status==='live',sc=s=>(fin||live)&&s.score!=null?' '+s.score:'';
   L.push(tn(g.away)+sc(g.away)+(g.neutral?' vs ':' @ ')+tn(g.home)+sc(g.home));
-  const day=etLabel(etKey(g));L.push((fin?'Final · ':live?'LIVE · ':'')+day+(isTBD(g)?' · time TBD':g.start?' · '+S25.localTime(new Date(g.start)):''));
+  const day=/*<S29E-GDATE>*/etLabel(gKey(g))/*</S29E-GDATE> local calendar day, same as the card's day header (was etKey: the ET day)*/;L.push((fin?'Final · ':live?'LIVE · ':'')+day+(isTBD(g)?' · time TBD':g.start?' · '+S25.localTime(new Date(g.start)):''));
   if(g.round)L.push(String(g.round));else if(g.kind==='conf')L.push('Conf tournament');
   const v=g.venue&&(g.venue.name||g.venue);if(v&&typeof v==='string')L.push(v+(g.neutral?' (neutral site)':''));else if(g.neutral)L.push('Neutral site');
   const ln=g.line;if(ln){if(ln.fav_name&&ln.sp!=null)L.push('Spread: '+ln.fav_name+' -'+ln.sp);else if(ln.sp===0)L.push('Spread: Pick’em');
     if(ln.aml!=null||ln.hml!=null)L.push('Moneyline: '+g.away.short+' '+fml(ln.aml)+' / '+g.home.short+' '+fml(ln.hml));
-    if(ln.ou!=null)L.push('Over/under: '+ln.ou);if(ln.p)L.push('Lines: '+ln.p+(fin&&ln.type==='close'?' (closing)':''))}
+    if(ln.ou!=null)L.push('Over/under: '+ln.ou)}
   const ow=s=>(s.owners||[]).map(n=>(ownerEmoji(n)?ownerEmoji(n)+' ':'')+PN(n)).join(', ');const oa=ow(g.away),oh=ow(g.home);
-  if(oa)L.push('Owner, '+g.away.short+': '+oa);if(oh)L.push('Owner, '+g.home.short+': '+oh);
+  if(oa)L.push(g.away.short+': '+oa);if(oh)L.push(g.home.short+': '+oh);
   return L.join('\n')}
 function s29CopyGame(id,btn){const g=S29G[id];if(!g)return;s27CopyText(s29GameText(g),()=>{if(!btn)return;btn.textContent='Copied';btn.classList.add('on');clearTimeout(btn._t);btn._t=setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('on')},1600)})}
 /*</S29B-GCOPY>*/
 /*<S29B-SHARE>*/ // the Share tab: pick Whole site or one tab -> a view-only link (?view=1#tab), navigator.share with a copy fallback ('Copied')
 let S29SH='';
-function s29ShTabs(){return TABS.filter(t=>t[0]!=='share'&&tabVisible(t[0])).map(t=>[t[0],t[1].slice(t[1].indexOf(' ')+1)])}
+function s29ShTabs(){return TABS.filter(t=>t[0]!=='share'&&t[0]!=='profile'&&tabVisible(t[0])).map(t=>[t[0],t[1].slice(t[1].indexOf(' ')+1)])}
 function s29ShUrl(){return s29ViewUrl(S29SH?s24HashOf(S29SH):'')}
+/*<S29E-PROFILE>*/function vProfile(){const view=typeof VIEW_ONLY!=='undefined'&&VIEW_ONLY;
+  if(view)return `<div class="card s29e-prof"><h2 style="margin:0">👤 Profile</h2><p style="margin:6px 0 0">You're viewing a read-only link.</p></div>`+vShare();
+  const me=(typeof b27Who==='function'&&b27Who())||null,o=me&&D&&D.owners?D.owners.find(x=>x.name===me):null;
+  return `<div class="card s29e-prof"><h2 style="margin:0">👤 Profile</h2><p style="margin:6px 0 0">${me?`You're using the site as <b>${esc(PN(me))}</b>`:'You haven’t picked who you are yet.'} <a href="#" onclick="presAsk();return false">(${me?'change':'pick'})</a></p></div>`+
+   `<div class="card s29e-set"><h3 style="margin:0 0 6px">My settings</h3>${me?`<div>Team: <b>${esc(TN(me))}</b>${o&&o.emoji?' · '+esc(o.emoji):''}</div>`:''}<p class="mut" style="margin:6px 0 0;font-size:12.5px">There are no personal settings to change yet. Team names and emojis are set by the commissioner.</p></div>`+
+   `<div class="card s29e-notif"><h3 style="margin:0 0 6px">Notifications</h3><p class="mut" style="margin:0">Coming soon</p></div>`+vShare()}
+/*</S29E-PROFILE>*/
 function vShare(){const u=s29ShUrl();
-  return `<div class="card s29sh"><h2 style="margin:0 0 8px">Share STOOPIDS</h2><label class="s29sh-l" for="s29shSel">What to share</label>
+  return `<div class="card s29sh"><h3 style="margin:0 0 2px">Share STOOPIDS</h3><p class="s29e-shsub" style="margin:0 0 8px;font-weight:700">Read-only link for friends and family</p><label class="s29sh-l" for="s29shSel">What to share</label>
    <select id="s29shSel" onchange="S29SH=this.value;render()"><option value=""${S29SH?'':' selected'}>Whole site</option>${s29ShTabs().map(([k,l])=>`<option value="${esc(k)}"${k===S29SH?' selected':''}>${esc(l)}</option>`).join('')}</select>
    <button type="button" class="rkseg-b on s29sh-b" id="s29shBtn" onclick="s29ShareGo(this)">${s24CanShare()?'Share':'Copy link'}</button>
-   <div class="s29sh-u" id="s29shUrl">${esc(u)}</div><p class="mut" style="margin:6px 0 0;font-size:12px">View-only link: people who open it can look around but can't add or change bets.</p></div>`}
+   <div class="s29sh-u" id="s29shUrl">${esc(u)}</div><p class="mut" style="margin:6px 0 0;font-size:12px">View-only link: people who open it can look around but can't add or change bets.</p>${/*<S29E-MGR>*/(typeof VIEW_ONLY!=='undefined'&&VIEW_ONLY)?'':`<div class="s29e-mgr" style="margin-top:14px;padding-top:10px;border-top:1px solid var(--line);font-size:13px"><b>Managers: use the regular link</b><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:4px"><span class="s29sh-u" id="s29eMgrUrl" style="margin:0">${esc(s29eMgrUrl())}</span><button type="button" class="s27-copy" id="s29eMgrBtn" style="margin-left:0" onclick="s29eMgrCopy(this)">Copy</button></div></div>`/*</S29E-MGR>*/}</div>`}
+/*<S29E-MGR>*/function s29eMgrUrl(){return location.origin+location.pathname.replace(/index\.html$/,'')}   // plain site URL: origin+pathname only (never view=1, admin, key or any other param)
+function s29eMgrCopy(btn){if(typeof VIEW_ONLY!=='undefined'&&VIEW_ONLY)return;s27CopyText(s29eMgrUrl(),()=>{if(!btn)return;btn.textContent='Copied';btn.classList.add('on');clearTimeout(btn._t);btn._t=setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('on')},1600)})}/*</S29E-MGR>*/
 function s29ShareGo(btn){const url=s29ShUrl(),ok=()=>{if(!btn)return;btn.textContent='Copied';clearTimeout(btn._t);btn._t=setTimeout(()=>{btn.textContent=s24CanShare()?'Share':'Copy link'},1600)};
   if(s24CanShare()){navigator.share({title:'STOOPIDS',url}).catch(e=>{if(!(e&&e.name==='AbortError'))s27CopyText(url,ok)})}else s27CopyText(url,ok)}
 /*</S29B-SHARE>*/
 function s27CopyText(t,ok){const fall=()=>{try{const ta=document.createElement('textarea');ta.value=t;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();const r=document.execCommand&&document.execCommand('copy');ta.remove();if(r){ok();return}}catch(e){}s24Toast('Copy failed',2600)};
   try{if(navigator.clipboard&&navigator.clipboard.writeText&&window.isSecureContext){navigator.clipboard.writeText(t).then(ok,fall);return}}catch(e){}fall()}
 function s27CopyBet(id,btn){const b=(U.doc&&U.doc.bets||[]).find(x=>x.id===id);if(!b)return;
-  s27CopyText(String(b.text||''),()=>{if(!btn)return;btn.textContent='Copied';btn.classList.add('on');clearTimeout(btn._t);btn._t=setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('on')},1600)})}
+  s27CopyText(/*<S29E-COPY>*/s29eCopyText(b)/*</S29E-COPY>*/,()=>{if(!btn)return;btn.textContent='Copied';btn.classList.add('on');clearTimeout(btn._t);btn._t=setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('on')},1600)})}
 const S27_TIPS={who:'Tap one or more managers. Several = one bet, one result.',text:'Write it as you say it: "Kansas -4 beats Duke".',amt:()=>'Minimum '+PULK.minAmt,odds:'If you’re right, they owe amount × first ÷ second. Even = 1-1.',auto:'A clear game bet (team, spread or total, date) gets a reading. After the final, ESPN scores propose the result. You confirm it; nothing settles on its own.',manual:'Manual: you enter the result yourself after the game.'};
 const s27TipK=(k,l)=>`<button type="button" class="s27-tipk k" data-tip="${k}" aria-expanded="false" onclick="s27Tip(this)">${esc(l)}</button>`;
 function s27TipClose(){document.querySelectorAll('.s27-pop').forEach(e=>e.remove());document.querySelectorAll('.s27-tipk[aria-expanded=true]').forEach(e=>e.setAttribute('aria-expanded','false'))}
@@ -2244,7 +2268,7 @@ VIEWS.howto=vHowTo;
 /*<S29D-NEWBETS>*/ // yellow 'new bets' count on the Bets tab: ledger bets (from the existing GET/poll, U.doc) created after this device's last look (localStorage stoopids_bets_seen), not placed by this device's stoopids_who. First load ever: seen = now (no history flood). Opening Bets: seen = now. localStorage only (works in ?view=1, writes nothing remote, never touches stoopids_who).
 const S29NB_KEY='stoopids_bets_seen';
 function s29NbSeen(){let v=lsGet(S29NB_KEY);if(!v||isNaN(Date.parse(v))){v=new Date().toISOString();lsSet(S29NB_KEY,v)}return Date.parse(v)}
-function s29NbCount(){const seen=s29NbSeen();if(!(U.doc&&U.doc.bets))return 0;let me=null;try{me=legacyOwner(window.localStorage['stoopids_who']||'')}catch(_){}   /* property read: bypasses the ?view=1 getItem guest shim, so own bets stay excluded in view mode too (read only) */return U.doc.bets.filter(b=>b&&b.created_at&&Date.parse(b.created_at)>seen&&b.backer!==me).length}
+function s29NbCount(){const seen=s29NbSeen();if(!(U.doc&&U.doc.bets))return 0;let me=null;try{me=legacyOwner(window.localStorage['stoopids_who']||'')}catch(_){}   /* property read: bypasses the ?view=1 getItem guest shim, so own bets stay excluded in view mode too (read only) */return U.doc.bets.filter(b=>b&&b.created_at&&Date.parse(b.created_at)>seen&&(b.postedBy?b.postedBy!==me:b.backer!==me)).length}
 function s29NbUpdate(){const nav=$('#nav');if(!nav||!D)return;if(tab==='bets27'||tab==='bets'){lsSet(S29NB_KEY,new Date().toISOString())}
   const a=nav.querySelector('a.nt[data-tab="bets27"]')||nav.querySelector('a.nt[data-tab="bets"]');if(!a)return;const n=(tab==='bets27'||tab==='bets')?0:s29NbCount();let e=a.querySelector('.s29nb');
   if(!n){if(e)e.remove();return}if(!e){e=document.createElement('b');e.className='s29nb';e.setAttribute('aria-hidden','true');a.appendChild(e)}e.textContent=n>99?'99+':String(n);a.title=n+' new bet'+(n>1?'s':'')}
@@ -2286,7 +2310,7 @@ function render(){
   /*<S29D-GGRID>*/try{$('#main').setAttribute('data-tab',tab)}catch(_){}/*</S29D-GGRID>*/
   /*<S29D-NEWBETS>*/setTimeout(()=>{try{s29NbUpdate()}catch(_){}},0);/*</S29D-NEWBETS>*/
   $('#main').innerHTML=(VIEWS[tab]||vStandings)();
-  $('#foot').innerHTML=`STOOPIDS · times in your time zone (${esc(S25.zoneLabel())})${DEMO?' · <a href="?">back to the live season</a>':''/*<S29D-NODEMOLINK> footer demo link removed; ?demo=1 still works </S29D-NODEMOLINK>*/}${ADMIN?' · scores ESPN (fallback ncaa.com)':''}`;
+  $('#foot').innerHTML=`STOOPIDS · times in your time zone${DEMO?' · <a href="?">back to the live season</a>':''/*<S29D-NODEMOLINK> footer demo link removed; ?demo=1 still works </S29D-NODEMOLINK>*/}${ADMIN?' · scores ESPN (fallback ncaa.com)':''}`;
   freshStart();
   /*<CHIP-FIT>*/try{chipFit()}catch(_){}/*</CHIP-FIT>*/
   /*<CHAT-BAR>*/try{chatAfterRender()}catch(_){}/*</CHAT-BAR>*/
@@ -2562,7 +2586,8 @@ function chatBarDraw(){
   const sb=$('#chatSnd');sb.setAttribute('aria-pressed',CH.snd?'true':'false');sb.textContent=CH.snd?'\u{1F514} Sound on':'\u{1F515} Sound off';
   chatTitle();chatNavBadge();
 }
-function chatTitle(){const base=document.title.replace(/^\((?:\d+|99\+)\) /,''),n=CH.nUnread,t=n?'('+chatCount(n)+') '+base:base;if(document.title!==t)document.title=t}
+/*<S29E-TITLE>*/const SITE_TITLE='STOOPIDS · NCAA Fantasy';   // the one browser-tab title (pattern '<League name> · NCAA Fantasy'); every document.title write uses it/*</S29E-TITLE>*/
+function chatTitle(){const base=SITE_TITLE,n=CH.nUnread,t=n?'('+chatCount(n)+') '+base:base;if(document.title!==t)document.title=t}
 function chatNavBadge(){
   const nav=$('#nav');if(!nav||!D)return;const i=TABS.findIndex(t=>t[0]==='bets'),b=nav.children[i];if(!b)return;
   const n=CH.nUnread,full=TABS[i][1].slice(TABS[i][1].indexOf(' ')+1);let e=b.querySelector('.nu');
@@ -2729,7 +2754,7 @@ function b27Valid0(x,names){/*</V25>*/
   if(!Number.isInteger(a)||!Number.isInteger(b)||a<1||b<1||a>PULK.maxOdds||b>PULK.maxOdds)return null;
   if(!Number.isInteger(n)||n<1||!isFinite(t)||typeof x.text!=='string')return null;
   const status=['open','backer','other','push','void'].includes(x.status)?x.status:'open';
-  return {id:x.id,n,backer:x.backer,other:x.other,/*<BUNDLE>*/...(opps.length>1?{opponents:opps}:{}),/*</BUNDLE>*/amt:st,odds:{a,b},text:b27Clean(x.text),created_at:new Date(t).toISOString(),status,settled_at:x.settled_at&&isFinite(Date.parse(x.settled_at))?new Date(x.settled_at).toISOString():null/*<MULTI-BET>*/,g:typeof x.g==='string'&&/^[a-z0-9]{6,24}$/.test(x.g)?x.g:undefined/*</MULTI-BET>*//*<S24-EDIT>*/,...s24ValidExtra(x,status,opps)/*</S24-EDIT>*//*<S25>*/,...s25ValidExtra(x,names,status)/*</S25>*/};
+  return {id:x.id,n,backer:x.backer,other:x.other,/*<BUNDLE>*/...(opps.length>1?{opponents:opps}:{}),/*</BUNDLE>*/amt:st,odds:{a,b},text:b27Clean(x.text),created_at:new Date(t).toISOString(),status,settled_at:x.settled_at&&isFinite(Date.parse(x.settled_at))?new Date(x.settled_at).toISOString():null/*<MULTI-BET>*/,g:typeof x.g==='string'&&/^[a-z0-9]{6,24}$/.test(x.g)?x.g:undefined/*</MULTI-BET>*//*<S24-EDIT>*/,...s24ValidExtra(x,status,opps)/*</S24-EDIT>*//*<S25>*/,...s25ValidExtra(x,names,status)/*</S25>*//*<S29E-POSTED>*/,...(typeof x.postedBy==='string'&&names.includes(legacyOwner(x.postedBy))?{postedBy:legacyOwner(x.postedBy)}:{}),...(x.postedAt&&isFinite(Date.parse(x.postedAt))?{postedAt:new Date(x.postedAt).toISOString()}:{})/*</S29E-POSTED>*/};
 }
 function b27Parse(txt,names){
   try{if(!txt||!txt.trim())return [];let d=JSON.parse(txt);if(typeof d==='string')d=JSON.parse(d);
@@ -2836,8 +2861,8 @@ function b27Schedule(){clearTimeout(U.timer);U.timer=null;if(document.hidden)ret
 /* ---- actions ---- */
 function b27Err(t){U.msg=t;U.msgBad=true}
 function b27FormOK(){
-  const me=b27Who();
-  if(!me)return 'Pick who you are first.';
+  const me0=b27Who();
+  if(!me0)return 'Pick who you are first.';/*<S29E-BACKER>*/const me=U.backer||me0;if(!b27OwnerNames().includes(me))return 'Choose who is betting.';/*</S29E-BACKER>*/
 /*<MULTI-BET>*/  const names=b27OwnerNames();if(!U.opps.length||!U.opps.every(o=>names.includes(o)))return 'Choose who you are betting against.';
   if(U.opps.includes(me))return 'You can’t bet against yourself.';
   if(new Set(U.opps).size!==U.opps.length)return 'Choose who you are betting against.';/*</MULTI-BET>*/
@@ -2849,7 +2874,7 @@ function b27FormOK(){
 }
 /*<MULTI-BET>*//* ONE bet record however many opponents are ticked (<BUNDLE>): with 2+ it carries `opponents:[...]` (other = the first one); with 1 it is the plain single-opponent record, exactly as before. The id is kept across a failed save (per selection) so a retry never double-posts. */
 function b27BetsFromForm(){const k=U.opps.join('|');
-  return [Object.assign({id:U.fids[k]||(U.fids[k]=b27Rid()),backer:b27Who(),other:U.opps[0]},U.opps.length>1?{opponents:U.opps.slice()}:{},{amt:U.amt,odds:{a:U.odds[0],b:U.odds[1]},text:b27Clean(U.text),status:'open'}/*<S25>*/,{rd:s25FormRd()}/*</S25>*/)]}
+  return [Object.assign({id:U.fids[k]||(U.fids[k]=b27Rid()),backer:U.backer||b27Who(),other:U.opps[0]/*<S29E-POSTED>*/,postedBy:b27Who(),postedAt:new Date().toISOString()/*</S29E-POSTED>*/},U.opps.length>1?{opponents:U.opps.slice()}:{},{amt:U.amt,odds:{a:U.odds[0],b:U.odds[1]},text:b27Clean(U.text),status:'open'}/*<S25>*/,{rd:s25FormRd()}/*</S25>*/)]}
 const b27Others=()=>b27OwnerNames().filter(n=>n!==b27Who());
 function b27Opp(i){const n=b27Others()[i];if(!n)return;const k=U.opps.indexOf(n);if(k>=0)U.opps.splice(k,1);else{U.opps.push(n);const o=b27Others();U.opps.sort((x,y)=>o.indexOf(x)-o.indexOf(y))}b27Sync()}
 function b27OppAll(){U.opps=b27Others().slice();b27Sync()}
@@ -2877,7 +2902,7 @@ function b27Edit(){U.confirm=false;render()}
     const mine=ids.map(id=>back.find(b=>b.id===id)).filter(Boolean);
     {const m=mine[0],k=m?b27Opps(m).length:1;U.msg='Placed! Bet #'+(m?m.n:'')+(k>1?' against '+k+' managers ('+b27Num(U.amt)+' each)':'')+' is open. You can undo it for 30 seconds.';U.msgBad=false;/*<S25C-FX>*/s25PlacedFx(m&&m.id)/*</S25C-FX>*/}
     U.undoG=null;/*<S24-EDIT>*/if(edOf){const o=back.find(x=>x.id===edOf);U.msg+=o?' It replaces bet #'+o.n+' (now cancelled).':'';U.editOf=null}/*</S24-EDIT>*/
-    U.opps=[];U.amt=null;U.amtCustom=false;U.amtTxt='';U.amtErr='';U.odds=[1,1];U.custom=false;U.customTxt='';U.oddsErr='';U.text='';U.confirm=false;U.fids={};U.gid=null;/*<S25E-RD>*/U.rdEd=null;U.rdOpen=false;/*</S25E-RD>*/
+    U.opps=[];U.backer=null;U.pz=null;U.amt=null;U.amtCustom=false;U.amtTxt='';U.amtErr='';U.odds=[1,1];U.custom=false;U.customTxt='';U.oddsErr='';U.text='';U.confirm=false;U.fids={};U.gid=null;/*<S25E-RD>*/U.rdEd=null;U.rdOpen=false;/*</S25E-RD>*/
     clearTimeout(U.undoT);U.undoT=setTimeout(()=>{if(tab==='bets27')render()},PULK.undoMs+300);
   }catch(e){/*<S24-EDIT>*/if(e&&e.message==='late'){const o=U.doc.bets.find(x=>x.id===U.editOf);U.editOf=null;U.confirm=false;U.busy=false;U.msg='Too late to edit: bet'+(o?' #'+o.n:'')+' was already settled or cancelled. Nothing was saved; your changes are still in the form.';U.msgBad=true;b27Poll();render();return}/*</S24-EDIT>*/U.msg=e&&e.message==='full'?'The bets ledger is full.':/*<SAFE-RACE>*/e&&e.message==='conflict'?'Couldn’t save, try again. Someone else was saving at the same moment.':/*</SAFE-RACE>*/'Couldn’t save. Check your connection and tap Place bet again (it won’t double-post).';U.msgBad=true;U.confirm=true}
   U.busy=false;render();
@@ -3012,7 +3037,7 @@ function b27PoolValid(x,names){
   if(x.back&&typeof x.back==='object'&&!Array.isArray(x.back)){const raw={};for(const k of Object.keys(x.back))raw[legacyOwner(k)]=x.back[k];const bk={};let ok=true;
     for(const k of Object.keys(raw)){if(!parts.includes(k)||!Number.isInteger(raw[k])||raw[k]<0||raw[k]>POOL_MAX)ok=false;else bk[k]=raw[k]}
     if(ok){parts.forEach(p=>{if(!has(bk,p))bk[p]=0});if(parts.reduce((s,p)=>s+bk[p],0)===amt*parts.length)back=bk}}
-  return {id:x.id,n,kind:'pool',backer,parts,amt,back,text:b27Clean(x.text),created_at:new Date(t).toISOString(),status:['open','void'].includes(x.status)?x.status:'open',settled_at:x.settled_at&&isFinite(Date.parse(x.settled_at))?new Date(x.settled_at).toISOString():null/*<S26F-POOL>*/,...(Array.isArray(x.places)&&x.places.length&&x.places.length<=10&&x.places.every(v=>Number.isInteger(v)&&v>=0&&v<=POOL_MAX)&&x.places.reduce((s,v)=>s+v,0)===amt*parts.length?{places:x.places.slice()}:{})/*</S26F-POOL>*//*<S25C-RX>*/,...(s25ValidExtra(x,names,'open').rx?{rx:s25ValidExtra(x,names,'open').rx}:{})/*</S25C-RX>*/};
+  return {id:x.id,n,kind:'pool',backer,parts,amt,back,/*<S29E-POSTED>*/...(typeof x.postedBy==='string'&&names.includes(legacyOwner(x.postedBy))?{postedBy:legacyOwner(x.postedBy)}:{}),...(x.postedAt&&isFinite(Date.parse(x.postedAt))?{postedAt:new Date(x.postedAt).toISOString()}:{}),/*</S29E-POSTED>*/text:b27Clean(x.text),created_at:new Date(t).toISOString(),status:['open','void'].includes(x.status)?x.status:'open',settled_at:x.settled_at&&isFinite(Date.parse(x.settled_at))?new Date(x.settled_at).toISOString():null/*<S26F-POOL>*/,...(Array.isArray(x.places)&&x.places.length&&x.places.length<=10&&x.places.every(v=>Number.isInteger(v)&&v>=0&&v<=POOL_MAX)&&x.places.reduce((s,v)=>s+v,0)===amt*parts.length?{places:x.places.slice()}:{})/*</S26F-POOL>*//*<S25C-RX>*/,...(s25ValidExtra(x,names,'open').rx?{rx:s25ValidExtra(x,names,'open').rx}:{})/*</S25C-RX>*/};
 }
 /* ---- the form (same components / classes as the live New bet form) ---- */
 function b27Kind(k){U.kind=k;U.msg='';U.confirm=false;render()}
@@ -3045,7 +3070,7 @@ function b27PoolConfirmHtml(){const ps=b27PoolParts(),c=s26fPoolCheck(),r={ok:!s
    <div class="b27-act"><button type="button" class="btn b27-big" onclick="b27Confirm()"${U.busy?' disabled':''}>${U.busy?'Saving…':esc(POOL_TXT.go)}</button><button type="button" class="btn sec b27-big" onclick="b27Edit()"${U.busy?' disabled':''}>${esc(POOL_TXT.change)}</button></div></div>`}
 function b27PoolPlace(){const e=b27PoolFormOK();/*<S26F-POOL>*/if(e){U.msg='';U.showErr={terms:1,people:1,buy:1,pay:1};render();const c=s26fPoolCheck();s26fFocus(c.e.terms?'b27Text':c.e.people?'s26lPeople':c.e.buy?'b27En':'s26p0');return}/*</S26F-POOL>*/U.msg='';U.confirm=true;render()}
 function b27PoolRecord(){const ps=b27PoolParts(),c=s26fPoolCheck(),r={amt:c.amt,back:null,places:c.places},k='pool|'+ps.join('|')+'|'+r.amt+'|'+JSON.stringify(r.places)+'|'+b27Clean(U.text),me=b27Who();
-  return Object.assign({id:U.fids[k]||(U.fids[k]=b27Rid()),kind:'pool',backer:me,parts:ps,amt:r.amt,back:null,text:b27Clean(U.text),status:'open'},r.places?{places:r.places}:{})}
+  return Object.assign({id:U.fids[k]||(U.fids[k]=b27Rid()),kind:'pool',backer:me,parts:ps,amt:r.amt,back:null,text:b27Clean(U.text),status:'open'/*<S29E-POSTED>*/,postedBy:me,postedAt:new Date().toISOString()/*</S29E-POSTED>*/},r.places?{places:r.places}:{})}
 async function b27PoolConfirm(){
   if(U.busy)return;const e=b27PoolFormOK();if(e){b27Err(e);U.confirm=false;render();return}
   U.busy=true;U.msg='Saving…';U.msgBad=false;render();const nb=b27PoolRecord();
@@ -3076,7 +3101,7 @@ function b27PoolCard(b,me){
   const st=b.status,done=st==='open'&&!!b.back;
   const stTxt=st==='void'?POOL_TXT.stVoid:b.back?POOL_TXT.stDone:POOL_TXT.stOpen;
   let h=`<div class="card b27-c b27-pool"${/*<S24-EDIT>*/s24Attr('b',b.id)/*</S24-EDIT>*/}><div class="s24hd"><b>${esc(POOL_TXT.word)} #${b.n}</b> <span class="st ${st==='void'?'unparsed':done?'settled':'open'}">${esc(stTxt)}</span> <span class="mut" style="font-size:12px">${esc(b27Day(Date.parse(b.created_at)))}</span> <span class="mut" style="font-size:12px">· ${esc(PT('who',{n:b.parts.length}))}</span>${/*<S24-EDIT>*/s24LinkBtn('bets',b.id,'pool')/*</S24-EDIT>*/}</div>
-   <div class="b27-t">${esc(b.text)}</div><div class="b27-m">${esc(PT('line',{buy:b27Num(b.amt),tot:b27Num(b.amt*b.parts.length)}))}</div><div class="b27-m">${esc(PT('with',{names:b.parts.map(PN).join(', ')}))}</div>`;
+   ${/*<S29E-POSTED>*/s29ePosted(b)/*</S29E-POSTED>*/}<div class="b27-t">${esc(b.text)}</div><div class="b27-m">${esc(PT('line',{buy:b27Num(b.amt),tot:b27Num(b.amt*b.parts.length)}))}</div><div class="b27-m">${esc(PT('with',{names:b.parts.map(PN).join(', ')}))}</div>`;
   /*<S26F-POOL>*/if(b.places)h+=`<div class="b27-m">${esc(PT('payLine',{x:b.places.map((a,i)=>s26fPlaceName(i)+' '+b27Num(a)).join(' · ')}))}</div>`;/*</S26F-POOL>*/
   if(st==='open'&&!b.back)h+=`<div class="note" style="margin-top:6px">${esc(POOL_TXT.noPay)}</div>`;
   if(done)h+=`<div class="note" style="margin-top:6px"><b>${esc(POOL_TXT.result)}:</b></div>`+b27PoolResultLines(b.parts,b.amt,b.back).map((l,i)=>`<div class="${i>=b.parts.length?'b27-l':'b27-w'}" style="margin-top:2px">${esc(l)}</div>`).join('');
@@ -3101,7 +3126,7 @@ function b27PoolOwesHtml(T){if(!T.poolOwes.length)return '';
   const rows=[];let last=null;T.poolOwes.forEach(o=>{if(o.n!==last){last=o.n;rows.push(`<tr class="oqh"><td colspan="4">${esc(PT('tTag',{n:o.n,text:o.text}))}</td></tr>`)}rows.push(`<tr><td>${b27Nm(o.from)}</td><td class="ow">owes</td><td>${b27Nm(o.to)}</td><td class="n"><b>${b27Num(o.num)}</b></td></tr>`)});
   return `<details class="b27-pd"${/*<OWES-CHART>*/U.poolOpen?' open':''/*</OWES-CHART>*/} ontoggle="U.poolOpen=this.open"><summary>${esc(POOL_TXT.tHead)}</summary><div class="oqs">${esc(POOL_TXT.tNote)}</div><table class="oq oqx" aria-label="${esc(POOL_TXT.tHead)}"><colgroup><col class="a"><col class="m"><col class="b"><col class="v"></colgroup><tr><th>Who</th><th></th><th>To</th><th class="n">Net</th></tr>${rows.join('')}</table></details>`}
 /*</POOL>*/
-function b27CanUndo(b){return b.status==='open'&&b.backer===b27Who()&&Date.now()-Date.parse(b.created_at)<PULK.undoMs}
+function b27CanUndo(b){return b.status==='open'&&(b.backer===b27Who()||(b.postedBy&&b.postedBy===b27Who()))&&Date.now()-Date.parse(b.created_at)<PULK.undoMs}
 /* ---- view ---- */
 function b27SyncDom(){
   const m=document.getElementById('main');if(!m)return;
@@ -3131,10 +3156,10 @@ const b27TinyName=n=>{const t=b27ShortName(n);return t.length<=7?t:t.slice(0,4)}
 const b27SelTxt=()=>U.opps.length?U.opps.length+' selected':'None selected';
 /* "3 bets of 10 each" / "1 bet of 10" */
 const b27CountTxt=()=>{const n=U.opps.length;return n>1?(U.amt?b27Num(U.amt):'?')+' each':n+' bet of '+(U.amt?b27Num(U.amt):'?')};   // bundle: "10 each" / single: "1 bet of 10"
-function b27Summary(){const me=b27Who()?PN(b27Who()):'You',o=U.opps.length?U.opps.map(PN).join(', '):'…',od=U.odds?b27OddsShort(U.odds[0],U.odds[1]).replace(/^at /,''):'?',t=b27Clean(U.text);
+function b27Summary(){const me=(U.backer||b27Who())?PN(U.backer||b27Who()):'You',o=U.opps.length?U.opps.map(PN).join(', '):'…',od=U.odds?b27OddsShort(U.odds[0],U.odds[1]).replace(/^at /,''):'?',t=b27Clean(U.text);
   return me+' vs '+o+' · '+(U.opps.length?b27CountTxt():(U.amt?b27Num(U.amt):'?'))+' · '+od+(t?' · '+t:'')}/*</MULTI-BET>*/
 function b27LiveHtml(){
-  const me=b27Who();if(!me||!U.opps.length||!U.amt||!U.odds)return '<span class="mut">Pick one or more opponents, an amount and the odds to see who owes what.</span>';
+  const me=U.backer||b27Who();if(!me||!U.opps.length||!U.amt||!U.odds)return '<span class="mut">Pick one or more opponents, an amount and the odds to see who owes what.</span>';
   const L=b27Lines({backer:me,other:U.opps[0],amt:U.amt,odds:{a:U.odds[0],b:U.odds[1]}});
   /*<MULTI-BET>*/if(U.opps.length>1){
     const B={backer:me,other:U.opps[0],opponents:U.opps,amt:U.amt,odds:{a:U.odds[0],b:U.odds[1]}},BL=b27Lines(B);
@@ -3148,7 +3173,7 @@ function b27Card(b,me){
   const res=BU?(st==='backer'?Bk+' won ('+OPd.join(', ')+' each owe '+Bk+' '+b27Num(b27Pay(b).ifBackerRight)+')':st==='other'?'Managers won ('+Bk+' owes each of them '+b27Num(b27Pay(b).ifOtherRight)+')':st==='push'?'Wash: whole bet cancelled, nobody owes anything':'')
    :st==='backer'?Bk+' won ('+Ot+' owes '+b27Num(b27Pay(b).ifBackerRight)+')':st==='other'?Ot+' won ('+Bk+' owes '+b27Num(b27Pay(b).ifOtherRight)+')':st==='push'?'Wash: nobody owes anything':'';
   let h=`<div class="card b27-c"${/*<S24-EDIT>*/s24Attr('b',b.id)/*</S24-EDIT>*/}><div class="s24hd"><b>Bet #${b.n}</b>${/*<S24-EDIT>*/s24FixBadge(b)/*</S24-EDIT>*/} <span class="st ${st==='open'?'open':st==='push'?'wash':st==='void'?'unparsed':'settled'}">${stTxt}</span> <span class="mut" style="font-size:12px">${esc(b27Day(Date.parse(b.created_at)))}</span>${BU?` <span class="mut" style="font-size:12px">· ${OP.length} managers, one result</span>`:''}${/*<MULTI-BET>*/b.g&&U.doc.bets.filter(x=>x.g===b.g).length>1?` <span class="mut" style="font-size:12px">· 1 of ${U.doc.bets.filter(x=>x.g===b.g).length} placed together</span>`:''/*</MULTI-BET>*/}${/*<S24-EDIT>*/s24LinkBtn('bets',b.id,'bet')/*</S24-EDIT>*/}</div>
-   <div class="b27-t${/*<CARD-SIZE>*/' s25cl'+(S25P.more[b.id]?' open':'')+'" data-s25-t="'+b.id/*</CARD-SIZE>*/}">${esc(b.text)}</div>${/*<CARD-SIZE>*/`<button type="button" class="s25more" data-s25-more="${b.id}" aria-expanded="${!!S25P.more[b.id]}" onclick="s25More('${b.id}')" hidden>${S25P.more[b.id]?'less':'more'}</button>`/*</CARD-SIZE>*/}<div class="b27-m"><b>${esc(Bk)}</b> vs <b>${esc(OPd.join(', '))}</b> · <b>${b27Num(b.amt)}</b>${BU?' each':''} · ${esc(b27OddsLabel(b.odds.a,b.odds.b))}</div>
+   ${/*<S29E-POSTED>*/s29ePosted(b)/*</S29E-POSTED>*/}<div class="b27-t${/*<CARD-SIZE>*/' s25cl'+(S25P.more[b.id]?' open':'')+'" data-s25-t="'+b.id/*</CARD-SIZE>*/}">${esc(b.text)}</div>${/*<CARD-SIZE>*/`<button type="button" class="s25more" data-s25-more="${b.id}" aria-expanded="${!!S25P.more[b.id]}" onclick="s25More('${b.id}')" hidden>${S25P.more[b.id]?'less':'more'}</button>`/*</CARD-SIZE>*/}<div class="b27-m"><b>${esc(Bk)}</b> vs <b>${esc(OPd.join(', '))}</b> · <b>${b27Num(b.amt)}</b>${BU?' each':''} · ${esc(b27OddsLabel(b.odds.a,b.odds.b))}</div>
    <div class="b27-w">${esc(L.win)}</div><div class="b27-l">${esc(L.lose)}</div>${L.rounded?'<div class="mut b27-r">Rounded to a whole number.</div>':''}${res?`<div class="note" style="margin-top:4px"><b>Result:</b> ${esc(res)}</div>`:''}${/*<S25>*/s25CardRd(b)+s25PropHtml(b,me)/*</S25>*/}${/*<CARD-SIZE>*/'<div class="s25sp" aria-hidden="true"></div>'/*</CARD-SIZE>*/}${/*<S25D-TS>*/s25dTsHtml(b)/*</S25D-TS>*/}`;
   if(st==='open'&&(isP||ADMIN)){
     const ask=w=>U.askSettle&&U.askSettle.id===b.id&&U.askSettle.what===w;
@@ -3200,6 +3225,7 @@ function vB27(){
      <div class="b27-act"><button type="button" class="btn b27-big" onclick="b27Confirm()"${U.busy?' disabled':''}>${U.busy?'Saving…':'✅ Yes, place it'}</button><button type="button" class="btn sec b27-big" onclick="b27Edit()"${U.busy?' disabled':''}>← Change</button></div></div>`);
   }else{
     const oc=U.odds?U.odds.join('-'):'';
+    /*<S29E-PASTE>*/if(PASTE_BET&&U.kind!=='pool')h+=s29ePasteBox();/*</S29E-PASTE>*/
     h+=/*<POOL>*/U.kind==='pool'?b27PoolForm(me):/*</POOL>*/`<div class="card b27-form"><b>New bet</b> <span class="note">· you are <b>${esc(PN(me))}</b> <a href="#" onclick="presAsk();return false">(change)</a></span>${/*<QUICK-BET>*/qbHint()/*</QUICK-BET>*/}${/*<S24-EDIT>*/s24EditHint()/*</S24-EDIT>*/}${/*<POOL>*/U.editOf?'':b27KindTabs()/*</POOL>*/}
      ${/*<MULTI-BET>*/''/*opponents: multi-select*/}<div class="b27-q"><button type="button" class="s27-tipk" data-tip="who" aria-expanded="false" onclick="s27Tip(this)">1. Who are you betting against?</button></div><div class="b27-opps" role="group" aria-label="Opponents" style="--n:${others.length+1}">${others.map((n,i)=>{const o=(D.owners.find(x=>x.name===n)||{});const on=U.opps.includes(n);return `<button type="button" class="b27-chip op" data-b27-opp="${i}" data-b27-name="${esc(n)}" aria-label="${esc(TN(n))}" aria-pressed="${on}" onclick="b27Opp(${i})"><span class="ck" aria-hidden="true">✓</span><span class="em" aria-hidden="true">${esc(o.emoji||'')}</span><span class="nm" aria-hidden="true"><span class="f">${esc(TN(n))}</span><span class="sh">${esc(b27ShortT(n))}</span><span class="xs">${esc(b27TinyT(n))}</span></span></button>`}).join('')}<div class="s27-sel"><button type="button" class="s27-selb" data-b27-all="1" onclick="b27OppAll()"><span class="f">Select all</span><span class="s">All</span></button><button type="button" class="s27-selb" data-b27-clear="1" onclick="b27OppClear()">Clear</button></div></div><span class="sr" id="b27SelCnt" aria-live="polite">${esc(b27SelTxt())}</span>
      ${''/*</MULTI-BET>*/}<div class="b27-q"><button type="button" class="s27-tipk" data-tip="text" aria-expanded="false" onclick="s27Tip(this)">2. What’s the bet?</button><label for="b27Text" class="sr">What’s the bet?</label></div><input id="b27Text" class="sb-in b27-in" maxlength="${PULK.maxText}" autocomplete="off" enterkeyhint="go" placeholder="e.g. Kansas -4 beats Duke" value="${esc(U.text)}" oninput="b27Text(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();b27Place()}">${/*<S25>*/'<div id="s25Rd">'+s25RdHtml()+'</div>'/*</S25>*/}
@@ -3287,7 +3313,7 @@ const tMoney=v=>b27Num(v/((D.bets.currency||{}).display_unit||1000));   // displ
    5) Copy link / Share: built ONLY from origin + path (+ ?demo=1 in the demo) + the route hash. Never ?admin, never names, never ledger keys.
    6) Tabs are <a href>: plain click switches in place (pushState), modifier / middle / right click = browser default. */
 const S24={sub:null,last:null,route0:false,prep:null,done:null,hlUntil:0,nf:null};
-const S24_H2T={share:'share',standings:'standings',ranks:'standings',games:'games',schedule:'games',scores:'games',rosters:'@points',squads:'@points',owner:'@points',points:'@points',rankings:'teams',apnet:'teams','ap-net':'teams',ap:'teams',net:'teams',polls:'teams',bets:'@bets',bets27:'@bets','bets-2025-26':'bets',bets2526:'bets',teams:'teams',postseason:'checklist',checklist:'checklist',redraft:'redraft',archive:'archive',rules:'about',about:'about'/*<S26N-DRAFT-RECAP>*/,draft:'recap',recap:'recap',howto:'howto','how-to-bet':'howto',draft27:'recap','draft-results':'recap',draftresults:'recap',picks:'recap',results:'recap'/*</S26N-DRAFT-RECAP>*/};
+const S24_H2T={share:'profile',profile:'profile',standings:'standings',ranks:'standings',games:'games',schedule:'games',scores:'games',rosters:'@points',squads:'@points',owner:'@points',points:'@points',rankings:'teams',apnet:'teams','ap-net':'teams',ap:'teams',net:'teams',polls:'teams',bets:'@bets',bets27:'@bets','bets-2025-26':'bets',bets2526:'bets',teams:'teams',postseason:'checklist',checklist:'checklist',redraft:'redraft',archive:'archive',rules:'about',about:'about'/*<S26N-DRAFT-RECAP>*/,draft:'recap',recap:'recap',howto:'howto','how-to-bet':'howto',draft27:'recap','draft-results':'recap',draftresults:'recap',picks:'recap',results:'recap'/*</S26N-DRAFT-RECAP>*/};
 const s24HasNew=()=>typeof VIEWS!=='undefined'&&!!VIEWS.bets27;
 const s24IdOK=v=>typeof v==='string'&&/^[A-Za-z0-9_-]{1,40}$/.test(v);
 function s24TabFromHash(h){const t=S24_H2T[h];if(!t)return null;/*<S26E>*/if(t==='@points'){s26eView('points');return 'standings'}/*</S26E>*/if(t==='@bets')return s24HasNew()?'bets27':'bets';return t}
@@ -3303,7 +3329,7 @@ function s24ShareUrl(kind,id){const h=kind&&s24IdOK(String(id))?(kind==='games'?
 /*<S29B-SHARE>*/ // every shared link is view-only: ?view=1 + #tab, nothing else (never admin=1, k=, a key, PIN or token)
 function s29ViewUrl(h){h=String(h||'').replace(/[^A-Za-z0-9_\/-]/g,'');return location.origin+location.pathname+'?view=1'+(h?'#'+h:'')}/*</S29B-SHARE>*/
 /*<S26W-MANIFEST>*/ // Install / Add to home screen from any tab opens that tab: the manifest link points at a per-tab manifest whose start_url is ./#<tab>
-const S26W_MT=["standings", "games", "bets", "bets-2025-26", "teams", "draft", "recap", "howto", "rules", "archive", "share", "postseason", "redraft", "rosters", "points"];function s26wMan(h){try{h=String(h||'').split('/')[0];const l=document.querySelector('link[rel=manifest]');if(!l)return;const want=S26W_MT.includes(h)?'manifest-'+h+'.webmanifest':'manifest.webmanifest';if(l.getAttribute('href')!==want)l.setAttribute('href',want)}catch(e){}}/*</S26W-MANIFEST>*/
+const S26W_MT=["standings", "games", "bets", "bets-2025-26", "teams", "draft", "recap", "howto", "rules", "archive", "share", "profile", "postseason", "redraft", "rosters", "points"];function s26wMan(h){try{h=String(h||'').split('/')[0];const l=document.querySelector('link[rel=manifest]');if(!l)return;const want=S26W_MT.includes(h)?'manifest-'+h+'.webmanifest':'manifest.webmanifest';if(l.getAttribute('href')!==want)l.setAttribute('href',want)}catch(e){}}/*</S26W-MANIFEST>*/
 function s24Put(push){try{s26wMan(s24HashOf(tab));const want=s24Url(s24RouteHash());try{sessionStorage.setItem('stoopids.tab',s24HashOf(tab))}catch(_){}if(location.pathname+location.search+location.hash===want)return;history[push?'pushState':'replaceState'](null,'',want)}catch(e){}}
 function s24NavClick(e,t){if(e&&(e.button>0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey))return true;if(e&&e.preventDefault)e.preventDefault();tab=t;S24.sub=null;render();window.scrollTo(0,0);return false}
 function s24OnNav(){const r=s24Read(location.hash);/*<S26W>*/try{if(r&&r.sub&&window.S26W)S26W.deep=true}catch(_){}/*</S26W>*/if(!r&&location.hash.length>1)return;const R=r||{t:'standings',sub:null};if(R.t===tab&&R.sub===S24.sub)return;/*<S26W>*/if(R.t===tab&&!R.sub&&S24.sub&&S24.done===tab+'/'+S24.sub)return;/*</S26W> the deep link just cleaned its own hash: popstate after hashchange must not undo the jump */
@@ -3393,7 +3419,7 @@ function s24EditedNote(b){let h='';
 const S24R=['backer','other','push'];
 const s24Side=(b,n)=>!n?null:n===b.backer?'b':b27Opps(b).includes(n)?'o':null;
 const s24ResLbl=(b,r)=>r==='backer'?b.backer+' won':r==='other'?(b27IsBundle(b)?'Managers won':b.other+' won'):r==='push'?'Wash':String(r);
-const s24When=t=>{try{return new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}).format(new Date(t)).replace(/\u202f/g,' ')+' '+S25.zoneLabel(new Date(t))}catch(e){return ''}};   /*<LOCAL-TIME>*/// viewer's zone/*</LOCAL-TIME>*/
+const s24When=t=>{try{return new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}).format(new Date(t)).replace(/\u202f/g,' ')}catch(e){return ''}};   /*<LOCAL-TIME>*/// viewer's zone/*</LOCAL-TIME>*/
 /* keeps the optional s24 fields when a record is read (anything malformed is dropped; old records simply have none) */
 /*<S25>*/
 /* ===== s25 page glue (STOOPIDS): auto-settle reading + ESPN proposal, settle sound + meme, mute toggle, reactions. The pure parts live in the shared S25 object above. ===== */
@@ -3426,7 +3452,7 @@ function s25EdHtml(){const r=s25FormRd(),a=r.k==='manual'?S25.parse('x beats y')
    <label>Opponent<input id="s25o" maxlength="40" value="${esc(r.k==='manual'?'':a.o)}"></label>
    <label>Line (spread +4 / total 145.5)<input id="s25l" inputmode="decimal" maxlength="7" value="${a.l==null?'':esc(String(a.l))}"></label>
    <label>Over / under${sel('s25ou',[['o','Over'],['u','Under']],a.ou||'o')}</label>
-   <label>Game date (ET)<input id="s25d" type="date" value="${esc(a.d||S25.etDay(new Date()))}"></label></div>
+   <label>Game date<input id="s25d" type="date" value="${esc(a.d||S25.etDay(new Date()))}"></label></div>
    <div id="s25Err" class="b27-bad-t" role="alert"></div><button type="button" class="ok" data-s25-save="1" onclick="s25EdSave()">Use this reading</button><button type="button" onclick="s25EdClose()">Cancel</button></div>`}
 function s25EdOpen(){U.rdOpen=true;const e=document.getElementById('s25Rd');if(e)e.innerHTML=s25RdHtml();else render()}
 function s25EdClose(){U.rdOpen=false;const e=document.getElementById('s25Rd');if(e)e.innerHTML=s25RdHtml();else render()}
@@ -3676,5 +3702,99 @@ if(VIEW_ONLY){(function(){
   put();document.addEventListener('DOMContentLoaded',put);
 })()}
 </script><!--</VIEW-ONLY>-->
+<!--<S29E-PASTE>--><script>
+/* s29e "Paste a bet": reads a WhatsApp-style line ("ken v paul 2-1 odds, duke +4 v Virginia") into the New bet form. Nothing is saved here:
+   Confirm calls b27Place(), the normal check-then-confirm path. Spec: /workspace/s29e/paste_bet_spec.md */
+function s29ePosted(b){if(!b||!b.postedBy)return '';const t=b.postedAt||b.created_at;let w='';try{w=new Date(t).toLocaleString([], {weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}catch(e){}
+  return '<div class="mut s29e-pb" style="font-size:11.5px;margin:2px 0 0">Posted by '+esc(PN(b.postedBy))+(w?' · '+esc(w):'')+'</div>'}
+const S29E={
+  CONN:/^(v|vs|vs\.|versus|bets|bet|against|and|&|with|,)$/i,
+  cands(){return b27OwnerNames().map(k=>{const d=(typeof OWNER_DISP!=='undefined'&&OWNER_DISP[k])||{};return {k,c:[k,d.team||'',d.person||''].filter(Boolean).map(x=>x.toLowerCase())}})},
+  /* one name token (1-2 words) -> {k} | {amb:[keys]} | null. Exact (whole name or one word of it) wins; else prefix (>=2 letters) of a name or of one of its words. */
+  who(tok){tok=String(tok||'').toLowerCase().replace(/[^a-z0-9' ]/g,'').trim();if(tok.length<1)return null;const C=S29E.cands();
+    const ex=C.filter(o=>o.c.some(c=>c===tok||c.split(/\s+/).includes(tok)));if(ex.length===1)return {k:ex[0].k};if(ex.length>1)return {amb:ex.map(o=>o.k),tok};
+    const px=C.filter(o=>o.c.some(c=>c.startsWith(tok)||c.split(/\s+/).some(w=>w.startsWith(tok))));if(px.length===1)return {k:px[0].k};if(px.length>1)return {amb:px.map(o=>o.k),tok};return null},
+  odds(t){let m=/\b(even(?:s|\s?money)?)\b(?:\s*odds)?/i.exec(t);if(m)return {a:1,b:1,raw:m[0]};
+    m=/(^|[^+\-\d.])(\d{1,3})\s?(?:-|\/|:|\bto\b)\s?(\d{1,3})(?![\d.])(\s*odds)?/i.exec(t);if(m&&(m[4]||(+m[2]<=20&&+m[3]<=20))){const a=+m[2],b=+m[3];if(a>=1&&b>=1&&a<=PULK.maxOdds&&b<=PULK.maxOdds)return {a,b,raw:m[0].slice(m[1].length)}}return null},
+  amt(t){const m=/(?:\bfor\s+\$?|\$)(\d{1,5})\s?k?\b|\b(\d{1,5})\s?k\b/i.exec(t);if(!m)return null;const n=+(m[1]||m[2]);return n>=PULK.minAmt&&n<=PULK.maxAmt?{n,raw:m[0]}:{bad:n,raw:m[0]}},
+  etDay(off){return S25.etDay(new Date(Date.now()+off*864e5))},
+  parse(line){
+    const out={line,names:[],amb:null,odds:null,amt:null,rd:null,g:null,text:''};let t=String(line||'').replace(/[\u2018\u2019]/g,"'").replace(/\s+/g,' ').trim();
+    /* 1) people at the start: NAME (CONN NAME)+ ; a name is 1 or 2 words */
+    const W=t.split(' ');let i=0;const take=()=>{for(const n of [2,1]){if(i+n>W.length)continue;const raw=W.slice(i,i+n).join(' ').replace(/[,:]+$/,'');const r=S29E.who(raw);if(r&&(r.k||r.amb)){if(n===2&&r.amb){continue}const tail=/[,:]$/.test(W[i+n-1]);i+=n;return Object.assign(r,{tail})}}return null};
+    let first=take();if(first){out.names.push(first);for(;;){const s=i;let c=false;while(i<W.length&&S29E.CONN.test(W[i].replace(/,$/,'')||',')){i++;c=true}if(!c&&!first.tail&&!(out.names[out.names.length-1]||{}).tail){i=s;break}const nx=take();if(!nx){i=s;break}out.names.push(nx)}}
+    let rest=W.slice(i).join(' ').replace(/^[,:\-\s]+/,'');
+    /* 2) odds and amount anywhere in the rest */
+    const o=S29E.odds(rest);if(o){out.odds=[o.a,o.b];rest=rest.replace(o.raw,' ')}
+    const a=S29E.amt(rest);if(a){out.amt=a.n||null;out.amtBad=a.bad||null;rest=rest.replace(a.raw,' ')}
+    rest=rest.replace(/\bodds\b/ig,' ').replace(/\s+/g,' ').replace(/^[ ,.:;\-]+|[ ,.:;\-]+$/g,'').trim();
+    /* 3) the bet: S25.parse (same reader as auto-settle), then S25.match on the Games data, today ET onward (7 days) */
+    const r=S25.parse(rest,new Date().toISOString());
+    if(r&&r.k!=='manual'){out.rd=r;const explicit=S25.dateFrom&&S25.dateFrom(rest,S25.etDay(new Date()));const days=explicit?[r.d]:[0,1,2,3,4,5,6,7].map(S29E.etDay);
+      for(const d of days){let g=null;try{g=S25.match(s29Sb(d),Object.assign({},r,{d}))}catch(e){}if(g){out.g=g;out.gday=d;break}}}
+    out.text=S29E.phrase(r,out,rest);return out},
+  fl(l){return l===0?'PK':(l>0?'+':'')+l},
+  /* clean bet phrase for the form: "Duke +4 beats Virginia" (date appended when the game is not today ET, so auto-settle reads the right day) */
+  phrase(r,o,rest){if(!r||r.k==='manual')return b27Clean(rest);const T=o.g?o.g.tn:r.t,O=o.g?o.g.on:r.o,dd=o.g&&o.gday!==S25.etDay(new Date())?' '+S25.dayLbl(o.gday):'';
+    return b27Clean(r.k==='spread'?T+' '+S29E.fl(r.l)+' beats '+O+dd:r.k==='total'?T+' vs '+O+' '+(r.ou==='o'?'over':'under')+' '+r.l+dd:T+' beats '+O+dd)},
+  vs(o){const r=o.rd;if(!r||r.k==='manual')return o.text;const T=o.g?o.g.tn:r.t,O=o.g?o.g.on:r.o;return r.k==='spread'?T+' '+S29E.fl(r.l)+' vs '+O:r.k==='total'?T+' vs '+O+' '+(r.ou==='o'?'over':'under')+' '+r.l:T+' beats '+O},
+  when(o){if(!o.g||!o.g.start)return '';try{return new Date(o.g.start).toLocaleString([], {weekday:'short',hour:'numeric',minute:'2-digit'})}catch(e){return ''}}
+};
+/* apply a parse to the form state (U). The first name in the line is the first bettor (backer: takes the bet as written); later names are the other side.
+   Only one name: it is the opponent and the device's manager is the first bettor. */
+function s29eApply(p){const me=b27Who();const ks=p.names.filter(n=>n.k).map(n=>n.k);p.amb=p.names.find(n=>n.amb)||null;
+  let backer=null,opps=[];if(!p.amb){if(ks.length>=2){backer=ks[0];opps=ks.slice(1).filter((k,j,a)=>k!==backer&&a.indexOf(k)===j)}else if(ks.length===1){backer=me;opps=ks[0]!==me?[ks[0]]:[]}}
+  p.backer=backer;p.opps=opps;
+  Object.assign(U,{kind:'bet',confirm:false,msg:'',msgBad:false,backer:backer&&backer!==me?backer:null,opps:opps.slice(),text:p.text||U.text,amt:p.amt||null,amtCustom:false,amtTxt:'',amtErr:'',odds:p.odds||null,custom:false,customTxt:'',oddsErr:'',rdEd:null});
+  U.pz=p}
+function s29eRead(){if(typeof VIEW_ONLY!=='undefined'&&VIEW_ONLY)return;const el=document.getElementById('s29eIn');const v=el?el.value:'';U.pzTxt=v;if(!v.trim()){U.pz={err:'Paste a bet line first.'};render();return}s29eApply(S29E.parse(v));render();s29eFocus()}
+function s29ePick(k){const p=U.pz;if(!p||!p.amb)return;const n=p.amb;delete n.amb;n.k=k;s29eApply(p);render();s29eFocus()}
+function s29eAmt(v){b27Amt(v);render();s29eFocus()}
+function s29eOdds(a,b){b27Odds(a,b);render();s29eFocus()}
+function s29eSetBacker(k){const me=b27Who();U.backer=k&&k!==me?k:null;if(U.pz){U.pz.backer=k}render();s29eFocus()}
+function s29eOpp(k){if(!U.opps.includes(k))U.opps=[k];if(U.pz)U.pz.opps=[k];render();s29eFocus()}
+function s29eConfirm(){if(typeof VIEW_ONLY!=='undefined'&&VIEW_ONLY)return;b27Place()}
+function s29eClear(){U.pz=null;U.pzTxt='';U.backer=null;render()}
+function s29eFocus(){setTimeout(()=>{try{const b=document.querySelector('.s29e-paste');b&&b.scrollIntoView({block:'nearest'})}catch(e){}},20)}
+function s29eLine(){const p=U.pz,me=b27Who(),bk=U.backer||me;const odd=U.odds?U.odds.join('-'):'odds ?';const amt=Number.isInteger(U.amt)?String(U.amt):'amount ?';
+  const who=(bk?PN(bk):'?')+' bets '+(U.opps.length?U.opps.map(PN).join(', '):'?');const w=S29E.when(p);
+  return who+': '+(S29E.vs(p)||'?')+', '+odd+', '+amt+(w?' ('+w+')':'')}
+function s29ePasteBox(){if(!PASTE_BET)return '';if(typeof VIEW_ONLY!=='undefined'&&VIEW_ONLY)return '';const p=U.pz,me=b27Who();
+  let h=`<div class="card s29e-paste" id="s29ePaste"><label for="s29eIn"><b>Paste a bet</b> <span class="note">· e.g. “ken v paul 2-1 odds, duke +4 v Virginia”</span></label><textarea id="s29eIn" class="sb-in b27-in s29e-in" rows="2" maxlength="300" placeholder="Paste the WhatsApp line here">${esc(U.pzTxt||'')}</textarea><div class="b27-act s29e-act"><button type="button" class="btn sec" id="s29eRead" onclick="s29eRead()">Read it</button>${p?'<button type="button" class="btn sec" onclick="s29eClear()">Clear</button>':''}</div>`;
+  if(p&&p.err)h+=`<div class="note bad">${esc(p.err)}</div>`;
+  else if(p){
+    if(p.amb){h+=`<div class="s29e-q" data-s29e-q="who"><div class="note">Which one is “${esc(p.amb.tok)}”?</div><div class="s29e-btns">${p.amb.amb.map(k=>`<button type="button" class="btn sec s29e-b" data-s29e-pick="${esc(k)}" onclick="s29ePick('${esc(k)}')">${esc(PN(k))} (${esc(TN(k))})</button>`).join('')}</div></div>`}
+    else{
+      h+=`<div class="s29e-sum" role="status">${esc(s29eLine())}</div>`;
+      if(!p.g)h+=`<div class="note s29e-nog">Couldn't match a game, will be settled by hand</div>`;
+      const others=b27OwnerNames();
+      if(!(U.backer||me))h+=`<div class="s29e-q" data-s29e-q="backer"><div class="note">Who is betting?</div><div class="s29e-btns">${others.map(k=>`<button type="button" class="btn sec s29e-b" onclick="s29eSetBacker('${esc(k)}')">${esc(PN(k))}</button>`).join('')}</div></div>`;
+      if(!U.opps.length)h+=`<div class="s29e-q" data-s29e-q="opp"><div class="note">Against who?</div><div class="s29e-btns">${others.filter(k=>k!==(U.backer||me)).map(k=>`<button type="button" class="btn sec s29e-b" onclick="s29eOpp('${esc(k)}')">${esc(PN(k))}</button>`).join('')}</div></div>`;
+      if(!U.odds)h+=`<div class="s29e-q" data-s29e-q="odds"><div class="note">Odds?</div><div class="s29e-btns">${PULK.oddsChips.map(([a,b])=>`<button type="button" class="btn sec s29e-b" onclick="s29eOdds(${a},${b})">${a===1&&b===1?'Even':a+'-'+b}</button>`).join('')}</div></div>`;
+      if(!Number.isInteger(U.amt))h+=`<div class="s29e-q" data-s29e-q="amt"><div class="note">Amount?${p.amtBad?' ('+esc(String(p.amtBad))+' is outside '+PULK.minAmt+'–'+PULK.maxAmt+')':''}</div><div class="s29e-btns">${PULK.amounts.map(v=>`<button type="button" class="btn sec s29e-b" data-s29e-amt="${v}" onclick="s29eAmt(${v})">${b27Num(v)}</button>`).join('')}</div></div>`;
+      h+=`<div class="b27-act"><button type="button" class="btn b27-big" id="s29eConfirm" onclick="s29eConfirm()">Confirm</button></div>`}}
+  return h+'</div>'}
+/* deep link #bets/paste: open Bets, scroll to the box and focus it */
+function s29eDeep(){if(String(location.hash).toLowerCase()!=='#bets/paste')return;let n=0;const go=()=>{const b=document.getElementById('s29ePaste');if(b){b.scrollIntoView({block:'start'});const i=document.getElementById('s29eIn');i&&i.focus({preventScroll:true});return}if(++n<40)setTimeout(go,150)};setTimeout(go,100)}
+window.addEventListener('hashchange',s29eDeep);window.addEventListener('load',s29eDeep);
+</script>
+<style>.s29e-paste .s29e-in{min-height:56px}.s29e-act{margin-top:6px}.s29e-sum{margin-top:8px;font-weight:700}.s29e-q{margin-top:8px}.s29e-btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}.s29e-b{min-height:40px;padding:0 12px}.s29e-nog{margin-top:4px}html.viewonly .s29e-paste{display:none}</style><!--</S29E-PASTE>-->
+<!--<S29E-COPY>--><script>
+/* s29e: the per-bet Copy button copies the whole card as WhatsApp-ready plain text (no link). Same words, numbers (b27Num) and odds math (b27Pay) as the card. */
+function s29eCopyText(b){if(!b)return '';const day=b27Day(Date.parse(b.created_at)),posted='Posted '+day+(b.postedBy?' by '+PN(b.postedBy):'')+' · STOOPIDS',L=[];
+  if(b.kind==='pool'){const done=b.status==='open'&&!!b.back,stTxt=b.status==='void'?POOL_TXT.stVoid:b.back?POOL_TXT.stDone:POOL_TXT.stOpen;
+    L.push(POOL_TXT.word+' #'+b.n+' · '+stTxt,b27Clean(b.text),'Buy-in '+b27Num(b.amt)+' · '+PT('who',{n:b.parts.length})+' · Total '+b27Num(b.amt*b.parts.length));
+    if(b.places)L.push(PT('payLine',{x:b.places.map((a,i)=>s26fPlaceName(i)+' '+b27Num(a)).join(' · ')}));
+    if(done)b27PoolResultLines(b.parts,b.amt,b.back).forEach(l=>L.push(l));else if(b.status==='open'&&!b.places)L.push(POOL_TXT.noPay);
+    L.push('Members: '+b.parts.map(PN).join(', '),posted);return L.join('\n')}
+  const OP=b27Opps(b),BU=OP.length>1,Bk=PN(b.backer),OPd=OP.map(PN),st=b.status,P=b27Pay(b);
+  const stTxt={open:'Open',backer:'Settled',other:'Settled',push:'Wash',void:'Cancelled'}[st]||'Open';
+  const win=st==='backer'?' · '+Bk+' won':st==='other'?' · '+(BU?'Managers':OPd[0])+' won':'';
+  L.push('Bet #'+b.n+' · '+stTxt+win,b27Clean(b.text),Bk+' vs '+OPd.join(', ')+' · '+b27Num(b.amt)+(BU?' each':'')+' '+b27OddsShort(b.odds.a,b.odds.b));
+  L.push('If '+Bk+' is right: '+OPd.join(', ')+(BU?' each owe ':' owes ')+Bk+' '+b27Num(P.ifBackerRight));
+  L.push('If '+OPd.join(', ')+(BU?' are':' is')+' right: '+Bk+' owes '+(BU?'each of them ':OPd[0]+' ')+b27Num(P.ifOtherRight));
+  let auto=false;try{auto=st==='open'&&!!b.rd&&s29AutoOK(b.rd)}catch(e){}if(auto)L.push('Auto-settles after the game');
+  L.push(posted);return L.join('\n')}
+</script><!--</S29E-COPY>-->
 </body>
 </html>
