@@ -2,7 +2,7 @@
  "name": "STOOPIDS — NCAA Stoopids Pool",
  "short_name": "STOOPIDS",
  "id": "./",
- "start_url": "./#draft",
+ "start_url": "./#recap",
  "scope": "./",
  "display": "standalone",
  "background_color": "#10131a",

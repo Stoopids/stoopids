@@ -45,6 +45,9 @@ if(VIEW_ONLY){(function(){
 <style>
 html.viewonly #chatF,html.viewonly #chatP,html.viewonly #chatWho,html.viewonly #pwho,html.viewonly .qbw,html.viewonly .qb-btn,html.viewonly .qb-pick,html.viewonly .b27-form,html.viewonly .b27-confirm,html.viewonly .b27-act,html.viewonly .b27-b,html.viewonly .b27-big,html.viewonly .s26k-m,html.viewonly .s25rxr,html.viewonly .s25rx,html.viewonly [class*="rx-add"],html.viewonly .pwho{display:none!important}
 #vob{display:none}html.viewonly #vob{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;font:600 12px/1.5 system-ui,sans-serif;background:#333;color:#eee;border:1px solid #666;vertical-align:middle}
+/*<S29B-PRES>*/ /* 'Stoopids presents' kicker: final rule locked with League Site */
+.s27-pres{font-size:clamp(22px,6.5vw,30px);font-weight:900;letter-spacing:.08em;line-height:1.1;font-variant:small-caps;text-transform:lowercase;margin:0 0 4px;color:var(--mut)}
+/*</S29B-PRES>*/
 </style><!--</VIEW-ONLY>-->
 <meta charset="utf-8">
 <meta http-equiv="Cache-Control" content="no-cache"><!--S26W-->
@@ -563,6 +566,8 @@ nav a.nt{text-decoration:none}
 .rkseg{display:inline-flex;background:#222;border:1px solid #444;border-radius:999px;padding:2px;margin:0 0 10px}
 .rkseg-b{font:inherit;padding:6px 14px;font-size:.85em;font-weight:600;min-height:44px;border:0;border-radius:999px;background:transparent;color:#bbb;cursor:pointer}
 .rkseg-b.on{background:#FFD400;color:#111}
+/*<S29B-SHARE>*/.s29sh{display:flex;flex-direction:column;gap:8px;max-width:520px}.s29sh-l{font-weight:700;font-size:13px}.s29sh select{min-height:44px;width:100%}.s29sh-b{align-self:flex-start;min-width:120px}.s29sh-u{font-family:ui-monospace,Menlo,monospace;font-size:13px;word-break:break-all;padding:8px 10px;border:1px solid var(--line);border-radius:8px;user-select:all}/*</S29B-SHARE>*/
+/*<S29B-GAMES>*/.rkseg.g4{display:flex;width:100%;box-sizing:border-box;margin:0 0 8px;gap:2px}.rkseg.g4>.rkseg-b{flex:1 1 0;min-width:0;padding:6px 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}.rkseg.g4>select.rkseg-b{-webkit-appearance:none;appearance:none;text-align-last:center;margin:0;line-height:normal}.rkseg.g4>select.rkseg-b option{background:#222;color:#eee}.g4s{display:none}@media(max-width:359px){.rkseg.g4>.rkseg-b{padding:6px 2px;font-size:.8em}.g4l{display:none}.g4s{display:inline}}.tabs.g2row{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0}.tabs.g2row>select{flex:1 1 0;min-width:110px;width:auto}.tabs.g2row>button{flex:0 0 auto;width:auto;white-space:nowrap}.tabs.g2row>.s24lb{margin:0 0 0 auto;flex:0 0 auto}/*</S29B-GAMES>*/
 .rkt{width:100%;border-collapse:collapse;margin-top:8px;font-size:13px}.rkt th{text-align:left;color:var(--mut);font-weight:600;padding:4px 6px}.rkt td{padding:4px 6px;border-top:1px solid var(--line);vertical-align:middle}.rkt th:first-child,.rkt td:first-child{width:44px;white-space:nowrap;font-weight:800}
 .rkwrap{display:grid;gap:12px}@media (min-width:1000px){.rkwrap{grid-template-columns:1fr 1fr;align-items:start}}
 /*</RANKINGS>*/
@@ -645,12 +650,63 @@ nav a.nt{text-decoration:none}
 @media (max-width:340px){.card.tap{padding:4px 2px}.card.tap th,.card.tap td{padding:5px 2px}.card.tap td.n{font-size:13px}.card.tap td.cf{font-size:11px}.card.tap .to{max-width:5ch}.card.tap td:first-child .chip{max-width:108px}.tapf button{padding:4px 6px;font-size:11px}}
 /*</S26P-TAP>*/
 /*<S26U-MONTH-JUMP>*/.gmon{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0 0;max-width:100%}.gmon button{flex:1 1 0;min-width:0;padding:5px 2px;font-size:13px;border-radius:999px;border:1px solid rgba(255,255,255,.25);background:transparent;color:inherit;cursor:pointer}.gmon button.on{background:rgba(255,210,63,.22);border-color:rgb(255,210,63)}.gmon button:disabled{opacity:.35;cursor:default}.gmore{text-align:center}/*</S26U-MONTH-JUMP>*/
+/*<S27>*/
+/* header share */
+.s27-hd{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:nowrap;max-width:100%}
+.s27-share{flex:none;display:inline-flex;align-items:center;gap:4px;min-height:36px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.s27-share:hover{border-color:var(--acc)}
+/* games: toggle + compact filters + one info line */
+.s27-seg{margin:0 0 8px}
+.s27-gf{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 6px}
+.s27-gf select,.s27-gf>button{min-height:36px;padding:4px 8px;font-size:13px;border-radius:8px;max-width:48%}
+.s27-gf>button.on{background:var(--acc);color:#111;border-color:var(--acc)}
+.s27-ck{display:inline-flex;align-items:center;gap:4px;font-size:13px;color:var(--mut);min-height:36px}
+.s27-info{margin:0 0 10px;font-size:12px;color:var(--mut)}
+/* bet copy button */
+.s27-copy{margin-left:auto;min-height:32px;padding:0 10px;border-radius:8px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font:inherit;font-size:12px;font-weight:700;cursor:pointer}
+.s27-copy.on{background:var(--acc);color:#111;border-color:var(--acc)}
+/* select all / clear in the last opponent-grid slot */
+.s27-sel{display:grid;grid-template-rows:1fr 1fr;gap:3px;min-width:0}
+.s27-selb{min-width:0;padding:0 2px;border-radius:9px;border:2px solid var(--line);background:var(--card2);color:var(--tx);font:inherit;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.s27-selb .s{display:none}
+@media (max-width:599px){.s27-selb{font-size:10px;border-width:1.5px}.s27-selb .f{display:none}.s27-selb .s{display:inline}}
+/* section-label tips */
+.s27-tipk{all:unset;cursor:pointer;font-weight:700;font-size:14px;border-bottom:1px dotted currentColor}
+.s27-tipk:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.s27-tipk.k{font-size:inherit;font-weight:inherit}
+.s27-pop{display:block;margin:6px 0 4px;padding:8px 10px;max-width:340px;border-radius:10px;background:#d8ecff;color:#0b2540;font-size:13px;font-weight:500;line-height:1.35;box-shadow:0 4px 14px rgba(0,0,0,.35)}
+.s27-pop a{color:#0b4fa0;font-weight:700;white-space:nowrap}
+/* how to bet */
+.s27-howl{display:inline-block;margin:0 0 10px;font-weight:700}
+.s27-how .card p{margin:6px 0 0;line-height:1.45}
+/* all teams sortable rank headers */
+.s27-sort button{all:unset;cursor:pointer;white-space:nowrap}
+.s27-sort i{font-style:normal;font-size:.8em;opacity:.6;margin-left:2px}
+.s27-ls{display:none}
+@media (max-width:600px){.s27-lf{display:none}.s27-ls{display:inline}.s27-sort i{display:none}.card.tap.s27-rk th,.card.tap.s27-rk td{padding:6px 2px}.card.tap.s27-rk td.n{font-size:12.5px}.card.tap.s27-rk td:first-child .chip{max-width:112px}.card.tap.s27-rk .to{max-width:5ch}.card.tap.s27-rk td.cf{font-size:11px}}
+.s27-sort[aria-sort=ascending] i,.s27-sort[aria-sort=descending] i{opacity:1;color:var(--acc)}
+/* breakdown: wider cards and bigger text on desktop */
+/*<S29B-BD>*/ /* Breakdown on desktop (>=900px), replaces s27's 940px tweak. Default = B: 2-across grid filling the content width. Variant A (one full-width column, stat columns spread out): add class bd-a to <html>. Phones (<900px) unchanged: one column. */
+@media (min-width:900px){
+.orl.q{grid-template-columns:repeat(2,minmax(0,1fr));justify-items:stretch;align-items:start;gap:10px}
+.orl.q .pcard{width:auto;max-width:none;min-width:0}
+.orl.q .ptw{overflow-x:auto}
+.orl.q .ptab{width:100%;font-size:13px}.orl.q .ptab th{font-size:11px}.orl.q .ptab th,.orl.q .ptab td{padding:4px 4px}
+.orl.q .ptab .pn,.orl.q .ptab .pn .chip{width:140px;min-width:140px;max-width:140px}.orl.q .ptab .pn .chip{font-size:12.5px}
+html.bd-a .orl.q{grid-template-columns:minmax(0,1fr)}
+html.bd-a .orl.q .ptab{font-size:15px}html.bd-a .orl.q .ptab th{font-size:12.5px}html.bd-a .orl.q .ptab th,html.bd-a .orl.q .ptab td{padding:5px 8px}
+html.bd-a .orl.q .ptab .pn,html.bd-a .orl.q .ptab .pn .chip{width:220px;min-width:220px;max-width:220px}html.bd-a .orl.q .ptab .pn .chip{font-size:14px}
+}/*</S29B-BD>*/
+/* header photo a bit taller so the bottom-right face shows */
+.hero{height:clamp(130px,22vw,235px);background-position:center 40%}
+@media (max-width:640px){.hero{height:clamp(104px,37vw,150px);background-position:center 22%}}
+/*</S27>*/
 </style>
 </head>
 <body>
 <header>
   <div class="hero" role="img" aria-label="The STOOPIDS crew"></div>
-  <div class="titlebar"><h1>STOOP<span>IDS</span></h1>
+  <div class="titlebar"><p class="s27-pres" id="lpres">Stoopids presents</p><h1>STOOP<span>IDS</span></h1><!--<S29B-SHARE> header Share dropped: the Share tab replaces it </S29B-SHARE>-->
 <!--<HDR-CENTER> Refresh Live Games moved to #gamesTop (top of Games) </HDR-CENTER>-->
   <p class="tag" id="tag"></p></div>
   <div class="sub" id="badges" style="margin:0"></div>
@@ -999,7 +1055,7 @@ const TABS=/*<TAB-ORDER>*/[['standings','🏆 Standings'],['games','📅 Games']
 /*<NAV-ONE-ROW>*/const NAVSHORT={standings:'Ranks',games:'Games',rosters:'Rosters',bets:'Bets',teams:'Teams',checklist:'Post',redraft:'Redraft',archive:'Archive',about:'Rules'};/*</NAV-ONE-ROW>*/   // short phone labels (the full name is each button's aria-label)
 /*<DRAFT-TAB>*/
 const DRAFT_URL='https://stoopids.github.io/stoopids/draft2/';   // the new draft room: a full separate app, so a normal same-tab link (the browser Back button returns here); no target=_blank
-Object.assign(NAVSHORT,{rosters:'Squads',redraft:'Jan 20',archive:'Past'});   // shorter phone labels so 10 items fit one row (full names stay in each button's aria-label)
+Object.assign(NAVSHORT,{rosters:'Squads',redraft:'Jan 20',archive:'Archive'});   // shorter phone labels so 10 items fit one row (full names stay in each button's aria-label)
 function draftNavLink(){   // appended LAST in the nav after every render(); not part of TABS, so tab switching / ?tab= routing never sees it
   const nav=document.getElementById('nav');if(!nav||nav.querySelector('a.nd'))return;
   const a=document.createElement('a');a.className='nd';a.href=DRAFT_URL;a.rel='external noopener';a.setAttribute('aria-label','Draft room (opens the draft app)');
@@ -1346,7 +1402,7 @@ function gameCard(g){
     if(g.kind==='ncaa'){if(u.is)foot+=` <span class="up${u.scored?'':' ns'}">😱 UPSET${u.scored?' +'+D.meta.points.upset:' (no bonus)'}</span>`;else if(u.is===false)foot+=' <span class="mut">· no upset</span>'}
     else if(u.is)foot+=' <span class="up ns">🐶 Underdog win</span>';}
   /*<REFRESH-NOW>*/foot+=lvNote(g);/*</REFRESH-NOW>*/
-  const inner=`<div class="gh">${head}${/*<S24-EDIT>*/s24LinkBtn('games',g.id,'game')/*</S24-EDIT>*/}</div>${row(g.away)}${row(g.home)}<div class="gl">${foot}</div>`;
+  const inner=`<div class="gh">${head}${/*<S24-EDIT>*/s29GameBtn(g)/*</S24-EDIT>*/}</div>${row(g.away)}${row(g.home)}<div class="gl">${foot}</div>`;
   /*<GAMES-LOCAL>*/if(fin){const id=String(g.id),op=gOpen.has(id),sc=s=>`${esc(s.short||s.name||'')} ${s.score!=null?s.score:''}`;
     return `<div class="gm gfin${op?' open':''}${g.h2h||g.civil?' h2h':''}"${s24Attr('g',g.id)}><button type="button" class="gsum" data-gfin="${esc(id)}" aria-expanded="${op}" onclick="gFin(this.dataset.gfin)"><span class="gst">FINAL</span><span class="${g.away.win?'w':''}">${sc(g.away)}</span><span class="mut">·</span><span class="${g.home.win?'w':''}">${sc(g.home)}</span>${g.upset&&g.upset.is?'<span>😱</span>':''}<span class="gch" aria-hidden="true">${op?'▾':'▸'}</span></button><div class="gbody"${op?'':' hidden'}>${inner}</div></div>`}/*</GAMES-LOCAL>*/
   return `<div class="gm${g.h2h||g.civil?' h2h':''}"${/*<S24-EDIT>*/s24Attr('g',g.id)/*</S24-EDIT>*/}>${inner}${/*<GAMES-LOCAL>*/'<div class="gsp" aria-hidden="true"></div>'/*</GAMES-LOCAL>*/}${/*<QUICK-BET>*/qbHtml(g)/*</QUICK-BET>*/}</div>`}
@@ -1411,14 +1467,11 @@ function vGames(){
   if(gDay!=='all'&&!days.includes(gDay))gDay='all';
   if(gDay!=='all')list=list.filter(g=>etKey(g)===gDay);
   /*<S26U-MONTH-JUMP>*/const GMON=[['11','Nov'],['12','Dec'],['01','Jan'],['02','Feb'],['03','Mar'],['04','Apr']],firstIn=m=>days.slice().sort().find(k=>k.slice(5,7)===m),curMon=gDay!=='all'?gDay.slice(5,7):'';
-  const monHtml=`<div class="gmon" role="group" aria-label="Jump to month">${GMON.map(([m,l])=>{const f=firstIn(m);return `<button type="button" data-mon="${m}" class="${m===curMon?'on':''}"${f?` onclick="gDay='${f}';render()"`:' disabled'} title="${f?'First game day: '+esc(etLabel(f)):'No games'}">${l}</button>`}).join('')}</div>`;
+  const monHtml=`<select class="rkseg-b gmon-sel${curMon?' on':''}" aria-label="Jump to month" onchange="if(this.value){gDay=this.value;render()}"><option value="">Month</option>${GMON.map(([m,l])=>{const f=firstIn(m);return `<option value="${f||''}" data-mon="${m}"${m===curMon?' selected':''}${f?'':' disabled'}>${l}</option>`}).join('')}</select>`;
   let gCapped=0;if(gDay==='all'&&gMode==='upcoming'){const near=days.slice().sort().slice(0,12),ns=new Set(near),n0=list.length;list=list.filter(g=>ns.has(etKey(g)));gCapped=n0-list.length}   // full schedule is loaded: 'All days' shows the next 12 game days; later days via the day list or month chips/*</S26U-MONTH-JUMP>*/
   if(gMode==='upcoming'){const sk=g=>etKey(g)+(isTBD(g)?'~':' ')+(g.start||'');list.sort((a,b)=>sk(a).localeCompare(sk(b)))}   // 'time TBD' games last within their day
-  let h=`<div class="card"><div class="tabs" style="margin:0 0 8px"><button class="${gMode==='upcoming'?'on':''}" onclick="gMode='upcoming';gDay='all';render()">⏭ Upcoming (${ups.length})</button><button class="${gMode==='scores'?'on':''}" onclick="gMode='scores';gDay='all';render()">✅ Scores (${fin.length})</button></div>
-   <div class="tabs" style="margin:0"><select onchange="gOwner=this.value;render()"><option value="all">All owners</option>${D.owners.map(o=>`<option value="${esc(o.name)}"${o.name===gOwner?' selected':''}>${esc(o.emoji)} ${esc(PN(o.name))}</option>`).join('')}</select>
-   <select onchange="gDay=this.value;render()"><option value="all">All days</option>${days.map(k=>`<option value="${k}"${k===gDay?' selected':''}>${esc(etLabel(k))}</option>`).join('')}</select>
-   <button class="${gH2H?'on':''}" onclick="gH2H=!gH2H;render()">🥊 Pool vs pool only</button></div>${monHtml}${/*<OWNED-GAMES>*/nHidden?`<label class="gUn"><input type="checkbox" id="gUnowned"${gAll?' checked':''} onchange="gAll=this.checked;render()"> Show unowned games <span class="mut">(${nHidden} hidden)</span></label>`:''/*</OWNED-GAMES>*/}
-   <div class="note" style="margin-top:6px">Times in your time zone (${esc(gZone())}). ⭐ = betting favorite, 🐶 = underdog. Betting lines posted so far: ${D.meta.games_view.n_with_line} of ${D.meta.games_view.n_games} games${ADMIN?' ('+esc((D.meta.sources||{}).odds||'')+')':' (DraftKings, via ESPN)'}.</div></div>`;
+  let h=`<div class="card"><div class="rkseg g4" role="group" aria-label="Games view"><button type="button" class="rkseg-b${gMode==='upcoming'?' on':''}" aria-pressed="${gMode==='upcoming'}" onclick="gMode='upcoming';gDay='all';render()">Upcoming</button><button type="button" class="rkseg-b${gMode==='scores'?' on':''}" aria-pressed="${gMode==='scores'}" onclick="gMode='scores';gDay='all';render()"><span class="g4l">Past games</span><span class="g4s">Past</span></button><select class="rkseg-b${gOwner!=='all'?' on':''}" aria-label="Owner" onchange="gOwner=this.value;render()"><option value="all">All owners</option>${D.owners.map(o=>`<option value="${esc(o.name)}"${o.name===gOwner?' selected':''}>${esc(o.emoji)} ${esc(PN(o.name))}</option>`).join('')}</select>${monHtml}</div>
+   <div class="tabs g2row"><select aria-label="Day" onchange="gDay=this.value;render()"><option value="all">All days</option>${days.map(k=>`<option value="${k}"${k===gDay?' selected':''}>${esc(etLabel(k))}</option>`).join('')}</select><button class="${gH2H?'on':''}" onclick="gH2H=!gH2H;render()">🥊 Pool vs pool only</button></div>${/*<OWNED-GAMES>*/nHidden?`<label class="gUn"><input type="checkbox" id="gUnowned"${gAll?' checked':''} onchange="gAll=this.checked;render()"> Show unowned games <span class="mut">(${nHidden} hidden)</span></label>`:''/*</OWNED-GAMES>*/}</div>`;
   if(!list.length)return h+`<div class="card">${all.length?'Nothing matches those filters.':nHidden/*<OWNED-GAMES>*/?'No games with an owned team right now 🏀 Check back soon. (Games where nobody in the pool owns either team are hidden.)'/*</OWNED-GAMES>*/:'No games for rostered teams yet. Check back when the schedule fills in.'}</div>`;
   if(gMode==='upcoming'&&D.meta.mode==='preseason')h+=`<div class="card note">Preseason: sportsbooks have posted lines for just some of the next few nights so far (lines are pulled for about the next 10 days). Everything refreshes automatically.</div>`;
   let cur=null;
@@ -1950,7 +2003,7 @@ function vRedraft0(){/*</TAB-WINDOWS>*/
 function vAbout(){
   const P=D.meta.points,m=D.meta;
   const rows=[['Win (reg season + conf tourney, any opponent)',P.win],['Conference regular-season champ',P.conf_reg],['Conference tournament champ',P.conf_tourn],['Make the NCAA field',P.ncaa_entry],['Play-in (First Four) win',P.playin_win],['Upset (NCAA tournament: beat a better seed)',P.upset],['NCAA tournament win',P.ncaa_win],['Final Four',P.final4],['National champ',P.champ],['Miss the Big Dance',P.missed_dance]];
-  return `<div class="card sc"><table><tr><th>Scoring</th><th class="n">Pts</th></tr>${rows.map(r=>`<tr><td>${r[0]}</td><td class="n">${sign(r[1])}</td></tr>`).join('')}</table></div>
+  return `<a class="s27-howl" href="${esc(s24Href('howto'))}" onclick="return s24NavClick(event,'howto')">📘 How to bet →</a><div class="card sc"><table><tr><th>Scoring</th><th class="n">Pts</th></tr>${rows.map(r=>`<tr><td>${r[0]}</td><td class="n">${sign(r[1])}</td></tr>`).join('')}</table></div>
   ${vUpsets()}
   ${''/*<RULES-ONLY>*/}
   ${ADMIN?`<div class="card"><b>What is automatic</b><ul class="it">
@@ -2041,14 +2094,17 @@ function vTeamsAP(){const netBy={};(RK.net||[]).forEach(x=>{if(x.tid)netBy[Strin
   const apOf=tid=>{if(!RK.ap)return null;const t=(D.teams||{})[tid]||{};return RK.ap[String(t.espn_id||tid)]||null};
   const rows=[];D.owners.forEach(o=>o.teams.forEach(t=>{const r=tRec(t.tid),g=r.w+r.l;rows.push({o:o.name,t,r,pct:g?r.w/g:0,ap:apOf(t.tid),net:netBy[String(t.tid)]||null})}));
   rows.sort((a,b)=>b.pct-a.pct||b.r.w-a.r.w||(a.net||999)-(b.net||999)||a.t.tid.localeCompare(b.t.tid));
+  /*<S27-RANKS>*/rows.forEach(x=>{const k=S27_RANKS[String(x.t.tid)]||[];x.sr=k[0]||null;x.kp=k[1]||null});
+  if(S27T.k){const f=S27T.k;rows.sort((a,b)=>(a[f]==null)-(b[f]==null)||(S27T.d*((a[f]||0)-(b[f]||0)))||a.t.tid.localeCompare(b.t.tid))}
+  const sth=(f,l,t)=>`<th class="n s27-sort" aria-sort="${S27T.k===f?(S27T.d>0?'ascending':'descending'):'none'}"><button type="button" title="${esc(t)}. Tap to sort" onclick="s27Sort('${f}')">${l}<i aria-hidden="true">${S27T.k===f?(S27T.d>0?'▲':'▼'):'↕'}</i></button></th>`;/*</S27-RANKS>*/
   const d=v=>v?'#'+v:'<span class="mut">\u2014</span>';
   /*<S26P-TAP>*/const cfBy={};(RK.net||[]).forEach(x=>{if(x.tid&&x.conf)cfBy[String(x.tid)]=String(x.conf)});
   const CFS={'Big Ten':'B10','Big 12':'B12','Big East':'BE','Atlantic 10':'A10','Mountain West':'MWC','American':'AAC','Ivy League':'Ivy','America East':'AE','Big South':'BSo','Big West':'BWC','Big Sky':'BSky','Sun Belt':'SBC','Summit League':'Sum','Horizon':'Hor','Southland':'SLC','Patriot':'Pat'};
   const cf=t=>{const c=cfBy[String(t)];return c?`<span title="${esc(c)}">${esc(CFS[c]||c)}</span>`:'<span class="mut">\u2014</span>'};
   let fo='';try{fo=localStorage.getItem('tapOwner')||''}catch(e){}if(!D.owners.some(o=>o.name===fo))fo='';
   const fb=(v,l)=>`<button type="button" data-o="${esc(v)}" class="${v===fo?'on':''}" onclick="tapF(this)">${esc(l)}</button>`;/*</S26P-TAP>*/
-  return `<div class="tapf" role="group" aria-label="Filter by owner">${fb('','All')}${D.owners.map(o=>fb(o.name,PN(o.name))).join('')}</div><div class="card tap"><table><tr><th>Team</th><th class="to">Owner</th><th class="n">Rec</th><th class="n" title="STOOPIDS points this season (same as Standings > Points)">Pts</th><th title="Conference">Conf</th><th class="n" title="AP Top 25">AP</th><th class="n" title="NCAA NET">NET</th></tr>${rows.map(x=>`<tr data-o="${esc(x.o)}"${x.t.status==='dropped'?' class="drop"':''}${fo&&fo!==x.o?' hidden':''}><td>${chip(x.t.tid,{out:x.t.status==='dropped'})}</td><td class="to" title="${esc(PN(x.o))}">${esc(PN(x.o))}</td><td class="n">${x.r.w}-${x.r.l}</td><td class="n">${x.t.total||0}</td><td class="cf">${cf(x.t.tid)}</td><td class="n">${d(x.ap)}</td><td class="n">${d(x.net)}</td></tr>`).join('')}</table></div>`+
-   `<p class="note">Sorted by best record. Rec = full season record (regular season + conference tournaments + postseason as ESPN counts it). AP = ${RK.ap?'AP Top 25'+(RK.apDate?' ('+esc(fmtDate(String(RK.apDate).slice(0,10)))+')':'')+', live from ESPN':'AP Top 25 (not loaded right now)'}. Pts = STOOPIDS points this season (team totals from Standings > Points). Conf = conference as listed in the NCAA NET file (${esc(RK.netSeason||'NCAA NET')}). NET = ${RK.net?esc(RK.netSeason||'NCAA NET')+(RK.netAsOf?', '+esc(RK.netAsOf):''):'NCAA NET (not loaded right now)'}. \u2014 = unranked.</p>`}
+  return `<div class="tapf" role="group" aria-label="Filter by owner">${fb('','All')}${D.owners.map(o=>fb(o.name,PN(o.name))).join('')}</div><div class="card tap s27-rk"><table><tr><th>Team</th><th class="to">Owner</th><th class="n">Rec</th><th class="n" title="STOOPIDS points this season (same as Standings > Points)">Pts</th><th title="Conference">Conf</th><th class="n" title="AP Top 25">AP</th><th class="n" title="NCAA NET">NET</th>${sth('sr','<span class="s27-lf">STOOPID</span><span class="s27-ls">STP</span>','STOOPID rank (Draft Room)')}${sth('kp','<span class="s27-lf">KenPom</span><span class="s27-ls">KP</span>','KenPom rank')}</tr>${rows.map(x=>`<tr data-o="${esc(x.o)}"${x.t.status==='dropped'?' class="drop"':''}${fo&&fo!==x.o?' hidden':''}><td>${chip(x.t.tid,{out:x.t.status==='dropped'})}</td><td class="to" title="${esc(PN(x.o))}">${esc(PN(x.o))}</td><td class="n">${x.r.w}-${x.r.l}</td><td class="n">${x.t.total||0}</td><td class="cf">${cf(x.t.tid)}</td><td class="n">${d(x.ap)}</td><td class="n">${d(x.net)}</td><td class="n">${d(x.sr)}</td><td class="n">${d(x.kp)}</td></tr>`).join('')}</table></div>`+
+   `<p class="note">${S27T.k?'Sorted by '+(S27T.k==='sr'?'STOOPID':'KenPom')+' rank (tap the header again to flip, a third time for best record).':'Sorted by best record. Tap STOOPID or KenPom to sort by that rank.'} STOOPID = STOOPID rank from the Draft Room preseason team list. KenPom = KenPom ${esc(S27_KP_SEASON)} ratings rank. Rec = full season record (regular season + conference tournaments + postseason as ESPN counts it). AP = ${RK.ap?'AP Top 25'+(RK.apDate?' ('+esc(fmtDate(String(RK.apDate).slice(0,10)))+')':'')+', live from ESPN':'AP Top 25 (not loaded right now)'}. Pts = STOOPIDS points this season (team totals from Standings > Points). Conf = conference as listed in the NCAA NET file (${esc(RK.netSeason||'NCAA NET')}). NET = ${RK.net?esc(RK.netSeason||'NCAA NET')+(RK.netAsOf?', '+esc(RK.netAsOf):''):'NCAA NET (not loaded right now)'}. \u2014 = unranked.</p>`}
 const PCOLS=[['W','Regular-season wins',b=>b.win],['Conf','Conference champ (regular season + tournament)',b=>(b.conf_reg||0)+(b.conf_tourn||0)],['NCAA','Made the NCAA field',b=>b.ncaa_entry],['PI','Play-in win',b=>b.playin_win],['NW','NCAA tournament wins',b=>b.ncaa_win],['Up','Upsets',b=>b.upset],['F4','Final Four',b=>b.final4],['Ch','National champ',b=>b.champ],['±','Missed the Big Dance / commissioner adjustment',b=>(b.missed_dance||0)+(b.adjust||0)]];
 const pCell=v=>v?`<b class="${v<0?'bad':''}">${v>0?v:'\u2212'+(-v)}</b>`:'<span class="mut">\u2014</span>';
 function vPoints(){/*<S26Q-PTAB>*/const hd='<tr><th class="pn" scope="col"><span class="sr">Team</span></th>'+PCOLS.map(c=>`<th scope="col" title="${esc(c[1])}">${c[0]}</th>`).join('')+'<th class="ptot" scope="col" title="Team total">Tot</th></tr>';
@@ -2080,10 +2136,10 @@ function d27Done(){const r=DRAFT27_RESULTS;if(!r)return false;const t=r.draft_co
 /* Weekly write-ups for the Recap tab: Monday recaps + milestone specials. Newest first by date. Add entries like {date:'2026-11-09',title:'Week 1',kind:'weekly',body:'...'} (kind 'weekly' | 'special'). body is plain text (escaped). */
 const RECAPS=[];
 function vDraftTab(){return vDraft27()}   /* s26s: STOOPIDS drafted by hand; board always shows, no gate, no draft-room button */
-function vRecap(){const top=`<section class="d27"><h2 class="d27r">🎓 Draft Recap</h2><div class="d27cs">${d27Cards()}</div></section>`;
+function vRecap(){/*<S27-RECAP> weekly write-ups first (newest first), then the draft grades, then the draft board (was the Draft tab) */
   const L=RECAPS.filter(x=>x&&x.title).slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
-  const list=L.length?'<div class="rcl">'+L.map(x=>`<article class="card rci"><small>${esc(x.kind==='special'?'Special':'Weekly')}${x.date?' · '+esc(fmtDate(String(x.date).slice(0,10))):''}</small><h3>${esc(x.title)}</h3><p>${esc(x.body||'')}</p></article>`).join('')+'</div>':'<div class="card rcnone">First recap coming after opening week</div>';
-  return top+`<section class="rcw"><h2>Weekly write-ups</h2>${list}</section>`}   /* s26s: removed the quiet 'Draft room →' link (no STOOPIDS draft room) */
+  const list=L.length?'<div class="rcl">'+L.map(x=>`<article class="card rci"><small>${esc(x.kind==='special'?'Special':'Weekly')}${x.date?' · '+esc(fmtDate(String(x.date).slice(0,10))):''}</small><h3>${esc(x.title)}</h3><p>${esc(x.body||'')}</p></article>`).join('')+'</div>':'<div class="card note rcnone">No weekly write-ups yet. The first one comes after opening week.</div>';
+  return `<section class="rcw"><h2>📰 Weekly write-ups</h2>${list}</section><section class="d27"><h2 class="d27r">🎓 Draft grades</h2><div class="d27cs">${d27Cards()}</div></section>`+vDraft27()}/*</S27-RECAP>*/
 /*</S26N-DRAFT-RECAP>*/
 function vDraft27(){const rows=d27Board();
   const head=DRAFT27.slots.map(([nm],i)=>`<th><b>${i+1}</b><span>${esc(TN(nm))}</span></th>`).join('');
@@ -2093,8 +2149,70 @@ function vDraft27(){const rows=d27Board();
 function d27Cards(){return DRAFT27.slots.map(([nm,id],i)=>{const g=d27Grade(nm,id);const gr=g&&g.grade?String(g.grade).trim().slice(0,3):'';
     return `<div class="d27c"><div class="d27h"><span class="d27g${gr?'':' tbd'}">${gr?esc(gr):'?'}</span><div><b>${esc(TN(nm))}</b><small>${esc(PN(nm))} · slot ${i+1}</small></div></div>`+
      (g?(g.summary4?`<p>${esc(g.summary4)}</p>`:'')+(g.deep?`<details><summary>More</summary><p>${esc(g.deep)}</p></details>`:''):'<p class="d27soon">Grades coming soon.</p>')+'</div>'}).join('');}
-/*<S26N-DRAFT-RECAP>*/VIEWS.draft=vDraftTab;VIEWS.recap=vRecap;TABS.splice(4,0,['draft','📝 Draft'],['recap','🎓 Recap']);NAVSHORT.draft='Draft';NAVSHORT.recap='Recap';/*</S26N-DRAFT-RECAP>*/
+/*<S26N-DRAFT-RECAP>*/VIEWS.draft=vDraftTab;VIEWS.recap=vRecap;/*<S27-TABS>*/TABS.splice(4,0,['recap','🎓 Recap']);{const ix=TABS.findIndex(t=>t[0]==='about');const ab=TABS.splice(ix,1)[0];TABS.splice(TABS.findIndex(t=>t[0]==='archive'),0,ab)}NAVSHORT.recap='Recap';/*</S27-TABS>*//*<S29B-SHARE>*/TABS.push(['share','🔗 Share']);NAVSHORT.share='Share';VIEWS.share=vShare;/*</S29B-SHARE>*//*</S26N-DRAFT-RECAP>*/
 /*</S26D-DRAFT>*/
+/*<S27>*/
+/* s27: header Share, bet text copy, form tips, How to bet page, All teams STOOPID + KenPom ranks. */
+const S27_RANKS={"2":[74,26],"8":[22,19],"12":[6,7],"21":[69,77],"26":[42,25],"30":[38,37],"41":[4,11],"47":[28,186],"57":[2,2],"61":[61,46],"66":[13,6],"68":[null,60],"84":[51,47],"96":[35,24],"97":[18,16],"127":[11,8],"130":[26,28],"139":[31,56],"142":[46,27],"150":[1,1],"152":[40,66],"153":[58,38],"158":[16,15],"163":[null,153],"167":[34,80],"194":[37,18],"202":[null,113],"222":[39,33],"235":[null,86],"238":[19,12],"245":[36,30],"248":[7,3],"251":[15,10],"252":[41,34],"258":[8,13],"261":[64,187],"275":[77,31],"300":[63,112],"328":[30,53],"333":[29,9],"350":[33,108],"356":[5,4],"2006":[49,101],"2132":[50,32],"2142":[null,222],"2181":[null,148],"2250":[3,14],"2253":[12,44],"2272":[9,62],"2294":[null,43],"2305":[10,5],"2377":[20,111],"2390":[14,20],"2440":[60,72],"2509":[45,23],"2599":[17,21],"2608":[23,76],"2633":[21,22],"2634":[79,207],"2641":[25,17],"2670":[24,57],"2724":[27,74],"2750":[70,160],"2755":[null,319]};   // tid -> [STOOPID rank (Draft Room teams.js meta p, built 2026-10-28; null = not in that list), KenPom rank (kenpom_o.json)]
+const S27_KP_SEASON='2027';
+const S27T={k:null,d:1};
+function s27Sort(f){if(S27T.k!==f){S27T.k=f;S27T.d=1}else if(S27T.d>0)S27T.d=-1;else S27T.k=null;render()}
+function s27SharePage(){try{s24Share()}catch(e){}}
+/*<S29B-GCOPY>*/ // per-game Copy: the game's text only (no link), same button as the per-bet Copy (.s27-copy -> 'Copied')
+const S29G={};
+function s29GameBtn(g){const id=String(g&&g.id||'');if(!s24IdOK(id))return '';S29G[id]=g;return `<button type="button" class="s27-copy" data-s29-gcopy="${esc(id)}" aria-label="Copy this game's details" onclick="s29CopyGame('${esc(id)}',this)">Copy</button>`}
+function s29GameText(g){const L=[],tn=s=>{const t=D.teams[s.id]||{};const rk=s.seed?'('+s.seed+') ':(s.rank||t.rank||t.ap)?'#'+(s.rank||t.rank||t.ap)+' ':'';const ln=g.line;const mk=ln?(String(ln.fav)===String(s.id)?' ⭐':String(ln.dog)===String(s.id)?' 🐶':''):'';return rk+(t.name||s.short||s.name||s.id)+mk};
+  const fin=g.status==='final',live=g.status==='live',sc=s=>(fin||live)&&s.score!=null?' '+s.score:'';
+  L.push(tn(g.away)+sc(g.away)+(g.neutral?' vs ':' @ ')+tn(g.home)+sc(g.home));
+  const day=etLabel(etKey(g));L.push((fin?'Final · ':live?'LIVE · ':'')+day+(isTBD(g)?' · time TBD':g.start?' · '+S25.localTime(new Date(g.start)):''));
+  if(g.round)L.push(String(g.round));else if(g.kind==='conf')L.push('Conf tournament');
+  const v=g.venue&&(g.venue.name||g.venue);if(v&&typeof v==='string')L.push(v+(g.neutral?' (neutral site)':''));else if(g.neutral)L.push('Neutral site');
+  const ln=g.line;if(ln){if(ln.fav_name&&ln.sp!=null)L.push('Spread: '+ln.fav_name+' -'+ln.sp);else if(ln.sp===0)L.push('Spread: Pick’em');
+    if(ln.aml!=null||ln.hml!=null)L.push('Moneyline: '+g.away.short+' '+fml(ln.aml)+' / '+g.home.short+' '+fml(ln.hml));
+    if(ln.ou!=null)L.push('Over/under: '+ln.ou);if(ln.p)L.push('Lines: '+ln.p+(fin&&ln.type==='close'?' (closing)':''))}
+  const ow=s=>(s.owners||[]).map(n=>(ownerEmoji(n)?ownerEmoji(n)+' ':'')+PN(n)).join(', ');const oa=ow(g.away),oh=ow(g.home);
+  if(oa)L.push('Owner, '+g.away.short+': '+oa);if(oh)L.push('Owner, '+g.home.short+': '+oh);
+  return L.join('\n')}
+function s29CopyGame(id,btn){const g=S29G[id];if(!g)return;s27CopyText(s29GameText(g),()=>{if(!btn)return;btn.textContent='Copied';btn.classList.add('on');clearTimeout(btn._t);btn._t=setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('on')},1600)})}
+/*</S29B-GCOPY>*/
+/*<S29B-SHARE>*/ // the Share tab: pick Whole site or one tab -> a view-only link (?view=1#tab), navigator.share with a copy fallback ('Copied')
+let S29SH='';
+function s29ShTabs(){return TABS.filter(t=>t[0]!=='share'&&tabVisible(t[0])).map(t=>[t[0],t[1].slice(t[1].indexOf(' ')+1)])}
+function s29ShUrl(){return s29ViewUrl(S29SH?s24HashOf(S29SH):'')}
+function vShare(){const u=s29ShUrl();
+  return `<div class="card s29sh"><h2 style="margin:0 0 8px">Share STOOPIDS</h2><label class="s29sh-l" for="s29shSel">What to share</label>
+   <select id="s29shSel" onchange="S29SH=this.value;render()"><option value=""${S29SH?'':' selected'}>Whole site</option>${s29ShTabs().map(([k,l])=>`<option value="${esc(k)}"${k===S29SH?' selected':''}>${esc(l)}</option>`).join('')}</select>
+   <button type="button" class="rkseg-b on s29sh-b" id="s29shBtn" onclick="s29ShareGo(this)">${s24CanShare()?'Share':'Copy link'}</button>
+   <div class="s29sh-u" id="s29shUrl">${esc(u)}</div><p class="mut" style="margin:6px 0 0;font-size:12px">View-only link: people who open it can look around but can't add or change bets.</p></div>`}
+function s29ShareGo(btn){const url=s29ShUrl(),ok=()=>{if(!btn)return;btn.textContent='Copied';clearTimeout(btn._t);btn._t=setTimeout(()=>{btn.textContent=s24CanShare()?'Share':'Copy link'},1600)};
+  if(s24CanShare()){navigator.share({title:'STOOPIDS',url}).catch(e=>{if(!(e&&e.name==='AbortError'))s27CopyText(url,ok)})}else s27CopyText(url,ok)}
+/*</S29B-SHARE>*/
+function s27CopyText(t,ok){const fall=()=>{try{const ta=document.createElement('textarea');ta.value=t;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();const r=document.execCommand&&document.execCommand('copy');ta.remove();if(r){ok();return}}catch(e){}s24Toast('Copy failed',2600)};
+  try{if(navigator.clipboard&&navigator.clipboard.writeText&&window.isSecureContext){navigator.clipboard.writeText(t).then(ok,fall);return}}catch(e){}fall()}
+function s27CopyBet(id,btn){const b=(U.doc&&U.doc.bets||[]).find(x=>x.id===id);if(!b)return;
+  s27CopyText(String(b.text||''),()=>{if(!btn)return;btn.textContent='Copied';btn.classList.add('on');clearTimeout(btn._t);btn._t=setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('on')},1600)})}
+const S27_TIPS={who:'Tap one or more managers. Several = one bet, one result.',text:'Write it as you say it: "Kansas beats Duke".',amt:()=>'Minimum '+PULK.minAmt,odds:'If you’re right, they owe amount × first ÷ second. Even = 1-1.',auto:'A clear game bet (team, spread or total, date) gets a reading. After the final, ESPN scores propose the result. You confirm it; nothing settles on its own.',manual:'Manual: you enter the result yourself after the game.'};
+const s27TipK=(k,l)=>`<button type="button" class="s27-tipk k" data-tip="${k}" aria-expanded="false" onclick="s27Tip(this)">${esc(l)}</button>`;
+function s27TipClose(){document.querySelectorAll('.s27-pop').forEach(e=>e.remove());document.querySelectorAll('.s27-tipk[aria-expanded=true]').forEach(e=>e.setAttribute('aria-expanded','false'))}
+function s27Tip(el){const open=el.getAttribute('aria-expanded')==='true';s27TipClose();if(open)return;let t=S27_TIPS[el.getAttribute('data-tip')]||'';if(typeof t==='function')t=t();
+  const p=document.createElement('div');p.className='s27-pop';p.setAttribute('role','tooltip');p.innerHTML=`<span>${esc(t)}</span> <a href="${esc(s24Href('howto'))}" onclick="s27TipClose();return s24NavClick(event,'howto')">How to bet →</a>`;
+  el.setAttribute('aria-expanded','true');el.insertAdjacentElement('afterend',p)}
+document.addEventListener('click',e=>{if(!e.target.closest||e.target.closest('.s27-tipk,.s27-pop'))return;s27TipClose()},true);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')s27TipClose()});
+function vHowTo(){const m=PULK.minAmt;
+  return `<div class="s27-how"><a class="s27-howl" href="${esc(s24Href('bets27'))}" onclick="return s24NavClick(event,'bets27')">← Back to Bets</a>
+  <h2>📘 How to bet</h2>
+  <div class="card"><b>1. Who you’re betting against</b><p>Tap one or more managers. Several managers = one bet with one result: each of them is on the other side at the same amount. <b>Select all</b> picks everyone, <b>Clear</b> starts over.</p></div>
+  <div class="card"><b>2. What’s the bet</b><p>Write what you say will happen, in plain words: “Kansas beats Duke”, “Duke -5.5 vs UNC”, “Over 150.5 Kansas vs Duke”. You’re the one saying it; they take the other side.</p></div>
+  <div class="card"><b>Auto-settle</b><p>Under the bet text, the Auto-settle box shows how the site reads a clear game bet (team, spread or total, date). After the final, ESPN scores propose the result and you confirm it: nothing settles on its own. Tap <b>Edit reading</b> to fix it, or <b>Make it manual</b> to enter the result yourself after the game.</p></div>
+  <div class="card"><b>3. Amount</b><p>Minimum ${m}. Tap a preset or <b>Custom</b> for a whole number from ${m} to ${PULK.maxAmt}.</p></div>
+  <div class="card"><b>4. Odds</b><p>Even = 1-1. With odds like 3-1, if you’re right they owe amount × 3 ÷ 1; if you’re wrong you owe the amount. Tap <b>Custom…</b> for odds like 7-2.</p></div>
+  <div class="card"><b>Place it</b><p>Tap <b>Place bet</b>, check the summary, then <b>Yes, place it</b>. Until someone settles it you can edit or cancel your own bet.</p></div>
+  <div class="card"><b>Settling</b><p>Either side of an open bet can mark who won, or a Wash (nobody owes anything); tap twice to confirm. To fix a settled result, both sides have to agree. Totals are on <b>Tally</b>.</p></div>
+  <div class="card"><b>Pools</b><p>Pick <b>Pool / buy-in</b> above the form for a buy-in: what the pool is, who’s in, buy-in per person and optional payouts by place.</p></div>
+  <div class="card"><b>Copy</b><p>Each bet’s <b>Copy</b> button copies just that bet’s text.</p></div></div>`}
+VIEWS.howto=vHowTo;
+/*</S27>*/
 /*<CHIP-FIT>*/
 const CHIPFIT_MIN=9;
 function chipFit(){   // one line per school name: full size if it fits, else the largest font (steps of .25px) >= 9px that fits; below that the CSS ellipsis applies
@@ -2118,7 +2236,7 @@ function render(){
   $('#badges').innerHTML=(m.mode==='demo'?'<span class="badge warn">DEMO DATA</span>':'')+(ADMIN?'<span class="badge">ADMIN VIEW</span>':'')+(ADMIN&&m.warnings.length?'<span class="badge warn">⚠ '+m.warnings.length+' warning(s) — see Rules</span>':'');
   try{nbSeen()}catch(_){}   // NEWBET hook: opening Side bets clears the 'new' badge
   /*<BETS-TALLY>*/if(typeof SHOW_OLD_BETS!=='undefined'&&!SHOW_OLD_BETS&&(tab==='bets'||tab==='bets2526'||tab==='bets-2025-26')&&VIEWS.bets27)tab='bets27';/*</BETS-TALLY>*/
-  /*<S26N-DRAFT-RECAP>*/if(/^(draft27|draft-results|draftresults|picks|results)$/.test(tab))tab='recap';/*</S26N-DRAFT-RECAP>*/
+  /*<S26N-DRAFT-RECAP>*/if(/^(draft|draft27|draft-results|draftresults|picks|results)$/.test(tab))tab='recap';/*</S26N-DRAFT-RECAP>*/
   /*<TAB-WINDOWS>*/if(tab==='rosters'||tab==='squads'){tab='standings';s26eView('points')}/*S26F-NOROSTERS*/if(!tabVisible(tab==='bets'?'bets27':tab))tab='standings';/*</TAB-WINDOWS>*/
   /*<NAV-ONE-ROW>*/
   $('#nav').innerHTML=TABS/*<TAB-WINDOWS>*/.filter(t=>tabVisible(t[0]))/*</TAB-WINDOWS>*/.map(t=>{const sp=t[1].indexOf(' '),ic=t[1].slice(0,sp),full=t[1].slice(sp+1),on=t[0]===tab||/*<ONE-BETS>*/(t[0]==='bets27'&&tab==='bets')/*</ONE-BETS>*/;
@@ -2871,8 +2989,7 @@ function b27PSync(){try{const m=document.getElementById('main');if(!m)return;
 function b27PoolForm(me){const others=b27Others();/*<S26F-POOL>*/setTimeout(()=>{try{s26fPaint()}catch(e){}},0);/*</S26F-POOL>*/
   return `<div class="card b27-form"><b>New bet</b> <span class="note">· you are <b>${esc(PN(me))}</b> <a href="#" onclick="presAsk();return false">(change)</a></span>${b27KindTabs()}
    <div class="s26st"><label for="b27Text" class="b27-lb"><span class="s26n">1</span>${esc(PT('s1'))}</label><textarea id="b27Text" class="sb-in b27-in" rows="2" maxlength="${PULK.maxText}" placeholder="${esc(PT('termsPh'))}" aria-describedby="s26eTerms" oninput="U.text=this.value;b27PSync()">${esc(U.text)}</textarea><div id="s26eTerms" class="s26err" role="alert"></div></div>
-   <div class="s26st"><div class="b27-lb" id="s26lPeople"><span class="s26n">2</span>${esc(PT('s2'))} <span class="note">${esc(POOL_TXT.youIn)}</span></div><div class="b27-opps" role="group" aria-labelledby="s26lPeople" style="--n:${others.length}">${others.map((n,i)=>{const o=(D.owners.find(x=>x.name===n)||{});const on=U.pp.includes(n);return `<button type="button" class="b27-chip op" data-b27-pp="${i}" data-b27-name="${esc(n)}" aria-label="${esc(TN(n))}" aria-pressed="${on}" onclick="b27PoolPP(${i})"><span class="ck" aria-hidden="true">✓</span><span class="em" aria-hidden="true">${esc(o.emoji||'')}</span><span class="nm" aria-hidden="true"><span class="f">${esc(TN(n))}</span><span class="sh">${esc(b27ShortT(n))}</span><span class="xs">${esc(b27TinyT(n))}</span></span></button>`}).join('')}</div>
-   <div class="b27-selbar"><button type="button" class="b27-sm" onclick="b27PoolAll()">Select all</button><button type="button" class="b27-sm" onclick="b27PoolClear()">Clear</button><span class="cnt" id="b27SelCnt" aria-live="polite">${U.pp.length?U.pp.length+' selected':'None selected'}</span></div>
+   <div class="s26st"><div class="b27-lb" id="s26lPeople"><span class="s26n">2</span>${esc(PT('s2'))} <span class="note">${esc(POOL_TXT.youIn)}</span></div><div class="b27-opps" role="group" aria-labelledby="s26lPeople" style="--n:${others.length+1}">${others.map((n,i)=>{const o=(D.owners.find(x=>x.name===n)||{});const on=U.pp.includes(n);return `<button type="button" class="b27-chip op" data-b27-pp="${i}" data-b27-name="${esc(n)}" aria-label="${esc(TN(n))}" aria-pressed="${on}" onclick="b27PoolPP(${i})"><span class="ck" aria-hidden="true">✓</span><span class="em" aria-hidden="true">${esc(o.emoji||'')}</span><span class="nm" aria-hidden="true"><span class="f">${esc(TN(n))}</span><span class="sh">${esc(b27ShortT(n))}</span><span class="xs">${esc(b27TinyT(n))}</span></span></button>`}).join('')}<div class="s27-sel"><button type="button" class="s27-selb" onclick="b27PoolAll()"><span class="f">Select all</span><span class="s">All</span></button><button type="button" class="s27-selb" onclick="b27PoolClear()">Clear</button></div></div><span class="sr" id="b27SelCnt" aria-live="polite">${U.pp.length?U.pp.length+' selected':'None selected'}</span>
    <div id="s26ePeople" class="s26err" role="alert"></div></div>
    <div class="s26st"><label for="b27En" class="b27-lb"><span class="s26n">3</span>${esc(PT('s3'))}</label><input id="b27En" class="sb-in b27-in s26buy" inputmode="decimal" autocomplete="off" placeholder="${esc(PT('buyPh'))}" value="${esc(U.entry)}" aria-describedby="s26Pot s26eBuy" oninput="U.entry=this.value;b27PSync()"><div id="s26Pot" class="s26pot" aria-live="polite"></div><div id="s26eBuy" class="s26err" role="alert"></div></div>
    <div class="s26st"><div class="b27-lb"><span class="s26n">4</span>${esc(PT('s4'))}</div><div class="note">${esc(PT('helpPl'))}</div>${s26fPlaceRows()}<button type="button" class="b27-sm s26add" onclick="s26fAddPlace()"${U.places.length>=10?' disabled':''}>${esc(PT('addPlace'))}</button><div id="s26Sum" class="s26sum" aria-live="polite"></div><div id="s26ePay" class="s26err" role="alert"></div></div>
@@ -3041,12 +3158,11 @@ function vB27(){
   }else{
     const oc=U.odds?U.odds.join('-'):'';
     h+=/*<POOL>*/U.kind==='pool'?b27PoolForm(me):/*</POOL>*/`<div class="card b27-form"><b>New bet</b> <span class="note">· you are <b>${esc(PN(me))}</b> <a href="#" onclick="presAsk();return false">(change)</a></span>${/*<QUICK-BET>*/qbHint()/*</QUICK-BET>*/}${/*<S24-EDIT>*/s24EditHint()/*</S24-EDIT>*/}${/*<POOL>*/U.editOf?'':b27KindTabs()/*</POOL>*/}
-     ${/*<MULTI-BET>*/''/*opponents: multi-select*/}<div class="b27-q">1. Who are you betting against? <span class="note">Tap one or more. Several = one bet, one result.</span></div><div class="b27-opps" role="group" aria-label="Opponents" style="--n:${others.length}">${others.map((n,i)=>{const o=(D.owners.find(x=>x.name===n)||{});const on=U.opps.includes(n);return `<button type="button" class="b27-chip op" data-b27-opp="${i}" data-b27-name="${esc(n)}" aria-label="${esc(TN(n))}" aria-pressed="${on}" onclick="b27Opp(${i})"><span class="ck" aria-hidden="true">✓</span><span class="em" aria-hidden="true">${esc(o.emoji||'')}</span><span class="nm" aria-hidden="true"><span class="f">${esc(TN(n))}</span><span class="sh">${esc(b27ShortT(n))}</span><span class="xs">${esc(b27TinyT(n))}</span></span></button>`}).join('')}</div>
-     <div class="b27-selbar"><button type="button" class="b27-sm" data-b27-all="1" onclick="b27OppAll()">Select all</button><button type="button" class="b27-sm" data-b27-clear="1" onclick="b27OppClear()">Clear</button><span class="cnt" id="b27SelCnt" aria-live="polite">${esc(b27SelTxt())}</span></div>
-     ${''/*</MULTI-BET>*/}<div class="b27-q"><label for="b27Text">2. What’s the bet? <span class="note">I say…</span></label></div><input id="b27Text" class="sb-in b27-in" maxlength="${PULK.maxText}" autocomplete="off" enterkeyhint="go" placeholder="e.g. Kansas beats Duke" value="${esc(U.text)}" oninput="b27Text(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();b27Place()}">${/*<S25>*/'<div id="s25Rd">'+s25RdHtml()+'</div>'/*</S25>*/}
-     <div class="b27-q">3. Amount <span class="note">(minimum ${PULK.minAmt})</span></div><div class="b27-amts" role="group" aria-label="Amount">${PULK.amounts.map(a=>`<button type="button" class="b27-amt" data-b27-amt="${a}" aria-pressed="${!U.amtCustom&&a===U.amt}" onclick="b27Amt(${a})">${a}</button>`).join('')}<button type="button" class="b27-amt cu" data-b27-amtcustom="1" aria-pressed="${U.amtCustom}" onclick="b27AmtCustomOpen()">Custom</button></div>
+     ${/*<MULTI-BET>*/''/*opponents: multi-select*/}<div class="b27-q"><button type="button" class="s27-tipk" data-tip="who" aria-expanded="false" onclick="s27Tip(this)">1. Who are you betting against?</button></div><div class="b27-opps" role="group" aria-label="Opponents" style="--n:${others.length+1}">${others.map((n,i)=>{const o=(D.owners.find(x=>x.name===n)||{});const on=U.opps.includes(n);return `<button type="button" class="b27-chip op" data-b27-opp="${i}" data-b27-name="${esc(n)}" aria-label="${esc(TN(n))}" aria-pressed="${on}" onclick="b27Opp(${i})"><span class="ck" aria-hidden="true">✓</span><span class="em" aria-hidden="true">${esc(o.emoji||'')}</span><span class="nm" aria-hidden="true"><span class="f">${esc(TN(n))}</span><span class="sh">${esc(b27ShortT(n))}</span><span class="xs">${esc(b27TinyT(n))}</span></span></button>`}).join('')}<div class="s27-sel"><button type="button" class="s27-selb" data-b27-all="1" onclick="b27OppAll()"><span class="f">Select all</span><span class="s">All</span></button><button type="button" class="s27-selb" data-b27-clear="1" onclick="b27OppClear()">Clear</button></div></div><span class="sr" id="b27SelCnt" aria-live="polite">${esc(b27SelTxt())}</span>
+     ${''/*</MULTI-BET>*/}<div class="b27-q"><button type="button" class="s27-tipk" data-tip="text" aria-expanded="false" onclick="s27Tip(this)">2. What’s the bet?</button><label for="b27Text" class="sr">What’s the bet?</label></div><input id="b27Text" class="sb-in b27-in" maxlength="${PULK.maxText}" autocomplete="off" enterkeyhint="go" placeholder="e.g. Kansas beats Duke" value="${esc(U.text)}" oninput="b27Text(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();b27Place()}">${/*<S25>*/'<div id="s25Rd">'+s25RdHtml()+'</div>'/*</S25>*/}
+     <div class="b27-q"><button type="button" class="s27-tipk" data-tip="amt" aria-expanded="false" onclick="s27Tip(this)">3. Amount</button></div><div class="b27-amts" role="group" aria-label="Amount">${PULK.amounts.map(a=>`<button type="button" class="b27-amt" data-b27-amt="${a}" aria-pressed="${!U.amtCustom&&a===U.amt}" onclick="b27Amt(${a})">${a}</button>`).join('')}<button type="button" class="b27-amt cu" data-b27-amtcustom="1" aria-pressed="${U.amtCustom}" onclick="b27AmtCustomOpen()">Custom</button></div>
      <div id="b27Aw" class="b27-cw"${U.amtCustom?'':' hidden'}><label for="b27Ao" class="sr">Custom amount</label><input id="b27Ao" class="sb-in b27-in" inputmode="numeric" pattern="[0-9]*" autocomplete="off" maxlength="6" placeholder="Whole number, ${PULK.minAmt} to ${PULK.maxAmt}" value="${esc(U.amtTxt)}" oninput="b27AmtApply(this.value);b27Sync()" onkeydown="if(event.key==='Enter'){event.preventDefault();b27Place()}"><div id="b27Ae" class="b27-bad-t" role="alert">${esc(U.amtErr)}</div></div>
-     <div class="b27-q">4. Odds <span class="note">(if you’re right, they owe amount × first ÷ second)</span></div><div class="b27-chips" role="group" aria-label="Odds">${PULK.oddsChips.map(([a,b])=>`<button type="button" class="b27-chip" data-b27-odds="${a}-${b}" aria-pressed="${!U.custom&&!!U.odds&&U.odds[0]===a&&U.odds[1]===b}" onclick="b27Odds(${a},${b})">${a===1&&b===1?'Even':a+'-'+b}</button>`).join('')}<button type="button" class="b27-chip" data-b27-custom="1" aria-pressed="${U.custom}" onclick="b27CustomOpen()">Custom…</button></div>
+     <div class="b27-q"><button type="button" class="s27-tipk" data-tip="odds" aria-expanded="false" onclick="s27Tip(this)">4. Odds</button></div><div class="b27-chips" role="group" aria-label="Odds">${PULK.oddsChips.map(([a,b])=>`<button type="button" class="b27-chip" data-b27-odds="${a}-${b}" aria-pressed="${!U.custom&&!!U.odds&&U.odds[0]===a&&U.odds[1]===b}" onclick="b27Odds(${a},${b})">${a===1&&b===1?'Even':a+'-'+b}</button>`).join('')}<button type="button" class="b27-chip" data-b27-custom="1" aria-pressed="${U.custom}" onclick="b27CustomOpen()">Custom…</button></div>
      <div id="b27Cw" class="b27-cw"${U.custom?'':' hidden'}><label for="b27Co" class="sr">Custom odds</label><input id="b27Co" class="sb-in b27-in" inputmode="text" autocomplete="off" maxlength="9" placeholder="e.g. 7-2 or 10-1" value="${esc(U.customTxt)}" oninput="b27CustomApply(this.value);b27Sync()" onkeydown="if(event.key==='Enter'){event.preventDefault();b27Place()}"><div id="b27Ce" class="b27-bad-t" role="alert">${esc(U.oddsErr)}</div></div>
      <div class="b27-livebox" id="b27Live" aria-live="polite">${b27LiveHtml()}</div>
      <div class="b27-sum" id="b27Sum">${esc(b27Summary())}</div><div class="b27-bad-t" id="b27Hint"></div>
@@ -3072,8 +3188,8 @@ function obView(v){OB_VIEW=v;tab='bets27';render();window.scrollTo(0,0)}
 const TALLY_NM={mark:'DIRTY DRAYMOND',jake:'STOCK RISING',kurt:'KURMOJI',ken:'KENTUT',neal:'MURFCOCKCHALKROCK',paul:'PARTY PAUL',jim:'NASTY PEACOCK',scott:'EN FUEGO'};   // Tally display = team nickname in caps (ids unchanged); neal = Neal Murf (archive). matthew has no nickname: shown as MATTHEW
 const tNm=i=>TALLY_NM[i]||String(P(i).name||i).toUpperCase();
 function vTally(){const B=D.bets,TT=B.tallies&&B.tallies.ledger;if(!TT)return '<div class="card note">No 2026-27 tally yet.</div>';
-  const T=TT[sbPaid?'unpaid':'all'],ids=T.ids.filter(i=>T.bets[i]>0||T.lost[i]||T.won[i]);
-  let h=`<div class="card"><b>🧮 Tally · 2026-27</b><div class="note">From the 2026-27 shared ledger only. Rows owe columns.</div><div class="tabs" style="margin-top:8px"><button class="${sbPaid?'on':''}" data-tally-paid onclick="sbPaid=!sbPaid;render()">Hide paid</button></div></div>`;
+  const T=TT.all,ids=T.ids.filter(i=>T.bets[i]>0||T.lost[i]||T.won[i]);
+  let h=`<div class="card"><b>🧮 Tally · 2026-27</b><div class="note">From the 2026-27 shared ledger only. Rows owe columns.</div></div>`;/*<S27> Hide paid removed */
   /*<S25J>*/const empty=!ids.length;const M=(a,b)=>(T.matrix&&T.matrix[a]&&T.matrix[a][b])||0;const gids=Object.keys(TALLY_NM).concat(ids.filter(i=>!(i in TALLY_NM)));
   if(empty)h+='<div class="card note" data-tally-empty>No 2026-27 bets with amounts yet.</div>';else/*</S25J>*/
   h+=`<div class="card sc"><table data-tally="people"><tr><th>Person</th><th class="n">Lost</th><th class="n">Won</th><th class="n">Net +/-</th><th class="n">Bets</th><th class="n">Fines</th></tr>${ids.slice().sort((a,b)=>T.net[b]-T.net[a]).map(i=>`<tr data-pid="${esc(i)}"><td>${esc(tNm(i))}</td><td class="n">${tMoney(T.lost[i])}</td><td class="n">${tMoney(T.won[i])}</td><td class="n"><b class="${T.net[i]>0?'good':T.net[i]<0?'bad':''}">${T.net[i]>0?'+':T.net[i]<0?'-':''}${tMoney(Math.abs(T.net[i]))}</b></td><td class="n">${T.bets[i]}</td><td class="n">${T.fines&&T.fines[i]?tMoney(T.fines[i]):'<span class=mut>0</span>'}</td></tr>`).join('')}</table></div>`;
@@ -3128,7 +3244,7 @@ const tMoney=v=>b27Num(v/((D.bets.currency||{}).display_unit||1000));   // displ
    5) Copy link / Share: built ONLY from origin + path (+ ?demo=1 in the demo) + the route hash. Never ?admin, never names, never ledger keys.
    6) Tabs are <a href>: plain click switches in place (pushState), modifier / middle / right click = browser default. */
 const S24={sub:null,last:null,route0:false,prep:null,done:null,hlUntil:0,nf:null};
-const S24_H2T={standings:'standings',ranks:'standings',games:'games',schedule:'games',scores:'games',rosters:'@points',squads:'@points',owner:'@points',points:'@points',rankings:'teams',apnet:'teams','ap-net':'teams',ap:'teams',net:'teams',polls:'teams',bets:'@bets',bets27:'@bets','bets-2025-26':'bets',bets2526:'bets',teams:'teams',postseason:'checklist',checklist:'checklist',redraft:'redraft',archive:'archive',rules:'about',about:'about'/*<S26N-DRAFT-RECAP>*/,draft:'draft',recap:'recap',draft27:'recap','draft-results':'recap',draftresults:'recap',picks:'recap',results:'recap'/*</S26N-DRAFT-RECAP>*/};
+const S24_H2T={share:'share',standings:'standings',ranks:'standings',games:'games',schedule:'games',scores:'games',rosters:'@points',squads:'@points',owner:'@points',points:'@points',rankings:'teams',apnet:'teams','ap-net':'teams',ap:'teams',net:'teams',polls:'teams',bets:'@bets',bets27:'@bets','bets-2025-26':'bets',bets2526:'bets',teams:'teams',postseason:'checklist',checklist:'checklist',redraft:'redraft',archive:'archive',rules:'about',about:'about'/*<S26N-DRAFT-RECAP>*/,draft:'recap',recap:'recap',howto:'howto','how-to-bet':'howto',draft27:'recap','draft-results':'recap',draftresults:'recap',picks:'recap',results:'recap'/*</S26N-DRAFT-RECAP>*/};
 const s24HasNew=()=>typeof VIEWS!=='undefined'&&!!VIEWS.bets27;
 const s24IdOK=v=>typeof v==='string'&&/^[A-Za-z0-9_-]{1,40}$/.test(v);
 function s24TabFromHash(h){const t=S24_H2T[h];if(!t)return null;/*<S26E>*/if(t==='@points'){s26eView('points');return 'standings'}/*</S26E>*/if(t==='@bets')return s24HasNew()?'bets27':'bets';return t}
@@ -3140,13 +3256,15 @@ const s24RouteHash=()=>s24HashOf(tab)+(S24.sub&&S24.done!==tab+'/'+S24.sub?'/'+S
 /* address-bar / href URL: path + (?demo=1) + (?admin=1 only in the address bar of an admin, never in shared links) + hash */
 function s24Url(h,share){const q=new URLSearchParams();if(DEMO)q.set('demo','1');if(!share&&ADMIN)q.set('admin','1');const s=q.toString();return location.pathname+(s?'?'+s:'')+(h?'#'+h:'')}
 const s24Href=t=>s24Url(s24HashOf(t),true);
-function s24ShareUrl(kind,id){const h=kind&&s24IdOK(String(id))?(kind==='games'?'games/':s24HashOf('bets27')+'/')+id:s24HashOf(tab);return location.origin+s24Url(h,true)}
+function s24ShareUrl(kind,id){const h=kind&&s24IdOK(String(id))?(kind==='games'?'games/':s24HashOf('bets27')+'/')+id:s24HashOf(tab);return s29ViewUrl(h)}
+/*<S29B-SHARE>*/ // every shared link is view-only: ?view=1 + #tab, nothing else (never admin=1, k=, a key, PIN or token)
+function s29ViewUrl(h){h=String(h||'').replace(/[^A-Za-z0-9_\/-]/g,'');return location.origin+location.pathname+'?view=1'+(h?'#'+h:'')}/*</S29B-SHARE>*/
 /*<S26W-MANIFEST>*/ // Install / Add to home screen from any tab opens that tab: the manifest link points at a per-tab manifest whose start_url is ./#<tab>
-const S26W_MT=["standings", "games", "bets", "bets-2025-26", "teams", "draft", "recap", "rules", "archive", "postseason", "redraft", "rosters", "points"];function s26wMan(h){try{h=String(h||'').split('/')[0];const l=document.querySelector('link[rel=manifest]');if(!l)return;const want=S26W_MT.includes(h)?'manifest-'+h+'.webmanifest':'manifest.webmanifest';if(l.getAttribute('href')!==want)l.setAttribute('href',want)}catch(e){}}/*</S26W-MANIFEST>*/
+const S26W_MT=["standings", "games", "bets", "bets-2025-26", "teams", "draft", "recap", "howto", "rules", "archive", "share", "postseason", "redraft", "rosters", "points"];function s26wMan(h){try{h=String(h||'').split('/')[0];const l=document.querySelector('link[rel=manifest]');if(!l)return;const want=S26W_MT.includes(h)?'manifest-'+h+'.webmanifest':'manifest.webmanifest';if(l.getAttribute('href')!==want)l.setAttribute('href',want)}catch(e){}}/*</S26W-MANIFEST>*/
 function s24Put(push){try{s26wMan(s24HashOf(tab));const want=s24Url(s24RouteHash());try{sessionStorage.setItem('stoopids.tab',s24HashOf(tab))}catch(_){}if(location.pathname+location.search+location.hash===want)return;history[push?'pushState':'replaceState'](null,'',want)}catch(e){}}
 function s24NavClick(e,t){if(e&&(e.button>0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey))return true;if(e&&e.preventDefault)e.preventDefault();tab=t;S24.sub=null;render();window.scrollTo(0,0);return false}
 function s24OnNav(){const r=s24Read(location.hash);/*<S26W>*/try{if(r&&r.sub&&window.S26W)S26W.deep=true}catch(_){}/*</S26W>*/if(!r&&location.hash.length>1)return;const R=r||{t:'standings',sub:null};if(R.t===tab&&R.sub===S24.sub)return;/*<S26W>*/if(R.t===tab&&!R.sub&&S24.sub&&S24.done===tab+'/'+S24.sub)return;/*</S26W> the deep link just cleaned its own hash: popstate after hashchange must not undo the jump */
-  tab=R.t;S24.sub=R.sub;S24.prep=null;S24.done=null;S24.nf=null;S24.last=tab;try{sessionStorage.setItem('stoopids.tab',s24HashOf(tab))}catch(_){}render();if(!R.sub)window.scrollTo(0,0)}
+  tab=R.t;S24.sub=R.sub;S24.prep=null;S24.done=null;S24.nf=null;S24.last=tab;try{sessionStorage.setItem('stoopids.tab',s24HashOf(tab))}catch(_){}render();/*<S27> alias hashes (#draft) settle to the tab hash + its manifest */try{if(!R.sub)s24Put(false)}catch(_){}if(!R.sub)window.scrollTo(0,0)}
 window.addEventListener('popstate',s24OnNav);window.addEventListener('hashchange',s24OnNav);
 /*<TAB-TOP>*/ // every tab switch opens at the top; the browser must not restore an old scroll position on reload/back. Only a link to one bet/game (#bets/<id>) scrolls to it.
 try{if('scrollRestoration' in history)history.scrollRestoration='manual'}catch(e){}
@@ -3167,7 +3285,7 @@ function s24Copy(url){const done=()=>s24Toast('Link copied',2600),fall=()=>{try{
 function s24Share(kind,id){const url=s24ShareUrl(kind,id);S24.lastUrl=url;
   if(s24CanShare()){navigator.share({title:'STOOPIDS',url}).catch(e=>{if(!(e&&e.name==='AbortError'))s24Copy(url)})}else s24Copy(url)}
 function s24Attr(k,id){id=String(id==null?'':id);return k==='g'?` id="g-${esc(id)}" data-gid="${esc(id)}"`:` id="bet-${esc(id)}" data-bid="${esc(id)}"`}
-function s24LinkBtn(kind,id,what){id=String(id==null?'':id);if(!s24IdOK(id))return '';if(kind==='bets'&&!s24HasNew())return '';const sh=s24CanShare();
+function s24LinkBtn(kind,id,what){id=String(id==null?'':id);if(!s24IdOK(id))return '';if(kind==='bets'&&!s24HasNew())return '';/*<S27-COPY>*/if(kind==='bets')return `<button type="button" class="s27-copy" data-s27-copy="${esc(id)}" aria-label="Copy this ${esc(what)}'s text" onclick="s27CopyBet('${esc(id)}',this)">Copy</button>`;/*</S27-COPY>*/const sh=s24CanShare();
   return `<button type="button" class="s24lk i" data-s24-link="${esc(kind+'/'+id)}" aria-label="${sh?'Share':'Copy link to'} this ${esc(what)}" title="${sh?'Share':'Copy link to'} this ${esc(what)}" onclick="s24Share('${kind}','${esc(id)}')">🔗</button>`}
 /* ---- render hook: hash in step with the tab, link bar, deep link ---- */
 const s24Render0=render;
@@ -3191,9 +3309,7 @@ function s24After(){
   if(tab!==S24.last){if(S24.sub&&S24.prep!==tab+'/'+S24.sub)S24.sub=null;S24.last=tab;S24.nf=null;s24Put(true)/*<TAB-TOP>*/;if(!S24.sub)window.scrollTo(0,0)/*</TAB-TOP>*/}
   /*<TAB-TOP>*/if(!S24.top0){S24.top0=1;if(!S24.sub)window.scrollTo(0,0)}/*</TAB-TOP>*/
   const m=document.getElementById('main');if(!m)return;
-  const seg=m.querySelector(':scope > .ob-seg');(seg||m).insertAdjacentHTML(seg?'afterend':'afterbegin',`<div class="s24lb">${/*<OWES-RESTORE>*/false/*<S26F-WIU> jump button removed </S26F-WIU>*/?'<button type="button" class="s24lk owes-jump" data-owes-jump="1" onclick="owesJump()">💸 Who Owes Who ↓</button>':''/*</OWES-RESTORE>*/}<button type="button" class="s24lk" data-s24-share="tab" onclick="s24Share()">🔗 ${s24CanShare()?'Share':'Copy link'}</button></div>`+(S24.nf&&S24.nf.t===tab?`<div class="card s24nf note" role="status">${esc(S24.nf.msg)}</div>`:''));
-  /*<S26W-ROW>*/ // the tab's view toggle (League/Breakdown, bets views...) and the Share button share ONE row: toggle left, Share right
-  try{const lb=m.querySelector(':scope > .s24lb');const tg=m.querySelector(':scope > .rkseg, :scope > .ob-seg, :scope > [role=group]');if(lb&&tg&&!lb.contains(tg)){const row=document.createElement('div');row.className='s26w-row';tg.parentNode.insertBefore(row,tg);row.appendChild(tg);row.appendChild(lb)}else if(lb&&!tg){const c=lb.nextElementSibling,t2=c&&c.matches('.card')&&c.firstElementChild&&c.firstElementChild.matches('.tabs')?c.firstElementChild:null;if(t2){t2.classList.add('s26w-in');t2.appendChild(lb)}}}catch(_){}/*</S26W-ROW>*/
+  const seg=m.querySelector(':scope > .ob-seg');/*<S27-SHARE> per-tab Share row removed: one Share button in the header </S27-SHARE>*/if(S24.nf&&S24.nf.t===tab)(seg||m).insertAdjacentHTML(seg?'afterend':'afterbegin',`<div class="card s24nf note" role="status">${esc(S24.nf.msg)}</div>`);
   s24DeepGo();
 }
 function s24NotFound(what){S24.nf={t:tab,msg:'That '+what+' wasn’t found (the link may be old or wrong). Showing the whole tab.'};const k=tab+'/'+S24.sub;S24.sub=null;S24.done=k;s24Put(false);render()}
@@ -3254,10 +3370,10 @@ function s25ValidExtra(x,names,status){const o={},R=x.rd,cl=v=>typeof v==='strin
 function s25FormRd(){if(U.rdEd)return U.rdEd;return S25.parse(U.text,new Date().toISOString())}
 function s25RdLine(r){return r.k==='manual'?'<span class="man">Manual</span>':'<b>'+esc(S25.label(r))+'</b> · '+esc(S25.SPORTS[r.sp].lbl)}
 function s25RdHtml(){
-  if(!b27Clean(U.text))return '<div class="s25rd"><span class="k">Auto-settle</span> <span class="mut">Type the bet. A clear game bet (team, spread or total, date) gets a reading the scores can settle.</span></div>';
+  if(!b27Clean(U.text))return '<div class="s25rd">'+s27TipK('auto','Auto-settle')+'</div>';
   if(U.rdOpen)return s25EdHtml();
   const r=s25FormRd();
-  return `<div class="s25rd" data-s25-rd="${r.k}"><span class="k">Reading${U.rdEd?' (edited)':''}</span> ${s25RdLine(r)}<div class="note">${r.k==='manual'?'Manual: you enter the result yourself after the game.':'After the final, ESPN scores propose the result. You confirm it; nothing settles on its own.'}</div>
+  return `<div class="s25rd" data-s25-rd="${r.k}">${s27TipK(r.k==='manual'?'manual':'auto','Reading'+(U.rdEd?' (edited)':''))} ${s25RdLine(r)}
    <button type="button" data-s25-edit="1" onclick="s25EdOpen()">✏️ Edit reading</button>${r.k!=='manual'?'<button type="button" data-s25-manual="1" onclick="s25SetManual()">Make it manual</button>':''}${U.rdEd?'<button type="button" data-s25-auto="1" onclick="s25Auto()">↺ Read the text again</button>':''}</div>`}
 function s25EdHtml(){const r=s25FormRd(),a=r.k==='manual'?S25.parse('x beats y'):r,sel=(id,opts,v)=>`<select id="${id}">${opts.map(([k,l])=>`<option value="${k}"${k===v?' selected':''}>${esc(l)}</option>`).join('')}</select>`;
   return `<div class="s25rd s25edw"><span class="k">Edit reading</span><div class="s25ed">
