@@ -818,6 +818,14 @@ nav a.nt.on,#ltabs a.on,.rkseg-b.on,.gf2-b.on{background:var(--pill,#FFD400)!imp
 .gbx-ld div{display:flex;flex-wrap:wrap;gap:4px 10px}.gbx-ld span{color:var(--mut,#9aa6bd)}
 .gbx-bets{font-weight:600}.gbx-lk{color:var(--acc,#ffd23f);font-weight:700;text-decoration:none}
 /*</SYNC2-BOX>*/
+/*<SYNC2-ST>*/ /* Standings pills: logo | abbreviation over record | rank badge on the right, centred */
+.card.oc .chip,.card.oc .chip:has(>.aprk){display:grid!important;grid-template-columns:auto minmax(0,1fr) auto!important;grid-template-rows:auto auto!important;align-content:center;align-items:center;column-gap:4px;row-gap:0}
+.card.oc .chip img,.card.oc .chip .nologo{grid-column:1!important;grid-row:1/3!important;align-self:center}
+.card.oc .chip .cn{display:none!important}
+.card.oc .chip .cab,.card.oc .chip .mkab{display:block!important;grid-column:2!important;grid-row:1!important;align-self:end;font-weight:800;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:clip;text-align:left}
+.card.oc .chip .cr,.card.oc .chip .mkrec{grid-column:2!important;grid-row:2!important;align-self:start;text-align:left;margin:0!important;position:static!important}
+.card.oc .chip>.aprk{grid-column:3!important;grid-row:1/3!important;align-self:center!important;justify-self:end!important;margin:0 2px 0 0!important}
+/*</SYNC2-ST>*/
 /*<SYNC2-ST2>*/ .card.oc .who .nm,.card.oc .who>b{text-transform:uppercase;letter-spacing:.02em}
 .card.oc .chip .cab,.card.oc .chip .mkab{white-space:nowrap!important;word-break:keep-all!important;overflow-wrap:normal!important;font-size:min(1em,11px);min-width:0}
 @media (max-width:640px){.card.oc .chip .cab,.card.oc .chip .mkab{font-size:10px;letter-spacing:0}}
@@ -837,6 +845,68 @@ nav a.nt.on,#ltabs a.on,.rkseg-b.on,.gf2-b.on{background:var(--pill,#FFD400)!imp
 .gm .gbtns>button,.gm .mkbtns>button,.gm .mkbtns .qb-btn{width:88px!important;height:30px!important;min-height:30px!important}
 @media (max-width:640px){.gm .gbtns>button,.gm .mkbtns>button,.gm .mkbtns .qb-btn{width:80px!important}}
 /*</SYNC2-GH>*/
+
+</style>
+<style>/*<SYNC3>*/ /* step3 (Paul: "too much space overall"): tighter shared layout, same CSS on STOOPIDS and League */
+/* header, banner, tab bar */
+.hero{height:clamp(96px,14vw,170px)!important;aspect-ratio:auto!important}
+.titlebar{padding:6px 12px 0!important}
+.titlebar h1,#ltitle{margin:0!important;line-height:1.05}
+.s27-pres,#lpres{margin:0!important}
+.tag,#tag{margin:2px 0 0!important}
+header,#lhdr{padding-bottom:4px!important}
+nav,#nav,#ltabs{padding-top:3px!important;padding-bottom:3px!important;margin-bottom:0!important}
+/* main, cards, headings, gaps */
+main,#main{padding-top:6px!important}
+.card{padding:8px!important;margin:6px 0!important}
+#main h2,#lbody h2{margin:10px 0 4px!important}
+#main h3,#lbody h3{margin:0 0 4px!important}
+.segrow{margin:0 0 6px!important}
+.gf2{margin:0 0 6px!important;gap:6px!important}
+.gday,.gdh{margin:8px 0 4px!important}
+.ggrid{gap:8px!important}
+.gm{padding:8px!important}
+.gm .gh{margin-bottom:2px!important}
+.gm .gow{margin:2px 0!important}
+.gm .gl{margin-top:4px!important;padding-top:4px!important}
+.gm .gsp{display:none!important}   /* empty spacer row inside game cards */
+.ocl{gap:6px!important}
+.card.oc .chips{margin-top:4px!important}
+.card.oc .bar{margin:4px 0 0!important}
+.card:empty,.note:empty,.b27-livebox:empty{display:none!important}
+.b27-q{margin:8px 0 4px!important}
+/* ranked lists: one fixed column grid  rank | movement slot | name/manager | points (right) */
+.card.oc{grid-template-columns:40px 14px minmax(0,1fr) 72px!important;grid-template-areas:"rank mv who pts" "bar bar bar bar" "chips chips chips chips"!important;column-gap:6px!important}
+.card.oc .rank{grid-area:rank;text-align:center}
+.card.oc .mv{grid-area:mv;text-align:center;font-size:11px}
+.card.oc .pts{grid-area:pts;text-align:right!important;justify-self:end!important;font-variant-numeric:tabular-nums}
+#powerrank .plb{grid-template-columns:40px 14px 40px minmax(0,1fr) 72px 20px!important;grid-template-areas:"rank mv av who grade chev" "meta meta meta meta meta meta"!important;column-gap:6px!important;padding:8px!important;min-height:0!important}
+#powerrank .pgr{justify-self:end}
+@media (min-width:700px){#powerrank .plb{grid-template-columns:40px 14px 44px minmax(0,1fr) 150px 72px 24px!important;grid-template-areas:"rank mv av who meta grade chev"!important}}
+/* bet form: Amount | Odds on one row (laptop), own rows on phone */
+@media (max-width:640px){
+ .b27-ao{grid-template-columns:minmax(0,1fr)!important;gap:2px!important}
+ .b27-ao .b27-amts,.b27-ao .b27-chips{gap:4px!important}
+ .b27-ao .b27-amt,.b27-ao .b27-chip{height:36px!important;min-height:36px!important;font-size:13px!important;letter-spacing:0!important}
+ .b27-ao .cu{font-size:11px!important}
+ /* phone tap targets >= 36px */
+ .rkseg-b,.segref,.gf2-s,.gf2-b,.gm .gbtns>button,.gm .mkbtns>button,.gm .mkbtns .qb-btn,.accsw{min-height:36px!important;height:auto}
+ .gm .gbtns>button,.gm .mkbtns>button,.gm .mkbtns .qb-btn{height:36px!important}
+ .accsw{width:36px!important;height:36px!important}
+ .card.oc .chip .cab,.card.oc .chip .mkab{font-size:10px!important;letter-spacing:-.03em!important}
+ .card{padding:7px!important}
+}
+/*</SYNC3>*/
+/*<SYNC3-GF>*/ /* Games filters v2: row 1 toggle + round refresh; row 2 owner | Pool vs Pool | More; More panel = Month | Day | team search */
+.segrow .gref{width:36px!important;height:36px!important;min-width:36px!important;padding:0!important;border-radius:50%!important;font-size:18px!important;line-height:1!important;display:inline-flex;align-items:center;justify-content:center}
+.gf2.gf2r{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 96px!important}
+.gf2.gmorep{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.gf2.gmorep[hidden]{display:none!important}
+.gf2>.gq{line-height:normal;color:var(--tx,#eef1f7);background:var(--card2,#222939);border:1px solid var(--line,#2d3548)}
+.gmore{position:relative}
+.gmore.dot::after{content:'';position:absolute;top:6px;right:10px;width:7px;height:7px;border-radius:50%;background:var(--pill,#FFD400)}
+@media (max-width:640px){.gf2.gf2r{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 84px!important}.gf2.gmorep{grid-template-columns:repeat(2,minmax(0,1fr))!important}.gf2.gmorep>.gq{grid-column:1/-1}}
+/*</SYNC3-GF>*/
 
 </style>
 </head>
@@ -1455,7 +1525,7 @@ function lvSchedule(){
   const now=Date.now(),d=lvDelay(now);LV.mode=lvActive(now)?'fast':'slow';LV.nextAt=now+d;
   LV.timer=setTimeout(()=>{LV.timer=null;lvCheck(false).catch(()=>{})},d);
 }
-/*<SYNC1>*/const lvBtnTxt=()=>LV.busy?'<i class="lvsp" aria-hidden="true"></i>Refreshing\u2026':'\u21BB Refresh Live Games';/*</SYNC1>*/
+/*<SYNC1>*/const lvBtnTxt=()=>LV.busy?'<i class="lvsp" aria-hidden="true"></i>':'\u21BB';   /*<SYNC3-GF>*/// round icon button/*</SYNC1>*/
 function lvManual(){LV.fails=0;LV.paused=false;lvCheck(true).catch(()=>{})}
 function lvRerender(){   // redraw only the tabs that show games, and never while someone is typing in / choosing from a control
   const a=document.activeElement,t=a&&a.tagName;
@@ -1500,7 +1570,7 @@ function lvUI(){
   if(t.textContent!==txt)t.textContent=txt;
   const bh=LV.busy?btn:'\u21BB Refresh Live Games';if(b.innerHTML!==bh)b.innerHTML=bh;
   liveSync();/*<SYNC2>*/
-  /*<SYNC1>*/document.querySelectorAll('.gref').forEach(x=>{if(x.innerHTML!==bh)x.innerHTML=bh;x.disabled=!!LV.busy});/*</SYNC1>*/
+  /*<SYNC1>*/document.querySelectorAll('.gref').forEach(x=>{const bh=lvBtnTxt();if(x.innerHTML!==bh)x.innerHTML=bh;x.disabled=!!LV.busy});/*</SYNC1>*/
   /*<LAST-UPDATED>*/{const u=document.getElementById('lvU');if(u){const lu=/*<HDR-CENTER>*/false&&/*</HDR-CENTER>*/LV.lastOk?'Last updated '+lvEtTime(LV.lastOk):'';if(u.textContent!==lu)u.textContent=lu;u.hidden=!lu}}/*</LAST-UPDATED>*/
   b.disabled=!!LV.busy;
   el.title='Live scores come straight from ESPN and are unofficial until the next data update. Standings and points only change when the site data updates.';
@@ -1633,7 +1703,7 @@ function qbPick(id,k,i){
   setTimeout(()=>{try{const f=document.querySelector('.b27-form');if(f){f.scrollIntoView({block:'start'});const b=document.getElementById('b27Place');if(b&&!b.disabled)b.focus({preventScroll:true})}}catch(_){}},30)}
 const qbHint=()=>U.qb&&U.qb===U.text&&U.kind==='bet'&&!U.confirm?'<div class="qb-hint note" role="status">⚡ Quick bet filled in — check and place it.</div>':'';
 /*</QUICK-BET>*/
-let gOwner='all',gMode=null,gDay='all',gH2H=params.has('h2h');
+let gOwner='all',gMode=null,gDay='all',gH2H=params.has('h2h');let gMore=false,gQ='';/*<SYNC3-GF>*/
 /*<SYNC1>*/const tName=id=>{const t=(D.teams||{})[id]||{};return String(t.short||t.name||id)};
 // games with a (non-void) 2026-27 bet on them: the SAME reading + matcher as auto-settle (b.rd via S25.match), so no new parsing rules
 function gBetIds(){const out=new Set();try{for(const b of (U.doc&&U.doc.bets)||[]){if(!b||b.status==='void'||b.kind==='pool'||!b.rd||b.rd.k==='manual'||!b.rd.d)continue;const m=S25.match(s29Sb(b.rd.d),b.rd);if(m&&m.id)out.add(m.id)}}catch(e){}return out}/*</SYNC1>*/
@@ -1646,6 +1716,7 @@ function vGames(){
   if(!gMode)gMode=ups.length?'upcoming':'scores';
   let list=(gMode==='upcoming'?ups:fin.slice().reverse());
   if(gOwner!=='all')list=list.filter(g=>g.home.owners.includes(gOwner)||g.away.owners.includes(gOwner));
+  /*<SYNC3-GF>*/if(gQ){const q=gQ.toLowerCase(),nm=s=>[(D.teams[s.id]||{}).name,s.short,s.name].join(' ').toLowerCase();list=list.filter(g=>nm(g.away).includes(q)||nm(g.home).includes(q))}/*</SYNC3-GF>*/
   if(gH2H&&gMode==='upcoming')list=list.filter(g=>/*<SYNC2>*/gOwner!=='all'?!!g.h2h:/*</SYNC2>*/(g.h2h||g.civil));
   /*<SYNC2>*/// Team dropdown removed (Paul): the Games filter is by manager (All owners + Pool vs Pool)/*</SYNC2>*/   // s29d: 'Pool only' is an Upcoming filter
   const etKey=gKey;   /*<GAMES-LOCAL>*/// this view groups, filters and sorts by the viewer's local date/*</GAMES-LOCAL>*/
@@ -1656,8 +1727,9 @@ function vGames(){
   const monHtml=`<select class="gf2-s gmon-sel${curMon?' on':''}" aria-label="Jump to month" onchange="if(this.value){gDay=this.value;render()}"><option value="">Month</option>${GMON.map(([m,l])=>{const f=firstIn(m);return `<option value="${f||''}" data-mon="${m}"${m===curMon?' selected':''}${f?'':' disabled'}>${l}</option>`}).join('')}</select>`;
   let gCapped=0;if(gDay==='all'&&gMode==='upcoming'){const near=days.slice().sort().slice(0,12),ns=new Set(near),n0=list.length;list=list.filter(g=>ns.has(etKey(g)));gCapped=n0-list.length}   // full schedule is loaded: 'All days' shows the next 12 game days; later days via the day list or month chips/*</S26U-MONTH-JUMP>*/
   if(gMode==='upcoming'){const sk=g=>etKey(g)+(isTBD(g)?'~':' ')+(g.start||'');list.sort((a,b)=>sk(a).localeCompare(sk(b)))}   // 'time TBD' games last within their day
-  /*<S29D-GF>*/let h=`<div class="segrow"><div class="rkseg" role="group" aria-label="Games view"><button type="button" class="rkseg-b${gMode==='upcoming'?' on':''}" data-gm="upcoming" aria-pressed="${gMode==='upcoming'}" onclick="gMode='upcoming';gDay='all';render()">Upcoming</button><button type="button" class="rkseg-b${gMode==='scores'?' on':''}" aria-pressed="${gMode==='scores'}" onclick="gMode='scores';gDay='all';render()">Past games</button></div>${/*<SYNC1>*/'<button type="button" class="rkseg-b segref gref" aria-label="Refresh live games" onclick="lvManual()">'+lvBtnTxt()+'</button>'/*</SYNC1>*/}</div>
-   <div class="gf2"><select class="gf2-s${gOwner!=='all'?' on':''}" aria-label="Owner" onchange="gOwner=this.value;render()"><option value="all">All owners</option>${D.owners.map(o=>`<option value="${esc(o.name)}"${o.name===gOwner?' selected':''}>${esc(o.emoji)} ${esc(PN(o.name))}</option>`).join('')}</select>${monHtml}<select class="gf2-s${gDay!=='all'?' on':''}" aria-label="Day" onchange="gDay=this.value;render()"><option value="all">All days</option>${days.map(k=>`<option value="${k}"${k===gDay?' selected':''}>${esc(etLabel(k))}</option>`).join('')}</select>${gMode==='upcoming'?`<button type="button" class="gf2-b${gH2H?' on':''}" aria-pressed="${gH2H}" title="Only games where both teams are owned by pool members" onclick="gH2H=!gH2H;render()">Pool vs Pool</button>`:''}</div>${/*<OWNED-GAMES>*/nHidden?`<label class="gUn"><input type="checkbox" id="gUnowned"${gAll?' checked':''} onchange="gAll=this.checked;render()"> Show unowned games <span class="mut">(${nHidden} hidden)</span></label>`:''/*</OWNED-GAMES>*/}`;/*</S29D-GF>*/
+  /*<S29D-GF>*/let h=`<div class="segrow"><div class="rkseg" role="group" aria-label="Games view"><button type="button" class="rkseg-b${gMode==='upcoming'?' on':''}" data-gm="upcoming" aria-pressed="${gMode==='upcoming'}" onclick="gMode='upcoming';gDay='all';render()">Upcoming</button><button type="button" class="rkseg-b${gMode==='scores'?' on':''}" aria-pressed="${gMode==='scores'}" onclick="gMode='scores';gDay='all';render()">Past games</button></div>${/*<SYNC1>*/'<button type="button" class="rkseg-b segref gref" aria-label="Refresh live games" title="Refresh live games" onclick="lvManual()">'+lvBtnTxt()+'</button>'/*</SYNC1>*/}</div>
+   <div class="gf2 gf2r"><select class="gf2-s${gOwner!=='all'?' on':''}" aria-label="Owner" onchange="gOwner=this.value;render()"><option value="all">All owners</option>${D.owners.map(o=>`<option value="${esc(o.name)}"${o.name===gOwner?' selected':''}>${esc(o.emoji)} ${esc(PN(o.name))}</option>`).join('')}</select>${gMode==='upcoming'?`<button type="button" class="gf2-b${gH2H?' on':''}" aria-pressed="${gH2H}" title="Only games where both teams are owned by pool members" onclick="gH2H=!gH2H;render()">Pool vs Pool</button>`:'<span></span>'}<button type="button" class="gf2-b gmore${gDay!=='all'||gQ?' dot':''}" aria-expanded="${gMore}" aria-controls="gMoreP" onclick="gMore=!gMore;render()">More ▾</button></div>
+   <div class="gf2 gmorep" id="gMoreP"${gMore?'':' hidden'}>${monHtml}<select class="gf2-s${gDay!=='all'?' on':''}" aria-label="Day" onchange="gDay=this.value;render()"><option value="all">All days</option>${days.map(k=>`<option value="${k}"${k===gDay?' selected':''}>${esc(etLabel(k))}</option>`).join('')}</select><input type="search" class="gf2-s gq${gQ?' on':''}" aria-label="Search teams" placeholder="Search teams" value="${esc(gQ)}" onchange="gQ=this.value.trim();render()"></div>${/*<OWNED-GAMES>*/nHidden?`<label class="gUn"><input type="checkbox" id="gUnowned"${gAll?' checked':''} onchange="gAll=this.checked;render()"> Show unowned games <span class="mut">(${nHidden} hidden)</span></label>`:''/*</OWNED-GAMES>*/}`;/*</S29D-GF>*/
   if(!list.length)return h+`<div class="card">${all.length?'Nothing matches those filters.':nHidden/*<OWNED-GAMES>*/?'No games with an owned team right now 🏀 Check back soon. (Games where nobody in the pool owns either team are hidden.)'/*</OWNED-GAMES>*/:'No games for rostered teams yet. Check back when the schedule fills in.'}</div>`;
   if(gMode==='upcoming'&&D.meta.mode==='preseason')h+=`<div class="card note">Preseason: sportsbooks have posted lines for just some of the next few nights so far (lines are pulled for about the next 10 days). Everything refreshes automatically.</div>`;
   let cur=null;
