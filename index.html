@@ -795,8 +795,50 @@ main,#main{padding-bottom:8px}
 footer{padding-bottom:12px;margin-top:0}
 .fresh,.stfoot{padding-bottom:6px;margin-bottom:0}
 
-.gteam{display:inline-flex;gap:4px;align-items:center}.gteamq{width:9em}
-/*</SYNC1>*/</style>
+/*</SYNC1>*/
+/*<SYNC2>*/
+nav a.nt.on,#ltabs a.on,.rkseg-b.on,.gf2-b.on{background:var(--pill,#FFD400)!important;color:var(--pill-ink,#111)!important;border-color:var(--pill,#FFD400)!important}
+.golive{position:relative;box-shadow:0 0 0 2px #22c55e!important}
+.golive::before{content:'';position:absolute;top:4px;right:5px;width:7px;height:7px;border-radius:50%;background:#22c55e;animation:golp 1.4s ease-in-out infinite;pointer-events:none}
+@keyframes golp{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(1.5)}}
+@media (prefers-reduced-motion:reduce){.golive::before{animation:none}}
+.accpick{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0}
+.accsw{width:30px;height:30px;border-radius:50%;background:var(--sw);border:2px solid #333;padding:0;cursor:pointer}
+.accsw[aria-checked="true"]{outline:2px solid #fff;outline-offset:2px}
+.b27-ao{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.b27-ao-c{min-width:0}
+.b27-ao .b27-amts,.b27-ao .b27-chips{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px}
+.b27-ao .b27-amt,.b27-ao .b27-chip{min-width:0;width:100%;height:36px;min-height:36px;padding:0 1px;font-size:13px;font-weight:700;border-radius:8px;box-sizing:border-box;white-space:nowrap;overflow:hidden;text-overflow:clip}
+.b27-ao .cu{font-size:11px;letter-spacing:-.02em}
+@media (max-width:640px){.b27-ao{gap:6px}.b27-ao .b27-amts,.b27-ao .b27-chips{gap:2px}.b27-ao .b27-amt,.b27-ao .b27-chip{font-size:10.5px;height:34px;min-height:34px;border-radius:6px}.b27-ao .cu{font-size:7.5px;letter-spacing:-.03em}}
+/*</SYNC2>*/
+/*<SYNC2-BOX>*/
+.gbx{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line,#2d3548);font-size:12.5px;display:grid;gap:6px}
+.gbx-t{border-collapse:collapse;width:auto}.gbx-t th,.gbx-t td{padding:2px 8px;text-align:center;font-variant-numeric:tabular-nums}.gbx-t th:first-child{text-align:left;padding-left:0}
+.gbx-ld div{display:flex;flex-wrap:wrap;gap:4px 10px}.gbx-ld span{color:var(--mut,#9aa6bd)}
+.gbx-bets{font-weight:600}.gbx-lk{color:var(--acc,#ffd23f);font-weight:700;text-decoration:none}
+/*</SYNC2-BOX>*/
+/*<SYNC2-ST2>*/ .card.oc .who .nm,.card.oc .who>b{text-transform:uppercase;letter-spacing:.02em}
+.card.oc .chip .cab,.card.oc .chip .mkab{white-space:nowrap!important;word-break:keep-all!important;overflow-wrap:normal!important;font-size:min(1em,11px);min-width:0}
+@media (max-width:640px){.card.oc .chip .cab,.card.oc .chip .mkab{font-size:10px;letter-spacing:0}}
+/*</SYNC2-ST2>*/
+/*<SYNC2-ST3>*/ .who small .gold{display:inline!important;margin-left:4px;font-size:inherit;letter-spacing:1px} /* trophies inline after the manager name */
+@media (max-width:640px){.b27-ao .b27-amt,.b27-ao .b27-chip{font-size:10px;padding:0;letter-spacing:-.03em}.b27-ao .cu{font-size:7px}}
+@media (max-width:640px){.card.oc .chip .cab,.card.oc .chip .mkab{font-size:9px!important;letter-spacing:-.02em!important}}
+/*<SYNC2-GF>*/ /* Games filters: one row of equal pills (laptop), 2x2 grid (phone); Pool vs Pool is a toggle pill */
+.gf2{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px!important;width:100%;box-sizing:border-box;margin:0 0 10px!important;padding:0!important}
+.gf2>.gf2-s,.gf2>.gf2-b{width:100%!important;min-width:0!important;max-width:none!important;height:36px!important;min-height:36px!important;margin:0!important;padding:0 12px!important;font-size:13px!important;font-weight:600;line-height:34px;border-radius:999px!important;box-sizing:border-box;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
+.gf2>.gf2-b{text-align:center;justify-content:center}
+@media (max-width:640px){.gf2{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/*</SYNC2-GF>*/
+/*<SYNC2-GH>*/ /* Copy + Quick bet side by side, right-aligned on the time row (no extra empty row) */
+.gm .gh{padding-right:0!important;min-height:30px!important;align-items:center!important}
+.gm .gbtns,.gm .mkbtns{position:static!important;flex-direction:row!important;align-items:center!important;gap:6px!important;margin-left:auto!important;order:99}
+.gm .gbtns>button,.gm .mkbtns>button,.gm .mkbtns .qb-btn{width:88px!important;height:30px!important;min-height:30px!important}
+@media (max-width:640px){.gm .gbtns>button,.gm .mkbtns>button,.gm .mkbtns .qb-btn{width:80px!important}}
+/*</SYNC2-GH>*/
+
+</style>
 </head>
 <body>
 <header>
@@ -1144,6 +1186,42 @@ const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;',
 const params=new URLSearchParams(location.search);
 const DEMO=params.has('demo');
 const ADMIN=params.has('admin');
+/*<SYNC2>*/ // shared with STOOPIDS / League (same code): commissioner accent colour + LIVE marker
+const ACCENTS=[['Yellow','#FFD400'],['Orange','#FF8A00'],['Green','#22C55E'],['Sky','#38BDF8'],['Purple','#A855F7'],['Pink','#F472B6']];
+function accInk(h){const n=parseInt(String(h).slice(1),16),c=[n>>16&255,n>>8&255,n&255].map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)}),L=.2126*c[0]+.7152*c[1]+.0722*c[2];return (L+.05)/.05>=1.05/(L+.05)?'#111':'#fff'}   // whichever of black / white has the higher WCAG contrast
+function accApply(h){if(!ACCENTS.some(a=>a[1]===h))h=ACCENTS[0][1];const r=document.documentElement.style;r.setProperty('--pill',h);r.setProperty('--pill-ink',accInk(h));return h}
+function accPickerHtml(cur){return `<div class="accpick" role="radiogroup" aria-label="Accent colour">${ACCENTS.map(([n,h])=>`<button type="button" class="accsw" role="radio" aria-checked="${h===cur}" aria-label="${n}" title="${n}" data-acc="${h}" style="--sw:${h}"></button>`).join('')}</div>`}
+const poolLive=gs=>(gs||[]).some(g=>g&&g.status==='live'&&((g.home&&g.home.owners&&g.home.owners.length)||(g.away&&g.away.owners&&g.away.owners.length)));
+function liveMark(any,sel){document.querySelectorAll(sel).forEach(e=>e.classList.toggle('golive',!!any))}
+/*</SYNC2>*/
+/*<SYNC2-BOX>*/ // opened FINAL card: score by half (+OT), top PTS/REB/AST per team, spread + over/under result, ESPN box score link.
+// ESPN summary endpoint (public GET, same host as the live feed), fetched only when a final card is opened, cached per game for the session.
+const BOX={};
+const boxUrl=id=>'https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/summary?event='+encodeURIComponent(id);
+const boxLink=id=>'https://www.espn.com/mens-college-basketball/boxscore/_/gameId/'+encodeURIComponent(id);
+function boxParse(j){const c=((j.header||{}).competitions||[])[0]||{};const L={};(j.leaders||[]).forEach(t=>{const tid=String((t.team||{}).id||'');L[tid]={};(t.leaders||[]).forEach(k=>{const a=(k.leaders||[])[0];if(a)L[tid][k.name]={n:(a.athlete||{}).shortName||(a.athlete||{}).displayName||'',v:a.displayValue||''}})});
+  return {teams:(c.competitors||[]).map(t=>({id:String((t.team||{}).id||t.id||''),ab:(t.team||{}).abbreviation||'',ha:t.homeAway,ls:(t.linescores||[]).map(x=>x.displayValue!=null?x.displayValue:x.value),sc:t.score,ld:L[String((t.team||{}).id||t.id||'')]||{}})).sort((a,b)=>a.ha==='away'?-1:1)}}
+function boxBets(g){const ln=g.line||{},A=g.away,H=g.home,as=+A.score,hs=+H.score;if(!isFinite(as)||!isFinite(hs))return '';const out=[];
+  const fav=String(ln.fav)===String(H.id)?H:String(ln.fav)===String(A.id)?A:null,sp=+ln.sp;
+  if(fav&&sp>0){const dog=fav===H?A:H,m=(+fav.score)-(+dog.score)-sp,nm=s=>esc(s.short||s.name||s.id);out.push(m>0?`${nm(fav)} covered -${sp}`:m<0?`${nm(dog)} covered +${sp}`:`Push on ${sp}`)}
+  const ou=+ln.ou;if(ou>0){const t=as+hs;out.push(t>ou?`Over ${ou} (total ${t})`:t<ou?`Under ${ou} (total ${t})`:`Push on ${ou}`)}
+  return out.length?`<div class="gbx-bets">${out.map(x=>`<span>${x}</span>`).join('<span class="mut"> · </span>')}</div>`:''}
+function boxHtml(g){const id=String(g.id),b=BOX[id],lk=`<a class="gbx-lk" href="${boxLink(id)}" target="_blank" rel="noopener">ESPN box score ↗</a>`;
+  if(!b||b.loading)return `<div class="mut">Loading box score…</div>${boxBets(g)}${lk}`;
+  if(b.err||!b.teams.length)return `<div class="mut">Box score not available right now.</div>${boxBets(g)}${lk}`;
+  const n=Math.max(...b.teams.map(t=>t.ls.length)),hd=Array.from({length:n},(_,i)=>i<2?(i+1)+'H':(n>3?'OT'+(i-1):'OT'));
+  const tbl=`<table class="gbx-t"><tr><th></th>${hd.map(h=>`<th>${h}</th>`).join('')}<th>T</th></tr>${b.teams.map(t=>`<tr><th>${esc(t.ab)}</th>${hd.map((_,i)=>`<td>${esc(String(t.ls[i]!=null?t.ls[i]:''))}</td>`).join('')}<td><b>${esc(String(t.sc||''))}</b></td></tr>`).join('')}</table>`;
+  const ld=`<div class="gbx-ld">${b.teams.map(t=>`<div><b>${esc(t.ab)}</b> ${[['points','PTS'],['rebounds','REB'],['assists','AST']].map(([k,l])=>t.ld[k]?`<span>${l} ${esc(t.ld[k].n)} ${esc(t.ld[k].v)}</span>`:'').join(' ')}</div>`).join('')}</div>`;
+  return tbl+ld+boxBets(g)+lk}
+const boxSlot=g=>g&&g.status==='final'?`<div class="gbx" data-box="${esc(String(g.id))}">${boxHtml(g)}</div>`:'';
+function boxFill(games){document.querySelectorAll('.gbx[data-box]').forEach(el=>{if(el.closest('[hidden]'))return;const id=el.dataset.box,g=(games||[]).find(x=>String(x.id)===id);if(!g)return;
+  if(BOX[id]){if(!BOX[id].loading)el.innerHTML=boxHtml(g);return}
+  BOX[id]={loading:1};fetch(boxUrl(id)).then(r=>r.ok?r.json():Promise.reject(r.status)).then(j=>{BOX[id]=boxParse(j)}).catch(()=>{BOX[id]={err:1,teams:[]}}).then(()=>{document.querySelectorAll('.gbx[data-box="'+id+'"]').forEach(e=>e.innerHTML=boxHtml(g))})})}
+/*</SYNC2-BOX>*/
+/*<SYNC2>*/ // STOOPIDS has no writable league-settings store from the page (config.json is static, the shared ledger is live bets), so the commissioner accent is saved in localStorage on this device
+const ACC_KEY='stoopids_accent';let ACC=(()=>{try{return accApply(localStorage.getItem(ACC_KEY))}catch(e){return accApply(null)}})();
+document.addEventListener('click',e=>{const b=e.target&&e.target.closest&&e.target.closest('.accsw');if(!b||!ADMIN)return;ACC=accApply(b.dataset.acc);try{localStorage.setItem(ACC_KEY,ACC)}catch(_){}render()});
+const liveSync=()=>{try{boxFill(D&&D.games)}catch(e){}try{liveMark(D&&poolLive(D.games),'#nav a.nt[data-tab="games"],[data-gm="upcoming"]')}catch(e){}};/*</SYNC2>*/
 /*<BALL-LOADER>*/function ballLoader(label){const b='<span class="bl-b"><i>🏀</i><s></s></span>';return '<div class="bl" role="status" aria-live="polite"><div class="bl-row" aria-hidden="true">'+b+b+b+'</div><div class="bl-t">'+esc(label||'Loading…')+'</div></div>'}/*</BALL-LOADER>*/   // ?admin=1 shows developer-facing details (warnings, data health, config/overrides notes, JSON export)
 let D=null,tab=params.get('tab')||'standings',ownerSel=null,openTeam={};
 const TABS=/*<TAB-ORDER>*/[['standings','🏆 Standings'],['games','📅 Games'],['bets','💵 Bets'],['teams','🏀 All teams'],['checklist','✅ Postseason'],['redraft','🔄 Jan 20 redraft'],['about','📖 Rules'],['archive','🗂️ Archive']]/*</TAB-ORDER>*/;
@@ -1421,6 +1499,7 @@ function lvUI(){
   /*</NO-CHECKED-LINE>*/
   if(t.textContent!==txt)t.textContent=txt;
   const bh=LV.busy?btn:'\u21BB Refresh Live Games';if(b.innerHTML!==bh)b.innerHTML=bh;
+  liveSync();/*<SYNC2>*/
   /*<SYNC1>*/document.querySelectorAll('.gref').forEach(x=>{if(x.innerHTML!==bh)x.innerHTML=bh;x.disabled=!!LV.busy});/*</SYNC1>*/
   /*<LAST-UPDATED>*/{const u=document.getElementById('lvU');if(u){const lu=/*<HDR-CENTER>*/false&&/*</HDR-CENTER>*/LV.lastOk?'Last updated '+lvEtTime(LV.lastOk):'';if(u.textContent!==lu)u.textContent=lu;u.hidden=!lu}}/*</LAST-UPDATED>*/
   b.disabled=!!LV.busy;
@@ -1450,8 +1529,8 @@ function vStandings(){/*<RANKINGS>*/const sv=rkView();if(sv==='points')return rk
   const mx=Math.max(10,...D.owners.map(o=>o.total));
   return /*<RANKINGS>*/rkSeg()+/*</RANKINGS>*//*<RANK-CHIPS>*/'<div class="ocl">'/*</RANK-CHIPS>*/+D.owners.map((o,i)=>`<div class="card${/*<RANK-CHIPS>*/' oc'/*</RANK-CHIPS>*/}"><div class="lb" onclick="goOwner('${esc(o.name)}')">
     <div class="rank">${rankTxt(o)}</div>
-    <div class="who"><b>${esc(o.emoji)} ${esc(/*<OWNER-NAMES>*/TN(o.name)/*</OWNER-NAMES>*/)}</b><small>${esc(/*<OWNER-NAMES>*/PN(o.name)/*</OWNER-NAMES>*/)}</small>${/*<GOLD-LINE>*/goldTag(o.name)/*</GOLD-LINE>*/}${/*<RANK-CHIPS>*/''/*per-owner quip no longer shown on these cards (quip() itself is untouched; Rosters still uses it)*//*</RANK-CHIPS>*/}</div>
-    <div class="pts">${o.total}<small>points</small></div></div>
+    <div class="who"><b>${esc(o.emoji)} ${esc(/*<OWNER-NAMES>*/TN(o.name)/*</OWNER-NAMES>*/)}</b><small>${esc(/*<OWNER-NAMES>*/PN(o.name)/*</OWNER-NAMES>*/)}${/*<GOLD-LINE>*//*<SYNC2-ST>*/goldTag(o.name)/*</GOLD-LINE>*/}</small>${/*<RANK-CHIPS>*/''/*per-owner quip no longer shown on these cards (quip() itself is untouched; Rosters still uses it)*//*</RANK-CHIPS>*/}</div>
+    <div class="pts">${o.total}<small>Points</small></div></div>
     <div class="bar"><i style="width:${Math.max(0,o.total)/mx*100}%"></i></div>
     <div class="chips">${o.teams.map(t=>/*<CHIP-RECORD>*/chipRec/*</CHIP-RECORD>*/(t.tid,{out:t.status==='dropped',cn:1})).join('')}</div></div>`).join('')+'</div>'+
     /*<S29D-NONOTE> standings owner-tap/redraft note removed </S29D-NONOTE>*/goldNote()}
@@ -1480,7 +1559,7 @@ const opills=a=>a&&a.length?a.map(n=>`<span class="opill">${esc(ownerEmoji(n))} 
 function lineTxt(ln,away,home,final){
   if(!ln)return null;
   const fav=ln.fav_name?`<b>${esc(ln.fav_name)}</b> -${ln.sp!=null?ln.sp:'?'}`:'Pick\u2019em';
-  const ml=(ln.aml!=null||ln.hml!=null)?` · Moneyline ${esc(away)} ${fml(ln.aml)} / ${esc(home)} ${fml(ln.hml)}`:'';
+  const ml=/*<SYNC2>*/final&&/*</SYNC2>*/(ln.aml!=null||ln.hml!=null)?` · Moneyline ${esc(away)} ${fml(ln.aml)} / ${esc(home)} ${fml(ln.hml)}`:'';
   const ou=ln.ou!=null?` · Over/under ${ln.ou}`:'';
   return `${final?(ln.type==='close'?'Closing line':'Last line'):'Line'}: ${fav}${ml}${ou} <span class="mut">· DraftKings</span>`}
 function gameCard(g){
@@ -1505,7 +1584,7 @@ function gameCard(g){
   /*<REFRESH-NOW>*/foot+=lvNote(g);/*</REFRESH-NOW>*/
   const inner=`<div class="gh">${head}<div class="gbtns">${/*<S24-EDIT>*/s29GameBtn(g)/*</S24-EDIT>*/}${/*<QUICK-BET>*/qbBtn(g)/*</QUICK-BET>*/}</div></div>${row(g.away)}${row(g.home,'H')}<div class="gl">${foot}</div>`;
   /*<GAMES-LOCAL>*/if(fin){const id=String(g.id),op=gOpen.has(id),sc=s=>`${esc(s.short||s.name||'')} ${s.score!=null?s.score:''}`;
-    return `<div class="gm gfin${op?' open':''}${g.h2h||g.civil?' h2h':''}${/*<SYNC1>*/gBetIds().has(id)?' gbet':''/*</SYNC1>*/}"${s24Attr('g',g.id)}><button type="button" class="gsum" data-gfin="${esc(id)}" aria-expanded="${op}" onclick="gFin(this.dataset.gfin)"><span class="gst">FINAL</span><span class="${g.away.win?'w':''}">${sc(g.away)}</span><span class="mut">·</span><span class="${g.home.win?'w':''}">${sc(g.home)}</span>${g.upset&&g.upset.is?'<span>😱</span>':''}<span class="gch" aria-hidden="true">${op?'▾':'▸'}</span></button><div class="gbody"${op?'':' hidden'}>${inner}</div></div>`}/*</GAMES-LOCAL>*/
+    return `<div class="gm gfin${op?' open':''}${g.h2h||g.civil?' h2h':''}${/*<SYNC1>*/gBetIds().has(id)?' gbet':''/*</SYNC1>*/}"${s24Attr('g',g.id)}><button type="button" class="gsum" data-gfin="${esc(id)}" aria-expanded="${op}" onclick="gFin(this.dataset.gfin)"><span class="gst">FINAL</span><span class="${g.away.win?'w':''}">${sc(g.away)}</span><span class="mut">·</span><span class="${g.home.win?'w':''}">${sc(g.home)}</span>${g.upset&&g.upset.is?'<span>😱</span>':''}<span class="gch" aria-hidden="true">${op?'▾':'▸'}</span></button><div class="gbody"${op?'':' hidden'}>${inner}${/*<SYNC2-BOX>*/op?boxSlot(g):''/*</SYNC2-BOX>*/}</div></div>`}/*</GAMES-LOCAL>*/
   return `<div class="gm${g.h2h||g.civil?' h2h':''}${/*<SYNC1>*/gBetIds().has(String(g.id))?' gbet':''/*</SYNC1>*/}"${/*<S24-EDIT>*/s24Attr('g',g.id)/*</S24-EDIT>*/}>${inner}${/*<GAMES-LOCAL>*/'<div class="gsp" aria-hidden="true"></div>'/*</GAMES-LOCAL>*/}${/*<QUICK-BET>*/qbHtml(g)/*</QUICK-BET>*/}</div>`}
 /*<QUICK-BET>*/
 /* "Quick bet" on a Games-tab card (only when the two teams belong to DIFFERENT owners and the game has not started). The picker lists the sides of up to three bet types: Spread (posted line), Winner (just who wins, EVEN odds, no moneyline odds used) and Over/under (posted total); spread / over-under are left out when no line / total is posted. Tapping a side only PREFILLS the existing 2026-27 New bet form (U state: opponent, text, amount, even odds) and switches to Bets > 2026-27. Nothing is created or saved until the person presses Place bet and confirms, exactly as before. Amount chips 5 / 10 are two of the form's own amounts (PULK.amounts). */
@@ -1554,9 +1633,7 @@ function qbPick(id,k,i){
   setTimeout(()=>{try{const f=document.querySelector('.b27-form');if(f){f.scrollIntoView({block:'start'});const b=document.getElementById('b27Place');if(b&&!b.disabled)b.focus({preventScroll:true})}}catch(_){}},30)}
 const qbHint=()=>U.qb&&U.qb===U.text&&U.kind==='bet'&&!U.confirm?'<div class="qb-hint note" role="status">⚡ Quick bet filled in — check and place it.</div>':'';
 /*</QUICK-BET>*/
-let gOwner='all',gMode=null,gDay='all',gH2H=params.has('h2h'),gTeam='all';let gTeamQ='';
-/*<SYNC1>*/function gTeamFind(q){gTeamQ=String(q||'');const sel=document.getElementById('gTeamSel');if(!sel)return;const n=gTeamQ.trim().toLowerCase();   // search box: hides non-matching pool teams in the Team dropdown (no re-render, keeps focus)
-  for(const o of sel.options)o.hidden=!!n&&o.value!=='all'&&!o.textContent.toLowerCase().includes(n)}/*</SYNC1>*/
+let gOwner='all',gMode=null,gDay='all',gH2H=params.has('h2h');
 /*<SYNC1>*/const tName=id=>{const t=(D.teams||{})[id]||{};return String(t.short||t.name||id)};
 // games with a (non-void) 2026-27 bet on them: the SAME reading + matcher as auto-settle (b.rd via S25.match), so no new parsing rules
 function gBetIds(){const out=new Set();try{for(const b of (U.doc&&U.doc.bets)||[]){if(!b||b.status==='void'||b.kind==='pool'||!b.rd||b.rd.k==='manual'||!b.rd.d)continue;const m=S25.match(s29Sb(b.rd.d),b.rd);if(m&&m.id)out.add(m.id)}}catch(e){}return out}/*</SYNC1>*/
@@ -1569,10 +1646,8 @@ function vGames(){
   if(!gMode)gMode=ups.length?'upcoming':'scores';
   let list=(gMode==='upcoming'?ups:fin.slice().reverse());
   if(gOwner!=='all')list=list.filter(g=>g.home.owners.includes(gOwner)||g.away.owners.includes(gOwner));
-  if(gH2H&&gMode==='upcoming')list=list.filter(g=>g.h2h||g.civil);
-  /*<SYNC1>*/const tIds=[...new Set((D.games||[]).flatMap(g=>[g.away,g.home].filter(x=>x&&x.owners&&x.owners.length).map(x=>String(x.id))))].sort((a,b)=>tName(a).localeCompare(tName(b)));if(gTeam!=='all'&&!tIds.includes(gTeam))gTeam='all';
-  if(gTeam!=='all')list=list.filter(g=>String(g.away.id)===gTeam||String(g.home.id)===gTeam);
-  const teamHtml=`<span class="gteam"><input type="search" id="gTeamQ" class="gf2-s gteamq" placeholder="Search teams" aria-label="Search teams" value="${esc(gTeamQ)}" oninput="gTeamFind(this.value)"><select id="gTeamSel" class="gf2-s${gTeam!=='all'?' on':''}" aria-label="Team" onchange="gTeam=this.value;render()"><option value="all">All teams</option>${tIds.map(t=>`<option value="${esc(t)}"${t===gTeam?' selected':''}>${esc(tName(t))}</option>`).join('')}</select></span>`;setTimeout(()=>gTeamFind(gTeamQ),0);/*</SYNC1>*/   // s29d: 'Pool only' is an Upcoming filter
+  if(gH2H&&gMode==='upcoming')list=list.filter(g=>/*<SYNC2>*/gOwner!=='all'?!!g.h2h:/*</SYNC2>*/(g.h2h||g.civil));
+  /*<SYNC2>*/// Team dropdown removed (Paul): the Games filter is by manager (All owners + Pool vs Pool)/*</SYNC2>*/   // s29d: 'Pool only' is an Upcoming filter
   const etKey=gKey;   /*<GAMES-LOCAL>*/// this view groups, filters and sorts by the viewer's local date/*</GAMES-LOCAL>*/
   const days=[...new Set(list.map(etKey))];
   if(gDay!=='all'&&!days.includes(gDay))gDay='all';
@@ -1581,8 +1656,8 @@ function vGames(){
   const monHtml=`<select class="gf2-s gmon-sel${curMon?' on':''}" aria-label="Jump to month" onchange="if(this.value){gDay=this.value;render()}"><option value="">Month</option>${GMON.map(([m,l])=>{const f=firstIn(m);return `<option value="${f||''}" data-mon="${m}"${m===curMon?' selected':''}${f?'':' disabled'}>${l}</option>`}).join('')}</select>`;
   let gCapped=0;if(gDay==='all'&&gMode==='upcoming'){const near=days.slice().sort().slice(0,12),ns=new Set(near),n0=list.length;list=list.filter(g=>ns.has(etKey(g)));gCapped=n0-list.length}   // full schedule is loaded: 'All days' shows the next 12 game days; later days via the day list or month chips/*</S26U-MONTH-JUMP>*/
   if(gMode==='upcoming'){const sk=g=>etKey(g)+(isTBD(g)?'~':' ')+(g.start||'');list.sort((a,b)=>sk(a).localeCompare(sk(b)))}   // 'time TBD' games last within their day
-  /*<S29D-GF>*/let h=`<div class="segrow"><div class="rkseg" role="group" aria-label="Games view"><button type="button" class="rkseg-b${gMode==='upcoming'?' on':''}" aria-pressed="${gMode==='upcoming'}" onclick="gMode='upcoming';gDay='all';render()">Upcoming</button><button type="button" class="rkseg-b${gMode==='scores'?' on':''}" aria-pressed="${gMode==='scores'}" onclick="gMode='scores';gDay='all';render()">Past games</button></div>${/*<SYNC1>*/'<button type="button" class="rkseg-b segref gref" aria-label="Refresh live games" onclick="lvManual()">'+lvBtnTxt()+'</button>'/*</SYNC1>*/}</div>
-   <div class="gf2"><select class="gf2-s${gOwner!=='all'?' on':''}" aria-label="Owner" onchange="gOwner=this.value;render()"><option value="all">All owners</option>${D.owners.map(o=>`<option value="${esc(o.name)}"${o.name===gOwner?' selected':''}>${esc(o.emoji)} ${esc(PN(o.name))}</option>`).join('')}</select>${monHtml}<select class="gf2-s${gDay!=='all'?' on':''}" aria-label="Day" onchange="gDay=this.value;render()"><option value="all">All days</option>${days.map(k=>`<option value="${k}"${k===gDay?' selected':''}>${esc(etLabel(k))}</option>`).join('')}</select>${gMode==='upcoming'?`<button type="button" class="gf2-b${gH2H?' on':''}" aria-pressed="${gH2H}" title="Only games where both teams are owned by pool members" onclick="gH2H=!gH2H;render()">Pool vs Pool</button>`:''}${teamHtml}</div>${/*<OWNED-GAMES>*/nHidden?`<label class="gUn"><input type="checkbox" id="gUnowned"${gAll?' checked':''} onchange="gAll=this.checked;render()"> Show unowned games <span class="mut">(${nHidden} hidden)</span></label>`:''/*</OWNED-GAMES>*/}`;/*</S29D-GF>*/
+  /*<S29D-GF>*/let h=`<div class="segrow"><div class="rkseg" role="group" aria-label="Games view"><button type="button" class="rkseg-b${gMode==='upcoming'?' on':''}" data-gm="upcoming" aria-pressed="${gMode==='upcoming'}" onclick="gMode='upcoming';gDay='all';render()">Upcoming</button><button type="button" class="rkseg-b${gMode==='scores'?' on':''}" aria-pressed="${gMode==='scores'}" onclick="gMode='scores';gDay='all';render()">Past games</button></div>${/*<SYNC1>*/'<button type="button" class="rkseg-b segref gref" aria-label="Refresh live games" onclick="lvManual()">'+lvBtnTxt()+'</button>'/*</SYNC1>*/}</div>
+   <div class="gf2"><select class="gf2-s${gOwner!=='all'?' on':''}" aria-label="Owner" onchange="gOwner=this.value;render()"><option value="all">All owners</option>${D.owners.map(o=>`<option value="${esc(o.name)}"${o.name===gOwner?' selected':''}>${esc(o.emoji)} ${esc(PN(o.name))}</option>`).join('')}</select>${monHtml}<select class="gf2-s${gDay!=='all'?' on':''}" aria-label="Day" onchange="gDay=this.value;render()"><option value="all">All days</option>${days.map(k=>`<option value="${k}"${k===gDay?' selected':''}>${esc(etLabel(k))}</option>`).join('')}</select>${gMode==='upcoming'?`<button type="button" class="gf2-b${gH2H?' on':''}" aria-pressed="${gH2H}" title="Only games where both teams are owned by pool members" onclick="gH2H=!gH2H;render()">Pool vs Pool</button>`:''}</div>${/*<OWNED-GAMES>*/nHidden?`<label class="gUn"><input type="checkbox" id="gUnowned"${gAll?' checked':''} onchange="gAll=this.checked;render()"> Show unowned games <span class="mut">(${nHidden} hidden)</span></label>`:''/*</OWNED-GAMES>*/}`;/*</S29D-GF>*/
   if(!list.length)return h+`<div class="card">${all.length?'Nothing matches those filters.':nHidden/*<OWNED-GAMES>*/?'No games with an owned team right now 🏀 Check back soon. (Games where nobody in the pool owns either team are hidden.)'/*</OWNED-GAMES>*/:'No games for rostered teams yet. Check back when the schedule fills in.'}</div>`;
   if(gMode==='upcoming'&&D.meta.mode==='preseason')h+=`<div class="card note">Preseason: sportsbooks have posted lines for just some of the next few nights so far (lines are pulled for about the next 10 days). Everything refreshes automatically.</div>`;
   let cur=null;
@@ -2182,7 +2257,7 @@ function vArchive(){
   h+=`<div class="card"><b>Final standings</b><div class="sc"><table><tr><th>Rank</th><th>Owner / team</th><th class="n">Points</th></tr>`+
     S.owners.map(o=>`<tr class="${o.champ?'arow-champ':''}"><td><b>${archRank(o)}</b></td><td>${archEmoji(o)}${archOwnerName(o)}${o.champ?'<span class="crown" title="Champion">👑</span>':''}<div class="fine">${esc(o.team_name)}</div></td><td class="n"><b>${o.total}</b></td></tr>`).join('')+
     `</table></div></div><h2>Rosters &amp; points</h2><div class="agrid">`+
-    S.owners.map(o=>`<div class="card"><div class="lb"><div class="rank">${o.champ?'👑':archRank(o)}</div><div class="who">${archEmoji(o)}${archOwnerName(o)}<small>${esc(o.team_name)}</small></div><div class="pts">${o.total}<small>points</small></div></div>`+
+    S.owners.map(o=>`<div class="card"><div class="lb"><div class="rank">${o.champ?'👑':archRank(o)}</div><div class="who">${archEmoji(o)}${archOwnerName(o)}<small>${esc(o.team_name)}</small></div><div class="pts">${o.total}<small>Points</small></div></div>`+
       (o.team_sum!=null?`<div class="note"><span class="pill warn">sheet quirk</span> Sheet total is ${o.total}; the teams below add up to ${o.team_sum}. Showing the sheet's total.</div>`:'')+
       (o.unranked?`<div class="note"><span class="pill warn">unranked</span> ${esc(o.unranked)}</div>`:'')+
       archTeams(o)+`</div>`).join('')+`</div>`;
@@ -2220,7 +2295,7 @@ const PCOLS=[['W','Regular-season wins',b=>b.win],['Conf','Conference champ (reg
 const pCell=v=>v?`<b class="${v<0?'bad':''}">${v>0?v:'\u2212'+(-v)}</b>`:'<span class="mut">\u2014</span>';
 function vPoints(){/*<S26Q-PTAB>*/const hd='<tr><th class="pn" scope="col"><span class="sr">Team</span></th>'+PCOLS.map(c=>`<th scope="col" title="${esc(c[1])}">${c[0]}</th>`).join('')+'<th class="ptot" scope="col" title="Team total">Tot</th></tr>';
   const tn=tid=>{const t=(D.teams||{})[tid]||{};return t.name||t.short||tid};
-  return '<div class="orl q">'+D.owners.map(o=>`<div class="card pcard" data-pc="${esc(o.name)}"><div class="orh" onclick="goOwner('${esc(o.name)}')"><span class="rank">${rankTxt(o)}</span><div class="who"><b>${esc(o.emoji)} ${esc(TN(o.name))}</b><small>${esc(PN(o.name))}</small>${/*<S26H-TROPHY>*/goldTag(o.name)/*</S26H-TROPHY>*/}</div><div class="pts">${o.total}<small>points</small></div></div><div class="ptw"><table class="ptab">${hd}`+
+  return '<div class="orl q">'+D.owners.map(o=>`<div class="card pcard" data-pc="${esc(o.name)}"><div class="orh" onclick="goOwner('${esc(o.name)}')"><span class="rank">${rankTxt(o)}</span><div class="who"><b>${esc(o.emoji)} ${esc(TN(o.name))}</b><small>${esc(PN(o.name))}${/*<S26H-TROPHY>*//*<SYNC2-ST>*/goldTag(o.name)/*</S26H-TROPHY>*/}</small></div><div class="pts">${o.total}<small>Points</small></div></div><div class="ptw"><table class="ptab">${hd}`+
    (o.teams||[]).map(t=>{const b=t.by||{};return `<tr class="prow${t.status==='dropped'?' drop':''}"><td class="pn" title="${esc(tn(t.tid))}">${chip(t.tid,{out:t.status==='dropped',cn:true})}</td>${PCOLS.map(c=>`<td>${pCell(c[2](b)||0)}</td>`).join('')}<td class="ptot">${t.total}</td></tr>`}).join('')+'</table></div></div>').join('')+'</div>'+/*</S26Q-PTAB>*/
   `<p class="note">Points each team earned for its manager, by category; \u2014 = none yet. ${PCOLS.map(c=>`<b>${c[0]}</b> ${esc(c[1])}`).join(' · ')} · <b>Tot</b> team total. Team totals add up to the manager total shown in League.</p>`+goldNote()}
 /*</S26E>*/
@@ -2298,6 +2373,7 @@ function s29ShUrl(){return s29ViewUrl(S29SH?s24HashOf(S29SH):'')}
   const me=(typeof b27Who==='function'&&b27Who())||null,o=me&&D&&D.owners?D.owners.find(x=>x.name===me):null;
   return `<div class="card s29e-prof"><h2 style="margin:0">👤 Profile</h2><p style="margin:6px 0 0">${me?`You're using the site as <b>${esc(PN(me))}</b>`:'You haven’t picked who you are yet.'} <a href="#" onclick="presAsk();return false">(${me?'change':'pick'})</a></p></div>`+
    `<div class="card s29e-set"><h3 style="margin:0 0 6px">My settings</h3>${me?`<div>Team: <b>${esc(TN(me))}</b>${o&&o.emoji?' · '+esc(o.emoji):''}</div>`:''}<p class="mut" style="margin:6px 0 0;font-size:12.5px">There are no personal settings to change yet. Team names and emojis are set by the commissioner.</p></div>`+
+   (ADMIN?`<div class="card s29e-acc"><h3 style="margin:0 0 6px">Commissioner: accent colour</h3>${accPickerHtml(ACC)}<p class="mut" style="margin:0;font-size:12.5px">Recolours the active tab and the toggles. Saved on this device.</p></div>`:'')+
    `<div class="card s29e-notif"><h3 style="margin:0 0 6px">Notifications</h3><p class="mut" style="margin:0">Coming soon</p></div>`+vShare()}
 /*</S29E-PROFILE>*/
 function vShare(){const u=s29ShUrl();
@@ -2363,7 +2439,7 @@ function render(){
   if(!D)return;const m=D.meta;
   if(!window._tagPick)window._tagPick={};
   const TAGS={
-   live:['Where college basketball knowledge goes to be humbled.','Confidence is high. The scoreboard disagrees.','Every win is skill. Every loss is the refs.','Somebody\u2019s mid-major is carrying them. Somebody\u2019s blue blood is not.','Bragging rights are updated every 15 minutes.'],
+   live:['Where college basketball knowledge goes to be humbled.','Confidence is high. The scoreboard disagrees.','Every win is skill. Every loss is the refs.','Somebody\u2019s mid-major is carrying them. Somebody\u2019s blue blood is not.','Bragging rights are checked every 15 minutes.'],
    final:['The season is over. Someone is insufferable now.','The trophy is decided. The group chat will never be the same.','It\u2019s over. Screenshots will be used against you.'],
    demo:['DEMO: last season\u2019s real results run through this year\u2019s rosters. Nobody\u2019s actual points.']};
   const pickTag=(k,arr)=>{if(window._tagPick[k]==null)window._tagPick[k]=Math.floor(Math.random()*arr.length);return arr[window._tagPick[k]%arr.length]};
@@ -2377,6 +2453,7 @@ function render(){
   $('#nav').innerHTML=TABS/*<TAB-WINDOWS>*/.filter(t=>tabVisible(t[0]))/*</TAB-WINDOWS>*/.map(t=>{const sp=t[1].indexOf(' '),ic=t[1].slice(0,sp),full=t[1].slice(sp+1),on=t[0]===tab||/*<ONE-BETS>*/(t[0]==='bets27'&&tab==='bets')/*</ONE-BETS>*/;
     return /*<S24-EDIT>*/`<a class="nt${on?' on':''}" href="${esc(s24Href(t[0]))}" data-tab="${t[0]}" aria-label="${esc(full)}"${on?' aria-current="page"':''} onclick="return s24NavClick(event,'${t[0]}')"><span class="ni" aria-hidden="true">${ic}</span><span class="nl f">${esc(full)}</span><span class="nl s" aria-hidden="true">${esc(NAVSHORT[t[0]]||full)}</span>${nbBadge(t[0])}</a>`/*</S24-EDIT>*/}).join('');
   /*</NAV-ONE-ROW>*/
+  setTimeout(liveSync,0);/*<SYNC2>*/
   /*<S29D-GGRID>*/try{$('#main').setAttribute('data-tab',tab)}catch(_){}/*</S29D-GGRID>*/
   /*<S29D-NEWBETS>*/setTimeout(()=>{try{s29NbUpdate()}catch(_){}},0);/*</S29D-NEWBETS>*/
   $('#main').innerHTML=(VIEWS[tab]||vStandings)();
@@ -2772,7 +2849,7 @@ function chatInit(){
    Rounding rule: all maths is integer; amt x a/b is rounded HALF UP to a whole number (7.5 -> 8, 3.33 -> 3), and never below 1; the card says so when it happened.
    Remove everything between the BETS-2627 markers (CSS, JS, load hook) to drop the tab. */
 const BETS_DISCLAIMER="Bets here are just for fun and are settled in pullups, not money. Betting is Stoopid, and we don't endorse or facilitate gambling for money.";   // the ONLY place the unit word appears in the tab; rendered once above the form
-const PULK={url:'https://textdb.dev/api/data/stoopids-bets-2627-9eaa4f66',amounts:[5,10,20,50,100],minAmt:5,maxAmt:1000,oddsChips:[[1,1],[2,1],[3,1],[4,1],[5,1]],maxOdds:100,maxText:140,maxBets:300,undoMs:30000,seenKey:'stoopids_bets2627_seen',pollMs:45000,pollOpenMs:15000};
+const PULK={url:'https://textdb.dev/api/data/stoopids-bets-2627-9eaa4f66',amounts:[5,10,20,25,50],minAmt:5,maxAmt:1000,oddsChips:[[1,1],[2,1],[3,1],[4,1],[5,1]],maxOdds:100,maxText:140,maxBets:300,undoMs:30000,seenKey:'stoopids_bets2627_seen',pollMs:45000,pollOpenMs:15000};
 const U={state:'init',doc:{bets:[]},known:null,maxN:0,mine:new Set(),opps:[],amt:null,amtCustom:false,amtTxt:'',amtErr:'',odds:[1,1],custom:false,customTxt:'',oddsErr:'',text:'',confirm:false,busy:false,msg:'',msgBad:false,fids:{},gid:null,askSettle:null,fails:0,timer:null,started:false,undoT:null};
 /*<POOL>*/Object.assign(U,{kind:'bet',pp:[],entry:'',backTxt:'',poolTxt:{},poolErr:{}});/*</POOL>*/
 /* ---- pure helpers (unit-tested) ---- */
@@ -3299,10 +3376,10 @@ function vB27(){
     h+=/*<POOL>*/U.kind==='pool'?b27PoolForm(me):/*</POOL>*/`<div class="card b27-form"><b>New bet</b> <span class="note">· you are <b>${esc(PN(me))}</b> <a href="#" onclick="presAsk();return false">(change)</a></span>${/*<QUICK-BET>*/qbHint()/*</QUICK-BET>*/}${/*<S24-EDIT>*/s24EditHint()/*</S24-EDIT>*/}${/*<POOL>*/U.editOf?'':b27KindTabs()/*</POOL>*/}
      ${/*<MULTI-BET>*/''/*opponents: multi-select*/}<div class="b27-q"><button type="button" class="s27-tipk" data-tip="who" aria-expanded="false" onclick="s27Tip(this)">1. Who are you betting against?</button></div><div class="b27-opps" role="group" aria-label="Opponents" style="--n:${others.length+1}">${others.map((n,i)=>{const o=(D.owners.find(x=>x.name===n)||{});const on=U.opps.includes(n);return `<button type="button" class="b27-chip op" data-b27-opp="${i}" data-b27-name="${esc(n)}" aria-label="${esc(TN(n))}" aria-pressed="${on}" onclick="b27Opp(${i})"><span class="ck" aria-hidden="true">✓</span><span class="em" aria-hidden="true">${esc(o.emoji||'')}</span><span class="nm" aria-hidden="true"><span class="f">${esc(TN(n))}</span><span class="sh">${esc(b27ShortT(n))}</span><span class="xs">${esc(b27TinyT(n))}</span></span></button>`}).join('')}<div class="s27-sel"><button type="button" class="s27-selb" data-b27-all="1" onclick="b27OppAll()"><span class="f">Select all</span><span class="s">All</span></button><button type="button" class="s27-selb" data-b27-clear="1" onclick="b27OppClear()">Clear</button></div></div><span class="sr" id="b27SelCnt" aria-live="polite">${esc(b27SelTxt())}</span>
      ${''/*</MULTI-BET>*/}<div class="b27-q"><button type="button" class="s27-tipk" data-tip="text" aria-expanded="false" onclick="s27Tip(this)">2. What’s the bet?</button><label for="b27Text" class="sr">What’s the bet?</label></div><input id="b27Text" class="sb-in b27-in" maxlength="${PULK.maxText}" autocomplete="off" enterkeyhint="go" placeholder="e.g. Kansas -4 beats Duke" value="${esc(U.text)}" oninput="b27Text(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();b27Place()}">${/*<S25>*/'<div id="s25Rd">'+s25RdHtml()+'</div>'/*</S25>*/}
-     <div class="b27-q"><button type="button" class="s27-tipk" data-tip="amt" aria-expanded="false" onclick="s27Tip(this)">3. Amount</button></div><div class="b27-amts" role="group" aria-label="Amount">${PULK.amounts.map(a=>`<button type="button" class="b27-amt" data-b27-amt="${a}" aria-pressed="${!U.amtCustom&&a===U.amt}" onclick="b27Amt(${a})">${a}</button>`).join('')}<button type="button" class="b27-amt cu" data-b27-amtcustom="1" aria-pressed="${U.amtCustom}" onclick="b27AmtCustomOpen()">Custom</button></div>
-     <div id="b27Aw" class="b27-cw"${U.amtCustom?'':' hidden'}><label for="b27Ao" class="sr">Custom amount</label><input id="b27Ao" class="sb-in b27-in" inputmode="numeric" pattern="[0-9]*" autocomplete="off" maxlength="6" placeholder="Whole number, ${PULK.minAmt} to ${PULK.maxAmt}" value="${esc(U.amtTxt)}" oninput="b27AmtApply(this.value);b27Sync()" onkeydown="if(event.key==='Enter'){event.preventDefault();b27Place()}"><div id="b27Ae" class="b27-bad-t" role="alert">${esc(U.amtErr)}</div></div>
-     <div class="b27-q"><button type="button" class="s27-tipk" data-tip="odds" aria-expanded="false" onclick="s27Tip(this)">4. Odds</button></div><div class="b27-chips" role="group" aria-label="Odds">${PULK.oddsChips.map(([a,b])=>`<button type="button" class="b27-chip" data-b27-odds="${a}-${b}" aria-pressed="${!U.custom&&!!U.odds&&U.odds[0]===a&&U.odds[1]===b}" onclick="b27Odds(${a},${b})">${a===1&&b===1?'Even':a+'-'+b}</button>`).join('')}<button type="button" class="b27-chip" data-b27-custom="1" aria-pressed="${U.custom}" onclick="b27CustomOpen()">Custom…</button></div>
-     <div id="b27Cw" class="b27-cw"${U.custom?'':' hidden'}><label for="b27Co" class="sr">Custom odds</label><input id="b27Co" class="sb-in b27-in" inputmode="text" autocomplete="off" maxlength="9" placeholder="e.g. 7-2 or 10-1" value="${esc(U.customTxt)}" oninput="b27CustomApply(this.value);b27Sync()" onkeydown="if(event.key==='Enter'){event.preventDefault();b27Place()}"><div id="b27Ce" class="b27-bad-t" role="alert">${esc(U.oddsErr)}</div></div>
+     <div class="b27-ao"><div class="b27-ao-c"><div class="b27-q"><button type="button" class="s27-tipk" data-tip="amt" aria-expanded="false" onclick="s27Tip(this)">3. Amount</button></div><div class="b27-amts" role="group" aria-label="Amount">${PULK.amounts.map(a=>`<button type="button" class="b27-amt" data-b27-amt="${a}" aria-pressed="${!U.amtCustom&&a===U.amt}" onclick="b27Amt(${a})">${a}</button>`).join('')}<button type="button" class="b27-amt cu" data-b27-amtcustom="1" aria-pressed="${U.amtCustom}" onclick="b27AmtCustomOpen()">Custom</button></div>
+     <div id="b27Aw" class="b27-cw"${U.amtCustom?'':' hidden'}><label for="b27Ao" class="sr">Custom amount</label><input id="b27Ao" class="sb-in b27-in" inputmode="numeric" pattern="[0-9]*" autocomplete="off" maxlength="6" placeholder="Whole number, ${PULK.minAmt} to ${PULK.maxAmt}" value="${esc(U.amtTxt)}" oninput="b27AmtApply(this.value);b27Sync()" onkeydown="if(event.key==='Enter'){event.preventDefault();b27Place()}"><div id="b27Ae" class="b27-bad-t" role="alert">${esc(U.amtErr)}</div></div></div><div class="b27-ao-c">
+     <div class="b27-q"><button type="button" class="s27-tipk" data-tip="odds" aria-expanded="false" onclick="s27Tip(this)">4. Odds</button></div><div class="b27-chips" role="group" aria-label="Odds">${PULK.oddsChips.map(([a,b])=>`<button type="button" class="b27-chip" data-b27-odds="${a}-${b}" aria-pressed="${!U.custom&&!!U.odds&&U.odds[0]===a&&U.odds[1]===b}" onclick="b27Odds(${a},${b})">${a===1&&b===1?'Even':a+'-'+b}</button>`).join('')}<button type="button" class="b27-chip cu" data-b27-custom="1" aria-pressed="${U.custom}" onclick="b27CustomOpen()">Custom</button></div>
+     <div id="b27Cw" class="b27-cw"${U.custom?'':' hidden'}><label for="b27Co" class="sr">Custom odds</label><input id="b27Co" class="sb-in b27-in" inputmode="text" autocomplete="off" maxlength="9" placeholder="e.g. 7-2 or 10-1" value="${esc(U.customTxt)}" oninput="b27CustomApply(this.value);b27Sync()" onkeydown="if(event.key==='Enter'){event.preventDefault();b27Place()}"><div id="b27Ce" class="b27-bad-t" role="alert">${esc(U.oddsErr)}</div></div></div></div>
      <div class="b27-livebox" id="b27Live" aria-live="polite">${b27LiveHtml()}</div>
      <div class="b27-sum" id="b27Sum">${esc(b27Summary())}</div><div id="s29Auto">${/*<S29D-AUTO>*/s29AutoHtml(s29AutoForm())/*</S29D-AUTO>*/}</div><div class="b27-bad-t" id="b27Hint"></div>
      <button type="button" id="b27Place" class="btn b27-big" onclick="b27Place()"${b27FormOK()?' disabled':''}>Place bet</button></div>`;
