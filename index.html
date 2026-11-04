@@ -907,6 +907,12 @@ main,#main{padding-top:6px!important}
  .card.oc .chip{display:grid!important}
 }
 /*</SYNC4>*/
+/*<SYNC5>*/ /* chip sizing: All teams pills fill their cell (same size, long names ellipsize); game pills one height */
+.obk.atk .obt{min-width:0;display:block}
+.obk.atk .obt>.chip{min-height:36px!important;width:100%!important;max-width:100%!important;box-sizing:border-box;min-width:0}
+.obk.atk .obt>.chip .cn{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gm .chip.big{height:40px!important;min-height:40px!important;box-sizing:border-box}
+/*</SYNC5>*/
 /*<SYNC3-GF>*/ /* Games filters v2: row 1 toggle + round refresh; row 2 owner | Pool vs Pool | More; More panel = Month | Day | team search */
 .segrow .gref{width:36px!important;height:36px!important;min-width:36px!important;padding:0!important;border-radius:50%!important;font-size:18px!important;line-height:1!important;display:inline-flex;align-items:center;justify-content:center}
 .gf2.gf2r{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 96px!important}
