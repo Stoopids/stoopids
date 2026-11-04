@@ -926,7 +926,7 @@ main,#main{padding-top:6px!important}
 /* SYNC7..SYNC14 moved to shared/ui.css (linked right after this style block) */
 
 </style>
-<link rel="stylesheet" href="shared/ui.css?v=1.3.0">
+<link rel="stylesheet" href="shared/ui.css?v=1.4.0">
 <style>/*<SORT-FIT> phone All teams table fits with no sideways scroll; Stoop header reads STOOP */@media (max-width:480px){html body .card.tap.s27-rk th,html body .card.tap.s27-rk td{padding:6px 1px!important}html body .card.tap.s27-rk td:first-child .chip{max-width:none!important;font-size:11px!important;padding-right:6px!important}html body .card.tap.s27-rk td:first-child .chip img{width:16px!important;height:16px!important}html body .card.tap.s27-rk th.to{max-width:none!important;overflow:visible!important;text-overflow:clip!important}html body .card.tap.s27-rk td.to{max-width:5ch}html body .card.tap.s27-rk th{font-size:10px!important}html body .card.tap.s27-rk{padding-left:3px!important;padding-right:3px!important}html body .card.tap.s27-rk td.n{font-size:11.5px!important}html body .card.tap.s27-rk td.to{font-size:11.5px}html body .card.tap.s27-rk .s27-sort i{font-size:.7em!important;margin-left:0!important}}/*</SORT-FIT>*/</style>
 </head>
 <body>
@@ -952,7 +952,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.1.0"></script>
+<script src="shared/ui.js?v=1.4.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -2377,7 +2377,7 @@ function vTeamsAP(){const netBy={};(RK.net||[]).forEach(x=>{if(x.tid)netBy[Strin
   const rows=[];D.owners.forEach(o=>o.teams.forEach(t=>{const r=tRec(t.tid),g=r.w+r.l;rows.push({o:o.name,t,r,pct:g?r.w/g:0,ap:apOf(t.tid),net:netBy[String(t.tid)]||null})}));
   rows.sort((a,b)=>b.pct-a.pct||b.r.w-a.r.w||(a.net||999)-(b.net||999)||a.t.tid.localeCompare(b.t.tid));
   /*<S27-RANKS>*/rows.forEach(x=>{const k=S27_RANKS[String(x.t.tid)]||[];x.sr=k[0]||null;x.kp=k[1]||null;/*<S29D-RANKS>*/const q=s29Rk(x.t.tid);if(q){x.sr=q.stoopid||null;x.kp=q.kenpom||null}/*</S29D-RANKS>*/});
-  /*<SORT-ALL>*/const SK=(a,b,kind,d)=>{if(kind==='r'){const an=a==null,bn=b==null;if(an||bn)return an-bn;return d*(a-b)}if(kind==='s')return d*String(a||'').localeCompare(String(b||''),undefined,{sensitivity:'base'});return d*((a||0)-(b||0))};const cfS={};(RK.net||[]).forEach(x=>{if(x.tid&&x.conf)cfS[String(x.tid)]=String(x.conf)});const KD={tm:['s',x=>((D.teams||{})[x.t.tid]||{}).name||x.t.tid],ow:['s',x=>PN(x.o)],rec:['n',x=>x.pct*1000+x.r.w],pts:['n',x=>x.t.total||0],cf:['s',x=>cfS[String(x.t.tid)]||'~'],ap:['r',x=>x.ap||null],net:['r',x=>x.net||null],sr:['r',x=>x.sr||null],kp:['r',x=>x.kp||null]};if(S27T.k&&KD[S27T.k]){const [kind,g]=KD[S27T.k];rows.sort((a,b)=>SK(g(a),g(b),kind,S27T.d)||a.t.tid.localeCompare(b.t.tid))}/*</SORT-ALL>*/
+  /*<SORT-ALL>*/const SK=(window.SHARED_UI&&SHARED_UI.sortCmp)||((a,b,kind,d)=>{if(kind==='r'){const an=a==null,bn=b==null;if(an||bn)return an-bn;return d*(a-b)}if(kind==='s')return d*String(a||'').localeCompare(String(b||''),undefined,{sensitivity:'base'});return d*((a||0)-(b||0))});const cfS={};(RK.net||[]).forEach(x=>{if(x.tid&&x.conf)cfS[String(x.tid)]=String(x.conf)});const KD={tm:['s',x=>((D.teams||{})[x.t.tid]||{}).name||x.t.tid],ow:['s',x=>PN(x.o)],rec:['n',x=>x.pct*1000+x.r.w],pts:['n',x=>x.t.total||0],cf:['s',x=>cfS[String(x.t.tid)]||'~'],ap:['r',x=>x.ap||null],net:['r',x=>x.net||null],sr:['r',x=>x.sr||null],kp:['r',x=>x.kp||null]};if(S27T.k&&KD[S27T.k]){const [kind,g]=KD[S27T.k];rows.sort((a,b)=>SK(g(a),g(b),kind,S27T.d)||a.t.tid.localeCompare(b.t.tid))}/*</SORT-ALL>*/
   const sth=(f,l,t)=>`<th class="n s27-sort" aria-sort="${S27T.k===f?(S27T.d>0?'ascending':'descending'):'none'}"><button type="button" title="${esc(t)}. Tap to sort" onclick="s27Sort('${f}')">${l}<i aria-hidden="true">${S27T.k===f?(S27T.d>0?'▲':'▼'):'↕'}</i></button></th>`;/*</S27-RANKS>*/
   const d=v=>v?'#'+v:'<span class="mut">\u2014</span>';
   /*<S26P-TAP>*/const cfBy={};(RK.net||[]).forEach(x=>{if(x.tid&&x.conf)cfBy[String(x.tid)]=String(x.conf)});
@@ -3933,12 +3933,7 @@ function load(){
   document.head.appendChild(s);
 }
 load();setInterval(load,5*60*1000);
-/*<MAXLEN-GUARD>*/(function(){if(typeof document==="undefined"||window.__mlg)return;window.__mlg=1;
-function note(m){let n=document.getElementById('mlnote');if(!n){n=document.createElement('div');n.id='mlnote';n.setAttribute('role','status');n.style.cssText='position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:#111827;color:#fff;border:1px solid #FFD400;padding:8px 14px;border-radius:999px;z-index:99999;font-size:13px;font-weight:700;pointer-events:none;max-width:90vw;text-align:center';document.body.appendChild(n)}n.textContent=(window.SHARED_UI?SHARED_UI.t('maxLen',m):'Keep it to '+m+' characters or fewer.');n.hidden=false;clearTimeout(n._t);n._t=setTimeout(()=>{n.hidden=true},3000)}
-const ok=el=>el&&(el.tagName==='INPUT'||el.tagName==='TEXTAREA')&&el.maxLength>0&&el.type!=='password';
-document.addEventListener('input',e=>{const el=e.target;if(!ok(el))return;const m=el.maxLength,t=el.value.trim();if(t.length>m){el.value=t.slice(0,m);note(m)}},true);
-document.addEventListener('paste',e=>{const el=e.target;if(!ok(el))return;let d='';try{d=e.clipboardData.getData('text')||''}catch(_){}const s=el.selectionStart||0,f=el.selectionEnd||0;if((el.value.slice(0,s)+d+el.value.slice(f)).trim().length>el.maxLength)note(el.maxLength)},true);
-document.addEventListener('keydown',e=>{const el=e.target;if(!ok(el)||e.key.length!==1||e.ctrlKey||e.metaKey)return;if(el.value.length>=el.maxLength&&el.selectionStart===el.selectionEnd)note(el.maxLength)},true)})();/*</MAXLEN-GUARD>*/
+/* MAXLEN-GUARD moved to shared/ui.js */
 /*<TEAMNAME-WARN>*/addEventListener('load',function(){try{const L=(window.SHARED_UI&&SHARED_UI.LIMITS.team)||15,seen={};JSON.stringify(window.STOOPIDS_DATA||{},function(k,v){if(k==='team_name'&&typeof v==='string'&&v.length>L&&!seen[v]){seen[v]=1;console.warn('Team name over '+L+' chars (shown in full, fix in config.json): '+v)}return v})}catch(e){}});/*</TEAMNAME-WARN>*/
 /*<ONLINE-STRIP>*/// "Who's online" strip under every tab: online first (green dot), then everyone else with last-seen. Reads the existing presence store only (GET); never writes.
 function onlStrip(){const main=document.getElementById('main');if(!main||!D)return;let el=document.getElementById('onlStrip');if(!el||el.previousElementSibling!==main){if(el)el.remove();el=document.createElement('section');el.id='onlStrip';el.className='onl';el.setAttribute('aria-label','Who\u2019s online');main.insertAdjacentElement('afterend',el)}
