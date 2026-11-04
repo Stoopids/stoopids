@@ -952,7 +952,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.8.0"></script>
+<script src="shared/ui.js?v=1.9.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -3508,6 +3508,7 @@ function vTally(){const B=D.bets,TT=B.tallies&&B.tallies.ledger;if(!TT)return '<
   /*<S25J>*/const empty=!ids.length;const M=(a,b)=>(T.matrix&&T.matrix[a]&&T.matrix[a][b])||0;const gids=Object.keys(TALLY_NM).concat(ids.filter(i=>!(i in TALLY_NM)));
   if(empty)h+='<div class="card note" data-tally-empty>No 2026-27 bets with amounts yet.</div>';else/*</S25J>*/
   h+=`<div class="card sc"><table data-tally="people"><tr><th>Person</th><th class="n">Lost</th><th class="n">Won</th><th class="n">Net +/-</th><th class="n">Bets</th><th class="n">Fines</th></tr>${ids.slice().sort((a,b)=>T.net[b]-T.net[a]).map(i=>`<tr data-pid="${esc(i)}"><td>${esc(tNm(i))}</td><td class="n">${tMoney(T.lost[i])}</td><td class="n">${tMoney(T.won[i])}</td><td class="n"><b class="${T.net[i]>0?'good':T.net[i]<0?'bad':''}">${T.net[i]>0?'+':T.net[i]<0?'-':''}${tMoney(Math.abs(T.net[i]))}</b></td><td class="n">${T.bets[i]}</td><td class="n">${T.fines&&T.fines[i]?tMoney(T.fines[i]):'<span class=mut>0</span>'}</td></tr>`).join('')}</table></div>`;
+  /*<STEP5-BETS>*/if(typeof SHARED_UI!=='undefined'&&SHARED_UI.owesMatrix)h+=SHARED_UI.owesMatrix(gids.map(i=>({id:i,label:tNm(i)})),M,{esc,fmt:tMoney,rowKey:'data-pid'});else/*</STEP5-BETS>*/
   h+=`<h2>Who Owes Who</h2><div class="swipe">↔ Swipe sideways to see every column</div><div class="card sc"><table class="mx" data-tally="owes"><tr><th>owes ↓ / to →</th>${gids.map(i=>`<th>${esc(tNm(i))}</th>`).join('')}</tr>${gids.map(r=>`<tr data-pid="${esc(r)}"><td><b>${esc(tNm(r))}</b></td>${gids.map(c=>{const v=M(r,c);return r===c?'<td class="z">·</td>':v?`<td>${tMoney(v)}</td>`:'<td class="z">0</td>'}).join('')}</tr>`).join('')}</table></div>`;
   /*<S25J> plain settle lines, one per non-zero netted pair */{const L=[];gids.forEach((a,x)=>gids.slice(x+1).forEach(b=>{const d=M(a,b)-M(b,a);if(d>0)L.push([a,b,d]);else if(d<0)L.push([b,a,-d])}));if(L.length)h+=`<div class="card" data-tally-settle>${L.map(([a,b,d])=>`<div class="tset">${esc(tNm(a))} owes ${esc(tNm(b))} ${tMoney(d)}</div>`).join('')}</div>`}/*</S25J>*/
   return h}
