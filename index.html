@@ -952,7 +952,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.6.0"></script>
+<script src="shared/ui.js?v=1.7.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -1621,6 +1621,7 @@ function PN(n){const k=ownerKey(n);return OWNER_DISP[k]?OWNER_DISP[k].person:n} 
 function TN(n){const k=ownerKey(n);const o=D&&D.owners&&D.owners.find(x=>x.name===k);return OWNER_DISP[k]?OWNER_DISP[k].team:(o&&o.team_name)||n}   // team name
 /*</OWNER-NAMES>*/
 function vStandings(){/*<RANKINGS>*/const sv=rkView();if(sv==='points')return rkSeg()+vPoints();/*</RANKINGS>*/
+  /*<STEP5-STANDINGS>*/if(typeof SHARED_UI!=='undefined'&&SHARED_UI.standingsList)return rkSeg()+SHARED_UI.standingsList(D.owners.map(o=>({rank:rankTxt(o),emoji:o.emoji,team:TN(o.name),person:PN(o.name),gold:goldTag(o.name),total:o.total,lbAttr:`onclick="goOwner('${esc(o.name)}')"`,chips:o.teams.map(t=>chipRec(t.tid,{out:t.status==='dropped',cn:1})).join('')})))+goldNote();/*</STEP5-STANDINGS> fallback below*/
   const mx=Math.max(10,...D.owners.map(o=>o.total));
   return /*<RANKINGS>*/rkSeg()+/*</RANKINGS>*//*<RANK-CHIPS>*/'<div class="ocl">'/*</RANK-CHIPS>*/+D.owners.map((o,i)=>`<div class="card${/*<RANK-CHIPS>*/' oc'/*</RANK-CHIPS>*/}"><div class="lb" onclick="goOwner('${esc(o.name)}')">
     <div class="rank">${rankTxt(o)}</div>
