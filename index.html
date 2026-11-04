@@ -926,7 +926,7 @@ main,#main{padding-top:6px!important}
 /* SYNC7..SYNC14 moved to shared/ui.css (linked right after this style block) */
 
 </style>
-<link rel="stylesheet" href="shared/ui.css?v=1.10.0">
+<link rel="stylesheet" href="shared/ui.css?v=1.11.0">
 <style>/*<SORT-FIT> phone All teams table fits with no sideways scroll; Stoop header reads STOOP */@media (max-width:480px){html body .card.tap.s27-rk th,html body .card.tap.s27-rk td{padding:6px 1px!important}html body .card.tap.s27-rk td:first-child .chip{max-width:none!important;font-size:11px!important;padding-right:6px!important}html body .card.tap.s27-rk td:first-child .chip img{width:16px!important;height:16px!important}html body .card.tap.s27-rk th.to{max-width:none!important;overflow:visible!important;text-overflow:clip!important}html body .card.tap.s27-rk td.to{max-width:5ch}html body .card.tap.s27-rk th{font-size:10px!important}html body .card.tap.s27-rk{padding-left:3px!important;padding-right:3px!important}html body .card.tap.s27-rk td.n{font-size:11.5px!important}html body .card.tap.s27-rk td.to{font-size:11.5px}html body .card.tap.s27-rk .s27-sort i{font-size:.7em!important;margin-left:0!important}}/*</SORT-FIT>*/</style>
 </head>
 <body>
@@ -952,7 +952,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.19.0"></script>
+<script src="shared/ui.js?v=1.20.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -1705,6 +1705,7 @@ function qbBtn(g){/*<SYNC1>*/// the Quick bet button, stacked under Copy in the 
   return `<button type="button" class="s27-copy qb-btn" aria-expanded="${open}" aria-label="Quick bet: ${esc(qbNm(g.away))} vs ${esc(qbNm(g.home))}" onclick="qbToggle('${esc(id)}')"><svg class="qb-bolt" viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg> Quick bet</button>`}
 function qbHtml(g){
   if(!qbOk(g))return '';const id=String(g.id),open=qbG===id;
+  /*<STEP7-QB>*/if(typeof SHARED_UI!=='undefined'&&SHARED_UI.qbSheet){if(!open)return '';return SHARED_UI.qbSheet(g,qbList(g),{e:esc,name:qbNm,date:qbDate(g),close:()=>`onclick="qbToggle(null)"`,blank:()=>`onclick="qbGo('${esc(id)}',null,0)"`,pick:(k,i)=>`onclick="qbGo('${esc(id)}','${k}',${i})"`})}/*</STEP7-QB>*/
   let h='';
   const oa=qbOwn(g.away),oh=qbOwn(g.home),me=b27Who(),need=me!==oa&&me!==oh;
   h+=`<div class="qb-pick" role="group" aria-label="Quick bet picker">`;
@@ -1728,6 +1729,16 @@ function qbPick(id,k,i){
   Object.assign(U,{kind:'bet',confirm:false,msg:'',msgBad:false,opps:[opp],pp:[],text:t,amt:qbAmt,amtCustom:false,amtTxt:'',amtErr:'',odds:[1,1],custom:false,customTxt:'',oddsErr:'',qb:t});
   qbG=null;qbMsg='';tab='bets27';render();
   setTimeout(()=>{try{const f=document.querySelector('.b27-form');if(f){f.scrollIntoView({block:'start'});const b=document.getElementById('b27Place');if(b&&!b.disabled)b.focus({preventScroll:true})}}catch(_){}},30)}
+/*<STEP7-QB>*/ /* the shared Quick bet window: posted odds only; a tap prefills Write it up (game + side/total + line). The Stoop(s) and the amount are picked in the form. */
+const qbList=g=>SHARED_UI.qbOptions(g,{name:qbNm,date:qbDate(g)});
+function qbGo(id,k,i){const g=(D.games||[]).find(x=>String(x.id)===String(id));if(!g||!qbOk(g))return;
+  let txt;if(k==null)txt=SHARED_UI.qbBlankText(g,{name:qbNm,date:qbDate(g)});else{const o=qbList(g).find(x=>x.k===k),s=o&&o.s[i];if(!s)return;txt=s.txt}
+  const t=b27Clean(txt);
+  Object.assign(U,{kind:'bet',confirm:false,msg:'',msgBad:false,opps:[],pp:[],text:t,amtCustom:false,amtTxt:'',amtErr:'',odds:[1,1],custom:false,customTxt:'',oddsErr:'',qb:t});
+  qbG=null;qbMsg='';tab='bets27';render();
+  setTimeout(()=>{try{const f=document.querySelector('.b27-form');if(f)f.scrollIntoView({block:'start'})}catch(_){}},30)}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&qbG!=null&&document.querySelector('.qbs')){qbToggle(null)}});
+/*</STEP7-QB>*/
 const qbHint=()=>U.qb&&U.qb===U.text&&U.kind==='bet'&&!U.confirm?'<div class="qb-hint note" role="status">⚡ Quick bet filled in — check and place it.</div>':'';
 /*</QUICK-BET>*/
 let gOwner='all',gMode=null,gDay='all',gH2H=params.has('h2h');let gMore=false,gQ='';/*<SYNC3-GF>*/
