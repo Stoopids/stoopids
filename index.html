@@ -952,7 +952,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.17.0"></script>
+<script src="shared/ui.js?v=1.18.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -2287,7 +2287,7 @@ function vRedraft0(){/*</TAB-WINDOWS>*/
 function vAbout(){
   const P=D.meta.points,m=D.meta;
   const rows=[['Win (reg season + conf tourney, any opponent)',P.win],['Conference regular-season champ',P.conf_reg],['Conference tournament champ',P.conf_tourn],['Make the NCAA field',P.ncaa_entry],['Play-in (First Four) win',P.playin_win],['Upset (NCAA tournament: beat a better seed)',P.upset],['NCAA tournament win',P.ncaa_win],['Final Four',P.final4],['National champ',P.champ],['Miss the Big Dance',P.missed_dance]];
-  return `<a class="s27-howl" href="${esc(s24Href('howto'))}" onclick="return s24NavClick(event,'howto')">📘 How to bet →</a><div class="card sc"><table><tr><th>Scoring</th><th class="n">Pts</th></tr>${rows.map(r=>`<tr><td>${r[0]}</td><td class="n">${sign(r[1])}</td></tr>`).join('')}</table></div>
+  return `<a class="s27-howl" href="${esc(s24Href('howto'))}" onclick="return s24NavClick(event,'howto')">📘 How to bet →</a>${(typeof SHARED_UI!=='undefined'&&SHARED_UI.scoringTable)?SHARED_UI.scoringTable(rows,{e:x=>x,sign}):`<div class="card sc"><table><tr><th>Scoring</th><th class="n">Pts</th></tr>${rows.map(r=>`<tr><td>${r[0]}</td><td class="n">${sign(r[1])}</td></tr>`).join('')}</table></div>`}
   ${vUpsets()}
   ${''/*<RULES-ONLY>*/}
   ${ADMIN?`<div class="card"><b>What is automatic</b><ul class="it">
