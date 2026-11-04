@@ -30,3 +30,12 @@ Open / to review: Team dropdown lists every team in the current view (~388, long
 - SYNC3: tighter spacing (cards/gaps/header/banner/tabs), empty spacer rows hidden, ranked grid rank|movement slot|name|points (no movement data exists yet, slot reserved), bet form Amount/Odds stacked on phone, phone taps >=36px, Games filters v2 (toggle + round refresh; owner | Pool vs Pool | More; More = Month, Day, team search, dot when active).
 - League: tap-size specs changed 44 -> 36 (tests/*, Paul approved); All teams numbers 14px = STOOPIDS.
 - Shots: /workspace/compare/step2/, /workspace/compare/step3/ (before|after per site).
+
+## Step 4 design fixes (4 Nov ~12:30-13:00 WIB, local only, not pushed)
+Same CSS block `/*<SYNC7>*/` on both sites (STOOPIDS index.html, League css/sync-step1.css), same markup changes.
+- Standings, laptop (>=700px): back to the old live row layout (rank | manager name + points | 2x4 pill grid on the right; old layout taken from origin/main). Kept from the new look: ALL CAPS manager team names, centred number + "Points", trophies inline ("Jake 🏆🏆"). Pills show the full school name (as live), now in caps, record underneath, AP rank badge kept on the right of the pill. Pills are always 4 across (League school-grid included); League phone now 4 across too (was 2 wide with 6-team rosters). Phone layout otherwise unchanged.
+- Games, laptop (>=641px): filters on ONE compact row: Upcoming|Past, All owners (170px), Pool vs Pool, More, round ↻. New wrapper `.gfrow` around the existing rows (display:contents on laptop). Phone unchanged.
+- New bet form (bet + pool form): bet-type toggle as a yellow segmented pill on the left, Select all / Clear as small outlined pills on the right, same line. Removed from the opponent grid (STOOPIDS) / the row under it (League). Phone labels "All" / "Clear". League's "N selected" counter is kept for screen readers only (STOOPIDS already did this).
+- Data and bet logic untouched. Click check: Select all / Clear / Pool toggle work on both (7 selected / None selected).
+- Shots: /workspace/compare/step4/ (old left, new right; raw/ has live-*, head-*, new-*). Verified like before: http.server / mock on localhost, Playwright with all non-GET to non-local hosts aborted.
+- Tests: test_bets 19 OK, test_ranks 6 OK, test_ranks_live 11 OK, test_score 20 OK (1 skip), test_shared 7 OK, tests/test_autosettle.js 30 OK.
