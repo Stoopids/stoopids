@@ -794,6 +794,8 @@ main,#main{padding-left:16px;padding-right:16px}
 main,#main{padding-bottom:8px}
 footer{padding-bottom:12px;margin-top:0}
 .fresh,.stfoot{padding-bottom:6px;margin-bottom:0}
+
+.gteam{display:inline-flex;gap:4px;align-items:center}.gteamq{width:9em}
 /*</SYNC1>*/</style>
 </head>
 <body>
@@ -1552,7 +1554,9 @@ function qbPick(id,k,i){
   setTimeout(()=>{try{const f=document.querySelector('.b27-form');if(f){f.scrollIntoView({block:'start'});const b=document.getElementById('b27Place');if(b&&!b.disabled)b.focus({preventScroll:true})}}catch(_){}},30)}
 const qbHint=()=>U.qb&&U.qb===U.text&&U.kind==='bet'&&!U.confirm?'<div class="qb-hint note" role="status">⚡ Quick bet filled in — check and place it.</div>':'';
 /*</QUICK-BET>*/
-let gOwner='all',gMode=null,gDay='all',gH2H=params.has('h2h'),gTeam='all';
+let gOwner='all',gMode=null,gDay='all',gH2H=params.has('h2h'),gTeam='all';let gTeamQ='';
+/*<SYNC1>*/function gTeamFind(q){gTeamQ=String(q||'');const sel=document.getElementById('gTeamSel');if(!sel)return;const n=gTeamQ.trim().toLowerCase();   // search box: hides non-matching pool teams in the Team dropdown (no re-render, keeps focus)
+  for(const o of sel.options)o.hidden=!!n&&o.value!=='all'&&!o.textContent.toLowerCase().includes(n)}/*</SYNC1>*/
 /*<SYNC1>*/const tName=id=>{const t=(D.teams||{})[id]||{};return String(t.short||t.name||id)};
 // games with a (non-void) 2026-27 bet on them: the SAME reading + matcher as auto-settle (b.rd via S25.match), so no new parsing rules
 function gBetIds(){const out=new Set();try{for(const b of (U.doc&&U.doc.bets)||[]){if(!b||b.status==='void'||b.kind==='pool'||!b.rd||b.rd.k==='manual'||!b.rd.d)continue;const m=S25.match(s29Sb(b.rd.d),b.rd);if(m&&m.id)out.add(m.id)}}catch(e){}return out}/*</SYNC1>*/
@@ -1566,9 +1570,9 @@ function vGames(){
   let list=(gMode==='upcoming'?ups:fin.slice().reverse());
   if(gOwner!=='all')list=list.filter(g=>g.home.owners.includes(gOwner)||g.away.owners.includes(gOwner));
   if(gH2H&&gMode==='upcoming')list=list.filter(g=>g.h2h||g.civil);
-  /*<SYNC1>*/const tIds=[...new Set(list.flatMap(g=>[g.away.id,g.home.id]))].map(String).sort((a,b)=>tName(a).localeCompare(tName(b)));if(gTeam!=='all'&&!tIds.includes(gTeam))gTeam='all';
+  /*<SYNC1>*/const tIds=[...new Set((D.games||[]).flatMap(g=>[g.away,g.home].filter(x=>x&&x.owners&&x.owners.length).map(x=>String(x.id))))].sort((a,b)=>tName(a).localeCompare(tName(b)));if(gTeam!=='all'&&!tIds.includes(gTeam))gTeam='all';
   if(gTeam!=='all')list=list.filter(g=>String(g.away.id)===gTeam||String(g.home.id)===gTeam);
-  const teamHtml=`<select class="gf2-s${gTeam!=='all'?' on':''}" aria-label="Team" onchange="gTeam=this.value;render()"><option value="all">All teams</option>${tIds.map(t=>`<option value="${esc(t)}"${t===gTeam?' selected':''}>${esc(tName(t))}</option>`).join('')}</select>`;/*</SYNC1>*/   // s29d: 'Pool only' is an Upcoming filter
+  const teamHtml=`<span class="gteam"><input type="search" id="gTeamQ" class="gf2-s gteamq" placeholder="Search teams" aria-label="Search teams" value="${esc(gTeamQ)}" oninput="gTeamFind(this.value)"><select id="gTeamSel" class="gf2-s${gTeam!=='all'?' on':''}" aria-label="Team" onchange="gTeam=this.value;render()"><option value="all">All teams</option>${tIds.map(t=>`<option value="${esc(t)}"${t===gTeam?' selected':''}>${esc(tName(t))}</option>`).join('')}</select></span>`;setTimeout(()=>gTeamFind(gTeamQ),0);/*</SYNC1>*/   // s29d: 'Pool only' is an Upcoming filter
   const etKey=gKey;   /*<GAMES-LOCAL>*/// this view groups, filters and sorts by the viewer's local date/*</GAMES-LOCAL>*/
   const days=[...new Set(list.map(etKey))];
   if(gDay!=='all'&&!days.includes(gDay))gDay='all';

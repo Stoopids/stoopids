@@ -1,0 +1,21 @@
+Not implemented: Window's scrollTo() method
+Not implemented: Window's scrollTo() method
+Not implemented: Window's scrollTo() method
+Not implemented: Window's scrollTo() method
+FAIL AssertionError [ERR_ASSERTION]: The input did not match the regular expression /Shared ledger/. Input:
+
+"✏️ Write it UpðŸ’° TallyðŸ‘‹ Pick who you are to betðŸ\x8F€ðŸ\x8F€ðŸ\x8F€Loadingâ€¦Bets here are just for fun and are settled in pullups, not money. Betting is Stoopid, and we don't endorse or facilitate gambling for money.This page just records who bet what and who owes whom.\n" +
+  '   '
+
+    at /workspace/stoopids-sync/test_ui_jsdom.js:47:10
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:644:9)
+    at process.processTimers (node:internal/timers:618:7) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: "✏️ Write it UpðŸ’° TallyðŸ‘‹ Pick who you are to betðŸ\x8F€ðŸ\x8F€ðŸ\x8F€Loadingâ€¦Bets here are just for fun and are settled in pullups, not money. Betting is Stoopid, and we don't endorse or facilitate gambling for money.This page just records who bet what and who owes whom.\n" +
+    '   ',
+  expected: /Shared ledger/,
+  operator: 'match',
+  diff: 'simple'
+}
