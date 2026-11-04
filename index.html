@@ -952,7 +952,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.11.0"></script>
+<script src="shared/ui.js?v=1.12.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -2340,7 +2340,7 @@ function vArchive(){
   const A=window.ARCHIVE;
   if(!A)return '<div class="card">Couldn\u2019t load the archive. Try reloading the page.</div>';
   const seasons=A.seasons; // newest first
-  /*<S25E-ARCH>*/if(!Array.isArray(seasons)||!seasons.length)return '<h2>🗂️ Season archive</h2><div class="card s25e-empty" data-s25e-empty="archive"><b>No past seasons yet.</b><div class="note">Finished seasons show up here.</div></div>';/*</S25E-ARCH>*/
+  /*<S25E-ARCH>*/if((!Array.isArray(seasons)||!seasons.length)&&typeof SHARED_UI!=='undefined'&&SHARED_UI.archiveEmpty)return SHARED_UI.archiveEmpty('class="card s25e-empty" data-s25e-empty="archive"','No past seasons yet.','Finished seasons show up here.');/*STEP5-ARCHIVE*/if(!Array.isArray(seasons)||!seasons.length)return '<h2>🗂️ Season archive</h2><div class="card s25e-empty" data-s25e-empty="archive"><b>No past seasons yet.</b><div class="note">Finished seasons show up here.</div></div>';/*</S25E-ARCH>*/
   if(!archSel||!seasons.some(s=>s.season===archSel))archSel=(seasons.find(s=>s.pool)||seasons[0]).season;
   const S=seasons.find(s=>s.season===archSel);
   const opts=seasons.map(s=>`<option value="${esc(s.season)}"${s.season===archSel?' selected':''}>${esc(s.season)}${s.pool?'':': no pool'}</option>`).join('');
