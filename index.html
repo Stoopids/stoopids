@@ -926,7 +926,7 @@ main,#main{padding-top:6px!important}
 /* SYNC7..SYNC14 moved to shared/ui.css (linked right after this style block) */
 
 </style>
-<link rel="stylesheet" href="shared/ui.css?v=1.9.0">
+<link rel="stylesheet" href="shared/ui.css?v=1.10.0">
 <style>/*<SORT-FIT> phone All teams table fits with no sideways scroll; Stoop header reads STOOP */@media (max-width:480px){html body .card.tap.s27-rk th,html body .card.tap.s27-rk td{padding:6px 1px!important}html body .card.tap.s27-rk td:first-child .chip{max-width:none!important;font-size:11px!important;padding-right:6px!important}html body .card.tap.s27-rk td:first-child .chip img{width:16px!important;height:16px!important}html body .card.tap.s27-rk th.to{max-width:none!important;overflow:visible!important;text-overflow:clip!important}html body .card.tap.s27-rk td.to{max-width:5ch}html body .card.tap.s27-rk th{font-size:10px!important}html body .card.tap.s27-rk{padding-left:3px!important;padding-right:3px!important}html body .card.tap.s27-rk td.n{font-size:11.5px!important}html body .card.tap.s27-rk td.to{font-size:11.5px}html body .card.tap.s27-rk .s27-sort i{font-size:.7em!important;margin-left:0!important}}/*</SORT-FIT>*/</style>
 </head>
 <body>
@@ -952,7 +952,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.16.0"></script>
+<script src="shared/ui.js?v=1.17.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -2430,7 +2430,7 @@ function vDraftTab(){return vDraft27()}   /* s26s: STOOPIDS drafted by hand; boa
 function vRecap(){/*<S27-RECAP> weekly write-ups first (newest first), then the draft grades, then the draft board (was the Draft tab) */
   const L=RECAPS.filter(x=>x&&x.title).slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
   const list=L.length?'<div class="rcl">'+L.map(x=>`<article class="card rci"><small>${esc(x.kind==='special'?'Special':'Weekly')}${x.date?' · '+esc(fmtDate(String(x.date).slice(0,10))):''}</small><h3>${esc(x.title)}</h3><p>${esc(x.body||'')}</p></article>`).join('')+'</div>':'<div class="card note rcnone">No weekly write-ups yet. The first one comes after opening week.</div>';
-  return `<section class="rcw"><h2>📰 Weekly write-ups</h2>${list}</section><section class="d27"><h2 class="d27r">🎓 Draft grades</h2><div class="d27cs">${d27Cards()}</div></section>`+vDraft27()}/*</S27-RECAP>*/
+  return `${/*STEP7-RECAP*/typeof SHARED_UI!=='undefined'&&SHARED_UI.weeklySection?SHARED_UI.weeklySection(RECAPS,{e:esc,fmtDate}):`<section class="rcw"><h2>📰 Weekly write-ups</h2>${list}</section>`}<section class="d27"><h2 class="d27r">🎓 Draft grades</h2><div class="d27cs">${d27Cards()}</div></section>`+vDraft27()}/*</S27-RECAP>*/
 /*</S26N-DRAFT-RECAP>*/
 function vDraft27(){const rows=d27Board();
   const head=DRAFT27.slots.map(([nm],i)=>`<th><b>${i+1}</b><span>${esc(TN(nm))}</span></th>`).join('');
