@@ -952,7 +952,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.7.0"></script>
+<script src="shared/ui.js?v=1.8.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -1621,7 +1621,7 @@ function PN(n){const k=ownerKey(n);return OWNER_DISP[k]?OWNER_DISP[k].person:n} 
 function TN(n){const k=ownerKey(n);const o=D&&D.owners&&D.owners.find(x=>x.name===k);return OWNER_DISP[k]?OWNER_DISP[k].team:(o&&o.team_name)||n}   // team name
 /*</OWNER-NAMES>*/
 function vStandings(){/*<RANKINGS>*/const sv=rkView();if(sv==='points')return rkSeg()+vPoints();/*</RANKINGS>*/
-  /*<STEP5-STANDINGS>*/if(typeof SHARED_UI!=='undefined'&&SHARED_UI.standingsList)return rkSeg()+SHARED_UI.standingsList(D.owners.map(o=>({rank:rankTxt(o),emoji:o.emoji,team:TN(o.name),person:PN(o.name),gold:goldTag(o.name),total:o.total,lbAttr:`onclick="goOwner('${esc(o.name)}')"`,chips:o.teams.map(t=>chipRec(t.tid,{out:t.status==='dropped',cn:1})).join('')})))+goldNote();/*</STEP5-STANDINGS> fallback below*/
+  /*<STEP5-STANDINGS>*/if(typeof SHARED_UI!=='undefined'&&SHARED_UI.standingsList)return rkSeg()+SHARED_UI.standingsList(D.owners.map(o=>({rank:rankTxt(o),emoji:o.emoji,team:TN(o.name),person:PN(o.name),gold:goldTag(o.name),total:o.total,lbAttr:`onclick="goOwner('${esc(o.name)}')"`,chips:o.teams.map(t=>chipRec(t.tid,{out:t.status==='dropped',cn:1})).join('')})),esc)+goldNote();/*</STEP5-STANDINGS> fallback below*/
   const mx=Math.max(10,...D.owners.map(o=>o.total));
   return /*<RANKINGS>*/rkSeg()+/*</RANKINGS>*//*<RANK-CHIPS>*/'<div class="ocl">'/*</RANK-CHIPS>*/+D.owners.map((o,i)=>`<div class="card${/*<RANK-CHIPS>*/' oc'/*</RANK-CHIPS>*/}"><div class="lb" onclick="goOwner('${esc(o.name)}')">
     <div class="rank">${rankTxt(o)}</div>
@@ -1680,6 +1680,7 @@ function gameCard(g){
   /*<REFRESH-NOW>*/foot+=lvNote(g);/* HALF-SCORES footer line replaced by HS-INLINE *//*</REFRESH-NOW>*/
   const inner=`<div class="gh">${head}<div class="gbtns">${/*<S24-EDIT>*/s29GameBtn(g)/*</S24-EDIT>*/}${/*<QUICK-BET>*/qbBtn(g)/*</QUICK-BET>*/}</div></div>${row(g.away)}${row(g.home,'H')}<div class="gl">${foot}</div>`;
   /*<GAMES-LOCAL>*/if(fin){const id=String(g.id),op=gOpen.has(id),sc=s=>`${esc(s.short||s.name||'')} ${s.score!=null?s.score:''}`;
+    /*<STEP5-GAMES>*/if(typeof SHARED_UI!=='undefined'&&SHARED_UI.finalCard)return SHARED_UI.finalCard({esc,cls:'gm',cls2:(g.h2h||g.civil?' h2h':'')+(gBetIds().has(id)?' gbet':''),attr:s24Attr('g',g.id),open:op,away:{name:g.away.short||g.away.name||'',score:g.away.score,win:g.away.win},home:{name:g.home.short||g.home.name||'',score:g.home.score,win:g.home.win},upset:g.upset&&g.upset.is,btnAttr:`data-gfin="${esc(id)}"`,btnAttr2:' onclick="gFin(this.dataset.gfin)"',body:inner+(op?boxSlot(g):'')});/*</STEP5-GAMES> fallback below*/
     return `<div class="gm gfin${op?' open':''}${g.h2h||g.civil?' h2h':''}${/*<SYNC1>*/gBetIds().has(id)?' gbet':''/*</SYNC1>*/}"${s24Attr('g',g.id)}><button type="button" class="gsum" data-gfin="${esc(id)}" aria-expanded="${op}" onclick="gFin(this.dataset.gfin)"><span class="gst">FINAL</span><span class="${g.away.win?'w':''}">${sc(g.away)}</span><span class="mut">·</span><span class="${g.home.win?'w':''}">${sc(g.home)}</span>${g.upset&&g.upset.is?'<span>😱</span>':''}<span class="gch" aria-hidden="true">${op?'▾':'▸'}</span></button><div class="gbody"${op?'':' hidden'}>${inner}${/*<SYNC2-BOX>*/op?boxSlot(g):''/*</SYNC2-BOX>*/}</div></div>`}/*</GAMES-LOCAL>*/
   return `<div class="gm${g.h2h||g.civil?' h2h':''}${/*<SYNC1>*/gBetIds().has(String(g.id))?' gbet':''/*</SYNC1>*/}"${/*<S24-EDIT>*/s24Attr('g',g.id)/*</S24-EDIT>*/}>${inner}${/*<GAMES-LOCAL>*/'<div class="gsp" aria-hidden="true"></div>'/*</GAMES-LOCAL>*/}${/*<QUICK-BET>*/qbHtml(g)/*</QUICK-BET>*/}</div>`}
 /*<QUICK-BET>*/
