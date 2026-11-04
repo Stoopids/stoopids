@@ -926,7 +926,7 @@ main,#main{padding-top:6px!important}
 /* SYNC7..SYNC14 moved to shared/ui.css (linked right after this style block) */
 
 </style>
-<link rel="stylesheet" href="shared/ui.css?v=1.5.0">
+<link rel="stylesheet" href="shared/ui.css?v=1.6.0">
 <style>/*<SORT-FIT> phone All teams table fits with no sideways scroll; Stoop header reads STOOP */@media (max-width:480px){html body .card.tap.s27-rk th,html body .card.tap.s27-rk td{padding:6px 1px!important}html body .card.tap.s27-rk td:first-child .chip{max-width:none!important;font-size:11px!important;padding-right:6px!important}html body .card.tap.s27-rk td:first-child .chip img{width:16px!important;height:16px!important}html body .card.tap.s27-rk th.to{max-width:none!important;overflow:visible!important;text-overflow:clip!important}html body .card.tap.s27-rk td.to{max-width:5ch}html body .card.tap.s27-rk th{font-size:10px!important}html body .card.tap.s27-rk{padding-left:3px!important;padding-right:3px!important}html body .card.tap.s27-rk td.n{font-size:11.5px!important}html body .card.tap.s27-rk td.to{font-size:11.5px}html body .card.tap.s27-rk .s27-sort i{font-size:.7em!important;margin-left:0!important}}/*</SORT-FIT>*/</style>
 </head>
 <body>
@@ -952,7 +952,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.5.0"></script>
+<script src="shared/ui.js?v=1.6.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -1290,7 +1290,7 @@ function liveMark(any,sel){document.querySelectorAll(sel).forEach(e=>e.classList
 const BOX={};
 const boxUrl=id=>'https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/summary?event='+encodeURIComponent(id);
 const boxLink=id=>'https://www.espn.com/mens-college-basketball/boxscore/_/gameId/'+encodeURIComponent(id);
-function boxParse(j){const c=((j.header||{}).competitions||[])[0]||{};const L={};(j.leaders||[]).forEach(t=>{const tid=String((t.team||{}).id||'');L[tid]={};(t.leaders||[]).forEach(k=>{const a=(k.leaders||[])[0];if(a)L[tid][k.name]={n:(a.athlete||{}).shortName||(a.athlete||{}).displayName||'',v:a.displayValue||''}})});
+function boxParse(j){if(window.SHARED_UI&&SHARED_UI.espnBox)return SHARED_UI.espnBox(j);const c=((j.header||{}).competitions||[])[0]||{};const L={};(j.leaders||[]).forEach(t=>{const tid=String((t.team||{}).id||'');L[tid]={};(t.leaders||[]).forEach(k=>{const a=(k.leaders||[])[0];if(a)L[tid][k.name]={n:(a.athlete||{}).shortName||(a.athlete||{}).displayName||'',v:a.displayValue||''}})});
   return {teams:(c.competitors||[]).map(t=>({id:String((t.team||{}).id||t.id||''),ab:(t.team||{}).abbreviation||'',ha:t.homeAway,ls:(t.linescores||[]).map(x=>x.displayValue!=null?x.displayValue:x.value),sc:t.score,ld:L[String((t.team||{}).id||t.id||'')]||{}})).sort((a,b)=>a.ha==='away'?-1:1)}}
 function boxBets(g){const ln=g.line||{},A=g.away,H=g.home,as=+A.score,hs=+H.score;if(!isFinite(as)||!isFinite(hs))return '';const out=[];
   const fav=String(ln.fav)===String(H.id)?H:String(ln.fav)===String(A.id)?A:null,sp=+ln.sp;
@@ -1298,8 +1298,8 @@ function boxBets(g){const ln=g.line||{},A=g.away,H=g.home,as=+A.score,hs=+H.scor
   const ou=+ln.ou;if(ou>0){const t=as+hs;out.push(t>ou?`Over ${ou} (total ${t})`:t<ou?`Under ${ou} (total ${t})`:`Push on ${ou}`)}
   return out.length?`<div class="gbx-bets">${out.map(x=>`<span>${x}</span>`).join('<span class="mut"> · </span>')}</div>`:''}
 /*<HS-INLINE> 1H/2H/OT + total on each team row (live + final). Linescore from the live ESPN overlay, else the game data (ls), else the box score once opened */
-function hsLs(g,s){const L=g._lv&&g._lv.ls;if(L){const a=s===g.away?L.a:L.h;if(a&&a.length)return a}if(Array.isArray(s.ls)&&s.ls.length)return s.ls;try{const b=BOX[String(g.id)];if(b&&b.teams){const t=b.teams.find(t=>String(t.id)===String(s.id));if(t&&t.ls&&t.ls.length)return t.ls}}catch(e){}return null}
-function hsHtml(g,s,first){const tot=s.score!=null?esc(String(s.score)):'';const A=hsLs(g,g.away),H=hsLs(g,g.home);if(!A&&!H)return tot;const n=Math.max(2,(A||[]).length,(H||[]).length),me=(s===g.away?A:H)||[],lab=i=>i<2?(i+1)+'H':(n>3?'OT'+(i-1):'OT');let h='';for(let i=0;i<n;i++){const v=me[i];h+='<span class="hsq"'+(first?' data-h="'+lab(i)+'"':'')+'>'+'<i>'+(v!=null&&v!==''?esc(String(v)):'&nbsp;')+'</i>'+'</span>'}return '<span class="hsg">'+h+'<span class="hst"'+(first?' data-h="T"':'')+'>'+tot+'</span></span>'}
+function hsLs(g,s){if(window.SHARED_UI&&SHARED_UI.halfLs)return SHARED_UI.halfLs(g,s,typeof BOX!=='undefined'?BOX:null);const L=g._lv&&g._lv.ls;if(L){const a=s===g.away?L.a:L.h;if(a&&a.length)return a}if(Array.isArray(s.ls)&&s.ls.length)return s.ls;try{const b=BOX[String(g.id)];if(b&&b.teams){const t=b.teams.find(t=>String(t.id)===String(s.id));if(t&&t.ls&&t.ls.length)return t.ls}}catch(e){}return null}
+function hsHtml(g,s,first){if(window.SHARED_UI&&SHARED_UI.halfScores)return SHARED_UI.halfScores(g,s,first,typeof BOX!=='undefined'?BOX:null);const tot=s.score!=null?esc(String(s.score)):'';const A=hsLs(g,g.away),H=hsLs(g,g.home);if(!A&&!H)return tot;const n=Math.max(2,(A||[]).length,(H||[]).length),me=(s===g.away?A:H)||[],lab=i=>i<2?(i+1)+'H':(n>3?'OT'+(i-1):'OT');let h='';for(let i=0;i<n;i++){const v=me[i];h+='<span class="hsq"'+(first?' data-h="'+lab(i)+'"':'')+'>'+'<i>'+(v!=null&&v!==''?esc(String(v)):'&nbsp;')+'</i>'+'</span>'}return '<span class="hsg">'+h+'<span class="hst"'+(first?' data-h="T"':'')+'>'+tot+'</span></span>'}
 /*</HS-INLINE>*/
 function boxHtml(g){const id=String(g.id),b=BOX[id],lk=`<a class="gbx-lk" href="${boxLink(id)}" target="_blank" rel="noopener">ESPN box score ↗</a>`;
   if(!b||b.loading)return `<div class="mut">Loading box score…</div>${boxBets(g)}${lk}`;
@@ -1423,14 +1423,14 @@ const LVC={url:'https://site.api.espn.com/apis/site/v2/sports/basketball/mens-co
 const LV={on:false,started:false,busy:false,timer:null,lastStart:0,lastOk:0,fails:0,paused:false,err:null,polls:0,events:0,matched:0,changed:0,days:[],ov:{},nextAt:0,mode:'slow'};
 const LV_RANK={scheduled:0,live:1,final:2};
 /* ESPN status -> our status: line-for-line port of status_of() in refresh.py */
-function lvStatus(e){
+function lvStatus(e){if(window.SHARED_UI&&SHARED_UI.espnStatus)return SHARED_UI.espnStatus(e);
   const n=((((e||{}).status||{}).type)||{}).name||'';
   const m={STATUS_FINAL:'final',STATUS_SCHEDULED:'scheduled',STATUS_POSTPONED:'postponed',STATUS_CANCELED:'canceled',STATUS_SUSPENDED:'postponed',STATUS_DELAYED:'live'};
   if(Object.prototype.hasOwnProperty.call(m,n))return m[n];
   return /PROGRESS|HALF|END_|OVERTIME/.test(n)?'live':'other';
 }
 /* one ESPN event -> {id,status,detail,start,home,away} (port of norm_event(): preseason skipped, exactly 2 competitors, int scores, NCAA seeds) */
-function lvParse(e){
+function lvParse(e){if(window.SHARED_UI&&SHARED_UI.espnEvent)return SHARED_UI.espnEvent(e);
   try{
     const c=(e.competitions||[])[0];if(!c)return null;
     const stype=(e.season||{}).type;if(stype===1)return null;
