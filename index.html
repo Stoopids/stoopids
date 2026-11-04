@@ -952,7 +952,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.15.0"></script>
+<script src="shared/ui.js?v=1.16.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -3515,6 +3515,7 @@ function vTally(){const B=D.bets,TT=B.tallies&&B.tallies.ledger;if(!TT)return '<
   let h=`<div class="card"><b>🧮 Tally · 2026-27</b><div class="note">From the 2026-27 shared ledger only. Rows owe columns.</div></div>`;/*<S27> Hide paid removed */
   /*<S25J>*/const empty=!ids.length;const M=(a,b)=>(T.matrix&&T.matrix[a]&&T.matrix[a][b])||0;const gids=Object.keys(TALLY_NM).concat(ids.filter(i=>!(i in TALLY_NM)));
   if(empty)h+='<div class="card note" data-tally-empty>No 2026-27 bets with amounts yet.</div>';else/*</S25J>*/
+  /*<STEP7-TALLY>*/if(typeof SHARED_UI!=='undefined'&&SHARED_UI.tallyPeople)h+=SHARED_UI.tallyPeople(ids.slice().sort((a,b)=>T.net[b]-T.net[a]).map(i=>({id:i,nameHtml:esc(tNm(i)),lost:T.lost[i],won:T.won[i],net:T.net[i],bets:T.bets[i],fines:T.fines&&T.fines[i]})),{e:esc,fmt:tMoney,tblAttr:' data-tally="people"',rowKey:'data-pid',zero:'<span class=mut>0</span>'});else/*</STEP7-TALLY>*/
   h+=`<div class="card sc"><table data-tally="people"><tr><th>Person</th><th class="n">Lost</th><th class="n">Won</th><th class="n">Net +/-</th><th class="n">Bets</th><th class="n">Fines</th></tr>${ids.slice().sort((a,b)=>T.net[b]-T.net[a]).map(i=>`<tr data-pid="${esc(i)}"><td>${esc(tNm(i))}</td><td class="n">${tMoney(T.lost[i])}</td><td class="n">${tMoney(T.won[i])}</td><td class="n"><b class="${T.net[i]>0?'good':T.net[i]<0?'bad':''}">${T.net[i]>0?'+':T.net[i]<0?'-':''}${tMoney(Math.abs(T.net[i]))}</b></td><td class="n">${T.bets[i]}</td><td class="n">${T.fines&&T.fines[i]?tMoney(T.fines[i]):'<span class=mut>0</span>'}</td></tr>`).join('')}</table></div>`;
   /*<STEP5-BETS>*/if(typeof SHARED_UI!=='undefined'&&SHARED_UI.owesMatrix)h+=SHARED_UI.owesMatrix(gids.map(i=>({id:i,label:tNm(i)})),M,{esc,fmt:tMoney,rowKey:'data-pid'});else/*</STEP5-BETS>*/
   h+=`<h2>Who Owes Who</h2><div class="swipe">↔ Swipe sideways to see every column</div><div class="card sc"><table class="mx" data-tally="owes"><tr><th>owes ↓ / to →</th>${gids.map(i=>`<th>${esc(tNm(i))}</th>`).join('')}</tr>${gids.map(r=>`<tr data-pid="${esc(r)}"><td><b>${esc(tNm(r))}</b></td>${gids.map(c=>{const v=M(r,c);return r===c?'<td class="z">·</td>':v?`<td>${tMoney(v)}</td>`:'<td class="z">0</td>'}).join('')}</tr>`).join('')}</table></div>`;
