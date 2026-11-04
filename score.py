@@ -98,7 +98,7 @@ def build_games_view(cfg, ov, today, games, lines, windows, recent_days, ahead_d
         sides = {}
         for k in ("home", "away"):
             sd = g[k]
-            sides[k] = {"id": sd.get("id"), "short": sd.get("short"), "seed": sd.get("seed"), "score": sd.get("score"), "win": bool(sd.get("win")),
+            sides[k] = {"id": sd.get("id"), "short": sd.get("short"), "seed": sd.get("seed"), "score": sd.get("score"), "win": bool(sd.get("win")), **({"ls": sd["ls"]} if sd.get("ls") else {}),
                         "pool": str(sd.get("id")) in pool, "owners": owners_for(sd.get("id"), g["day"]) if str(sd.get("id")) in pool else []}
         ho, ao = set(sides["home"]["owners"]), set(sides["away"]["owners"])
         h2h = bool(ho and ao and not (ho & ao))

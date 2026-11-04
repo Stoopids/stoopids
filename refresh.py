@@ -136,6 +136,17 @@ def status_of(e):
 ROUNDS = ["First Four", "1st Round", "2nd Round", "Sweet 16", "Elite 8", "Final Four", "National Championship"]
 
 
+def _ls(x):
+    """Per-half (and OT) points from ESPN linescores, e.g. [29, 37]; [] when not given (HS-INLINE)."""
+    out = []
+    for l in x.get("linescores") or []:
+        try:
+            out.append(int(float(l.get("value") if l.get("value") is not None else l.get("displayValue"))))
+        except Exception:
+            out.append(None)
+    return out
+
+
 def norm_event(e, day):
     c = e["competitions"][0]
     stype = e.get("season", {}).get("type")
@@ -170,7 +181,8 @@ def norm_event(e, day):
             sc = None
         return {"id": str(t.get("id")) if t.get("id") else None, "short": t.get("shortDisplayName") or t.get("location"),
                 "name": t.get("location"), "score": sc, "win": bool(x.get("winner")), "conf": t.get("conferenceId"),
-                "seed": seed if (kind == "ncaa" and seed and seed < 99) else None}
+                "seed": seed if (kind == "ncaa" and seed and seed < 99) else None,
+                "ls": _ls(x)}
     home = next((x for x in comps if x.get("homeAway") == "home"), comps[0])
     away = next((x for x in comps if x.get("homeAway") == "away"), comps[1])
     h, a = side(home), side(away)
