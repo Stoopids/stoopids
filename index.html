@@ -1069,6 +1069,14 @@ html body .segrow .rkseg .rkseg-b,html body .segv .seg,html body .b27-kindrow>.t
 .hscs{display:flex;flex-wrap:wrap;gap:4px 10px;margin-top:4px;font-size:12px;opacity:.9}
 .hscs .hsc b{color:#22c55e;font-weight:800;margin-right:2px}
 /*</SYNC13>*/
+/*<SYNC14>*/ /* Standings: online Stoops glow green */
+.card.oc.isonl .who>b{display:inline-flex!important;align-items:center;gap:8px;padding:2px 10px;margin-left:-10px;border-radius:999px;outline:2px solid #22c55e;box-shadow:0 0 10px 2px rgba(34,197,94,.65);animation:onlglow 1.6s ease-in-out infinite;max-width:100%}
+.onlb{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:900;letter-spacing:.06em;color:#22c55e;text-transform:uppercase;flex:none}
+.onlb::before{content:"";width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 6px #22c55e}
+@keyframes onlglow{0%,100%{box-shadow:0 0 6px 1px rgba(34,197,94,.5)}50%{box-shadow:0 0 16px 4px rgba(34,197,94,.9)}}
+@media (prefers-reduced-motion:reduce){.card.oc.isonl .who>b{animation:none}}
+@media (max-width:640px){.card.oc.isonl .who>b{padding:1px 7px;margin-left:-7px;gap:5px}.onlb{font-size:9px}}
+/*</SYNC14>*/
 
 </style>
 </head>
@@ -4074,7 +4082,7 @@ load();setInterval(load,5*60*1000);
 function onlStrip(){const main=document.getElementById('main');if(!main||!D)return;let el=document.getElementById('onlStrip');if(!el||el.previousElementSibling!==main){if(el)el.remove();el=document.createElement('section');el.id='onlStrip';el.className='onl';el.setAttribute('aria-label','Who\u2019s online');main.insertAdjacentElement('afterend',el)}
   const m=PS.map||{},now=Date.now(),me=PS.who,on=[],off=[];presOwners().forEach(o=>{const e=m[o.name];if(e&&(now-e.t<=PRES.onlineMs||o.name===me))on.push(o);else off.push([o,e&&e.t?now-e.t:Infinity])});off.sort((a,b)=>a[1]-b[1]);
   const nm=o=>esc((o.emoji?o.emoji+' ':'')+PN(o.name));
-  el.innerHTML='<span class="onl-h">Who\u2019s online</span>'+on.map(o=>`<span class="onl-p on" title="Online now"><i class="pd"></i>${nm(o)}</span>`).join('')+off.map(([o,a])=>`<span class="onl-p"><i class="pd off"></i>${nm(o)} <small>${a===Infinity?'not seen yet':esc(presAgo(a))}</small></span>`).join('')}
+  /*<ONLINE-HL>*/try{const onN=new Set(on.map(o=>o.name));document.querySelectorAll('.card.oc').forEach(c=>{const lb=c.querySelector('[onclick^="goOwner"]'),mm=lb&&lb.getAttribute('onclick').match(/goOwner\('(.*)'\)/),n=mm?mm[1]:'',w=c.querySelector('.who');const yes=[...onN].some(x=>x===n||esc(x)===n);c.classList.toggle('isonl',yes);if(w){let t=w.querySelector('.onlb');if(yes&&!t){t=document.createElement('span');t.className='onlb';t.textContent='ONLINE';w.querySelector('b')?.appendChild(t)}else if(!yes&&t)t.remove()}})}catch(e){}/*</ONLINE-HL>*/el.innerHTML='<span class="onl-h">Who\u2019s online</span>'+on.map(o=>`<span class="onl-p on" title="Online now"><i class="pd"></i>${nm(o)}</span>`).join('')+off.map(([o,a])=>`<span class="onl-p"><i class="pd off"></i>${nm(o)} <small>${a===Infinity?'not seen yet':esc(presAgo(a))}</small></span>`).join('')}
 let ONL_M={};async function onlRead(){if(!(PS.who&&PS.lastOk&&Date.now()-PS.lastOk<PRES.beatMs*4)){try{const r=await fetch(PRES.url,{cache:'no-store'});if(r.ok){ONL_M=presParse(await r.text());if(!(PS.who&&PS.lastOk))PS.map=Object.assign({},PS.map||{},ONL_M)}}catch(e){}}try{onlStrip()}catch(e){}}
 {const _r=render;render=function(){const x=_r.apply(this,arguments);try{onlStrip()}catch(e){}/*<LIVE-MARK>*/try{document.body.classList.toggle('haslive',!!(D&&(D.games||[]).some(g=>g.status==='live')))}catch(e){}/*</LIVE-MARK>*/return x};const _p=presDraw;presDraw=function(){_p();try{onlStrip()}catch(e){}}}
 setTimeout(onlRead,1500);setInterval(onlRead,60000);/*</ONLINE-STRIP>*/
