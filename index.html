@@ -952,7 +952,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.9.0"></script>
+<script src="shared/ui.js?v=1.10.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -2431,6 +2431,7 @@ function vDraft27(){const rows=d27Board();
   return `<section class="d27"><h2>Draft results (by roster)</h2><p class="d27sub">8 owners · snake draft · ${rows.length} rounds${d27When()}. Tap a team for ESPN.</p>
 <div class="d27w"><table class="d27t"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div></section>`}
 function d27Cards(){return DRAFT27.slots.map(([nm,id],i)=>{const g=d27Grade(nm,id);const gr=g&&g.grade?String(g.grade).trim().slice(0,3):'';
+    /*<STEP5-RECAP>*/if(typeof SHARED_UI!=='undefined'&&SHARED_UI.gradeCard)return SHARED_UI.gradeCard({grade:g&&g.grade,team:TN(nm),person:PN(nm),slot:i+1,has:!!g,short:g&&g.summary4,deep:g&&g.deep,soon:'Grades coming soon.'},esc);/*</STEP5-RECAP>*/
     return `<div class="d27c"><div class="d27h"><span class="d27g${gr?'':' tbd'}">${gr?esc(gr):'?'}</span><div><b>${esc(TN(nm))}</b><small>${esc(PN(nm))} · slot ${i+1}</small></div></div>`+
      (g?(g.summary4?`<p>${esc(g.summary4)}</p>`:'')+(g.deep?`<details><summary>More</summary><p>${esc(g.deep)}</p></details>`:''):'<p class="d27soon">Grades coming soon.</p>')+'</div>'}).join('');}
 /*<S26N-DRAFT-RECAP>*/VIEWS.draft=vDraftTab;VIEWS.recap=vRecap;/*<S27-TABS>*/TABS.splice(4,0,['recap','🎓 Recap']);{const ix=TABS.findIndex(t=>t[0]==='about');const ab=TABS.splice(ix,1)[0];TABS.splice(TABS.findIndex(t=>t[0]==='archive'),0,ab)}NAVSHORT.recap='Recap';/*</S27-TABS>*//*<S29B-SHARE>*/TABS.push(['profile','👤 Profile']);NAVSHORT.profile='Profile';VIEWS.profile=vProfile;VIEWS.share=vProfile;/*<S29E-PROFILE> Share is now part of Profile; #share is an alias *//*</S29B-SHARE>*//*</S26N-DRAFT-RECAP>*/
