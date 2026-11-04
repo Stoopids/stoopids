@@ -13,7 +13,7 @@
     {"name": "Stock", "team_name": "Stock Rising",                "emoji": "📈", "sheet_header_match": "STOCK RISING"},
     {"name": "Kurmoji",  "team_name": "Kurmoji",                     "emoji": "🦠", "sheet_header_match": "KURMOJI"},
     {"name": "Kentut",   "team_name": "Kentut",                      "emoji": "💨", "sheet_header_match": "KENTUT"},
-    {"name": "Murf",     "team_name": "Murfcockchalkrock",           "emoji": "🪨", "sheet_header_match": "MURFCOCK"},
+    {"name": "Murf",     "team_name": "Cockchalkrock",           "emoji": "🪨", "sheet_header_match": "MURFCOCK"},
     {"name": "Paul",      "team_name": "PAUL",                   "emoji": "💩", "sheet_header_match": "POO PARTY"},
     {"name": "Nasty",    "team_name": "Peacock",                     "emoji": "🦚", "sheet_header_match": "PEACOCK"},
     {"name": "En Fuego", "team_name": "En Fuego",                    "emoji": "🔥", "sheet_header_match": "EN FUEGO"}
