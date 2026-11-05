@@ -952,7 +952,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.20.0"></script>
+<script src="shared/ui.js?v=1.21.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -3417,7 +3417,7 @@ function b27SyncDom(){
 function b27Sync(){try{b27SyncDom()}catch(e){}}
 /*<MULTI-BET>*//* narrow chip label: short names (several words = the last word when it is 4-9 chars: "Dirty Draymond" -> "Draymond", "En Fuego" -> "Fuego"; else <=9 chars as is, else the first word, else cut with an ellipsis). The full name is always in aria-label and data-b27-name. */
 const b27ShortName=n=>{n=String(PN(n));const w=n.split(/\s+/).filter(Boolean),l=w[w.length-1];if(w.length>1&&l.length>=4&&l.length<=9)return l;if(n.length<=9)return n;if(w.length>1&&w[0].length<=9)return w[0];return n.slice(0,8)+'…'};
-/*<OWNER-NAMES>*/const b27ShortT=n=>{n=String(TN(n));const w=n.split(/\s+/).filter(Boolean),l=w[w.length-1];if(w.length>1&&l.length>=4&&l.length<=9)return l;if(n.length<=9)return n;if(w.length>1&&w[0].length<=9)return w[0];return n.slice(0,8)+'…'};const b27TinyT=n=>{const t=b27ShortT(n);return t.length<=7?t:t.slice(0,4)};   // bet-against chips show TEAM names (keyed by the owner key)/*</OWNER-NAMES>*/
+/*<OWNER-NAMES>*/const b27ShortT=n=>{if(typeof SHARED_UI!=='undefined'&&SHARED_UI.shortName)return SHARED_UI.shortName(TN(n));n=String(TN(n));const w=n.split(/\s+/).filter(Boolean),l=w[w.length-1];if(w.length>1&&l.length>=4&&l.length<=9)return l;if(n.length<=9)return n;if(w.length>1&&w[0].length<=9)return w[0];return n.slice(0,8)+'…'};const b27TinyT=n=>{const t=b27ShortT(n);return t.length<=7?t:t.slice(0,4)};   // bet-against chips show TEAM names (keyed by the owner key)/*</OWNER-NAMES>*/
 const b27TinyName=n=>{const t=b27ShortName(n);return t.length<=7?t:t.slice(0,4)};   // phones (7 chips in one row): max 7 chars, long ones cut to 4 letters ("Draymond" -> "Dray")
 const b27SelTxt=()=>U.opps.length?U.opps.length+' selected':'None selected';
 /* "3 bets of 10 each" / "1 bet of 10" */
