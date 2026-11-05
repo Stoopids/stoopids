@@ -536,7 +536,7 @@ nav a.nt .s29nb{position:absolute;top:1px;right:2px;min-width:15px;background:#F
 /*</S29D-NAV>*/
 .tabs{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:6px;overflow:visible}
 .tabs>button,.tabs>select,.tabs>a{min-width:0;width:100%;white-space:normal;overflow-wrap:anywhere;padding-left:6px;padding-right:6px}
-.tabs.ob-seg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0}
+.tabs.ob-seg{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:0}
 .tabs.ob-seg button{white-space:normal}
 /*</TAB-GRID>*/
 /*<CARD-SIZE>*/
@@ -3519,7 +3519,7 @@ function vB27(){
 /*<ONE-BETS>*/
 /* One "Bets" tab: tab id 'bets27' = 2026-27 view (default), tab id 'bets' = the old 2025-26 side-bets ledger (read-only). ?tab=bets (the old Side bets URL) opens the old view, ?tab=bets27 the new one. */
 /*<BETS-TALLY>*/const SHOW_OLD_BETS=!!window.__STOOPIDS_SHOW_OLD_BETS;   // default false; the legacy jsdom suites set the window flag before load to keep testing the hidden view   // the 2025-26 (old) side-bets view: hidden (data kept: data.json bets / bets_imported.json); set true to bring its tab back
-const OB_LABELS={form:'\u270F\uFE0F Write it Up',tally:'💰 Tally',request:'\u{1F4E8} Request a bet'};   // Bets tab segment labels
+const OB_LABELS={form:'\u270F\uFE0F Write it Up',tally:'💰 Tally',request:'\u{1F4E8} Request',open:'\u{1F4CC} Open'};   /* STEP10 order: Write it Up, Request, Open, Tally */   // Bets tab segment labels
 /*<STEP8-REQUEST>*/ /* Request a bet: shared module (shared/ui.js SHARED_UI.Requests); requests live in their OWN textdb record (not the bets ledger) */
 const REQ_URL='https://textdb.dev/api/data/stoopids-requests-2627-9eaa4f66';
 const RQ=(typeof SHARED_UI!=='undefined'&&SHARED_UI.Requests)?SHARED_UI.Requests({maxText:PULK.maxText,change:"presAsk();return false",
@@ -3532,7 +3532,7 @@ const RQ=(typeof SHARED_UI!=='undefined'&&SHARED_UI.Requests)?SHARED_UI.Requests
   placeBet:async(r,me)=>{const id=b27Rid(),at=new Date().toISOString(),text=b27Clean(r.txt);let rd;try{rd=S25.parse(text,at)}catch(_){}
     const nb=Object.assign({id,backer:r.by,other:me,postedBy:me,postedAt:at,amt:r.amt,odds:{a:(r.odds||[1,1])[0],b:(r.odds||[1,1])[1]},text,status:'open',req:r.id},rd?{rd}:{});
     const back=await b27Write(cur=>{if(cur.some(c=>c.id===id))return cur;let n=b27MaxN(cur);return cur.concat([Object.assign({},nb,{n:n+1,created_at:at,settled_at:null})])},cur=>cur.some(c=>c.id===id));b27Apply(back)},
-  render:()=>{if(tab==='bets27'&&OB_VIEW==='request')render()}}):null;
+  render:()=>{if(tab==='bets27'&&(OB_VIEW==='request'||OB_VIEW==='open'))render()}}):null;
 /*</STEP8-REQUEST>*/
 let OB_VIEW='form';   // Bets tab: 'form' = 2026-27 (New bet form + bet list), 'tally' = person table + Who owes who for 2026-27
 function obView(v){OB_VIEW=v;tab='bets27';render();window.scrollTo(0,0)}
@@ -3554,7 +3554,7 @@ function vTally(){const B=D.bets,TT=B.tallies&&B.tallies.ledger;if(!TT)return '<
 /*</BETS-TALLY>*/
 function obToggle(){
   /*<BETS-TALLY>*/if(!SHOW_OLD_BETS||tab==='bets27'){const sg=(k,t)=>`<button type="button" class="${tab==='bets27'&&OB_VIEW===k?'on':''}" aria-pressed="${tab==='bets27'&&OB_VIEW===k}" data-ob="${k}" onclick="obView('${k}')">${t}</button>`;
-    return `<div class="tabs ob-seg" role="group" aria-label="Bets">${sg('form',OB_LABELS.form)}${sg('tally',OB_LABELS.tally)}${(typeof RQ!=='undefined'&&RQ)?sg('request',OB_LABELS.request):''}${SHOW_OLD_BETS?`<button type="button" data-ob="bets" onclick="obGo('bets')">2025-26 (old)</button>`:''}</div>`}/*</BETS-TALLY>*/
+    return `<div class="tabs ob-seg" role="group" aria-label="Bets">${sg('form',OB_LABELS.form)}${(typeof RQ!=='undefined'&&RQ)?sg('request',OB_LABELS.request)+sg('open',OB_LABELS.open):''}${sg('tally',OB_LABELS.tally)}${SHOW_OLD_BETS?`<button type="button" data-ob="bets" onclick="obGo('bets')">2025-26 (old)</button>`:''}</div>`}/*</BETS-TALLY>*/
   const seg=(k,t,bd)=>`<button type="button" class="${tab===k?'on':''}" aria-pressed="${tab===k}" data-ob="${k}"${tab!==k&&bd?' aria-label="'+t+', new bets"':''} onclick="obGo('${k}')">${t}${tab===k?'':bd}</button>`;
   return `<div class="tabs ob-seg" role="group" aria-label="Bets season">${seg('bets27','2026-27',b27Badge())}${seg('bets','2025-26 (old)',nbBadge('bets'))}</div>`;
 }
@@ -3568,7 +3568,7 @@ function obOldNote(){   // read-only replacement of the old shared-ledger card (
 (function(){
   if(DEMO)return;
   /*<ONE-BETS>*/const i=TABS.findIndex(t=>t[0]==='bets');if(i<0)TABS.push(['bets27','💵 Bets']);else TABS[i]=['bets27','💵 Bets'];   // the ONE Bets tab (was Side bets + Bets 26-27); the Draft link stays last
-  VIEWS.bets27=()=>obToggle()+/*<BETS-TALLY>*/(OB_VIEW==='tally'?vTally():OB_VIEW==='request'&&typeof RQ!=='undefined'&&RQ?RQ.view():((typeof RQ!=='undefined'&&RQ?RQ.pinned(s24FSt()==='req'):'')+vB27()))/*</BETS-TALLY>*/;VIEWS.bets=()=>obToggle()+vBets();NAVSHORT.bets27='Bets';/*</ONE-BETS>*/
+  VIEWS.bets27=()=>obToggle()+/*<BETS-TALLY>*/(OB_VIEW==='tally'?vTally():OB_VIEW==='request'&&typeof RQ!=='undefined'&&RQ?RQ.view():OB_VIEW==='open'&&typeof RQ!=='undefined'&&RQ?RQ.view('open'):((typeof RQ!=='undefined'&&RQ?RQ.pinned(s24FSt()==='req'):'')+vB27()))/*</BETS-TALLY>*/;VIEWS.bets=()=>obToggle()+vBets();NAVSHORT.bets27='Bets';/*</ONE-BETS>*/
   if(typeof nbBadge==='function'){const _b=nbBadge;nbBadge=function(k){return k==='bets27'?/*<ONE-BETS>*/(tab==='bets'||tab==='bets27'?'':b27Badge()||_b('bets'))/*</ONE-BETS>*/:_b(k)}}      // 'new' badge on the one Bets tab: 2026-27 (own watermark) or the old ledger; inside the tab the toggle shows it on the other segment
   const pp=presPick;presPick=function(w){pp(w);try{U.opps=[];/*<POOL>*/U.pp=[];/*</POOL>*/if(tab==='bets27')render()}catch(e){}};
   /* toast: own text, and 'View' opens this tab when every pending item is a Bets 26-27 bet (wraps the existing functions; nothing in them is edited) */
