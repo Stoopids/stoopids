@@ -3940,16 +3940,22 @@ function s24FixBadge(b){return b.fxh&&b.fxh.some(e=>e.out==='confirmed'/*<CREATO
 /*</CREATOR-SETTLE>*/
 /* ---- Bets filter (2026-27 view): the older STOOPIDS two-select design (Wagers list: Everyone / person + status), plus "Me" and "Waiting on me".
    Remembered per device in localStorage (stoopids_b27_person / stoopids_b27_status): only the filter value ("me" is stored as the word me, never a name for it). ---- */
-const S24FS=[['all','Any status'],['open','Open'],['settled','Settled'],['wash','Wash'],['wait','Waiting on me'],['req','Requested']],S24FPK='stoopids_b27_person',S24FSK='stoopids_b27_status';
+const S24FS=[['all','Any status'],['open','Open'],['settled','Settled'],['wash','Wash'],['wait','Waiting on me'],['wstoops','Waiting on stoops'],['req','Requested']],S24FPK='stoopids_b27_person',S24FSK='stoopids_b27_status';
 const s24FP=()=>{const v=lsGet(S24FPK);return v==='me'||b27OwnerNames().includes(v)?v:'all'};
 const s24FSt=()=>{const v=lsGet(S24FSK);return S24FS.some(x=>x[0]===v)?v:'all'};
 function s24FSetP(v){lsSet(S24FPK,v==='me'||b27OwnerNames().includes(v)?v:'all');render()}
 function s24FSetS(v){lsSet(S24FSK,S24FS.some(x=>x[0]===v)?v:'all');render()}
 const s24InBet=(b,n)=>!!n&&(b.backer===n||b.other===n||b27Opps(b).includes(n)||(b.kind==='pool'&&Array.isArray(b.parts)&&b.parts.includes(n)));
 const s24IsOpen=b=>b.status==='open'&&!(b.kind==='pool'&&b.back);
-/* "Waiting on me": an open bet someone else placed against me (nobody has settled it yet), an open pool I'm in with no payouts, or a Fix result request from the other side that I have to confirm */
+/* STEP10: "Waiting on me" = ONLY bets where I can tap something (the placer enters the result / Confirm on an open bet or pool; the placer answers a Fix request).
+   "Waiting on stoops" = open bets/pools I'm in that only another Stoop can move (they placed it), or my own Fix request waiting on the placer. */
 function s24Waiting(b,me){if(!me)return false;
   /*<CREATOR-SETTLE>*/if(b.fx&&S24R.includes(b.status)&&me===b.backer&&b.fx.by!==me)return true;/*</CREATOR-SETTLE>*/
+  if(b.status!=='open')return false;
+  if(b.kind==='pool')return !b.back&&b.backer===me;
+  return b.backer===me&&b27Opps(b).length>0}
+function s24WaitStoops(b,me){if(!me||s24Waiting(b,me))return false;
+  if(b.fx&&S24R.includes(b.status)&&b.fx.by===me&&b.backer!==me)return true;
   if(b.status!=='open')return false;
   if(b.kind==='pool')return !b.back&&b.backer!==me&&Array.isArray(b.parts)&&b.parts.includes(me);
   return b.backer!==me&&b27Opps(b).includes(me)}
@@ -3957,12 +3963,12 @@ let s24Q='';   // search text: this page view only, not stored
 const s24Hay=b=>[b.text,b.backer,b.other,...b27Opps(b),...(Array.isArray(b.parts)?b.parts:[])].join(' ').toLowerCase();
 function s24FSetQ(v){s24Q=String(v||'').slice(0,80);render()}
 function s24Filter(bets,me){if(s24FSt()==='req')return [];/*STEP8-REQUEST*/const p=s24FP(),st=s24FSt(),who=p==='me'?me:p==='all'?null:p,q=s24Q.trim().toLowerCase();
-  return bets.filter(b=>(S24.sub&&b.id===S24.sub)||((!q||s24Hay(b).includes(q))&&(p==='all'||s24InBet(b,who))&&(st==='all'||(st==='wait'?s24Waiting(b,me):st==='open'?s24IsOpen(b):st==='settled'?(b.status==='backer'||b.status==='other'||(b.kind==='pool'&&b.status==='open'&&!!b.back)):st==='wash'?b.status==='push':true))))}
+  return bets.filter(b=>(S24.sub&&b.id===S24.sub)||((!q||s24Hay(b).includes(q))&&(p==='all'||s24InBet(b,who))&&(st==='all'||(st==='wait'?s24Waiting(b,me):st==='wstoops'?s24WaitStoops(b,me):st==='open'?s24IsOpen(b):st==='settled'?(b.status==='backer'||b.status==='other'||(b.kind==='pool'&&b.status==='open'&&!!b.back)):st==='wash'?b.status==='push':true))))}
 /* same markup + classes as the old 2025-26 Wagers filter (card > row2 > select, select, input.sb-in), all on one row */
-function s24FilterBar(bets,me){const p=s24FP(),st=s24FSt(),n=bets.filter(b=>s24Waiting(b,me)).length;
+function s24FilterBar(bets,me){const p=s24FP(),st=s24FSt(),n=bets.filter(b=>s24Waiting(b,me)).length,n2=bets.filter(b=>s24WaitStoops(b,me)).length;
   return `<div class="card s24fb"><div class="row2"><select id="sbPerson" aria-label="Person" onchange="s24FSetP(this.value)"><option value="all"${p==='all'?' selected':''}>Everyone</option><option value="me"${p==='me'?' selected':''}>Me</option>${b27OwnerNames().map(o=>`<option value="${esc(o)}"${o===p?' selected':''}>${esc(PN(o))}</option>`).join('')}</select>
-   <select id="sbStatus" aria-label="Status" onchange="s24FSetS(this.value)">${S24FS.map(([k,t])=>`<option value="${k}"${k===st?' selected':''}>${esc(t)}${k==='wait'&&n?' ('+n+')':''}</option>`).join('')}</select>
-   <input id="sbQ" class="sb-in" aria-label="Search bets" placeholder="search terms…" value="${esc(s24Q)}" onchange="s24FSetQ(this.value)"></div>${(p==='me'||st==='wait')&&!me?'<div class="note" style="margin-top:6px">Pick who you are to use “Me” / “Waiting on me”.</div>':''}</div>`}
+   <select id="sbStatus" aria-label="Status" onchange="s24FSetS(this.value)">${S24FS.map(([k,t])=>`<option value="${k}"${k===st?' selected':''}>${esc(t)}${k==='wait'&&n?' ('+n+')':k==='wstoops'&&n2?' ('+n2+')':''}</option>`).join('')}</select>
+   <input id="sbQ" class="sb-in" aria-label="Search bets" placeholder="search terms…" value="${esc(s24Q)}" onchange="s24FSetQ(this.value)"></div>${(p==='me'||st==='wait'||st==='wstoops')&&!me?'<div class="note" style="margin-top:6px">Pick who you are to use “Me” / “Waiting on me” / “Waiting on stoops”.</div>':''}</div>`}
 
 /*</S24-EDIT>*/
 /*<ST-REFRESH>*/// Standings Refresh: re-fetch data.js + an immediate live-scores check, with visible feedback ("Refreshing…", then "checked just now")
