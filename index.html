@@ -2523,7 +2523,7 @@ function s27CopyText(t,ok){const fall=()=>{try{const ta=document.createElement('
   try{if(navigator.clipboard&&navigator.clipboard.writeText&&window.isSecureContext){navigator.clipboard.writeText(t).then(ok,fall);return}}catch(e){}fall()}
 function s27CopyBet(id,btn){const b=(U.doc&&U.doc.bets||[]).find(x=>x.id===id);if(!b)return;
   s27CopyText(/*<S29E-COPY>*/s29eCopyText(b)/*</S29E-COPY>*/,()=>{if(!btn)return;btn.textContent='Copied';btn.classList.add('on');clearTimeout(btn._t);btn._t=setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('on')},1600)})}
-const S27_TIPS={who:'Tap one or more managers. Several = one bet, one result.',text:'Write it as you say it: "Kansas -4 beats Duke".',amt:()=>'Minimum '+PULK.minAmt,/*<STEP12-TIPS>*/pterms:'Say what the pool is, e.g. “STOOPIDS season-long tournament pool”.',ppl:'You’re in automatically. Tap everyone else who’s in.',buy:()=>'Buy-in per person, minimum '+PULK.minAmt+'. The pot is buy-in × people in.',pay:'Amounts only; you pick who finished where when you settle it. They must add up to the pot. Optional: leave blank to fill in when it’s over.',/*</STEP12-TIPS>*/odds:'If you’re right, they owe amount × first ÷ second. Even = 1-1.',auto:'A clear game bet (team, spread or total, date) gets a reading. After the final, ESPN scores propose the result. You confirm it; nothing settles on its own.',manual:'Manual: you enter the result yourself after the game.'};
+const S27_TIPS={who:'Tap one or more managers. Several = one bet, one result.',text:'Write it as you say it: "Kansas -4 beats Duke".',amt:()=>'Minimum '+PULK.minAmt,/*<STEP12-TIPS>*/pterms:'Say what the pool is, e.g. “STOOPIDS season-long tournament pool”.',ppl:'You’re in automatically. Tap everyone else who’s in.',buy:()=>'Buy-in per person, minimum '+PULK.minAmt+'. The pot is buy-in × people in.',pay:'Amounts only; you pick who finished where when you settle it. They must add up to the pot. Optional: leave blank to fill in when it’s over.',/*</STEP12-TIPS>*/odds:'If you’re right, they owe amount × first ÷ second. Even = 1-1.',auto:'A clear game bet (team, spread or total, date) can be matched to an ESPN final. After the final, scores propose the result. You confirm it; nothing settles on its own.',manual:'Unclear bets: you enter the result yourself after the game.'};
 const s27TipK=(k,l)=>`<button type="button" class="s27-tipk k" data-tip="${k}" aria-expanded="false" onclick="s27Tip(this)">${esc(l)}</button>`;
 function s27TipClose(){document.querySelectorAll('.s27-pop').forEach(e=>e.remove());document.querySelectorAll('.s27-tipk[aria-expanded=true]').forEach(e=>e.setAttribute('aria-expanded','false'))}
 function s27Tip(el){const open=el.getAttribute('aria-expanded')==='true';s27TipClose();if(open)return;let t=S27_TIPS[el.getAttribute('data-tip')]||'';if(typeof t==='function')t=t();
@@ -2536,7 +2536,7 @@ function vHowTo(){const m=PULK.minAmt;
   <h2>📘 How to bet</h2>
   <section id="howto-newbet" class="s29-hnb"><h3>New bet</h3><div class="card"><b>1. Who you’re betting against</b><p>Tap one or more managers. Several managers = one bet with one result: each of them is on the other side at the same amount. <b>Select all</b> picks everyone, <b>Clear</b> starts over.</p></div>
   <div class="card"><b>2. What’s the bet</b><p>Write what you say will happen, in plain words: “Kansas -4 beats Duke”, “Duke -5.5 vs UNC”, “Over 150.5 Kansas vs Duke”. You’re the one saying it; they take the other side.</p></div>
-  <div class="card"><b>Auto-settle</b><p>Under the bet text, the Auto-settle box shows how the site reads a clear game bet (team, spread or total, date). After the final, ESPN scores propose the result and you confirm it: nothing settles on its own. Tap <b>Edit reading</b> to fix it, or <b>Make it manual</b> to enter the result yourself after the game.</p></div>
+  <div class="card"><b>Auto-settle</b><p>A clear game bet (team, spread or total, date) can be matched to an ESPN final. After the final, scores propose the result and you confirm it: nothing settles on its own. Unclear bets you settle by hand.</p></div>
   <div class="card"><b>3. Amount</b><p>Minimum ${m}. Tap a preset or <b>Custom</b> for a whole number from ${m} to ${PULK.maxAmt}.</p></div>
   <div class="card"><b>4. Odds</b><p>Even = 1-1. With odds like 3-1, if you’re right they owe amount × 3 ÷ 1; if you’re wrong you owe the amount. Tap <b>Custom…</b> for odds like 7-2.</p></div>
   <div class="card"><b>Place it</b><p>Tap <b>Place bet</b>, check the summary, then <b>Yes, place it</b>. Until someone settles it you can edit or cancel your own bet.</p></div></section>
@@ -3754,11 +3754,8 @@ function s25ValidExtra(x,names,status){const o={},R=x.rd,cl=v=>typeof v==='strin
 function s25FormRd(){if(U.rdEd)return U.rdEd;return S25.parse(U.text,new Date().toISOString())}
 function s25RdLine(r){return r.k==='manual'?'<span class="man">Manual</span>':'<b>'+esc(S25.label(r))+'</b> · '+esc(S25.SPORTS[r.sp].lbl)}
 function s25RdHtml(){
-  if(!b27Clean(U.text))return '';   // s29d: no 'Auto-settle' tip label on the empty form (explained on How to bet)
-  if(U.rdOpen)return s25EdHtml();
-  const r=s25FormRd();
-  return `<div class="s25rd" data-s25-rd="${r.k}"><span class="k">${'Reading'+(U.rdEd?' (edited)':'')}</span> ${s25RdLine(r)}
-   <button type="button" data-s25-edit="1" onclick="s25EdOpen()">✏️ Edit reading</button>${r.k!=='manual'?'<button type="button" data-s25-manual="1" onclick="s25SetManual()">Make it manual</button>':''}${U.rdEd?'<button type="button" data-s25-auto="1" onclick="s25Auto()">↺ Read the text again</button>':''}</div>`}
+  /* S34-NORD: Paul — drop Write it Up READING / Edit reading / Make it manual chrome. Parse still runs quietly via s25FormRd for settle. */
+  return ''}
 function s25EdHtml(){const r=s25FormRd(),a=r.k==='manual'?S25.parse('x beats y'):r,sel=(id,opts,v)=>`<select id="${id}">${opts.map(([k,l])=>`<option value="${k}"${k===v?' selected':''}>${esc(l)}</option>`).join('')}</select>`;
   return `<div class="s25rd s25edw"><span class="k">Edit reading</span><div class="s25ed">
    <label>Type${sel('s25k',[['spread','Spread'],['ml','Wins outright'],['total','Total (over/under)'],['manual','Manual']],r.k)}</label>
@@ -3779,7 +3776,7 @@ function s25EdSave(){const v=id=>{const e=document.getElementById(id);return e?e
   const ok=s25ValidExtra({rd:r},[],'open').rd;const er=document.getElementById('s25Err');
   if(!ok||ok.k==='manual'){if(er)er.textContent='Fill in both teams, a date and '+(k==='ml'?'':'a number for the line.');return}
   U.rdEd=ok;s25EdClose()}
-function s25ConfirmLine(){const r=s25FormRd();return `<div class="s25rdc" data-s25-confirm-rd="${r.k}">${r.k==='manual'?'We can’t read this one automatically, so you’ll settle it by hand.':'We read this as: '+s25RdLine(r)+'. After the final we’ll show you the score and a proposed result to confirm. Not right? Tap ← Change.'}</div>`}
+function s25ConfirmLine(){/* S34-NORD: no reading chrome on confirm either */return ''}
 /* --- card: reading + ESPN proposal (creator-only Confirm / Fix) --- */
 /*<S29D-AUTO>*/ // "This will be auto-settled after completion." = the SAME reading the settle flow uses (S25.parse via s25FormRd / the stored b.rd) is a game bet (k spread/total/ml, not manual) AND S25.match (the settle matcher) finds that game on the reading's day among the ESPN games in data.js. No new parsing or matching rules.
 const S29_AUTO_B=false;   // variant flag: false = (A) no note when it won't auto-settle; true = (B) muted 'Settled by hand.'
