@@ -961,7 +961,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.36.0"></script>
+<script src="shared/ui.js?v=1.37.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -4112,7 +4112,14 @@ function s29ePasteBox(){if(!PASTE_BET)return '';if(typeof VIEW_ONLY!=='undefined
 function s29eDeep(){if(String(location.hash).toLowerCase()!=='#bets/paste')return;let n=0;const go=()=>{const b=document.getElementById('s29ePaste');if(b){b.scrollIntoView({block:'start'});const i=document.getElementById('s29eIn');i&&i.focus({preventScroll:true});return}if(++n<40)setTimeout(go,150)};setTimeout(go,100)}
 window.addEventListener('hashchange',s29eDeep);window.addEventListener('load',s29eDeep);
 </script>
-<style>.s29e-paste .s29e-in{min-height:56px}.s29e-act{margin-top:6px}.s29e-sum{margin-top:8px;font-weight:700}.s29e-q{margin-top:8px}.s29e-btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}.s29e-b{min-height:40px;padding:0 12px}.s29e-nog{margin-top:4px}html.viewonly .s29e-paste{display:none}</style><!--</S29E-PASTE>-->
+<style>.s29e-paste .s29e-in{min-height:56px}.s29e-act{margin-top:6px}.s29e-sum{margin-top:8px;font-weight:700}.s29e-q{margin-top:8px}.s29e-btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}.s29e-b{min-height:40px;padding:0 12px}.s29e-nog{margin-top:4px}html.viewonly .s29e-paste{display:none}/*<S30-GCOMPACT>*/ /* Paul: Games filter bubbles + Upcoming/Past tabs compact */
+html body .gfrow .rkseg-b{min-height:28px!important;height:28px!important;padding:0 10px!important;font-size:12px!important;line-height:26px!important}
+html body .gfrow .rkseg{padding:2px!important;gap:2px!important}
+html body .gf2>.gf2-s,html body .gf2>.gf2-b,html body #lbody .gf2>.gf2-s,html body #lbody .gf2>.gf2-b{height:28px!important;min-height:28px!important;padding:0 10px!important;font-size:12px!important;line-height:26px!important}
+html body .gf2{gap:5px!important;margin:0 0 6px!important}
+html body .gfrow{margin-bottom:6px!important}
+/*</S30-GCOMPACT>*/
+</style><!--</S29E-PASTE>-->
 <!--<S29E-COPY>--><script>
 /* s29e: the per-bet Copy button copies the whole card as WhatsApp-ready plain text (no link). Same words, numbers (b27Num) and odds math (b27Pay) as the card. */
 function s29eCopyText(b){if(!b)return '';const day=b27Day(Date.parse(b.created_at)),posted='Posted '+day+(b.postedBy?' by '+PN(b.postedBy):'')+' · STOOPIDS',L=[];
