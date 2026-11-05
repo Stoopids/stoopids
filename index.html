@@ -675,6 +675,15 @@ nav a.nt .s29nb{position:absolute;top:1px;right:2px;min-width:15px;background:#F
 /*</S26P-TAP>*/
 /*<S26U-MONTH-JUMP>*/.gmon{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0 0;max-width:100%}.gmon button{flex:1 1 0;min-width:0;padding:5px 2px;font-size:13px;border-radius:999px;border:1px solid rgba(255,255,255,.25);background:transparent;color:inherit;cursor:pointer}.gmon button.on{background:rgba(255,210,63,.22);border-color:rgb(255,210,63)}.gmon button:disabled{opacity:.35;cursor:default}.gmore{text-align:center}/*</S26U-MONTH-JUMP>*/
 /*<S27>*/
+/*<STEP12-HSHARE>*/ /* whole-site Share button beside the title (same rules both sites) */
+.s12-hd{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:nowrap;max-width:100%}
+.s12-hd h1{min-width:0}
+.s12-share{flex:none;display:inline-flex;align-items:center;gap:4px;min-height:36px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:var(--card2);color:var(--tx,#eef1f7);font:inherit;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+.s12-share:hover{border-color:var(--acc)}
+.s12-share.on{background:var(--acc);color:#111;border-color:var(--acc)}
+@media (max-width:480px){.s12-hd{gap:6px}.s12-share{min-height:36px;padding:0 9px;font-size:12px}}
+/*</STEP12-HSHARE>*/
+/*<STEP12-TIPS>*/ .b27-lb{flex-wrap:wrap}.b27-lb>.s27-pop{flex-basis:100%;margin:2px 0 0} /*</STEP12-TIPS>*/
 /* header share */
 .s27-hd{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:nowrap;max-width:100%}
 .s27-share{flex:none;display:inline-flex;align-items:center;gap:4px;min-height:36px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font:inherit;font-size:13px;font-weight:700;cursor:pointer}
@@ -926,13 +935,13 @@ main,#main{padding-top:6px!important}
 /* SYNC7..SYNC14 moved to shared/ui.css (linked right after this style block) */
 
 </style>
-<link rel="stylesheet" href="shared/ui.css?v=1.22.0">
+<link rel="stylesheet" href="shared/ui.css?v=1.23.0">
 <style>/*<SORT-FIT> phone All teams table fits with no sideways scroll; Stoop header reads STOOP */@media (max-width:480px){html body .card.tap.s27-rk th,html body .card.tap.s27-rk td{padding:6px 1px!important}html body .card.tap.s27-rk td:first-child .chip{max-width:none!important;font-size:11px!important;padding-right:6px!important}html body .card.tap.s27-rk td:first-child .chip img{width:16px!important;height:16px!important}html body .card.tap.s27-rk th.to{max-width:none!important;overflow:visible!important;text-overflow:clip!important}html body .card.tap.s27-rk td.to{max-width:5ch}html body .card.tap.s27-rk th{font-size:10px!important}html body .card.tap.s27-rk{padding-left:3px!important;padding-right:3px!important}html body .card.tap.s27-rk td.n{font-size:11.5px!important}html body .card.tap.s27-rk td.to{font-size:11.5px}html body .card.tap.s27-rk .s27-sort i{font-size:.7em!important;margin-left:0!important}}/*</SORT-FIT>*/</style>
 </head>
 <body>
 <header>
   <div class="hero" role="img" aria-label="The STOOPIDS crew"></div>
-  <div class="titlebar"><p class="s27-pres" id="lpres">Stoopids presents</p><h1>STOOP<span>IDS</span></h1><!--<S29B-SHARE> header Share dropped: the Share tab replaces it </S29B-SHARE>-->
+  <div class="titlebar"><p class="s27-pres" id="lpres">Stoopids presents</p><div class="s12-hd"><h1>STOOP<span>IDS</span></h1><!--<STEP12-HSHARE> whole-site Share beside the title (view-only link; Profile keeps the pick-a-tab share) --><button type="button" class="s12-share" id="s12Share" aria-label="Share STOOPIDS (view-only link to the whole site)" onclick="s12ShareSite(this)">🔗 Share</button><!--</STEP12-HSHARE>--></div>
 <!--<HDR-CENTER> Refresh Live Games moved to #gamesTop (top of Games) </HDR-CENTER>-->
   <p class="tag" id="tag"></p></div>
   <div class="sub" id="badges" style="margin:0"></div>
@@ -952,7 +961,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.30.0"></script>
+<script src="shared/ui.js?v=1.31.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -2506,11 +2515,15 @@ function s29eMgrCopy(btn){if(typeof VIEW_ONLY!=='undefined'&&VIEW_ONLY)return;s2
 function s29ShareGo(btn){const url=s29ShUrl(),ok=()=>{if(!btn)return;btn.textContent='Copied';clearTimeout(btn._t);btn._t=setTimeout(()=>{btn.textContent=s24CanShare()?'Share':'Copy link'},1600)};
   if(s24CanShare()){navigator.share({title:'STOOPIDS',url}).catch(e=>{if(!(e&&e.name==='AbortError'))s27CopyText(url,ok)})}else s27CopyText(url,ok)}
 /*</S29B-SHARE>*/
+/*<STEP12-HSHARE>*/ // header Share: always the whole site, view-only (?view=1, no hash); native share sheet, else copy + 'Copied'
+function s12ShareSite(btn){const url=s29ViewUrl(''),ok=()=>{if(!btn)return;btn.textContent='Copied';btn.classList.add('on');clearTimeout(btn._t);btn._t=setTimeout(()=>{btn.textContent='🔗 Share';btn.classList.remove('on')},1600)};
+  if(s24CanShare()){navigator.share({title:'STOOPIDS',url}).catch(e=>{if(!(e&&e.name==='AbortError'))s27CopyText(url,ok)})}else s27CopyText(url,ok)}
+/*</STEP12-HSHARE>*/
 function s27CopyText(t,ok){const fall=()=>{try{const ta=document.createElement('textarea');ta.value=t;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();const r=document.execCommand&&document.execCommand('copy');ta.remove();if(r){ok();return}}catch(e){}s24Toast('Copy failed',2600)};
   try{if(navigator.clipboard&&navigator.clipboard.writeText&&window.isSecureContext){navigator.clipboard.writeText(t).then(ok,fall);return}}catch(e){}fall()}
 function s27CopyBet(id,btn){const b=(U.doc&&U.doc.bets||[]).find(x=>x.id===id);if(!b)return;
   s27CopyText(/*<S29E-COPY>*/s29eCopyText(b)/*</S29E-COPY>*/,()=>{if(!btn)return;btn.textContent='Copied';btn.classList.add('on');clearTimeout(btn._t);btn._t=setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('on')},1600)})}
-const S27_TIPS={who:'Tap one or more managers. Several = one bet, one result.',text:'Write it as you say it: "Kansas -4 beats Duke".',amt:()=>'Minimum '+PULK.minAmt,odds:'If you’re right, they owe amount × first ÷ second. Even = 1-1.',auto:'A clear game bet (team, spread or total, date) gets a reading. After the final, ESPN scores propose the result. You confirm it; nothing settles on its own.',manual:'Manual: you enter the result yourself after the game.'};
+const S27_TIPS={who:'Tap one or more managers. Several = one bet, one result.',text:'Write it as you say it: "Kansas -4 beats Duke".',amt:()=>'Minimum '+PULK.minAmt,/*<STEP12-TIPS>*/pterms:'Say what the pool is, e.g. “STOOPIDS season-long tournament pool”.',ppl:'You’re in automatically. Tap everyone else who’s in.',buy:()=>'Buy-in per person, minimum '+PULK.minAmt+'. The pot is buy-in × people in.',pay:'Amounts only; you pick who finished where when you settle it. They must add up to the pot. Optional: leave blank to fill in when it’s over.',/*</STEP12-TIPS>*/odds:'If you’re right, they owe amount × first ÷ second. Even = 1-1.',auto:'A clear game bet (team, spread or total, date) gets a reading. After the final, ESPN scores propose the result. You confirm it; nothing settles on its own.',manual:'Manual: you enter the result yourself after the game.'};
 const s27TipK=(k,l)=>`<button type="button" class="s27-tipk k" data-tip="${k}" aria-expanded="false" onclick="s27Tip(this)">${esc(l)}</button>`;
 function s27TipClose(){document.querySelectorAll('.s27-pop').forEach(e=>e.remove());document.querySelectorAll('.s27-tipk[aria-expanded=true]').forEach(e=>e.setAttribute('aria-expanded','false'))}
 function s27Tip(el){const open=el.getAttribute('aria-expanded')==='true';s27TipClose();if(open)return;let t=S27_TIPS[el.getAttribute('data-tip')]||'';if(typeof t==='function')t=t();
@@ -2528,7 +2541,12 @@ function vHowTo(){const m=PULK.minAmt;
   <div class="card"><b>4. Odds</b><p>Even = 1-1. With odds like 3-1, if you’re right they owe amount × 3 ÷ 1; if you’re wrong you owe the amount. Tap <b>Custom…</b> for odds like 7-2.</p></div>
   <div class="card"><b>Place it</b><p>Tap <b>Place bet</b>, check the summary, then <b>Yes, place it</b>. Until someone settles it you can edit or cancel your own bet.</p></div></section>
   <div class="card"><b>Settling</b><p>Either side of an open bet can mark who won, or a Wash (nobody owes anything); tap twice to confirm. To fix a settled result, both sides have to agree. Totals are on <b>Tally</b>.</p></div>
-  <div class="card"><b>Pools</b><p>Pick <b>Pool / buy-in</b> above the form for a buy-in: what the pool is, who’s in, buy-in per person and optional payouts by place.</p></div>
+  <section id="howto-pool" class="s29-hnb"><h3>Pools</h3><div class="card"><b>Pool / buy-in</b><p>Pick <b>Pool</b> (phone) or <b>Pool / buy-in</b> at the top of the New bet form for a buy-in pool.</p></div>
+  <div class="card"><b>1. What’s the pool?</b><p>Say what the pool is, e.g. “STOOPIDS season-long tournament pool”.</p></div>
+  <div class="card"><b>2. Who’s in?</b><p>You’re in automatically. Tap everyone else who’s in (<b>Select all</b> / <b>Clear</b> work here too).</p></div>
+  <div class="card"><b>3. Buy-in per person</b><p>A whole number, minimum ${m}. The pot is buy-in × people in.</p></div>
+  <div class="card"><b>4. Payouts by place</b><p>Amounts only; you pick who finished where when you settle it. They must add up to the pot. Optional: leave blank to fill in when it’s over.</p></div></section>
+  <div class="card"><b>Request and Open</b><p><b>Request</b> asks one or more managers to take a bet you write; everyone sees live requests on <b>Open</b> (the red number is how many are open).</p></div>
   <div class="card"><b>Copy</b><p>Each bet’s <b>Copy</b> button copies just that bet’s text.</p></div></div>`}
 VIEWS.howto=vHowTo;
 /*<S29D-NEWBETS>*/ // yellow 'new bets' count on the Bets tab: ledger bets (from the existing GET/poll, U.doc) created after this device's last look (localStorage stoopids_bets_seen), not placed by this device's stoopids_who. First load ever: seen = now (no history flood). Opening Bets: seen = now. localStorage only (works in ?view=1, writes nothing remote, never touches stoopids_who).
@@ -2540,6 +2558,15 @@ function s29NbUpdate(){const nav=$('#nav');if(!nav||!D)return;if(tab==='bets27'|
   if(!n){if(e)e.remove();return}if(!e){e=document.createElement('b');e.className='s29nb';e.setAttribute('aria-hidden','true');a.appendChild(e)}e.textContent=n>99?'99+':String(n);a.title=n+' new bet'+(n>1?'s':'')}
 setInterval(()=>{try{s29NbUpdate()}catch(_){}},3000);
 /*</S29D-NEWBETS>*/
+/*<STEP12-RECAPNEW>*/ // yellow count on the Recap tab = weekly write-ups (RECAPS) this device hasn't seen yet. Seen = a list of date|title keys in localStorage stoopids_recap_seen. First load ever: everything already there counts as seen (no flood). Opening Recap marks all seen. localStorage only, nothing remote.
+const S12RC_KEY='stoopids_recap_seen';
+const s12RcKeys=()=>(typeof RECAPS!=='undefined'?RECAPS:[]).filter(x=>x&&x.title).map(x=>String(x.date||'')+'|'+String(x.title));
+function s12RcSeen(){let v=null;try{v=JSON.parse(lsGet(S12RC_KEY)||'null')}catch(_){}if(!Array.isArray(v)){v=s12RcKeys();lsSet(S12RC_KEY,JSON.stringify(v))}return v}
+function s12RcUpdate(){const nav=$('#nav');if(!nav||!D)return;const ks=s12RcKeys(),sn=s12RcSeen();if(tab==='recap'&&ks.some(k=>!sn.includes(k)))lsSet(S12RC_KEY,JSON.stringify(ks));
+  const a=nav.querySelector('a.nt[data-tab="recap"]');if(!a)return;const n=tab==='recap'?0:ks.filter(k=>!sn.includes(k)).length;let e=a.querySelector('.s29nb');
+  if(!n){if(e){e.remove();a.removeAttribute('title')}return}if(!e){e=document.createElement('b');e.className='s29nb';e.setAttribute('aria-hidden','true');a.appendChild(e)}e.textContent=n>99?'99+':String(n);a.title=n+' new recap'+(n>1?'s':'')}
+setInterval(()=>{try{s12RcUpdate()}catch(_){}},3000);
+/*</STEP12-RECAPNEW>*/
 /*<S29D-HNB>*/ // the form tips' link opens How to bet AT the New bet section (#howto-newbet); only this link skips the open-at-top rule
 function s29HowNew(ev){s27TipClose();const r=s24NavClick(ev,'howto');if(r!==false)return r;const go=()=>{const e=document.getElementById('howto-newbet');if(e)e.scrollIntoView({block:'start'})};setTimeout(go,0);setTimeout(go,120);return false}
 /*</S29D-HNB>*/
@@ -2575,7 +2602,7 @@ function render(){
   /*</NAV-ONE-ROW>*/
   setTimeout(liveSync,0);/*<SYNC2>*/
   /*<S29D-GGRID>*/try{$('#main').setAttribute('data-tab',tab)}catch(_){}/*</S29D-GGRID>*/
-  /*<S29D-NEWBETS>*/setTimeout(()=>{try{s29NbUpdate()}catch(_){}},0);/*</S29D-NEWBETS>*/
+  /*<S29D-NEWBETS>*/setTimeout(()=>{try{s29NbUpdate()}catch(_){}},0);/*</S29D-NEWBETS>*//*<STEP12-RECAPNEW>*/setTimeout(()=>{try{s12RcUpdate()}catch(_){}},0);/*</STEP12-RECAPNEW>*/
   $('#main').innerHTML=(VIEWS[tab]||vStandings)();
   $('#foot').innerHTML=`STOOPIDS · times in your time zone${DEMO?' · <a href="?">back to the live season</a>':''/*<S29D-NODEMOLINK> footer demo link removed; ?demo=1 still works </S29D-NODEMOLINK>*/}${ADMIN?' · scores ESPN (fallback ncaa.com)':''}`;
   freshStart();
@@ -3324,11 +3351,11 @@ function b27PSync(){try{const m=document.getElementById('main');if(!m)return;
   /*<S26F-POOL>*/const pb=document.getElementById('b27Place');if(pb){pb.disabled=!!U.busy;pb.removeAttribute('aria-disabled')}s26fPaint()/*</S26F-POOL>*/}catch(e){}}
 function b27PoolForm(me){const others=b27Others();/*<S26F-POOL>*/setTimeout(()=>{try{s26fPaint()}catch(e){}},0);/*</S26F-POOL>*/
   return `<div class="card b27-form"><b>New bet</b> <span class="note">· you are <b>${esc(PN(me))}</b> <a href="#" onclick="presAsk();return false">(change)</a></span>${b27KindTabs(`<div class="s27-sel"><button type="button" class="s27-selb" onclick="b27PoolAll()"><span class="f">Select all</span><span class="s">All</span></button><button type="button" class="s27-selb" onclick="b27PoolClear()">Clear</button></div>`)}
-   <div class="s26st"><label for="b27Text" class="b27-lb"><span class="s26n">1</span>${esc(PT('s1'))}</label><textarea id="b27Text" class="sb-in b27-in" rows="2" maxlength="${PULK.maxText}" placeholder="${esc(PT('termsPh'))}" aria-describedby="s26eTerms" oninput="U.text=this.value;b27PSync()">${esc(U.text)}</textarea><div id="s26eTerms" class="s26err" role="alert"></div></div>
-   <div class="s26st"><div class="b27-lb" id="s26lPeople"><span class="s26n">2</span>${esc(PT('s2'))} <span class="note">${esc(POOL_TXT.youIn)}</span></div><div class="b27-opps" role="group" aria-labelledby="s26lPeople" style="--n:${others.length}">${others.map((n,i)=>{const o=(D.owners.find(x=>x.name===n)||{});const on=U.pp.includes(n);return `<button type="button" class="b27-chip op" data-b27-pp="${i}" data-b27-name="${esc(n)}" aria-label="${esc(TN(n))}" aria-pressed="${on}" onclick="b27PoolPP(${i})"><span class="ck" aria-hidden="true">✓</span><span class="em" aria-hidden="true">${esc(o.emoji||'')}</span><span class="nm" aria-hidden="true"><span class="f">${esc(TN(n))}</span><span class="sh">${esc(b27ShortT(n))}</span><span class="xs">${esc(b27TinyT(n))}</span></span></button>`}).join('')}</div><span class="sr" id="b27SelCnt" aria-live="polite">${U.pp.length?U.pp.length+' selected':'None selected'}</span>
+   <div class="s26st"><div class="b27-lb"><span class="s26n">1</span><button type="button" class="s27-tipk" data-tip="pterms" aria-expanded="false" onclick="s27Tip(this)">${esc(PT('s1'))}</button><label for="b27Text" class="sr">${esc(PT('s1'))}</label></div><textarea id="b27Text" class="sb-in b27-in" rows="2" maxlength="${PULK.maxText}" placeholder="${esc(PT('termsPh'))}" aria-describedby="s26eTerms" oninput="U.text=this.value;b27PSync()">${esc(U.text)}</textarea><div id="s26eTerms" class="s26err" role="alert"></div></div>
+   <div class="s26st"><div class="b27-lb" id="s26lPeople"><span class="s26n">2</span><button type="button" class="s27-tipk" data-tip="ppl" aria-expanded="false" onclick="s27Tip(this)">${esc(PT('s2'))}</button></div><div class="b27-opps" role="group" aria-labelledby="s26lPeople" style="--n:${others.length}">${others.map((n,i)=>{const o=(D.owners.find(x=>x.name===n)||{});const on=U.pp.includes(n);return `<button type="button" class="b27-chip op" data-b27-pp="${i}" data-b27-name="${esc(n)}" aria-label="${esc(TN(n))}" aria-pressed="${on}" onclick="b27PoolPP(${i})"><span class="ck" aria-hidden="true">✓</span><span class="em" aria-hidden="true">${esc(o.emoji||'')}</span><span class="nm" aria-hidden="true"><span class="f">${esc(TN(n))}</span><span class="sh">${esc(b27ShortT(n))}</span><span class="xs">${esc(b27TinyT(n))}</span></span></button>`}).join('')}</div><span class="sr" id="b27SelCnt" aria-live="polite">${U.pp.length?U.pp.length+' selected':'None selected'}</span>
    <div id="s26ePeople" class="s26err" role="alert"></div></div>
-   <div class="s26st"><label for="b27En" class="b27-lb"><span class="s26n">3</span>${esc(PT('s3'))}</label><input maxlength="8" id="b27En" class="sb-in b27-in s26buy" inputmode="decimal" autocomplete="off" placeholder="${esc(PT('buyPh'))}" value="${esc(U.entry)}" aria-describedby="s26Pot s26eBuy" oninput="U.entry=this.value;b27PSync()"><div id="s26Pot" class="s26pot" aria-live="polite"></div><div id="s26eBuy" class="s26err" role="alert"></div></div>
-   <div class="s26st"><div class="b27-lb"><span class="s26n">4</span>${esc(PT('s4'))}</div><div class="note">${esc(PT('helpPl'))}</div>${s26fPlaceRows()}<button type="button" class="b27-sm s26add" onclick="s26fAddPlace()"${U.places.length>=10?' disabled':''}>${esc(PT('addPlace'))}</button><div id="s26Sum" class="s26sum" aria-live="polite"></div><div id="s26ePay" class="s26err" role="alert"></div></div>
+   <div class="s26st"><div class="b27-lb"><span class="s26n">3</span><button type="button" class="s27-tipk" data-tip="buy" aria-expanded="false" onclick="s27Tip(this)">${esc(PT('s3'))}</button><label for="b27En" class="sr">${esc(PT('s3'))}</label></div><input maxlength="8" id="b27En" class="sb-in b27-in s26buy" inputmode="decimal" autocomplete="off" placeholder="${esc(PT('buyPh'))}" value="${esc(U.entry)}" aria-describedby="s26Pot s26eBuy" oninput="U.entry=this.value;b27PSync()"><div id="s26Pot" class="s26pot" aria-live="polite"></div><div id="s26eBuy" class="s26err" role="alert"></div></div>
+   <div class="s26st"><div class="b27-lb"><span class="s26n">4</span><button type="button" class="s27-tipk" data-tip="pay" aria-expanded="false" onclick="s27Tip(this)">${esc(PT('s4'))}</button></div>${s26fPlaceRows()}<button type="button" class="b27-sm s26add" onclick="s26fAddPlace()"${U.places.length>=10?' disabled':''}>${esc(PT('addPlace'))}</button><div id="s26Sum" class="s26sum" aria-live="polite"></div><div id="s26ePay" class="s26err" role="alert"></div></div>
    <button type="button" id="b27Place" class="btn b27-big" onclick="b27Place()">${esc(POOL_TXT.build)}</button></div>`}
 function b27PoolSummary(){const ps=b27PoolParts(),r=/*<S26F-POOL>*/(c=>({ok:!s26fFirstErr(c),amt:c.amt}))(s26fPoolCheck())/*</S26F-POOL>*/;return r.ok?PT('sum',{names:ps.map(PN).join(', '),buy:b27Num(r.amt),tot:b27Num(r.amt*ps.length)}):''}
 function b27PoolResultLines(parts,amt,back){if(!back)return [PT('open')];const nets=parts.map(p=>[p,back[p]-amt]);
@@ -3431,7 +3458,7 @@ function b27LiveHtml(){
   const L=b27Lines({backer:me,other:U.opps[0],amt:U.amt,odds:{a:U.odds[0],b:U.odds[1]}});
   /*<MULTI-BET>*/if(U.opps.length>1){
     const B={backer:me,other:U.opps[0],opponents:U.opps,amt:U.amt,odds:{a:U.odds[0],b:U.odds[1]}},BL=b27Lines(B);
-    return '<b>'+esc(BL.top)+'</b><div class="mut b27-r">One bet against '+U.opps.length+' managers, one result for all of them.</div><div class="b27-w">'+esc(BL.win)+'</div><div class="b27-l">'+esc(BL.lose)+'</div>'+(BL.rounded?'<div class="mut b27-r">Rounded to a whole number.</div>':'')}/*</MULTI-BET>*/
+    return '<b>'+esc(BL.top)+'</b><div class="b27-w">'+esc(BL.win)+'</div><div class="b27-l">'+esc(BL.lose)+'</div>'+(BL.rounded?'<div class="mut b27-r">Rounded to a whole number.</div>':'')}/*</MULTI-BET>*/
   return '<b>'+esc(L.top)+'</b><div class="b27-w">'+esc(L.win)+'</div><div class="b27-l">'+esc(L.lose)+'</div>'+(L.rounded?'<div class="mut b27-r">Rounded to a whole number.</div>':'');
 }
 function b27Card(b,me){

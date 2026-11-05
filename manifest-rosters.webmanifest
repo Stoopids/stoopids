@@ -1,7 +1,7 @@
 {
  "name": "STOOPIDS · NCAA Fantasy",
  "short_name": "STOOPIDS",
- "id": "./",
+ "id": "./?app=rosters",
  "start_url": "./#rosters",
  "scope": "./",
  "display": "standalone",

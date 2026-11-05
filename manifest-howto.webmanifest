@@ -1,7 +1,7 @@
 {
  "name": "STOOPIDS · NCAA Fantasy",
  "short_name": "STOOPIDS",
- "id": "./",
+ "id": "./?app=howto",
  "start_url": "./#howto",
  "scope": "./",
  "display": "standalone",

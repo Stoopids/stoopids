@@ -1,7 +1,7 @@
 {
  "name": "STOOPIDS · NCAA Fantasy",
  "short_name": "STOOPIDS",
- "id": "./",
+ "id": "./?app=points",
  "start_url": "./#points",
  "scope": "./",
  "display": "standalone",

@@ -39,3 +39,11 @@ Same CSS block `/*<SYNC7>*/` on both sites (STOOPIDS index.html, League css/sync
 - Data and bet logic untouched. Click check: Select all / Clear / Pool toggle work on both (7 selected / None selected).
 - Shots: /workspace/compare/step4/ (old left, new right; raw/ has live-*, head-*, new-*). Verified like before: http.server / mock on localhost, Playwright with all non-GET to non-local hosts aborted.
 - Tests: test_bets 19 OK, test_ranks 6 OK, test_ranks_live 11 OK, test_score 20 OK (1 skip), test_shared 7 OK, tests/test_autosettle.js 30 OK.
+
+## Step 12 (5 Nov ~15:20-15:45 WIB, local branch step12, not pushed)
+- How to bet: Pool form grey notes ("(you are in automatically)", payouts help) and the multi-Stoop grey line under the live summary are gone; each Pool step label is a tap tip (SHARED_UI.TIPS pterms/ppl/buy/pay, ui.js 1.31.0, VERSION 1.7.0). How to bet page gains a Pools section (#howto-pool) and a Request/Open card. 1 vs 1 form already used tap tips.
+- Header Share (STEP12-HSHARE) beside the title: whole-site view-only link (?view=1), native share or copy + "Copied". Profile keeps the pick-a-tab share. No per-tab Share row existed on Ranks or any other tab on this tip.
+- Shortcut: per-tab manifests now have their own id (./?app=<tab>) so a second install from another tab is its own icon; start_url ./#<tab>, routes open at top. Paul must re-save his home-screen icon when live.
+- Recap badge (STEP12-RECAPNEW): yellow count of RECAPS write-ups unseen on this device (localStorage stoopids_recap_seen; first load = all seen). RECAPS is empty today, so no badge yet.
+- Tally: name column width:1% (STEP12-TALLY-GAP in shared ui.css, v=1.23.0): no empty gap before Lost.
+- Shots: /workspace/compare/merge-ref/step12-*.png, step11-tally-*.png re-shot.

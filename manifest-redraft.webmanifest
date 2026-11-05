@@ -1,7 +1,7 @@
 {
  "name": "STOOPIDS · NCAA Fantasy",
  "short_name": "STOOPIDS",
- "id": "./",
+ "id": "./?app=redraft",
  "start_url": "./#redraft",
  "scope": "./",
  "display": "standalone",
