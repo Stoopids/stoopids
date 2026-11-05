@@ -926,7 +926,7 @@ main,#main{padding-top:6px!important}
 /* SYNC7..SYNC14 moved to shared/ui.css (linked right after this style block) */
 
 </style>
-<link rel="stylesheet" href="shared/ui.css?v=1.16.0">
+<link rel="stylesheet" href="shared/ui.css?v=1.19.0">
 <style>/*<SORT-FIT> phone All teams table fits with no sideways scroll; Stoop header reads STOOP */@media (max-width:480px){html body .card.tap.s27-rk th,html body .card.tap.s27-rk td{padding:6px 1px!important}html body .card.tap.s27-rk td:first-child .chip{max-width:none!important;font-size:11px!important;padding-right:6px!important}html body .card.tap.s27-rk td:first-child .chip img{width:16px!important;height:16px!important}html body .card.tap.s27-rk th.to{max-width:none!important;overflow:visible!important;text-overflow:clip!important}html body .card.tap.s27-rk td.to{max-width:5ch}html body .card.tap.s27-rk th{font-size:10px!important}html body .card.tap.s27-rk{padding-left:3px!important;padding-right:3px!important}html body .card.tap.s27-rk td.n{font-size:11.5px!important}html body .card.tap.s27-rk td.to{font-size:11.5px}html body .card.tap.s27-rk .s27-sort i{font-size:.7em!important;margin-left:0!important}}/*</SORT-FIT>*/</style>
 </head>
 <body>
@@ -952,7 +952,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.24.0"></script>
+<script src="shared/ui.js?v=1.27.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -1612,7 +1612,7 @@ const rankTxt=o=>(D.owners.filter(x=>x.rank===o.rank).length>1?'T-':'')+o.rank;
 function goldN(n){const A=window.ARCHIVE;if(!A||!A.alltime||!A.seasons)return 0;const p=A.alltime.find(x=>x.current_owner===n);if(!p||!p.title_seasons)return 0;return p.title_seasons.filter(y=>!((A.seasons.find(s=>s.season===y)||{}).no_tournament)).length}/*</GOLD-LINE>*/
 /*<S26H-TROPHY>*/ // one 🏆 per league title (goldN: archive.js champions of COMPLETED seasons only). Shown in League AND Breakdown. Current-season leaders never get one: 2026-27 is not in the archive until it is finished.
 /*<S26I-COVID>*/function goldP(n){const A=window.ARCHIVE;if(!A||!A.alltime||!A.seasons)return 0;const p=A.alltime.find(x=>x.current_owner===n);if(!p||!p.title_seasons)return 0;return p.title_seasons.some(y=>((A.seasons.find(s=>s.season===y)||{}).no_tournament))?1:0}   // 2019-20 (no_tournament) title from archive title_seasons = predicted winner (rank 1 / champ in the 2019-20 sheet when play stopped)
-const goldNote=()=>(window.ARCHIVE&&D&&D.owners&&D.owners.some(o=>goldP(o.name)))?'<p class="fine gfoot">* 2019-20 cancelled (COVID), predicted winner</p>':'';
+const goldNote=()=>{const c=(window.ARCHIVE&&D&&D.owners&&D.owners.some(o=>goldP(o.name)))?'* 2019-20 cancelled (COVID), predicted winner':'';return (typeof SHARED_UI!=='undefined'&&SHARED_UI.footNote)?SHARED_UI.footNote(c):(c?'<p class="fine gfoot">'+c+'</p>':'')};
 function goldTag(n){const g=goldN(n),c=goldP(n);if(!g&&!c)return '';const t=(g?g+' league title'+(g>1?'s':''):'')+(c?(g?' + ':'')+'2019-20 predicted (COVID)':'');return `<span class="gold" role="img" aria-label="${t}" title="${t}">${'🏆'.repeat(g)}${c?'🏆*':''}</span>`}/*</S26I-COVID>*//*</S26H-TROPHY>*/
 /*<OWNER-NAMES>*/ // display names only: the internal owner key (config/data.json owners[].name) is unchanged, so bets, trophies, sign-in, chat, reactions and presence stay attached.
 const OWNER_DISP={'Dirty Draymond':{team:'Dirty Draymond',person:'Mark'},'Stock':{team:'Stock Rising',person:'Jake'},'Kurmoji':{team:'Kurmoji',person:'Kurt'},'Kentut':{team:'Kentut',person:'Ken'},'Murf':{team:'Cockchalkrock',person:'Murf'},'Paul':{team:'Party Paul',person:'Paul'},'Nasty':{team:'Nasty Peacock',person:'Jim'},'En Fuego':{team:'En Fuego',person:'Scotty'}};
@@ -3522,7 +3522,7 @@ function vB27(){
 const OB_LABELS={form:'\u270F\uFE0F Write it Up',tally:'💰 Tally',request:'\u{1F4E8} Request a bet'};   // Bets tab segment labels
 /*<STEP8-REQUEST>*/ /* Request a bet: shared module (shared/ui.js SHARED_UI.Requests); requests live in their OWN textdb record (not the bets ledger) */
 const REQ_URL='https://textdb.dev/api/data/stoopids-requests-2627-9eaa4f66';
-const RQ=(typeof SHARED_UI!=='undefined'&&SHARED_UI.Requests)?SHARED_UI.Requests({change:"presAsk();return false",
+const RQ=(typeof SHARED_UI!=='undefined'&&SHARED_UI.Requests)?SHARED_UI.Requests({maxText:PULK.maxText,change:"presAsk();return false",
   e:esc,me:()=>b27Who(),others:()=>b27Others().map(n=>({id:n,emoji:ownerEmoji(n),nick:TN(n)})),nick:n=>TN(n),real:n=>PN(n),
   canWrite:()=>!DEMO&&!!b27Who()&&b27OwnerNames().includes(b27Who()),amounts:PULK.amounts,
   games:()=>(D.games||[]).filter(g=>g&&g.home&&g.away).map(g=>({id:String(g.id),g,start:g.start,status:g.status,period:g.period||null,label:qbNm(g.away)+' vs '+qbNm(g.home)+' · '+qbDate(g)})),
@@ -3543,8 +3543,10 @@ function vTally(){const B=D.bets,TT=B.tallies&&B.tallies.ledger;if(!TT)return '<
   let h=`<div class="card"><b>🧮 Tally · 2026-27</b><div class="note">From the 2026-27 shared ledger only. Rows owe columns.</div></div>`;/*<S27> Hide paid removed */
   /*<S25J>*/const empty=!ids.length;const M=(a,b)=>(T.matrix&&T.matrix[a]&&T.matrix[a][b])||0;const gids=Object.keys(TALLY_NM).concat(ids.filter(i=>!(i in TALLY_NM)));
   if(empty)h+='<div class="card note" data-tally-empty>No 2026-27 bets with amounts yet.</div>';else/*</S25J>*/
+  /*<TALLY-ONE>*/if(typeof SHARED_UI!=='undefined'&&SHARED_UI.tallyTable)h+=SHARED_UI.tallyTable(gids.map(i=>({id:i,name:String(P(i).name||i).split(' ')[0],lost:T.lost[i]||0,won:T.won[i]||0,net:T.net[i]||0,bets:T.bets[i]||0})),M,{e:esc,fmt:tMoney,rowKey:'data-pid'});else/*</TALLY-ONE>*/
   /*<STEP7-TALLY>*/if(typeof SHARED_UI!=='undefined'&&SHARED_UI.tallyPeople)h+=SHARED_UI.tallyPeople(ids.slice().sort((a,b)=>T.net[b]-T.net[a]).map(i=>({id:i,nameHtml:esc(tNm(i)),lost:T.lost[i],won:T.won[i],net:T.net[i],bets:T.bets[i],fines:T.fines&&T.fines[i]})),{e:esc,fmt:tMoney,tblAttr:' data-tally="people"',rowKey:'data-pid',zero:'<span class=mut>0</span>'});else/*</STEP7-TALLY>*/
   h+=`<div class="card sc"><table data-tally="people"><tr><th>Person</th><th class="n">Lost</th><th class="n">Won</th><th class="n">Net +/-</th><th class="n">Bets</th><th class="n">Fines</th></tr>${ids.slice().sort((a,b)=>T.net[b]-T.net[a]).map(i=>`<tr data-pid="${esc(i)}"><td>${esc(tNm(i))}</td><td class="n">${tMoney(T.lost[i])}</td><td class="n">${tMoney(T.won[i])}</td><td class="n"><b class="${T.net[i]>0?'good':T.net[i]<0?'bad':''}">${T.net[i]>0?'+':T.net[i]<0?'-':''}${tMoney(Math.abs(T.net[i]))}</b></td><td class="n">${T.bets[i]}</td><td class="n">${T.fines&&T.fines[i]?tMoney(T.fines[i]):'<span class=mut>0</span>'}</td></tr>`).join('')}</table></div>`;
+  if(typeof SHARED_UI!=='undefined'&&SHARED_UI.tallyTable){}else/*TALLY-ONE*/
   /*<STEP5-BETS>*/if(typeof SHARED_UI!=='undefined'&&SHARED_UI.owesMatrix)h+=SHARED_UI.owesMatrix(gids.map(i=>({id:i,label:tNm(i)})),M,{esc,fmt:tMoney,rowKey:'data-pid'});else/*</STEP5-BETS>*/
   h+=`<h2>Who Owes Who</h2><div class="swipe">↔ Swipe sideways to see every column</div><div class="card sc"><table class="mx" data-tally="owes"><tr><th>owes ↓ / to →</th>${gids.map(i=>`<th>${esc(tNm(i))}</th>`).join('')}</tr>${gids.map(r=>`<tr data-pid="${esc(r)}"><td><b>${esc(tNm(r))}</b></td>${gids.map(c=>{const v=M(r,c);return r===c?'<td class="z">·</td>':v?`<td>${tMoney(v)}</td>`:'<td class="z">0</td>'}).join('')}</tr>`).join('')}</table></div>`;
   /*<S25J> plain settle lines, one per non-zero netted pair */{const L=[];gids.forEach((a,x)=>gids.slice(x+1).forEach(b=>{const d=M(a,b)-M(b,a);if(d>0)L.push([a,b,d]);else if(d<0)L.push([b,a,-d])}));if(L.length)h+=`<div class="card" data-tally-settle>${L.map(([a,b,d])=>`<div class="tset">${esc(tNm(a))} owes ${esc(tNm(b))} ${tMoney(d)}</div>`).join('')}</div>`}/*</S25J>*/
@@ -3964,15 +3966,15 @@ function s24FilterBar(bets,me){const p=s24FP(),st=s24FSt(),n=bets.filter(b=>s24W
 
 /*</S24-EDIT>*/
 /*<ST-REFRESH>*/// Standings Refresh: re-fetch data.js + an immediate live-scores check, with visible feedback ("Refreshing…", then "checked just now")
-let ST_CHK=0;function stRefresh(btn){if(btn){btn.disabled=true;btn.textContent='Refreshing\u2026'}ST_CHK=Date.now();try{lvManual()}catch(e){}load();setTimeout(()=>{try{const u=document.getElementById('stUpd'),d=genDate();if(u)u.textContent='Updated '+(d?relAgo(Date.now()-d.getTime()):'')+(window.SHARED_UI&&SHARED_UI.checkedText?SHARED_UI.checkedText(ST_CHK):' \u00b7 checked just now');const b=document.querySelector('.segref');if(b){b.disabled=false;b.innerHTML='&#8635; Refresh'}}catch(e){}},1500)}/*</ST-REFRESH>*/
-function load(){
+let ST_CHK=0;function stRefresh(btn){/*REFRESH-NOW shared*/if(window.SHARED_UI&&SHARED_UI.refreshNow){ST_CHK=Date.now();LV.fails=0;LV.paused=false;return SHARED_UI.refreshNow('.segref:not(.gref)',[()=>new Promise(r=>load(r)),()=>lvCheck(true)],()=>render())}if(btn){btn.disabled=true;btn.textContent='Refreshing\u2026'}ST_CHK=Date.now();try{lvManual()}catch(e){}load();setTimeout(()=>{try{const u=document.getElementById('stUpd'),d=genDate();if(u)u.textContent='Updated '+(d?relAgo(Date.now()-d.getTime()):'')+(window.SHARED_UI&&SHARED_UI.checkedText?SHARED_UI.checkedText(ST_CHK):' \u00b7 checked just now');const b=document.querySelector('.segref');if(b){b.disabled=false;b.innerHTML='&#8635; Refresh'}}catch(e){}},1500)}/*</ST-REFRESH>*/
+function load(cb){
   const s=document.createElement('script');s.src=(DEMO?'demo/':'')+'data.js?v='+Date.now();
   s.onload=()=>{D=window.STOOPIDS_DATA;D._base=D.bets;applyShared();/*<REFRESH-NOW>*/try{lvReapply()}catch(e){}/*</REFRESH-NOW>*/render();try{presInit()}catch(e){}try{chatInit()}catch(e){}/*<REFRESH-NOW>*/try{lvInit()}catch(e){}/*</REFRESH-NOW>*/
-    /*<BETS-2627>*/try{b27Init()}catch(e){}/*</BETS-2627>*//*<S24-EDIT>*/try{s24AfterLoad()}catch(e){}/*</S24-EDIT>*/};   /* chatInit = CHAT hook */
-  s.onerror=()=>{if(!D)$('#main').innerHTML='<div class="card">Couldn\u2019t load the latest data. Try reloading the page.'+(ADMIN?' (data.js missing: run <code>python3 refresh.py</code> first.)':'')+'</div>'};
+    /*<BETS-2627>*/try{b27Init()}catch(e){}/*</BETS-2627>*//*<S24-EDIT>*/try{s24AfterLoad()}catch(e){}/*</S24-EDIT>*/if(typeof cb==='function')cb()};   /* chatInit = CHAT hook */
+  s.onerror=()=>{if(typeof cb==='function')cb();if(!D)$('#main').innerHTML='<div class="card">Couldn\u2019t load the latest data. Try reloading the page.'+(ADMIN?' (data.js missing: run <code>python3 refresh.py</code> first.)':'')+'</div>'};
   document.head.appendChild(s);
 }
-load();setInterval(load,5*60*1000);
+load();setInterval(()=>load(),5*60*1000);
 /* MAXLEN-GUARD moved to shared/ui.js */
 /*<TEAMNAME-WARN>*/addEventListener('load',function(){try{const L=(window.SHARED_UI&&SHARED_UI.LIMITS.team)||15,seen={};JSON.stringify(window.STOOPIDS_DATA||{},function(k,v){if(k==='team_name'&&typeof v==='string'&&v.length>L&&!seen[v]){seen[v]=1;console.warn('Team name over '+L+' chars (shown in full, fix in config.json): '+v)}return v})}catch(e){}});/*</TEAMNAME-WARN>*/
 /*<ONLINE-STRIP>*/// "Who's online" strip under every tab: online first (green dot), then everyone else with last-seen. Reads the existing presence store only (GET); never writes.
