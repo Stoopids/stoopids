@@ -2651,7 +2651,7 @@ function nbEnsure(){
   const e=document.createElement('div');e.id='nbtoast';e.className='nbt';e.setAttribute('role','status');e.setAttribute('aria-live','polite');e.hidden=true;
   e.innerHTML='<span class="nbm"></span><button type="button" class="nbv">View</button><button type="button" class="nbx" aria-label="Dismiss">\u2715</button>';
   e.querySelector('.nbx').onclick=nbHide;
-  e.querySelector('.nbv').onclick=()=>{nbHide();/*<OLD-SCOPE>*/tab=typeof VIEWS!=='undefined'&&VIEWS.bets27?'bets27':'bets';S24.sub=null;try{OB_VIEW='form'}catch(_){}/*</OLD-SCOPE>*/render();window.scrollTo(0,0)};   // 'ledger' scope = the 2026-27 bets, where the new one is listed
+  e.querySelector('.nbv').onclick=()=>{nbHide();/*<OLD-SCOPE>*/tab=typeof VIEWS!=='undefined'&&VIEWS.bets27?'bets27':'bets';S24.sub=null;try{OB_VIEW='all'}catch(_){}/*</OLD-SCOPE>*/render();window.scrollTo(0,0)};   // 'ledger' scope = the 2026-27 bets, where the new one is listed
   document.body.appendChild(e);return NB.el=e;
 }
 function nbShow(list){
@@ -3512,7 +3512,7 @@ function vB27(){
   const introBottom=`<div class="card b27-intro"><div class="note b27-note" id="b27Note">${esc(BETS_DISCLAIMER)}</div><div class="note" style="margin-top:6px">This page just <b>records</b> who bet what and who owes whom.</div>
    <div class="note" id="b27Top" style="margin-top:6px">${U.state==='ok'?'<span class="good">● live</span> · anyone with the link can add bets (no logins). Play nice.':U.state==='error'?'<span class="bad">● can’t reach the bets ledger right now</span>':/*<BALL-LOADER>*/''/*</BALL-LOADER>*/}</div></div>`;/*</BETS-INTRO-BOTTOM>*/
   if(U.msg)h+=`<div class="card ${U.msgBad?'b27-bad':'b27-ok'}" role="status">${esc(U.msg)}${/*<MULTI-BET>*/U.undoG&&b27GroupUndoable(U.undoG).length>1?`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27UndoGroup('${U.undoG}')"${U.busy?' disabled':''}>↩ Undo all ${b27GroupUndoable(U.undoG).length} bets (30 s)</button></div>`:''/*</MULTI-BET>*/}</div>`;
-  if(!me){h+=`<div class="card"><button type="button" class="btn b27-big" onclick="presAsk()">👋 Pick who you are to bet</button></div>`}
+  /*<ALL-BETS>*/if(OB_VIEW==='all'){}/*list only: form lives on Write it Up*/else/*</ALL-BETS>*/ if(!me){h+=`<div class="card"><button type="button" class="btn b27-big" onclick="presAsk()">👋 Pick who you are to bet</button></div>`}
   /*<POOL>*/else if(U.confirm&&U.kind==='pool'){h+=s26kModal(b27PoolConfirmHtml())}/*</POOL>*/
   else if(U.confirm){
     const e=b27FormOK();
@@ -3535,6 +3535,7 @@ function vB27(){
   const bets=U.doc.bets.slice().sort((a,b)=>b.n-a.n),T=b27Tally(bets);
   const ppl=Object.entries(T.per).sort((a,b)=>b[1].net-a[1].net);
   /*<BALL-LOADER>*/if(U.state==='init'){h+=ballLoader();h+=introBottom;return h}   // ledger still loading: loader instead of an empty owes table / "No bets yet/*</BALL-LOADER>*/
+  /*<ALL-BETS>*/if(OB_VIEW!=='all'){h+=introBottom;return h}/*Write it Up = form only; the list is on All bets*//*</ALL-BETS>*/
   /*<OWES-TABLE>*//*<S26F-WIU>*/// Write it Up: no Who Owes Who grid / Net per manager here; they live on Tally only (vTally, unchanged)/*</S26F-WIU>*//*</OWES-TABLE>*/
   /*<S26F-WIU> 'Still open' line removed from Write it Up (its closing </div> belonged to the removed owes card) </S26F-WIU>*/
   /*<S24-EDIT>*/{const FL=s24Filter(bets,me);
@@ -3546,7 +3547,7 @@ function vB27(){
 /*<ONE-BETS>*/
 /* One "Bets" tab: tab id 'bets27' = 2026-27 view (default), tab id 'bets' = the old 2025-26 side-bets ledger (read-only). ?tab=bets (the old Side bets URL) opens the old view, ?tab=bets27 the new one. */
 /*<BETS-TALLY>*/const SHOW_OLD_BETS=!!window.__STOOPIDS_SHOW_OLD_BETS;   // default false; the legacy jsdom suites set the window flag before load to keep testing the hidden view   // the 2025-26 (old) side-bets view: hidden (data kept: data.json bets / bets_imported.json); set true to bring its tab back
-const OB_LABELS={form:'\u270F\uFE0F Write it Up',tally:'💰 Tally',request:'\u{1F4E8} Request',open:'\u{1F4CC} Open'};   /* STEP10 order: Write it Up, Request, Open, Tally */   // Bets tab segment labels
+const OB_LABELS={form:'\u270F\uFE0F Write it Up',all:'\u{1F4CB} All bets',tally:'💰 Tally',request:'\u{1F4E8} Request',open:'\u{1F4CC} Open'};   /* ALL-BETS order: Write it Up, Request, Open, All bets, Tally */   // Bets tab segment labels
 /*<STEP8-REQUEST>*/ /* Request a bet: shared module (shared/ui.js SHARED_UI.Requests); requests live in their OWN textdb record (not the bets ledger) */
 const REQ_URL='https://textdb.dev/api/data/stoopids-requests-2627-9eaa4f66';
 const RQ=(typeof SHARED_UI!=='undefined'&&SHARED_UI.Requests)?SHARED_UI.Requests({maxText:PULK.maxText,change:"presAsk();return false",
@@ -3583,7 +3584,7 @@ function vTally(){/* STEP11: Tally = 2026-27 Bets ledger (b27Tally / U.doc), not
 /*</BETS-TALLY>*/
 function obToggle(){
   /*<BETS-TALLY>*/if(!SHOW_OLD_BETS||tab==='bets27'){const sg=(k,t)=>`<button type="button" class="${tab==='bets27'&&OB_VIEW===k?'on':''}" aria-pressed="${tab==='bets27'&&OB_VIEW===k}" data-ob="${k}" onclick="obView('${k}')">${t}</button>`;
-    return `<div class="tabs ob-seg" role="group" aria-label="Bets">${sg('form',OB_LABELS.form)}${(typeof RQ!=='undefined'&&RQ)?sg('request',OB_LABELS.request)+sg('open',OB_LABELS.open):''}${sg('tally',OB_LABELS.tally)}${SHOW_OLD_BETS?`<button type="button" data-ob="bets" onclick="obGo('bets')">2025-26 (old)</button>`:''}</div>`}/*</BETS-TALLY>*/
+    return `<div class="tabs ob-seg" role="group" aria-label="Bets">${sg('form',OB_LABELS.form)}${(typeof RQ!=='undefined'&&RQ)?sg('request',OB_LABELS.request)+sg('open',OB_LABELS.open):''}${sg('all',OB_LABELS.all)}${sg('tally',OB_LABELS.tally)}${SHOW_OLD_BETS?`<button type="button" data-ob="bets" onclick="obGo('bets')">2025-26 (old)</button>`:''}</div>`}/*</BETS-TALLY>*/
   const seg=(k,t,bd)=>`<button type="button" class="${tab===k?'on':''}" aria-pressed="${tab===k}" data-ob="${k}"${tab!==k&&bd?' aria-label="'+t+', new bets"':''} onclick="obGo('${k}')">${t}${tab===k?'':bd}</button>`;
   return `<div class="tabs ob-seg" role="group" aria-label="Bets season">${seg('bets27','2026-27',b27Badge())}${seg('bets','2025-26 (old)',nbBadge('bets'))}</div>`;
 }
@@ -3597,7 +3598,7 @@ function obOldNote(){   // read-only replacement of the old shared-ledger card (
 (function(){
   if(DEMO)return;
   /*<ONE-BETS>*/const i=TABS.findIndex(t=>t[0]==='bets');if(i<0)TABS.push(['bets27','💵 Bets']);else TABS[i]=['bets27','💵 Bets'];   // the ONE Bets tab (was Side bets + Bets 26-27); the Draft link stays last
-  VIEWS.bets27=()=>obToggle()+/*<BETS-TALLY>*/(OB_VIEW==='tally'?vTally():OB_VIEW==='request'&&typeof RQ!=='undefined'&&RQ?RQ.view():OB_VIEW==='open'&&typeof RQ!=='undefined'&&RQ?RQ.view('open'):((typeof RQ!=='undefined'&&RQ&&s24FSt()==='req'?RQ.pinned(true):'')+vB27())/*STEP10: no pinned Open requests strip on Write it Up (Open tab has them); the Requested filter still lists them*/)/*</BETS-TALLY>*/;VIEWS.bets=()=>obToggle()+vBets();NAVSHORT.bets27='Bets';/*</ONE-BETS>*/
+  VIEWS.bets27=()=>obToggle()+/*<BETS-TALLY>*/(OB_VIEW==='tally'?vTally():OB_VIEW==='request'&&typeof RQ!=='undefined'&&RQ?RQ.view():OB_VIEW==='open'&&typeof RQ!=='undefined'&&RQ?RQ.view('open'):((OB_VIEW==='all'&&typeof RQ!=='undefined'&&RQ&&s24FSt()==='req'?RQ.pinned(true):'')+vB27())/*STEP10: no pinned Open requests strip on Write it Up (Open tab has them); the Requested filter still lists them*/)/*</BETS-TALLY>*/;VIEWS.bets=()=>obToggle()+vBets();NAVSHORT.bets27='Bets';/*</ONE-BETS>*/
   if(typeof nbBadge==='function'){const _b=nbBadge;nbBadge=function(k){return k==='bets27'?/*<ONE-BETS>*/(tab==='bets'||tab==='bets27'?'':b27Badge()||_b('bets'))/*</ONE-BETS>*/:_b(k)}}      // 'new' badge on the one Bets tab: 2026-27 (own watermark) or the old ledger; inside the tab the toggle shows it on the other segment
   const pp=presPick;presPick=function(w){pp(w);try{U.opps=[];/*<POOL>*/U.pp=[];/*</POOL>*/if(tab==='bets27')render()}catch(e){}};
   /* toast: own text, and 'View' opens this tab when every pending item is a Bets 26-27 bet (wraps the existing functions; nothing in them is edited) */
@@ -3605,7 +3606,7 @@ function obOldNote(){   // read-only replacement of the old shared-ledger card (
   const allP=()=>NB.pending.length>0&&NB.pending.every(x=>x&&x._msg);
   const _ns=nbShow;nbShow=function(list){_ns(list);try{const e=NB.el;if(!e)return;
     if(allP())e.querySelector('.nbm').textContent=NB.pending.length===1?NB.pending[0]._msg:NB.pending.length+' new 2026-27 bets just added';
-    const v=e.querySelector('.nbv');if(v&&!v._pu){const orig=v.onclick;v.onclick=function(ev){if(allP()){nbHide();tab='bets27';try{OB_VIEW='form'}catch(_){}render();window.scrollTo(0,0)}else if(orig)orig.call(v,ev)};v._pu=1}}catch(_){}};
+    const v=e.querySelector('.nbv');if(v&&!v._pu){const orig=v.onclick;v.onclick=function(ev){if(allP()){nbHide();tab='bets27';try{OB_VIEW='all'}catch(_){}render();window.scrollTo(0,0)}else if(orig)orig.call(v,ev)};v._pu=1}}catch(_){}};
   /* chat bar: the one fixed bottom bar on every tab (no top copy any more); the unread count badge shows on the one Bets tab */
   if(typeof chatNavBadge==='function'){const _cb=chatNavBadge;chatNavBadge=function(){_cb();try{const nav=$('#nav');if(!nav||!D)return;const i=TABS.findIndex(t=>t[0]==='bets27'),b=nav.children[i];if(!b)return;
     const n=CH.nUnread,full=TABS[i][1].slice(TABS[i][1].indexOf(' ')+1);let e=b.querySelector('.nu');b.classList.toggle('hasu',!!n);
