@@ -3568,7 +3568,7 @@ function obOldNote(){   // read-only replacement of the old shared-ledger card (
 (function(){
   if(DEMO)return;
   /*<ONE-BETS>*/const i=TABS.findIndex(t=>t[0]==='bets');if(i<0)TABS.push(['bets27','💵 Bets']);else TABS[i]=['bets27','💵 Bets'];   // the ONE Bets tab (was Side bets + Bets 26-27); the Draft link stays last
-  VIEWS.bets27=()=>obToggle()+/*<BETS-TALLY>*/(OB_VIEW==='tally'?vTally():OB_VIEW==='request'&&typeof RQ!=='undefined'&&RQ?RQ.view():OB_VIEW==='open'&&typeof RQ!=='undefined'&&RQ?RQ.view('open'):((typeof RQ!=='undefined'&&RQ?RQ.pinned(s24FSt()==='req'):'')+vB27()))/*</BETS-TALLY>*/;VIEWS.bets=()=>obToggle()+vBets();NAVSHORT.bets27='Bets';/*</ONE-BETS>*/
+  VIEWS.bets27=()=>obToggle()+/*<BETS-TALLY>*/(OB_VIEW==='tally'?vTally():OB_VIEW==='request'&&typeof RQ!=='undefined'&&RQ?RQ.view():OB_VIEW==='open'&&typeof RQ!=='undefined'&&RQ?RQ.view('open'):((typeof RQ!=='undefined'&&RQ&&s24FSt()==='req'?RQ.pinned(true):'')+vB27())/*STEP10: no pinned Open requests strip on Write it Up (Open tab has them); the Requested filter still lists them*/)/*</BETS-TALLY>*/;VIEWS.bets=()=>obToggle()+vBets();NAVSHORT.bets27='Bets';/*</ONE-BETS>*/
   if(typeof nbBadge==='function'){const _b=nbBadge;nbBadge=function(k){return k==='bets27'?/*<ONE-BETS>*/(tab==='bets'||tab==='bets27'?'':b27Badge()||_b('bets'))/*</ONE-BETS>*/:_b(k)}}      // 'new' badge on the one Bets tab: 2026-27 (own watermark) or the old ledger; inside the tab the toggle shows it on the other segment
   const pp=presPick;presPick=function(w){pp(w);try{U.opps=[];/*<POOL>*/U.pp=[];/*</POOL>*/if(tab==='bets27')render()}catch(e){}};
   /* toast: own text, and 'View' opens this tab when every pending item is a Bets 26-27 bet (wraps the existing functions; nothing in them is edited) */
