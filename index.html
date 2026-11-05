@@ -926,7 +926,7 @@ main,#main{padding-top:6px!important}
 /* SYNC7..SYNC14 moved to shared/ui.css (linked right after this style block) */
 
 </style>
-<link rel="stylesheet" href="shared/ui.css?v=1.21.0">
+<link rel="stylesheet" href="shared/ui.css?v=1.22.0">
 <style>/*<SORT-FIT> phone All teams table fits with no sideways scroll; Stoop header reads STOOP */@media (max-width:480px){html body .card.tap.s27-rk th,html body .card.tap.s27-rk td{padding:6px 1px!important}html body .card.tap.s27-rk td:first-child .chip{max-width:none!important;font-size:11px!important;padding-right:6px!important}html body .card.tap.s27-rk td:first-child .chip img{width:16px!important;height:16px!important}html body .card.tap.s27-rk th.to{max-width:none!important;overflow:visible!important;text-overflow:clip!important}html body .card.tap.s27-rk td.to{max-width:5ch}html body .card.tap.s27-rk th{font-size:10px!important}html body .card.tap.s27-rk{padding-left:3px!important;padding-right:3px!important}html body .card.tap.s27-rk td.n{font-size:11.5px!important}html body .card.tap.s27-rk td.to{font-size:11.5px}html body .card.tap.s27-rk .s27-sort i{font-size:.7em!important;margin-left:0!important}}/*</SORT-FIT>*/</style>
 </head>
 <body>
@@ -952,7 +952,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.29.0"></script>
+<script src="shared/ui.js?v=1.30.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -3042,12 +3042,14 @@ function b27Lines(b0){const p=b27Pay(b0),b=/*<OWNER-NAMES>*/Object.assign({},b0,
     lose:'If '+b.other+' is right, '+b.backer+' owes '+b.other+' '+b27Num(p.ifOtherRight)+'.',
     rounded:b27Rounded(b.amt,b.odds.a,b.odds.b)}}
 function b27Tally(bets){
-  const pair={},per={};let openC=0,openN=0;/*<POOL>*/const poolOwes=[];/*</POOL>*/
+  const pair={},per={},M={},lost={},won={};let openC=0,openN=0;/*<POOL>*/const poolOwes=[];/*</POOL>*/
   const P=n=>per[n]||(per[n]={net:0,bets:0});
+  const ent=(lose,win,c)=>{if(!c||lose===win)return;P(win).net+=c;P(lose).net-=c;lost[lose]=(lost[lose]||0)+c;won[win]=(won[win]||0)+c;M[lose]=M[lose]||{};M[lose][win]=(M[lose][win]||0)+c;
+    const k=[win,lose].sort().join('|');pair[k]=pair[k]||{x:k.split('|')[0],y:k.split('|')[1],net:0};pair[k].net+=(win===pair[k].x?c:-c)};   // net = what y owes x
   for(const b of bets){
     /*<POOL>*/if(b.kind==='pool'){if(b.status!=='open')continue;
       if(!b.back){openN++;openC+=b.amt*b.parts.length;continue}
-      const nets=b27PoolNets(b);nets.forEach(([p,v])=>{P(p).net+=v;P(p).bets++});b27Greedy(nets).forEach(s=>poolOwes.push({n:b.n,from:s.from,to:s.to,num:s.num,text:b.text}));continue}/*</POOL>*/
+      const nets=b27PoolNets(b);nets.forEach(([p,v])=>{P(p).bets++});b27Greedy(nets).forEach(s=>{poolOwes.push({n:b.n,from:s.from,to:s.to,num:s.num,text:b.text});ent(s.from,s.to,s.num)});continue}/*</POOL>*/
     const opps=/*<BUNDLE>*/b27Opps(b)/*</BUNDLE>*/;      // a bundle counts as ONE bet per person, but every opponent carries the same amount / odds
     if(b.status==='open'){openN++;openC+=b.amt*opps.length;continue}
     if(b.status==='push'){P(b.backer).bets++;opps.forEach(o=>P(o).bets++);continue}
@@ -3055,14 +3057,12 @@ function b27Tally(bets){
     const p=b27Pay(b);P(b.backer).bets++;
     for(const o of opps){
       const win=b.status==='backer'?b.backer:o,lose=b.status==='backer'?o:b.backer,c=b.status==='backer'?p.ifBackerRight:p.ifOtherRight;
-      P(win).net+=c;P(lose).net-=c;P(o).bets++;
-      const k=[win,lose].sort().join('|');pair[k]=pair[k]||{x:k.split('|')[0],y:k.split('|')[1],net:0};     // net = what y owes x
-      pair[k].net+=(win===pair[k].x?c:-c);
+      P(o).bets++;ent(lose,win,c);
     }
   }
   const owes=[];Object.values(pair).forEach(p=>{if(p.net>0)owes.push({from:p.y,to:p.x,num:p.net});else if(p.net<0)owes.push({from:p.x,to:p.y,num:-p.net})});
   owes.sort((a,b)=>b.num-a.num||a.from.localeCompare(b.from));
-  return {owes,per,openTotal:openC,openCount:openN/*<POOL>*/,poolOwes/*</POOL>*/};
+  return {owes,per,openTotal:openC,openCount:openN,lost,won,M/*<POOL>*/,poolOwes/*</POOL>*/};
 }
 /* ---- state / network (own key only) ---- */
 const b27Who=()=>{const w=PS.who||legacyOwner(lsGet('stoopids_who'));return b27OwnerNames().includes(w)?w:null};
@@ -3538,18 +3538,20 @@ let OB_VIEW='form';   // Bets tab: 'form' = 2026-27 (New bet form + bet list), '
 function obView(v){OB_VIEW=v;tab='bets27';render();window.scrollTo(0,0)}
 const TALLY_NM={mark:'DIRTY DRAYMOND',jake:'STOCK RISING',kurt:'KURMOJI',ken:'KENTUT',neal:'COCKCHALKROCK',paul:'PARTY PAUL',jim:'NASTY PEACOCK',scott:'EN FUEGO'};   // Tally display = team nickname in caps (ids unchanged); neal = Neal Murf (archive). matthew has no nickname: shown as MATTHEW
 const tNm=i=>TALLY_NM[i]||String(P(i).name||i).toUpperCase();
-function vTally(){const B=D.bets,TT=B.tallies&&B.tallies.ledger;if(!TT)return '<div class="card note">No 2026-27 tally yet.</div>';
-  const T=TT.all,ids=T.ids.filter(i=>T.bets[i]>0||T.lost[i]||T.won[i]);
-  let h=`<div class="card"><b>🧮 Tally · 2026-27</b><div class="note">From the 2026-27 shared ledger only. Rows owe columns.</div></div>`;/*<S27> Hide paid removed */
-  /*<S25J>*/const empty=!ids.length;const M=(a,b)=>(T.matrix&&T.matrix[a]&&T.matrix[a][b])||0;const gids=Object.keys(TALLY_NM).concat(ids.filter(i=>!(i in TALLY_NM)));
-  if(empty)h+='<div class="card note" data-tally-empty>No 2026-27 bets with amounts yet.</div>';else/*</S25J>*/
-  /*<TALLY-ONE>*/if(typeof SHARED_UI!=='undefined'&&SHARED_UI.tallyTable)h+=SHARED_UI.tallyTable(gids.map(i=>({id:i,name:String(P(i).name||i).split(' ')[0],lost:T.lost[i]||0,won:T.won[i]||0,net:T.net[i]||0,bets:T.bets[i]||0})),M,{e:esc,fmt:tMoney,rowKey:'data-pid'});else/*</TALLY-ONE>*/
-  /*<STEP7-TALLY>*/if(typeof SHARED_UI!=='undefined'&&SHARED_UI.tallyPeople)h+=SHARED_UI.tallyPeople(ids.slice().sort((a,b)=>T.net[b]-T.net[a]).map(i=>({id:i,nameHtml:esc(tNm(i)),lost:T.lost[i],won:T.won[i],net:T.net[i],bets:T.bets[i],fines:T.fines&&T.fines[i]})),{e:esc,fmt:tMoney,tblAttr:' data-tally="people"',rowKey:'data-pid',zero:'<span class=mut>0</span>'});else/*</STEP7-TALLY>*/
-  h+=`<div class="card sc"><table data-tally="people"><tr><th>Person</th><th class="n">Lost</th><th class="n">Won</th><th class="n">Net +/-</th><th class="n">Bets</th><th class="n">Fines</th></tr>${ids.slice().sort((a,b)=>T.net[b]-T.net[a]).map(i=>`<tr data-pid="${esc(i)}"><td>${esc(tNm(i))}</td><td class="n">${tMoney(T.lost[i])}</td><td class="n">${tMoney(T.won[i])}</td><td class="n"><b class="${T.net[i]>0?'good':T.net[i]<0?'bad':''}">${T.net[i]>0?'+':T.net[i]<0?'-':''}${tMoney(Math.abs(T.net[i]))}</b></td><td class="n">${T.bets[i]}</td><td class="n">${T.fines&&T.fines[i]?tMoney(T.fines[i]):'<span class=mut>0</span>'}</td></tr>`).join('')}</table></div>`;
-  if(typeof SHARED_UI!=='undefined'&&SHARED_UI.tallyTable){}else/*TALLY-ONE*/
-  /*<STEP5-BETS>*/if(typeof SHARED_UI!=='undefined'&&SHARED_UI.owesMatrix)h+=SHARED_UI.owesMatrix(gids.map(i=>({id:i,label:tNm(i)})),M,{esc,fmt:tMoney,rowKey:'data-pid'});else/*</STEP5-BETS>*/
-  h+=`<h2>Who Owes Who</h2><div class="swipe">↔ Swipe sideways to see every column</div><div class="card sc"><table class="mx" data-tally="owes"><tr><th>owes ↓ / to →</th>${gids.map(i=>`<th>${esc(tNm(i))}</th>`).join('')}</tr>${gids.map(r=>`<tr data-pid="${esc(r)}"><td><b>${esc(tNm(r))}</b></td>${gids.map(c=>{const v=M(r,c);return r===c?'<td class="z">·</td>':v?`<td>${tMoney(v)}</td>`:'<td class="z">0</td>'}).join('')}</tr>`).join('')}</table></div>`;
-  /*<S25J> plain settle lines, one per non-zero netted pair */{const L=[];gids.forEach((a,x)=>gids.slice(x+1).forEach(b=>{const d=M(a,b)-M(b,a);if(d>0)L.push([a,b,d]);else if(d<0)L.push([b,a,-d])}));if(L.length)h+=`<div class="card" data-tally-settle>${L.map(([a,b,d])=>`<div class="tset">${esc(tNm(a))} owes ${esc(tNm(b))} ${tMoney(d)}</div>`).join('')}</div>`}/*</S25J>*/
+function vTally(){/* STEP11: Tally = 2026-27 Bets ledger (b27Tally / U.doc), not D.bets.tallies.ledger */
+  if(U.state==='init')return '<div class="card"><b>🧮 Tally · 2026-27</b><div class="note">Loading the 2026-27 bets ledger…</div></div>'+(typeof ballLoader==='function'?ballLoader():'');
+  const bets=(U.doc&&U.doc.bets)||[],T=b27Tally(bets),names=b27OwnerNames();
+  const M=(a,b)=>(T.M&&T.M[a]&&T.M[a][b])||0,Lo=n=>T.lost[n]||0,Wo=n=>T.won[n]||0,per=n=>T.per[n]||{net:0,bets:0};
+  let h=`<div class="card"><b>🧮 Tally · 2026-27</b><div class="note">From the 2026-27 shared ledger only. Rows owe columns.</div></div>`;
+  const empty=!names.some(n=>per(n).bets||Lo(n)||Wo(n));
+  if(empty)h+='<div class="card note" data-tally-empty>No 2026-27 bets with amounts yet'+(T.openCount?` (${T.openCount} still open)`:'')+'.</div>';
+  else if(typeof SHARED_UI!=='undefined'&&SHARED_UI.tallyTable)h+=SHARED_UI.tallyTable(names.map(n=>({id:n,name:String(PN(n)||n).split(' ')[0],lost:Lo(n),won:Wo(n),net:per(n).net,bets:per(n).bets})),M,{e:esc,fmt:b27Num,rowKey:'data-pid'});
+  else{/* fallback without SHARED_UI.tallyTable */
+    const ids=names.filter(n=>per(n).bets||Lo(n)||Wo(n));
+    h+=`<div class="card sc"><table data-tally="people"><tr><th>Person</th><th class="n">Lost</th><th class="n">Won</th><th class="n">Net</th><th class="n">Bets</th></tr>${ids.slice().sort((a,b)=>per(b).net-per(a).net).map(n=>{const nt=per(n).net;return`<tr data-pid="${esc(n)}"><td>${esc(PN(n))}</td><td class="n">${b27Num(Lo(n))}</td><td class="n">${b27Num(Wo(n))}</td><td class="n"><b class="${nt>0?'good':nt<0?'bad':''}">${nt>0?'+':nt<0?'-':''}${b27Num(Math.abs(nt))}</b></td><td class="n">${per(n).bets}</td></tr>`}).join('')}</table></div>`;
+    const L=[];names.forEach((a,x)=>names.slice(x+1).forEach(b=>{const d=M(a,b)-M(b,a);if(d>0)L.push([a,b,d]);else if(d<0)L.push([b,a,-d])}));
+    if(L.length)h+=`<div class="card" data-tally-settle><b>If settled today</b>${L.map(([a,b,d])=>`<div class="tset">${esc(PN(a))} pays ${esc(PN(b))} ${b27Num(d)}</div>`).join('')}</div>`;
+  }
   return h}
 /*</BETS-TALLY>*/
 function obToggle(){
