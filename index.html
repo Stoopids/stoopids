@@ -926,7 +926,7 @@ main,#main{padding-top:6px!important}
 /* SYNC7..SYNC14 moved to shared/ui.css (linked right after this style block) */
 
 </style>
-<link rel="stylesheet" href="shared/ui.css?v=1.20.0">
+<link rel="stylesheet" href="shared/ui.css?v=1.21.0">
 <style>/*<SORT-FIT> phone All teams table fits with no sideways scroll; Stoop header reads STOOP */@media (max-width:480px){html body .card.tap.s27-rk th,html body .card.tap.s27-rk td{padding:6px 1px!important}html body .card.tap.s27-rk td:first-child .chip{max-width:none!important;font-size:11px!important;padding-right:6px!important}html body .card.tap.s27-rk td:first-child .chip img{width:16px!important;height:16px!important}html body .card.tap.s27-rk th.to{max-width:none!important;overflow:visible!important;text-overflow:clip!important}html body .card.tap.s27-rk td.to{max-width:5ch}html body .card.tap.s27-rk th{font-size:10px!important}html body .card.tap.s27-rk{padding-left:3px!important;padding-right:3px!important}html body .card.tap.s27-rk td.n{font-size:11.5px!important}html body .card.tap.s27-rk td.to{font-size:11.5px}html body .card.tap.s27-rk .s27-sort i{font-size:.7em!important;margin-left:0!important}}/*</SORT-FIT>*/</style>
 </head>
 <body>
@@ -952,7 +952,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.28.0"></script>
+<script src="shared/ui.js?v=1.29.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -3758,7 +3758,7 @@ function s29Sb(day){const T=s=>{const t=D.teams[s.id]||{};return {location:t.nam
   return {events:(D.games||[]).filter(g=>g.day===day&&g.home&&g.away).map(g=>({id:g.id,date:g.start,competitions:[{competitors:[{team:T(g.home)},{team:T(g.away)}]}],status:{type:{}}}))}}
 function s29AutoOK(r){try{if(!r||r.k==='manual'||!r.t||!r.o||!r.d)return false;return !!S25.match(s29Sb(r.d),r)}catch(e){return false}}
 function s29AutoForm(){try{return b27Clean(U.text)?s29AutoOK(s25FormRd()):null}catch(e){return null}}
-function s29AutoHtml(ok){return ok?'<div class="s29-auto" data-s29-auto="1">This will be auto-settled after completion.</div>':(ok===false&&S29_AUTO_B?'<div class="s29-auto s29-hand" data-s29-auto="0">Settled by hand.</div>':'')}
+function s29AutoHtml(ok){return ok?'<div class="s29-auto" data-s29-auto="1">'+(window.SHARED_UI&&SHARED_UI.AUTO_NOTE||'This will be auto-settled after completion.')+'</div>':(ok===false&&S29_AUTO_B?'<div class="s29-auto s29-hand" data-s29-auto="0">Settled by hand.</div>':'')}
 let S29AT=0;function s29AutoSoon(){clearTimeout(S29AT);S29AT=setTimeout(()=>{const e=document.getElementById('s29Auto');if(e)e.innerHTML=s29AutoHtml(s29AutoForm())},250)}
 /*</S29D-AUTO>*/
 function s25CardRd(b){/*<S29D-AUTO>*/const an=(b.status==='open'&&b.kind!=='pool'&&s29AutoOK(b.rd))?s29AutoHtml(true):'';/*</S29D-AUTO>*/if(b.kind==='pool'||!(b.rd||b.src))return an;return an+`<div class="s25rdc" data-s25-card-rd="${b.rd?b.rd.k:''}">${b.rd?'Read as: '+s25RdLine(b.rd):''}${b.src?`${b.rd?' · ':''}from the final score: ${esc(b.src.sc)}`:''}</div>`}
@@ -3771,11 +3771,11 @@ function s25Fetch(r){const k=s25Key(r),c=S25P.games[k];if(c&&(c.st==='loading'||
   fetch(S25.scoreboardUrl(r.sp,r.d),ac?{cache:'no-store',signal:ac.signal}:{cache:'no-store'}).then(x=>{if(!x.ok)throw 0;return x.json()}).then(sb=>{S25P.games[k]={st:'ok',at:Date.now(),sb}},()=>{S25P.games[k]={st:'err',at:Date.now()}})
     .then(()=>{const ae=document.activeElement;if(tab==='bets27'&&!(ae&&ae.closest&&ae.closest('#main')&&/INPUT|TEXTAREA|SELECT/.test(ae.tagName)))render()}).catch(()=>{})}
 function s25ResWho(b,r){const OP=b27Opps(b);return r==='backer'?b.backer+' won':r==='other'?(OP.length>1?'Managers won':b.other+' won'):'Wash'}
-function s25PropHtml(b,me){const G=s25Game(b);if(!G)return '';const r=b.rd;
+function s25PropHtml(b,me){const G=s25Game(b);if(!G)return '';const r=b.rd;/*STEP9-AUTOSETTLE live leader*/if(G.wait==='live'&&G.g&&window.SHARED_UI&&SHARED_UI.autoLine){try{const p=S25.proposal(r,Object.assign({},G.g,{final:true}));if(p&&p.r){const OP=b27Opps(b);return SHARED_UI.autoLine({e:esc,live:true,who:p.r==='backer'?PN(b.backer):p.r==='other'?(OP.length>1?'Managers':PN(b.other)):'',sc:p.sc})}}catch(e){}}
   if(G.wait){const t=G.wait==='future'?'Game day '+S25.dayLbl(r.d)+'. After the final we’ll show you the score and a proposed result to confirm.':G.wait==='loading'?'Checking the final score…':G.wait==='err'?'Scores can’t be read right now: settle it by hand.':G.wait==='nogame'?'No matching game found yet: settle it by hand.':
       'No final score yet. Settle it by hand any time, or come back after the game.'+(G.g&&G.g.state==='pre'&&G.g.start?' (starts '+S25.localTime(G.g.start)+')':'');
     return `<div class="s25pp" data-s25-prop="${G.wait}">${esc(t)}</div>`}
-  const p=G.p;if(!p)return '';const ask=S25P.ask===b.id;
+  const p=G.p;if(!p)return '';const ask=S25P.ask===b.id;/*STEP9-AUTOSETTLE*/if(window.SHARED_UI&&SHARED_UI.autoLine){const OP=b27Opps(b);return '<div class="s25pp" data-s25-prop="final">'+SHARED_UI.autoLine({e:esc,live:false,who:p.r==='backer'?PN(b.backer):p.r==='other'?(OP.length>1?'Managers':PN(b.other)):'',sc:p.sc,btn:`<button type="button" class="ok" data-s25-ok="${b.id}" onclick="${ask?`s25Confirm('${b.id}')`:`s25Ask('${b.id}')`}"${U.busy?' disabled':''}>${ask?'Tap again to confirm':'✅ Confirm'}</button> <button type="button" data-s25-fix="${b.id}" aria-pressed="${!!S25P.fix[b.id]}" onclick="s25Fix('${b.id}')">✏️ Fix</button>`,note:'Nothing is settled until someone taps Confirm.'})+'</div>'}
   return `<div class="s25pp" data-s25-prop="final"><div><b>Final:</b> ${esc(p.sc)}</div><div><b>Proposed result:</b> ${esc(s25ResWho(b,p.r))} <span class="note">(${esc(p.why)})</span></div><button type="button" class="ok" data-s25-ok="${b.id}" onclick="${ask?`s25Confirm('${b.id}')`:`s25Ask('${b.id}')`}"${U.busy?' disabled':''}>${ask?'Tap again to confirm':'✅ Confirm'}</button><button type="button" data-s25-fix="${b.id}" aria-pressed="${!!S25P.fix[b.id]}" onclick="s25Fix('${b.id}')">✏️ Fix</button><div class="note">Nothing is settled until you confirm.</div></div>`}
 function s25Ask(id){S25P.ask=S25P.ask===id?null:id;render()}
 function s25HideManual(b){if(S25P.fix[b.id])return false;const G=s25Game(b);return !!(G&&G.p)}
