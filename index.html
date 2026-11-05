@@ -926,7 +926,7 @@ main,#main{padding-top:6px!important}
 /* SYNC7..SYNC14 moved to shared/ui.css (linked right after this style block) */
 
 </style>
-<link rel="stylesheet" href="shared/ui.css?v=1.13.0">
+<link rel="stylesheet" href="shared/ui.css?v=1.14.0">
 <style>/*<SORT-FIT> phone All teams table fits with no sideways scroll; Stoop header reads STOOP */@media (max-width:480px){html body .card.tap.s27-rk th,html body .card.tap.s27-rk td{padding:6px 1px!important}html body .card.tap.s27-rk td:first-child .chip{max-width:none!important;font-size:11px!important;padding-right:6px!important}html body .card.tap.s27-rk td:first-child .chip img{width:16px!important;height:16px!important}html body .card.tap.s27-rk th.to{max-width:none!important;overflow:visible!important;text-overflow:clip!important}html body .card.tap.s27-rk td.to{max-width:5ch}html body .card.tap.s27-rk th{font-size:10px!important}html body .card.tap.s27-rk{padding-left:3px!important;padding-right:3px!important}html body .card.tap.s27-rk td.n{font-size:11.5px!important}html body .card.tap.s27-rk td.to{font-size:11.5px}html body .card.tap.s27-rk .s27-sort i{font-size:.7em!important;margin-left:0!important}}/*</SORT-FIT>*/</style>
 </head>
 <body>
@@ -1667,7 +1667,7 @@ function gameCard(g){
     /*<SYNC1>*/// home team gets a 🏠 and every side shows its W-L inside the pill; both sit outside the name span so a long name truncates instead of crowding them
     const extra=(other==='H'&&!g.neutral?'<span class="ghome" title="Home">🏠</span>':'')+'<span class="grec">'+rec(s.id)+'</span>';
     const ch=chip(s.id,{big:1,name:s.short,cn:1}).replace('<span class="cn','<span title="'+fn+'" class="cn').replace(/<\/a>$/,extra+'</a>');/*</SYNC1>*/
-    return `<div class="gside${lose?' lose':''}${(fin||live)&&s===g.away&&(hsLs(g,g.away)||hsLs(g,g.home))?' hs1':''}"><div class="nm">${/*<GAMES-EVEN>*/ch/*</GAMES-EVEN>*/}${s.seed?`<span class="seed">(${s.seed})</span>`:''}${tag}</div><div class="sc2">${(fin||live)?hsHtml(g,s,s===g.away):''}</div></div>${/*<GAMES-EVEN>*/`<div class="gow"${s.owners&&s.owners.length?'':' aria-hidden="true"'}>${opills(s.owners)||'&nbsp;'}</div>`/*</GAMES-EVEN>*/}`};
+    return `<div class="gside${lose?' lose':''}${(fin||live)&&s===g.away&&(hsLs(g,g.away)||hsLs(g,g.home))?' hs1':''}"><div class="nm">${/*<GAMES-EVEN>*/ch/*</GAMES-EVEN>*/}${s.seed?`<span class="seed">(${s.seed})</span>`:''}${tag}</div>${/*<GAMES-EVEN>*/`<div class="gow"${s.owners&&s.owners.length?'':' aria-hidden="true"'}>${opills(s.owners)||'&nbsp;'}</div>`/*</GAMES-EVEN>*/}<div class="sc2">${(fin||live)?hsHtml(g,s,s===g.away):''}</div></div>`};
   let head=`<span>${fin?'FINAL':live?'<b class="good">LIVE</b>'/*<REFRESH-NOW>*/+(g._lv&&g._lv.detail?' <span class="mut">'+esc(g._lv.detail)+'</span>':'')/*</REFRESH-NOW>*/:'<b>'+/*<GAMES-LOCAL>*/gTime(g)/*</GAMES-LOCAL>*/+'</b>'}</span>`;
   if(g.round)head+=`<span>· ${esc(g.round)}</span>`;else if(g.kind==='conf')head+='<span>· Conf tournament</span>';
   if(g.h2h)head+=`<span class="h2b">🥊 ${esc(g.away.owners.map(PN).join('/'))} vs ${esc(g.home.owners.map(PN).join('/'))}</span>`;
