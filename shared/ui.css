@@ -469,4 +469,7 @@ html body .tabs.ob-seg.ob-phone{display:none!important}
 }
 /* Request (and the same opponent grid): 4 equal cells, so 7 invitees are 4 then 3. */
 html body .b27-opps,html body .rq-to{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+html body .b27-opps>.b27-util{display:flex;flex-direction:column;justify-content:stretch;gap:4px;min-width:0;min-height:58px;height:100%;box-sizing:border-box}
+html body .b27-util .s27-selb{flex:1 1 0;width:100%;min-height:0;margin:0;padding:0 4px;border-radius:12px;font-size:12px;line-height:1.05}
+@media (max-width:599px){html body .b27-opps>.b27-util{min-height:52px;gap:3px}html body .b27-util .s27-selb{border-radius:9px;font-size:11px}}
 /*</PARITY-LAYOUT>*/
