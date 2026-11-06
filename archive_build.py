@@ -382,7 +382,49 @@ def apply_sheet_strikes(archive, xlsx_path):
                 unclassified.append((season["season"], b["header"], t["pick"], t["name"], t["row"]))
     if unclassified:
         raise SystemExit("struck roster names were not matched:\n" + "\n".join(map(str, unclassified)))
-    return {"flagged": flagged, "struck_adds": struck_adds}
+    boundary = keep_matched_drops(archive)
+    flagged = [row for row in flagged if _still_dropped(archive, row)]
+    return {"flagged": flagged, "struck_adds": struck_adds, "boundary": boundary}
+
+
+def _still_dropped(archive, row):
+    season, person, pick, name = row[0], row[1], row[2], row[3]
+    for s in archive["seasons"]:
+        if s.get("season") != season:
+            continue
+        for o in s.get("owners") or []:
+            if o.get("person") != person:
+                continue
+            for t in o.get("teams") or []:
+                if t.get("pick") == pick and t.get("name") == name:
+                    return bool(t.get("redraft_drop"))
+    return False
+
+
+def keep_matched_drops(archive):
+    """A source strikethrough is a Jan 20 drop only when that roster's struck originals
+    equal its plain replacements (redraft_add). A sheet that strikes most of the original
+    list, or a different count than the adds, is decoration: those names stay plain.
+    Points and totals are not touched. Returns the rosters left unlabeled.
+    """
+    boundary = []
+    for season in archive.get("seasons") or []:
+        for o in season.get("owners") or []:
+            teams = o.get("teams") or []
+            drops = [t for t in teams if t.get("redraft_drop")]
+            adds = [t for t in teams if t.get("redraft_add")]
+            if drops and len(drops) == len(adds):
+                continue
+            for t in drops:
+                t.pop("redraft_drop", None)
+            if drops:
+                boundary.append({
+                    "season": season.get("season"),
+                    "person": o.get("person"),
+                    "struck": [(t.get("pick"), t.get("name")) for t in drops],
+                    "adds": len(adds),
+                })
+    return boundary
 
 
 def write_archive(out):
@@ -446,7 +488,19 @@ def main():
 
 
 if __name__ == "__main__":
-    if "--strike-only" in sys.argv:
+    if "--keep-matched" in sys.argv:
+        out = json.load(open(os.path.join(HERE, "archive.json"), encoding="utf-8"))
+        before_pts = [(s.get("season"), o.get("person"), o.get("total"), [(t.get("pick"), t.get("name"), t.get("pts")) for t in (o.get("teams") or [])]) for s in out["seasons"] for o in (s.get("owners") or [])]
+        boundary = keep_matched_drops(out)
+        after_pts = [(s.get("season"), o.get("person"), o.get("total"), [(t.get("pick"), t.get("name"), t.get("pts")) for t in (o.get("teams") or [])]) for s in out["seasons"] for o in (s.get("owners") or [])]
+        if after_pts != before_pts:
+            raise SystemExit("keep-matched changed a name, pick, point, or total")
+        write_archive(out)
+        n=sum(1 for s in out["seasons"] for o in (s.get("owners") or []) for t in (o.get("teams") or []) if t.get("redraft_drop"))
+        print("redraft_drop=%d unlabeled_rosters=%d" % (n, len(boundary)))
+        for b in boundary:
+            print("  unlabeled %s %s struck=%s adds=%s" % (b["season"], b["person"], b["struck"], b["adds"]))
+    elif "--strike-only" in sys.argv:
         src = sys.argv[sys.argv.index("--strike-only") + 1]
         out = json.load(open(os.path.join(HERE, "archive.json"), encoding="utf-8"))
         before = json.dumps(out, ensure_ascii=False, sort_keys=True)
@@ -456,9 +510,11 @@ if __name__ == "__main__":
         if scrub(json.dumps(out, ensure_ascii=False, sort_keys=True)) != scrub(before):
             raise SystemExit("strike pass changed something other than redraft_drop")
         write_archive(out)
-        print("redraft_drop=%d struck Jan 20 adds left plain=%d" % (len(rep["flagged"]), len(rep["struck_adds"])))
+        print("redraft_drop=%d struck Jan 20 adds left plain=%d unlabeled_rosters=%d" % (len(rep["flagged"]), len(rep["struck_adds"]), len(rep.get("boundary") or [])))
         for row in rep["flagged"]:
             print("  drop %s %s #%s %s row %s pts %s wins %s" % row)
+        for b in rep.get("boundary") or []:
+            print("  unlabeled %s %s struck=%s adds=%s" % (b["season"], b["person"], b["struck"], b["adds"]))
         for row in rep["struck_adds"]:
             print("  add-kept-plain %s %s #%s %s row %s" % row)
     else:
