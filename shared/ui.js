@@ -166,8 +166,7 @@ U.halfLs=hsLs;U.halfScores=function(g,s,first,BOX){var tot=s.score!=null?esc(Str
     function left(ms){var m=Math.max(1,Math.round(ms/60000)),d=Math.round(m/1440);return m<60?m+'m':m<48*60?Math.round(m/60)+'h':d<60?d+' days':d<330?Math.round(d/30)+' months':Math.round(d/365)<=1?'1 year':Math.round(d/365)+' years'}
     var YEAR=366*86400000;
     function expAt(f,now,ws){if(f.mode==='start')return ws||null;var x;if(f.mode==='at'){x=Date.parse(f.at);if(isNaN(x))return null}else{var n=+f.n;if(!(n>0))return null;x=now+n*({m:60000,h:3600000,d:86400000,w:604800000,mo:2592000000}[f.mode]||3600000)}return x>now+YEAR?null:x}
-    function sides(g){var o=SHARED_UI.qbOptions(g,{name:A.tname,date:A.dateET(g)});if(o.length)return o;
-      var d=A.dateET(g);return [{k:'win',t:'Winner (no odds posted)',s:[[g.away,g.home],[g.home,g.away]].map(function(p){return{lab:A.tname(p[0])+' to win',txt:A.tname(p[0])+' beats '+A.tname(p[1])+(d?', '+d:'')}})}]}
+    function sides(g){return SHARED_UI.qbOptions(g,{name:A.tname,date:A.dateET(g)})}
     function pick(g,f){var tt=String(f.text||'').trim().slice(0,A.maxText||140);if(!g)return tt?{k:'txt',si:0,lab:tt,other:'',txt:tt}:null;if(tt&&!(f.side&&(function(){var q=f.side.split(':'),oo=sides(g).find(function(x){return x.k===q[0]});return oo&&oo.s[+q[1]]&&(oo.s[+q[1]].lab===tt||oo.s[+q[1]].txt===tt)})()))return {k:'txt',si:0,lab:tt,other:'',txt:tt+' ('+A.tname(g.away)+' vs '+A.tname(g.home)+', '+A.dateET(g)+')'};if(!f.side)return null;var p=f.side.split(':'),o=sides(g).find(function(x){return x.k===p[0]}),s=o&&o.s[+p[1]];var ot=o.s[1-(+p[1])];return s?{k:p[0],si:+p[1],lab:s.lab,other:ot?ot.lab:'',txt:(f.cov==='2h'?'2nd half: ':'')+s.txt}:null}
     async function write(mut,ok){for(var k=0;k<3;k++){var cur=parse(await A.get());if(!ok(cur)){await A.set(JSON.stringify({v:1,reqs:mut(cur)}))}
         await new Promise(function(r){setTimeout(r,350+Math.random()*400)});var back=parse(await A.get());if(ok(back)){S.list=back;S.at=Date.now();return back}}throw new Error('conflict')}
@@ -348,21 +347,18 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
   SHARED_UI.shortName=function(n){n=String(n);var w=n.split(/\s+/).filter(Boolean),l=w[w.length-1];if(w.length>1&&l.length>=4&&l.length<=9)return l;if(n.length<=9)return n;if(w.length>1&&w[0].length<=9)return w[0];return n.slice(0,8)+'\u2026'};
   SHARED_UI.tinyName=function(n){var t=SHARED_UI.shortName(n);return t.length<=7?t:t.slice(0,4)};
   /* STEP7-QUICKBET: Games "Quick bet" window. qbOptions(g,{name,date}) -> [{k,t,s:[{lab,txt}]}] from the posted odds only
-     (spread each side, moneyline each side, over/under); [] when no odds are posted. qbSheet(g,list,o) -> the window markup;
+     (spread each side, over/under). No moneyline and no straight-winner preset. [] when neither is posted. qbSheet(g,list,o) -> the window markup;
      each site wires the taps through o.pick(k,i) / o.blank() / o.close() attribute strings. Nothing is placed from here. */
   SHARED_UI.qbOptions=function(g,o){var A=g.away,H=g.home,ln=(g.line&&typeof g.line==='object')?g.line:{},nm=o.name,d=o.date?', '+o.date:'',out=[];
-    var num=function(v){return v!=null&&v!==''&&isFinite(+v)};var sg=function(v){return (+v>0?'+':'')+(+v)};
     var fav=String(ln.fav)===String(A.id)?A:String(ln.fav)===String(H.id)?H:null,sp=+ln.sp;
     if(fav&&isFinite(sp)&&sp>0){var dog=fav===A?H:A;out.push({k:'sp',t:'Spread',s:[fav,dog].map(function(x){var y=x===fav?dog:fav,sx=x===fav?'-':'+',sy=y===fav?'-':'+';return{lab:nm(x)+' '+sx+sp,txt:nm(x)+' '+sx+sp+' vs '+nm(y)+' '+sy+sp+d}})})}
-    var ma=num(ln.aml)?ln.aml:num(ln.mlA)?ln.mlA:ln.ml&&num(ln.ml.away)?ln.ml.away:null,mh=num(ln.hml)?ln.hml:num(ln.mlH)?ln.mlH:ln.ml&&num(ln.ml.home)?ln.ml.home:null;
-    if(ma!=null&&mh!=null)out.push({k:'ml',t:'Moneyline',s:[[A,H,ma],[H,A,mh]].map(function(r){return{lab:nm(r[0])+' '+sg(r[2]),txt:nm(r[0])+' '+sg(r[2])+' to beat '+nm(r[1])+d}})});
     var ou=+ln.ou;if(isFinite(ou)&&ou>0){var m=nm(A)+' v '+nm(H);out.push({k:'ou',t:'Over/under',s:[['Over','Under'],['Under','Over']].map(function(p){return{lab:p[0]+' '+ou,txt:p[0]+' '+ou+' vs '+p[1]+' '+ou+', '+m+d}})})}
     return out};
   SHARED_UI.qbBlankText=function(g,o){return o.name(g.away)+' vs '+o.name(g.home)+(o.date?', '+o.date:'')};
   /* GAME-ROW: one team row of a game card, same markup on both sites: pill · seed · ⭐/🐶 · 1H/2H/T, owner chip on its own row under the pill. o={chip,seed,tag,owners,scores,lose,hs1} (already safe markup; seed is escaped here) */
   SHARED_UI.gameRow=function(o,e){return '<div class="gside'+(o.lose?' lose':'')+(o.hs1?' hs1':'')+'"><div class="nm">'+o.chip+(o.seed?'<span class="seed">('+e(String(o.seed))+')</span>':'')+(o.tag||'')+'</div><div class="sc2">'+(o.scores||'')+'</div></div><div class="gow"'+(o.owners?'':' aria-hidden="true"')+'>'+(o.owners||'&nbsp;')+'</div>'};
-  SHARED_UI.qbSheet=function(g,list,o){var e=o.e,t=e(o.name(g.away))+' vs '+e(o.name(g.home));list=(list||[]).filter(function(x){return x.k!=='win'});
-    /* inline drop-down under the game card (no modal): spread each side, moneyline, over/under when posted, plus a plain Request a bet. Every choice opens Request a bet prefilled */
+  SHARED_UI.qbSheet=function(g,list,o){var e=o.e,t=e(o.name(g.away))+' vs '+e(o.name(g.home));list=(list||[]).filter(function(x){return x.k!=='win'&&x.k!=='ml'});
+    /* inline drop-down under the game card (no modal): spread each side and over/under when posted, plus a plain Request a bet. Every choice opens Request a bet prefilled */
     var h='<div class="qbd" role="region" aria-label="Quick bet: '+t+'"><div class="qbd-h"><b>\u26A1 Quick bet</b><button type="button" class="qbd-x" aria-label="Close" '+o.close()+'>\u2715</button></div>';
     list.forEach(function(x){h+='<div class="qbs-r"><span class="qbs-l">'+e(x.t)+'</span><span class="qbs-s">'+x.s.map(function(s,i){return '<button type="button" class="qbs-o" aria-label="'+e(s.txt)+'" '+o.pick(x.k,i)+'>'+e(s.lab)+'</button>'}).join('')+'</span></div>'});
     return h+'<button type="button" class="qbs-o qbd-req" '+o.blank()+'>\u{1F4E8} Request a bet</button></div>'};

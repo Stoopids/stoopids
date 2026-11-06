@@ -970,7 +970,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.55.0"></script>
+<script src="shared/ui.js?v=1.56.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -1673,9 +1673,8 @@ const opills=a=>a&&a.length?a.map(n=>`<span class="opill">${esc(ownerEmoji(n))} 
 function lineTxt(ln,away,home,final){
   if(!ln)return null;
   const fav=ln.fav_name?`<b>${esc(ln.fav_name)}</b> -${ln.sp!=null?ln.sp:'?'}`:'Pick\u2019em';
-  const ml=/*<SYNC2>*/final&&/*</SYNC2>*/(ln.aml!=null||ln.hml!=null)?` · Moneyline ${esc(away)} ${fml(ln.aml)} / ${esc(home)} ${fml(ln.hml)}`:'';
   const ou=ln.ou!=null?` · Over/under ${ln.ou}`:'';
-  return `${final?(ln.type==='close'?'Closing line':'Last line'):'Line'}: ${fav}${ml}${ou} <span class="mut">· DraftKings</span>`}
+  return `${final?(ln.type==='close'?'Closing line':'Last line'):'Line'}: ${fav}${ou} <span class="mut">· DraftKings</span>`}
 function gameCard(g){
   const fin=g.status==='final',live=g.status==='live';
   const dog=g.line&&g.line.dog;
@@ -1714,7 +1713,6 @@ function qbOpts(g){
   const A=g.away,H=g.home,ln=g.line||{},d=qbDate(g),o=[];
   const fav=String(ln.fav)===String(A.id)?A:String(ln.fav)===String(H.id)?H:null,sp=ln.sp;
   if(fav&&sp!=null&&+sp>0){const dog=fav===A?H:A;o.push({k:'sp',t:'Spread',s:[fav,dog].map(t=>{const x=t===fav?fav:dog,y=t===fav?dog:fav,sx=x===fav?'-':'+',sy=y===fav?'-':'+';return{lab:qbNm(x)+' '+sx+sp,team:x,txt:qbNm(x)+' '+sx+sp+' vs '+qbNm(y)+' '+sy+sp+', '+d}})})}
-  o.push({k:'win',t:'Winner',s:[A,H].map(t=>{const y=t===A?H:A;return{lab:qbNm(t),team:t,txt:qbNm(t)+' beats '+qbNm(y)+', '+d}})});
   if(ln.ou!=null&&+ln.ou>0){const m=qbNm(A)+' v '+qbNm(H);o.push({k:'ou',t:'Over/under',s:[['Over','Under'],['Under','Over']].map(([x,y])=>({lab:x+' '+ln.ou,team:null,txt:x+' '+ln.ou+' vs '+y+' '+ln.ou+', '+m+', '+d}))})}
   return o}
 function qbBtn(g){/*<SYNC1>*/// the Quick bet button, stacked under Copy in the card header; the picker (qbHtml) still opens below the card body/*</SYNC1>*/
@@ -2479,7 +2477,6 @@ function s29GameText(g){const L=[],tn=s=>{const t=D.teams[s.id]||{};const rk=s.s
   if(g.round)L.push(String(g.round));else if(g.kind==='conf')L.push('Conf tournament');
   const v=g.venue&&(g.venue.name||g.venue);if(v&&typeof v==='string')L.push(v+(g.neutral?' (neutral site)':''));else if(g.neutral)L.push('Neutral site');
   const ln=g.line;if(ln){if(ln.fav_name&&ln.sp!=null)L.push('Spread: '+ln.fav_name+' -'+ln.sp);else if(ln.sp===0)L.push('Spread: Pick’em');
-    if(ln.aml!=null||ln.hml!=null)L.push('Moneyline: '+g.away.short+' '+fml(ln.aml)+' / '+g.home.short+' '+fml(ln.hml));
     if(ln.ou!=null)L.push('Over/under: '+ln.ou)}
   const ow=s=>(s.owners||[]).map(n=>(ownerEmoji(n)?ownerEmoji(n)+' ':'')+PN(n)).join(', ');const oa=ow(g.away),oh=ow(g.home);
   if(oa)L.push(g.away.short+': '+oa);if(oh)L.push(g.home.short+': '+oh);
@@ -3836,7 +3833,7 @@ function s25RdHtml(){
   return ''}
 function s25EdHtml(){const r=s25FormRd(),a=r.k==='manual'?S25.parse('x beats y'):r,sel=(id,opts,v)=>`<select id="${id}">${opts.map(([k,l])=>`<option value="${k}"${k===v?' selected':''}>${esc(l)}</option>`).join('')}</select>`;
   return `<div class="s25rd s25edw"><span class="k">Edit reading</span><div class="s25ed">
-   <label>Type${sel('s25k',[['spread','Spread'],['ml','Wins outright'],['total','Total (over/under)'],['manual','Manual']],r.k)}</label>
+   <label>Type${sel('s25k',[['spread','Spread'],['total','Total (over/under)'],['manual','Manual']],r.k==='ml'?'manual':r.k)}</label>
    <label>Sport${sel('s25sp',Object.entries(S25.SPORTS).map(([k,v])=>[k,v.lbl]),a.sp||'mcbb')}</label>
    <label>Team (your side)<input id="s25t" maxlength="40" value="${esc(r.k==='manual'?'':a.t)}"></label>
    <label>Opponent<input id="s25o" maxlength="40" value="${esc(r.k==='manual'?'':a.o)}"></label>
