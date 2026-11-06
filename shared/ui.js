@@ -121,8 +121,16 @@ U.halfLs=hsLs;U.halfScores=function(g,s,first,BOX){var tot=s.score!=null?esc(Str
   /* STEP6-TEAMS: STOOPIDS All-teams table, both sites. o: {filters(html),heads:[[k,label,title,cls]],sk,sd,btn(k)->attrs,rows:[{attr,cells:[[cls,attr,html]]}],e} */
   SHARED_UI.teamsTable=function(o){var e=o.e;
     var th=function(h){var k=h[0],on=o.sk===k;return '<th class="'+(h[3]==null?'n s27-sort':h[3])+'" aria-sort="'+(on?(o.sd>0?'ascending':'descending'):'none')+'"><button type="button" title="'+e(h[2])+'. Tap to sort" '+o.btn(k)+'>'+h[1]+'<i aria-hidden="true">'+(on?(o.sd>0?'▲':'▼'):'↕')+'</i></button></th>'};
-    return '<div class="tapf" role="group" aria-label="Filter by owner">'+o.filters+'</div><div class="card tap s27-rk"><table><tr>'+o.heads.map(th).join('')+'</tr>'+
-      o.rows.map(function(r){return '<tr'+(r.attr||'')+'>'+r.cells.map(function(c){return '<td'+(c[0]?' class="'+c[0]+'"':'')+(c[1]||'')+'>'+c[2]+'</td>'}).join('')+'</tr>'}).join('')+'</table></div>'};
+    var html='<div class="tapf" role="group" aria-label="Filter by owner">'+o.filters+'</div><div class="card tap s27-rk"><table><tr>'+o.heads.map(th).join('')+'</tr>'+
+      o.rows.map(function(r){return '<tr'+(r.attr||'')+'>'+r.cells.map(function(c){return '<td'+(c[0]?' class="'+c[0]+'"':'')+(c[1]||'')+'>'+c[2]+'</td>'}).join('')+'</tr>'}).join('')+'</table></div>';
+    setTimeout(function(){try{SHARED_UI.atBadgeFit()}catch(e){}},0);return html};
+  /* All-teams badges: one width, the longest name in this table, and one height. Hidden filter rows still count. */
+  SHARED_UI.atBadgeFit=function(){var cards=document.querySelectorAll('.card.tap.s27-rk');if(!cards.length)return;cards.forEach(function(card){
+    var chips=[].slice.call(card.querySelectorAll('td:first-child .chip'));if(!chips.length)return;
+    var probe=chips[0].cloneNode(true);probe.style.cssText='position:absolute;left:0;top:0;visibility:hidden;pointer-events:none;width:max-content;min-width:0;max-width:none;height:30px;min-height:30px;display:inline-flex';
+    document.body.appendChild(probe);var max=0,longest='';
+    chips.forEach(function(c){probe.className=c.className;probe.innerHTML=c.innerHTML;var w=probe.offsetWidth;var label=(c.textContent||'').replace(/\s+/g,' ').trim();if(w>max){max=w;longest=label}});
+    probe.remove();if(max>0){card.style.setProperty('--at-badge',max+'px');card.setAttribute('data-at-long',longest)}});};
 
   /* STEP6-BETS: New bet question tips (STOOPIDS wording), both sites */
   SHARED_UI.TIPS={who:'Tap one or more managers. Several = one bet, one result.',text:'Write it as you say it: "Kansas -4 beats Duke".',amt:function(min){return 'Minimum '+min},odds:'If you’re right, they owe amount × first ÷ second. Even = 1-1.',

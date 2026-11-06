@@ -945,7 +945,7 @@ main,#main{padding-top:6px!important}
 
 </style>
 <link rel="stylesheet" href="shared/ui.css?v=1.31.0">
-<style>/*<SORT-FIT> phone All teams table fits with no sideways scroll; Stoop header reads STOOP */@media (max-width:480px){html body .card.tap.s27-rk th,html body .card.tap.s27-rk td{padding:6px 1px!important}html body .card.tap.s27-rk td:first-child .chip{max-width:none!important;font-size:11px!important;padding-right:6px!important}html body .card.tap.s27-rk td:first-child .chip img{width:16px!important;height:16px!important}html body .card.tap.s27-rk th.to{max-width:none!important;overflow:visible!important;text-overflow:clip!important}html body .card.tap.s27-rk td.to{max-width:5ch}html body .card.tap.s27-rk th{font-size:10px!important}html body .card.tap.s27-rk{padding-left:3px!important;padding-right:3px!important}html body .card.tap.s27-rk td.n{font-size:11.5px!important}html body .card.tap.s27-rk td.to{font-size:11.5px}html body .card.tap.s27-rk .s27-sort i{font-size:.7em!important;margin-left:0!important}}/*</SORT-FIT>*/</style>
+<style>/*<SORT-FIT> phone All teams: the card scrolls sideways, the page does not. Names stay full size. */@media (max-width:480px){html body .card.tap.s27-rk{padding-left:4px!important;padding-right:4px!important}html body .card.tap.s27-rk th{font-size:11px!important}html body .card.tap.s27-rk td.n,html body .card.tap.s27-rk td.to,html body .card.tap.s27-rk td.cf{font-size:13px!important}html body .card.tap.s27-rk .s27-sort i{font-size:.7em!important;margin-left:0!important}}/*</SORT-FIT>*/</style>
 </head>
 <body>
 <header>
@@ -2624,6 +2624,7 @@ function render(){
   const footBits=[];if(tab!=='games')footBits.push('STOOPIDS · times in your time zone');if(DEMO)footBits.push('<a href="?">back to the live season</a>');if(ADMIN)footBits.push('scores ESPN (fallback ncaa.com)');const footEl=$('#foot');footEl.innerHTML=footBits.join(' · ');footEl.hidden=!footBits.length;
   freshStart();
   /*<CHIP-FIT>*/try{chipFit()}catch(_){}/*</CHIP-FIT>*/
+  try{if(window.SHARED_UI&&SHARED_UI.atBadgeFit)SHARED_UI.atBadgeFit()}catch(_){}
   /*<CHAT-BAR>*/try{chatAfterRender()}catch(_){}/*</CHAT-BAR>*/
 }
 /*<NEWBET>*/
