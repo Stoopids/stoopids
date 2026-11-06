@@ -3662,6 +3662,7 @@ function obOldNote(){   // read-only replacement of the old shared-ledger card (
 (function(){
   if(DEMO)return;
   /*<ONE-BETS>*/const i=TABS.findIndex(t=>t[0]==='bets');if(i<0)TABS.push(['bets27','💵 Bets']);else TABS[i]=['bets27','💵 Bets'];   // the ONE Bets tab (was Side bets + Bets 26-27); the Draft link stays last
+  const bi=TABS.findIndex(t=>t[0]==='bets27');if(TABS.every(t=>t[0]!=='tally'))TABS.splice(bi+1,0,['tally','🧮 Tally']);NAVSHORT.tally='Tally';VIEWS.tally=()=>vTally();
   function entryPair(){const focus=OB_VIEW==='request'?'request':'form',wiu=vB27(),rq=(typeof RQ!=='undefined'&&RQ)?RQ.view():'<div class="card note">Request a bet is unavailable right now.</div>';
     return `<div class="entry-pair" data-focus="${focus}"><div class="entry-col entry-wiu${focus==='form'?' is-on':''}">${wiu}</div><div class="entry-col entry-rq${focus==='request'?' is-on':''}">${rq}</div></div>`}
   VIEWS.bets27=()=>{if(OB_VIEW==='open'||OB_VIEW==='tally')OB_VIEW='all';
@@ -3693,7 +3694,7 @@ const tMoney=v=>b27Num(v/((D.bets.currency||{}).display_unit||1000));   // displ
    5) Copy link / Share: built ONLY from origin + path (+ ?demo=1 in the demo) + the route hash. Never ?admin, never names, never ledger keys.
    6) Tabs are <a href>: plain click switches in place (pushState), modifier / middle / right click = browser default. */
 const S24={sub:null,last:null,route0:false,prep:null,done:null,hlUntil:0,nf:null};
-const S24_H2T={share:'profile',profile:'profile',standings:'standings',ranks:'standings',games:'games',schedule:'games',scores:'games',rosters:'@points',squads:'@points',owner:'@points',points:'@points',rankings:'teams',apnet:'teams','ap-net':'teams',ap:'teams',net:'teams',polls:'teams',bets:'@bets',bets27:'@bets','bets-2025-26':'bets',bets2526:'bets',teams:'teams',postseason:'checklist',checklist:'checklist',redraft:'redraft',archive:'archive',rules:'about',about:'about'/*<S26N-DRAFT-RECAP>*/,draft:'recap',recap:'recap',howto:'howto','how-to-bet':'howto',draft27:'recap','draft-results':'recap',draftresults:'recap',picks:'recap',results:'recap'/*</S26N-DRAFT-RECAP>*/};
+const S24_H2T={share:'profile',profile:'profile',standings:'standings',ranks:'standings',games:'games',schedule:'games',scores:'games',rosters:'@points',squads:'@points',owner:'@points',points:'@points',rankings:'teams',apnet:'teams','ap-net':'teams',ap:'teams',net:'teams',polls:'teams',bets:'@bets',bets27:'@bets','bets-2025-26':'bets',bets2526:'bets',tally:'tally',teams:'teams',postseason:'checklist',checklist:'checklist',redraft:'redraft',archive:'archive',rules:'about',about:'about'/*<S26N-DRAFT-RECAP>*/,draft:'recap',recap:'recap',howto:'howto','how-to-bet':'howto',draft27:'recap','draft-results':'recap',draftresults:'recap',picks:'recap',results:'recap'/*</S26N-DRAFT-RECAP>*/};
 const s24HasNew=()=>typeof VIEWS!=='undefined'&&!!VIEWS.bets27;
 const s24IdOK=v=>typeof v==='string'&&/^[A-Za-z0-9_-]{1,40}$/.test(v);
 function s24TabFromHash(h){const t=S24_H2T[h];if(!t)return null;/*<S26E>*/if(t==='@points'){s26eView('points');return 'standings'}/*</S26E>*/if(t==='@bets')return s24HasNew()?'bets27':'bets';return t}
