@@ -961,7 +961,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.50.0"></script>
+<script src="shared/ui.js?v=1.51.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -3508,14 +3508,12 @@ function b27OwesHtml(T){
 function b27ActionItem(b,me){if(!me||!b)return null;
   if(b.fx&&typeof S24R!=='undefined'&&S24R.includes(b.status)&&me===b.backer&&b.fx.by!==me)return {id:b.id,kind:'bet',action:'Answer the correction',text:b.text||''};
   if(b.status!=='open'||b.kind==='pool'||b.backer!==me)return null;
-  const later=SHARED_UI.whenKind(b)==='date'&&b.est>SHARED_UI.estToday();
-  const r=b.rd;if(!r||r.k==='manual'||!r.d){const dc=SHARED_UI.whenClass(b);return !later&&(dc==='today'||dc==='over')?{id:b.id,kind:'bet',action:'Enter the result',text:b.text||''}:null}
+  const r=b.rd;if(!r||r.k==='manual'||!r.d)return null;
   let today='';try{today=S25.etDay(new Date())}catch(e){return null}
   if(String(r.d)>today)return null;
   let G=null;try{G=s25Game(b)}catch(e){G=null}
   if(G&&G.p)return {id:b.id,kind:'bet',action:'Confirm the result',text:b.text||''};
   if(G&&G.wait==='future')return null;
-  if(later)return null;
   return {id:b.id,kind:'bet',action:'Enter the result',text:b.text||''}}
 function b27WaitingItems(me){const out=[];if(!me)return out;
   try{const now=Date.now();((typeof RQ!=='undefined'&&RQ&&RQ.S&&RQ.S.list)||[]).forEach(r=>{if(!r||r.status!=='open'||r.by===me)return;if((r.to||[]).indexOf(me)<0||(r.dec||[]).indexOf(me)>=0)return;if((r.took||[]).some(t=>t&&t.m===me))return;if(!(now<r.exp))return;out.push({id:r.id,kind:'req',action:'Accept or decline',text:r.txt||r.lab||'Request'})})}catch(e){}
@@ -3750,10 +3748,10 @@ function s24AfterLoad(){/*<NO-JUMP>*/const first=!S24.al;S24.al=1;/*</NO-JUMP>*/
 /* ---- 1) Edit ---- */
 function s24ResetForm(){Object.assign(U,{/*<S25>*/rdEd:null,rdOpen:false,/*</S25>*/opps:[],amt:null,amtCustom:false,amtTxt:'',amtErr:'',odds:[1,1],custom:false,customTxt:'',oddsErr:'',text:'',confirm:false,fids:{},qb:null,est:'',wk:'unknown'})}
 let estDraft=null;
-function s24When(k){if(!estDraft)return;estDraft.kind=k==='date'||k==='season'?k:'unknown';if(estDraft.kind!=='date')estDraft.val='';render()}
+function s24EstKind(k){if(!estDraft)return;estDraft.kind=k==='date'||k==='season'?k:'unknown';if(estDraft.kind!=='date')estDraft.val='';render()}
 function s24EstHtml(b){const open=estDraft&&estDraft.id===b.id;
   if(!open)return `<div class="b27-act"><span class="note">${esc(SHARED_UI.whenText(b))}.</span> <button type="button" class="btn sec b27-b" data-est-edit="${esc(b.id)}" onclick="s24EditStart('${b.id}')">Edit</button></div>`;
-  return `<div class="b27-est" data-est-editor="${esc(b.id)}">${SHARED_UI.whenBox({e:esc,kind:estDraft.kind,est:estDraft.val,seasonId:b27Season(),inputId:'estIn',pick:id=>`onclick="s24When('${id}')"`,dateAttr:'onchange="if(estDraft)estDraft.val=this.value"'})}<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="s24EstSave('${b.id}')">Save</button><button type="button" class="btn sec b27-b" onclick="s24EstClear('${b.id}')">Clear</button><button type="button" class="btn sec b27-b" onclick="s24EstCancel()">Cancel</button></div><div class="note">Description, people, amount, and odds stay as written.</div></div>`}
+  return `<div class="b27-est" data-est-editor="${esc(b.id)}">${SHARED_UI.whenBox({e:esc,kind:estDraft.kind,est:estDraft.val,seasonId:b27Season(),inputId:'estIn',pick:id=>`onclick="s24EstKind('${id}')"`,dateAttr:'onchange="if(estDraft)estDraft.val=this.value"'})}<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="s24EstSave('${b.id}')">Save</button><button type="button" class="btn sec b27-b" onclick="s24EstClear('${b.id}')">Clear</button><button type="button" class="btn sec b27-b" onclick="s24EstCancel()">Cancel</button></div><div class="note">Description, people, amount, and odds stay as written.</div></div>`}
 function s24EstOwner(b){const me=b27Who();return !!(b&&b.status==='open'&&b.kind!=='pool'&&me&&b.backer===me)}
 function s24EditStart(id){const b=(U.doc.bets||[]).find(x=>x.id===id);
   if(!s24EstOwner(b)){estDraft=null;U.msg=b&&b.status!=='open'?'This bet is already settled. The sorting note stays as it is.':'Only the person who posted this bet can set when it might be settled.';U.msgBad=true;render();return}
@@ -3764,7 +3762,7 @@ async function s24EstWrite(id,kind,est){const b=(U.doc.bets||[]).find(x=>x.id===
   const w=pack||SHARED_UI.whenPack('unknown');
   const sig=x=>JSON.stringify({text:x.text,amt:x.amt,odds:x.odds,backer:x.backer,other:x.other,opponents:x.opponents||null,rd:x.rd||null});
   const before=sig(b);
-  try{const back=await b27Write(cur=>cur.map(x=>x.id===id?Object.assign({},x,{wk:w.wk,est:w.est,sid:w.sid}):x),cur=>cur.some(x=>x.id===id&&x.wk===w.wk&&(w.est?x.est===w.est:!x.est)&&(w.sid?x.sid===w.sid:!x.sid)));
+  try{const back=await b27Write(cur=>cur.map(x=>{if(x.id!==id)return x;const y=SHARED_UI.whenApply(x,w);if(!y)throw new Error('locked');return y}),cur=>cur.some(x=>x.id===id&&x.wk===w.wk&&(w.est?x.est===w.est:!x.est)&&(w.sid?x.sid===w.sid:!x.sid)));
     const now=back.find(x=>x.id===id);if(!now||sig(now)!==before)throw new Error('locked');
     b27Apply(back);estDraft=null;U.msg='Sorting note saved. The terms are unchanged.';U.msgBad=false}
   catch(e){U.msg='The sorting note was not saved. The terms were not changed.';U.msgBad=true}
