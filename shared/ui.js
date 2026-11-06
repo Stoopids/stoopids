@@ -238,7 +238,7 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
       S.expT=setTimeout(function(){S.expT=0;try{if(!A.watchExpiry||A.watchExpiry())A.render()}catch(e){}armExpiry()},wait)}
     function sees(r){var me=A.me();if(!me||!r)return false;if(r.by===me)return true;if(!r.to||r.to.indexOf(me)<0)return false;if((r.dec||[]).indexOf(me)>=0)return false;if(tk(r).indexOf(me)>=0)return false;return true}
     function shown(r,now){return live(r,now)&&sees(r)}
-    function pinned(only,mark){var now=Date.now(),L=S.list.filter(function(r){return shown(r,now)}).sort(function(a,b){return a.exp-b.exp});
+    function pinned(only,mark){var now=Date.now(),L=S.list.filter(function(r){return shown(r,now)}).filter(function(r){return !A.reqMatch||A.reqMatch(r)}).sort(function(a,b){return a.exp-b.exp});
       if(mark){markOpenSeen();try{paint()}catch(e){}}
       armExpiry();
       if(!L.length)return only?'<div class="card note rq-none">No open requests right now.</div>':'';

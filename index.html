@@ -452,7 +452,7 @@ nav a.nt{text-decoration:none}
 #s24t{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--chatH,0px) + 14px);z-index:60;max-width:min(92vw,520px);background:var(--acc);color:#111;font-weight:800;padding:10px 16px;border-radius:12px;box-shadow:0 4px 18px rgba(0,0,0,.4);word-break:break-all;font-size:14px}
 #s24t[hidden]{display:none}
 .s24nf{border-color:var(--acc)}
-.s24fb .row2{flex-wrap:nowrap}.s24fb .row2>*{flex:1 1 0;min-width:0}   /* the Bets filter: Person, Status and search on ONE row at every width */
+.s24fb .row2{flex-wrap:wrap}.s24fb .row2>*{flex:1 1 140px;min-width:0}   /* Person, Status, Action, When, and search wrap instead of overflowing */
 .b27-fx{margin-top:6px;padding:8px;border:1px dashed var(--acc);border-radius:10px}
 .b27-fxh{margin-top:6px;font-size:12px}.b27-fxh li{margin:2px 0}
 .st.fixd{background:var(--acc);color:#111}
@@ -2538,7 +2538,7 @@ function vHowTo(){const m=PULK.minAmt;
   <div class="card"><b>Write it Up</b><p>Use this when the bet is already agreed. It goes straight onto <b>All Bets</b>. Pick who you’re against, write the bet, choose the amount and the odds, then <b>5. When can this be settled?</b> That date, <b>End of season</b>, or <b>Not sure yet</b> is for sorting only. Tap <b>Place bet</b>, check it, then <b>Yes, place it</b>.</p></div>
   <div class="card"><b>Request a bet</b><p>Use this when nothing is agreed yet. Pick who it is open to. Leave them unpicked, or choose <b>All</b>, and it is open to the other Stoops. A shorter list is only those invitees. Set how many can accept, and when the invitation expires. Expiry is not the settlement estimate. Then <b>7. When can this be settled?</b>, same three sorting choices. Tap <b>Request bet</b>. It stays under <b>Open requests</b> at the top of <b>All Bets</b> until someone accepts, it expires, or you delete or close it.</p></div>
   <div class="card"><b>Who sees an open request</b><p>The page shows an open request to the Stoop who sent it, and to invitees who can still take it. Other Stoops do not get that card or a request badge. A guest does not see those cards. Accept still only works for an invitee. This is how the page filters the list. The request record itself is still read as one shared list, so the page is not a private lock.</p></div>
-  <div class="card"><b>After it is agreed</b><p>An accepted request becomes a bet on <b>All Bets</b>, same as Write it Up. The description, people, amount, and odds stay as written. <b>Edit</b> on an open bet only changes the sorting note. The person who posted it enters who won, or <b>Wash</b>, and confirms. If the words match a finished game, the score can propose a result; nothing changes until they tap <b>Confirm</b>. They can correct a settled result. <b>Waiting on me</b> in the All Bets filter is for those result actions.</p></div></section>
+  <div class="card"><b>After it is agreed</b><p>An accepted request becomes a bet on <b>All Bets</b>, same as Write it Up. The description, people, amount, and odds stay as written. <b>Edit</b> on an open bet only changes the sorting note. The person who posted it enters who won, or <b>Wash</b>, and confirms. If the words match a finished game, the score can propose a result; nothing changes until they tap <b>Confirm</b>. They can correct a settled result. <b>My turn</b> under Action needed is for those result actions. <a href="${esc(s24Href('howto'))}" onclick="return s24HowFilters(event)">How the filters work →</a></p></div></section>
   <div class="card"><b>Settling</b><p>The person who posted the bet enters who won, or a Wash. A proposed score waits for their Confirm. They can correct a settled result. Totals stay in <b>Tally</b> at the bottom of <b>All Bets</b>.</p></div>
   <section id="howto-pool" class="s29-hnb"><h3>Pools</h3><div class="card"><b>Pool / buy-in</b><p>Pick <b>Pool</b> (phone) or <b>Pool / buy-in</b> at the top of Write it Up for a buy-in pool.</p></div>
   <div class="card"><b>1. What’s the pool?</b><p>Say what the pool is, e.g. “STOOPIDS season-long tournament pool”.</p></div>
@@ -2546,6 +2546,15 @@ function vHowTo(){const m=PULK.minAmt;
   <div class="card"><b>3. Buy-in per person</b><p>A whole number, minimum ${m}. The pot is buy-in × people in.</p></div>
   <div class="card"><b>4. Payouts by place</b><p>Amounts only; you pick who finished where when you settle it. They must add up to the pot. Optional: leave blank to fill in when it’s over.</p></div></section>
   <div class="card"><b>Request and Open</b><p>Open requests sit at the top of <b>All Bets</b>. The badge counts unseen requests for this account only.</p></div>
+  <section id="howto-filters" class="s29-hnb"><h3>How the All Bets filters work</h3>
+  <div class="card"><b>This update only</b><p>This is how the filters work in this held update. They are not on the public site yet. Nothing here settles a bet by itself.</p></div>
+  <div class="card"><b>Five controls</b><p><b>Everyone / a person</b> and <b>search</b> stay. The old long status list is now three controls that all apply at once. A bet has to pass every one of them. <b>Status</b> is All, Open, Settled, Wash, or Cancelled. <b>Action needed</b> is Any, My turn, or Their turn. <b>When</b> is Any time, Upcoming, Today, Past settle date, End game, End of season, or Not sure yet. The page opens on <b>Open</b>, <b>Any</b> action, and <b>Any time</b>.</p></div>
+  <div class="card"><b>Status</b><p><b>Open</b> is still open. A pool whose payouts are already entered is not open. <b>Settled</b> has a winner, or it is a pool with payouts entered. <b>Wash</b> is a push: nobody owes anything. <b>Cancelled</b> was voided. <b>All</b> includes every one of those.</p></div>
+  <div class="card"><b>Whose turn</b><p><b>My turn</b> means there is a real step with your name on it: answer someone else’s correction, confirm a proposed score, or enter the result once the game day has arrived. A future game is not your turn just because you posted it. <b>Their turn</b> is the same kind of step for the other person, on a bet you are in. An open bet is not “their turn” only because they wrote it. The number on My turn or Their turn is how many bets match that choice together with the other controls. It is not the yellow new-bet badge, and it is not the new-request badge. Those unseen numbers clear when you open All Bets. Changing a filter does not clear them.</p></div>
+  <div class="card"><b>When</b><p>Today, Upcoming, and Past settle date use this device’s calendar day, the same day the page already uses for sorting. They are not Eastern Time and not the tip-off. <b>Past settle date</b> means the sorting date is before today. The bet stays open until someone enters the result. <b>End of season</b> and <b>End game</b> are only those labels. No season-end date and no game-end time is invented, and neither one settles the bet.</p></div>
+  <div class="card"><b>Requests stay separate</b><p>Open requests stay in their own list at the top of All Bets. Status, Action needed, and When do not try to classify a request. Everyone, Me, a named person, and search do apply to that list, but only after the page has already hidden requests you cannot see. You see a request you sent, or one you were invited to and can still take. You never see someone else’s request just because you searched their name. A guest does not see those cards.</p></div>
+  <div class="card"><b>Three examples</b><p>Open + My turn + Today: you posted it, the game day is here, and you still need to enter or confirm the result. It shows. The same bet about a game next week does not.</p><p>Settled + Their turn: you asked to correct the result, and the person who posted it has not answered. It stays settled until they do.</p><p>Open + Any + End of season: those bets are grouped by that label. They do not settle when the season ends, because no end date is on file.</p></div>
+  </section>
   <div class="card"><b>Copy</b><p>Each bet’s <b>Copy</b> button copies just that bet’s text.</p></div></div>`}
 VIEWS.howto=vHowTo;
 /*<S29D-NEWBETS>*/ // Bets tab number = bets this device has not seen on All bets yet. Not a total, and not open requests. First load: seen = now. The number clears only when All bets is the list on screen. Write it Up or Request does not clear it. localStorage only.
@@ -2569,6 +2578,7 @@ setInterval(()=>{try{s12RcUpdate()}catch(_){}},3000);
 /*</STEP12-RECAPNEW>*/
 /*<S29D-HNB>*/ // the form tips' link opens How to bet AT the New bet section (#howto-newbet); only this link skips the open-at-top rule
 function s29HowNew(ev){s27TipClose();const r=s24NavClick(ev,'howto');if(r!==false)return r;const go=()=>{const e=document.getElementById('howto-newbet');if(e)e.scrollIntoView({block:'start'})};setTimeout(go,0);setTimeout(go,120);return false}
+function s24HowFilters(ev){if(ev&&ev.preventDefault)ev.preventDefault();s27TipClose();tab='howto';try{S24.sub=null}catch(e){}render();const go=()=>{const e=document.getElementById('howto-filters');if(e)e.scrollIntoView({block:'start'})};setTimeout(go,0);setTimeout(go,120);return false}
 /*</S29D-HNB>*/
 /*</S27>*/
 /*<CHIP-FIT>*/
@@ -3604,7 +3614,7 @@ const RQ=(typeof SHARED_UI!=='undefined'&&SHARED_UI.Requests)?SHARED_UI.Requests
     const w=SHARED_UI.whenPack(r.wk,r.est,r.sid)||SHARED_UI.whenPack('unknown');
     const nb=Object.assign({id,backer:r.by,other:me,postedBy:me,postedAt:at,amt:r.amt,odds:{a:(r.odds||[1,1])[0],b:(r.odds||[1,1])[1]},text,status:'open',req:r.id,wk:w.wk,est:w.est,sid:w.sid},rd?{rd}:{});
     const back=await b27Write(cur=>{if(cur.some(c=>c.id===id))return cur;let n=b27MaxN(cur);return cur.concat([Object.assign({},nb,{n:n+1,created_at:at,settled_at:null})])},cur=>cur.some(c=>c.id===id));b27Apply(back)},
-  watchExpiry:()=>OB_VIEW==='all'||OB_VIEW==='open',
+  watchExpiry:()=>OB_VIEW==='all'||OB_VIEW==='open',reqMatch:r=>s24ReqMatch(r),
   render:()=>{if(tab==='bets27'&&(OB_VIEW==='request'||OB_VIEW==='form'||OB_VIEW==='all'||OB_VIEW==='open'))render()}}):null;
 /*</STEP8-REQUEST>*/
 let OB_VIEW='form';   // Bets tab: 'form' = 2026-27 (New bet form + bet list), 'tally' = person table + Who owes who for 2026-27
@@ -4036,32 +4046,43 @@ function s24FixBadge(b){return b.fxh&&b.fxh.some(e=>e.out==='confirmed'/*<CREATO
 /*</CREATOR-SETTLE>*/
 /* ---- Bets filter (2026-27 view): the older STOOPIDS two-select design (Wagers list: Everyone / person + status), plus "Me" and "Waiting on me".
    Remembered per device in localStorage (stoopids_b27_person / stoopids_b27_status): only the filter value ("me" is stored as the word me, never a name for it). ---- */
-const S24FS=[['all','Any status'],['open','Open'],['settled','Settled'],['wash','Wash'],['wait','Waiting on me'],['wstoops','Waiting on stoops'],['dueup','Upcoming'],['duetoday','Due today'],['dueover','Overdue'],['dueseason','End of season'],['duenone','Not sure yet'],['req','Requested']],S24FPK='stoopids_b27_person',S24FSK='stoopids_b27_status';
+const S24FST=[['open','Open'],['all','All'],['settled','Settled'],['wash','Wash'],['void','Cancelled']],S24FAC=[['any','Any'],['mine','My turn'],['theirs','Their turn']],S24FWH=[['any','Any time'],['up','Upcoming'],['today','Today'],['over','Past settle date'],['game','End game'],['season','End of season'],['none','Not sure yet']],S24FPK='stoopids_b27_person',S24FSK='stoopids_b27_status',S24FAK='stoopids_b27_action',S24FWK='stoopids_b27_when';
 const s24FP=()=>{const v=lsGet(S24FPK);return v==='me'||b27OwnerNames().includes(v)?v:'all'};
-const s24FSt=()=>{const v=lsGet(S24FSK);return S24FS.some(x=>x[0]===v)?v:'all'};
+const s24One=(key,list,fb)=>{const v=lsGet(key);return list.some(x=>x[0]===v)?v:fb};
+const s24FSt=()=>s24One(S24FSK,S24FST,'open');
+const s24FAc=()=>s24One(S24FAK,S24FAC,'any');
+const s24FWh=()=>s24One(S24FWK,S24FWH,'any');
 function s24FSetP(v){lsSet(S24FPK,v==='me'||b27OwnerNames().includes(v)?v:'all');render()}
-function s24FSetS(v){lsSet(S24FSK,S24FS.some(x=>x[0]===v)?v:'all');render()}
+function s24FSetS(v){if(!S24FST.some(x=>x[0]===v))v='open';lsSet(S24FSK,v);render()}
+function s24FSetA(v){if(!S24FAC.some(x=>x[0]===v))v='any';lsSet(S24FAK,v);render()}
+function s24FSetW(v){if(!S24FWH.some(x=>x[0]===v))v='any';lsSet(S24FWK,v);render()}
 const s24InBet=(b,n)=>!!n&&(b.backer===n||b.other===n||b27Opps(b).includes(n)||(b.kind==='pool'&&Array.isArray(b.parts)&&b.parts.includes(n)));
 const s24IsOpen=b=>b.status==='open'&&!(b.kind==='pool'&&b.back);
-/* STEP10: "Waiting on me" = ONLY bets where I can tap something (the placer enters the result / Confirm on an open bet or pool; the placer answers a Fix request).
-   "Waiting on stoops" = open bets/pools I'm in that only another Stoop can move (they placed it), or my own Fix request waiting on the placer. */
-function s24Waiting(b,me){return !!b27ActionItem(b,me)}
-function s24WaitStoops(b,me){if(!me||s24Waiting(b,me))return false;
-  if(b.fx&&S24R.includes(b.status)&&b.fx.by===me&&b.backer!==me)return true;
-  if(b.status!=='open')return false;
-  if(b.kind==='pool')return !b.back&&b.backer!==me&&Array.isArray(b.parts)&&b.parts.includes(me);
-  return b.backer!==me&&b27Opps(b).includes(me)}
-let s24Q='';   // search text: this page view only, not stored
+function s24Waiting(b,me){if(!me||!b)return false;if(b.kind==='pool')return b27PoolCanSettle(b,me);return !!b27ActionItem(b,me)}
+function s24TheirTurn(b,me){if(!me||!b||s24Waiting(b,me)||!s24InBet(b,me))return false;
+  if(b.kind==='pool')return b.backer!==me&&b27PoolCanSettle(b,b.backer);
+  return !!(b.backer&&b.backer!==me&&b27ActionItem(b,b.backer))}
+let s24Q='';
 const s24Hay=b=>[b.text,b.backer,b.other,...b27Opps(b),...(Array.isArray(b.parts)?b.parts:[])].join(' ').toLowerCase();
 function s24FSetQ(v){s24Q=String(v||'').slice(0,80);render()}
-function s24Filter(bets,me){if(s24FSt()==='req')return [];/*STEP8-REQUEST*/const p=s24FP(),st=s24FSt(),who=p==='me'?me:p==='all'?null:p,q=s24Q.trim().toLowerCase();
-  const due=st==='dueup'?'up':st==='duetoday'?'today':st==='dueover'?'over':st==='dueseason'?'season':st==='duenone'?'none':'';
-  return bets.filter(b=>(S24.sub&&b.id===S24.sub)||((!q||s24Hay(b).includes(q))&&(p==='all'||s24InBet(b,who))&&(st==='all'||(due?s24IsOpen(b)&&SHARED_UI.whenClass(b)===due:st==='wait'?s24Waiting(b,me):st==='wstoops'?s24WaitStoops(b,me):st==='open'?s24IsOpen(b):st==='settled'?(b.status==='backer'||b.status==='other'||(b.kind==='pool'&&b.status==='open'&&!!b.back)):st==='wash'?b.status==='push':true))))}
-/* same markup + classes as the old 2025-26 Wagers filter (card > row2 > select, select, input.sb-in), all on one row */
-function s24FilterBar(bets,me){const p=s24FP(),st=s24FSt(),n2=bets.filter(b=>s24WaitStoops(b,me)).length;
+function s24StatusOk(b,st){if(st==='all')return true;if(st==='open')return s24IsOpen(b);if(st==='settled')return b.status==='backer'||b.status==='other'||(b.kind==='pool'&&b.status==='open'&&!!b.back);if(st==='wash')return b.status==='push';if(st==='void')return b.status==='void';return false}
+function s24WhenOk(b,wh){if(!wh||wh==='any')return true;return SHARED_UI.whenClass(b)===wh}
+function s24ActOk(b,me,ac){if(!ac||ac==='any')return true;if(ac==='mine')return s24Waiting(b,me);if(ac==='theirs')return s24TheirTurn(b,me);return false}
+function s24Match(b,me,o){o=o||{};const p=s24FP(),who=p==='me'?me:p==='all'?null:p,q=s24Q.trim().toLowerCase(),st=o.st||s24FSt(),ac=o.ac||s24FAc(),wh=o.wh||s24FWh();
+  if(q&&!s24Hay(b).includes(q))return false;if(p!=='all'&&!(who&&s24InBet(b,who)))return false;return s24StatusOk(b,st)&&s24ActOk(b,me,ac)&&s24WhenOk(b,wh)}
+function s24Filter(bets,me){return (bets||[]).filter(b=>(S24.sub&&b.id===S24.sub)||s24Match(b,me))}
+function s24Count(bets,me,o){return (bets||[]).filter(b=>s24Match(b,me,o)).length}
+function s24ReqMatch(r){const p=s24FP(),me=b27Who(),who=p==='me'?me:p==='all'?null:p,q=s24Q.trim().toLowerCase();
+  if(who&&r.by!==who&&(r.to||[]).indexOf(who)<0)return false;if(!q)return true;return [r.txt,r.lab,r.by,...(r.to||[]),r.game].join(' ').toLowerCase().includes(q)}
+function s24FilterBar(bets,me){const p=s24FP(),st=s24FSt(),ac=s24FAc(),wh=s24FWh();
+  const opt=(list,cur,extra)=>list.map(([k,t])=>`<option value="${k}"${k===cur?' selected':''}>${esc(t)}${extra&&extra[k]!=null?' ('+extra[k]+')':''}</option>`).join('');
+  const nMine=s24Count(bets,me,{ac:'mine'}),nTheirs=s24Count(bets,me,{ac:'theirs'});
   return `<div class="card s24fb"><div class="row2"><select id="sbPerson" aria-label="Person" onchange="s24FSetP(this.value)"><option value="all"${p==='all'?' selected':''}>Everyone</option><option value="me"${p==='me'?' selected':''}>Me</option>${b27OwnerNames().map(o=>`<option value="${esc(o)}"${o===p?' selected':''}>${esc(PN(o))}</option>`).join('')}</select>
-   <select id="sbStatus" aria-label="Status" onchange="s24FSetS(this.value)">${S24FS.map(([k,t])=>`<option value="${k}"${k===st?' selected':''}>${esc(t)}${k==='wstoops'&&n2?' ('+n2+')':''}</option>`).join('')}</select>
-   <input id="sbQ" class="sb-in" aria-label="Search bets" placeholder="search terms…" value="${esc(s24Q)}" onchange="s24FSetQ(this.value)"></div>${(p==='me'||st==='wait'||st==='wstoops')&&!me?'<div class="note" style="margin-top:6px">Pick who you are to use “Me” / “Waiting on me” / “Waiting on stoops”.</div>':''}</div>`}
+   <select id="sbStatus" aria-label="Status" onchange="s24FSetS(this.value)">${opt(S24FST,st)}</select>
+   <select id="sbAction" aria-label="Action needed" onchange="s24FSetA(this.value)">${opt(S24FAC,ac,{mine:nMine,theirs:nTheirs})}</select>
+   <select id="sbWhen" aria-label="When" onchange="s24FSetW(this.value)">${opt(S24FWH,wh)}</select>
+   <input id="sbQ" class="sb-in" aria-label="Search bets" placeholder="search terms…" value="${esc(s24Q)}" onchange="s24FSetQ(this.value)"></div>
+   <div class="note" style="margin-top:6px"><a href="${esc(s24Href('howto'))}" onclick="return s24HowFilters(event)">How these filters work →</a>${(ac==='mine'||ac==='theirs')&&!me?' Pick who you are to use My turn or Their turn.':''}</div></div>`}
 
 /*</S24-EDIT>*/
 /*<ST-REFRESH>*/// Standings Refresh: re-fetch data.js + an immediate live-scores check, with visible feedback ("Refreshing…", then "checked just now")
@@ -4219,7 +4240,7 @@ html body .gf3 .gf2>.gmore,html body #main .gf3 .gf2>.gmore,html body #lbody .gf
 html body #main .gf3 .gf2>select,html body #main .gf3 .gf2>button,html body #main .gf3 .gf2>input,html body #lbody .gf3 .gf2>select,html body #lbody .gf3 .gf2>button,html body #lbody .gf3 .gf2>input{height:26px!important;min-height:26px!important}
 html body #main .gf3 .gf2>select.gf2-s,html body #lbody .gf3 .gf2>select.gf2-s{padding:0 14px 0 7px!important;-webkit-appearance:none!important;appearance:none!important;text-overflow:clip!important;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%23aab'/%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:right 5px center!important;background-size:8px 5px!important}
 html body #main .gf3>.gf2.gfpills,html body #main .gf3>.gf2.gfwhen{display:flex!important;flex-flow:row wrap!important;align-items:center!important;width:100%!important;max-width:100%!important;gap:6px!important}
-html body #main .gf3>.gf2.gfpills>.gf2-s,html body #main .gf3>.gf2.gfpills>.gf2-b,html body #main .gf3>.gf2.gfwhen>.gf2-s,html body #main .gf3>.gf2.gfwhen>.gf2-b{width:220px!important;min-width:0!important;max-width:100%!important;flex:0 1 220px!important;height:32px!important;min-height:32px!important;box-sizing:border-box!important}
+html body #main .gf3>.gf2.gfpills>.gf2-s,html body #main .gf3>.gf2.gfpills>.gf2-b,html body #main .gf3>.gf2.gfwhen>.gf2-s,html body #main .gf3>.gf2.gfwhen>.gf2-b{width:150px!important;min-width:150px!important;max-width:150px!important;flex:0 0 150px!important;height:32px!important;min-height:32px!important;box-sizing:border-box!important}
 html body .ggrid>.gm:not(.gfin) .gside a.chip{width:200px!important;min-width:200px!important;max-width:200px!important;height:40px!important;min-height:40px!important;max-height:40px!important;box-sizing:border-box!important}
 html body #onlStrip.onl{flex-wrap:nowrap!important;justify-content:flex-start!important;overflow-x:auto!important;max-width:100%!important}
 html body #onlStrip .onl-p,html body #onlStrip .onl-h{flex:none}
