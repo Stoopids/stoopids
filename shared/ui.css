@@ -456,7 +456,9 @@ html body .b27-ao .b27-amt,html body .b27-ao .b27-chip{width:auto!important;min-
 @media (min-width:1000px){
  html body .entry-pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:start}
  html body .entry-pair .entry-col.is-on>.card{box-shadow:0 0 0 2px rgba(255,255,255,.28)}
- html body .entry-hd-wiu h2,html body .entry-hd-rq h2{font-size:22px;line-height:1.15;letter-spacing:.04em;text-transform:uppercase}
+ html body .entry-hd.entry-hd-wiu,html body .entry-hd.entry-hd-rq{padding:6px 12px}
+ html body .entry-hd.entry-hd-wiu p,html body .entry-hd.entry-hd-rq p{margin-top:2px;line-height:1.2}
+ html body .entry-hd-wiu h2,html body .entry-hd-rq h2{font-size:22px;line-height:1.05;letter-spacing:.04em;text-transform:uppercase}
  html body .entry-sub-m{display:none!important}
  html body .entry-rq a{color:#93c5fd}
  html body .entry-rq a:focus-visible,html body .entry-rq button:focus-visible,html body .entry-rq input:focus-visible,html body .entry-rq select:focus-visible{outline-color:#93c5fd}
