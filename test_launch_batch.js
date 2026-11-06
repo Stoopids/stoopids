@@ -30,7 +30,7 @@ assert.ok(html.includes('function b27AssertTerms'));
 assert.ok(html.includes('Once a bet is posted, its terms stay as written'));
 assert.ok(html.includes("OB_VIEW='form'"));
 assert.ok(!html.includes('data-ob="open"'));
-assert.ok(html.includes('Write it Up or Request'));
+assert.ok(html.includes('Request or Write it up'));
 assert.ok(css.includes('.entry-pair'));
 assert.ok(ui.includes('Already agreed on a bet?'));
 assert.ok(ui.includes('Nothing agreed yet—find a Stoop who wants to feel something.'));
