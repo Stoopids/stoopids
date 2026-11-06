@@ -168,6 +168,7 @@ def parse_season(season, rows):
             adj = num(cell(r, 2))
             if adj is not None and adj < 0:
                 t["redraft_add"] = True  # picks 9/10 carry a negative 'Jan 20 math' number = added at the redraft
+            # redraft_drop is not in the CSV. apply_sheet_strikes() sets it from the xlsx font.
             teams.append(t)
         teamsum = sum(t["pts"] or 0 for t in teams)
         person = PERSON_ALIASES.get((label or "").lower().strip())
@@ -246,6 +247,150 @@ def parse_season(season, rows):
     return s
 
 
+def _norm_team(s):
+    if s is None:
+        return ""
+    return re.sub(r"\s+", " ", str(s).replace("\u00a0", " ")).strip().upper()
+
+
+def _pick_num(v):
+    if isinstance(v, bool) or v is None:
+        return None
+    if isinstance(v, (int, float)) and v == int(v) and 1 <= int(v) <= 20:
+        return int(v)
+    if isinstance(v, str) and re.fullmatch(r"\d+", v.strip() or ""):
+        n = int(v.strip())
+        if 1 <= n <= 20:
+            return n
+    return None
+
+
+def _sheet_team_name(ws, wf, r):
+    v = ws.cell(r, 2).value
+    f = wf.cell(r, 2).value
+    if isinstance(f, str) and f.startswith("=HYPERLINK"):
+        m = re.search(r',\s*"([^"]*)"\s*\)\s*$', f)
+        if m and m.group(1).strip():
+            return m.group(1).strip()
+    if v is None:
+        return None
+    text = str(v).strip()
+    return text or None
+
+
+def apply_sheet_strikes(archive, xlsx_path):
+    """Mark redraft_drop from strikethrough on the team-name cell in the public xlsx export.
+
+    The CSV export has the same words and numbers but no font. A row is a drop only when
+    that cell's font.strike is true, the row is a numbered pick on one owner roster, and
+    the name matches exactly one archived team on that roster. Jan 20 adds stay unmarked.
+    Points, wins, and totals are not changed. Raises if a struck roster name cannot be matched.
+    """
+    import openpyxl
+    wb = openpyxl.load_workbook(xlsx_path, data_only=True)
+    wbf = openpyxl.load_workbook(xlsx_path, data_only=False)
+
+    def blocks(sheet):
+        ws, wf = wb[sheet], wbf[sheet]
+        rows = []
+        for r in range(1, (ws.max_row or 0) + 1):
+            font = wf.cell(r, 2).font
+            rows.append((r, _pick_num(ws.cell(r, 1).value), _sheet_team_name(ws, wf, r),
+                         bool(font and font.strike), ws.cell(r, 1).value))
+        starts = []
+        for i in range(len(rows) - 1):
+            if rows[i + 1][1] != 1 or rows[i][1] is not None:
+                continue
+            if rows[i][4] is None or str(rows[i][4]).strip() == "":
+                continue
+            k = 0
+            while i + 1 + k < len(rows) and rows[i + 1 + k][1] is not None:
+                k += 1
+            if k >= 8:
+                starts.append(i)
+        out = []
+        for si, h in enumerate(starts):
+            end = starts[si + 1] if si + 1 < len(starts) else len(rows)
+            teams = []
+            for rec in rows[h + 1:end]:
+                if rec[1] is None:
+                    break
+                teams.append({"row": rec[0], "pick": rec[1], "name": rec[2], "strike": rec[3]})
+            out.append({"header": str(rows[h][4]).strip(), "teams": teams})
+        return out
+
+    flagged = []
+    struck_adds = []
+    unclassified = []
+    for season in archive["seasons"]:
+        if not season.get("pool"):
+            continue
+        sheet = season.get("tab")
+        if sheet not in wb.sheetnames:
+            raise SystemExit("archive tab %r is not in the xlsx" % sheet)
+        blks = blocks(sheet)
+        owners = season["owners"]
+        cands = []
+        for bi, b in enumerate(blks):
+            bnames = {_norm_team(t["name"]) for t in b["teams"] if _norm_team(t["name"])}
+            for oi, o in enumerate(owners):
+                onames = [_norm_team(t["name"]) for t in o["teams"] if _norm_team(t["name"])]
+                if not onames:
+                    continue
+                ov = sum(1 for n in onames if n in bnames)
+                cands.append((ov, len(onames), bi, oi))
+        cands.sort(reverse=True)
+        taken_b, taken_o, assigned = set(), set(), {}
+        for ov, olen, bi, oi in cands:
+            if bi in taken_b or oi in taken_o:
+                continue
+            if ov < 6 or ov < 0.6 * olen:
+                continue
+            rivals = [c for c in cands if c[2] == bi and c[3] not in taken_o and c[3] != oi and c[0] >= ov - 1]
+            if rivals:
+                continue
+            taken_b.add(bi)
+            taken_o.add(oi)
+            assigned[oi] = bi
+        seen_rows = set()
+        for oi, bi in assigned.items():
+            o, b = owners[oi], blks[bi]
+            by = {}
+            for t in b["teams"]:
+                by.setdefault(_norm_team(t["name"]), []).append(t)
+            for t in o["teams"]:
+                t.pop("redraft_drop", None)
+                hits = by.get(_norm_team(t["name"]), []) if _norm_team(t["name"]) else []
+                if len(hits) != 1:
+                    continue
+                h = hits[0]
+                seen_rows.add(h["row"])
+                if not h["strike"]:
+                    continue
+                if t.get("redraft_add"):
+                    struck_adds.append((season["season"], o["person"], t["pick"], t["name"], h["row"]))
+                    continue
+                t["redraft_drop"] = True
+                flagged.append((season["season"], o["person"], t["pick"], t["name"], h["row"], t.get("pts"), t.get("wins")))
+        for b in blks:
+            for t in b["teams"]:
+                if not t["strike"] or t["row"] in seen_rows:
+                    continue
+                name = t["name"] or ""
+                if re.match(r"^(X+|-)?$", name, re.I):
+                    continue
+                unclassified.append((season["season"], b["header"], t["pick"], t["name"], t["row"]))
+    if unclassified:
+        raise SystemExit("struck roster names were not matched:\n" + "\n".join(map(str, unclassified)))
+    return {"flagged": flagged, "struck_adds": struck_adds}
+
+
+def write_archive(out):
+    json.dump(out, open(os.path.join(HERE, "archive.json"), "w"), ensure_ascii=False, indent=1)
+    open(os.path.join(HERE, "archive.js"), "w").write(
+        "window.ARCHIVE=" + json.dumps(out, ensure_ascii=False, separators=(",", ":")) + ";\n")
+
+
 def main():
     seasons = []
     for season, gid, tab in TABS:
@@ -283,10 +428,38 @@ def main():
         "seasons_played": sum(1 for s in seasons if s["pool"]),
         "seasons": seasons, "alltime": alltime,
     }
-    json.dump(out, open(os.path.join(HERE, "archive.json"), "w"), ensure_ascii=False, indent=1)
-    open(os.path.join(HERE, "archive.js"), "w").write("window.ARCHIVE=" + json.dumps(out, ensure_ascii=False, separators=(",", ":")) + ";\n")
+    xlsx = os.path.join(CACHE, "_strike.xlsx")
+    try:
+        req = urllib.request.Request("https://docs.google.com/spreadsheets/d/%s/export?format=xlsx" % SHEET,
+                                     headers={"User-Agent": "stoopids-archive/1"})
+        open(xlsx, "wb").write(urllib.request.urlopen(req, timeout=90).read())
+        rep = apply_sheet_strikes(out, xlsx)
+        print("   redraft_drop=%d struck Jan 20 adds left plain=%d" % (len(rep["flagged"]), len(rep["struck_adds"])))
+    except Exception as e:
+        print("  xlsx strike pass failed; redraft_drop not applied:", e, file=sys.stderr)
+        raise
+    finally:
+        if os.path.exists(xlsx):
+            os.remove(xlsx)
+    write_archive(out)
     print("wrote archive.json / archive.js")
 
 
 if __name__ == "__main__":
-    main()
+    if "--strike-only" in sys.argv:
+        src = sys.argv[sys.argv.index("--strike-only") + 1]
+        out = json.load(open(os.path.join(HERE, "archive.json"), encoding="utf-8"))
+        before = json.dumps(out, ensure_ascii=False, sort_keys=True)
+        rep = apply_sheet_strikes(out, src)
+        def scrub(s):
+            return re.sub(r',?\s*"redraft_drop"\s*:\s*true', "", s)
+        if scrub(json.dumps(out, ensure_ascii=False, sort_keys=True)) != scrub(before):
+            raise SystemExit("strike pass changed something other than redraft_drop")
+        write_archive(out)
+        print("redraft_drop=%d struck Jan 20 adds left plain=%d" % (len(rep["flagged"]), len(rep["struck_adds"])))
+        for row in rep["flagged"]:
+            print("  drop %s %s #%s %s row %s pts %s wins %s" % row)
+        for row in rep["struck_adds"]:
+            print("  add-kept-plain %s %s #%s %s row %s" % row)
+    else:
+        main()
