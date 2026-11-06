@@ -8,7 +8,7 @@ assert.ok(css.includes('grid-template-columns:repeat(auto-fit,minmax(96px,1fr))'
 assert.ok(css.includes('grid-template-columns:repeat(4,minmax(0,1fr))'));
 assert.ok(css.includes('.gf2.gfpills'));
 assert.ok(html.includes('gf2 gfpills'));
-assert.ok(html.includes('shared/ui.css?v=1.25.0'));
+assert.ok(html.includes('shared/ui.css?v=1.27.0'));
 assert.ok(js.includes("MQ='(max-width:700px)'"));
-assert.equal(fs.readFileSync('shared/VERSION','utf8').trim(),'1.8.6');
+assert.equal(fs.readFileSync('shared/VERSION','utf8').trim(),'1.8.8');
 console.log('test_parity_layout: ok');

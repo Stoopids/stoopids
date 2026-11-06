@@ -1,0 +1,65 @@
+'use strict';
+const assert=require('assert');
+const fs=require('fs');
+const vm=require('vm');
+const html=fs.readFileSync('index.html','utf8');
+const css=fs.readFileSync('shared/ui.css','utf8');
+const ui=fs.readFileSync('shared/ui.js','utf8');
+const yml=fs.readFileSync('.github/workflows/refresh.yml','utf8');
+
+assert.ok(html.includes('gf2 gfwhen'), 'month/day/search sit on the next row');
+assert.ok(css.includes('.gf2.gfwhen'));
+assert.ok(css.includes('grid-template-columns:minmax(0,1fr) minmax(0,max-content) minmax(0,1fr)'));
+assert.ok(!/function s12ShareSite[\s\S]{0,500}navigator\.share/.test(html), 'header Share does not open the native sheet');
+assert.ok(html.includes('data-s12="copy"')&&html.includes('data-s12="wa"'));
+assert.ok(html.includes("searchParams.set('view','1')"));
+assert.ok(/function chatNavBadge\(\)\{[^}]*querySelectorAll\('a\.nt \.nu'\)/.test(html));
+assert.ok(html.includes('b27SetStatus')&&html.includes('s25Confirm'));
+assert.ok(html.includes('setInterval(()=>load(),2*60*1000)'));
+assert.ok(yml.includes('*/10 * * * *')&&yml.includes('GITHUB_TOKEN'));
+assert.ok(html.includes('id="wme"')&&html.includes('Waiting on me'));
+assert.ok(html.includes('shared/ui.js?v=1.45.0'));
+assert.ok(css.includes('.entry-pair'));
+assert.ok(ui.includes('Already agreed on a bet?'));
+assert.ok(ui.includes('Nothing agreed yet.'));
+assert.ok(html.includes('function entryPair()'));
+assert.ok(ui.includes('💣')&&ui.includes('💥')&&ui.includes('rq_open_seen:'));
+assert.ok(!ui.includes('Bet Requested:'), 'old WhatsApp heading is gone');
+assert.ok(/function qbPick\(id,k,i\)\{qbGo\(id,k,i\)\}/.test(html), 'older Quick bet side tap uses Request');
+assert.ok(!/function qbGo[\s\S]{0,700}Object\.assign\(U,/.test(html), 'Quick bet does not fill Write it Up');
+assert.ok(html.includes("OB_VIEW='request'"));
+
+const store={};
+const localStorage={getItem:k=>Object.prototype.hasOwnProperty.call(store,k)?store[k]:null,setItem:(k,v)=>{store[k]=String(v)},removeItem:k=>{delete store[k]}};
+const ctx={console,setTimeout,clearTimeout,localStorage,navigator:{},document:{readyState:'loading',head:{appendChild(){}},addEventListener(){},querySelector:()=>null,querySelectorAll:()=>[],createElement:()=>({style:{},setAttribute(){},select(){},remove(){},appendChild(){}}),body:{appendChild(){}}}};
+ctx.window=ctx;ctx.globalThis=ctx;
+vm.createContext(ctx);
+vm.runInContext(ui,ctx);
+const names={ken:'Ken',paul:'Paul',a:'Ana',b:'Bea',c:'Cal'};
+let me='paul';
+const R=ctx.SHARED_UI.Requests({
+  me:()=>me,nick:id=>names[id]||id,real:id=>names[id]||id,others:()=>[],games:()=>[],
+  get:async()=>'[]',render(){},canWrite:()=>false,placeBet:async()=>{},change:'',e:s=>String(s==null?'':s)
+});
+const now=Date.now();
+const base={id:'r1',status:'open',by:'paul',to:['ken'],amt:5,odds:[1,1],slots:1,txt:'Duke +5.5 vs UConn -5.5',lab:'Duke +5.5',exp:now+3*3600000,took:[],dec:[],gid:'g',start:new Date(now+86400000).toISOString()};
+const named=R.waText(base,'new');
+assert.strictEqual(named,'💣 $5 Paul v Ken 💣\nDuke +5.5 vs UConn -5.5\nExpires in 3h');
+assert.ok(!/even/i.test(named));
+const many=R.waText(Object.assign({},base,{to:['ken','a','b'],slots:3}),'new');
+assert.strictEqual(many.split('\n')[0],'💣 $5 Paul v Open to 3 stoops 💣');
+const odds=R.waText(Object.assign({},base,{odds:[3,1]}),'new');
+assert.ok(odds.includes('at 3-1'));
+assert.strictEqual((odds.match(/3-1/g)||[]).length,1);
+const acc=R.waText(base,'acc','ken');
+assert.strictEqual(acc,'💥 $5 Paul v Ken — Accepted 💥\nDuke +5.5 vs UConn -5.5');
+assert.ok(!/Expires/.test(acc));
+R.S.list=[base,Object.assign({},base,{id:'r2',by:'ken',to:['paul']})];
+assert.strictEqual(R.openN(),2);
+R.view('open');
+assert.strictEqual(R.openN(),0,'viewing Open marks them seen');
+R.S.list.push(Object.assign({},base,{id:'r3',by:'a',to:['paul']}));
+assert.strictEqual(R.openN(),1,'a new id counts again');
+me='ken';
+assert.strictEqual(R.openN(),3,'another account has its own seen list');
+console.log('launch batch checks ok');
