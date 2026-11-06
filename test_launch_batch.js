@@ -18,7 +18,7 @@ assert.ok(html.includes('b27SetStatus')&&html.includes('s25Confirm'));
 assert.ok(html.includes('setInterval(()=>load(),2*60*1000)'));
 assert.ok(yml.includes('*/10 * * * *')&&yml.includes('GITHUB_TOKEN'));
 assert.ok(html.includes('id="wme"')&&html.includes('Waiting on me'));
-assert.ok(html.includes('shared/ui.js?v=1.51.0'));
+assert.ok(html.includes('shared/ui.js?v=1.52.0'));
 assert.ok(html.includes('SHARED_UI.whenApply'));
 assert.ok(!/function b27ActionItem[\s\S]{0,900}if\(later\)/.test(html));
 assert.ok(html.includes('shared/ui.css?v=1.30.0'));

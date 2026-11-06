@@ -961,7 +961,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.51.0"></script>
+<script src="shared/ui.js?v=1.52.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -3548,7 +3548,7 @@ function vB27(){
      <div id="b27Aw" class="b27-cw"${U.amtCustom?'':' hidden'}><label for="b27Ao" class="sr">Custom amount</label><input id="b27Ao" class="sb-in b27-in" inputmode="numeric" pattern="[0-9]*" autocomplete="off" maxlength="6" placeholder="Whole number, ${PULK.minAmt} to ${PULK.maxAmt}" value="${esc(U.amtTxt)}" oninput="b27AmtApply(this.value);b27Sync()" onkeydown="if(event.key==='Enter'){event.preventDefault();b27Place()}"><div id="b27Ae" class="b27-bad-t" role="alert">${esc(U.amtErr)}</div></div></div><div class="b27-ao-c">
      <div class="b27-q"><button type="button" class="s27-tipk" data-tip="odds" aria-expanded="false" onclick="s27Tip(this)">4. Odds</button></div><div class="b27-chips" role="group" aria-label="Odds">${PULK.oddsChips.map(([a,b])=>`<button type="button" class="b27-chip" data-b27-odds="${a}-${b}" aria-pressed="${!U.custom&&!!U.odds&&U.odds[0]===a&&U.odds[1]===b}" onclick="b27Odds(${a},${b})">${a===1&&b===1?'Even':a+'-'+b}</button>`).join('')}<button type="button" class="b27-chip cu" data-b27-custom="1" aria-pressed="${U.custom}" onclick="b27CustomOpen()">Custom</button></div>
      <div id="b27Cw" class="b27-cw"${U.custom?'':' hidden'}><label for="b27Co" class="sr">Custom odds</label><input id="b27Co" class="sb-in b27-in" inputmode="text" autocomplete="off" maxlength="9" placeholder="e.g. 7-2 or 10-1" value="${esc(U.customTxt)}" oninput="b27CustomApply(this.value);b27Sync()" onkeydown="if(event.key==='Enter'){event.preventDefault();b27Place()}"><div id="b27Ce" class="b27-bad-t" role="alert">${esc(U.oddsErr)}</div></div></div></div>
-     ${SHARED_UI.whenBox({e:esc,kind:U.wk||'unknown',est:U.est,seasonId:b27Season(),inputId:'b27Est',pick:id=>`onclick="b27When('${id}')"`,dateAttr:'onchange="U.est=this.value"'})}
+     ${SHARED_UI.whenBox({e:esc,kind:U.wk||'unknown',est:U.est,seasonId:b27Season(),step:'5',inputId:'b27Est',pick:id=>`onclick="b27When('${id}')"`,dateAttr:'onchange="U.est=this.value"'})}
      <div class="b27-livebox" id="b27Live" aria-live="polite">${b27LiveHtml()}</div>
      <div class="b27-sum" id="b27Sum">${esc(b27Summary())}</div><div id="s29Auto">${/*<S29D-AUTO>*/s29AutoHtml(s29AutoForm())/*</S29D-AUTO>*/}</div><div class="b27-bad-t" id="b27Hint"></div>
      <button type="button" id="b27Place" class="btn b27-big" onclick="b27Place()"${b27FormOK()?' disabled':''}>Place bet</button></div>`;
