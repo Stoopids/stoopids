@@ -44,7 +44,8 @@
        "pick": 5,
        "name": "DAYTON",
        "pts": 14,
-       "wins": 14
+       "wins": 14,
+       "redraft_drop": true
       },
       {
        "pick": 6,
@@ -56,7 +57,8 @@
        "pick": 7,
        "name": "CINCINNATI",
        "pts": 10,
-       "wins": 10
+       "wins": 10,
+       "redraft_drop": true
       },
       {
        "pick": 8,
@@ -790,13 +792,15 @@
        "pick": 7,
        "name": "RUTGERS",
        "pts": 10,
-       "wins": 10
+       "wins": 10,
+       "redraft_drop": true
       },
       {
        "pick": 8,
        "name": "PROVIDENCE",
        "pts": 9,
-       "wins": 9
+       "wins": 9,
+       "redraft_drop": true
       },
       {
        "pick": 9,
@@ -910,7 +914,8 @@
        "pick": 4,
        "name": "VERMONT",
        "pts": 10,
-       "wins": 10
+       "wins": 10,
+       "redraft_drop": true
       },
       {
        "pick": 5,
@@ -934,7 +939,8 @@
        "pick": 8,
        "name": "XAVIER",
        "pts": 12,
-       "wins": 12
+       "wins": 12,
+       "redraft_drop": true
       },
       {
        "pick": 9,
@@ -992,7 +998,8 @@
        "pick": 5,
        "name": "Stephen F Austin",
        "pts": 8,
-       "wins": 8
+       "wins": 8,
+       "redraft_drop": true
       },
       {
        "pick": 6,
@@ -1010,7 +1017,8 @@
        "pick": 8,
        "name": "Kent State",
        "pts": 11,
-       "wins": 11
+       "wins": 11,
+       "redraft_drop": true
       },
       {
        "pick": 9,
@@ -1056,7 +1064,8 @@
        "pick": 3,
        "name": "ARKANSAS",
        "pts": 11,
-       "wins": 11
+       "wins": 11,
+       "redraft_drop": true
       },
       {
        "pick": 4,
@@ -1080,7 +1089,8 @@
        "pick": 7,
        "name": "JAMES MADISON",
        "pts": 10,
-       "wins": 10
+       "wins": 10,
+       "redraft_drop": true
       },
       {
        "pick": 8,
@@ -1150,7 +1160,8 @@
        "pick": 6,
        "name": "OHIO",
        "pts": 10,
-       "wins": 10
+       "wins": 10,
+       "redraft_drop": true
       },
       {
        "pick": 7,
@@ -1162,7 +1173,8 @@
        "pick": 8,
        "name": "W Kentucky",
        "pts": 11,
-       "wins": 11
+       "wins": 11,
+       "redraft_drop": true
       },
       {
        "pick": 9,
@@ -1232,7 +1244,8 @@
        "pick": 7,
        "name": "TOWSON",
        "pts": 10,
-       "wins": 10
+       "wins": 10,
+       "redraft_drop": true
       },
       {
        "pick": 8,
@@ -1342,7 +1355,8 @@
        "pick": 5,
        "name": "CLEVELAND ST",
        "pts": 11,
-       "wins": 11
+       "wins": 11,
+       "redraft_drop": true
       },
       {
        "pick": 6,
@@ -1411,13 +1425,15 @@
        "pick": 5,
        "name": "🗽 LIBERTY 🗽",
        "pts": 12,
-       "wins": 12
+       "wins": 12,
+       "redraft_drop": true
       },
       {
        "pick": 6,
        "name": "UMASS LOWELL",
        "pts": 13,
-       "wins": 13
+       "wins": 13,
+       "redraft_drop": true
       },
       {
        "pick": 7,
@@ -1475,7 +1491,8 @@
        "pick": 3,
        "name": "ARKANSAS",
        "pts": 10,
-       "wins": 10
+       "wins": 10,
+       "redraft_drop": true
       },
       {
        "pick": 4,
@@ -1538,7 +1555,8 @@
        "pick": 2,
        "name": "MICHIGAN ST.",
        "pts": 11,
-       "wins": 11
+       "wins": 11,
+       "redraft_drop": true
       },
       {
        "pick": 3,
@@ -1556,7 +1574,8 @@
        "pick": 5,
        "name": "ST. JOHN'S",
        "pts": 12,
-       "wins": 12
+       "wins": 12,
+       "redraft_drop": true
       },
       {
        "pick": 6,
@@ -1644,13 +1663,15 @@
        "pick": 7,
        "name": "IONA",
        "pts": 8,
-       "wins": 8
+       "wins": 8,
+       "redraft_drop": true
       },
       {
        "pick": 8,
        "name": "FLORIDA",
        "pts": 11,
-       "wins": 11
+       "wins": 11,
+       "redraft_drop": true
       },
       {
        "pick": 9,
@@ -1715,7 +1736,8 @@
        "pick": 6,
        "name": "STANFORD",
        "pts": 9,
-       "wins": 9
+       "wins": 9,
+       "redraft_drop": true
       },
       {
        "pick": 7,
@@ -1727,7 +1749,8 @@
        "pick": 8,
        "name": "WRIGHT ST",
        "pts": 9,
-       "wins": 9
+       "wins": 9,
+       "redraft_drop": true
       },
       {
        "pick": 9,
@@ -1779,7 +1802,8 @@
        "pick": 4,
        "name": "MARYLAND",
        "pts": 11,
-       "wins": 11
+       "wins": 11,
+       "redraft_drop": true
       },
       {
        "pick": 5,
@@ -1797,7 +1821,8 @@
        "pick": 7,
        "name": "FURMAN",
        "pts": 9,
-       "wins": 9
+       "wins": 9,
+       "redraft_drop": true
       },
       {
        "pick": 8,
@@ -1924,13 +1949,15 @@
        "pick": 4,
        "name": "UCLA",
        "pts": 8,
-       "wins": 8
+       "wins": 8,
+       "redraft_drop": true
       },
       {
        "pick": 5,
        "name": "Yale",
        "pts": 11,
-       "wins": 11
+       "wins": 11,
+       "redraft_drop": true
       },
       {
        "pick": 6,
@@ -2033,13 +2060,15 @@
        "pick": 7,
        "name": "Texas A&M",
        "pts": 13,
-       "wins": 13
+       "wins": 13,
+       "redraft_drop": true
       },
       {
        "pick": 8,
        "name": "TOLEDO",
        "pts": 12,
-       "wins": 12
+       "wins": 12,
+       "redraft_drop": true
       },
       {
        "pick": 9,
@@ -2103,7 +2132,8 @@
        "pick": 6,
        "name": "Drake",
        "pts": 14,
-       "wins": 14
+       "wins": 14,
+       "redraft_drop": true
       },
       {
        "pick": 7,
@@ -2115,7 +2145,8 @@
        "pick": 8,
        "name": "Virginia Tech",
        "pts": 11,
-       "wins": 11
+       "wins": 11,
+       "redraft_drop": true
       },
       {
        "pick": 9,
@@ -2237,7 +2268,8 @@
        "pick": 3,
        "name": "TEXAS TECH",
        "pts": 10,
-       "wins": 10
+       "wins": 10,
+       "redraft_drop": true
       },
       {
        "pick": 4,
@@ -2458,7 +2490,8 @@
        "pick": 3,
        "name": "MICHIGAN",
        "pts": 10,
-       "wins": 10
+       "wins": 10,
+       "redraft_drop": true
       },
       {
        "pick": 4,
@@ -2470,7 +2503,8 @@
        "pick": 5,
        "name": "FLORIDA",
        "pts": 10,
-       "wins": 10
+       "wins": 10,
+       "redraft_drop": true
       },
       {
        "pick": 6,
@@ -2546,7 +2580,8 @@
        "pick": 5,
        "name": "WYOMING",
        "pts": 5,
-       "wins": 5
+       "wins": 5,
+       "redraft_drop": true
       },
       {
        "pick": 6,
@@ -3241,7 +3276,8 @@
        "pick": 5,
        "name": "MARQUETTE",
        "pts": 13,
-       "wins": 13
+       "wins": 13,
+       "redraft_drop": true
       },
       {
        "pick": 6,
@@ -3259,7 +3295,8 @@
        "pick": 8,
        "name": "BYU",
        "pts": 14,
-       "wins": 14
+       "wins": 14,
+       "redraft_drop": true
       },
       {
        "pick": 9,
@@ -3323,7 +3360,8 @@
        "pick": 6,
        "name": "PROVIDENCE",
        "pts": 11,
-       "wins": 11
+       "wins": 11,
+       "redraft_drop": true
       },
       {
        "pick": 7,
@@ -3335,7 +3373,8 @@
        "pick": 8,
        "name": "Weber St.",
        "pts": 6,
-       "wins": 6
+       "wins": 6,
+       "redraft_drop": true
       },
       {
        "pick": 9,
@@ -3405,13 +3444,15 @@
        "pick": 7,
        "name": "Notre Dame",
        "pts": 11,
-       "wins": 11
+       "wins": 11,
+       "redraft_drop": true
       },
       {
        "pick": 8,
        "name": "Tennessee",
        "pts": 11,
-       "wins": 11
+       "wins": 11,
+       "redraft_drop": true
       },
       {
        "pick": 9,
@@ -3475,13 +3516,15 @@
        "pick": 6,
        "name": "NORTH DAKOTA ST",
        "pts": 13,
-       "wins": 13
+       "wins": 13,
+       "redraft_drop": true
       },
       {
        "pick": 7,
        "name": "XAVIER",
        "pts": 12,
-       "wins": 12
+       "wins": 12,
+       "redraft_drop": true
       },
       {
        "pick": 8,
@@ -3557,13 +3600,15 @@
        "pick": 7,
        "name": "Toledo",
        "pts": 10,
-       "wins": 10
+       "wins": 10,
+       "redraft_drop": true
       },
       {
        "pick": 8,
        "name": "UCLA",
        "pts": 9,
-       "wins": 9
+       "wins": 9,
+       "redraft_drop": true
       },
       {
        "pick": 9,
@@ -3609,13 +3654,15 @@
        "pick": 3,
        "name": "DAVIDSON",
        "pts": 8,
-       "wins": 8
+       "wins": 8,
+       "redraft_drop": true
       },
       {
        "pick": 4,
        "name": "CINCINNATI",
        "pts": 11,
-       "wins": 11
+       "wins": 11,
+       "redraft_drop": true
       },
       {
        "pick": 5,
@@ -3679,13 +3726,15 @@
        "pick": 2,
        "name": "NORTH CAROLINA",
        "pts": 8,
-       "wins": 8
+       "wins": 8,
+       "redraft_drop": true
       },
       {
        "pick": 3,
        "name": "OHIO STATE",
        "pts": 12,
-       "wins": 12
+       "wins": 12,
+       "redraft_drop": true
       },
       {
        "pick": 4,
@@ -3785,13 +3834,15 @@
        "pick": 7,
        "name": "Iona",
        "pts": 4,
-       "wins": 4
+       "wins": 4,
+       "redraft_drop": true
       },
       {
        "pick": 8,
        "name": "Bucknell",
        "pts": 8,
-       "wins": 8
+       "wins": 8,
+       "redraft_drop": true
       },
       {
        "pick": 9,
@@ -3872,7 +3923,8 @@
        "pick": 6,
        "name": "WESTERN KENTUCKY",
        "pts": 9,
-       "wins": 9
+       "wins": 9,
+       "redraft_drop": true
       },
       {
        "pick": 7,
@@ -3884,7 +3936,8 @@
        "pick": 8,
        "name": "UCONN",
        "pts": 11,
-       "wins": 11
+       "wins": 11,
+       "redraft_drop": true
       },
       {
        "pick": 9,
@@ -3948,7 +4001,8 @@
        "pick": 6,
        "name": "RHODE ISLAND",
        "pts": 10,
-       "wins": 10
+       "wins": 10,
+       "redraft_drop": true
       },
       {
        "pick": 7,
@@ -3960,7 +4014,8 @@
        "pick": 8,
        "name": "Xavier",
        "pts": 11,
-       "wins": 11
+       "wins": 11,
+       "redraft_drop": true
       },
       {
        "pick": 9,
@@ -4018,7 +4073,8 @@
        "pick": 5,
        "name": "CLEMSON",
        "pts": 11,
-       "wins": 11
+       "wins": 11,
+       "redraft_drop": true
       },
       {
        "pick": 6,
@@ -4030,7 +4086,8 @@
        "pick": 7,
        "name": "COLLEGE OF CHARLESTON",
        "pts": 14,
-       "wins": 14
+       "wins": 14,
+       "redraft_drop": true
       },
       {
        "pick": 8,
@@ -4094,7 +4151,8 @@
        "pick": 5,
        "name": "HARVARD",
        "pts": 6,
-       "wins": 6
+       "wins": 6,
+       "redraft_drop": true
       },
       {
        "pick": 6,
@@ -4112,7 +4170,8 @@
        "pick": 8,
        "name": "Northeastern",
        "pts": 11,
-       "wins": 11
+       "wins": 11,
+       "redraft_drop": true
       },
       {
        "pick": 9,
@@ -4170,13 +4229,15 @@
        "pick": 5,
        "name": "Montana",
        "pts": 12,
-       "wins": 12
+       "wins": 12,
+       "redraft_drop": true
       },
       {
        "pick": 6,
        "name": "Stephen F. Austin",
        "pts": 9,
-       "wins": 9
+       "wins": 9,
+       "redraft_drop": true
       },
       {
        "pick": 7,
@@ -4228,7 +4289,8 @@
        "pick": 2,
        "name": "WEST VIRGINIA",
        "pts": 9,
-       "wins": 9
+       "wins": 9,
+       "redraft_drop": true
       },
       {
        "pick": 3,
@@ -4258,7 +4320,8 @@
        "pick": 7,
        "name": "BYU",
        "pts": 12,
-       "wins": 12
+       "wins": 12,
+       "redraft_drop": true
       },
       {
        "pick": 8,
@@ -4322,7 +4385,8 @@
        "pick": 5,
        "name": "UCLA",
        "pts": 10,
-       "wins": 10
+       "wins": 10,
+       "redraft_drop": true
       },
       {
        "pick": 6,
@@ -4373,7 +4437,8 @@
        "pick": 2,
        "name": "WICHITA STATE",
        "pts": 8,
-       "wins": 8
+       "wins": 8,
+       "redraft_drop": true
       },
       {
        "pick": 3,
@@ -4403,7 +4468,8 @@
        "pick": 7,
        "name": "MIAMI",
        "pts": 9,
-       "wins": 9
+       "wins": 9,
+       "redraft_drop": true
       },
       {
        "pick": 8,
@@ -4470,7 +4536,8 @@
        "pick": 3,
        "name": "MINNESOTA",
        "pts": 14,
-       "wins": 14
+       "wins": 14,
+       "redraft_drop": true
       },
       {
        "pick": 4,
@@ -4482,7 +4549,8 @@
        "pick": 5,
        "name": "BAYLOR",
        "pts": 12,
-       "wins": 12
+       "wins": 12,
+       "redraft_drop": true
       },
       {
        "pick": 6,
@@ -4570,13 +4638,15 @@
        "pick": 7,
        "name": "PROVIDENCE",
        "pts": 14,
-       "wins": 14
+       "wins": 14,
+       "redraft_drop": true
       },
       {
        "pick": 8,
        "name": "S.M.U.",
        "pts": 14,
-       "wins": 14
+       "wins": 14,
+       "redraft_drop": true
       },
       {
        "pick": 9,
@@ -4634,7 +4704,8 @@
        "pick": 5,
        "name": "davidson",
        "pts": 10,
-       "wins": 10
+       "wins": 10,
+       "redraft_drop": true
       },
       {
        "pick": 6,
@@ -4652,7 +4723,8 @@
        "pick": 8,
        "name": "IOWA STATE",
        "pts": 11,
-       "wins": 11
+       "wins": 11,
+       "redraft_drop": true
       },
       {
        "pick": 9,
@@ -4774,7 +4846,8 @@
        "pick": 3,
        "name": "LA Tech",
        "pts": 12,
-       "wins": 12
+       "wins": 12,
+       "redraft_drop": true
       },
       {
        "pick": 4,
@@ -4792,7 +4865,8 @@
        "pick": 6,
        "name": "Texas",
        "pts": 12,
-       "wins": 12
+       "wins": 12,
+       "redraft_drop": true
       },
       {
        "pick": 7,
@@ -4856,7 +4930,8 @@
        "pick": 4,
        "name": "University of California Los Angeles",
        "pts": 13,
-       "wins": 13
+       "wins": 13,
+       "redraft_drop": true
       },
       {
        "pick": 5,
@@ -4880,7 +4955,8 @@
        "pick": 8,
        "name": "Virginia Tech",
        "pts": 13,
-       "wins": 13
+       "wins": 13,
+       "redraft_drop": true
       },
       {
        "pick": 9,
@@ -4926,7 +5002,8 @@
        "pick": 3,
        "name": "San Diego St.",
        "pts": 11,
-       "wins": 11
+       "wins": 11,
+       "redraft_drop": true
       },
       {
        "pick": 4,
@@ -4944,7 +5021,8 @@
        "pick": 6,
        "name": "IONA",
        "pts": 12,
-       "wins": 12
+       "wins": 12,
+       "redraft_drop": true
       },
       {
        "pick": 7,
@@ -5002,7 +5080,8 @@
        "pick": 3,
        "name": "Wisconsin",
        "pts": 10,
-       "wins": 10
+       "wins": 10,
+       "redraft_drop": true
       },
       {
        "pick": 4,
@@ -5014,7 +5093,8 @@
        "pick": 5,
        "name": "UCONN",
        "pts": 10,
-       "wins": 10
+       "wins": 10,
+       "redraft_drop": true
       },
       {
        "pick": 6,
@@ -5099,7 +5179,8 @@
        "pick": 4,
        "name": "Texas A&M",
        "pts": 9,
-       "wins": 9
+       "wins": 9,
+       "redraft_drop": true
       },
       {
        "pick": 5,
@@ -5111,7 +5192,8 @@
        "pick": 6,
        "name": "Ohio",
        "pts": 11,
-       "wins": 11
+       "wins": 11,
+       "redraft_drop": true
       },
       {
        "pick": 7,
@@ -5256,7 +5338,8 @@
        "pick": 6,
        "name": "Georgetown",
        "pts": 10,
-       "wins": 10
+       "wins": 10,
+       "redraft_drop": true
       },
       {
        "pick": 7,
@@ -5268,7 +5351,8 @@
        "pick": 8,
        "name": "Ohio State",
        "pts": 12,
-       "wins": 12
+       "wins": 12,
+       "redraft_drop": true
       },
       {
        "pick": 9,
@@ -5389,7 +5473,8 @@
        "pick": 4,
        "name": "San Diego State",
        "pts": 11,
-       "wins": 11
+       "wins": 11,
+       "redraft_drop": true
       },
       {
        "pick": 5,
@@ -5401,7 +5486,8 @@
        "pick": 6,
        "name": "MICHIGAN",
        "pts": 12,
-       "wins": 12
+       "wins": 12,
+       "redraft_drop": true
       },
       {
        "pick": 7,
@@ -5453,7 +5539,8 @@
        "pick": 2,
        "name": "UCONN",
        "pts": 7,
-       "wins": 7
+       "wins": 7,
+       "redraft_drop": true
       },
       {
        "pick": 3,
@@ -5465,7 +5552,8 @@
        "pick": 4,
        "name": "UAB",
        "pts": 12,
-       "wins": 12
+       "wins": 12,
+       "redraft_drop": true
       },
       {
        "pick": 5,
@@ -5535,7 +5623,8 @@
        "pick": 3,
        "name": "Texas",
        "pts": 7,
-       "wins": 7
+       "wins": 7,
+       "redraft_drop": true
       },
       {
        "pick": 4,
@@ -5547,7 +5636,8 @@
        "pick": 5,
        "name": "Stephen F. Austin",
        "pts": 8,
-       "wins": 8
+       "wins": 8,
+       "redraft_drop": true
       },
       {
        "pick": 6,
