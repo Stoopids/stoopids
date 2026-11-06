@@ -2530,7 +2530,7 @@ function vHowTo(){const m=PULK.minAmt;
   return `<div class="s27-how"><a class="s27-howl" href="${esc(s24Href('bets27'))}" onclick="return s24NavClick(event,'bets27')">← Back to Bets</a>
   <h2>📘 How to bet</h2>
   <section id="howto-newbet" class="s29-hnb"><h3>How to make a bet</h3>
-  <div class="card"><b>Where to start</b><p>On a wide screen, <b>Write it Up or Request</b> shows both forms side by side. On a phone there are three tabs: <b>Write it Up</b>, <b>Request</b>, and <b>All Bets</b>. One form shows at a time. Quick bet on an upcoming game opens <b>Request</b> with that side filled in. Nothing is posted until you submit.</p></div>
+  <div class="card"><b>Where to start</b><p>On a wide screen, <b>Write it Up or Request</b> shows both forms side by side. On a phone there are three tabs: <b>Write it Up</b>, <b>Request</b>, and <b>All Bets</b>. One form shows at a time. Quick bet on an upcoming game opens <b>Request</b> with that side filled in. Nothing is posted until you submit. The Bets number is only bets you have not seen on All Bets yet. It disappears when you open that list, even if the bets are still open. The All Bets number is only new requests for you, and it disappears the same way. Opening Write it Up or Request does not clear either number.</p></div>
   <div class="card"><b>Write it Up</b><p>Use this when the bet is already agreed. It goes straight onto <b>All Bets</b>. Pick who you’re against, write the bet, choose the amount and the odds, then <b>5. When can this be settled?</b> That date, <b>End of season</b>, or <b>Not sure yet</b> is for sorting only. Tap <b>Place bet</b>, check it, then <b>Yes, place it</b>.</p></div>
   <div class="card"><b>Request a bet</b><p>Use this when nothing is agreed yet. Pick who it is open to. Leave them unpicked, or choose <b>All</b>, and it is open to the other Stoops. A shorter list is only those invitees. Set how many can accept, and when the invitation expires. Expiry is not the settlement estimate. Then <b>7. When can this be settled?</b>, same three sorting choices. Tap <b>Request bet</b>. It stays under <b>Open requests</b> at the top of <b>All Bets</b> until someone accepts, it expires, or you delete or close it.</p></div>
   <div class="card"><b>Who sees an open request</b><p>The page shows an open request to the Stoop who sent it, and to invitees who can still take it. Other Stoops do not get that card or a request badge. A guest does not see those cards. Accept still only works for an invitee. This is how the page filters the list. The request record itself is still read as one shared list, so the page is not a private lock.</p></div>
@@ -2544,12 +2544,13 @@ function vHowTo(){const m=PULK.minAmt;
   <div class="card"><b>Request and Open</b><p>Open requests sit at the top of <b>All Bets</b>. The badge counts unseen requests for this account only.</p></div>
   <div class="card"><b>Copy</b><p>Each bet’s <b>Copy</b> button copies just that bet’s text.</p></div></div>`}
 VIEWS.howto=vHowTo;
-/*<S29D-NEWBETS>*/ // yellow 'new bets' count on the Bets tab: ledger bets (from the existing GET/poll, U.doc) created after this device's last look (localStorage stoopids_bets_seen), not placed by this device's stoopids_who. First load ever: seen = now (no history flood). Opening Bets: seen = now. localStorage only (works in ?view=1, writes nothing remote, never touches stoopids_who).
+/*<S29D-NEWBETS>*/ // Bets tab number = bets this device has not seen on All bets yet. Not a total, and not open requests. First load: seen = now. The number clears only when All bets is the list on screen. Write it Up or Request does not clear it. localStorage only.
 const S29NB_KEY='stoopids_bets_seen';
 function s29NbSeen(){let v=lsGet(S29NB_KEY);if(!v||isNaN(Date.parse(v))){v=new Date().toISOString();lsSet(S29NB_KEY,v)}return Date.parse(v)}
 function s29NbCount(){const seen=s29NbSeen();if(!(U.doc&&U.doc.bets))return 0;let me=null;try{me=legacyOwner(window.localStorage['stoopids_who']||'')}catch(_){}   /* property read: bypasses the ?view=1 getItem guest shim, so own bets stay excluded in view mode too (read only) */return U.doc.bets.filter(b=>b&&b.created_at&&Date.parse(b.created_at)>seen&&(b.postedBy?b.postedBy!==me:b.backer!==me)).length}
-function s29NbUpdate(){const nav=$('#nav');if(!nav||!D)return;if(tab==='bets27'||tab==='bets'){lsSet(S29NB_KEY,new Date().toISOString())}
-  const a=nav.querySelector('a.nt[data-tab="bets27"]')||nav.querySelector('a.nt[data-tab="bets"]');if(!a)return;const n=(tab==='bets27'||tab==='bets')?0:s29NbCount();let e=a.querySelector('.s29nb');
+function s29NbListOn(){return tab==='bets27'&&typeof OB_VIEW!=='undefined'&&OB_VIEW==='all'}
+function s29NbUpdate(){const nav=$('#nav');if(!nav||!D)return;if(s29NbListOn())lsSet(S29NB_KEY,new Date().toISOString());
+  const a=nav.querySelector('a.nt[data-tab="bets27"]')||nav.querySelector('a.nt[data-tab="bets"]');if(!a)return;const n=s29NbListOn()?0:s29NbCount();let e=a.querySelector('.s29nb');
   if(!n){if(e)e.remove();return}if(!e){e=document.createElement('b');e.className='s29nb';e.setAttribute('aria-hidden','true');a.appendChild(e)}e.textContent=n>99?'99+':String(n);a.title=n+' new bet'+(n>1?'s':'')}
 setInterval(()=>{try{s29NbUpdate()}catch(_){}},3000);
 /*</S29D-NEWBETS>*/
@@ -2599,6 +2600,7 @@ function render(){
   /*<S29D-GGRID>*/try{$('#main').setAttribute('data-tab',tab)}catch(_){}/*</S29D-GGRID>*/
   /*<S29D-NEWBETS>*/setTimeout(()=>{try{s29NbUpdate()}catch(_){}},0);/*</S29D-NEWBETS>*//*<STEP12-RECAPNEW>*/setTimeout(()=>{try{s12RcUpdate()}catch(_){}},0);/*</STEP12-RECAPNEW>*/
   $('#main').innerHTML=(VIEWS[tab]||vStandings)();
+  try{if(typeof s29NbUpdate==='function')s29NbUpdate()}catch(_){}
   $('#foot').innerHTML=`STOOPIDS · times in your time zone${DEMO?' · <a href="?">back to the live season</a>':''/*<S29D-NODEMOLINK> footer demo link removed; ?demo=1 still works </S29D-NODEMOLINK>*/}${ADMIN?' · scores ESPN (fallback ncaa.com)':''}`;
   freshStart();
   /*<CHIP-FIT>*/try{chipFit()}catch(_){}/*</CHIP-FIT>*/
