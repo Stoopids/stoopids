@@ -265,8 +265,12 @@ nav button .nb{position:absolute;top:1px;right:2px;background:var(--acc);color:#
 /*<CHAT-CSS>*/
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 /*<CHAT-BOTTOM>*/
-.chat{position:fixed;left:0;right:0;bottom:0;z-index:30;box-sizing:border-box;margin:0;padding:8px max(10px,calc((100% - 1000px)/2)) calc(8px + env(safe-area-inset-bottom,0px));background:var(--bg);border-top:1px solid var(--line);display:flex;flex-direction:column-reverse}   /* ONE fixed bar at the bottom of every tab (page content gets --chatH bottom padding), the panel opens upward as a sheet */
-body{padding-bottom:var(--chatH,0px)}
+.chat{position:fixed;left:auto;right:max(12px,env(safe-area-inset-right,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:30;box-sizing:border-box;width:min(320px,calc(100vw - 24px));max-height:min(70dvh,calc(100dvh - 24px));margin:0;padding:8px;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 28px rgba(0,0,0,.45);display:flex;flex-direction:column-reverse;overflow:auto}   /* expanded: narrow bottom-right overlay, no page padding */
+body{padding-bottom:0}
+html body .chat.chat-bar{left:0!important;right:0!important;bottom:0!important;width:auto!important;max-width:none!important;max-height:none!important;border-radius:0!important;border-left:0!important;border-right:0!important;border-bottom:0!important;box-shadow:none!important;background:var(--bg)!important;padding:8px max(10px,calc((100% - 1000px)/2)) calc(8px + env(safe-area-inset-bottom,0px))!important}
+html body .chat.chat-off{left:auto!important;right:max(12px,env(safe-area-inset-right,0px))!important;bottom:max(12px,env(safe-area-inset-bottom,0px))!important;width:max-content!important;max-width:min(240px,calc(100vw - 24px))!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important;overflow:visible!important}
+html body .chat.chat-off .chat-b{display:none!important}
+.chat-who{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:800;font-size:13px;line-height:1.2;color:var(--tx);cursor:default;user-select:text}
 body.nochat .chat{visibility:hidden}   /* hidden (space kept) while a text field outside the chat has focus, so the phone keyboard never meets two bars */
 .chat-b{display:flex;flex-direction:column;max-height:70vh;max-height:70dvh;overflow:hidden}
 /*</CHAT-BOTTOM>*/
@@ -289,7 +293,7 @@ body.nochat .chat{visibility:hidden}   /* hidden (space kept) while a text field
 .chat.unread .chat-t{border-color:var(--acc);background:#2b2510;animation:cbpulse 2.2s ease-in-out infinite}
 @keyframes cbpulse{0%,100%{box-shadow:0 0 0 0 rgba(255,210,63,0)}50%{box-shadow:0 0 0 5px rgba(255,210,63,.32),0 0 16px rgba(255,210,63,.3)}}
 @media (prefers-reduced-motion:reduce){.chat.unread .chat-t{animation:none;box-shadow:0 0 0 3px rgba(255,210,63,.5)}}
-.chat-h{display:flex;gap:6px;align-items:center;justify-content:space-between;margin:0 0 6px}
+.chat-h{display:flex;gap:6px;align-items:center;justify-content:space-between;margin:0 0 6px}.chat-hx{display:flex;gap:6px;align-items:center;margin-left:auto;flex:none}.chat-x{min-width:36px;min-height:36px;padding:0;border-radius:10px;border:1px solid #fff;background:#1e3a8a;color:#fff;font:inherit;font-size:18px;font-weight:800;line-height:1;cursor:pointer}
 .chat-h button{min-height:40px;padding:0 10px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--mut);font:inherit;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}
 .chat-h button[aria-pressed=true]{color:var(--acc);border-color:var(--acc)}
 .chat-h button[hidden]{display:none}
@@ -563,8 +567,8 @@ nav a.nt .s29nb{position:absolute;top:1px;right:2px;min-width:15px;background:#F
 .ggrid>.gm>*{flex:none}.ggrid>.gm>.gsp{margin-top:auto;height:0}
 .ggrid .gm .gh{margin-bottom:2px}.ggrid .gside{padding:1px 0}.ggrid .gside .sc2{font-size:19px}.ggrid .gl{margin-top:4px;padding-top:4px;font-size:12.5px}
 .ggrid .qbw{display:flex;justify-content:flex-end;margin-top:8px}   /*<S25D-QB>*/
-.ggrid .qb-btn{display:inline-flex;align-items:center;justify-content:center;width:auto;padding:8px 16px;min-height:44px;font-size:.9em;font-weight:700;border-radius:10px;background:#FFD400;color:#111;border:0}   /*</S25D-QB>*/
-.ggrid .qb-btn[aria-expanded=true]{background:#FFD400;color:#111;outline:2px solid #fff3;outline-offset:2px}
+.ggrid .qb-btn{display:inline-flex;align-items:center;justify-content:center;width:auto;padding:8px 16px;min-height:44px;font-size:.9em;font-weight:700;border-radius:10px;background:#1e3a8a;color:#fff;border:0}   /*</S25D-QB>*/
+.ggrid .qb-btn[aria-expanded=true]{background:#1e3a8a;color:#fff;outline:2px solid #fff3;outline-offset:2px}
 .ggrid>.gm.gfin{padding:0;align-self:start}
 .gsum{all:unset;box-sizing:border-box;display:flex;flex-wrap:wrap;gap:6px;align-items:center;width:100%;min-height:44px;padding:8px 12px;font-size:13.5px;cursor:pointer;border-radius:14px}
 .gsum:focus-visible{outline:2px solid var(--acc)}.gsum .gst{font-size:11.5px;font-weight:800;color:var(--mut)}.gsum .w{font-weight:900}.gsum .gch{margin-left:auto;color:var(--mut)}
@@ -775,7 +779,7 @@ main,#main{padding-left:16px;padding-right:16px}
 .gm .gh{position:relative;padding-right:104px;min-height:28px}
 .gbtns{position:absolute;top:0;right:0;display:flex;flex-direction:column;gap:6px;align-items:stretch;z-index:2}
 .gbtns>button{position:static!important;width:96px;height:30px;min-height:30px;margin:0!important;padding:0 8px;font-size:12px;font-weight:700;border-radius:8px;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap}
-.gbtns .qb-btn{background:#FFD400;color:#111;border:0}
+.gbtns .qb-btn{background:#1e3a8a;color:#fff;border:0}
 .gm .gside .nm{max-width:calc(100% - 100px);min-width:0}
 .gm.gbet{border-color:#22c55e!important;box-shadow:0 0 0 1px #22c55e inset}
 .gm:has(.qb-btn) .gh{min-height:64px;align-items:flex-start}
@@ -953,10 +957,10 @@ main,#main{padding-top:6px!important}
 <!--<CHAT>--><section id="chat" class="chat" aria-label="Live chat" hidden>
   <!--<CHAT-BAR>--><button type="button" id="chatT" class="chat-t" aria-expanded="false" aria-controls="chatB"><span class="ca" aria-hidden="true">▸</span><span class="cbm"><span class="cb1" id="chatOn"></span><span class="cb2 mut" id="chatPv"></span></span><i class="cdot" hidden title="New messages"></i></button><!--</CHAT-BAR>-->
   <div id="chatB" class="chat-b" hidden>
-    <!--<CHAT-BAR>--><div class="chat-h"><button type="button" id="chatWho" hidden>You · change</button><button type="button" id="chatSnd" aria-pressed="false" title="Soft blip when someone else posts. Off by default.">🔕 Sound off</button></div><!--</CHAT-BAR>-->
+    <!--<CHAT-BAR>--><div class="chat-h"><span id="chatWho" class="chat-who" hidden>You</span><span class="chat-hx"><button type="button" id="chatSnd" aria-pressed="false" title="Soft blip when someone else posts. Off by default.">🔕 Sound off</button><button type="button" id="chatMin" aria-label="Minimize chat">Minimize</button><button type="button" id="chatX" class="chat-x" aria-label="Close chat">✕</button></span></div><!--</CHAT-BAR>-->
     <div id="chatL" class="chat-l" role="log" aria-live="polite" aria-label="Chat messages" tabindex="0"></div>
     <form id="chatF" class="chat-f" autocomplete="off" hidden><label for="chatI" class="sr">Your message</label><input maxlength="200" id="chatI" type="text" enterkeyhint="send" autocomplete="off" autocapitalize="sentences" placeholder="Say something Stoopid…"><button type="submit" id="chatS">Send</button></form>
-    <div id="chatP" class="chat-p" hidden><button type="button" id="chatPb">👋 Pick who you are to chat</button></div>
+    <div id="chatP" class="chat-p" hidden><p id="chatPb">👋 Pick who you are to chat</p></div>
     <div class="chat-m"><span id="chatM" role="status"></span><span id="chatA"></span></div>
   </div>
 </section><!--</CHAT>-->
@@ -1750,7 +1754,7 @@ function vGames(){
   let list=(gMode==='upcoming'?ups:fin.slice().reverse());
   if(gOwner!=='all')list=list.filter(g=>g.home.owners.includes(gOwner)||g.away.owners.includes(gOwner));
   /*<SYNC3-GF>*/if(gQ){const q=gQ.toLowerCase(),nm=s=>[(D.teams[s.id]||{}).name,s.short,s.name].join(' ').toLowerCase();list=list.filter(g=>nm(g.away).includes(q)||nm(g.home).includes(q))}/*</SYNC3-GF>*/
-  if(gH2H&&gMode==='upcoming')list=list.filter(g=>/*<SYNC2>*/gOwner!=='all'?!!g.h2h:/*</SYNC2>*/(g.h2h||g.civil));
+  if(gH2H)list=list.filter(g=>/*<SYNC2>*/gOwner!=='all'?!!g.h2h:/*</SYNC2>*/(g.h2h||g.civil));
   /*<SYNC2>*/// Team dropdown removed (Paul): the Games filter is by manager (All owners + Pool vs Pool)/*</SYNC2>*/   // s29d: 'Pool only' is an Upcoming filter
   const etKey=gKey;   /*<GAMES-LOCAL>*/// this view groups, filters and sorts by the viewer's local date/*</GAMES-LOCAL>*/
   const days=[...new Set(list.map(etKey))];
@@ -1760,7 +1764,7 @@ function vGames(){
   const monHtml=`<select class="gf2-s gmon-sel${curMon?' on':''}" aria-label="Jump to month" onchange="if(this.value){gDay=this.value;render()}"><option value="">Month</option>${GMON.map(([m,l])=>{const f=firstIn(m);return `<option value="${f||''}" data-mon="${m}"${m===curMon?' selected':''}${f?'':' disabled'}>${l}</option>`}).join('')}</select>`;
   let gCapped=0;if(gDay==='all'&&gMode==='upcoming'){const near=days.slice().sort().slice(0,12),ns=new Set(near),n0=list.length;list=list.filter(g=>ns.has(etKey(g)));gCapped=n0-list.length}   // full schedule is loaded: 'All days' shows the next 12 game days; later days via the day list or month chips/*</S26U-MONTH-JUMP>*/
   if(gMode==='upcoming'){const sk=g=>etKey(g)+(isTBD(g)?'~':' ')+(g.start||'');list.sort((a,b)=>sk(a).localeCompare(sk(b)))}   // 'time TBD' games last within their day
-  /*<S29D-GF>*/let h=`<div class="gfrow"><div class="segrow"><div class="rkseg" role="group" aria-label="Games view"><button type="button" class="rkseg-b${gMode==='upcoming'?' on':''}" data-gm="upcoming" aria-pressed="${gMode==='upcoming'}" onclick="gMode='upcoming';gDay='all';render()">Upcoming</button><button type="button" class="rkseg-b${gMode==='scores'?' on':''}" aria-pressed="${gMode==='scores'}" onclick="gMode='scores';gDay='all';render()">Past games</button></div>${/*<SYNC1>*/'<button type="button" class="rkseg-b segref gref" aria-label="Refresh live games" title="Refresh live games" onclick="lvManual()">'+lvBtnTxt()+'</button>'/*</SYNC1>*/}</div></div><div class="gf3"><div class="gf2 gfpills"><select class="gf2-s${gOwner!=='all'?' on':''}" aria-label="Owner" onchange="gOwner=this.value;render()"><option value="all">All Stoops</option>${D.owners.map(o=>`<option value="${esc(o.name)}"${o.name===gOwner?' selected':''}>${esc(o.emoji)} ${esc(PN(o.name))}</option>`).join('')}</select>${gMode==='upcoming'?`<button type="button" class="gf2-b${gH2H?' on':''}" aria-pressed="${gH2H}" title="Only games where both teams are owned by Stoops" onclick="gH2H=!gH2H;render()">Stoop vs Stoop</button>`:''}</div><div class="gf2 gfwhen">${monHtml}<select class="gf2-s${gDay!=='all'?' on':''}" aria-label="Day" onchange="gDay=this.value;render()"><option value="all">All days</option>${days.map(k=>`<option value="${k}"${k===gDay?' selected':''}>${esc(etLabel(k))}</option>`).join('')}</select><input type="search" class="gf2-s gq${gQ?' on':''}" aria-label="Search teams" placeholder="Search teams" value="${esc(gQ)}" onchange="gQ=this.value.trim();render()"></div></div>${/*<OWNED-GAMES>*/nHidden?`<label class="gUn"><input type="checkbox" id="gUnowned"${gAll?' checked':''} onchange="gAll=this.checked;render()"> Show unowned games <span class="mut">(${nHidden} hidden)</span></label>`:''/*</OWNED-GAMES>*/}`;/*</S29D-GF>*/
+  /*<S29D-GF>*/let h=`<div class="gfrow"><div class="segrow"><div class="rkseg" role="group" aria-label="Games view"><button type="button" class="rkseg-b${gMode==='upcoming'?' on':''}" data-gm="upcoming" aria-pressed="${gMode==='upcoming'}" onclick="gMode='upcoming';gDay='all';render()">Upcoming</button><button type="button" class="rkseg-b${gMode==='scores'?' on':''}" aria-pressed="${gMode==='scores'}" onclick="gMode='scores';gDay='all';render()">Past games</button></div>${/*<SYNC1>*/'<button type="button" class="rkseg-b segref gref" aria-label="Refresh live games" title="Refresh live games" onclick="lvManual()">'+lvBtnTxt()+'</button>'/*</SYNC1>*/}</div></div><div class="gf3"><div class="gf2 gfpills"><select class="gf2-s${gOwner!=='all'?' on':''}" aria-label="Owner" onchange="gOwner=this.value;render()"><option value="all">All Stoops</option>${D.owners.map(o=>`<option value="${esc(o.name)}"${o.name===gOwner?' selected':''}>${esc(o.emoji)} ${esc(PN(o.name))}</option>`).join('')}</select><button type="button" class="gf2-b${gH2H?' on':''}" aria-pressed="${gH2H}" title="Only games where both teams are owned by Stoops" onclick="gH2H=!gH2H;render()">Stoop vs Stoop</button></div><div class="gf2 gfwhen">${monHtml}<select class="gf2-s${gDay!=='all'?' on':''}" aria-label="Day" onchange="gDay=this.value;render()"><option value="all">All days</option>${days.map(k=>`<option value="${k}"${k===gDay?' selected':''}>${esc(etLabel(k))}</option>`).join('')}</select><input type="search" class="gf2-s gq${gQ?' on':''}" aria-label="Search teams" placeholder="Search teams" value="${esc(gQ)}" onchange="gQ=this.value.trim();render()"></div></div>${/*<OWNED-GAMES>*/nHidden?`<label class="gUn"><input type="checkbox" id="gUnowned"${gAll?' checked':''} onchange="gAll=this.checked;render()"> Show unowned games <span class="mut">(${nHidden} hidden)</span></label>`:''/*</OWNED-GAMES>*/}`;/*</S29D-GF>*/
   if(!list.length)return h+`<div class="card">${all.length?'Nothing matches those filters.':nHidden/*<OWNED-GAMES>*/?'No games with an owned team right now 🏀 Check back soon. (Games where nobody in the pool owns either team are hidden.)'/*</OWNED-GAMES>*/:'No games for rostered teams yet. Check back when the schedule fills in.'}</div>`;
   if(gMode==='upcoming'&&D.meta.mode==='preseason')h+=`<div class="card note">Preseason: sportsbooks have posted lines for just some of the next few nights so far (lines are pulled for about the next 10 days). Everything refreshes automatically.</div>`;
   let cur=null;
@@ -2366,7 +2370,7 @@ function vArchive(){
       (o.unranked?`<div class="note"><span class="pill warn">unranked</span> ${esc(o.unranked)}</div>`:'')+
       archTeams(o)+`</div>`).join('')+`</div>`;
   return h+archAllTime(A)}
-const VIEWS={standings:/*<HDR-CENTER>*/()=>vStandings()+'<div id="fresh" class="fresh stfoot" hidden><span></span></div>'/*</HDR-CENTER>*/,games:vGames,bets:vBets,rosters:vRosters,teams:vTeams,checklist:vChecklist,redraft:vRedraft,archive:vArchive,about:vAbout};
+const VIEWS={standings:()=>vStandings(),games:vGames,bets:vBets,rosters:vRosters,teams:vTeams,checklist:vChecklist,redraft:vRedraft,archive:vArchive,about:vAbout};
 /*<S26E>*/
 /* Standings > Points: per-manager breakdown. Every number is the page's own scoring output from data.js (the same fields the League view and the owner breakdown use):
    cell = t.by[category] (points that team earned for that owner, inside its redraft window), team total = t.total, manager total = o.total.
@@ -2601,7 +2605,7 @@ function render(){
   /*<S29D-NEWBETS>*/setTimeout(()=>{try{s29NbUpdate()}catch(_){}},0);/*</S29D-NEWBETS>*//*<STEP12-RECAPNEW>*/setTimeout(()=>{try{s12RcUpdate()}catch(_){}},0);/*</STEP12-RECAPNEW>*/
   $('#main').innerHTML=(VIEWS[tab]||vStandings)();
   try{if(typeof s29NbUpdate==='function')s29NbUpdate()}catch(_){}
-  $('#foot').innerHTML=`STOOPIDS · times in your time zone${DEMO?' · <a href="?">back to the live season</a>':''/*<S29D-NODEMOLINK> footer demo link removed; ?demo=1 still works </S29D-NODEMOLINK>*/}${ADMIN?' · scores ESPN (fallback ncaa.com)':''}`;
+  const footBits=[];if(tab!=='games')footBits.push('STOOPIDS · times in your time zone');if(DEMO)footBits.push('<a href="?">back to the live season</a>');if(ADMIN)footBits.push('scores ESPN (fallback ncaa.com)');const footEl=$('#foot');footEl.innerHTML=footBits.join(' · ');footEl.hidden=!footBits.length;
   freshStart();
   /*<CHIP-FIT>*/try{chipFit()}catch(_){}/*</CHIP-FIT>*/
   /*<CHAT-BAR>*/try{chatAfterRender()}catch(_){}/*</CHAT-BAR>*/
@@ -2873,7 +2877,7 @@ function chatBarDraw(){
   const d=sec.querySelector('.cdot');d.hidden=!n;d.textContent=n?chatCount(n):'';d.title=n?n+' new message'+(n>1?'s':''):'New messages';
   sec.classList.toggle('unread',n>0);
   $('#chatT').setAttribute('aria-label','Chat'+(n?', '+n+' unread':'')+'. '+pv.textContent);/*<CHAT-BOTTOM>*/chatLayout();/*</CHAT-BOTTOM>*/
-  const w=chatWho(),wb=$('#chatWho');wb.hidden=!PS.who;wb.textContent=PS.who===PRES.guestKey?'You: guest \u00b7 pick name':'You: '+(w||'?')+' \u00b7 change';
+  const w=chatWho(),wb=$('#chatWho');wb.hidden=!PS.who;wb.textContent=PS.who===PRES.guestKey?'You: guest':'You: '+(w?PN(w):'?');
   const sb=$('#chatSnd');sb.setAttribute('aria-pressed',CH.snd?'true':'false');sb.textContent=CH.snd?'\u{1F514} Sound on':'\u{1F515} Sound off';
   chatTitle();chatNavBadge();
 }
@@ -2888,7 +2892,7 @@ function chatPlace(){      // the one bar: fixed to the bottom of the page on EV
 }
 /*<CHAT-BOTTOM>*/
 /* page bottom padding = bar height (also expanded); the bar lifts above the phone keyboard; online list that does not fit is cut with "+N more" */
-function chatLayout(){const s=document.getElementById('chat');document.documentElement.style.setProperty('--chatH',(s&&!s.hidden?s.offsetHeight:0)+'px')}
+function chatLayout(){document.documentElement.style.setProperty('--chatH','0px')}
 function chatFit(el){if(!el||!el.clientWidth)return;const old=el.querySelector('.cbm2');if(old)old.remove();if(el.scrollWidth<=el.clientWidth)return;
   const more=document.createElement('span');more.className='cbg cbm2';el.appendChild(more);let n=0;
   while(el.scrollWidth>el.clientWidth&&el.children.length>3){el.removeChild(el.children[el.children.length-2]);n++;more.textContent='+'+n+' more'}
@@ -2951,21 +2955,32 @@ async function chatClear(){
   if(!ADMIN||!window.confirm('Delete ALL chat messages for everyone?'))return;
   try{const w=await fetch(CHAT.url,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({v:1,m:[]})});if(!w.ok)throw 0;CH.list=[];/*<CHAT-BAR>*/CH.nUnread=0;/*</CHAT-BAR>*/chatDrawList();chatSay('Chat cleared.')}catch(e){chatSay("Couldn't clear the chat.",true)}
 }
+function chatMode(mode){
+  if(mode!=='pop'&&mode!=='bar'&&mode!=='off')mode='bar';
+  CH.mode=mode;CH.open=mode==='pop';
+  const sec=$('#chat');if(!sec)return;
+  sec.hidden=false;
+  sec.classList.toggle('chat-bar',mode==='bar');
+  sec.classList.toggle('chat-pop',mode==='pop');
+  sec.classList.toggle('chat-off',mode==='off');
+  const panel=$('#chatB');if(panel)panel.hidden=mode!=='pop';
+  const t=$('#chatT');if(t){t.setAttribute('aria-expanded',mode==='pop'?'true':'false');const ca=t.querySelector('.ca');if(ca)ca.textContent=mode==='pop'?'▾':'▸'}
+  document.body.classList.toggle('chatopen',mode==='pop');/*<CHAT-BOTTOM>*/chatLayout();/*</CHAT-BOTTOM>*/
+  if(mode==='pop'){/*<CHAT-BAR>*/try{if(!document.hidden)chatMarkSeen()}catch(e){}/*</CHAT-BAR>*/try{chatDrawList()}catch(e){}CH.fails=0;clearTimeout(CH.timer);try{chatPoll()}catch(e){}const L=$('#chatL');if(L)L.scrollTop=L.scrollHeight}
+  else try{chatSchedule()}catch(e){}
+  try{chatUI()}catch(e){}
+}
 function chatToggle(open){
-  CH.open=open==null?!CH.open:!!open;
-  $('#chatB').hidden=!CH.open;$('#chatT').setAttribute('aria-expanded',CH.open?'true':'false');$('#chatT .ca').textContent=CH.open?'▾':'▸';
-  document.body.classList.toggle('chatopen',CH.open);/*<CHAT-BOTTOM>*/chatLayout();/*</CHAT-BOTTOM>*/
-  if(CH.open){/*<CHAT-BAR>*/if(!document.hidden)chatMarkSeen();/*</CHAT-BAR>*/chatDrawList();CH.fails=0;clearTimeout(CH.timer);chatPoll();const L=$('#chatL');L.scrollTop=L.scrollHeight}
-  else chatSchedule();
-  chatUI();
+  if(open===true)return chatMode('pop');
+  if(open===false)return chatMode('bar');
+  return chatMode(CH.mode==='pop'?'bar':'pop');
 }
 function chatInit(){
   if(CH.started||DEMO||!D||!D.owners)return;CH.started=true;
-  const sec=$('#chat');if(!sec)return;sec.hidden=false;
+  const sec=$('#chat');if(!sec)return;sec.hidden=false;CH.mode='bar';sec.classList.add('chat-bar');
   /*<CHAT-BAR>*/chatSeenLoad();CH.snd=lsGet(CB.sndKey)==='1';/*</CHAT-BAR>*/
-  $('#chatT').onclick=()=>chatToggle();
-  $('#chatPb').onclick=()=>presAsk();
-  /*<CHAT-BAR>*/$('#chatWho').onclick=()=>presAsk();$('#chatSnd').onclick=()=>chatSndSet(!CH.snd);$('#chatI').addEventListener('input',chatTypingNote);
+  $('#chatT').onclick=()=>chatMode('pop');
+  /*<CHAT-BAR>*/$('#chatSnd').onclick=()=>chatSndSet(!CH.snd);$('#chatMin').onclick=()=>chatMode('bar');$('#chatX').onclick=()=>chatMode('off');$('#chatI').addEventListener('input',chatTypingNote);
   ['pointerdown','keydown','touchend'].forEach(e=>document.addEventListener(e,()=>{if(CH.snd&&(!CH.ctx||CH.ctx.state==='suspended'))chatAudioWake()},{passive:true}));   // autoplay rules: only after a gesture
   chatPlace();/*</CHAT-BAR>*/
   $('#chatF').addEventListener('submit',async ev=>{ev.preventDefault();const i=$('#chatI');const v=i.value;const sent=await chatSend(v);if(sent&&i.value===v)i.value=''});
@@ -4203,6 +4218,11 @@ html body .gf3 .gf2>input.gf2-s{padding:0 10px!important}
 html body .gf3 .gf2>.gmore,html body #main .gf3 .gf2>.gmore,html body #lbody .gf3 .gf2>.gmore{display:none!important}
 html body #main .gf3 .gf2>select,html body #main .gf3 .gf2>button,html body #main .gf3 .gf2>input,html body #lbody .gf3 .gf2>select,html body #lbody .gf3 .gf2>button,html body #lbody .gf3 .gf2>input{height:26px!important;min-height:26px!important}
 html body #main .gf3 .gf2>select.gf2-s,html body #lbody .gf3 .gf2>select.gf2-s{padding:0 14px 0 7px!important;-webkit-appearance:none!important;appearance:none!important;text-overflow:clip!important;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%23aab'/%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:right 5px center!important;background-size:8px 5px!important}
+html body #main .gf3>.gf2.gfpills,html body #main .gf3>.gf2.gfwhen{display:flex!important;flex-flow:row wrap!important;align-items:center!important;width:100%!important;max-width:100%!important;gap:6px!important}
+html body #main .gf3>.gf2.gfpills>.gf2-s,html body #main .gf3>.gf2.gfpills>.gf2-b,html body #main .gf3>.gf2.gfwhen>.gf2-s,html body #main .gf3>.gf2.gfwhen>.gf2-b{width:220px!important;min-width:0!important;max-width:100%!important;flex:0 1 220px!important;height:32px!important;min-height:32px!important;box-sizing:border-box!important}
+html body .ggrid>.gm:not(.gfin) .gside a.chip{width:200px!important;min-width:200px!important;max-width:200px!important;height:40px!important;min-height:40px!important;max-height:40px!important;box-sizing:border-box!important}
+html body #onlStrip.onl{flex-wrap:nowrap!important;justify-content:flex-start!important;overflow-x:auto!important;max-width:100%!important}
+html body #onlStrip .onl-p,html body #onlStrip .onl-h{flex:none}
 /*</S32-GPILL3>*/
 /*<S33-GGAP>*/ /* Paul: kill blank gap above Games filters on phone (empty-looking #live bar had 40px min-height) */
 @media (max-width:640px){html body #gamesTop #live{min-height:0!important;margin:0!important;padding:2px 0!important;font-size:11px!important;line-height:1.2!important;color:var(--mut,#aab)!important;background:none!important;border:0!important}html body #gamesTop #live:not(:has(#lvT:not(:empty))){display:none!important}html body #main{padding-top:4px!important}}
