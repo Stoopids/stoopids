@@ -2550,10 +2550,10 @@ function vHowTo(){const m=PULK.minAmt;
   <div class="card"><b>This update only</b><p>This is how the filters work in this held update. They are not on the public site yet. Nothing here settles a bet by itself.</p></div>
   <div class="card"><b>Five controls</b><p><b>Everyone / a person</b> and <b>search</b> stay. The old long status list is now three controls that all apply at once. A bet has to pass every one of them. <b>Status</b> is All, Open, Settled, Wash, or Cancelled. <b>Action needed</b> is Any, My turn, or Their turn. <b>When</b> is Any time, Upcoming, Today, Past settle date, End game, End of season, or Not sure yet. The page opens on <b>Open</b>, <b>Any</b> action, and <b>Any time</b>.</p></div>
   <div class="card"><b>Status</b><p><b>Open</b> is still open. A pool whose payouts are already entered is not open. <b>Settled</b> has a winner, or it is a pool with payouts entered. <b>Wash</b> is a push: nobody owes anything. <b>Cancelled</b> was voided. <b>All</b> includes every one of those.</p></div>
-  <div class="card"><b>Whose turn</b><p><b>My turn</b> means there is a real step with your name on it: answer someone else’s correction, confirm a proposed score, or enter the result once the game day has arrived. A future game is not your turn just because you posted it. <b>Their turn</b> is the same kind of step for the other person, on a bet you are in. An open bet is not “their turn” only because they wrote it. The number on My turn or Their turn is how many bets match that choice together with the other controls. It is not the yellow new-bet badge, and it is not the new-request badge. Those unseen numbers clear when you open All Bets. Changing a filter does not clear them.</p></div>
+  <div class="card"><b>Whose turn</b><p><b>My turn</b> means there is a real step with your name on it: answer someone else’s correction, confirm a score that has already been proposed, or enter the result because that bet’s game is final and no score was proposed. A sorting date does not do this. A game later today, and a game still being played, are not your turn. A correction you still have to answer counts even if that game has not been played. <b>Their turn</b> is the same kind of step for the other person, on a bet you are in. An open bet is not “their turn” only because they wrote it. The number on My turn or Their turn is how many bets match that choice together with the other controls. It is not the yellow new-bet badge, and it is not the new-request badge. Those unseen numbers clear when you open All Bets. Changing a filter does not clear them.</p></div>
   <div class="card"><b>When</b><p>Today, Upcoming, and Past settle date use this device’s calendar day, the same day the page already uses for sorting. They are not Eastern Time and not the tip-off. <b>Past settle date</b> means the sorting date is before today. The bet stays open until someone enters the result. <b>End of season</b> and <b>End game</b> are only those labels. No season-end date and no game-end time is invented, and neither one settles the bet.</p></div>
   <div class="card"><b>Requests stay separate</b><p>Open requests stay in their own list at the top of All Bets. Status, Action needed, and When do not try to classify a request. Everyone, Me, a named person, and search do apply to that list, but only after the page has already hidden requests you cannot see. You see a request you sent, or one you were invited to and can still take. You never see someone else’s request just because you searched their name. A guest does not see those cards.</p></div>
-  <div class="card"><b>Three examples</b><p>Open + My turn + Today: you posted it, the game day is here, and you still need to enter or confirm the result. It shows. The same bet about a game next week does not.</p><p>Settled + Their turn: you asked to correct the result, and the person who posted it has not answered. It stays settled until they do.</p><p>Open + Any + End of season: those bets are grouped by that label. They do not settle when the season ends, because no end date is on file.</p></div>
+  <div class="card"><b>Three examples</b><p>Open + My turn: the game is final and you still need to confirm the proposed score, or enter the result because the final did not propose one. It shows. A game today that has not started, and a game that is still being played, do not. Next week does not either.</p><p>Settled + Their turn: you asked to correct the result, and the person who posted it has not answered. It stays settled until they do.</p><p>Open + Any + End of season: those bets are grouped by that label. They do not settle when the season ends, because no end date is on file.</p></div>
   </section>
   <div class="card"><b>Copy</b><p>Each bet’s <b>Copy</b> button copies just that bet’s text.</p></div></div>`}
 VIEWS.howto=vHowTo;
@@ -3537,16 +3537,18 @@ function b27OwesHtml(T){
 }
 /*</OWES-CHART>*/
 /*</OWES-TABLE>*/
+function s25Stage(b){const r=b&&b.rd;if(!r||r.k==='manual'||!r.d||b.status!=='open'||b.kind==='pool')return null;
+  let today='';try{today=S25.etDay(new Date())}catch(e){return null}if(String(r.d)>today)return {wait:'future'};
+  const c=S25P.games[s25Key(r)];if(!c||c.st!=='ok'||!c.sb)return null;
+  let g=null;try{g=S25.match(c.sb,r)}catch(e){return null}if(!g||!g.final)return {wait:'live',g};
+  let p=null;try{p=S25.proposal(r,g)}catch(e){}return {g,p:p||null}}
 function b27ActionItem(b,me){if(!me||!b)return null;
   if(b.fx&&typeof S24R!=='undefined'&&S24R.includes(b.status)&&me===b.backer&&b.fx.by!==me)return {id:b.id,kind:'bet',action:'Answer the correction',text:b.text||''};
   if(b.status!=='open'||b.kind==='pool'||b.backer!==me)return null;
-  const r=b.rd;if(!r||r.k==='manual'||!r.d)return null;
-  let today='';try{today=S25.etDay(new Date())}catch(e){return null}
-  if(String(r.d)>today)return null;
-  let G=null;try{G=s25Game(b)}catch(e){G=null}
+  let G=null;try{G=b.backer===b27Who()?s25Game(b):null}catch(e){G=null}if(!G)G=s25Stage(b);
   if(G&&G.p)return {id:b.id,kind:'bet',action:'Confirm the result',text:b.text||''};
-  if(G&&G.wait==='future')return null;
-  return {id:b.id,kind:'bet',action:'Enter the result',text:b.text||''}}
+  if(G&&G.g&&G.g.final)return {id:b.id,kind:'bet',action:'Enter the result',text:b.text||''};
+  return null}
 function b27WaitingItems(me){const out=[];if(!me)return out;
   try{const now=Date.now();((typeof RQ!=='undefined'&&RQ&&RQ.S&&RQ.S.list)||[]).forEach(r=>{if(!r||r.status!=='open'||r.by===me)return;if((r.to||[]).indexOf(me)<0||(r.dec||[]).indexOf(me)>=0)return;if((r.took||[]).some(t=>t&&t.m===me))return;if(!(now<r.exp))return;out.push({id:r.id,kind:'req',action:'Accept or decline',text:r.txt||r.lab||'Request'})})}catch(e){}
   (U.doc&&U.doc.bets||[]).forEach(b=>{const it=b27ActionItem(b,me);if(it)out.push(it)});return out}
