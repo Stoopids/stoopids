@@ -402,3 +402,28 @@ html body nav#ltabs>a.tb .ni,html body nav#ltabs>a.nd .ni,html body #ltabs>a .ni
 html body .tabs.ob-seg>button{min-height:36px!important;padding-top:6px!important;padding-bottom:6px!important;font-size:13px!important;font-weight:600!important;line-height:1.15!important}
 @media (max-width:640px){html body .tabs.ob-seg>button{min-height:34px!important;font-size:12px!important;padding-top:5px!important;padding-bottom:5px!important}}
 /*</NAV-MAIN-TALL>*/
+
+/*<PARITY-LAYOUT>*/ /* One layout for every league. Labels differ (short person name vs fantasy team name); the boxes do not. */
+/* Main nav and the page column share one width and the same side inset. Archive on STOOPIDS is an extra tab, not a different control size. */
+html body nav#nav,html body nav#ltabs{box-sizing:border-box!important;width:100%!important;max-width:var(--nav-max,1080px)!important;margin-left:auto!important;margin-right:auto!important;padding-left:16px!important;padding-right:16px!important}
+html body nav#nav>a,html body nav#ltabs>a{box-sizing:border-box!important;height:48px!important;min-height:48px!important;max-height:none!important;padding:0 8px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important}
+@media (max-width:700px){html body nav#nav.nm5>a,html body nav#nav.nm5>.nm-b,html body nav#ltabs.nm5>a,html body nav#ltabs.nm5>.nm-b{box-sizing:border-box!important;height:50px!important;min-height:50px!important;max-height:50px!important;padding:4px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important}}
+html body #main{box-sizing:border-box!important;width:100%!important;max-width:var(--nav-max,1080px)!important;margin-left:auto!important;margin-right:auto!important;padding-left:16px!important;padding-right:16px!important}
+html body.lsite main,html body.lsite #main{box-sizing:border-box!important;width:100%!important;max-width:var(--nav-max,1080px)!important;margin-left:auto!important;margin-right:auto!important;padding-left:0!important;padding-right:0!important}
+html body #lbody{box-sizing:border-box!important;width:100%!important;max-width:none!important;margin-left:auto!important;margin-right:auto!important;padding-left:16px!important;padding-right:16px!important}
+/* All teams owner filters: equal cells. A long team name wraps to two lines inside the cell instead of pushing the row onto a new line. */
+html body .tapf,html body .lgref .tapf{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(96px,1fr))!important;gap:6px!important;justify-content:stretch!important;align-items:stretch!important;width:100%!important;max-width:none!important;margin:0 auto 10px!important}
+html body .tapf button,html body .lgref .tapf button{display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:2;line-clamp:2;width:100%!important;min-width:0!important;min-height:40px!important;height:auto!important;margin:0!important;padding:6px 8px!important;box-sizing:border-box!important;font-size:13px!important;font-weight:700!important;line-height:1.15!important;text-align:center!important;white-space:normal!important;overflow:hidden!important;overflow-wrap:anywhere!important}
+@media (max-width:640px){html body .tapf button,html body .lgref .tapf button{font-size:12px!important;min-height:38px!important;padding:5px 6px!important}}
+/* All teams table fills that same column. The Stoop cell wraps two lines; it is not clipped to 8 characters and the card does not shrink to the text. */
+html body #allteams,html body #atfilter,html body .card.tap,html body .lgref .card.tap{width:100%!important;max-width:none!important;margin-left:0!important;margin-right:0!important;box-sizing:border-box!important}
+html body .card.tap table,html body .lgref .card.tap table{width:100%!important;table-layout:auto!important}
+html body .card.tap .to,html body .lgref .card.tap .to,html body .card.tap td.to,html body .lgref .card.tap td.to{max-width:none!important;width:22%;white-space:normal!important;overflow:hidden!important;text-overflow:unset!important;line-height:1.15;vertical-align:middle}
+html body .card.tap td.to .tnt,html body .lgref .card.tap td.to .tnt{display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:2;line-clamp:2;white-space:normal!important;overflow:hidden!important;text-overflow:unset!important}
+/* Games filters: content-sized pills on one wrapping row (who, matchup, month, day, search). Not stretched bars. */
+html body #main .gf3>.gf2.gfpills,html body #lbody .gf3>.gf2.gfpills{display:flex!important;flex-flow:row wrap!important;align-items:center!important;justify-content:flex-start!important;width:auto!important;max-width:100%!important;gap:6px!important;margin:0!important;padding:0!important;background:none!important;border:0!important}
+html body #main .gf3>.gf2.gfpills>.gf2-s,html body #main .gf3>.gf2.gfpills>.gf2-b,html body #lbody .gf3>.gf2.gfpills>.gf2-s,html body #lbody .gf3>.gf2.gfpills>.gf2-b{display:inline-flex!important;align-items:center!important;width:auto!important;max-width:min(240px,100%)!important;min-width:0!important;flex:0 1 auto!important;height:32px!important;min-height:32px!important;padding:0 12px!important;font-size:13px!important;line-height:normal!important;border-radius:999px!important;box-sizing:border-box!important}
+html body #main .gf3>.gf2.gfpills>select.gf2-s,html body #lbody .gf3>.gf2.gfpills>select.gf2-s{padding:0 22px 0 10px!important}
+/* Request (and the same opponent grid): 4 equal cells, so 7 invitees are 4 then 3. */
+html body .b27-opps,html body .rq-to{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+/*</PARITY-LAYOUT>*/

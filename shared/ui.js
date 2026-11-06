@@ -311,9 +311,9 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
     return '<section class="rcw"'+(o.secAttr||'')+'><h2>📰 Weekly write-ups</h2>'+list+'</section>'};
 })(typeof window!=='undefined'?window:globalThis);
 
-/* NAV-MORE: phones (<600px) show 5 main tabs across: Standings, Games, Bets, Teams + More. More opens a scrollable sheet with every other nav item
+/* NAV-MORE: under 700px (phone and half-page) show 5 main tabs across: Standings, Games, Bets, Teams + More. More opens a scrollable sheet with every other nav item
    (taps forward to the hidden original link, so each site's own click handlers run). Laptop/desktop unchanged. Works on #nav (STOOPIDS) and #ltabs (League). */
-(function(root){if(typeof document==='undefined')return;var KEEP=['standings','games','bets','bets27','teams'],MQ='(max-width:599px)';
+(function(root){if(typeof document==='undefined')return;var KEEP=['standings','games','bets','bets27','teams'],MQ='(max-width:700px)';
   var css='@media '+MQ+'{nav#nav.nm5,nav#ltabs.nm5{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;flex-wrap:nowrap!important;overflow:visible!important}nav#nav.nm5>.nm-x,nav#ltabs.nm5>.nm-x{display:none!important}nav#nav.nm5>.nm-b,nav#ltabs.nm5>.nm-b{display:flex}}'+
    '.nm-b{display:none;position:relative;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:0;min-height:46px;padding:4px;background:var(--card,#1b2030);color:var(--tx,#eee);border:1px solid var(--line,#333);border-radius:10px;font:inherit;font-size:12px;font-weight:800;cursor:pointer}'+
    '.nm-b .ni{font-size:15px;line-height:1}.nm-b.on,.nm-b[aria-expanded=true]{background:var(--pill,#FFD400);color:var(--pill-ink,#111);border-color:var(--pill,#FFD400)}'+
