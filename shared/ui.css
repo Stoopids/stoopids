@@ -463,6 +463,9 @@ html body .tabs.ob-seg.ob-phone{display:none!important}
  html body .entry-pair{display:block}
  html body .entry-pair .entry-col{display:none!important}
  html body .entry-pair[data-focus="form"] .entry-wiu,html body .entry-pair[data-focus="request"] .entry-rq{display:block!important}
+ html body .entry-hd.entry-hd-wiu,html body .entry-hd.entry-hd-rq{display:flex;align-items:baseline;gap:6px;padding:4px 8px;margin:-8px -8px 8px}
+ html body .entry-hd.entry-hd-wiu h2,html body .entry-hd.entry-hd-rq h2{font-size:13px;line-height:1.15;letter-spacing:-.02em;white-space:nowrap;flex:none}
+ html body .entry-hd.entry-hd-wiu p,html body .entry-hd.entry-hd-rq p{margin:0;font-size:8.5px;line-height:1.15;letter-spacing:-.02em;white-space:nowrap;min-width:0}
 }
 /* Request (and the same opponent grid): 4 equal cells, so 7 invitees are 4 then 3. */
 html body .b27-opps,html body .rq-to{grid-template-columns:repeat(4,minmax(0,1fr))!important}
