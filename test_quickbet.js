@@ -134,6 +134,10 @@ function html(){return RQ.view()}
   assert.equal(doc.reqs.length,n+1);
   assert.notEqual(doc.reqs[doc.reqs.length-1].exp,Date.parse(TBD));
   assert.ok(doc.reqs[doc.reqs.length-1].exp>now);
+  const page=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
+  assert.match(page,/function qbPick\(id,k,i\)\{qbGo\(id,k,i\)\}/);
+  assert.doesNotMatch(page,/function qbGo[\s\S]{0,500}Object\.assign\(U,/);
+  assert.match(page,/OB_VIEW='request'/);
   console.log('test_quickbet: ok');
   Date.now=realNow;
   process.exit(0);
