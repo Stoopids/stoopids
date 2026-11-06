@@ -528,3 +528,7 @@ html body #main .card.tap.s27-rk td:first-child a.chip img,html body #main .card
 .rq-nt span{font-size:13px;line-height:1.35;overflow-wrap:anywhere}
 .rq-ni{color:#aab}
 .rq-nx{flex:none;width:36px;height:36px;border-radius:8px;border:1px solid #3a4256;background:transparent;color:inherit;font:inherit;font-size:16px;cursor:pointer}
+/* Standings identity line. Last in the standings content, above the fixed chat and online row. */
+html body .idline{margin:16px 0 calc(76px + env(safe-area-inset-bottom,0px));padding:0;font-size:15px;line-height:1.4;color:var(--tx,#eef1f7)}
+html body .idline-ch{display:inline;margin:0;padding:2px 4px;min-height:36px;border:0;background:transparent;color:var(--acc,#ffd23f);font:inherit;font-weight:800;text-decoration:underline;cursor:pointer}
+html body .idline-ch:focus-visible{outline:2px solid var(--acc,#ffd23f);outline-offset:3px;border-radius:6px}

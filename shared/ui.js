@@ -396,6 +396,11 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
   SHARED_UI.weeklySection=function(items,o){var e=o.e;var L=(items||[]).filter(function(x){return x&&x.title}).slice().sort(function(a,b){return String(b.date||'').localeCompare(String(a.date||''))});
     var list=L.length?'<div class="rcl">'+L.map(function(x){return '<article class="card rci"><small>'+e(x.kind==='special'?'Special':'Weekly')+(x.date?' · '+e(o.fmtDate(String(x.date).slice(0,10))):'')+'</small><h3>'+e(x.title)+'</h3><p>'+e(x.body||'')+'</p></article>'}).join('')+'</div>':'<div class="card note rcnone"'+(o.emptyAttr||'')+'>No weekly write-ups yet. The first one comes after opening week.</div>';
     return '<section class="rcw"'+(o.secAttr||'')+'><h2>📰 Weekly write-ups</h2>'+list+'</section>'};
+  /* Standings only. name is already escaped. change is the existing picker attribute (presAsk). No name: guest, and no Change control, because a fresh visit cannot pick one. */
+  SHARED_UI.loginLine=function(o){o=o||{};
+    if(!o.name)return '<p class="idline" role="status">You\u2019re viewing as a guest. This visit can\u2019t pick a name.</p>';
+    var ch=o.change?' <button type="button" class="idline-ch" '+o.change+'>Change?</button>':'';
+    return '<p class="idline">You are logged in as <b>'+o.name+'</b> \u2014'+ch+'</p>'};
 })(typeof window!=='undefined'?window:globalThis);
 
 /* NAV-MORE: under 700px (phone and half-page) show 5 main tabs across: Standings, Games, Bets, Teams + More. More opens a scrollable sheet with every other nav item
