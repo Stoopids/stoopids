@@ -364,7 +364,7 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
     if(k==='game')h+='<div class="note">'+e('End game. No game end is linked, so this only groups it.')+'</div>';
     return h+'</div>'};
   SHARED_UI.entryHead=function(k){return k==='rq'
-    ?'<div class="entry-hd entry-hd-rq"><h2>Request a bet</h2><p class="entry-sub-d">Offer it to the group.</p><p class="entry-sub-m">Nothing agreed yet—find a Stoop who wants to feel something.</p></div>'
+    ?'<div class="entry-hd entry-hd-rq"><h2>Request a bet</h2><p class="entry-sub-d">Nothing agreed yet? Find a stoop who wants to feel something.</p><p class="entry-sub-m">Nothing agreed yet—find a Stoop who wants to feel something.</p></div>'
     :'<div class="entry-hd entry-hd-wiu"><h2>Write it Up</h2><p class="entry-sub-d">Bet already set? Log it here.</p><p class="entry-sub-m">Already agreed on a bet? Record it here and add it to All bets.</p></div>'};
   SHARED_UI.weeklySection=function(items,o){var e=o.e;var L=(items||[]).filter(function(x){return x&&x.title}).slice().sort(function(a,b){return String(b.date||'').localeCompare(String(a.date||''))});
     var list=L.length?'<div class="rcl">'+L.map(function(x){return '<article class="card rci"><small>'+e(x.kind==='special'?'Special':'Weekly')+(x.date?' · '+e(o.fmtDate(String(x.date).slice(0,10))):'')+'</small><h3>'+e(x.title)+'</h3><p>'+e(x.body||'')+'</p></article>'}).join('')+'</div>':'<div class="card note rcnone"'+(o.emptyAttr||'')+'>No weekly write-ups yet. The first one comes after opening week.</div>';
