@@ -171,7 +171,29 @@ U.halfLs=hsLs;U.halfScores=function(g,s,first,BOX){var tot=s.score!=null?esc(Str
     function pick(g,f){var tt=String(f.text||'').trim().slice(0,A.maxText||140);if(!g)return tt?{k:'txt',si:0,lab:tt,other:'',txt:tt}:null;if(tt&&!(f.side&&(function(){var q=f.side.split(':'),oo=sides(g).find(function(x){return x.k===q[0]});return oo&&oo.s[+q[1]]&&(oo.s[+q[1]].lab===tt||oo.s[+q[1]].txt===tt)})()))return {k:'txt',si:0,lab:tt,other:'',txt:tt+' ('+A.tname(g.away)+' vs '+A.tname(g.home)+', '+A.dateET(g)+')'};if(!f.side)return null;var p=f.side.split(':'),o=sides(g).find(function(x){return x.k===p[0]}),s=o&&o.s[+p[1]];var ot=o.s[1-(+p[1])];return s?{k:p[0],si:+p[1],lab:s.lab,other:ot?ot.lab:'',txt:(f.cov==='2h'?'2nd half: ':'')+s.txt}:null}
     async function write(mut,ok){for(var k=0;k<3;k++){var cur=parse(await A.get());if(!ok(cur)){await A.set(JSON.stringify({v:1,reqs:mut(cur)}))}
         await new Promise(function(r){setTimeout(r,350+Math.random()*400)});var back=parse(await A.get());if(ok(back)){S.list=back;S.at=Date.now();return back}}throw new Error('conflict')}
-    async function load(){if(S.loading)return;S.loading=true;S.at=Date.now();try{S.list=parse(await A.get());S.at=Date.now();paint();
+    function responseEvents(list,me){var out=[];(list||[]).forEach(function(r){if(!r||r.by!==me||!r.id)return;var sum=String(r.txt||r.lab||'Request').replace(/\s+/g,' ').trim().slice(0,90);
+      (r.took||[]).forEach(function(t){if(t&&t.m&&t.m!==me)out.push({key:'a:'+r.id+':'+t.m,who:t.m,resp:'accepted',sum:sum,id:r.id})});
+      (r.dec||[]).forEach(function(m){if(m&&m!==me)out.push({key:'d:'+r.id+':'+m,who:m,resp:'declined',sum:sum,id:r.id})})});return out}
+    function clearNotes(){S.noteT=S.noteT||{};if(typeof document==='undefined')return;var h=document.getElementById('rqNotes');if(h)h.textContent='';Object.keys(S.noteT).forEach(function(k){clearTimeout(S.noteT[k])});S.noteT={}}
+    function dismissNote(key){if(S.noteT&&S.noteT[key]){clearTimeout(S.noteT[key]);delete S.noteT[key]}if(typeof document==='undefined')return;var n=document.querySelector('.rq-n[data-key="'+key.replace(/"/g,'')+'"]');if(n)n.remove()}
+    function pushNote(ev){if(typeof document==='undefined'||!document.body)return;S.noteT=S.noteT||{};var host=document.getElementById('rqNotes');
+      if(!host){host=document.createElement('div');host.id='rqNotes';host.className='rq-notes';host.setAttribute('aria-live','polite');host.setAttribute('aria-relevant','additions');document.body.appendChild(host);
+        if(!S.noteEsc){S.noteEsc=1;document.addEventListener('keydown',function(e){if(e.key!=='Escape')return;var last=document.querySelector('#rqNotes .rq-n:last-child');if(!last)return;dismissNote(last.getAttribute('data-key'))})}}
+      if(host.querySelector('.rq-n[data-key="'+ev.key.replace(/"/g,'')+'"]'))return;
+      var name=nmOf(ev.who),row=document.createElement('div');row.className='rq-n'+(ev.resp==='declined'?' dec':'');row.setAttribute('data-key',ev.key);row.setAttribute('role','status');
+      var text=document.createElement('div');text.className='rq-nt';
+      var b=document.createElement('b');b.textContent=name+' '+ev.resp;text.appendChild(b);
+      var s=document.createElement('span');s.textContent=ev.sum;text.appendChild(s);
+      var i=document.createElement('span');i.className='rq-ni';i.textContent='Request '+ev.id;text.appendChild(i);
+      var x=document.createElement('button');x.type='button';x.className='rq-nx';x.setAttribute('aria-label','Dismiss');x.textContent='\u2715';x.addEventListener('click',function(){dismissNote(ev.key)});
+      row.appendChild(text);row.appendChild(x);host.appendChild(row);
+      S.noteT[ev.key]=setTimeout(function(){dismissNote(ev.key)},5000)}
+    function observe(list){var me=A.me();if(!me){S.noteMe='';S.noteKeys=null;clearNotes();return}
+      var events=responseEvents(list,me);
+      if(S.noteMe!==me||!S.noteKeys){S.noteMe=me;S.noteKeys={};events.forEach(function(ev){S.noteKeys[ev.key]=1});clearNotes();return}
+      var fresh=events.filter(function(ev){return !S.noteKeys[ev.key]});
+      events.forEach(function(ev){S.noteKeys[ev.key]=1});fresh.forEach(pushNote)}
+    async function load(){if(S.loading)return;S.loading=true;S.at=Date.now();try{S.list=parse(await A.get());S.at=Date.now();observe(S.list);paint();
         var now=Date.now(),dead=S.list.filter(function(r){return r.status==='open'&&!live(r,now)}).map(function(r){return r.id});
         if(dead.length&&A.canWrite())await write(function(c){return c.map(function(r){return dead.indexOf(r.id)>=0&&r.status==='open'&&!live(r,now)?Object.assign({},r,{status:tk(r).length>=slots(r)?'full':'closed',endedAt:now}):r})},function(c){return c.every(function(r){return dead.indexOf(r.id)<0||r.status!=='open'})})}
       catch(x){}S.loading=false;A.render()}
@@ -320,7 +342,7 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
     if(typeof document!=='undefined'){document.addEventListener('click',function(ev){var t=ev.target.closest&&ev.target.closest('[data-rq]');if(!t)return;ev.preventDefault();act(t.dataset.rq,t.dataset.v)});
       document.addEventListener('change',function(ev){var t=ev.target;if(t&&t.dataset&&t.dataset.rqIn)input(t.dataset.rqIn,t.value)});
       document.addEventListener('input',function(ev){var t=ev.target;if(!(t&&t.dataset&&(t.dataset.rqIn==='amtTxt'||t.dataset.rqIn==='n'||t.dataset.rqIn==='oddTxt'||t.dataset.rqIn==='text')))return;S.f[t.dataset.rqIn]=t.value;if(t.dataset.rqIn==='text'||t.dataset.rqIn==='amtTxt')rqPaintExplain()})}
-    return {view:view,openN:openN,pinned:pinned,prefill:prefill,load:load,count:count,paint:paint,S:S,waText:waText,label:'\u{1F4E8} Request a bet'}};
+    return {view:view,openN:openN,pinned:pinned,prefill:prefill,load:load,count:count,paint:paint,observe:observe,S:S,waText:waText,label:'\u{1F4E8} Request a bet'}};
   /* STEP7-NAMES: Stoop label rule (both sites): roomy spots = emoji + team nickname; tight spots use the real name.
      shortName/tinyName = the bet-form chip's phone labels (same cut on both sites). */
   SHARED_UI.shortName=function(n){n=String(n);var w=n.split(/\s+/).filter(Boolean),l=w[w.length-1];if(w.length>1&&l.length>=4&&l.length<=9)return l;if(n.length<=9)return n;if(w.length>1&&w[0].length<=9)return w[0];return n.slice(0,8)+'\u2026'};
