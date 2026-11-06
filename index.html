@@ -2502,11 +2502,10 @@ function s29eMgrCopy(btn){if(typeof VIEW_ONLY!=='undefined'&&VIEW_ONLY)return;s2
 function s29ShareGo(btn){const url=s29ShUrl(),ok=()=>{if(!btn)return;btn.textContent='Copied';clearTimeout(btn._t);btn._t=setTimeout(()=>{btn.textContent=s24CanShare()?'Share':'Copy link'},1600)};
   if(s24CanShare()){navigator.share({title:'STOOPIDS',url}).catch(e=>{if(!(e&&e.name==='AbortError'))s27CopyText(url,ok)})}else s27CopyText(url,ok)}
 /*</S29B-SHARE>*/
-/*<STEP12-HSHARE>*/ // header Share: public URL only. No sender name, no view=1, no admin or token. A Stoop already recognized on their own device keeps that identity. Anyone else is view-only.
-function s12PublicUrl(){let u;try{u=new URL(location.href)}catch(e){return location.origin+location.pathname}
-  u.search='';if(!/^#[A-Za-z0-9_\/-]*$/.test(u.hash))u.hash='';return u.origin+u.pathname+(u.hash||'')}
-function s12ApplyGuest(){if(VIEW_ONLY||!D||!D.owners)return;let w='';try{w=legacyOwner(localStorage.getItem('stoopids_who')||'')}catch(e){}
-  if(w&&w!=='__guest__'&&D.owners.some(o=>o&&o.name===w))return;s12LockGuest()}
+/*<STEP12-HSHARE>*/ // header Share promises a view-only link, so it is ?view=1 only. No sender name, admin flag, or token. The ordinary page (no view=1) lets a visitor pick a manager name. That pick is not a login.
+function s12PublicUrl(){let u;try{u=new URL(location.href)}catch(e){return location.origin+location.pathname+'?view=1'}
+  u.search='';u.searchParams.set('view','1');if(!/^#[A-Za-z0-9_\/-]*$/.test(u.hash))u.hash='';return u.origin+u.pathname+u.search+(u.hash||'')}
+function s12ApplyGuest(){/* A normal visit may pick a name. Do not lock that visit. ?view=1 is locked at load and stays read-only, even if a name is already saved. */}
 function s12ShareSite(btn){const old=document.getElementById('s12menu');if(old){old.remove();return}
   const m=document.createElement('div');m.id='s12menu';m.className='s12menu';m.setAttribute('role','menu');
   m.innerHTML='<button type="button" role="menuitem" data-s12="copy">Copy link</button><button type="button" role="menuitem" data-s12="wa">WhatsApp</button>';
@@ -2713,6 +2712,7 @@ function presPick(w){
   if(!w)return;
   if(w!==PS.who){const oldKey=PS.who&&presMyKey();PS.who=w;lsSet('stoopids_who',w);if(oldKey&&oldKey!==presMyKey()&&PS.map[oldKey]&&oldKey.indexOf('g-')===0)delete PS.map[oldKey]}
   presBeat();presTick();
+  try{if(typeof render==='function')render()}catch(e){}
 }
 function presTick(){clearInterval(PS.timer);PS.timer=null;if(!document.hidden&&PS.who){PS.timer=setInterval(()=>{presBeat()},PRES.beatMs)}}
 function presInit(){
