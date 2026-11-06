@@ -4248,6 +4248,9 @@ html body .ggrid>.gm:not(.gfin) .gside a.chip{width:200px!important;min-width:20
 html body #onlStrip.onl{flex-wrap:nowrap!important;justify-content:flex-start!important;overflow-x:auto!important;max-width:100%!important}
 html body #onlStrip .onl-p,html body #onlStrip .onl-h{flex:none}
 /*</S32-GPILL3>*/
+/*<TALLY-NAV>*/ /* Desktop main nav has no Tally tab. The link stays in the page so the phone More sheet can still open it. The ledger stays inside All Bets. */
+@media (min-width:701px){html body nav#nav>a[data-tab="tally"]{display:none!important}}
+/*</TALLY-NAV>*/
 /*<S33-GGAP>*/ /* Paul: kill blank gap above Games filters on phone (empty-looking #live bar had 40px min-height) */
 @media (max-width:640px){html body #gamesTop #live{min-height:0!important;margin:0!important;padding:2px 0!important;font-size:11px!important;line-height:1.2!important;color:var(--mut,#aab)!important;background:none!important;border:0!important}html body #gamesTop #live:not(:has(#lvT:not(:empty))){display:none!important}html body #main{padding-top:4px!important}}
 /*</S33-GGAP>*/
