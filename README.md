@@ -41,4 +41,4 @@ Rosters come live from the Google Sheet; before the redraft date a copy is saved
 ESPN scoreboard/standings/odds/teams JSON (primary); ncaa.com data via https://ncaa-api.henrygd.me (fallback, scores+seeds only).
 
 ## Optional hosting
-`.github/workflows/refresh.yml` runs `refresh.py` every 15 min on GitHub Actions and commits `data.js`, `data.json`, `roster_snapshot.json` and `bets_shared_backup.json` (site: GitHub Pages).
+`.github/workflows/refresh.yml` runs `refresh.py` every 10 min on GitHub Actions (was every 15) and commits `data.js`, `data.json`, `roster_snapshot.json` and `bets_shared_backup.json` (site: GitHub Pages). That schedule runs only from the default branch, so it stays inactive until this branch is merged.

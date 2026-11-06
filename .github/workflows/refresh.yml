@@ -2,7 +2,10 @@
 name: refresh-stoopids
 on:
   schedule:
-    - cron: "*/15 * * * *"
+    # Proposed cadence (inactive until this branch is on main): every 10 min.
+    # Was */15 (~96 runs/day). */10 is ~144 runs/day, still one public ESPN read plus a commit only when data changed.
+    # Do not workflow_dispatch this from a feature branch. No new token: the repo GITHUB_TOKEN (contents: write) is enough.
+    - cron: "*/10 * * * *"
   workflow_dispatch:
 permissions:
   contents: write
