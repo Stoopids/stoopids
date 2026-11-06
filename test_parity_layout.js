@@ -10,5 +10,5 @@ assert.ok(css.includes('.gf2.gfpills'));
 assert.ok(html.includes('gf2 gfpills'));
 assert.ok(html.includes('shared/ui.css?v=1.30.0'));
 assert.ok(js.includes("MQ='(max-width:700px)'"));
-assert.equal(fs.readFileSync('shared/VERSION','utf8').trim(),'1.8.15');
+assert.equal(fs.readFileSync('shared/VERSION','utf8').trim(),'1.8.16');
 console.log('test_parity_layout: ok');

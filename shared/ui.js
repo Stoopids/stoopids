@@ -345,10 +345,10 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
   SHARED_UI.whenBox=function(o){o=o||{};var e=o.e||function(s){return String(s==null?'':s)},k=o.kind==='date'||o.kind==='season'?o.kind:'unknown';
     var btn=function(id,lab){return '<button type="button" class="b27-chip" data-when="'+id+'" aria-pressed="'+(k===id?'true':'false')+'" '+(o.pick?o.pick(id):'')+'>'+e(lab)+'</button>'};
     var q=(o.step?String(o.step)+'. ':'')+'When can this be settled?';
-    var h='<div class="b27-when"><div class="b27-q">'+e(q)+' <span class="note">for sorting only</span></div><div class="b27-when-c" role="group" aria-label="When can this be settled?">'+btn('date','Choose a date')+btn('season','End of season')+btn('unknown','Not sure yet')+'</div>';
+    var h='<div class="b27-when"><div class="b27-q"><button type="button" class="s27-tipk" data-tip="when" aria-expanded="false" onmouseenter="s27TipShow(this)" onfocus="s27TipShow(this)" onclick="s27WhenClick(this)">'+e(q)+' <span class="note">for sorting only</span></button></div><div class="b27-when-c" role="group" aria-label="When can this be settled?">'+btn('date','Choose a date')+btn('season','End of season')+btn('unknown','Not sure yet')+'</div>';
     if(k==='date')h+='<input class="sb-in b27-in" type="date" id="'+(o.inputId||'whenDate')+'" aria-label="Choose a date" value="'+e(o.est||'')+'" '+(o.dateAttr||'')+'>';
     if(k==='season'){var id=o.seasonId||'';h+='<div class="note">'+(id?e('End of '+id+'. No calendar end date is set, so this only groups the bet.'):e('End of season. No season id is on file, so this only groups the bet.'))+'</div>'}
-    return h+'<div class="note">Around then, for sorting. It does not settle the bet, pick a winner, or close a request.</div></div>'};
+    return h+'</div>'};
   SHARED_UI.entryHead=function(k){return k==='rq'
     ?'<div class="entry-hd entry-hd-rq"><h2>Request a bet</h2><p>Nothing agreed yet. Find a Stoop who wants some action and to feel something.</p></div>'
     :'<div class="entry-hd entry-hd-wiu"><h2>Write it Up</h2><p>Already agreed on a bet? Record it here and add it to All bets.</p></div>'};

@@ -961,7 +961,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.52.0"></script>
+<script src="shared/ui.js?v=1.53.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -2518,9 +2518,11 @@ function s27CopyText(t,ok){const fall=()=>{try{const ta=document.createElement('
   try{if(navigator.clipboard&&navigator.clipboard.writeText&&window.isSecureContext){navigator.clipboard.writeText(t).then(ok,fall);return}}catch(e){}fall()}
 function s27CopyBet(id,btn){const b=(U.doc&&U.doc.bets||[]).find(x=>x.id===id);if(!b)return;
   s27CopyText(/*<S29E-COPY>*/s29eCopyText(b)/*</S29E-COPY>*/,()=>{if(!btn)return;btn.textContent='Copied';btn.classList.add('on');clearTimeout(btn._t);btn._t=setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('on')},1600)})}
-const S27_TIPS={who:'Tap one or more managers. Several = one bet, one result.',text:'Write it as you say it: "Kansas -4 beats Duke".',amt:()=>'Minimum '+PULK.minAmt,/*<STEP12-TIPS>*/pterms:'Say what the pool is, e.g. “STOOPIDS season-long tournament pool”.',ppl:'You’re in automatically. Tap everyone else who’s in.',buy:()=>'Buy-in per person, minimum '+PULK.minAmt+'. The pot is buy-in × people in.',pay:'Amounts only; you pick who finished where when you settle it. They must add up to the pot. Optional: leave blank to fill in when it’s over.',/*</STEP12-TIPS>*/odds:'If you’re right, they owe amount × first ÷ second. Even = 1-1.',auto:'A clear game bet (team, spread or total, date) can be matched to an ESPN final. After the final, scores propose the result. You confirm it; nothing settles on its own.',manual:'Unclear bets: you enter the result yourself after the game.'};
+const S27_TIPS={who:'Tap one or more managers. Several = one bet, one result.',text:'Write it as you say it: "Kansas -4 beats Duke".',amt:()=>'Minimum '+PULK.minAmt,/*<STEP12-TIPS>*/pterms:'Say what the pool is, e.g. “STOOPIDS season-long tournament pool”.',ppl:'You’re in automatically. Tap everyone else who’s in.',buy:()=>'Buy-in per person, minimum '+PULK.minAmt+'. The pot is buy-in × people in.',pay:'Amounts only; you pick who finished where when you settle it. They must add up to the pot. Optional: leave blank to fill in when it’s over.',/*</STEP12-TIPS>*/odds:'If you’re right, they owe amount × first ÷ second. Even = 1-1.',auto:'A clear game bet (team, spread or total, date) can be matched to an ESPN final. After the final, scores propose the result. You confirm it; nothing settles on its own.',manual:'Unclear bets: you enter the result yourself after the game.',when:'Around then, for sorting. It does not settle the bet, pick a winner, or close a request.'};
 const s27TipK=(k,l)=>`<button type="button" class="s27-tipk k" data-tip="${k}" aria-expanded="false" onclick="s27Tip(this)">${esc(l)}</button>`;
 function s27TipClose(){document.querySelectorAll('.s27-pop').forEach(e=>e.remove());document.querySelectorAll('.s27-tipk[aria-expanded=true]').forEach(e=>e.setAttribute('aria-expanded','false'))}
+function s27TipShow(el){if(!el||el.getAttribute('aria-expanded')==='true')return;el._hoverAt=Date.now();s27Tip(el)}
+function s27WhenClick(el){if(el&&el._hoverAt&&Date.now()-el._hoverAt<500){el._hoverAt=0;return}s27Tip(el)}
 function s27Tip(el){const open=el.getAttribute('aria-expanded')==='true';s27TipClose();if(open)return;let t=S27_TIPS[el.getAttribute('data-tip')]||'';if(typeof t==='function')t=t();
   const p=document.createElement('div');p.className='s27-pop';p.setAttribute('role','tooltip');p.innerHTML=`<span>${esc(t)}</span> <a href="${esc(s24Href('howto'))}" data-s29-hnb="1" onclick="return s29HowNew(event)">How to make a New bet →</a>`;
   el.setAttribute('aria-expanded','true');el.insertAdjacentElement('afterend',p)}
