@@ -224,7 +224,9 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
       S.list.forEach(function(r){if(r&&r.status==='open'&&r.exp>now&&(soon==null||r.exp<soon))soon=r.exp});
       if(soon==null)return;var wait=Math.max(400,Math.min(soon-now+80,30000));
       S.expT=setTimeout(function(){S.expT=0;try{if(!A.watchExpiry||A.watchExpiry())A.render()}catch(e){}armExpiry()},wait)}
-    function pinned(only,mark){var now=Date.now(),L=S.list.filter(function(r){return live(r,now)}).sort(function(a,b){return a.exp-b.exp});
+    function sees(r){var me=A.me();if(!me||!r)return false;if(r.by===me)return true;if(!r.to||r.to.indexOf(me)<0)return false;if((r.dec||[]).indexOf(me)>=0)return false;if(tk(r).indexOf(me)>=0)return false;return true}
+    function shown(r,now){return live(r,now)&&sees(r)}
+    function pinned(only,mark){var now=Date.now(),L=S.list.filter(function(r){return shown(r,now)}).sort(function(a,b){return a.exp-b.exp});
       if(mark){markOpenSeen();try{paint()}catch(e){}}
       armExpiry();
       if(!L.length)return only?'<div class="card note rq-none">No open requests right now.</div>':'';
@@ -232,12 +234,12 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
     /* STEP10: view('open') = the Open tab (open request cards only); view() = the Request tab (form only) */
     function seenKey(){return 'rq_open_seen:'+String(A.seenScope?A.seenScope():(A.me()||'guest'))}
     function seenIds(){try{var ls=typeof localStorage!=='undefined'?localStorage:null;if(!ls)return [];var a=JSON.parse(ls.getItem(seenKey())||'[]');return Array.isArray(a)?a:[]}catch(e){return []}}
-    function markOpenSeen(){var now=Date.now(),ids=S.list.filter(function(r){return live(r,now)}).map(function(r){return r.id});
+    function markOpenSeen(){var now=Date.now(),ids=S.list.filter(function(r){return shown(r,now)}).map(function(r){return r.id});
       try{if(typeof localStorage!=='undefined')localStorage.setItem(seenKey(),JSON.stringify(ids.slice(-300)))}catch(e){}}
     function view(mode){var now=Date.now();if(!S.at||now-S.at>20000)setTimeout(load,0);
       if(mode==='open'||mode==='all'){markOpenSeen();try{paint()}catch(e){}}
       armExpiry();
-      var L=S.list.filter(function(r){return live(r,now)}).sort(function(a,b){return a.exp-b.exp}),me=A.me();
+      var L=S.list.filter(function(r){return shown(r,now)}).sort(function(a,b){return a.exp-b.exp}),me=A.me();
       var h='';if(S.msg&&!S.f.gid)h+='<div class="card '+(S.bad?'b27-bad':'b27-ok')+'" role="status">'+e(S.msg)+(S.fb?'<pre class="rq-fb">'+e(S.fb)+'</pre><div class="rq-act"><button type="button" class="btn" data-rq="wa">Copy</button></div>':'')+'</div>';
       if(mode==='open')return h+(L.length?'<h2 class="rq-h">Open requests</h2><div class="rq-grid">'+L.map(function(r){return card(r,now)}).join('')+'</div>':'<div class="card note rq-none">No open requests right now.</div>');
       return h+(me&&A.canWrite()?form():'<div class="card note rq-none">Pick who you are to request a bet.</div>')}
@@ -270,7 +272,7 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
             var xe=S.list.find(function(y){return y.id===ed});if(!xe||xe.ver!==r.ver)throw new Error('late');S.edit=null}
           else await write(function(c){return c.filter(function(x){return x.status==='open'||now-(x.endedAt||x.at)<7*86400000}).concat([r])},function(c){return c.some(function(x){return x.id===r.id})});S.f=nf();S.posted=true;S.msg=toast(S.copied);S.bad=false}
         catch(x){S.msg=x&&x.message==='late'?'Too late to edit: it was accepted or removed.':'Could not send it. Try again.';S.bad=true;if(x&&x.message==='late'){S.edit=null;S.f=nf()}}S.busy=false}
-      else if(k==='dec'||k==='cancel'){if(k==='cancel'&&!(typeof window!=='undefined'&&window.confirm&&window.confirm('Delete this request?')))return;/* STEP12-DELCONFIRM */if(k==='cancel'){var rd=S.list.find(function(x){return x.id===v});if(rd)say(waText(rd,'del'),'Request deleted')}S.busy=true;A.render();try{await write(function(c){return c.map(function(x){return x.id!==v?x:k==='dec'?Object.assign({},x,{dec:(x.dec||[]).concat([me])}):(tk(x).length?x:Object.assign({},x,{status:'deleted',endedAt:now}))})},function(c){var x=c.find(function(y){return y.id===v});return !x||(k==='dec'?(x.dec||[]).indexOf(me)>=0:x.status!=='open'||!!tk(x).length)});var xd=S.list.find(function(y){return y.id===v});if(k==='dec'){S.msg='Declined.'}else if(xd&&tk(xd).length){S.posted=false;S.fb='';S.msg='Too late to delete: someone accepted. Use Close to others instead (ignore the copied message).';S.bad=true;S.busy=false;A.render();return}else{S.posted=true;S.msg=toast(S.copied)}S.bad=false}catch(x){S.msg='Could not save that. Try again.';S.bad=true}S.busy=false}
+      else if(k==='dec'||k==='cancel'){var gate=S.list.find(function(x){return x.id===v});if(!gate||(k==='dec'?(!sees(gate)||gate.by===me):gate.by!==me))return;if(k==='cancel'&&!(typeof window!=='undefined'&&window.confirm&&window.confirm('Delete this request?')))return;/* STEP12-DELCONFIRM */if(k==='cancel'){var rd=S.list.find(function(x){return x.id===v});if(rd)say(waText(rd,'del'),'Request deleted')}S.busy=true;A.render();try{await write(function(c){return c.map(function(x){return x.id!==v?x:k==='dec'?Object.assign({},x,{dec:(x.dec||[]).concat([me])}):(tk(x).length?x:Object.assign({},x,{status:'deleted',endedAt:now}))})},function(c){var x=c.find(function(y){return y.id===v});return !x||(k==='dec'?(x.dec||[]).indexOf(me)>=0:x.status!=='open'||!!tk(x).length)});var xd=S.list.find(function(y){return y.id===v});if(k==='dec'){S.msg='Declined.'}else if(xd&&tk(xd).length){S.posted=false;S.fb='';S.msg='Too late to delete: someone accepted. Use Close to others instead (ignore the copied message).';S.bad=true;S.busy=false;A.render();return}else{S.posted=true;S.msg=toast(S.copied)}S.bad=false}catch(x){S.msg='Could not save that. Try again.';S.bad=true}S.busy=false}
       else if(k==='acc'){S.busy=true;S.msg='Accepting…';S.bad=false;A.render();
         try{var ok=function(x){return x.id===v&&live(x,Date.now())&&x.to.indexOf(me)>=0&&tk(x).indexOf(me)<0&&x.by!==me};
           var back=await write(function(c){return c.map(function(x){return ok(x)?Object.assign({},x,{took:(x.took||[]).concat([{m:me,at:Date.now()}])}):x})},function(c){var x=c.find(function(y){return y.id===v});return !x||tk(x).indexOf(me)>=0||!live(x,Date.now())});
@@ -288,7 +290,7 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
     /* STEP9-BADGES: Bets tab = requests waiting for me + bets waiting on my action (A.waiting); Request a bet segment = requests only */
     function nb(el,n,lab){if(!el)return;var b=el.querySelector('.rq-nb');if(!n){if(b)b.remove();return}if(!b){b=document.createElement('b');b.className='rq-nb';el.appendChild(b)}var s=String(Math.min(99,n));if(b.textContent!==s)b.textContent=s;b.setAttribute('aria-label',lab)}
     /* Unread badge sits on the All bets sub-tab. Viewing All bets marks the current live requests seen; they can stay open. A new id counts again. Not on the main Bets tab. */
-    function openN(){var seen={},now=Date.now();seenIds().forEach(function(id){seen[id]=1});return S.list.filter(function(r){return live(r,now)&&!seen[r.id]}).length}
+    function openN(){var seen={},now=Date.now();seenIds().forEach(function(id){seen[id]=1});return S.list.filter(function(r){return shown(r,now)&&!seen[r.id]}).length}
     function paint(){try{var on=openN();
       document.querySelectorAll('#b27Ob_open,[data-ob="open"],#b27Ob_all,[data-ob="all"]').forEach(function(el){
         if(el.getAttribute('data-ob')==='open'||el.id==='b27Ob_open'){var old=el.querySelector('.rq-nb');if(old)old.remove();return}
@@ -350,7 +352,7 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
     if(k==='season'){var id=o.seasonId||'';h+='<div class="note">'+(id?e('End of '+id+'. No calendar end date is set, so this only groups the bet.'):e('End of season. No season id is on file, so this only groups the bet.'))+'</div>'}
     return h+'</div>'};
   SHARED_UI.entryHead=function(k){return k==='rq'
-    ?'<div class="entry-hd entry-hd-rq"><h2>Request a bet</h2><p>Nothing agreed yet. Find a Stoop who wants some action and to feel something.</p></div>'
+    ?'<div class="entry-hd entry-hd-rq"><h2>Request a bet</h2><p>Nothing agreed yet—find a Stoop who wants to feel something.</p></div>'
     :'<div class="entry-hd entry-hd-wiu"><h2>Write it Up</h2><p>Already agreed on a bet? Record it here and add it to All bets.</p></div>'};
   SHARED_UI.weeklySection=function(items,o){var e=o.e;var L=(items||[]).filter(function(x){return x&&x.title}).slice().sort(function(a,b){return String(b.date||'').localeCompare(String(a.date||''))});
     var list=L.length?'<div class="rcl">'+L.map(function(x){return '<article class="card rci"><small>'+e(x.kind==='special'?'Special':'Weekly')+(x.date?' · '+e(o.fmtDate(String(x.date).slice(0,10))):'')+'</small><h3>'+e(x.title)+'</h3><p>'+e(x.body||'')+'</p></article>'}).join('')+'</div>':'<div class="card note rcnone"'+(o.emptyAttr||'')+'>No weekly write-ups yet. The first one comes after opening week.</div>';

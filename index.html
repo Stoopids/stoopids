@@ -935,7 +935,7 @@ main,#main{padding-top:6px!important}
 /* SYNC7..SYNC14 moved to shared/ui.css (linked right after this style block) */
 
 </style>
-<link rel="stylesheet" href="shared/ui.css?v=1.30.0">
+<link rel="stylesheet" href="shared/ui.css?v=1.31.0">
 <style>/*<SORT-FIT> phone All teams table fits with no sideways scroll; Stoop header reads STOOP */@media (max-width:480px){html body .card.tap.s27-rk th,html body .card.tap.s27-rk td{padding:6px 1px!important}html body .card.tap.s27-rk td:first-child .chip{max-width:none!important;font-size:11px!important;padding-right:6px!important}html body .card.tap.s27-rk td:first-child .chip img{width:16px!important;height:16px!important}html body .card.tap.s27-rk th.to{max-width:none!important;overflow:visible!important;text-overflow:clip!important}html body .card.tap.s27-rk td.to{max-width:5ch}html body .card.tap.s27-rk th{font-size:10px!important}html body .card.tap.s27-rk{padding-left:3px!important;padding-right:3px!important}html body .card.tap.s27-rk td.n{font-size:11.5px!important}html body .card.tap.s27-rk td.to{font-size:11.5px}html body .card.tap.s27-rk .s27-sort i{font-size:.7em!important;margin-left:0!important}}/*</SORT-FIT>*/</style>
 </head>
 <body>
@@ -961,7 +961,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.53.0"></script>
+<script src="shared/ui.js?v=1.54.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -1699,10 +1699,8 @@ let qbG=null,qbAmt=5,qbMe=null,qbMsg='';
 const qbOwn=s=>s&&s.owners&&s.owners.length?s.owners[0]:null;
 const qbDate=g=>etLabel(etKey(g)).replace(/,/g,'').replace(/\s+\d{4}$/,'');   // "Mon Nov 2": the ET game date on purpose (the auto-settle reader and ESPN match ET dates); display headers are local
 const qbNm=s=>String(s.short||s.name||s.id);
-function qbOk(g){
-  if(DEMO||!g||typeof VIEWS==='undefined'||!VIEWS.bets27||g.status==='final'||g.status==='live'||!g.home||!g.away)return false;
-  const a=g.away.owners||[],h=g.home.owners||[],ow=b27OwnerNames();
-  return a.length>0&&h.length>0&&!a.some(n=>h.includes(n))&&ow.includes(a[0])&&ow.includes(h[0])}
+function qbStarted(g){if(!g||g.status!=='scheduled'||!g.home||!g.away)return true;if(isTBD(g))return false;const t=Date.parse(g.start||'');return isFinite(t)&&t<=Date.now()}
+function qbOk(g){if(DEMO||!g||typeof VIEWS==='undefined'||!VIEWS.bets27)return false;return !qbStarted(g)}
 function qbOpts(g){
   const A=g.away,H=g.home,ln=g.line||{},d=qbDate(g),o=[];
   const fav=String(ln.fav)===String(A.id)?A:String(ln.fav)===String(H.id)?H:null,sp=ln.sp;
@@ -2518,32 +2516,32 @@ function s27CopyText(t,ok){const fall=()=>{try{const ta=document.createElement('
   try{if(navigator.clipboard&&navigator.clipboard.writeText&&window.isSecureContext){navigator.clipboard.writeText(t).then(ok,fall);return}}catch(e){}fall()}
 function s27CopyBet(id,btn){const b=(U.doc&&U.doc.bets||[]).find(x=>x.id===id);if(!b)return;
   s27CopyText(/*<S29E-COPY>*/s29eCopyText(b)/*</S29E-COPY>*/,()=>{if(!btn)return;btn.textContent='Copied';btn.classList.add('on');clearTimeout(btn._t);btn._t=setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('on')},1600)})}
-const S27_TIPS={who:'Tap one or more managers. Several = one bet, one result.',text:'Write it as you say it: "Kansas -4 beats Duke".',amt:()=>'Minimum '+PULK.minAmt,/*<STEP12-TIPS>*/pterms:'Say what the pool is, e.g. “STOOPIDS season-long tournament pool”.',ppl:'You’re in automatically. Tap everyone else who’s in.',buy:()=>'Buy-in per person, minimum '+PULK.minAmt+'. The pot is buy-in × people in.',pay:'Amounts only; you pick who finished where when you settle it. They must add up to the pot. Optional: leave blank to fill in when it’s over.',/*</STEP12-TIPS>*/odds:'If you’re right, they owe amount × first ÷ second. Even = 1-1.',auto:'A clear game bet (team, spread or total, date) can be matched to an ESPN final. After the final, scores propose the result. You confirm it; nothing settles on its own.',manual:'Unclear bets: you enter the result yourself after the game.',when:'Around then, for sorting. It does not settle the bet, pick a winner, or close a request.'};
+const S27_TIPS={who:'Tap one or more managers. Several = one bet, one result.',text:'Write it as you say it: "Kansas -4 beats Duke".',amt:()=>'Minimum '+PULK.minAmt,/*<STEP12-TIPS>*/pterms:'Say what the pool is, e.g. “STOOPIDS season-long tournament pool”.',ppl:'You’re in automatically. Tap everyone else who’s in.',buy:()=>'Buy-in per person, minimum '+PULK.minAmt+'. The pot is buy-in × people in.',pay:'Amounts only; you pick who finished where when you settle it. They must add up to the pot. Optional: leave blank to fill in when it’s over.',/*</STEP12-TIPS>*/odds:'If you’re right, they owe amount × first ÷ second. Even = 1-1.',auto:'A clear game bet (team, spread or total, date) can be matched to an ESPN final. After the final, scores propose the result. You confirm it; nothing settles on its own.',manual:'Unclear bets: you enter the result yourself after the game.',when:'Sorting only. It does not settle the bet, pick a winner, or close a request.'};
 const s27TipK=(k,l)=>`<button type="button" class="s27-tipk k" data-tip="${k}" aria-expanded="false" onclick="s27Tip(this)">${esc(l)}</button>`;
 function s27TipClose(){document.querySelectorAll('.s27-pop').forEach(e=>e.remove());document.querySelectorAll('.s27-tipk[aria-expanded=true]').forEach(e=>e.setAttribute('aria-expanded','false'))}
 function s27TipShow(el){if(!el||el.getAttribute('aria-expanded')==='true')return;el._hoverAt=Date.now();s27Tip(el)}
 function s27WhenClick(el){if(el&&el._hoverAt&&Date.now()-el._hoverAt<500){el._hoverAt=0;return}s27Tip(el)}
 function s27Tip(el){const open=el.getAttribute('aria-expanded')==='true';s27TipClose();if(open)return;let t=S27_TIPS[el.getAttribute('data-tip')]||'';if(typeof t==='function')t=t();
-  const p=document.createElement('div');p.className='s27-pop';p.setAttribute('role','tooltip');p.innerHTML=`<span>${esc(t)}</span> <a href="${esc(s24Href('howto'))}" data-s29-hnb="1" onclick="return s29HowNew(event)">How to make a New bet →</a>`;
+  const p=document.createElement('div');p.className='s27-pop';p.setAttribute('role','tooltip');p.innerHTML=`<span>${esc(t)}</span> <a href="${esc(s24Href('howto'))}" data-s29-hnb="1" onclick="return s29HowNew(event)">How to make a bet →</a>`;
   el.setAttribute('aria-expanded','true');el.insertAdjacentElement('afterend',p)}
 document.addEventListener('click',e=>{if(!e.target.closest||e.target.closest('.s27-tipk,.s27-pop'))return;s27TipClose()},true);
 document.addEventListener('keydown',e=>{if(e.key==='Escape')s27TipClose()});
 function vHowTo(){const m=PULK.minAmt;
   return `<div class="s27-how"><a class="s27-howl" href="${esc(s24Href('bets27'))}" onclick="return s24NavClick(event,'bets27')">← Back to Bets</a>
   <h2>📘 How to bet</h2>
-  <section id="howto-newbet" class="s29-hnb"><h3>New bet</h3><div class="card"><b>1. Who you’re betting against</b><p>Tap one or more managers. Several managers = one bet with one result: each of them is on the other side at the same amount. <b>Select all</b> picks everyone, <b>Clear</b> starts over.</p></div>
-  <div class="card"><b>2. What’s the bet</b><p>Write what you say will happen, in plain words: “Kansas -4 beats Duke”, “Duke -5.5 vs UNC”, “Over 150.5 Kansas vs Duke”. You’re the one saying it; they take the other side.</p></div>
-  <div class="card"><b>Auto-settle</b><p>A clear game bet (team, spread or total, date) can be matched to an ESPN final. After the final, scores propose the result and you confirm it: nothing settles on its own. Unclear bets you settle by hand.</p></div>
-  <div class="card"><b>3. Amount</b><p>Minimum ${m}. Tap a preset or <b>Custom</b> for a whole number from ${m} to ${PULK.maxAmt}.</p></div>
-  <div class="card"><b>4. Odds</b><p>Even = 1-1. With odds like 3-1, if you’re right they owe amount × 3 ÷ 1; if you’re wrong you owe the amount. Tap <b>Custom…</b> for odds like 7-2.</p></div>
-  <div class="card"><b>Place it</b><p>Tap <b>Place bet</b>, check the summary, then <b>Yes, place it</b>. Until someone settles it you can edit or cancel your own bet.</p></div></section>
-  <div class="card"><b>Settling</b><p>Either side of an open bet can mark who won, or a Wash (nobody owes anything); tap twice to confirm. To fix a settled result, both sides have to agree. Totals are on <b>Tally</b>.</p></div>
-  <section id="howto-pool" class="s29-hnb"><h3>Pools</h3><div class="card"><b>Pool / buy-in</b><p>Pick <b>Pool</b> (phone) or <b>Pool / buy-in</b> at the top of the New bet form for a buy-in pool.</p></div>
+  <section id="howto-newbet" class="s29-hnb"><h3>How to make a bet</h3>
+  <div class="card"><b>Where to start</b><p>On a wide screen, <b>Write it Up or Request</b> shows both forms side by side. On a phone there are three tabs: <b>Write it Up</b>, <b>Request</b>, and <b>All Bets</b>. One form shows at a time. Quick bet on an upcoming game opens <b>Request</b> with that side filled in. Nothing is posted until you submit.</p></div>
+  <div class="card"><b>Write it Up</b><p>Use this when the bet is already agreed. It goes straight onto <b>All Bets</b>. Pick who you’re against, write the bet, choose the amount and the odds, then <b>5. When can this be settled?</b> That date, <b>End of season</b>, or <b>Not sure yet</b> is for sorting only. Tap <b>Place bet</b>, check it, then <b>Yes, place it</b>.</p></div>
+  <div class="card"><b>Request a bet</b><p>Use this when nothing is agreed yet. Pick who it is open to. Leave them unpicked, or choose <b>All</b>, and it is open to the other Stoops. A shorter list is only those invitees. Set how many can accept, and when the invitation expires. Expiry is not the settlement estimate. Then <b>7. When can this be settled?</b>, same three sorting choices. Tap <b>Request bet</b>. It stays under <b>Open requests</b> at the top of <b>All Bets</b> until someone accepts, it expires, or you delete or close it.</p></div>
+  <div class="card"><b>Who sees an open request</b><p>The page shows an open request to the Stoop who sent it, and to invitees who can still take it. Other Stoops do not get that card or a request badge. A guest does not see those cards. Accept still only works for an invitee. This is how the page filters the list. The request record itself is still read as one shared list, so the page is not a private lock.</p></div>
+  <div class="card"><b>After it is agreed</b><p>An accepted request becomes a bet on <b>All Bets</b>, same as Write it Up. The description, people, amount, and odds stay as written. <b>Edit</b> on an open bet only changes the sorting note. The person who posted it enters who won, or <b>Wash</b>, and confirms. If the words match a finished game, the score can propose a result; nothing changes until they tap <b>Confirm</b>. They can correct a settled result. <b>Waiting on me</b> in the All Bets filter is for those result actions.</p></div></section>
+  <div class="card"><b>Settling</b><p>The person who posted the bet enters who won, or a Wash. A proposed score waits for their Confirm. They can correct a settled result. Totals stay in <b>Tally</b> at the bottom of <b>All Bets</b>.</p></div>
+  <section id="howto-pool" class="s29-hnb"><h3>Pools</h3><div class="card"><b>Pool / buy-in</b><p>Pick <b>Pool</b> (phone) or <b>Pool / buy-in</b> at the top of Write it Up for a buy-in pool.</p></div>
   <div class="card"><b>1. What’s the pool?</b><p>Say what the pool is, e.g. “STOOPIDS season-long tournament pool”.</p></div>
   <div class="card"><b>2. Who’s in?</b><p>You’re in automatically. Tap everyone else who’s in (<b>Select all</b> / <b>Clear</b> work here too).</p></div>
   <div class="card"><b>3. Buy-in per person</b><p>A whole number, minimum ${m}. The pot is buy-in × people in.</p></div>
   <div class="card"><b>4. Payouts by place</b><p>Amounts only; you pick who finished where when you settle it. They must add up to the pot. Optional: leave blank to fill in when it’s over.</p></div></section>
-  <div class="card"><b>Request and Open</b><p><b>Request</b> asks one or more managers to take a bet you write; everyone sees live requests on <b>Open</b> (the red number is how many are open).</p></div>
+  <div class="card"><b>Request and Open</b><p>Open requests sit at the top of <b>All Bets</b>. The badge counts unseen requests for this account only.</p></div>
   <div class="card"><b>Copy</b><p>Each bet’s <b>Copy</b> button copies just that bet’s text.</p></div></div>`}
 VIEWS.howto=vHowTo;
 /*<S29D-NEWBETS>*/ // yellow 'new bets' count on the Bets tab: ledger bets (from the existing GET/poll, U.doc) created after this device's last look (localStorage stoopids_bets_seen), not placed by this device's stoopids_who. First load ever: seen = now (no history flood). Opening Bets: seen = now. localStorage only (works in ?view=1, writes nothing remote, never touches stoopids_who).
@@ -3591,7 +3589,7 @@ let OB_VIEW='form';   // Bets tab: 'form' = 2026-27 (New bet form + bet list), '
 function obView(v){tab='bets27';
   if(v==='open'){OB_VIEW='all';render();setTimeout(()=>{const el=document.getElementById('rqPinned');if(el)el.scrollIntoView({block:'start'})},40);return}
   if(v==='tally'){OB_VIEW='all';render();setTimeout(()=>{const el=document.getElementById('b27Tally');if(el){el.open=true;el.scrollIntoView({block:'start'})}},40);return}
-  OB_VIEW=(v==='request'||v==='form')?'form':v==='all'?'all':'form';
+  OB_VIEW=v==='request'?'request':v==='all'?'all':'form';
   if(v==='request'){render();setTimeout(()=>{const el=document.getElementById('rqForm');if(el)el.scrollIntoView({block:'start'})},40);return}
   render();window.scrollTo(0,0)}
 const TALLY_NM={mark:'DIRTY DRAYMOND',jake:'STOCK RISING',kurt:'KURMOJI',ken:'KENTUT',neal:'COCKCHALKROCK',paul:'PARTY PAUL',jim:'NASTY PEACOCK',scott:'EN FUEGO'};   // Tally display = team nickname in caps (ids unchanged); neal = Neal Murf (archive). matthew has no nickname: shown as MATTHEW
@@ -3614,8 +3612,9 @@ function vTally(){/* STEP11: Tally = 2026-27 Bets ledger (b27Tally / U.doc), not
 /*</BETS-TALLY>*/
 function obToggle(){
   /*<BETS-TALLY>*/if(!SHOW_OLD_BETS||tab==='bets27'){const entry=OB_VIEW==='form'||OB_VIEW==='request',all=OB_VIEW==='all'||OB_VIEW==='open'||OB_VIEW==='tally';
-    const sg=(k,on,t)=>`<button type="button" class="${on?'on':''}" aria-pressed="${on}" data-ob="${k}" id="b27Ob_${k}" onclick="obView('${k}')">${t}</button>`;
-    return `<div class="tabs ob-seg" role="group" aria-label="Bets">${sg('form',entry,OB_LABELS.form)}${sg('all',all,OB_LABELS.all)}${SHOW_OLD_BETS?`<button type="button" data-ob="bets" onclick="obGo('bets')">2025-26 (old)</button>`:''}</div>`}/*</BETS-TALLY>*/
+    const sg=(k,on,t,id)=>`<button type="button" class="${on?'on':''}" aria-pressed="${on}" data-ob="${k}"${id?` id="${id}"`:''} onclick="obView('${k}')">${t}</button>`;
+    const old=SHOW_OLD_BETS?`<button type="button" data-ob="bets" onclick="obGo('bets')">2025-26 (old)</button>`:'';
+    return `<div class="tabs ob-seg ob-desk" role="group" aria-label="Bets">${sg('form',entry,'Write it Up or Request','b27Ob_form')}${sg('all',all,'All Bets','b27Ob_all')}${old}</div><div class="tabs ob-seg ob-phone" role="group" aria-label="Bets">${sg('form',OB_VIEW==='form','Write it Up')}${sg('request',OB_VIEW==='request','Request')}${sg('all',all,'All Bets')}${old}</div>`}/*</BETS-TALLY>*/
   const seg=(k,t,bd)=>`<button type="button" class="${tab===k?'on':''}" aria-pressed="${tab===k}" data-ob="${k}"${tab!==k&&bd?' aria-label="'+t+', new bets"':''} onclick="obGo('${k}')">${t}${tab===k?'':bd}</button>`;
   return `<div class="tabs ob-seg" role="group" aria-label="Bets season">${seg('bets27','2026-27',b27Badge())}${seg('bets','2025-26 (old)',nbBadge('bets'))}</div>`;
 }

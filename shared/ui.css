@@ -436,7 +436,7 @@ html body .entry-pair{display:block;width:100%;max-width:100%;min-width:0}
 html body .entry-col{min-width:0;max-width:100%}
 html body .entry-hd{margin:-8px -8px 10px;padding:10px 12px;border-radius:10px 10px 0 0}
 html body .entry-hd h2{margin:0!important;font-size:18px;line-height:1.2}
-html body .entry-hd p{margin:4px 0 0;font-size:13.5px;line-height:1.35}
+html body .entry-hd p{margin:4px 0 0;font-size:13.5px;line-height:1.35;white-space:normal;overflow-wrap:break-word;max-width:100%}
 html body .b27-due{margin-top:4px;font-size:12.5px;font-weight:700}
 html body .b27-due[data-due="over"]{color:#fca5a5}
 html body .b27-due[data-due="today"]{color:#fde68a}
@@ -456,12 +456,14 @@ html body .b27-ao .b27-amt,html body .b27-ao .b27-chip{width:auto!important;min-
  html body .entry-pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:start}
  html body .entry-pair .entry-col.is-on>.card{box-shadow:0 0 0 2px rgba(255,255,255,.28)}
 }
+html body .tabs.ob-seg.ob-phone{display:none!important}
 @media (max-width:999px){
- html body .entry-pair{display:flex;flex-direction:column;gap:12px}
- html body .entry-pair .entry-col{display:block}
+ html body .tabs.ob-seg.ob-desk{display:none!important}
+ html body .tabs.ob-seg.ob-phone{display:grid!important}
+ html body .entry-pair{display:block}
+ html body .entry-pair .entry-col{display:none!important}
+ html body .entry-pair[data-focus="form"] .entry-wiu,html body .entry-pair[data-focus="request"] .entry-rq{display:block!important}
 }
-html.viewonly .entry-pair{display:block!important}
-html.viewonly .entry-pair .entry-col{display:block!important}
 /* Request (and the same opponent grid): 4 equal cells, so 7 invitees are 4 then 3. */
 html body .b27-opps,html body .rq-to{grid-template-columns:repeat(4,minmax(0,1fr))!important}
 /*</PARITY-LAYOUT>*/
