@@ -508,6 +508,9 @@ html body .ggrid>.gm:not(.gfin)>.gh,html body .ggrid>.gm:not(.gfin)>.gl,html bod
 html body .ggrid>.gm:not(.gfin)>.gside,html body .ggrid .gbody>.gside{grid-column:1;padding:0!important;margin:0!important}
 html body .ggrid>.gm:not(.gfin)>.gow,html body .ggrid .gbody>.gow{grid-column:2;display:flex!important;align-items:center;height:40px!important;min-height:0!important;max-height:40px!important;margin:0!important;padding:0!important;align-self:center;white-space:nowrap;overflow:hidden}
 html body .ggrid>.gm:not(.gfin)>.gow[aria-hidden="true"],html body .ggrid .gbody>.gow[aria-hidden="true"]{visibility:hidden!important}
+html body .ggrid>.gm:not(.gfin)>.gh,html body .ggrid .gbody>.gh{display:flex!important;flex-wrap:wrap!important;align-items:center!important;justify-content:flex-start!important;min-height:0!important;padding-right:0!important;margin-bottom:2px!important}
+html body .ggrid>.gm:not(.gfin)>.gh .gbtns,html body .ggrid>.gm:not(.gfin)>.gh .mkbtns,html body .ggrid .gbody>.gh .gbtns,html body .ggrid .gbody>.gh .mkbtns{position:static!important;top:auto!important;right:auto!important;flex-direction:row!important;margin:0 0 0 auto!important;z-index:auto!important}
+html body .ggrid>.gm:not(.gfin)>.gh+.gside,html body .ggrid>.gm:not(.gfin)>.gside{margin-right:0!important}
 html body #main .gfone .rkseg-b,html body #lbody .gfone .rkseg-b{width:auto!important;height:28px!important;min-height:28px!important;font-size:12px!important;padding:0 10px!important}
 /* All teams: content-sized table. Team badges share one width and height, set from the longest name (--at-badge). Games chips are not these. */
 html body #main .card.tap.s27-rk,html body #lbody .card.tap.s27-rk,html body .lgref .card.tap.s27-rk{width:fit-content!important;max-width:100%!important;margin-left:auto!important;margin-right:auto!important;overflow-x:auto!important;overflow-y:hidden!important;box-sizing:border-box!important}
