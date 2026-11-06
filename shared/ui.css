@@ -539,6 +539,11 @@ html body #main .gfone .gref,html body #lbody .gfone .gref{margin-left:auto!impo
 html body .gm .gh{flex-wrap:nowrap!important;min-height:0!important}
 html body .gm .gh .gbtns{position:static!important;flex-direction:row!important;margin-left:auto!important}
 html body .gm .gbtns>button{width:auto!important;height:26px!important;min-height:26px!important;padding:0 7px!important;font-size:11px!important}
+/* Games search pills: intrinsic width, side by side, wrapping into one or two tight rows. Not a stack of full-width bars. */
+html body #main .gfone>.gf3,html body #lbody .gfone>.gf3{display:block!important;width:100%!important;max-width:100%!important;overflow:visible!important;margin:0!important}
+html body #main .gfone .gf2.gfpills,html body #main .gfone .gf2.gfwhen,html body #lbody .gfone .gf2.gfpills,html body #lbody .gfone .gf2.gfwhen{display:flex!important;flex-flow:row wrap!important;align-items:center!important;justify-content:flex-start!important;align-content:flex-start!important;gap:6px!important;width:100%!important;max-width:100%!important;margin:0!important;padding:0!important}
+html body #main .gfone .gfpills>.gf2-s,html body #main .gfone .gfpills>.gf2-b,html body #main .gfone .gfwhen>.gf2-s,html body #main .gfone .gfwhen>.gf2-b,html body #lbody .gfone .gfpills>.gf2-s,html body #lbody .gfone .gfpills>.gf2-b,html body #lbody .gfone .gfwhen>.gf2-s,html body #lbody .gfone .gfwhen>.gf2-b{width:auto!important;max-width:100%!important;min-width:0!important;flex:0 1 auto!important;height:28px!important;min-height:28px!important;padding:0 10px!important;font-size:12px!important}
+html body #main .gf3>.gf2.gfpills>input.gf2-s,html body #lbody .gf3>.gf2.gfpills>input.gf2-s{width:16ch!important;max-width:46%!important}
 @media (max-width:999px){
  html body .entry-pair>.entry-col{position:absolute!important;width:0!important;max-width:0!important;overflow:hidden!important}
  html body .entry-pair[data-focus="form"]>.entry-wiu,html body .entry-pair[data-focus="request"]>.entry-rq{position:static!important;width:100%!important;max-width:100%!important}
