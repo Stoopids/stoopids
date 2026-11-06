@@ -935,7 +935,7 @@ main,#main{padding-top:6px!important}
 /* SYNC7..SYNC14 moved to shared/ui.css (linked right after this style block) */
 
 </style>
-<link rel="stylesheet" href="shared/ui.css?v=1.27.0">
+<link rel="stylesheet" href="shared/ui.css?v=1.30.0">
 <style>/*<SORT-FIT> phone All teams table fits with no sideways scroll; Stoop header reads STOOP */@media (max-width:480px){html body .card.tap.s27-rk th,html body .card.tap.s27-rk td{padding:6px 1px!important}html body .card.tap.s27-rk td:first-child .chip{max-width:none!important;font-size:11px!important;padding-right:6px!important}html body .card.tap.s27-rk td:first-child .chip img{width:16px!important;height:16px!important}html body .card.tap.s27-rk th.to{max-width:none!important;overflow:visible!important;text-overflow:clip!important}html body .card.tap.s27-rk td.to{max-width:5ch}html body .card.tap.s27-rk th{font-size:10px!important}html body .card.tap.s27-rk{padding-left:3px!important;padding-right:3px!important}html body .card.tap.s27-rk td.n{font-size:11.5px!important}html body .card.tap.s27-rk td.to{font-size:11.5px}html body .card.tap.s27-rk .s27-sort i{font-size:.7em!important;margin-left:0!important}}/*</SORT-FIT>*/</style>
 </head>
 <body>
@@ -961,7 +961,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.45.0"></script>
+<script src="shared/ui.js?v=1.50.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -2986,7 +2986,7 @@ function chatInit(){
    Remove everything between the BETS-2627 markers (CSS, JS, load hook) to drop the tab. */
 const BETS_DISCLAIMER="Bets here are just for fun and are settled in pullups, not money. Betting is Stoopid, and we don't endorse or facilitate gambling for money.";   // the ONLY place the unit word appears in the tab; rendered once above the form
 const PULK={url:'https://textdb.dev/api/data/stoopids-bets-2627-9eaa4f66',amounts:[5,10,20,25,50],minAmt:5,maxAmt:1000,oddsChips:[[1,1],[2,1],[3,1],[4,1],[5,1]],maxOdds:100,maxText:140,maxBets:300,undoMs:30000,seenKey:'stoopids_bets2627_seen',pollMs:45000,pollOpenMs:15000};
-const U={state:'init',doc:{bets:[]},known:null,maxN:0,mine:new Set(),opps:[],amt:null,amtCustom:false,amtTxt:'',amtErr:'',odds:[1,1],custom:false,customTxt:'',oddsErr:'',text:'',confirm:false,busy:false,msg:'',msgBad:false,fids:{},gid:null,askSettle:null,fails:0,timer:null,started:false,undoT:null};
+const U={state:'init',doc:{bets:[]},known:null,maxN:0,mine:new Set(),opps:[],amt:null,amtCustom:false,amtTxt:'',amtErr:'',odds:[1,1],custom:false,customTxt:'',oddsErr:'',text:'',confirm:false,busy:false,msg:'',msgBad:false,fids:{},gid:null,askSettle:null,fails:0,timer:null,started:false,undoT:null,est:'',wk:'unknown'};
 /*<POOL>*/Object.assign(U,{kind:'bet',pp:[],entry:'',backTxt:'',poolTxt:{},poolErr:{}});/*</POOL>*/
 /* ---- pure helpers (unit-tested) ---- */
 const b27Num=n=>{const neg=n<0;n=Math.abs(Math.round(n));return (neg?'-':'')+n.toLocaleString('en-US')};      // plain whole number, thousands separator, no unit
@@ -3109,11 +3109,16 @@ const b27Jit=()=>new Promise(r=>setTimeout(r,PULK.confirmMin+Math.floor(Math.ran
 function b27Renum(list){   // bet numbers stay unique after a re-merge: a number that is already taken moves to the next free one (oldest keeps it)
   let mx=list.reduce((m,b)=>Math.max(m,Number(b.n)||0),0);const seen=new Set();
   return list.slice().sort((a,b)=>a.n-b.n||Date.parse(a.created_at)-Date.parse(b.created_at)||String(a.id).localeCompare(String(b.id))).map(b=>{if(seen.has(b.n))b=Object.assign({},b,{n:++mx});seen.add(b.n);return b})}
+function b27TermKey(b){return JSON.stringify({text:b.text,amt:b.amt,odds:b.odds,backer:b.backer,other:b.other,opponents:b.opponents||null,parts:b.parts||null,rd:b.rd||null})}
+function b27AssertTerms(prev,next){const by={};(prev||[]).forEach(b=>{if(b&&b.id)by[b.id]=b});
+  (next||[]).forEach(b=>{if(!b||!b.id)return;const old=by[b.id];
+    if(!old){if(b.ed&&by[b.ed])throw new Error('locked');return}
+    if(b27TermKey(old)!==b27TermKey(b))throw new Error('locked')})}
 async function b27Write(mutate,verify){
   for(let k=0;k<PULK.tries;k++){
     const cur=await b27Get();
     if(!verify(cur)){                                            // not there yet (or overwritten by a racing save): merge onto the FRESH ledger and post
-      const nxt=b27Renum(mutate(cur));
+      const nxt=b27Renum(mutate(cur));b27AssertTerms(cur,nxt);
       const w=await fetch(PULK.url,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({v:1,bets:nxt})});if(!w.ok)throw 0}
     await b27Jit();                                              // let a racing save land first
     const back=await b27Get();if(verify(back))return back;       // confirmed in a re-read: only now may the caller say "Placed!" / "Saved."
@@ -3153,11 +3158,14 @@ function b27FormOK(){
   if(!b27Clean(U.text))return 'Say what the bet is about.';
   if(!Number.isInteger(U.amt)||U.amt<PULK.minAmt||U.amt>PULK.maxAmt)return U.amtCustom?b27ParseAmt(U.amtTxt).err||'Pick an amount.':'Tap an amount or type your own (minimum '+PULK.minAmt+').';
   if(!(U.odds&&U.odds[0]>=1&&U.odds[1]>=1))return 'Pick the odds.';
+  if((U.wk||'unknown')==='date'&&!SHARED_UI.estOk(U.est))return 'Use a real date, or pick End of season or Not sure yet.';
   return '';
 }
 /*<MULTI-BET>*//* ONE bet record however many opponents are ticked (<BUNDLE>): with 2+ it carries `opponents:[...]` (other = the first one); with 1 it is the plain single-opponent record, exactly as before. The id is kept across a failed save (per selection) so a retry never double-posts. */
-function b27BetsFromForm(){const k=U.opps.join('|');
-  return [Object.assign({id:U.fids[k]||(U.fids[k]=b27Rid()),backer:U.backer||b27Who(),other:U.opps[0]/*<S29E-POSTED>*/,postedBy:b27Who(),postedAt:new Date().toISOString()/*</S29E-POSTED>*/},U.opps.length>1?{opponents:U.opps.slice()}:{},{amt:U.amt,odds:{a:U.odds[0],b:U.odds[1]},text:b27Clean(U.text),status:'open'}/*<S25>*/,{rd:s25FormRd()}/*</S25>*/)]}
+function b27Season(){const s=D&&D.meta&&D.meta.season;return typeof s==='string'&&/^[0-9]{4}-[0-9]{2}$/.test(s)?s:''}
+function b27When(k){U.wk=k==='date'||k==='season'?k:'unknown';if(U.wk!=='date')U.est='';render()}
+function b27BetsFromForm(){const k=U.opps.join('|'),w=SHARED_UI.whenPack(U.wk||'unknown',U.est,b27Season())||SHARED_UI.whenPack('unknown');
+  return [Object.assign({id:U.fids[k]||(U.fids[k]=b27Rid()),backer:U.backer||b27Who(),other:U.opps[0]/*<S29E-POSTED>*/,postedBy:b27Who(),postedAt:new Date().toISOString()/*</S29E-POSTED>*/},U.opps.length>1?{opponents:U.opps.slice()}:{},{amt:U.amt,odds:{a:U.odds[0],b:U.odds[1]},text:b27Clean(U.text),status:'open',wk:w.wk,est:w.est,sid:w.sid}/*<S25>*/,{rd:s25FormRd()}/*</S25>*/)]}
 const b27Others=()=>b27OwnerNames().filter(n=>n!==b27Who());
 function b27Opp(i){const n=b27Others()[i];if(!n)return;const k=U.opps.indexOf(n);if(k>=0)U.opps.splice(k,1);else{U.opps.push(n);const o=b27Others();U.opps.sort((x,y)=>o.indexOf(x)-o.indexOf(y))}b27Sync()}
 function b27OppAll(){U.opps=b27Others().slice();b27Sync()}
@@ -3172,7 +3180,9 @@ function b27Text(t){U.text=t;b27Sync()}
 function b27Place(){/*<POOL>*/if(U.kind==='pool')return b27PoolPlace();/*</POOL>*/const e=b27FormOK();if(e){b27Err(e);render();return}U.msg='';U.confirm=true;render()}
 function b27Edit(){U.confirm=false;render()}
 /*<MULTI-BET>*/async function b27Confirm(){
-  if(U.busy)return;/*<POOL>*/if(U.kind==='pool')return b27PoolConfirm();/*</POOL>*/const e=b27FormOK();if(e){b27Err(e);U.confirm=false;render();return}
+  if(U.busy)return;/*<POOL>*/if(U.kind==='pool')return b27PoolConfirm();/*</POOL>*/
+  if(U.editOf){U.editOf=null;U.confirm=false;U.msg='Once a bet is posted, its terms stay as written. Only the result can be entered.';U.msgBad=true;render();return}
+  const e=b27FormOK();if(e){b27Err(e);U.confirm=false;render();return}
   U.busy=true;U.msg='Saving…';U.msgBad=false;render();
   const nbs=b27BetsFromForm(),ids=nbs.map(b=>b.id);
   try{
@@ -3185,9 +3195,10 @@ function b27Edit(){U.confirm=false;render()}
     const mine=ids.map(id=>back.find(b=>b.id===id)).filter(Boolean);
     {const m=mine[0],k=m?b27Opps(m).length:1;U.msg='Placed! Bet #'+(m?m.n:'')+(k>1?' against '+k+' managers ('+b27Num(U.amt)+' each)':'')+' is open. You can undo it for 30 seconds.';U.msgBad=false;/*<S25C-FX>*/s25PlacedFx(m&&m.id)/*</S25C-FX>*/}
     U.undoG=null;/*<S24-EDIT>*/if(edOf){const o=back.find(x=>x.id===edOf);U.msg+=o?' It replaces bet #'+o.n+' (now cancelled).':'';U.editOf=null}/*</S24-EDIT>*/
-    U.opps=[];U.backer=null;U.pz=null;U.amt=null;U.amtCustom=false;U.amtTxt='';U.amtErr='';U.odds=[1,1];U.custom=false;U.customTxt='';U.oddsErr='';U.text='';U.confirm=false;U.fids={};U.gid=null;/*<S25E-RD>*/U.rdEd=null;U.rdOpen=false;/*</S25E-RD>*/
+    U.opps=[];U.backer=null;U.pz=null;U.amt=null;U.amtCustom=false;U.amtTxt='';U.amtErr='';U.odds=[1,1];U.custom=false;U.customTxt='';U.oddsErr='';U.text='';U.est='';U.wk='unknown';U.confirm=false;U.fids={};U.gid=null;/*<S25E-RD>*/U.rdEd=null;U.rdOpen=false;/*</S25E-RD>*/
     clearTimeout(U.undoT);U.undoT=setTimeout(()=>{if(tab==='bets27')render()},PULK.undoMs+300);
-  }catch(e){/*<S24-EDIT>*/if(e&&e.message==='late'){const o=U.doc.bets.find(x=>x.id===U.editOf);U.editOf=null;U.confirm=false;U.busy=false;U.msg='Too late to edit: bet'+(o?' #'+o.n:'')+' was already settled or cancelled. Nothing was saved; your changes are still in the form.';U.msgBad=true;b27Poll();render();return}/*</S24-EDIT>*/U.msg=e&&e.message==='full'?'The bets ledger is full.':/*<SAFE-RACE>*/e&&e.message==='conflict'?'Couldn’t save, try again. Someone else was saving at the same moment.':/*</SAFE-RACE>*/'Couldn’t save. Check your connection and tap Place bet again (it won’t double-post).';U.msgBad=true;U.confirm=true}
+  }catch(e){/*<S24-EDIT>*/if(e&&e.message==='locked'){U.editOf=null;U.confirm=false;U.busy=false;U.msg='Once a bet is posted, its terms stay as written. Only the result can be entered.';U.msgBad=true;render();return}
+    if(e&&e.message==='late'){const o=U.doc.bets.find(x=>x.id===U.editOf);U.editOf=null;U.confirm=false;U.busy=false;U.msg='Too late to edit: bet'+(o?' #'+o.n:'')+' was already settled or cancelled. Nothing was saved; your changes are still in the form.';U.msgBad=true;b27Poll();render();return}/*</S24-EDIT>*/U.msg=e&&e.message==='full'?'The bets ledger is full.':/*<SAFE-RACE>*/e&&e.message==='conflict'?'Couldn’t save, try again. Someone else was saving at the same moment.':/*</SAFE-RACE>*/'Couldn’t save. Check your connection and tap Place bet again (it won’t double-post).';U.msgBad=true;U.confirm=true}
   U.busy=false;render();
 }
 /* group undo: voids every still-open bet of the group that is mine and inside the 30 s window, in ONE write */
@@ -3457,7 +3468,7 @@ function b27Card(b,me){
   const res=BU?(st==='backer'?Bk+' won ('+OPd.join(', ')+' each owe '+Bk+' '+b27Num(b27Pay(b).ifBackerRight)+')':st==='other'?'Managers won ('+Bk+' owes each of them '+b27Num(b27Pay(b).ifOtherRight)+')':st==='push'?'Wash: whole bet cancelled, nobody owes anything':'')
    :st==='backer'?Bk+' won ('+Ot+' owes '+b27Num(b27Pay(b).ifBackerRight)+')':st==='other'?Ot+' won ('+Bk+' owes '+b27Num(b27Pay(b).ifOtherRight)+')':st==='push'?'Wash: nobody owes anything':'';
   let h=`<div class="card b27-c"${/*<S24-EDIT>*/s24Attr('b',b.id)/*</S24-EDIT>*/}><div class="s24hd"><b>Bet #${b.n}</b>${/*<S24-EDIT>*/s24FixBadge(b)/*</S24-EDIT>*/} <span class="st ${st==='open'?'open':st==='push'?'wash':st==='void'?'unparsed':'settled'}">${stTxt}</span> <span class="mut" style="font-size:12px">${esc(b27Day(Date.parse(b.created_at)))}</span>${BU?` <span class="mut" style="font-size:12px">· ${OP.length} managers, one result</span>`:''}${/*<MULTI-BET>*/b.g&&U.doc.bets.filter(x=>x.g===b.g).length>1?` <span class="mut" style="font-size:12px">· 1 of ${U.doc.bets.filter(x=>x.g===b.g).length} placed together</span>`:''/*</MULTI-BET>*/}${/*<S24-EDIT>*/s24LinkBtn('bets',b.id,'bet')/*</S24-EDIT>*/}</div>
-   ${/*<S29E-POSTED>*/s29ePosted(b)/*</S29E-POSTED>*/}<div class="b27-t${/*<CARD-SIZE>*/' s25cl'+(S25P.more[b.id]?' open':'')+'" data-s25-t="'+b.id/*</CARD-SIZE>*/}">${esc(b.text)}</div>${/*<CARD-SIZE>*/`<button type="button" class="s25more" data-s25-more="${b.id}" aria-expanded="${!!S25P.more[b.id]}" onclick="s25More('${b.id}')" hidden>${S25P.more[b.id]?'less':'more'}</button>`/*</CARD-SIZE>*/}<div class="b27-m"><b>${esc(Bk)}</b> vs <b>${esc(OPd.join(', '))}</b> · <b>${b27Num(b.amt)}</b>${BU?' each':''} · ${esc(b27OddsLabel(b.odds.a,b.odds.b))}</div>
+   ${/*<S29E-POSTED>*/s29ePosted(b)/*</S29E-POSTED>*/}<div class="b27-due" data-due="${SHARED_UI.whenClass(b)}">${esc(SHARED_UI.whenText(b))}</div><div class="b27-t${/*<CARD-SIZE>*/' s25cl'+(S25P.more[b.id]?' open':'')+'" data-s25-t="'+b.id/*</CARD-SIZE>*/}">${esc(b.text)}</div>${/*<CARD-SIZE>*/`<button type="button" class="s25more" data-s25-more="${b.id}" aria-expanded="${!!S25P.more[b.id]}" onclick="s25More('${b.id}')" hidden>${S25P.more[b.id]?'less':'more'}</button>`/*</CARD-SIZE>*/}<div class="b27-m"><b>${esc(Bk)}</b> vs <b>${esc(OPd.join(', '))}</b> · <b>${b27Num(b.amt)}</b>${BU?' each':''} · ${esc(b27OddsLabel(b.odds.a,b.odds.b))}</div>
    <div class="b27-w">${esc(L.win)}</div><div class="b27-l">${esc(L.lose)}</div>${L.rounded?'<div class="mut b27-r">Rounded to a whole number.</div>':''}${res?`<div class="note" style="margin-top:4px"><b>Result:</b> ${esc(res)}</div>`:''}${/*<S25>*/s25CardRd(b)+s25PropHtml(b,me)/*</S25>*/}${/*<CARD-SIZE>*/'<div class="s25sp" aria-hidden="true"></div>'/*</CARD-SIZE>*/}${/*<S25D-TS>*/s25dTsHtml(b)/*</S25D-TS>*/}`;
   if(st==='open'&&(isP||ADMIN)){
     const ask=w=>U.askSettle&&U.askSettle.id===b.id&&U.askSettle.what===w;
@@ -3467,7 +3478,7 @@ function b27Card(b,me){
     if(b27CanUndo(b)&&b.g&&gu.length>1){if(U.doc.bets.filter(x=>x.g===b.g&&b27CanUndo(x)).sort((p,q)=>q.n-p.n)[0].id===b.id)h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27UndoGroup('${b.g}')"${U.busy?' disabled':''}>↩ Undo all ${gu.length} bets placed together (30 s)</button></div>`}
     else /*</MULTI-BET>*/if(b27CanUndo(b))h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27SetStatus('${b.id}','void')"${U.busy?' disabled':''}>↩ Undo this bet (30 s)</button></div>`;
     else if(ADMIN)h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27SetStatus('${b.id}','void')"${U.busy?' disabled':''}>Cancel bet (admin)</button></div>`;
-    /*<S24-EDIT>*/if(me&&me===b.backer)h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" data-s24-edit="${b.id}" onclick="s24EditStart('${b.id}')"${U.busy?' disabled':''}>✏️ Edit</button><span class="note">only while nobody has settled it</span></div>`;/*</S24-EDIT>*/
+    if(me&&me===b.backer)h+=s24EstHtml(b);
   }
   /*<S24-EDIT>*/h+=s24EditedNote(b)+s24FixHtml(b,me);/*</S24-EDIT>*/
   return h+/*<S25>*/s25RxHtml(b,me)/*</S25>*/+'</div>';
@@ -3497,12 +3508,14 @@ function b27OwesHtml(T){
 function b27ActionItem(b,me){if(!me||!b)return null;
   if(b.fx&&typeof S24R!=='undefined'&&S24R.includes(b.status)&&me===b.backer&&b.fx.by!==me)return {id:b.id,kind:'bet',action:'Answer the correction',text:b.text||''};
   if(b.status!=='open'||b.kind==='pool'||b.backer!==me)return null;
-  const r=b.rd;if(!r||r.k==='manual'||!r.d)return null;
+  const later=SHARED_UI.whenKind(b)==='date'&&b.est>SHARED_UI.estToday();
+  const r=b.rd;if(!r||r.k==='manual'||!r.d){const dc=SHARED_UI.whenClass(b);return !later&&(dc==='today'||dc==='over')?{id:b.id,kind:'bet',action:'Enter the result',text:b.text||''}:null}
   let today='';try{today=S25.etDay(new Date())}catch(e){return null}
   if(String(r.d)>today)return null;
   let G=null;try{G=s25Game(b)}catch(e){G=null}
   if(G&&G.p)return {id:b.id,kind:'bet',action:'Confirm the result',text:b.text||''};
   if(G&&G.wait==='future')return null;
+  if(later)return null;
   return {id:b.id,kind:'bet',action:'Enter the result',text:b.text||''}}
 function b27WaitingItems(me){const out=[];if(!me)return out;
   try{const now=Date.now();((typeof RQ!=='undefined'&&RQ&&RQ.S&&RQ.S.list)||[]).forEach(r=>{if(!r||r.status!=='open'||r.by===me)return;if((r.to||[]).indexOf(me)<0||(r.dec||[]).indexOf(me)>=0)return;if((r.took||[]).some(t=>t&&t.m===me))return;if(!(now<r.exp))return;out.push({id:r.id,kind:'req',action:'Accept or decline',text:r.txt||r.lab||'Request'})})}catch(e){}
@@ -3511,9 +3524,9 @@ var wmeOpen=false;
 function wmeHtml(me){const items=b27WaitingItems(me);
   if(!me)return '<div class="card wme"><b>Waiting on me</b> <span class="note">Pick who you are.</span></div>';
   const rows=items.map(it=>`<div class="wme-r"><span class="wme-a">${esc(it.action)}</span><span class="wme-t">${esc(String(it.text||'').slice(0,160))}</span><button type="button" class="btn sec" onclick="wmeGo('${it.kind}','${esc(it.id)}')">Open</button></div>`).join('');
-  return `<details class="card wme" id="wme"${wmeOpen?' open':''} ontoggle="wmeOpen=this.open"><summary><b>Waiting on me</b> <span class="note">${items.length}</span></summary>${items.length?rows:'<div class="note">Nothing needs you right now. An open bet whose game has not finished is not listed.</div>'}</details>`}
-function wmeGo(kind,id){if(kind==='req'){tab='bets27';OB_VIEW='open';render();setTimeout(()=>{const el=document.querySelector('[data-rq-id="'+id+'"]');if(el)el.scrollIntoView({block:'center'})},40);return}
-  tab='bets27';OB_VIEW='all';try{S24.sub=id}catch(e){}render();setTimeout(()=>{const el=document.getElementById('bet-'+id);if(el)el.scrollIntoView({block:'center'})},40)}
+  return `<details class="card wme" id="wme"${wmeOpen?' open':''} ontoggle="wmeOpen=this.open"><summary><b>Waiting on me</b> <span class="note">${items.length}</span></summary>${items.length?rows:'<div class="note">Nothing needs you right now. A bet that is only open for later is not listed.</div>'}</details>`}
+function wmeGo(kind,id){tab='bets27';OB_VIEW='all';if(kind!=='req'){try{S24.sub=id}catch(e){}}
+  render();setTimeout(()=>{const el=kind==='req'?document.querySelector('[data-rq-id="'+id+'"]'):document.getElementById('bet-'+id);if(el)el.scrollIntoView({block:'center'})},40)}
 function vB27(){
   b27Seen();
   const me=b27Who(),names=b27OwnerNames(),others=names.filter(n=>n!==me);
@@ -3537,18 +3550,19 @@ function vB27(){
      <div id="b27Aw" class="b27-cw"${U.amtCustom?'':' hidden'}><label for="b27Ao" class="sr">Custom amount</label><input id="b27Ao" class="sb-in b27-in" inputmode="numeric" pattern="[0-9]*" autocomplete="off" maxlength="6" placeholder="Whole number, ${PULK.minAmt} to ${PULK.maxAmt}" value="${esc(U.amtTxt)}" oninput="b27AmtApply(this.value);b27Sync()" onkeydown="if(event.key==='Enter'){event.preventDefault();b27Place()}"><div id="b27Ae" class="b27-bad-t" role="alert">${esc(U.amtErr)}</div></div></div><div class="b27-ao-c">
      <div class="b27-q"><button type="button" class="s27-tipk" data-tip="odds" aria-expanded="false" onclick="s27Tip(this)">4. Odds</button></div><div class="b27-chips" role="group" aria-label="Odds">${PULK.oddsChips.map(([a,b])=>`<button type="button" class="b27-chip" data-b27-odds="${a}-${b}" aria-pressed="${!U.custom&&!!U.odds&&U.odds[0]===a&&U.odds[1]===b}" onclick="b27Odds(${a},${b})">${a===1&&b===1?'Even':a+'-'+b}</button>`).join('')}<button type="button" class="b27-chip cu" data-b27-custom="1" aria-pressed="${U.custom}" onclick="b27CustomOpen()">Custom</button></div>
      <div id="b27Cw" class="b27-cw"${U.custom?'':' hidden'}><label for="b27Co" class="sr">Custom odds</label><input id="b27Co" class="sb-in b27-in" inputmode="text" autocomplete="off" maxlength="9" placeholder="e.g. 7-2 or 10-1" value="${esc(U.customTxt)}" oninput="b27CustomApply(this.value);b27Sync()" onkeydown="if(event.key==='Enter'){event.preventDefault();b27Place()}"><div id="b27Ce" class="b27-bad-t" role="alert">${esc(U.oddsErr)}</div></div></div></div>
+     ${SHARED_UI.whenBox({e:esc,kind:U.wk||'unknown',est:U.est,seasonId:b27Season(),inputId:'b27Est',pick:id=>`onclick="b27When('${id}')"`,dateAttr:'onchange="U.est=this.value"'})}
      <div class="b27-livebox" id="b27Live" aria-live="polite">${b27LiveHtml()}</div>
      <div class="b27-sum" id="b27Sum">${esc(b27Summary())}</div><div id="s29Auto">${/*<S29D-AUTO>*/s29AutoHtml(s29AutoForm())/*</S29D-AUTO>*/}</div><div class="b27-bad-t" id="b27Hint"></div>
      <button type="button" id="b27Place" class="btn b27-big" onclick="b27Place()"${b27FormOK()?' disabled':''}>Place bet</button></div>`;
   }
-  const bets=U.doc.bets.slice().sort((a,b)=>b.n-a.n),T=b27Tally(bets);
+  const bets=SHARED_UI.estSort(U.doc.bets,SHARED_UI.estToday()),T=b27Tally(bets);
   const ppl=Object.entries(T.per).sort((a,b)=>b[1].net-a[1].net);
   /*<BALL-LOADER>*/if(U.state==='init'){h+=ballLoader();h+=introBottom;return h}   // ledger still loading: loader instead of an empty owes table / "No bets yet/*</BALL-LOADER>*/
   /*<ALL-BETS>*/if(OB_VIEW!=='all'){h+=introBottom;return h}/*Write it Up = form only; the list is on All bets*//*</ALL-BETS>*/
   /*<OWES-TABLE>*//*<S26F-WIU>*/// Write it Up: no Who Owes Who grid / Net per manager here; they live on Tally only (vTally, unchanged)/*</S26F-WIU>*//*</OWES-TABLE>*/
   /*<S26F-WIU> 'Still open' line removed from Write it Up (its closing </div> belonged to the removed owes card) </S26F-WIU>*/
   /*<S24-EDIT>*/{const FL=s24Filter(bets,me);
-  h+=wmeHtml(me)+`<h2>Bets (${FL.length}${FL.length!==bets.length?' of '+bets.length:''})${/*<S25>*/s25MuteBtn()/*</S25>*/}</h2>`+s24FilterBar(bets,me)+(FL.length?FL.slice(0,60).concat(S24.sub&&tab==='bets27'?FL.slice(60).filter(b=>b.id===S24.sub):[]).map(b=>/*<POOL>*/b.kind==='pool'?b27PoolCard(b,me):/*</POOL>*/b27Card(b,me)).join('')/*<S25>*/.replace(/^/,'<div class="b27-grid">')+'</div>'/*</S25>*/:bets.length?'<div class="card note s24fe">No bets match this filter.</div>':'<div class="card note">No bets yet. Be the first.</div>');}/*</S24-EDIT>*/
+  h+=`<h2>Bets (${FL.length}${FL.length!==bets.length?' of '+bets.length:''})${/*<S25>*/s25MuteBtn()/*</S25>*/}</h2>`+s24FilterBar(bets,me)+(FL.length?FL.slice(0,60).concat(S24.sub&&tab==='bets27'?FL.slice(60).filter(b=>b.id===S24.sub):[]).map(b=>/*<POOL>*/b.kind==='pool'?b27PoolCard(b,me):/*</POOL>*/b27Card(b,me)).join('')/*<S25>*/.replace(/^/,'<div class="b27-grid">')+'</div>'/*</S25>*/:bets.length?'<div class="card note s24fe">No bets match this filter.</div>':'<div class="card note">No bets yet. Be the first.</div>');}/*</S24-EDIT>*/
   if(bets.length>60)h+='<p class="note">Showing the latest 60.</p>';
   /*<BETS-INTRO-BOTTOM>*/h+=introBottom;/*</BETS-INTRO-BOTTOM>*/
   return h;
@@ -3556,23 +3570,30 @@ function vB27(){
 /*<ONE-BETS>*/
 /* One "Bets" tab: tab id 'bets27' = 2026-27 view (default), tab id 'bets' = the old 2025-26 side-bets ledger (read-only). ?tab=bets (the old Side bets URL) opens the old view, ?tab=bets27 the new one. */
 /*<BETS-TALLY>*/const SHOW_OLD_BETS=!!window.__STOOPIDS_SHOW_OLD_BETS;   // default false; the legacy jsdom suites set the window flag before load to keep testing the hidden view   // the 2025-26 (old) side-bets view: hidden (data kept: data.json bets / bets_imported.json); set true to bring its tab back
-const OB_LABELS={form:'\u270F\uFE0F Write it Up',all:'\u{1F4CB} All bets',tally:'💰 Tally',request:'\u{1F4E8} Request',open:'\u{1F4CC} Open'};   /* ALL-BETS order: Write it Up, Request, Open, All bets, Tally */   // Bets tab segment labels
+const OB_LABELS={form:'Write it Up or Request',all:'All Bets',tally:'All Bets',request:'Write it Up or Request',open:'All Bets'};
 /*<STEP8-REQUEST>*/ /* Request a bet: shared module (shared/ui.js SHARED_UI.Requests); requests live in their OWN textdb record (not the bets ledger) */
 const REQ_URL='https://textdb.dev/api/data/stoopids-requests-2627-9eaa4f66';
 const RQ=(typeof SHARED_UI!=='undefined'&&SHARED_UI.Requests)?SHARED_UI.Requests({maxText:PULK.maxText,change:"presAsk();return false",
   e:esc,me:()=>b27Who(),others:()=>b27Others().map(n=>({id:n,emoji:ownerEmoji(n),nick:TN(n)})),nick:n=>TN(n),real:n=>PN(n),
   canWrite:()=>!DEMO&&!!b27Who()&&b27OwnerNames().includes(b27Who()),amounts:PULK.amounts,
-  games:()=>(D.games||[]).filter(g=>g&&g.home&&g.away).map(g=>({id:String(g.id),g,start:g.start,status:g.status,period:g.period||null,label:qbNm(g.away)+' vs '+qbNm(g.home)+' · '+qbDate(g)})),
+  seasonId:()=>b27Season(),games:()=>(D.games||[]).filter(g=>g&&g.home&&g.away).map(g=>({id:String(g.id),g,start:g.start,status:g.status,period:g.period||null,label:qbNm(g.away)+' vs '+qbNm(g.home)+' · '+qbDate(g)})),
   tname:s=>qbNm(s),dateET:g=>qbDate(g),link:()=>location.href.split('#')[0]+'#bets27',goRequest:()=>{tab='bets27';OB_VIEW='request'},waiting:()=>{try{const me=b27Who();return me&&U.doc&&U.doc.bets?U.doc.bets.filter(b=>s24Waiting(b,me)).length:0}catch(e){return 0}},navEl:()=>document.querySelector('a.nt[data-tab="bets27"]')||document.querySelector('a.nt[data-tab="bets"]'),
   get:async()=>{const r=await fetch(REQ_URL,{cache:'no-store'});if(!r.ok)throw 0;return r.text()},
   set:async txt=>{const w=await fetch(REQ_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:txt});if(!w.ok)throw 0},
   placeBet:async(r,me)=>{const id=b27Rid(),at=new Date().toISOString(),text=b27Clean(r.txt);let rd;try{rd=S25.parse(text,at)}catch(_){}
-    const nb=Object.assign({id,backer:r.by,other:me,postedBy:me,postedAt:at,amt:r.amt,odds:{a:(r.odds||[1,1])[0],b:(r.odds||[1,1])[1]},text,status:'open',req:r.id},rd?{rd}:{});
+    const w=SHARED_UI.whenPack(r.wk,r.est,r.sid)||SHARED_UI.whenPack('unknown');
+    const nb=Object.assign({id,backer:r.by,other:me,postedBy:me,postedAt:at,amt:r.amt,odds:{a:(r.odds||[1,1])[0],b:(r.odds||[1,1])[1]},text,status:'open',req:r.id,wk:w.wk,est:w.est,sid:w.sid},rd?{rd}:{});
     const back=await b27Write(cur=>{if(cur.some(c=>c.id===id))return cur;let n=b27MaxN(cur);return cur.concat([Object.assign({},nb,{n:n+1,created_at:at,settled_at:null})])},cur=>cur.some(c=>c.id===id));b27Apply(back)},
-  render:()=>{if(tab==='bets27'&&(OB_VIEW==='request'||OB_VIEW==='open'))render()}}):null;
+  watchExpiry:()=>OB_VIEW==='all'||OB_VIEW==='open',
+  render:()=>{if(tab==='bets27'&&(OB_VIEW==='request'||OB_VIEW==='form'||OB_VIEW==='all'||OB_VIEW==='open'))render()}}):null;
 /*</STEP8-REQUEST>*/
 let OB_VIEW='form';   // Bets tab: 'form' = 2026-27 (New bet form + bet list), 'tally' = person table + Who owes who for 2026-27
-function obView(v){OB_VIEW=v;tab='bets27';render();window.scrollTo(0,0)}
+function obView(v){tab='bets27';
+  if(v==='open'){OB_VIEW='all';render();setTimeout(()=>{const el=document.getElementById('rqPinned');if(el)el.scrollIntoView({block:'start'})},40);return}
+  if(v==='tally'){OB_VIEW='all';render();setTimeout(()=>{const el=document.getElementById('b27Tally');if(el){el.open=true;el.scrollIntoView({block:'start'})}},40);return}
+  OB_VIEW=(v==='request'||v==='form')?'form':v==='all'?'all':'form';
+  if(v==='request'){render();setTimeout(()=>{const el=document.getElementById('rqForm');if(el)el.scrollIntoView({block:'start'})},40);return}
+  render();window.scrollTo(0,0)}
 const TALLY_NM={mark:'DIRTY DRAYMOND',jake:'STOCK RISING',kurt:'KURMOJI',ken:'KENTUT',neal:'COCKCHALKROCK',paul:'PARTY PAUL',jim:'NASTY PEACOCK',scott:'EN FUEGO'};   // Tally display = team nickname in caps (ids unchanged); neal = Neal Murf (archive). matthew has no nickname: shown as MATTHEW
 const tNm=i=>TALLY_NM[i]||String(P(i).name||i).toUpperCase();
 function vTally(){/* STEP11: Tally = 2026-27 Bets ledger (b27Tally / U.doc), not D.bets.tallies.ledger */
@@ -3592,8 +3613,9 @@ function vTally(){/* STEP11: Tally = 2026-27 Bets ledger (b27Tally / U.doc), not
   return h}
 /*</BETS-TALLY>*/
 function obToggle(){
-  /*<BETS-TALLY>*/if(!SHOW_OLD_BETS||tab==='bets27'){const sg=(k,t)=>`<button type="button" class="${tab==='bets27'&&OB_VIEW===k?'on':''}" aria-pressed="${tab==='bets27'&&OB_VIEW===k}" data-ob="${k}" onclick="obView('${k}')">${t}</button>`;
-    return `<div class="tabs ob-seg" role="group" aria-label="Bets">${sg('form',OB_LABELS.form)}${(typeof RQ!=='undefined'&&RQ)?sg('request',OB_LABELS.request)+sg('open',OB_LABELS.open):''}${sg('all',OB_LABELS.all)}${sg('tally',OB_LABELS.tally)}${SHOW_OLD_BETS?`<button type="button" data-ob="bets" onclick="obGo('bets')">2025-26 (old)</button>`:''}</div>`}/*</BETS-TALLY>*/
+  /*<BETS-TALLY>*/if(!SHOW_OLD_BETS||tab==='bets27'){const entry=OB_VIEW==='form'||OB_VIEW==='request',all=OB_VIEW==='all'||OB_VIEW==='open'||OB_VIEW==='tally';
+    const sg=(k,on,t)=>`<button type="button" class="${on?'on':''}" aria-pressed="${on}" data-ob="${k}" id="b27Ob_${k}" onclick="obView('${k}')">${t}</button>`;
+    return `<div class="tabs ob-seg" role="group" aria-label="Bets">${sg('form',entry,OB_LABELS.form)}${sg('all',all,OB_LABELS.all)}${SHOW_OLD_BETS?`<button type="button" data-ob="bets" onclick="obGo('bets')">2025-26 (old)</button>`:''}</div>`}/*</BETS-TALLY>*/
   const seg=(k,t,bd)=>`<button type="button" class="${tab===k?'on':''}" aria-pressed="${tab===k}" data-ob="${k}"${tab!==k&&bd?' aria-label="'+t+', new bets"':''} onclick="obGo('${k}')">${t}${tab===k?'':bd}</button>`;
   return `<div class="tabs ob-seg" role="group" aria-label="Bets season">${seg('bets27','2026-27',b27Badge())}${seg('bets','2025-26 (old)',nbBadge('bets'))}</div>`;
 }
@@ -3609,7 +3631,9 @@ function obOldNote(){   // read-only replacement of the old shared-ledger card (
   /*<ONE-BETS>*/const i=TABS.findIndex(t=>t[0]==='bets');if(i<0)TABS.push(['bets27','💵 Bets']);else TABS[i]=['bets27','💵 Bets'];   // the ONE Bets tab (was Side bets + Bets 26-27); the Draft link stays last
   function entryPair(){const focus=OB_VIEW==='request'?'request':'form',wiu=vB27(),rq=(typeof RQ!=='undefined'&&RQ)?RQ.view():'<div class="card note">Request a bet is unavailable right now.</div>';
     return `<div class="entry-pair" data-focus="${focus}"><div class="entry-col entry-wiu${focus==='form'?' is-on':''}">${wiu}</div><div class="entry-col entry-rq${focus==='request'?' is-on':''}">${rq}</div></div>`}
-  VIEWS.bets27=()=>obToggle()+/*<BETS-TALLY>*/(OB_VIEW==='tally'?vTally():OB_VIEW==='open'&&typeof RQ!=='undefined'&&RQ?RQ.view('open'):OB_VIEW==='all'?((typeof RQ!=='undefined'&&RQ&&s24FSt()==='req'?RQ.pinned(true):'')+vB27()):entryPair())/*</BETS-TALLY>*/;VIEWS.bets=()=>obToggle()+vBets();NAVSHORT.bets27='Bets';/*</ONE-BETS>*/
+  VIEWS.bets27=()=>{if(OB_VIEW==='open'||OB_VIEW==='tally')OB_VIEW='all';
+    const entry=OB_VIEW==='form'||OB_VIEW==='request';
+    return obToggle()+(entry?entryPair():((typeof RQ!=='undefined'&&RQ?RQ.pinned(false,true):'')+vB27()+'<details class="card tally-fold" id="b27Tally"><summary><b>Tally</b> <span class="note">Who owes who</span></summary>'+vTally()+'</details>'))};VIEWS.bets=()=>obToggle()+vBets();NAVSHORT.bets27='Bets';/*</ONE-BETS>*/
   if(typeof nbBadge==='function'){const _b=nbBadge;nbBadge=function(k){return k==='bets27'?/*<ONE-BETS>*/(tab==='bets'||tab==='bets27'?'':b27Badge()||_b('bets'))/*</ONE-BETS>*/:_b(k)}}      // 'new' badge on the one Bets tab: 2026-27 (own watermark) or the old ledger; inside the tab the toggle shows it on the other segment
   const pp=presPick;presPick=function(w){pp(w);try{U.opps=[];/*<POOL>*/U.pp=[];/*</POOL>*/if(tab==='bets27')render()}catch(e){}};
   /* toast: own text, and 'View' opens this tab when every pending item is a Bets 26-27 bet (wraps the existing functions; nothing in them is edited) */
@@ -3619,11 +3643,7 @@ function obOldNote(){   // read-only replacement of the old shared-ledger card (
     if(allP())e.querySelector('.nbm').textContent=NB.pending.length===1?NB.pending[0]._msg:NB.pending.length+' new 2026-27 bets just added';
     const v=e.querySelector('.nbv');if(v&&!v._pu){const orig=v.onclick;v.onclick=function(ev){if(allP()){nbHide();tab='bets27';try{OB_VIEW='all'}catch(_){}render();window.scrollTo(0,0)}else if(orig)orig.call(v,ev)};v._pu=1}}catch(_){}};
   /* chat bar: the one fixed bottom bar on every tab (no top copy any more); the unread count badge shows on the one Bets tab */
-  if(typeof chatNavBadge==='function'){const _cb=chatNavBadge;chatNavBadge=function(){_cb();try{const nav=$('#nav');if(!nav||!D)return;const i=TABS.findIndex(t=>t[0]==='bets27'),b=nav.children[i];if(!b)return;
-    const n=CH.nUnread,full=TABS[i][1].slice(TABS[i][1].indexOf(' ')+1);let e=b.querySelector('.nu');b.classList.toggle('hasu',!!n);
-    if(!n){if(e)e.remove();b.setAttribute('aria-label',full);return}
-    if(!e){e=document.createElement('b');e.className='nu';e.setAttribute('aria-hidden','true');b.appendChild(e)}
-    e.textContent='💬'+chatCount(n);b.setAttribute('aria-label',full+', '+n+' unread chat message'+(n>1?'s':''))}catch(_){}}}
+  if(typeof chatNavBadge==='function'){const _cb=chatNavBadge;chatNavBadge=function(){_cb()}}
   document.addEventListener('visibilitychange',()=>{if(!document.hidden&&U.started)b27Poll()});
 })();
 function b27Init(){if(U.started||DEMO)return;U.started=true;b27Poll()}
@@ -3660,7 +3680,9 @@ const S26W_MT=["standings", "games", "bets", "bets-2025-26", "teams", "draft", "
 function s24Put(push){try{s26wMan(s24HashOf(tab));const want=s24Url(s24RouteHash());try{sessionStorage.setItem('stoopids.tab',s24HashOf(tab))}catch(_){}if(location.pathname+location.search+location.hash===want)return;history[push?'pushState':'replaceState'](null,'',want)}catch(e){}}
 function s24NavClick(e,t){if(e&&(e.button>0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey))return true;if(e&&e.preventDefault)e.preventDefault();tab=t;S24.sub=null;render();window.scrollTo(0,0);return false}
 function s24OnNav(){const r=s24Read(location.hash);/*<S26W>*/try{if(r&&r.sub&&window.S26W)S26W.deep=true}catch(_){}/*</S26W>*/if(!r&&location.hash.length>1)return;const R=r||{t:'standings',sub:null};if(R.t===tab&&R.sub===S24.sub)return;/*<S26W>*/if(R.t===tab&&!R.sub&&S24.sub&&S24.done===tab+'/'+S24.sub)return;/*</S26W> the deep link just cleaned its own hash: popstate after hashchange must not undo the jump */
-  tab=R.t;S24.sub=R.sub;S24.prep=null;S24.done=null;S24.nf=null;S24.last=tab;try{sessionStorage.setItem('stoopids.tab',s24HashOf(tab))}catch(_){}render();/*<S27> alias hashes (#draft) settle to the tab hash + its manifest */try{if(!R.sub)s24Put(false)}catch(_){}if(!R.sub)window.scrollTo(0,0)}
+  tab=R.t;S24.sub=R.sub;S24.prep=null;S24.done=null;S24.nf=null;S24.last=tab;try{sessionStorage.setItem('stoopids.tab',s24HashOf(tab))}catch(_){}
+  if(tab==='bets27'&&S24.sub&&/^(open|request|tally|form|write|all)$/i.test(S24.sub)){const a=S24.sub.toLowerCase();S24.sub=null;obView(a==='write'?'form':a);return}
+  render();/*<S27> alias hashes (#draft) settle to the tab hash + its manifest */try{if(!R.sub)s24Put(false)}catch(_){}if(!R.sub)window.scrollTo(0,0)}
 window.addEventListener('popstate',s24OnNav);window.addEventListener('hashchange',s24OnNav);
 /*<TAB-TOP>*/ // every tab switch opens at the top; the browser must not restore an old scroll position on reload/back. Only a link to one bet/game (#bets/<id>) scrolls to it.
 try{if('scrollRestoration' in history)history.scrollRestoration='manual'}catch(e){}
@@ -3726,15 +3748,30 @@ function s24DeepGo(){
 }
 function s24AfterLoad(){/*<NO-JUMP>*/const first=!S24.al;S24.al=1;/*</NO-JUMP>*/if(S24.sub)s24DeepGo()/*<TAB-TOP>*/;else if(first)window.scrollTo(0,0)/*</TAB-TOP>*//*<S26W>*/;try{window.S26W&&S26W.top()}catch(_){}/*</S26W>*/}   // the 5-min reload never scrolls
 /* ---- 1) Edit ---- */
-function s24ResetForm(){Object.assign(U,{/*<S25>*/rdEd:null,rdOpen:false,/*</S25>*/opps:[],amt:null,amtCustom:false,amtTxt:'',amtErr:'',odds:[1,1],custom:false,customTxt:'',oddsErr:'',text:'',confirm:false,fids:{},qb:null})}
-function s24EditStart(id){
-  const b=U.doc.bets.find(x=>x.id===id),me=b27Who();
-  if(!b||b.kind==='pool'||b.status!=='open'||b.backer!==me){U.msg='Too late to edit: that bet was already settled or cancelled.';U.msgBad=true;render();return}
-  const inA=PULK.amounts.includes(b.amt),inO=PULK.oddsChips.some(([a,c])=>a===b.odds.a&&c===b.odds.b);
-  Object.assign(U,{kind:'bet',confirm:false,msg:'',msgBad:false,opps:b27Opps(b).slice(),pp:[],text:b.text,amt:b.amt,amtCustom:!inA,amtTxt:inA?'':String(b.amt),amtErr:'',odds:[b.odds.a,b.odds.b],custom:!inO,customTxt:inO?'':b.odds.a+'-'+b.odds.b,oddsErr:'',editOf:id,fids:{},qb:null/*<S25>*/,rdEd:b.rd||null,rdOpen:false/*</S25>*/});
-  tab='bets27';S24.sub=null;render();
-  setTimeout(()=>{try{const f=document.querySelector('.b27-form');if(f)f.scrollIntoView({block:'start'})}catch(_){}},30)}
-function s24EditCancel(){U.editOf=null;s24ResetForm();U.msg='';render()}
+function s24ResetForm(){Object.assign(U,{/*<S25>*/rdEd:null,rdOpen:false,/*</S25>*/opps:[],amt:null,amtCustom:false,amtTxt:'',amtErr:'',odds:[1,1],custom:false,customTxt:'',oddsErr:'',text:'',confirm:false,fids:{},qb:null,est:'',wk:'unknown'})}
+let estDraft=null;
+function s24When(k){if(!estDraft)return;estDraft.kind=k==='date'||k==='season'?k:'unknown';if(estDraft.kind!=='date')estDraft.val='';render()}
+function s24EstHtml(b){const open=estDraft&&estDraft.id===b.id;
+  if(!open)return `<div class="b27-act"><span class="note">${esc(SHARED_UI.whenText(b))}.</span> <button type="button" class="btn sec b27-b" data-est-edit="${esc(b.id)}" onclick="s24EditStart('${b.id}')">Edit</button></div>`;
+  return `<div class="b27-est" data-est-editor="${esc(b.id)}">${SHARED_UI.whenBox({e:esc,kind:estDraft.kind,est:estDraft.val,seasonId:b27Season(),inputId:'estIn',pick:id=>`onclick="s24When('${id}')"`,dateAttr:'onchange="if(estDraft)estDraft.val=this.value"'})}<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="s24EstSave('${b.id}')">Save</button><button type="button" class="btn sec b27-b" onclick="s24EstClear('${b.id}')">Clear</button><button type="button" class="btn sec b27-b" onclick="s24EstCancel()">Cancel</button></div><div class="note">Description, people, amount, and odds stay as written.</div></div>`}
+function s24EstOwner(b){const me=b27Who();return !!(b&&b.status==='open'&&b.kind!=='pool'&&me&&b.backer===me)}
+function s24EditStart(id){const b=(U.doc.bets||[]).find(x=>x.id===id);
+  if(!s24EstOwner(b)){estDraft=null;U.msg=b&&b.status!=='open'?'This bet is already settled. The sorting note stays as it is.':'Only the person who posted this bet can set when it might be settled.';U.msgBad=true;render();return}
+  const kind=SHARED_UI.whenKind(b);estDraft={id,kind,val:kind==='date'?b.est:''};U.msg='';render()}
+function s24EstCancel(){estDraft=null;render()}
+async function s24EstWrite(id,kind,est){const b=(U.doc.bets||[]).find(x=>x.id===id);if(!s24EstOwner(b)){estDraft=null;U.msg='Only the person who posted this unsettled bet can set when it might be settled.';U.msgBad=true;render();return}
+  const pack=SHARED_UI.whenPack(kind,est,b27Season());if(kind==='date'&&!pack){U.msg='Use a real calendar date, or pick End of season or Not sure yet.';U.msgBad=true;render();return}
+  const w=pack||SHARED_UI.whenPack('unknown');
+  const sig=x=>JSON.stringify({text:x.text,amt:x.amt,odds:x.odds,backer:x.backer,other:x.other,opponents:x.opponents||null,rd:x.rd||null});
+  const before=sig(b);
+  try{const back=await b27Write(cur=>cur.map(x=>x.id===id?Object.assign({},x,{wk:w.wk,est:w.est,sid:w.sid}):x),cur=>cur.some(x=>x.id===id&&x.wk===w.wk&&(w.est?x.est===w.est:!x.est)&&(w.sid?x.sid===w.sid:!x.sid)));
+    const now=back.find(x=>x.id===id);if(!now||sig(now)!==before)throw new Error('locked');
+    b27Apply(back);estDraft=null;U.msg='Sorting note saved. The terms are unchanged.';U.msgBad=false}
+  catch(e){U.msg='The sorting note was not saved. The terms were not changed.';U.msgBad=true}
+  render()}
+function s24EstSave(id){const raw=(document.getElementById('estIn')||{}).value||'';const kind=estDraft&&estDraft.id===id?estDraft.kind:'unknown';s24EstWrite(id,kind,raw||null)}
+function s24EstClear(id){s24EstWrite(id,'unknown',null)}
+function s24EditCancel(){estDraft=null;U.editOf=null;U.msg='';render()}
 function s24EditHint(){if(!U.editOf)return '';const o=U.doc.bets.find(x=>x.id===U.editOf),n=o?'#'+o.n:'';
   const late=!o||o.status!=='open';
   return `<div class="b27-edn note" role="status" data-s24-editing="${esc(U.editOf)}">✏️ Editing bet ${n}. ${late?'<b class="bad">It was already settled or cancelled, so it can’t be edited any more.</b>':`Nothing changes until you place it: then bet ${n} is cancelled and this one replaces it.`} <a href="#" onclick="s24EditCancel();return false">Cancel edit</a></div>`}
@@ -3978,7 +4015,7 @@ function s24FixBadge(b){return b.fxh&&b.fxh.some(e=>e.out==='confirmed'/*<CREATO
 /*</CREATOR-SETTLE>*/
 /* ---- Bets filter (2026-27 view): the older STOOPIDS two-select design (Wagers list: Everyone / person + status), plus "Me" and "Waiting on me".
    Remembered per device in localStorage (stoopids_b27_person / stoopids_b27_status): only the filter value ("me" is stored as the word me, never a name for it). ---- */
-const S24FS=[['all','Any status'],['open','Open'],['settled','Settled'],['wash','Wash'],['wait','Waiting on me'],['wstoops','Waiting on stoops'],['req','Requested']],S24FPK='stoopids_b27_person',S24FSK='stoopids_b27_status';
+const S24FS=[['all','Any status'],['open','Open'],['settled','Settled'],['wash','Wash'],['wait','Waiting on me'],['wstoops','Waiting on stoops'],['dueup','Upcoming'],['duetoday','Due today'],['dueover','Overdue'],['dueseason','End of season'],['duenone','Not sure yet'],['req','Requested']],S24FPK='stoopids_b27_person',S24FSK='stoopids_b27_status';
 const s24FP=()=>{const v=lsGet(S24FPK);return v==='me'||b27OwnerNames().includes(v)?v:'all'};
 const s24FSt=()=>{const v=lsGet(S24FSK);return S24FS.some(x=>x[0]===v)?v:'all'};
 function s24FSetP(v){lsSet(S24FPK,v==='me'||b27OwnerNames().includes(v)?v:'all');render()}
@@ -3987,11 +4024,7 @@ const s24InBet=(b,n)=>!!n&&(b.backer===n||b.other===n||b27Opps(b).includes(n)||(
 const s24IsOpen=b=>b.status==='open'&&!(b.kind==='pool'&&b.back);
 /* STEP10: "Waiting on me" = ONLY bets where I can tap something (the placer enters the result / Confirm on an open bet or pool; the placer answers a Fix request).
    "Waiting on stoops" = open bets/pools I'm in that only another Stoop can move (they placed it), or my own Fix request waiting on the placer. */
-function s24Waiting(b,me){if(!me)return false;
-  /*<CREATOR-SETTLE>*/if(b.fx&&S24R.includes(b.status)&&me===b.backer&&b.fx.by!==me)return true;/*</CREATOR-SETTLE>*/
-  if(b.status!=='open')return false;
-  if(b.kind==='pool')return !b.back&&b.backer===me;
-  return b.backer===me&&b27Opps(b).length>0}
+function s24Waiting(b,me){return !!b27ActionItem(b,me)}
 function s24WaitStoops(b,me){if(!me||s24Waiting(b,me))return false;
   if(b.fx&&S24R.includes(b.status)&&b.fx.by===me&&b.backer!==me)return true;
   if(b.status!=='open')return false;
@@ -4001,11 +4034,12 @@ let s24Q='';   // search text: this page view only, not stored
 const s24Hay=b=>[b.text,b.backer,b.other,...b27Opps(b),...(Array.isArray(b.parts)?b.parts:[])].join(' ').toLowerCase();
 function s24FSetQ(v){s24Q=String(v||'').slice(0,80);render()}
 function s24Filter(bets,me){if(s24FSt()==='req')return [];/*STEP8-REQUEST*/const p=s24FP(),st=s24FSt(),who=p==='me'?me:p==='all'?null:p,q=s24Q.trim().toLowerCase();
-  return bets.filter(b=>(S24.sub&&b.id===S24.sub)||((!q||s24Hay(b).includes(q))&&(p==='all'||s24InBet(b,who))&&(st==='all'||(st==='wait'?s24Waiting(b,me):st==='wstoops'?s24WaitStoops(b,me):st==='open'?s24IsOpen(b):st==='settled'?(b.status==='backer'||b.status==='other'||(b.kind==='pool'&&b.status==='open'&&!!b.back)):st==='wash'?b.status==='push':true))))}
+  const due=st==='dueup'?'up':st==='duetoday'?'today':st==='dueover'?'over':st==='dueseason'?'season':st==='duenone'?'none':'';
+  return bets.filter(b=>(S24.sub&&b.id===S24.sub)||((!q||s24Hay(b).includes(q))&&(p==='all'||s24InBet(b,who))&&(st==='all'||(due?s24IsOpen(b)&&SHARED_UI.whenClass(b)===due:st==='wait'?s24Waiting(b,me):st==='wstoops'?s24WaitStoops(b,me):st==='open'?s24IsOpen(b):st==='settled'?(b.status==='backer'||b.status==='other'||(b.kind==='pool'&&b.status==='open'&&!!b.back)):st==='wash'?b.status==='push':true))))}
 /* same markup + classes as the old 2025-26 Wagers filter (card > row2 > select, select, input.sb-in), all on one row */
-function s24FilterBar(bets,me){const p=s24FP(),st=s24FSt(),n=bets.filter(b=>s24Waiting(b,me)).length,n2=bets.filter(b=>s24WaitStoops(b,me)).length;
+function s24FilterBar(bets,me){const p=s24FP(),st=s24FSt(),n2=bets.filter(b=>s24WaitStoops(b,me)).length;
   return `<div class="card s24fb"><div class="row2"><select id="sbPerson" aria-label="Person" onchange="s24FSetP(this.value)"><option value="all"${p==='all'?' selected':''}>Everyone</option><option value="me"${p==='me'?' selected':''}>Me</option>${b27OwnerNames().map(o=>`<option value="${esc(o)}"${o===p?' selected':''}>${esc(PN(o))}</option>`).join('')}</select>
-   <select id="sbStatus" aria-label="Status" onchange="s24FSetS(this.value)">${S24FS.map(([k,t])=>`<option value="${k}"${k===st?' selected':''}>${esc(t)}${k==='wait'&&n?' ('+n+')':k==='wstoops'&&n2?' ('+n2+')':''}</option>`).join('')}</select>
+   <select id="sbStatus" aria-label="Status" onchange="s24FSetS(this.value)">${S24FS.map(([k,t])=>`<option value="${k}"${k===st?' selected':''}>${esc(t)}${k==='wstoops'&&n2?' ('+n2+')':''}</option>`).join('')}</select>
    <input id="sbQ" class="sb-in" aria-label="Search bets" placeholder="search terms…" value="${esc(s24Q)}" onchange="s24FSetQ(this.value)"></div>${(p==='me'||st==='wait'||st==='wstoops')&&!me?'<div class="note" style="margin-top:6px">Pick who you are to use “Me” / “Waiting on me” / “Waiting on stoops”.</div>':''}</div>`}
 
 /*</S24-EDIT>*/
@@ -4038,7 +4072,7 @@ function s26kModal(c){return c?`<div class="s26k-bd" onclick="if(event.target===
 <!--<VIEW-ONLY>--><script>
 if(VIEW_ONLY){(function(){
   var no=function(){return false},na=function(){return Promise.resolve(false)};
-  ['presAsk','presPick','qbPick','qbToggle','qbSetAmt','qbGo','b27Place','b27PoolPlace','b27PoolGo','b27Opp','b27Amt','b27Odds','b27Text','b27Edit','b27Ask','s25Ask','s25Fix','s24EditStart','sbSettle'].forEach(function(n){if(typeof window[n]==='function')window[n]=no});
+  ['presAsk','presPick','qbPick','qbToggle','qbSetAmt','qbGo','b27Place','b27PoolPlace','b27PoolGo','b27Opp','b27Amt','b27Odds','b27Text','b27Edit','b27Ask','s25Ask','s25Fix','s24EditStart','s24EstSave','s24EstClear','sbSettle'].forEach(function(n){if(typeof window[n]==='function')window[n]=no});
   ['presBeat','chatTypeWrite','chatSend','chatClear','b27Write','b27Confirm','b27SetStatus','b27PoolConfirm','b27PoolSettle','b27UndoGroup','s25Confirm','sbSave','sbSaveShared','sbSettleShared','sbSettleGo','sbShared','sharedWrite'].forEach(function(n){if(typeof window[n]==='function')window[n]=na});
   try{clearInterval(PS.timer);PS.timer=null;presTick=no}catch(e){}
   var put=function(){var h=document.querySelector('.titlebar h1');if(h&&!document.getElementById('vob')){var b=document.createElement('span');b.id='vob';b.setAttribute('role','status');b.textContent='👀 View only';h.appendChild(b)}};

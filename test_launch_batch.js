@@ -18,7 +18,17 @@ assert.ok(html.includes('b27SetStatus')&&html.includes('s25Confirm'));
 assert.ok(html.includes('setInterval(()=>load(),2*60*1000)'));
 assert.ok(yml.includes('*/10 * * * *')&&yml.includes('GITHUB_TOKEN'));
 assert.ok(html.includes('id="wme"')&&html.includes('Waiting on me'));
-assert.ok(html.includes('shared/ui.js?v=1.45.0'));
+assert.ok(html.includes('shared/ui.js?v=1.50.0'));
+assert.ok(html.includes('shared/ui.css?v=1.30.0'));
+assert.ok(html.includes('function b27When('));
+assert.ok(html.includes("['dueseason','End of season']"));
+assert.ok(!html.includes('h+=wmeHtml'), 'Waiting on me stays a filter, not a second request list');
+assert.ok(!html.includes('data-s24-edit='));
+assert.ok(html.includes('function b27AssertTerms'));
+assert.ok(html.includes('Once a bet is posted, its terms stay as written'));
+assert.ok(html.includes("OB_VIEW='form'"));
+assert.ok(!html.includes('data-ob="open"'));
+assert.ok(html.includes('Write it Up or Request'));
 assert.ok(css.includes('.entry-pair'));
 assert.ok(ui.includes('Already agreed on a bet?'));
 assert.ok(ui.includes('Nothing agreed yet.'));
@@ -62,4 +72,49 @@ R.S.list.push(Object.assign({},base,{id:'r3',by:'a',to:['paul']}));
 assert.strictEqual(R.openN(),1,'a new id counts again');
 me='ken';
 assert.strictEqual(R.openN(),3,'another account has its own seen list');
+const S=ctx.SHARED_UI;
+const today='2026-11-06';
+const rows=S.estSort([
+  {id:'old',status:'open',est:'2026-11-01',created_at:'2026-11-01T00:00:00Z'},
+  {id:'new',status:'open',est:'2026-11-06',created_at:'2026-10-01T00:00:00Z'},
+  {id:'tieB',status:'open',est:'2026-11-06',created_at:'2026-11-02T00:00:00Z'},
+  {id:'tieA',status:'open',est:'2026-11-06',created_at:'2026-11-02T00:00:00Z'},
+  {id:'fut',status:'open',est:'2026-12-01',created_at:'2026-11-01T00:00:00Z'},
+  {id:'none',status:'open',created_at:'2026-11-05T00:00:00Z'},
+  {id:'done',status:'backer',est:'2026-11-06',created_at:'2026-11-06T00:00:00Z'}
+], today);
+assert.deepStrictEqual(rows.map(x=>x.id),['tieA','tieB','new','old','fut','none','done']);
+assert.strictEqual(S.estLabel('2026-11-06'),'Nov 6, 2026');
+assert.strictEqual(S.estToday(new Date(2026,10,6,0,30)),'2026-11-06');
+assert.strictEqual(S.estToday(new Date(2026,10,6,23,30)),'2026-11-06');
+assert.strictEqual(S.estOk('2026-02-29'),false);
+assert.strictEqual(S.estOk('2024-02-29'),true);
+assert.strictEqual(S.estOk('2026-11-31'),false);
+assert.strictEqual(S.dueClass('2026-11-05','2026-11-06'),'over');
+assert.strictEqual(S.dueClass('2026-11-06','2026-11-06'),'today');
+assert.strictEqual(S.dueClass('2026-11-07','2026-11-06'),'up');
+assert.strictEqual(S.dueClass('','2026-11-06'),'none');
+assert.strictEqual(S.dueClass('2026-02-31','2026-11-06'),'none');
+assert.strictEqual(S.dueText('2026-11-07','2026-11-06'),'Settle by: Nov 7, 2026 · Upcoming');
+assert.ok(ui.includes('When can this be settled?'));
+assert.ok(ui.includes('End of season'));
+assert.ok(ui.includes('Not sure yet'));
+const season=S.whenPack('season','2026-11-01','2026-27');
+assert.strictEqual(season.wk,'season');
+assert.strictEqual(season.est,null);
+assert.strictEqual(season.sid,'2026-27');
+assert.strictEqual(S.whenPack('season','2026-11-01','April 6').sid,null);
+assert.strictEqual(S.whenKind({est:'2026-11-06'}),'date');
+assert.strictEqual(S.whenKind({}),'unknown');
+assert.strictEqual(S.whenKind({wk:'date',est:'2026-02-31'}),'unknown');
+assert.strictEqual(S.whenText({wk:'season',sid:'2026-27'}),'When: End of season · 2026-27');
+assert.ok(!/2027-0[34]-/.test(S.whenText({wk:'season',sid:'2026-27'})));
+const timed=S.estSort([
+  {id:'late',status:'open',wk:'date',est:'2026-12-01',created_at:'2026-11-01T00:00:00Z'},
+  {id:'sea',status:'open',wk:'season',sid:'2026-27',est:'2026-01-01',created_at:'2026-11-01T00:00:00Z'},
+  {id:'ask',status:'reported',wk:'unknown',created_at:'2026-10-01T00:00:00Z'},
+  {id:'unk',status:'open',created_at:'2026-11-05T00:00:00Z'},
+  {id:'due',status:'open',wk:'date',est:'2026-11-06',created_at:'2026-10-02T00:00:00Z'}
+], today);
+assert.deepStrictEqual(timed.map(x=>x.id),['ask','due','late','sea','unk']);
 console.log('launch batch checks ok');

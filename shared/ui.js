@@ -143,7 +143,7 @@ U.halfLs=hsLs;U.halfScores=function(g,s,first,BOX){var tot=s.score!=null?esc(Str
      A request auto-cancels when its own window starts (full game: tip-off; 2nd half: halftime) or at the poster's expiry, whichever first. */
   SHARED_UI.Requests=function(A){
     var e=A.e,S={f:null,list:[],at:0,busy:false,msg:'',bad:false,loading:false};
-    var nf=function(){return{gid:'',side:'',cov:'game',odds:[1,1],amt:null,amtTxt:'',to:[],mode:'h',n:3,at:''}};S.f=nf();
+      var nf=function(){return{gid:'',side:'',cov:'game',odds:[1,1],amt:null,amtTxt:'',to:[],mode:'h',n:3,at:'',est:'',wk:'unknown'}};S.f=nf();
     var HALF_MS=70*60000;
     function parse(t){try{var o=JSON.parse(t||'{}');if(typeof o==='string')o=JSON.parse(o);return Array.isArray(o.reqs)?o.reqs.filter(function(r){return r&&r.id}):[]}catch(x){return[]}}
     function rid(){return 'rq'+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
@@ -171,7 +171,7 @@ U.halfLs=hsLs;U.halfScores=function(g,s,first,BOX){var tot=s.score!=null?esc(Str
     function card(r,now){var me=A.me(),inv=r.to.indexOf(me)>=0,dec=(r.dec||[]).indexOf(me)>=0,n=r.to.length,w=Math.min(r.exp,winStart(r,game(r.gid)));
       var nt=tk(r).length,mine=tk(r).indexOf(me)>=0;var sn=slots(r),who=n===1?'Open to '+e(A.nick(r.to[0])):sn<n?'Open to '+sn+' of '+n+' stoops':n>=A.others().length?'Open to all '+n+' stoops':'Open to '+n+' stoops';   /* STEP13-SLOTS */
       var h='<div class="card rq-card" data-rq-id="'+e(r.id)+'"><div class="rq-top"><b>📨 '+e(A.nick(r.by))+'</b> <span class="note">'+who+(nt?' · '+nt+' of '+slots(r)+' taken':'')+' · expires '+expTxt(r,now)+'</span></div>'
-        +'<div class="rq-body"><span class="rq-amt">'+e(r.amt)+'</span> <span class="rq-side">'+e(r.lab)+'</span>'+' <span class="note">at '+oddsTxt(r.odds)+' odds</span>'+(r.cov==='2h'?' <span class="pill">2nd half</span>':'')+(r.game?'<div class="note">'+e(r.game)+' · '+e(r.date||'')+'</div>':'')+'</div>'+explain(r);
+        +'<div class="rq-body"><span class="rq-amt">'+e(r.amt)+'</span> <span class="rq-side">'+e(r.lab)+'</span>'+' <span class="note">at '+oddsTxt(r.odds)+' odds</span>'+(r.cov==='2h'?' <span class="pill">2nd half</span>':'')+(r.game?'<div class="note">'+e(r.game)+' · '+e(r.date||'')+'</div>':'')+'</div>'+explain(r)+'<div class="b27-due" data-due="'+SHARED_UI.whenClass(r)+'">'+e(SHARED_UI.whenText(r))+'</div>';
       if(mine)h+='<div class="note good">You accepted: it is your bet now.</div>';
       else if(me&&inv&&!dec&&r.by!==me&&A.canWrite())h+='<div class="rq-act"><button type="button" class="btn rq-yes" data-rq="acc" data-v="'+e(r.id)+'"'+(S.busy?' disabled':'')+'>Accept</button><button type="button" class="btn sec rq-no" data-rq="dec" data-v="'+e(r.id)+'"'+(S.busy?' disabled':'')+'>Decline</button></div>';
       else if(dec)h+='<div class="note">You declined.</div>';
@@ -195,6 +195,7 @@ U.halfLs=hsLs;U.halfScores=function(g,s,first,BOX){var tot=s.score!=null?esc(Str
       h+='</div><div class="rq-56c">';
       h+='<div class="b27-q">6. Expires</div><div class="rq-exp">'+(f.mode==='start'?'':f.mode==='at'?'<input class="sb-in b27-in rq-in" type="datetime-local" data-rq-in="at" value="'+e(f.at)+'" aria-label="Expires at">':'<input class="sb-in b27-in rq-in rq-num" data-rq-in="n" inputmode="numeric" value="'+e(f.n)+'" aria-label="Expires in">')+'<select class="sb-in b27-in rq-in rq-unit" data-rq-in="mode" aria-label="Unit">'+[['m','minutes'],['h','hours'],['d','days'],['w','weeks'],['mo','months'],].concat(g?[['start','at tipoff']]:[]).concat([['at','exact date/time']]).map(function(m){return '<option value="'+m[0]+'"'+(f.mode===m[0]?' selected':'')+'>'+m[1]+'</option>'}).join('')+'</select></div>'+(g?'<div class="note">It also closes by itself at tip-off.</div>':'');
       h+='</div></div>';
+      h+=SHARED_UI.whenBox({e:e,kind:f.wk||(SHARED_UI.estOk(f.est)?'date':'unknown'),est:f.est,seasonId:A.seasonId?A.seasonId():'',inputId:'rqEst',pick:function(id){return 'data-rq="when" data-v="'+id+'"'},dateAttr:'data-rq-in="est"'});
       var p=pick(g&&g.g,f),amt=f.amtC?(+f.amtTxt>0?+f.amtTxt:null):f.amt;
       h+='<div class="b27-sum">'+(p?e(p.txt):'Write the bet')+' · '+(amt?e(amt):'?')+' · '+oddsTxt(f.odds)+' odds · '+(nTo?(nTo===1?e(A.nick(f.to[0])):nTo>=nOth?'all stoops':nTo+' stoops')+(sl<nTo?', first '+sl:''):'any stoops'+(sl<nOth?', first '+sl:''))+'</div>';
       if(S.msg)h+='<div class="'+(S.bad?'b27-bad-t':'good')+' rq-msg" role="status">'+e(S.msg)+'</div>';
@@ -219,15 +220,23 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
     function say(txt,base){S.copied=null;S.fb=null;S.posted=false;S.base=base;copy(txt)}
     function copy(t,done){var fin=function(ok){S.copied=ok;S.fb=ok?null:t;if(S.posted)S.msg=toast(ok);if(done)done(ok);A.render()};var fb=function(){var ok=false;try{var ta=document.createElement('textarea');ta.value=t;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();ok=!!document.execCommand('copy');ta.remove()}catch(x){}fin(ok)};
       try{if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(t).then(function(){fin(true)},fb);return}}catch(x){}fb()}
-    function pinned(only){var now=Date.now(),L=S.list.filter(function(r){return live(r,now)}).sort(function(a,b){return a.exp-b.exp});
-      if(!L.length)return only?'<div class="card note rq-none">No open requests right now.</div>':'';return '<div class="rq-pin" id="rqPinned"><h2 class="rq-h">\u{1F4CC} Open requests</h2>'+L.map(function(r){return card(r,now)}).join('')+'</div>'}
+    function armExpiry(){if(S.expT)clearTimeout(S.expT);var now=Date.now(),soon=null;
+      S.list.forEach(function(r){if(r&&r.status==='open'&&r.exp>now&&(soon==null||r.exp<soon))soon=r.exp});
+      if(soon==null)return;var wait=Math.max(400,Math.min(soon-now+80,30000));
+      S.expT=setTimeout(function(){S.expT=0;try{if(!A.watchExpiry||A.watchExpiry())A.render()}catch(e){}armExpiry()},wait)}
+    function pinned(only,mark){var now=Date.now(),L=S.list.filter(function(r){return live(r,now)}).sort(function(a,b){return a.exp-b.exp});
+      if(mark){markOpenSeen();try{paint()}catch(e){}}
+      armExpiry();
+      if(!L.length)return only?'<div class="card note rq-none">No open requests right now.</div>':'';
+      return '<div class="rq-pin" id="rqPinned"><h2 class="rq-h">Open requests</h2><p class="note">Nothing is agreed until someone accepts. Expired or filled requests leave this list.</p><div class="rq-grid">'+L.map(function(r){return card(r,now)}).join('')+'</div></div>'}
     /* STEP10: view('open') = the Open tab (open request cards only); view() = the Request tab (form only) */
     function seenKey(){return 'rq_open_seen:'+String(A.seenScope?A.seenScope():(A.me()||'guest'))}
     function seenIds(){try{var ls=typeof localStorage!=='undefined'?localStorage:null;if(!ls)return [];var a=JSON.parse(ls.getItem(seenKey())||'[]');return Array.isArray(a)?a:[]}catch(e){return []}}
     function markOpenSeen(){var now=Date.now(),ids=S.list.filter(function(r){return live(r,now)}).map(function(r){return r.id});
       try{if(typeof localStorage!=='undefined')localStorage.setItem(seenKey(),JSON.stringify(ids.slice(-300)))}catch(e){}}
     function view(mode){var now=Date.now();if(!S.at||now-S.at>20000)setTimeout(load,0);
-      if(mode==='open'){markOpenSeen();try{paint()}catch(e){}}
+      if(mode==='open'||mode==='all'){markOpenSeen();try{paint()}catch(e){}}
+      armExpiry();
       var L=S.list.filter(function(r){return live(r,now)}).sort(function(a,b){return a.exp-b.exp}),me=A.me();
       var h='';if(S.msg&&!S.f.gid)h+='<div class="card '+(S.bad?'b27-bad':'b27-ok')+'" role="status">'+e(S.msg)+(S.fb?'<pre class="rq-fb">'+e(S.fb)+'</pre><div class="rq-act"><button type="button" class="btn" data-rq="wa">Copy</button></div>':'')+'</div>';
       if(mode==='open')return h+(L.length?'<h2 class="rq-h">Open requests</h2><div class="rq-grid">'+L.map(function(r){return card(r,now)}).join('')+'</div>':'<div class="card note rq-none">No open requests right now.</div>');
@@ -235,23 +244,25 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
     async function act(k,v){var f=S.f,me=A.me(),now=Date.now();
       if(k==='cp'){var rc=S.list.find(function(x){return x.id===v});if(rc)copy(waText(rc,'new'),function(ok){S.msg=ok?'Message copied, paste in WhatsApp.':'Could not copy. Long-press to copy the text below.';S.bad=!ok});return}   /* STEP14-COPY */
       if(k==='wa'){if(S.fb)copy(S.fb,function(ok){if(ok){S.msg='Message copied, paste in WhatsApp.';S.bad=false}});return}
-      if(k==='edit'){var re=S.list.find(function(x){return x.id===v});if(!re||re.by!==me||tk(re).length||re.status!=='open')return;var ws=winStart(re,game(re.gid)),pad=function(n){return String(n).padStart(2,'0')},dt=new Date(re.exp);
-        S.f={gid:re.gid,text:re.lab,side:re.k==='txt'?'':re.k+':'+(re.si||0),cov:re.cov||'game',odds:(re.odds||[1,1]).slice(),amt:A.amounts.indexOf(+re.amt)>=0?+re.amt:null,amtTxt:A.amounts.indexOf(+re.amt)>=0?'':String(re.amt),amtC:A.amounts.indexOf(+re.amt)<0,slots:re.slots||null,oddC:[[1,1],[2,1],[3,1],[4,1],[5,1]].every(function(o){return !(+(re.odds||[1,1])[0]===o[0]&&+(re.odds||[1,1])[1]===o[1])}),to:re.to.slice(),mode:re.exp>=ws?'start':'at',n:3,at:dt.getFullYear()+'-'+pad(dt.getMonth()+1)+'-'+pad(dt.getDate())+'T'+pad(dt.getHours())+':'+pad(dt.getMinutes())};
+      if(k==='edit'){var re=S.list.find(function(x){return x.id===v});if(!re||re.by!==me||tk(re).length||re.status!=='open'){if(re&&tk(re).length){S.msg='Someone already accepted. Those terms stay as agreed.';S.bad=true;A.render()}return}var ws=winStart(re,game(re.gid)),pad=function(n){return String(n).padStart(2,'0')},dt=new Date(re.exp);
+        S.f={gid:re.gid,text:re.lab,side:re.k==='txt'?'':re.k+':'+(re.si||0),cov:re.cov||'game',odds:(re.odds||[1,1]).slice(),amt:A.amounts.indexOf(+re.amt)>=0?+re.amt:null,amtTxt:A.amounts.indexOf(+re.amt)>=0?'':String(re.amt),amtC:A.amounts.indexOf(+re.amt)<0,slots:re.slots||null,oddC:[[1,1],[2,1],[3,1],[4,1],[5,1]].every(function(o){return !(+(re.odds||[1,1])[0]===o[0]&&+(re.odds||[1,1])[1]===o[1])}),to:re.to.slice(),mode:re.exp>=ws?'start':'at',n:3,at:dt.getFullYear()+'-'+pad(dt.getMonth()+1)+'-'+pad(dt.getDate())+'T'+pad(dt.getHours())+':'+pad(dt.getMinutes()),est:SHARED_UI.whenKind(re)==='date'?re.est:'',wk:SHARED_UI.whenKind(re)};
         S.edit=re.id;S.msg='';S.fb=null;if(A.goRequest)A.goRequest();A.render();setTimeout(function(){try{var fo=document.getElementById('rqForm');if(fo)fo.scrollIntoView({block:'start'})}catch(x){}},30);return}
       if(k==='slot-'||k==='slot+'||k==='close'){var rs=S.list.find(function(x){return x.id===v});if(!rs||rs.by!==me||rs.status!=='open')return;var nt0=tk(rs).length,want=k==='close'?null:Math.max(nt0,Math.min(rs.to.length,slots(rs)+(k==='slot+'?1:-1)));
         if(k==='close')say(waText(rs,'close'),'Request closed');
         S.busy=true;A.render();try{await write(function(c){return c.map(function(x){if(x.id!==v||x.by!==me||x.status!=='open')return x;var n2=tk(x).length;return k==='close'?Object.assign({},x,{status:'closed',endedAt:Date.now()}):Object.assign({},x,{slots:Math.max(n2,want)})})},function(c){var x=c.find(function(y){return y.id===v});return !x||(k==='close'?x.status!=='open':slots(x)===Math.max(tk(x).length,want))});
           if(k==='close'){S.posted=true;S.msg=toast(S.copied)}else S.msg='Spots: '+want+'.';S.bad=false}catch(x){S.msg='Could not save that. Try again.';S.bad=true}S.busy=false;A.render();return}
       if(k==='unedit'){S.edit=null;S.f=nf();A.render();return}
+      if(k==='when'){f.wk=v==='date'||v==='season'?v:'unknown';if(f.wk!=='date')f.est='';A.render();return}
       if(k==='to'){var i=f.to.indexOf(v);if(i>=0)f.to.splice(i,1);else f.to.push(v)}
       else if(k==='all')f.to=A.others().map(function(o){return o.id});else if(k==='clear')f.to=[];
       else if(k==='side'){f.side=v;var gg=game(f.gid),pp=gg&&pick(gg.g,{side:v,cov:'game'});if(pp)f.text=pp.txt}else if(k==='cov'){f.cov=v}else if(k==='amt'){f.amt=+v;f.amtTxt='';f.amtC=false}else if(k==='amtc'){f.amtC=true;f.amt=null}else if(k==='oddc'){f.oddC=true}else if(k==='fslotall'){f.sAll=true;f.slots=null}else if(k==='fslot-'||k==='fslot+'){var nT=f.to.length,cT=nT||A.others().length,cur=f.sAll?cT:f.slots?Math.min(f.slots,cT):(nT||1);f.sAll=false;cur+=k==='fslot+'?1:-1;f.slots=Math.max(1,Math.min(cT,cur))}else if(k==='odds'){f.odds=v.split('-').map(Number);f.oddC=false;f.oddTxt=''}
       else if(k==='send'){var g=game(f.gid),p=pick(g&&g.g,f),amt=f.amtC?(+f.amtTxt>0?Math.round(+f.amtTxt):null):f.amt,ex=expAt(f,now,g?winStart({cov:f.cov,start:g.start},g):null);
         var err=!p?'Write the bet.':!amt?'Choose an amount.':!ex||ex<=now?'Choose when it expires (up to a year).':null;
+        var pack=SHARED_UI.whenPack(f.wk||'unknown',f.est,A.seasonId?A.seasonId():'');if(!err&&(f.wk||'unknown')==='date'&&!pack)err='Use a real date, or pick End of season or Not sure yet.';
         if(!err){var r0={id:rid(),gid:g?String(g.id):'',start:g&&g.start||null};if(started(Object.assign({cov:f.cov},r0),now))err='That '+(f.cov==='2h'?'half':'game')+' has already started.'}
         if(err){S.msg=err;S.bad=true;A.render();return}
         if(S.edit)r0.id=S.edit;
-        var toAll=f.to.length?f.to.slice():A.others().map(function(o){return o.id});var r=Object.assign(r0,{by:me,to:toAll,cov:f.cov,k:p.k,si:p.si,lab:p.lab,other:p.other,odds:f.odds.slice(),slots:f.sAll?null:f.slots?Math.min(f.slots,toAll.length):(f.to.length?null:1),txt:p.txt,game:g?A.tname(g.g.away)+' vs '+A.tname(g.g.home):'',date:g?A.dateET(g.g):'',amt:amt,exp:ex,at:now,status:'open',dec:[]});
+        var toAll=f.to.length?f.to.slice():A.others().map(function(o){return o.id});var r=Object.assign(r0,{by:me,to:toAll,cov:f.cov,k:p.k,si:p.si,lab:p.lab,other:p.other,odds:f.odds.slice(),slots:f.sAll?null:f.slots?Math.min(f.slots,toAll.length):(f.to.length?null:1),txt:p.txt,game:g?A.tname(g.g.away)+' vs '+A.tname(g.g.home):'',date:g?A.dateET(g.g):'',amt:amt,exp:ex,at:now,status:'open',dec:[],wk:pack.wk,est:pack.est,sid:pack.sid});
         say(waText(r,S.edit?'upd':'new'),S.edit?'Request updated':'Request posted');   /* one tap: copy starts inside the tap (clipboard needs it), then the request is posted */
         S.busy=true;S.msg='Sending…';S.bad=false;A.render();
         var ed=S.edit;r.ver=rid();
@@ -276,10 +287,12 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
     function count(){var me=A.me(),now=Date.now();if(!me)return 0;return S.list.filter(function(r){return live(r,now)&&r.by!==me&&r.to.indexOf(me)>=0&&(r.dec||[]).indexOf(me)<0&&tk(r).indexOf(me)<0}).length}
     /* STEP9-BADGES: Bets tab = requests waiting for me + bets waiting on my action (A.waiting); Request a bet segment = requests only */
     function nb(el,n,lab){if(!el)return;var b=el.querySelector('.rq-nb');if(!n){if(b)b.remove();return}if(!b){b=document.createElement('b');b.className='rq-nb';el.appendChild(b)}var s=String(Math.min(99,n));if(b.textContent!==s)b.textContent=s;b.setAttribute('aria-label',lab)}
-    /* Open sub-tab badge = live requests this device+account has not opened the Open tab on. Viewing Open marks them seen; they can stay open. A new id counts again. Not shown on the main Bets tab. */
+    /* Unread badge sits on the All bets sub-tab. Viewing All bets marks the current live requests seen; they can stay open. A new id counts again. Not on the main Bets tab. */
     function openN(){var seen={},now=Date.now();seenIds().forEach(function(id){seen[id]=1});return S.list.filter(function(r){return live(r,now)&&!seen[r.id]}).length}
     function paint(){try{var on=openN();
-      nb(document.querySelector('#b27Ob_open,[data-ob="open"]'),on,on+' unread open request'+(on===1?'':'s'));
+      document.querySelectorAll('#b27Ob_open,[data-ob="open"],#b27Ob_all,[data-ob="all"]').forEach(function(el){
+        if(el.getAttribute('data-ob')==='open'||el.id==='b27Ob_open'){var old=el.querySelector('.rq-nb');if(old)old.remove();return}
+        nb(el,on,on+' unread open request'+(on===1?'':'s'))});
       var a=A.navEl&&A.navEl();if(a){var old=a.querySelector('.rq-nb');if(old)old.remove()}}catch(x){}}
     if(typeof window!=='undefined'&&typeof setInterval!=='undefined'){setTimeout(function(){if(A.me())load()},3000);setInterval(function(){if(A.me()&&!S.busy)load()},60000);setInterval(paint,2000)}
     if(typeof document!=='undefined'){document.addEventListener('click',function(ev){var t=ev.target.closest&&ev.target.closest('[data-rq]');if(!t)return;ev.preventDefault();act(t.dataset.rq,t.dataset.v)});
@@ -313,6 +326,27 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
   SHARED_UI.upsetHead=function(note,empty){var h='<div class="card"><b>\u{1F631} The upset rule</b><div class="note">'+note+'</div></div>';return empty==null?h:h+'<div class="card">'+empty+'</div>'};
   /* STEP7-SCORING: Rules scoring table (label escaping passed in: STOOPIDS labels are trusted markup, League escapes) */
   SHARED_UI.scoringTable=function(rows,o){var e=o.e,s=o.sign;return '<div class="card sc"><table><tr><th>Scoring</th><th class="n">Pts</th></tr>'+rows.map(function(r){return '<tr><td>'+e(r[0])+'</td><td class="n">'+s(r[1])+'</td></tr>'}).join('')+'</table></div>'};
+  SHARED_UI.estToday=function(d){d=d||new Date();var p=function(n){return String(n).padStart(2,'0')};return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())};
+  SHARED_UI.estOk=function(s){if(!s)return false;var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s);if(!m)return false;var y=+m[1],mo=+m[2],da=+m[3],dt=new Date(y,mo-1,da);return dt.getFullYear()===y&&dt.getMonth()===mo-1&&dt.getDate()===da};
+  SHARED_UI.estLabel=function(s){if(!SHARED_UI.estOk(s))return 'No date';var p=s.split('-'),mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+p[1]-1];return mo+' '+Number(p[2])+', '+p[0]};
+  SHARED_UI.whenKind=function(b){if(!b||typeof b!=='object')return 'unknown';if(b.wk==='season')return 'season';if(b.wk==='unknown')return 'unknown';if(b.wk==='date')return SHARED_UI.estOk(b.est)?'date':'unknown';return SHARED_UI.estOk(b.est)?'date':'unknown'};
+  SHARED_UI.whenPack=function(kind,est,sid){var id=typeof sid==='string'&&/^[0-9]{4}-[0-9]{2}$/.test(sid)?sid:null;if(kind==='season')return {wk:'season',est:null,sid:id};if(kind==='date'){if(!SHARED_UI.estOk(est))return null;return {wk:'date',est:est,sid:null}}return {wk:'unknown',est:null,sid:null}};
+  SHARED_UI.needsConfirm=function(b){if(!b)return false;if(b.status==='reported'||b.status==='disputed')return true;if(b.fx&&(b.status==='backer'||b.status==='other'||b.status==='push'))return true;if(b.fix&&b.fix.st==='pending')return true;return false};
+  SHARED_UI.estSort=function(list,today,created){today=today||SHARED_UI.estToday();created=created||function(b){return Date.parse(b.created_at||b.ts)||0};
+    var live=function(b){return b&&(b.status==='open'||b.status==='reported'||b.status==='disputed'||b.status==='pending')&&!(b.kind==='pool'&&b.back)};
+    var rank=function(b){if(SHARED_UI.needsConfirm(b))return 0;if(!live(b))return 5;var k=SHARED_UI.whenKind(b);if(k==='date')return b.est<=today?1:2;if(k==='season')return 3;return 4};
+    return (list||[]).slice().sort(function(a,b){var ra=rank(a),rb=rank(b);if(ra!==rb)return ra-rb;if((ra===1||ra===2)&&a.est!==b.est)return ra===1?(a.est<b.est?1:-1):(a.est<b.est?-1:1);var ca=created(a),cb=created(b);if(ca!==cb)return cb-ca;return String(a.id).localeCompare(String(b.id))})};
+  SHARED_UI.dueClass=function(est,today){today=today||SHARED_UI.estToday();if(!SHARED_UI.estOk(est))return 'none';if(est<today)return 'over';if(est===today)return 'today';return 'up'};
+  SHARED_UI.dueName=function(c){return c==='over'?'Overdue':c==='today'?'Due today':c==='up'?'Upcoming':c==='season'?'End of season':'No date'};
+  SHARED_UI.dueText=function(est,today){var ok=SHARED_UI.estOk(est);return 'Settle by: '+(ok?SHARED_UI.estLabel(est):'No date')+(ok?' · '+SHARED_UI.dueName(SHARED_UI.dueClass(est,today)):'')};
+  SHARED_UI.whenClass=function(b,today){var k=SHARED_UI.whenKind(b);if(k==='season')return 'season';if(k==='date')return SHARED_UI.dueClass(b.est,today);return 'none'};
+  SHARED_UI.whenText=function(b){var k=SHARED_UI.whenKind(b);if(k==='date')return 'When: '+SHARED_UI.estLabel(b.est)+' · '+SHARED_UI.dueName(SHARED_UI.dueClass(b.est));if(k==='season')return 'When: End of season'+(b.sid?' · '+b.sid:' · no season end date on file');return 'When: Not sure yet'};
+  SHARED_UI.whenBox=function(o){o=o||{};var e=o.e||function(s){return String(s==null?'':s)},k=o.kind==='date'||o.kind==='season'?o.kind:'unknown';
+    var btn=function(id,lab){return '<button type="button" class="b27-chip" data-when="'+id+'" aria-pressed="'+(k===id?'true':'false')+'" '+(o.pick?o.pick(id):'')+'>'+e(lab)+'</button>'};
+    var h='<div class="b27-when"><div class="b27-q">When can this be settled? <span class="note">for sorting only</span></div><div class="b27-when-c" role="group" aria-label="When can this be settled?">'+btn('date','Choose a date')+btn('season','End of season')+btn('unknown','Not sure yet')+'</div>';
+    if(k==='date')h+='<input class="sb-in b27-in" type="date" id="'+(o.inputId||'whenDate')+'" aria-label="Choose a date" value="'+e(o.est||'')+'" '+(o.dateAttr||'')+'>';
+    if(k==='season'){var id=o.seasonId||'';h+='<div class="note">'+(id?e('End of '+id+'. No calendar end date is set, so this only groups the bet.'):e('End of season. No season id is on file, so this only groups the bet.'))+'</div>'}
+    return h+'<div class="note">Around then, for sorting. It does not settle the bet, pick a winner, or close a request.</div></div>'};
   SHARED_UI.entryHead=function(k){return k==='rq'
     ?'<div class="entry-hd entry-hd-rq"><h2>Request a bet</h2><p>Nothing agreed yet. Find a Stoop who wants some action and to feel something.</p></div>'
     :'<div class="entry-hd entry-hd-wiu"><h2>Write it Up</h2><p>Already agreed on a bet? Record it here and add it to All bets.</p></div>'};
