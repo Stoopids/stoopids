@@ -19,7 +19,7 @@ document.addEventListener('keydown',e=>{const el=e.target;if(!ok(el)||e.key.leng
 
 /* Who's online strip: on = [name HTML], off = [[name HTML, ms since last seen or Infinity]], ago(ms) -> 'x min ago'. Returns the strip's inner HTML (same on both sites). */
 (function(g){if(!g.SHARED_UI)return;var U=g.SHARED_UI;
-U.onlineStrip=function(on,off,ago){return '<span class="onl-h">Who\u2019s online</span>'+on.map(function(n){return '<span class="onl-p on" title="Online now"><i class="pd"></i>'+n+'</span>'}).join('')+off.map(function(x){return '<span class="onl-p"><i class="pd off"></i>'+x[0]+' <small>'+(x[1]===Infinity?'not seen yet':ago(x[1]))+'</small></span>'}).join('')};
+U.onlineStrip=function(on,off,ago){var live=on.length?on.map(function(n){return '<span class="onl-p on" title="Online now"><i class="pd"></i>'+n+'</span>'}).join(''):'<span class="onl-none">nobody</span>';var was=off.map(function(x){return '<span class="onl-p" title="Last seen"><i class="pd off"></i>'+x[0]+' <small>'+(x[1]===Infinity?'not seen yet':ago(x[1]))+'</small></span>'}).join('');return '<span class="onl-g onl-now"><b class="onl-h">Online</b>'+live+'</span>'+(was?'<span class="onl-g onl-was"><b class="onl-h">Last seen</b>'+was+'</span>':'')};
 /* Online dot on a Standings card: toggles .isonl and the small dot after the name (no layout shift). */
 U.markOnline=function(c,yes){c.classList.toggle('isonl',!!yes);var w=c.querySelector('.who');if(!w)return;var b=w.querySelector('.onlb');if(yes&&!b){b=document.createElement('span');b.className='onlb';b.title='Online now';(w.querySelector('b')||w).appendChild(b)}else if(!yes&&b)b.remove()};
 /* 'checked just now' after a manual Refresh: ts = click time (0 = never). */

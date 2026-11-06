@@ -127,13 +127,17 @@ html body .gm:has(.gh :is(.gbtns,.mkbtns)>:nth-child(2)) .gh+.gside{margin-right
 /* light content: narrow centred boxes */
 @media (min-width:700px){html body .card[data-tally-settle]{max-width:640px;margin-left:auto!important;margin-right:auto!important}}
 /* Who's online strip (reads existing presence only) */
-.onl{max-width:860px;margin:14px auto 10px;padding:10px 12px;display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;justify-content:center;border:1px solid var(--line,#2d3548);border-radius:14px;background:var(--card,#1b2130);font-size:13px;box-sizing:border-box}
-.onl-h{font-weight:800;margin-right:4px}
-.onl-p{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;background:rgba(127,127,127,.12);white-space:nowrap}
+.onl{max-width:100%;margin:8px 0;padding:6px 8px;display:flex;flex-wrap:nowrap;gap:8px;align-items:center;justify-content:flex-start;overflow-x:auto;overflow-y:hidden;border:1px solid var(--line,#2d3548);border-radius:12px;background:var(--card,#1b2130);font-size:14px;line-height:1.2;box-sizing:border-box}
+.onl-g{display:inline-flex;align-items:center;gap:6px;flex:0 0 auto}
+.onl-h{font-weight:800;font-size:14px;margin-right:2px}
+.onl-now .onl-h{color:#86efac}
+.onl-was .onl-h{color:var(--mut,#9aa)}
+.onl-none{color:var(--mut,#9aa);font-size:14px}
+.onl-p{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;background:rgba(127,127,127,.12);white-space:nowrap;font-size:14px}
 .onl-p .pd{width:8px;height:8px;border-radius:50%;background:#22c55e;display:inline-block;box-shadow:0 0 0 2px rgba(34,197,94,.25)}
 .onl-p .pd.off{background:#6b7280;box-shadow:none}
-.onl-p small{opacity:.7;font-size:11.5px}
-@media (max-width:640px){.onl{margin:12px 8px 10px;font-size:12px;gap:5px 6px}.onl-p{padding:3px 8px}}
+.onl-p small{opacity:.85;font-size:13px}
+@media (max-width:640px){.onl{font-size:14px;gap:6px}.onl-p{padding:4px 8px;font-size:14px}}
 /*</SYNC12>*/
 /*<SYNC13>*/ /* backlog: LIVE mark on Upcoming + Games tab, slightly wider toggles, score by half, Standings bottom gap */
 body.haslive .rkseg-b[data-gm=upcoming],body.haslive .gctl .rkseg-b[data-v=upcoming],body.haslive a[data-tab=games],body.haslive a[data-a=tab][data-v=games]{outline:2px solid #22c55e!important;outline-offset:-2px;position:relative}
@@ -488,3 +492,10 @@ html body .b27-opps>.b27-util{display:flex;flex-direction:column;justify-content
 html body .b27-util .s27-selb{flex:1 1 0;width:100%;min-height:0;margin:0;padding:0 4px;border-radius:12px;font-size:12px;line-height:1.05}
 @media (max-width:599px){html body .b27-opps>.b27-util{min-height:52px;gap:3px}html body .b27-util .s27-selb{border-radius:9px;font-size:11px}}
 /*</PARITY-LAYOUT>*/
+/* Quick bet uses the Request a bet blue (#1e3a8a), not the yellow tab. */
+html body .gm .qb-btn,html body .ggrid .qb-btn,html body .gbtns .qb-btn{background:#1e3a8a!important;color:#fff!important;border-color:#1e3a8a!important}
+html body .gm .qb-btn[aria-expanded=true],html body .ggrid .qb-btn[aria-expanded=true]{background:#1e3a8a!important;color:#fff!important}
+/* Games filters: one smaller row. The row scrolls; the page does not. */
+html body #main .gf3,html body #lbody .gf3{display:flex!important;flex-flow:row nowrap!important;align-items:center!important;justify-content:flex-start!important;gap:6px!important;width:100%!important;max-width:100%!important;overflow-x:auto!important;overflow-y:hidden!important;margin:0 0 8px!important}
+html body #main .gf3>.gf2.gfpills,html body #main .gf3>.gf2.gfwhen,html body #lbody .gf3>.gf2.gfpills,html body #lbody .gf3>.gf2.gfwhen{display:contents!important}
+html body #main .gf3>.gf2.gfpills>.gf2-s,html body #main .gf3>.gf2.gfpills>.gf2-b,html body #main .gf3>.gf2.gfwhen>.gf2-s,html body #main .gf3>.gf2.gfwhen>.gf2-b,html body #lbody .gf3>.gf2.gfpills>.gf2-s,html body #lbody .gf3>.gf2.gfpills>.gf2-b,html body #lbody .gf3>.gf2.gfwhen>.gf2-s,html body #lbody .gf3>.gf2.gfwhen>.gf2-b{flex:0 0 auto!important;width:auto!important;min-width:0!important;max-width:none!important;height:28px!important;min-height:28px!important;font-size:12px!important;padding:0 10px!important;box-sizing:border-box!important}
