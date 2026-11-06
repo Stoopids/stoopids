@@ -223,6 +223,7 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
       var od=o[0]+'-'+o[1];if(t.toLowerCase().indexOf(od.toLowerCase())>=0)return t;return (t?t+' ':'')+'at '+od}
     function vsRight(r,acc){if(acc)return nmOf(acc);if(r.to&&r.to.length===1)return nmOf(r.to[0]);var n=slots(r)||(r.to?r.to.length:0);return 'Open to '+n+' stoop'+(n===1?'':'s')}
     function waText(r,kind,acc){var left=nmOf(r.by),right=vsRight(r,kind==='acc'?acc:null),money='$'+r.amt+' '+left+' v '+right,desc=descLine(r);
+      if(kind==='bet'){var rights=(r.to||[]).map(nmOf).filter(Boolean),rightB=rights.length?rights.join(', '):right,moneyB='$'+r.amt+' '+left+' v '+rightB;return ['💥 '+moneyB+' 💥',desc].filter(Boolean).join('\n')}
       if(kind==='acc')return ['💥 '+money+' — Accepted 💥',desc].filter(Boolean).join('\n');
       if(kind==='del')return ['Bet Request Deleted: '+money,desc].filter(Boolean).join('\n');
       if(kind==='close')return ['Bet Request Closed: '+money,desc,tk(r).length+' stoops in'].filter(Boolean).join('\n');
@@ -364,8 +365,8 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
     if(k==='game')h+='<div class="note">'+e('End game. No game end is linked, so this only groups it.')+'</div>';
     return h+'</div>'};
   SHARED_UI.entryHead=function(k){return k==='rq'
-    ?'<div class="entry-hd entry-hd-rq"><h2>Request a bet</h2><p class="entry-sub-d">Nothing agreed yet? Find a stoop who wants to feel something.</p><p class="entry-sub-m">Nothing agreed yet—find a Stoop who wants to feel something.</p></div>'
-    :'<div class="entry-hd entry-hd-wiu"><h2>Write it Up</h2><p class="entry-sub-d">Bet already discussed.</p><p class="entry-sub-m">Already agreed on a bet? Record it here and add it to All bets.</p></div>'};
+    ?'<div class="entry-hd entry-hd-rq"><h2><span class="entry-ico" aria-hidden="true">💣</span>Request a bet</h2><p class="entry-sub-d">Nothing agreed yet? Find a stoop who wants to feel something.</p><p class="entry-sub-m">Nothing agreed yet—find a Stoop who wants to feel something.</p></div>'
+    :'<div class="entry-hd entry-hd-wiu"><h2><span class="entry-ico" aria-hidden="true">💥</span>Write it Up</h2><p class="entry-sub-d">Bet already discussed.</p><p class="entry-sub-m">Already agreed on a bet? Record it here and add it to All bets.</p></div>'};
   SHARED_UI.weeklySection=function(items,o){var e=o.e;var L=(items||[]).filter(function(x){return x&&x.title}).slice().sort(function(a,b){return String(b.date||'').localeCompare(String(a.date||''))});
     var list=L.length?'<div class="rcl">'+L.map(function(x){return '<article class="card rci"><small>'+e(x.kind==='special'?'Special':'Weekly')+(x.date?' · '+e(o.fmtDate(String(x.date).slice(0,10))):'')+'</small><h3>'+e(x.title)+'</h3><p>'+e(x.body||'')+'</p></article>'}).join('')+'</div>':'<div class="card note rcnone"'+(o.emptyAttr||'')+'>No weekly write-ups yet. The first one comes after opening week.</div>';
     return '<section class="rcw"'+(o.secAttr||'')+'><h2>📰 Weekly write-ups</h2>'+list+'</section>'};

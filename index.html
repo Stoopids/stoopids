@@ -3179,14 +3179,18 @@ function b27Odds(a,b){U.custom=false;U.oddsErr='';U.odds=[a,b];b27Sync()}
 function b27CustomOpen(){U.custom=true;b27CustomApply(U.customTxt,true);b27Sync();const i=document.getElementById('b27Co');if(i)i.focus({preventScroll:true})}
 function b27CustomApply(t,quiet){U.customTxt=t;const r=b27ParseOdds(t);if(r.ok){U.odds=[r.a,r.b];U.oddsErr=''}else{U.odds=null;U.oddsErr=quiet&&!t?'':r.err}}
 function b27Text(t){U.text=t;b27Sync()}
-function b27Place(){/*<POOL>*/if(U.kind==='pool')return b27PoolPlace();/*</POOL>*/const e=b27FormOK();if(e){b27Err(e);render();return}U.msg='';U.confirm=true;render()}
+function b27ClipText(b){if(!b||!RQ||!RQ.waText)return '';return RQ.waText({by:b.backer,to:b27Opps(b),amt:b.amt,odds:[b.odds.a,b.odds.b],txt:b.text||'',lab:b.text||''},'bet')}
+function b27CopyNow(t){return new Promise(resolve=>{const fin=ok=>resolve(!!ok);const fb=()=>{let ok=false;try{const ta=document.createElement('textarea');ta.value=t;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();ok=!!(document.execCommand&&document.execCommand('copy'));ta.remove()}catch(e){}fin(ok)};try{if(navigator.clipboard&&navigator.clipboard.writeText&&window.isSecureContext){const p=navigator.clipboard.writeText(t);if(p&&p.then){p.then(()=>fin(true),fb);return}} }catch(e){}fb()})}
+async function b27ClipRetry(){if(!U.clip)return;const ok=await b27CopyNow(U.clip);if(ok){const base=String(U.msg||'').replace(/ Could not copy it\. Copy the message below\.$/,'').replace(/ Message copied\. Paste it in WhatsApp\.$/,'');U.clip=null;U.msg=base+' Message copied. Paste it in WhatsApp.';U.msgBad=false}else U.msgBad=false;render()}
+function b27Place(){/*<POOL>*/if(U.kind==='pool')return b27PoolPlace();/*</POOL>*/const e=b27FormOK();if(e){b27Err(e);render();return}U.msg='';U.clip=null;U.confirm=true;render()}
 function b27Edit(){U.confirm=false;render()}
 /*<MULTI-BET>*/async function b27Confirm(){
   if(U.busy)return;/*<POOL>*/if(U.kind==='pool')return b27PoolConfirm();/*</POOL>*/
   if(U.editOf){U.editOf=null;U.confirm=false;U.msg='Once a bet is posted, its terms stay as written. Only the result can be entered.';U.msgBad=true;render();return}
   const e=b27FormOK();if(e){b27Err(e);U.confirm=false;render();return}
-  U.busy=true;U.msg='Saving…';U.msgBad=false;render();
-  const nbs=b27BetsFromForm(),ids=nbs.map(b=>b.id);
+  const nbs=b27BetsFromForm(),ids=nbs.map(b=>b.id),clip=nbs.map(b27ClipText).filter(Boolean).join('\n\n');
+  const copyP=clip?b27CopyNow(clip):Promise.resolve(false);
+  U.busy=true;U.msg='Saving…';U.msgBad=false;U.clip=null;render();
   try{
     /* ONE read-modify-write for the whole batch (+ read-back, one retry): only the bets whose id is not there yet are added; done when every id is present */
     /*<S24-EDIT>*/const edOf=U.editOf||null,meE=b27Who();if(edOf)nbs.forEach(b=>{b.ed=edOf});/*</S24-EDIT>*/
@@ -3195,11 +3199,11 @@ function b27Edit(){U.confirm=false;render()}
       return cur.concat(miss.map(b=>Object.assign({},b,{n:++n,created_at:at,settled_at:null})))},cur=>ids.every(id=>cur.some(b=>b.id===id))/*<S24-EDIT>*/&&(!edOf||!cur.some(c=>c.id===edOf&&c.status==='open'))/*</S24-EDIT>*/);
     ids.forEach(id=>U.mine.add(id));b27Apply(back);
     const mine=ids.map(id=>back.find(b=>b.id===id)).filter(Boolean);
-    {const m=mine[0],k=m?b27Opps(m).length:1;U.msg='Placed! Bet #'+(m?m.n:'')+(k>1?' against '+k+' managers ('+b27Num(U.amt)+' each)':'')+' is open. You can undo it for 30 seconds.';U.msgBad=false;/*<S25C-FX>*/s25PlacedFx(m&&m.id)/*</S25C-FX>*/}
+    {const m=mine[0],k=m?b27Opps(m).length:1,copied=await copyP;U.msg='Placed! Bet #'+(m?m.n:'')+(k>1?' against '+k+' managers ('+b27Num(U.amt)+' each)':'')+' is open. You can undo it for 30 seconds.';if(copied){U.clip=null;U.msg+=' Message copied. Paste it in WhatsApp.'}else{U.clip=clip;U.msg+=' Could not copy it. Copy the message below.'}U.msgBad=false;/*<S25C-FX>*/s25PlacedFx(m&&m.id)/*</S25C-FX>*/}
     U.undoG=null;/*<S24-EDIT>*/if(edOf){const o=back.find(x=>x.id===edOf);U.msg+=o?' It replaces bet #'+o.n+' (now cancelled).':'';U.editOf=null}/*</S24-EDIT>*/
     U.opps=[];U.backer=null;U.pz=null;U.amt=null;U.amtCustom=false;U.amtTxt='';U.amtErr='';U.odds=[1,1];U.custom=false;U.customTxt='';U.oddsErr='';U.text='';U.est='';U.wk='unknown';U.confirm=false;U.fids={};U.gid=null;/*<S25E-RD>*/U.rdEd=null;U.rdOpen=false;/*</S25E-RD>*/
     clearTimeout(U.undoT);U.undoT=setTimeout(()=>{if(tab==='bets27')render()},PULK.undoMs+300);
-  }catch(e){/*<S24-EDIT>*/if(e&&e.message==='locked'){U.editOf=null;U.confirm=false;U.busy=false;U.msg='Once a bet is posted, its terms stay as written. Only the result can be entered.';U.msgBad=true;render();return}
+  }catch(e){U.clip=null;/*<S24-EDIT>*/if(e&&e.message==='locked'){U.editOf=null;U.confirm=false;U.busy=false;U.msg='Once a bet is posted, its terms stay as written. Only the result can be entered.';U.msgBad=true;render();return}
     if(e&&e.message==='late'){const o=U.doc.bets.find(x=>x.id===U.editOf);U.editOf=null;U.confirm=false;U.busy=false;U.msg='Too late to edit: bet'+(o?' #'+o.n:'')+' was already settled or cancelled. Nothing was saved; your changes are still in the form.';U.msgBad=true;b27Poll();render();return}/*</S24-EDIT>*/U.msg=e&&e.message==='full'?'The bets ledger is full.':/*<SAFE-RACE>*/e&&e.message==='conflict'?'Couldn’t save, try again. Someone else was saving at the same moment.':/*</SAFE-RACE>*/'Couldn’t save. Check your connection and tap Place bet again (it won’t double-post).';U.msgBad=true;U.confirm=true}
   U.busy=false;render();
 }
@@ -3535,7 +3539,7 @@ function vB27(){
   /*<BETS-INTRO-BOTTOM>*/let h='';   // headline removed: New bet sits right under the season toggle + Share row
   const introBottom=`<div class="card b27-intro"><div class="note b27-note" id="b27Note">${esc(BETS_DISCLAIMER)}</div><div class="note" style="margin-top:6px">This page just <b>records</b> who bet what and who owes whom.</div>
    <div class="note" id="b27Top" style="margin-top:6px">${U.state==='ok'?'<span class="good">● live</span> · anyone with the link can add bets (no logins). Play nice.':U.state==='error'?'<span class="bad">● can’t reach the bets ledger right now</span>':/*<BALL-LOADER>*/''/*</BALL-LOADER>*/}</div></div>`;/*</BETS-INTRO-BOTTOM>*/
-  if(U.msg)h+=`<div class="card ${U.msgBad?'b27-bad':'b27-ok'}" role="status">${esc(U.msg)}${/*<MULTI-BET>*/U.undoG&&b27GroupUndoable(U.undoG).length>1?`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27UndoGroup('${U.undoG}')"${U.busy?' disabled':''}>↩ Undo all ${b27GroupUndoable(U.undoG).length} bets (30 s)</button></div>`:''/*</MULTI-BET>*/}</div>`;
+  if(U.msg)h+=`<div class="card ${U.msgBad?'b27-bad':'b27-ok'}" role="status">${esc(U.msg)}${U.clip?`<pre class="rq-fb">${esc(U.clip)}</pre><div class="b27-act"><button type="button" class="btn sec" onclick="b27ClipRetry()">Copy</button></div>`:''}${/*<MULTI-BET>*/U.undoG&&b27GroupUndoable(U.undoG).length>1?`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27UndoGroup('${U.undoG}')"${U.busy?' disabled':''}>↩ Undo all ${b27GroupUndoable(U.undoG).length} bets (30 s)</button></div>`:''/*</MULTI-BET>*/}</div>`;
   /*<ALL-BETS>*/if(OB_VIEW==='all'){}/*list only: form lives on Write it Up*/else/*</ALL-BETS>*/ if(!me){h+=`<div class="card"><button type="button" class="btn b27-big" onclick="presAsk()">👋 Pick who you are to bet</button></div>`}
   /*<POOL>*/else if(U.confirm&&U.kind==='pool'){h+=s26kModal(b27PoolConfirmHtml())}/*</POOL>*/
   else if(U.confirm){
