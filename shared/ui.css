@@ -455,6 +455,10 @@ html body .b27-ao .b27-amt,html body .b27-ao .b27-chip{width:auto!important;min-
 @media (min-width:1000px){
  html body .entry-pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:start}
  html body .entry-pair .entry-col.is-on>.card{box-shadow:0 0 0 2px rgba(255,255,255,.28)}
+ html body .entry-rq a{color:#93c5fd}
+ html body .entry-rq a:focus-visible,html body .entry-rq button:focus-visible,html body .entry-rq input:focus-visible,html body .entry-rq select:focus-visible{outline-color:#93c5fd}
+ html body .entry-rq .b27-chip[aria-pressed=true],html body .entry-rq .b27-amt[aria-pressed=true],html body .entry-rq .btn.sec.on,html body .entry-rq .btn.sec[aria-pressed=true]{background:#1e3a8a;color:#fff;border-color:#1e3a8a}
+ html body .entry-rq .btn.b27-big:not(.sec),html body .entry-rq .rq-send:not(.sec){background:#1e3a8a;color:#fff}
 }
 html body .tabs.ob-seg.ob-phone{display:none!important}
 @media (max-width:999px){
