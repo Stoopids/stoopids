@@ -532,3 +532,18 @@ html body #main .card.tap.s27-rk td:first-child a.chip img,html body #main .card
 html body .idline{margin:16px 0 calc(76px + env(safe-area-inset-bottom,0px));padding:0;font-size:15px;line-height:1.4;color:var(--tx,#eef1f7)}
 html body .idline-ch{display:inline;margin:0;padding:2px 4px;min-height:36px;border:0;background:transparent;color:var(--acc,#ffd23f);font:inherit;font-weight:800;text-decoration:underline;cursor:pointer}
 html body .idline-ch:focus-visible{outline:2px solid var(--acc,#ffd23f);outline-offset:3px;border-radius:6px}
+html body #main .gfone,html body #lbody .gfone{display:flex!important;flex-direction:column!important;align-items:stretch!important;overflow:visible!important;gap:6px!important}
+html body #main .gfone>.gfrow,html body #lbody .gfone>.gfrow{display:flex!important;flex-flow:row nowrap!important;align-items:center!important;width:100%!important;margin:0!important}
+html body #main .gfone .segrow,html body #main .gfone .mkrow,html body #lbody .gfone .segrow,html body #lbody .gfone .mkrow{display:flex!important;flex-flow:row nowrap!important;align-items:center!important;width:100%!important;gap:6px!important;margin:0!important}
+html body #main .gfone .gref,html body #lbody .gfone .gref{margin-left:auto!important;width:28px!important;min-width:28px!important;height:28px!important;min-height:28px!important;padding:0!important;border-radius:50%!important;flex:0 0 28px!important}
+html body .gm .gh{flex-wrap:nowrap!important;min-height:0!important}
+html body .gm .gh .gbtns{position:static!important;flex-direction:row!important;margin-left:auto!important}
+html body .gm .gbtns>button{width:auto!important;height:26px!important;min-height:26px!important;padding:0 7px!important;font-size:11px!important}
+@media (max-width:999px){
+ html body .entry-pair>.entry-col{position:absolute!important;width:0!important;max-width:0!important;overflow:hidden!important}
+ html body .entry-pair[data-focus="form"]>.entry-wiu,html body .entry-pair[data-focus="request"]>.entry-rq{position:static!important;width:100%!important;max-width:100%!important}
+}
+@media (max-width:700px){
+ html body #onlStrip.onl-fixed{left:8px!important;right:132px!important;height:44px!important;max-height:44px!important;font-size:14px!important;overflow-x:auto!important}
+ html body .chat.chat-pop{bottom:calc(60px + env(safe-area-inset-bottom,0px))!important}
+}

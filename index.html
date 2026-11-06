@@ -944,7 +944,7 @@ main,#main{padding-top:6px!important}
 /* SYNC7..SYNC14 moved to shared/ui.css (linked right after this style block) */
 
 </style>
-<link rel="stylesheet" href="shared/ui.css?v=1.33.0">
+<link rel="stylesheet" href="shared/ui.css?v=1.34.0">
 <style>/*<SORT-FIT> phone All teams: the card scrolls sideways, the page does not. Names stay full size. */@media (max-width:480px){html body .card.tap.s27-rk{padding-left:4px!important;padding-right:4px!important}html body .card.tap.s27-rk th{font-size:11px!important}html body .card.tap.s27-rk td.n,html body .card.tap.s27-rk td.to,html body .card.tap.s27-rk td.cf{font-size:13px!important}html body .card.tap.s27-rk .s27-sort i{font-size:.7em!important;margin-left:0!important}}/*</SORT-FIT>*/</style>
 </head>
 <body>
@@ -1230,14 +1230,13 @@ S25.renderReactions=function(el,counts,mine,onToggle,opts){if(!el||!el.ownerDocu
   let wl=null;const showWho=e=>{const w=who(e);if(!w.length)return;if(!wl){wl=doc.createElement('div');wl.className='s25wl';wl.setAttribute('data-s25-wl','');el.appendChild(wl)}wl.textContent=e+' '+w.join(', ')},hideWho=()=>{if(wl){wl.remove();wl=null}};
   const fire=(e,on)=>{closeOpen();if(typeof onToggle==='function')onToggle(e,on)};
   EM.filter(e=>cnt(e)>0).forEach(e=>{const n=cnt(e),on=my.has(e),w=who(e),b=doc.createElement('button');b.type='button';b.className='s25rx'+(on?' on':'');b.setAttribute('data-s25-rx',e);b.setAttribute('aria-pressed',String(on));
-    b.setAttribute('aria-label',e+' '+n+(w.length?': '+w.join(', '):''));if(w.length)b.title=w.join(', ');b.innerHTML='';b.appendChild(doc.createTextNode(e));const s=doc.createElement('span');s.className='n';s.textContent=String(n);b.appendChild(s);
+    b.setAttribute('aria-label',e+' '+n+(w.length?': '+w.join(', '):''));b.innerHTML='';b.appendChild(doc.createTextNode(e));const s=doc.createElement('span');s.className='n';s.textContent=String(n);b.appendChild(s);
     if(ro)b.disabled=true;let lp=false,tm=null;
     b.addEventListener('pointerdown',()=>{lp=false;clearTimeout(tm);tm=setTimeout(()=>{lp=true;showWho(e)},500)});['pointerup','pointercancel','pointerleave'].forEach(t=>b.addEventListener(t,()=>clearTimeout(tm)));
     b.addEventListener('contextmenu',ev=>ev.preventDefault());
-    if(fine){b.addEventListener('mouseenter',()=>showWho(e));b.addEventListener('mouseleave',()=>{if(!lp)hideWho()})}
     b.addEventListener('click',ev=>{if(lp){lp=false;ev.preventDefault();return}if(!ro)fire(e,!on)});el.appendChild(b)});
   if(ro)return;
-  const add=doc.createElement('button');add.type='button';add.className='s25add';add.setAttribute('data-s25-add','');add.setAttribute('aria-haspopup','true');add.setAttribute('aria-expanded','false');add.setAttribute('aria-label','Add a reaction');add.title='Add a reaction';add.textContent='😀+';el.appendChild(add);
+  const add=doc.createElement('button');add.type='button';add.className='s25add';add.setAttribute('data-s25-add','');add.setAttribute('aria-haspopup','true');add.setAttribute('aria-expanded','false');add.setAttribute('aria-label','Add a reaction');add.textContent='😀+';el.appendChild(add);
   let pk=null;const close=()=>{if(pk){pk.remove();pk=null}add.setAttribute('aria-expanded','false')};
   const open=()=>{if(pk)return;closeOpen();pk=doc.createElement('div');pk.className='s25pk';pk.setAttribute('role','menu');pk.setAttribute('data-s25-pk','');
     EM.forEach(e=>{const on=my.has(e),b=doc.createElement('button');b.type='button';b.setAttribute('role','menuitemcheckbox');b.setAttribute('aria-checked',String(on));b.setAttribute('data-s25-pick',e);b.setAttribute('aria-label',e);if(on)b.className='on';b.textContent=e;b.addEventListener('click',()=>fire(e,!on));pk.appendChild(b)});
@@ -1245,9 +1244,7 @@ S25.renderReactions=function(el,counts,mine,onToggle,opts){if(!el||!el.ownerDocu
     try{const vw=(doc.documentElement&&doc.documentElement.clientWidth)||G.innerWidth||0,r=pk.getBoundingClientRect(),ar=add.getBoundingClientRect(),er=el.getBoundingClientRect();if(vw&&r.width){let left=ar.left-er.left;const abs=er.left+left;
       if(abs+r.width>vw-6)left=vw-6-r.width-er.left;if(er.left+left<6)left=6-er.left;pk.style.left=left+'px'}}catch(e){}   // keep the picker inside the viewport (320px safe)
     const f=pk.querySelector('button');if(f&&!fine)f.focus({preventScroll:true})};
-  add.addEventListener('click',()=>{if(pk){closeOpen();close()}else open()});
-  if(fine){let ht=null;const hold=()=>clearTimeout(ht),later=()=>{clearTimeout(ht);ht=setTimeout(()=>{if(OPEN&&OPEN.el===el)closeOpen()},350)};
-    add.addEventListener('mouseenter',()=>{hold();open()});add.addEventListener('mouseleave',later);el.addEventListener('mouseenter',hold);el.addEventListener('mouseleave',later)}};
+  add.addEventListener('click',()=>{if(pk){closeOpen();close()}else open()})};
 G.betPlaced=S25.betPlaced;G.renderReactions=S25.renderReactions;
 /* ===== s25c upset tagline: mixed into the 2-day rotation (every 4th slot) when ESPN shows a recent men's college hoops upset ===== */
 S25.UPSET_TEMPLATES=["{Winner} over {Loser}. Bracket-busting is a Stoopid art.","Houston, {Loser} has a problem.","{Loser}, you had one job.","Upset alert: {Winner} 1, Smaht people 0.","Et tu, {Winner}? {Loser} never saw it coming.","Ask not what {Loser} can do for your bracket.","To be ranked, or not to be ranked: {Loser} chose not.","One small step for {Winner}, one giant faceplant for {Loser}.","{Winner} {WS}, {Loser} {LS}. The Smaht money is crying.","Stoopid is as Stoopid does. Today, {Winner} does.","Frankly, my dear {Loser}, {Winner} didn't give a damn.","{Winner} came to play. {Loser} came to watch.","Believe in upsets yet? {Winner} does.","Somebody stop this bracket! {Winner} over {Loser}.","Ice in the veins! {Winner} with the upset.","Absolutely bracket-wrecking! {Winner} took down {Loser}.","Boom goes the dynamite. {Loser} goes the bracket.","Oh my! {Winner} 1, Smaht people 0.","Bang! {Winner} drops {Loser}.","Get that outta here! {Loser}, take a seat.","Not over till the buzzer. For {Loser}, it's over.","You miss 100% of the shots you don't take. {Loser} missed the rest too.","Déjà vu all over again: {Loser} loses to {Winner}.","Everyone's got a plan until {Winner} shows up.","When you come to a fork in the road, take {Winner}.","It's not whether you get knocked down. {Loser} stayed down.","Nobody goes to {Loser} games anymore. They're too crowded.","Winning isn't everything, it's the only thing. Ask {Winner}.","Half this game is 90% mental. {Loser} brought the other half."];
@@ -3043,6 +3040,7 @@ function b27Clean(t,max){
   const a=Array.from(t);return (a.length>(max||PULK.maxText)?a.slice(0,max||PULK.maxText).join(''):t).trim();
 }
 const b27OwnerNames=()=>(D&&D.owners||[]).map(o=>o.name);
+function b27WhenFields(x){if(!window.SHARED_UI||!x)return {};const kind=x.wk==='date'||x.wk==='season'||x.wk==='game'||x.wk==='unknown'?x.wk:(SHARED_UI.estOk(x.est)?'date':null);if(!kind)return {};const w=SHARED_UI.whenPack(kind,x.est,x.sid);if(!w)return {};const o={wk:w.wk};if(w.est)o.est=w.est;if(w.sid)o.sid=w.sid;return o}
 function b27Valid(x,names){/*<V25>*/return s25V25Gate(b27Valid0(x,names))}
 function b27Valid0(x,names){/*</V25>*/
   if(!x||typeof x!=='object')return null;
@@ -3058,7 +3056,7 @@ function b27Valid0(x,names){/*</V25>*/
   if(!Number.isInteger(a)||!Number.isInteger(b)||a<1||b<1||a>PULK.maxOdds||b>PULK.maxOdds)return null;
   if(!Number.isInteger(n)||n<1||!isFinite(t)||typeof x.text!=='string')return null;
   const status=['open','backer','other','push','void'].includes(x.status)?x.status:'open';
-  return {id:x.id,n,backer:x.backer,other:x.other,/*<BUNDLE>*/...(opps.length>1?{opponents:opps}:{}),/*</BUNDLE>*/amt:st,odds:{a,b},text:b27Clean(x.text),created_at:new Date(t).toISOString(),status,settled_at:x.settled_at&&isFinite(Date.parse(x.settled_at))?new Date(x.settled_at).toISOString():null/*<MULTI-BET>*/,g:typeof x.g==='string'&&/^[a-z0-9]{6,24}$/.test(x.g)?x.g:undefined/*</MULTI-BET>*//*<S24-EDIT>*/,...s24ValidExtra(x,status,opps)/*</S24-EDIT>*//*<S25>*/,...s25ValidExtra(x,names,status)/*</S25>*//*<S29E-POSTED>*/,...(typeof x.postedBy==='string'&&names.includes(legacyOwner(x.postedBy))?{postedBy:legacyOwner(x.postedBy)}:{}),...(x.postedAt&&isFinite(Date.parse(x.postedAt))?{postedAt:new Date(x.postedAt).toISOString()}:{})/*</S29E-POSTED>*/};
+  return {id:x.id,n,backer:x.backer,other:x.other,/*<BUNDLE>*/...(opps.length>1?{opponents:opps}:{}),/*</BUNDLE>*/amt:st,odds:{a,b},text:b27Clean(x.text),created_at:new Date(t).toISOString(),status,settled_at:x.settled_at&&isFinite(Date.parse(x.settled_at))?new Date(x.settled_at).toISOString():null/*<MULTI-BET>*/,g:typeof x.g==='string'&&/^[a-z0-9]{6,24}$/.test(x.g)?x.g:undefined/*</MULTI-BET>*//*<S24-EDIT>*/,...s24ValidExtra(x,status,opps)/*</S24-EDIT>*/,...b27WhenFields(x)/*<S25>*/,...s25ValidExtra(x,names,status)/*</S25>*//*<S29E-POSTED>*/,...(typeof x.postedBy==='string'&&names.includes(legacyOwner(x.postedBy))?{postedBy:legacyOwner(x.postedBy)}:{}),...(x.postedAt&&isFinite(Date.parse(x.postedAt))?{postedAt:new Date(x.postedAt).toISOString()}:{})/*</S29E-POSTED>*/};
 }
 function b27Parse(txt,names){
   try{if(!txt||!txt.trim())return [];let d=JSON.parse(txt);if(typeof d==='string')d=JSON.parse(d);
@@ -4096,7 +4094,8 @@ load();setInterval(()=>load(),2*60*1000);   /* re-read the published data.js. Th
 /* MAXLEN-GUARD moved to shared/ui.js */
 /*<TEAMNAME-WARN>*/addEventListener('load',function(){try{const L=(window.SHARED_UI&&SHARED_UI.LIMITS.team)||15,seen={};JSON.stringify(window.STOOPIDS_DATA||{},function(k,v){if(k==='team_name'&&typeof v==='string'&&v.length>L&&!seen[v]){seen[v]=1;console.warn('Team name over '+L+' chars (shown in full, fix in config.json): '+v)}return v})}catch(e){}});/*</TEAMNAME-WARN>*/
 /*<ONLINE-STRIP>*/// "Who's online" strip under every tab: online first (green dot), then everyone else with last-seen. Reads the existing presence store only (GET); never writes.
-function placeOnl(){const el=document.getElementById('onlStrip'),sec=document.getElementById('chat');if(!el)return;const mode=sec&&sec.classList.contains('chat-pop')?'pop':sec&&sec.classList.contains('chat-off')?'off':'bar';
+function placeOnl(){const el=document.getElementById('onlStrip'),sec=document.getElementById('chat');if(!el)return;const phone=window.matchMedia&&matchMedia('(max-width:700px)').matches;const mode=sec&&sec.classList.contains('chat-pop')?'pop':sec&&sec.classList.contains('chat-off')?'off':'bar';
+  if(phone&&mode!=='bar'){if(el.parentNode!==document.body)document.body.appendChild(el);el.classList.add('onl-fixed');return}
   if(mode==='pop'){const panel=document.getElementById('chatB');if(panel&&el.parentNode!==panel)panel.insertBefore(el,panel.firstChild);el.classList.remove('onl-fixed')}
   else if(mode==='off'){if(el.parentNode!==document.body)document.body.appendChild(el);el.classList.add('onl-fixed')}
   else if(sec){const btn=document.getElementById('chatT');if(btn)sec.insertBefore(el,btn);el.classList.remove('onl-fixed')}}
@@ -4281,6 +4280,30 @@ html body #main .ggrid:not(:has(>.gfin))>.gm,html body #lbody .ggrid:not(:has(>.
 /*<S33-GGAP>*/ /* Paul: kill blank gap above Games filters on phone (empty-looking #live bar had 40px min-height) */
 @media (max-width:640px){html body #gamesTop #live{min-height:0!important;margin:0!important;padding:2px 0!important;font-size:11px!important;line-height:1.2!important;color:var(--mut,#aab)!important;background:none!important;border:0!important}html body #gamesTop #live:not(:has(#lvT:not(:empty))){display:none!important}html body #main{padding-top:4px!important}}
 /*</S33-GGAP>*/
+/*<HELD-LAYOUT>*/
+html body #main .gfone,html body #lbody .gfone{display:flex!important;flex-direction:column!important;align-items:stretch!important;overflow:visible!important;gap:6px!important}
+html body #main .gfone>.gfrow,html body #lbody .gfone>.gfrow{display:flex!important;flex-flow:row nowrap!important;align-items:center!important;width:100%!important;margin:0!important}
+html body #main .gfone .segrow,html body #main .gfone .mkrow,html body #lbody .gfone .segrow,html body #lbody .gfone .mkrow{display:flex!important;flex-flow:row nowrap!important;align-items:center!important;flex:1 1 auto!important;width:100%!important;gap:6px!important;margin:0!important}
+html body #main .gfone .gref,html body #lbody .gfone .gref{margin-left:auto!important;order:2!important;width:28px!important;min-width:28px!important;height:28px!important;min-height:28px!important;padding:0!important;border-radius:50%!important;flex:0 0 28px!important}
+html body .gm .gh,html body .ggrid>.gm>.gh,html body .ggrid .gbody>.gh{flex-wrap:nowrap!important;align-items:center!important;min-height:0!important;height:auto!important;gap:6px!important}
+html body .gm:has(.qb-btn) .gh{min-height:0!important;align-items:center!important}
+html body .gbtns,html body .gm .gh .gbtns{position:static!important;flex-direction:row!important;flex:none!important;margin:0 0 0 auto!important;gap:4px!important;align-items:center!important}
+html body #main .gm .gbtns>button,html body .gm .gbtns>button{width:auto!important;height:26px!important;min-height:26px!important;max-height:26px!important;padding:0 7px!important;font-size:11px!important;line-height:1!important}
+html body .qb-bolt{width:11px!important;height:11px!important}
+@media (max-width:999px){
+ html body .entry-pair{display:block!important;width:100%!important}
+ html body .entry-pair>.entry-col{display:none!important;position:absolute!important;width:0!important;max-width:0!important;min-width:0!important;overflow:hidden!important}
+ html body .entry-pair[data-focus="form"]>.entry-wiu,html body .entry-pair[data-focus="request"]>.entry-rq{display:block!important;position:static!important;width:100%!important;max-width:100%!important;min-width:0!important}
+}
+@media (max-width:700px){
+ html body #onlStrip.onl-fixed{left:8px!important;right:132px!important;bottom:max(8px,env(safe-area-inset-bottom,0px))!important;width:auto!important;height:44px!important;min-height:44px!important;max-height:44px!important;margin:0!important;padding:0 8px!important;display:flex!important;align-items:center!important;flex-wrap:nowrap!important;overflow-x:auto!important;overflow-y:hidden!important;box-sizing:border-box!important;font-size:14px!important}
+ html body #onlStrip.onl-fixed .onl-h,html body #onlStrip.onl-fixed .onl-p,html body #onlStrip.onl-fixed .onl-p small{font-size:14px!important;line-height:1.2!important}
+ html body .chat.chat-off{bottom:max(8px,env(safe-area-inset-bottom,0px))!important;height:44px!important;max-height:44px!important;z-index:31!important}
+ html body .chat.chat-off>.chat-t{height:44px!important;min-height:44px!important;max-height:44px!important}
+ html body .chat.chat-pop{bottom:calc(60px + env(safe-area-inset-bottom,0px))!important;max-height:min(62dvh,calc(100dvh - 120px))!important}
+ html body{padding-bottom:calc(60px + env(safe-area-inset-bottom,0px))!important}
+}
+/*</HELD-LAYOUT>*/
 </style><!--</S29E-PASTE>-->
 <!--<S29E-COPY>--><script>
 /* s29e: the per-bet Copy button copies the whole card as WhatsApp-ready plain text (no link). Same words, numbers (b27Num) and odds math (b27Pay) as the card. */
