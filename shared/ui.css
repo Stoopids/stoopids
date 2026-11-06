@@ -460,6 +460,8 @@ html body .b27-ao .b27-amts,html body .b27-ao .b27-chips{display:flex!important;
 html body .b27-ao .b27-amt,html body .b27-ao .b27-chip{width:auto!important;min-width:44px!important;height:36px!important;min-height:36px!important;padding:0 10px!important;font-size:13px!important;letter-spacing:0!important}
 @media (min-width:1000px){
  html body .entry-pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:start}
+ html body .entry-pair>.entry-rq{order:1}
+ html body .entry-pair>.entry-wiu{order:2}
  html body .entry-pair .entry-col.is-on>.card{box-shadow:0 0 0 2px rgba(255,255,255,.28)}
  html body .entry-hd.entry-hd-wiu,html body .entry-hd.entry-hd-rq{padding:6px 12px}
  html body .entry-hd.entry-hd-wiu p,html body .entry-hd.entry-hd-rq p{margin-top:2px;line-height:1.2}
