@@ -207,7 +207,7 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
     function explainParts(r){var o=r.odds||[1,1],rn=(A.real||A.nick)(r.by),win2=Math.round(r.amt*o[0]/o[1]*100)/100,ot=r.k==='ou'?r.other:String(r.other||'').replace(/\s[+-]?\d+(\.\d+)?$/,'');
       return {win:ifTxt(r,r.lab)+', '+rn+' wins '+r.amt+'$ from whoever accepts.',lose:ifTxt(r,ot)+', the Stoop who accepts wins '+win2+'$'+(+o[0]===+o[1]?'':' ('+oddsTxt(o)+')')+' from '+rn+'.'}}
     function explain(r){var p=explainParts(r);return '<div class="rq-ex note">'+e(p.win)+'<br>'+e(p.lose)+'</div>'}
-    function rqQ(n,tip,label){return '<div class="b27-q"><button type="button" class="s27-tipk" data-tip="'+tip+'" aria-expanded="false" onmouseenter="s27TipShow(this)" onfocus="s27TipShow(this)" onclick="s27WhenClick(this)">'+n+'. '+label+'</button></div>'}
+    function rqQ(n,tip,label){return '<div class="b27-q"><button type="button" class="s27-tipk" data-tip="'+tip+'" aria-expanded="false" onfocus="s27TipShow(this)" onclick="s27WhenClick(this)">'+n+'. '+label+'</button></div>'}
     function rqPreview(f){var g=game(f.gid),p=pick(g&&g.g,f),me=A.me(),amt=f.amtC?(+f.amtTxt>0?+f.amtTxt:null):f.amt,o=f.odds||[1,1];
       var nTo=f.to.length,nOth=A.others().length,cap=nTo||nOth,sl=f.sAll?cap:f.slots?Math.max(1,Math.min(f.slots,cap)):(nTo||1);
       var who=nTo?(nTo===1?(A.real||A.nick)(f.to[0]):nTo>=nOth?'all stoops':(f.to||[]).map(function(id){return (A.real||A.nick)(id)}).join(', ')):'any stoop';
@@ -334,7 +334,7 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
   SHARED_UI.qbSheet=function(g,list,o){var e=o.e,t=e(o.name(g.away))+' vs '+e(o.name(g.home));list=(list||[]).filter(function(x){return x.k!=='win'});
     /* inline drop-down under the game card (no modal): spread each side, moneyline, over/under when posted, plus a plain Request a bet. Every choice opens Request a bet prefilled */
     var h='<div class="qbd" role="region" aria-label="Quick bet: '+t+'"><div class="qbd-h"><b>\u26A1 Quick bet</b><button type="button" class="qbd-x" aria-label="Close" '+o.close()+'>\u2715</button></div>';
-    list.forEach(function(x){h+='<div class="qbs-r"><span class="qbs-l">'+e(x.t)+'</span><span class="qbs-s">'+x.s.map(function(s,i){return '<button type="button" class="qbs-o" title="'+e(s.txt)+'" '+o.pick(x.k,i)+'>'+e(s.lab)+'</button>'}).join('')+'</span></div>'});
+    list.forEach(function(x){h+='<div class="qbs-r"><span class="qbs-l">'+e(x.t)+'</span><span class="qbs-s">'+x.s.map(function(s,i){return '<button type="button" class="qbs-o" aria-label="'+e(s.txt)+'" '+o.pick(x.k,i)+'>'+e(s.lab)+'</button>'}).join('')+'</span></div>'});
     return h+'<button type="button" class="qbs-o qbd-req" '+o.blank()+'>\u{1F4E8} Request a bet</button></div>'};
   /* STEP7-UPSETS: Rules "upset rule" card + empty state (each site passes its own wording, already safe markup) */
   SHARED_UI.upsetHead=function(note,empty){var h='<div class="card"><b>\u{1F631} The upset rule</b><div class="note">'+note+'</div></div>';return empty==null?h:h+'<div class="card">'+empty+'</div>'};
@@ -359,7 +359,7 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
   SHARED_UI.whenBox=function(o){o=o||{};var e=o.e||function(s){return String(s==null?'':s)},k=o.kind==='date'||o.kind==='season'||o.kind==='game'?o.kind:'unknown';
     var btn=function(id,lab){return '<button type="button" class="b27-chip" data-when="'+id+'" aria-pressed="'+(k===id?'true':'false')+'" '+(o.pick?o.pick(id):'')+'>'+e(lab)+'</button>'};
     var q=(o.step?String(o.step)+'. ':'')+'When can this be settled?';
-    var h='<div class="b27-when"><div class="b27-q"><button type="button" class="s27-tipk" data-tip="when" aria-expanded="false" onmouseenter="s27TipShow(this)" onfocus="s27TipShow(this)" onclick="s27WhenClick(this)">'+e(q)+'</button></div><div class="b27-when-c" role="group" aria-label="When can this be settled?">'+btn('date','Choose a date')+btn('season','End of season')+(o.game||k==='game'?btn('game','End game'):'')+btn('unknown','Not sure yet')+'</div>';
+    var h='<div class="b27-when"><div class="b27-q"><button type="button" class="s27-tipk" data-tip="when" aria-expanded="false" onfocus="s27TipShow(this)" onclick="s27WhenClick(this)">'+e(q)+'</button></div><div class="b27-when-c" role="group" aria-label="When can this be settled?">'+btn('date','Choose a date')+btn('season','End of season')+(o.game||k==='game'?btn('game','End game'):'')+btn('unknown','Not sure yet')+'</div>';
     if(k==='date')h+='<input class="sb-in b27-in" type="date" id="'+(o.inputId||'whenDate')+'" aria-label="Choose a date" value="'+e(o.est||'')+'" '+(o.dateAttr||'')+'>';
     if(k==='season'){var id=o.seasonId||'';h+='<div class="note">'+(id?e('End of '+id+'. No calendar end date is set, so this only groups the bet.'):e('End of season. No season id is on file, so this only groups the bet.'))+'</div>'}
     if(k==='game')h+='<div class="note">'+e('End game. No game end is linked, so this only groups it.')+'</div>';
