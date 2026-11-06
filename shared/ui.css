@@ -443,6 +443,7 @@ html body .b27-due[data-due="today"]{color:#fde68a}
 html body .b27-due[data-due="up"]{color:#93c5fd}
 html body .b27-due[data-due="none"]{color:var(--mut,#9aa)}
 html body .b27-due[data-due="season"]{color:#c4b5fd}
+html body .b27-due[data-due="game"]{color:#93c5fd}
 html body .b27-when-c{display:flex;flex-wrap:wrap;gap:6px}
 html body .b27-when-c .b27-chip{width:auto!important;min-height:36px;padding:0 10px}
 html body .entry-hd-wiu{background:#FFD400;color:#1a1400}
@@ -455,6 +456,7 @@ html body .b27-ao .b27-amt,html body .b27-ao .b27-chip{width:auto!important;min-
 @media (min-width:1000px){
  html body .entry-pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:start}
  html body .entry-pair .entry-col.is-on>.card{box-shadow:0 0 0 2px rgba(255,255,255,.28)}
+ html body .entry-hd-wiu h2,html body .entry-hd-rq h2{font-size:22px;line-height:1.15;letter-spacing:.04em;text-transform:uppercase}
  html body .entry-rq a{color:#93c5fd}
  html body .entry-rq a:focus-visible,html body .entry-rq button:focus-visible,html body .entry-rq input:focus-visible,html body .entry-rq select:focus-visible{outline-color:#93c5fd}
  html body .entry-rq .b27-chip[aria-pressed=true],html body .entry-rq .b27-amt[aria-pressed=true],html body .entry-rq .btn.sec.on,html body .entry-rq .btn.sec[aria-pressed=true]{background:#1e3a8a;color:#fff;border-color:#1e3a8a}
@@ -468,7 +470,8 @@ html body .tabs.ob-seg.ob-phone{display:none!important}
  html body .entry-pair .entry-col{display:none!important}
  html body .entry-pair[data-focus="form"] .entry-wiu,html body .entry-pair[data-focus="request"] .entry-rq{display:block!important}
  html body .entry-hd.entry-hd-wiu,html body .entry-hd.entry-hd-rq{display:flex;align-items:baseline;gap:6px;padding:4px 8px;margin:-8px -8px 8px}
- html body .entry-hd.entry-hd-wiu h2,html body .entry-hd.entry-hd-rq h2{font-size:13px;line-height:1.15;letter-spacing:-.02em;white-space:nowrap;flex:none}
+ html body .entry-hd.entry-hd-wiu h2,html body .entry-hd.entry-hd-rq h2{font-size:13px;line-height:1.15;letter-spacing:-.02em;text-transform:none;white-space:nowrap;flex:none}
+ html body .entry-rq [data-when="game"]{display:none!important}
  html body .entry-hd.entry-hd-wiu p,html body .entry-hd.entry-hd-rq p{margin:0;font-size:8.5px;line-height:1.15;letter-spacing:-.02em;white-space:nowrap;min-width:0}
 }
 /* Request (and the same opponent grid): 4 equal cells, so 7 invitees are 4 then 3. */
