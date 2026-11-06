@@ -31,7 +31,7 @@
 /*<S29E-PASTE>*/var PASTE_BET=false;   // 'Paste a bet' box (s29e item 5): OFF until Paul says it's ready. Only the box is gated; postedBy, Posted line and full-card Copy stay on. The preview kit turns it on for preview builds./*</S29E-PASTE>*/
 /* View-only mode (s26t): ?view=1 (kept per tab in sessionStorage stoopids_view=1). Forces guest WITHOUT touching localStorage stoopids_who, and blocks every write. */
 var VIEW_ONLY=(function(){try{if(/(?:^|[?&])view=1(?:&|$)/.test(location.search))sessionStorage.setItem('stoopids_view','1');return sessionStorage.getItem('stoopids_view')==='1'}catch(e){return /(?:^|[?&])view=1(?:&|$)/.test(location.search)}})();
-if(VIEW_ONLY){(function(){
+function s12LockGuest(){if(window.__vwLock)return;window.__vwLock=1;VIEW_ONLY=true;
   var SP=Storage.prototype,g=SP.getItem,s=SP.setItem,rm=SP.removeItem;
   SP.getItem=function(k){if(this===window.localStorage&&k==='stoopids_who')return '__guest__';return g.apply(this,arguments)};
   SP.setItem=function(k){if(this===window.localStorage&&k==='stoopids_who')return;return s.apply(this,arguments)};
@@ -40,8 +40,8 @@ if(VIEW_ONLY){(function(){
   var f0=window.fetch;window.fetch=function(i,o){var u=typeof i==='string'?i:(i&&i.url),m=(o&&o.method)||(i&&typeof i==='object'&&i.method);if(isW(u,m)||/stoopids-presence-/.test(String(u||'')))return Promise.reject(new Error('view-only'));return f0.apply(this,arguments)};
   var xo=XMLHttpRequest.prototype.open,xs=XMLHttpRequest.prototype.send;XMLHttpRequest.prototype.open=function(m,u){this.__vw=isW(u,m);return xo.apply(this,arguments)};XMLHttpRequest.prototype.send=function(){if(this.__vw)throw new Error('view-only');return xs.apply(this,arguments)};
   if(navigator.sendBeacon)navigator.sendBeacon=function(){return false};
-  document.documentElement.classList.add('viewonly');
-})()}
+  document.documentElement.classList.add('viewonly')}
+if(VIEW_ONLY)s12LockGuest();
 </script>
 <style>
 html.viewonly #chatF,html.viewonly #chatP,html.viewonly #chatWho,html.viewonly #pwho,html.viewonly .qbw,html.viewonly .qb-btn,html.viewonly .qb-pick,html.viewonly .b27-form,html.viewonly .b27-confirm,html.viewonly .b27-act,html.viewonly .b27-b,html.viewonly .b27-big,html.viewonly .s26k-m,html.viewonly .s25rxr,html.viewonly .s25rx,html.viewonly [class*="rx-add"],html.viewonly .pwho{display:none!important}
@@ -2500,11 +2500,11 @@ function s29eMgrCopy(btn){if(typeof VIEW_ONLY!=='undefined'&&VIEW_ONLY)return;s2
 function s29ShareGo(btn){const url=s29ShUrl(),ok=()=>{if(!btn)return;btn.textContent='Copied';clearTimeout(btn._t);btn._t=setTimeout(()=>{btn.textContent=s24CanShare()?'Share':'Copy link'},1600)};
   if(s24CanShare()){navigator.share({title:'STOOPIDS',url}).catch(e=>{if(!(e&&e.name==='AbortError'))s27CopyText(url,ok)})}else s27CopyText(url,ok)}
 /*</S29B-SHARE>*/
-/*<STEP12-HSHARE>*/ // header Share: always the whole site, view-only (?view=1, no hash); native share sheet, else copy + 'Copied'
-function s12PublicUrl(){let u;try{u=new URL(location.href)}catch(e){return location.origin+location.pathname+'?view=1'}
-  [...u.searchParams.keys()].forEach(k=>{const n=k.toLowerCase();if(!/^(view|l)$/.test(n)||/token|secret|key|admin|pass|auth/.test(n)){if(n!=='view'&&n!=='l')u.searchParams.delete(k)}});
-  [...u.searchParams.keys()].forEach(k=>{const n=k.toLowerCase();if(n!=='view'&&n!=='l')u.searchParams.delete(k)});
-  u.searchParams.set('view','1');if(!/^#[A-Za-z0-9_-]*$/.test(u.hash))u.hash='';return u.origin+u.pathname+u.search+(u.hash||'')}
+/*<STEP12-HSHARE>*/ // header Share: public URL only. No sender name, no view=1, no admin or token. A Stoop already recognized on their own device keeps that identity. Anyone else is view-only.
+function s12PublicUrl(){let u;try{u=new URL(location.href)}catch(e){return location.origin+location.pathname}
+  u.search='';if(!/^#[A-Za-z0-9_\/-]*$/.test(u.hash))u.hash='';return u.origin+u.pathname+(u.hash||'')}
+function s12ApplyGuest(){if(VIEW_ONLY||!D||!D.owners)return;let w='';try{w=legacyOwner(localStorage.getItem('stoopids_who')||'')}catch(e){}
+  if(w&&w!=='__guest__'&&D.owners.some(o=>o&&o.name===w))return;s12LockGuest()}
 function s12ShareSite(btn){const old=document.getElementById('s12menu');if(old){old.remove();return}
   const m=document.createElement('div');m.id='s12menu';m.className='s12menu';m.setAttribute('role','menu');
   m.innerHTML='<button type="button" role="menuitem" data-s12="copy">Copy link</button><button type="button" role="menuitem" data-s12="wa">WhatsApp</button>';
@@ -2578,7 +2578,7 @@ function chipFit(){   // one line per school name: full size if it fits, else th
 try{let _cf=0;window.addEventListener('resize',()=>{clearTimeout(_cf);_cf=setTimeout(()=>{try{chipFit()}catch(_){}},120)});if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{try{chipFit()}catch(_){}})}catch(_){}
 /*</CHIP-FIT>*/
 function render(){
-  if(!D)return;const m=D.meta;
+  if(!D)return;try{s12ApplyGuest()}catch(e){}const m=D.meta;
   if(!window._tagPick)window._tagPick={};
   const TAGS={
    live:['Where college basketball knowledge goes to be humbled.','Confidence is high. The scoreboard disagrees.','Every win is skill. Every loss is the refs.','Somebody\u2019s mid-major is carrying them. Somebody\u2019s blue blood is not.','Bragging rights are checked every 10 minutes.'],
