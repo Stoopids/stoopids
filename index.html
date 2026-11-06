@@ -778,7 +778,7 @@ main,#main{padding-left:16px;padding-right:16px}
 .gbtns .qb-btn{background:#FFD400;color:#111;border:0}
 .gm .gside .nm{max-width:calc(100% - 100px);min-width:0}
 .gm.gbet{border-color:#22c55e!important;box-shadow:0 0 0 1px #22c55e inset}
-.gm:has(.qb-btn) .gh{min-height:64px;align-items:flex-start}
+.gm:has(.gbtns .qb-btn) .gh{min-height:64px;align-items:flex-start}
 /* segmented row with an action on the right (Games: Refresh Live Games; Standings: Updated + Refresh) */
 .segrow{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:nowrap;margin:0 0 10px}
 .segrow>.rkseg{margin:0}
@@ -936,7 +936,13 @@ main,#main{padding-top:6px!important}
 
 </style>
 <link rel="stylesheet" href="shared/ui.css?v=1.24.0">
-<style>/*<SORT-FIT> phone All teams table fits with no sideways scroll; Stoop header reads STOOP */@media (max-width:480px){html body .card.tap.s27-rk th,html body .card.tap.s27-rk td{padding:6px 1px!important}html body .card.tap.s27-rk td:first-child .chip{max-width:none!important;font-size:11px!important;padding-right:6px!important}html body .card.tap.s27-rk td:first-child .chip img{width:16px!important;height:16px!important}html body .card.tap.s27-rk th.to{max-width:none!important;overflow:visible!important;text-overflow:clip!important}html body .card.tap.s27-rk td.to{max-width:5ch}html body .card.tap.s27-rk th{font-size:10px!important}html body .card.tap.s27-rk{padding-left:3px!important;padding-right:3px!important}html body .card.tap.s27-rk td.n{font-size:11.5px!important}html body .card.tap.s27-rk td.to{font-size:11.5px}html body .card.tap.s27-rk .s27-sort i{font-size:.7em!important;margin-left:0!important}}/*</SORT-FIT>*/</style>
+<style>/*<QB-BOTTOM> normal-size dark-bolt Quick bet sits on the bottom row; Copy stays on the time row */
+.gm .gh:has(>.gbtns){padding-right:96px!important}
+.ggrid>.gm>.qbw{display:flex;justify-content:flex-end;align-items:center;width:100%;margin-top:8px}
+.ggrid>.gm>.qbw .qb-btn{width:auto!important;max-width:100%;height:auto!important;min-height:44px!important;padding:8px 16px!important;font-size:.9em!important;font-weight:700!important;border-radius:10px!important;background:#FFD400!important;color:#111!important;border:0!important;display:inline-flex!important;align-items:center;justify-content:center}
+@media (max-width:640px){.gm .gh:has(>.gbtns){padding-right:88px!important}}
+/*</QB-BOTTOM>*/
+/*<SORT-FIT> phone All teams table fits with no sideways scroll; Stoop header reads STOOP */@media (max-width:480px){html body .card.tap.s27-rk th,html body .card.tap.s27-rk td{padding:6px 1px!important}html body .card.tap.s27-rk td:first-child .chip{max-width:none!important;font-size:11px!important;padding-right:6px!important}html body .card.tap.s27-rk td:first-child .chip img{width:16px!important;height:16px!important}html body .card.tap.s27-rk th.to{max-width:none!important;overflow:visible!important;text-overflow:clip!important}html body .card.tap.s27-rk td.to{max-width:5ch}html body .card.tap.s27-rk th{font-size:10px!important}html body .card.tap.s27-rk{padding-left:3px!important;padding-right:3px!important}html body .card.tap.s27-rk td.n{font-size:11.5px!important}html body .card.tap.s27-rk td.to{font-size:11.5px}html body .card.tap.s27-rk .s27-sort i{font-size:.7em!important;margin-left:0!important}}/*</SORT-FIT>*/</style>
 </head>
 <body>
 <header>
@@ -961,7 +967,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.41.0"></script>
+<script src="shared/ui.js?v=1.42.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -1688,21 +1694,19 @@ function gameCard(g){
     if(g.kind==='ncaa'){if(u.is)foot+=` <span class="up${u.scored?'':' ns'}">😱 UPSET${u.scored?' +'+D.meta.points.upset:' (no bonus)'}</span>`;else if(u.is===false)foot+=' <span class="mut">· no upset</span>'}
     else if(u.is)foot+=' <span class="up ns">🐶 Underdog win</span>';}
   /*<REFRESH-NOW>*/foot+=lvNote(g);/* HALF-SCORES footer line replaced by HS-INLINE *//*</REFRESH-NOW>*/
-  const inner=`<div class="gh">${head}<div class="gbtns">${/*<S24-EDIT>*/s29GameBtn(g)/*</S24-EDIT>*/}${/*<QUICK-BET>*/qbBtn(g)/*</QUICK-BET>*/}</div></div>${row(g.away)}${row(g.home,'H')}<div class="gl">${foot}</div>`;
+  const inner=`<div class="gh">${head}<div class="gbtns">${/*<S24-EDIT>*/s29GameBtn(g)/*</S24-EDIT>*/}</div></div>${row(g.away)}${row(g.home,'H')}<div class="gl">${foot}</div>`;
   /*<GAMES-LOCAL>*/if(fin){const id=String(g.id),op=gOpen.has(id),sc=s=>`${esc(s.short||s.name||'')} ${s.score!=null?s.score:''}`;
     /*<STEP5-GAMES>*/if(typeof SHARED_UI!=='undefined'&&SHARED_UI.finalCard)return SHARED_UI.finalCard({esc,cls:'gm',cls2:(g.h2h||g.civil?' h2h':'')+(gBetIds().has(id)?' gbet':''),attr:s24Attr('g',g.id),open:op,away:{name:g.away.short||g.away.name||'',score:g.away.score,win:g.away.win},home:{name:g.home.short||g.home.name||'',score:g.home.score,win:g.home.win},upset:g.upset&&g.upset.is,btnAttr:`data-gfin="${esc(id)}"`,btnAttr2:' onclick="gFin(this.dataset.gfin)"',body:inner+(op?boxSlot(g):'')});/*</STEP5-GAMES> fallback below*/
     return `<div class="gm gfin${op?' open':''}${g.h2h||g.civil?' h2h':''}${/*<SYNC1>*/gBetIds().has(id)?' gbet':''/*</SYNC1>*/}"${s24Attr('g',g.id)}><button type="button" class="gsum" data-gfin="${esc(id)}" aria-expanded="${op}" onclick="gFin(this.dataset.gfin)"><span class="gst">FINAL</span><span class="${g.away.win?'w':''}">${sc(g.away)}</span><span class="mut">·</span><span class="${g.home.win?'w':''}">${sc(g.home)}</span>${g.upset&&g.upset.is?'<span>😱</span>':''}<span class="gch" aria-hidden="true">${op?'▾':'▸'}</span></button><div class="gbody"${op?'':' hidden'}>${inner}${/*<SYNC2-BOX>*/op?boxSlot(g):''/*</SYNC2-BOX>*/}</div></div>`}/*</GAMES-LOCAL>*/
   return `<div class="gm${g.h2h||g.civil?' h2h':''}${/*<SYNC1>*/gBetIds().has(String(g.id))?' gbet':''/*</SYNC1>*/}"${/*<S24-EDIT>*/s24Attr('g',g.id)/*</S24-EDIT>*/}>${inner}${/*<GAMES-LOCAL>*/'<div class="gsp" aria-hidden="true"></div>'/*</GAMES-LOCAL>*/}${/*<QUICK-BET>*/qbHtml(g)/*</QUICK-BET>*/}</div>`}
 /*<QUICK-BET>*/
-/* "Quick bet" on a Games-tab card (only when the two teams belong to DIFFERENT owners and the game has not started). The picker lists the sides of up to three bet types: Spread (posted line), Winner (just who wins, EVEN odds, no moneyline odds used) and Over/under (posted total); spread / over-under are left out when no line / total is posted. Tapping a side only PREFILLS the existing 2026-27 New bet form (U state: opponent, text, amount, even odds) and switches to Bets > 2026-27. Nothing is created or saved until the person presses Place bet and confirms, exactly as before. Amount chips 5 / 10 are two of the form's own amounts (PULK.amounts). */
+/* Quick bet on every upcoming game that has not started (live and final never). Ownership and a posted line are not required. Tapping the button only opens the picker. Tapping a side, or Request a bet when no line is posted, prefills Request a bet (full editable description, invitees, how many can accept, amount, odds, expiry). Nothing is posted or accepted until Request bet. Owned and unowned games both stay on Request. Neither falls through to Write it Up. */
 let qbG=null,qbAmt=5,qbMe=null,qbMsg='';
 const qbOwn=s=>s&&s.owners&&s.owners.length?s.owners[0]:null;
 const qbDate=g=>etLabel(etKey(g)).replace(/,/g,'').replace(/\s+\d{4}$/,'');   // "Mon Nov 2": the ET game date on purpose (the auto-settle reader and ESPN match ET dates); display headers are local
 const qbNm=s=>String(s.short||s.name||s.id);
-function qbOk(g){
-  if(DEMO||!g||typeof VIEWS==='undefined'||!VIEWS.bets27||g.status==='final'||g.status==='live'||!g.home||!g.away)return false;
-  const a=g.away.owners||[],h=g.home.owners||[],ow=b27OwnerNames();
-  return a.length>0&&h.length>0&&!a.some(n=>h.includes(n))&&ow.includes(a[0])&&ow.includes(h[0])}
+function qbStarted(g){if(!g||g.status!=='scheduled'||!g.home||!g.away)return true;if(isTBD(g))return false;const t=Date.parse(g.start||'');return isFinite(t)&&t<=Date.now()}
+function qbOk(g){if(DEMO||!g||typeof VIEWS==='undefined'||!VIEWS.bets27)return false;return !qbStarted(g)}
 function qbOpts(g){
   const A=g.away,H=g.home,ln=g.line||{},d=qbDate(g),o=[];
   const fav=String(ln.fav)===String(A.id)?A:String(ln.fav)===String(H.id)?H:null,sp=ln.sp;
@@ -1710,44 +1714,30 @@ function qbOpts(g){
   o.push({k:'win',t:'Winner',s:[A,H].map(t=>{const y=t===A?H:A;return{lab:qbNm(t),team:t,txt:qbNm(t)+' beats '+qbNm(y)+', '+d}})});
   if(ln.ou!=null&&+ln.ou>0){const m=qbNm(A)+' v '+qbNm(H);o.push({k:'ou',t:'Over/under',s:[['Over','Under'],['Under','Over']].map(([x,y])=>({lab:x+' '+ln.ou,team:null,txt:x+' '+ln.ou+' vs '+y+' '+ln.ou+', '+m+', '+d}))})}
   return o}
-function qbBtn(g){/*<SYNC1>*/// the Quick bet button, stacked under Copy in the card header; the picker (qbHtml) still opens below the card body/*</SYNC1>*/
+function qbBtn(g){/* bottom of the card, not the header: normal-size bolt, right-aligned on .qbw */
   if(!qbOk(g))return '';const id=String(g.id),open=qbG===id;
-  return `<button type="button" class="s27-copy qb-btn" aria-expanded="${open}" aria-label="Quick bet: ${esc(qbNm(g.away))} vs ${esc(qbNm(g.home))}" onclick="qbToggle('${esc(id)}')"><svg class="qb-bolt" viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg> Quick bet</button>`}
+  return `<div class="qbw"><button type="button" class="qb-btn" aria-expanded="${open}" aria-label="Quick bet: ${esc(qbNm(g.away))} vs ${esc(qbNm(g.home))}" onclick="qbToggle('${esc(id)}')"><svg class="qb-bolt" viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg> Quick bet</button></div>`}
 function qbHtml(g){
-  if(!qbOk(g))return '';const id=String(g.id),open=qbG===id;
-  /*<STEP7-QB>*/if(typeof SHARED_UI!=='undefined'&&SHARED_UI.qbSheet){if(!open)return '';return SHARED_UI.qbSheet(g,qbList(g),{e:esc,name:qbNm,date:qbDate(g),close:()=>`onclick="qbToggle(null)"`,blank:()=>`onclick="qbGo('${esc(id)}',null,0)"`,pick:(k,i)=>`onclick="qbGo('${esc(id)}','${k}',${i})"`})}/*</STEP7-QB>*/
+  if(!qbOk(g))return '';const id=String(g.id),open=qbG===id,btn=qbBtn(g);
+  /*<STEP7-QB>*/if(typeof SHARED_UI!=='undefined'&&SHARED_UI.qbSheet){if(!open)return btn;return btn+SHARED_UI.qbSheet(g,qbList(g),{e:esc,name:qbNm,date:qbDate(g),close:()=>`onclick="qbToggle(null)"`,blank:()=>`onclick="qbGo('${esc(id)}',null,0)"`,pick:(k,i)=>`onclick="qbGo('${esc(id)}','${k}',${i})"`})}/*</STEP7-QB>*/
   let h='';
   const oa=qbOwn(g.away),oh=qbOwn(g.home),me=b27Who(),need=me!==oa&&me!==oh;
   h+=`<div class="qb-pick" role="group" aria-label="Quick bet picker">`;
   if(need)h+=`<div class="qb-r v"><span class="qb-l">I'm</span><span class="qb-g w">${[oa,oh].map(n=>`<button type="button" aria-pressed="${qbMe===n}" onclick="qbWho(this.dataset.w)" data-w="${esc(n)}">${esc(ownerEmoji(n))} ${esc(PN(n))}</button>`).join('')}</span></div>`;
   h+=`<div class="qb-r"><span class="qb-l">Amount</span>${[5,10].map(a=>`<button type="button" aria-pressed="${qbAmt===a}" onclick="qbSetAmt(${a})">${a}</button>`).join('')}<span class="note">more in the form</span></div>`;
-  qbOpts(g).forEach(o=>{h+=`<div class="qb-r v"><span class="qb-l">${esc(o.t)}</span><span class="qb-g">${o.s.map((s,i)=>`<button type="button" class="qb-s" title="${esc(s.txt)}" onclick="qbPick('${esc(id)}','${o.k}',${i})">${esc(s.lab)}</button>`).join('')}</span></div>`});
+  qbOpts(g).forEach(o=>{h+=`<div class="qb-r v"><span class="qb-l">${esc(o.t)}</span><span class="qb-g">${o.s.map((s,i)=>`<button type="button" class="qb-s" title="${esc(s.txt)}" onclick="qbGo('${esc(id)}','${o.k}',${i})">${esc(s.lab)}</button>`).join('')}</span></div>`});
   if(qbMsg)h+=`<div class="qb-m" role="alert">${esc(qbMsg)}</div>`;
   return h+`<div class="qb-r"><button type="button" class="qb-x" onclick="qbToggle(null)">Close</button><span class="note">Nothing is placed yet: the form opens filled in.</span></div></div>`}
 function qbToggle(id){qbG=(id==null||qbG===String(id))?null:String(id);qbMsg='';render()}
 function qbSetAmt(a){qbAmt=a;render()}
 function qbWho(n){qbMe=n;qbMsg='';render()}
-function qbPick(id,k,i){
-  const g=(D.games||[]).find(x=>String(x.id)===String(id));if(!g||!qbOk(g))return;
-  const o=qbOpts(g).find(x=>x.k===k),s=o&&o.s[i];if(!s)return;
-  const pair=[qbOwn(g.away),qbOwn(g.home)];let me=b27Who();
-  if(!pair.includes(me)){   // the form's "you are" must be one of the two owners: use the one picked above, else the owner of the picked team
-    me=qbMe&&pair.includes(qbMe)?qbMe:(s.team?qbOwn(s.team):null);
-    if(!me){qbMsg='Tap who you are first.';render();return}
-    presPick(me)}
-  const opp=pair.find(n=>n!==me),t=b27Clean(s.txt);
-  Object.assign(U,{kind:'bet',confirm:false,msg:'',msgBad:false,opps:[opp],pp:[],text:t,amt:qbAmt,amtCustom:false,amtTxt:'',amtErr:'',odds:[1,1],custom:false,customTxt:'',oddsErr:'',qb:t});
-  qbG=null;qbMsg='';tab='bets27';render();
-  setTimeout(()=>{try{const f=document.querySelector('.b27-form');if(f){f.scrollIntoView({block:'start'});const b=document.getElementById('b27Place');if(b&&!b.disabled)b.focus({preventScroll:true})}}catch(_){}},30)}
-/*<STEP7-QB>*/ /* the shared Quick bet window: posted odds only; a tap prefills Write it up (game + side/total + line). The Stoop(s) and the amount are picked in the form. */
+function qbPick(id,k,i){qbGo(id,k,i)}
+/*<STEP7-QB>*/ /* a tap opens Request a bet with the side and spread filled in. Owned or not, it does not open Write it Up and it does not post. */
 const qbList=g=>SHARED_UI.qbOptions(g,{name:qbNm,date:qbDate(g)});
 function qbGo(id,k,i){const g=(D.games||[]).find(x=>String(x.id)===String(id));if(!g||!qbOk(g))return;
-  /*<STEP8-REQUEST>*/if(typeof RQ!=='undefined'&&RQ){RQ.prefill(id,k,i);qbG=null;qbMsg='';tab='bets27';OB_VIEW='request';render();setTimeout(()=>{try{const f=document.getElementById('rqForm');if(f)f.scrollIntoView({block:'start'})}catch(_){}},30);return}/*</STEP8-REQUEST>*/
-  let txt;if(k==null)txt=SHARED_UI.qbBlankText(g,{name:qbNm,date:qbDate(g)});else{const o=qbList(g).find(x=>x.k===k),s=o&&o.s[i];if(!s)return;txt=s.txt}
-  const t=b27Clean(txt);
-  Object.assign(U,{kind:'bet',confirm:false,msg:'',msgBad:false,opps:[],pp:[],text:t,amtCustom:false,amtTxt:'',amtErr:'',odds:[1,1],custom:false,customTxt:'',oddsErr:'',qb:t});
-  qbG=null;qbMsg='';tab='bets27';render();
-  setTimeout(()=>{try{const f=document.querySelector('.b27-form');if(f)f.scrollIntoView({block:'start'})}catch(_){}},30)}
+  if(!(typeof RQ!=='undefined'&&RQ)){qbMsg='Request a bet is unavailable right now.';render();return}
+  RQ.prefill(id,k,i);qbG=null;qbMsg='';tab='bets27';OB_VIEW='request';render();
+  setTimeout(()=>{try{const f=document.getElementById('rqForm');if(f)f.scrollIntoView({block:'start'})}catch(_){}},30)}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&qbG!=null&&document.querySelector('.qbs')){qbToggle(null)}});
 /*</STEP7-QB>*/
 const qbHint=()=>U.qb&&U.qb===U.text&&U.kind==='bet'&&!U.confirm?'<div class="qb-hint note" role="status">⚡ Quick bet filled in — check and place it.</div>':'';
@@ -3553,7 +3543,7 @@ const REQ_URL='https://textdb.dev/api/data/stoopids-requests-2627-9eaa4f66';
 const RQ=(typeof SHARED_UI!=='undefined'&&SHARED_UI.Requests)?SHARED_UI.Requests({maxText:PULK.maxText,change:"presAsk();return false",
   e:esc,me:()=>b27Who(),others:()=>b27Others().map(n=>({id:n,emoji:ownerEmoji(n),nick:TN(n)})),nick:n=>TN(n),real:n=>PN(n),
   canWrite:()=>!DEMO&&!!b27Who()&&b27OwnerNames().includes(b27Who()),amounts:PULK.amounts,
-  games:()=>(D.games||[]).filter(g=>g&&g.home&&g.away).map(g=>({id:String(g.id),g,start:g.start,status:g.status,period:g.period||null,label:qbNm(g.away)+' vs '+qbNm(g.home)+' · '+qbDate(g)})),
+  games:()=>(D.games||[]).filter(g=>g&&g.home&&g.away).map(g=>({id:String(g.id),g,start:g.start,status:g.status,period:g.period||null,tbd:isTBD(g),label:qbNm(g.away)+' vs '+qbNm(g.home)+' · '+qbDate(g)})),
   tname:s=>qbNm(s),dateET:g=>qbDate(g),link:()=>location.href.split('#')[0]+'#bets27',goRequest:()=>{tab='bets27';OB_VIEW='request'},waiting:()=>{try{const me=b27Who();return me&&U.doc&&U.doc.bets?U.doc.bets.filter(b=>s24Waiting(b,me)).length:0}catch(e){return 0}},navEl:()=>document.querySelector('a.nt[data-tab="bets27"]')||document.querySelector('a.nt[data-tab="bets"]'),
   get:async()=>{const r=await fetch(REQ_URL,{cache:'no-store'});if(!r.ok)throw 0;return r.text()},
   set:async txt=>{const w=await fetch(REQ_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:txt});if(!w.ok)throw 0},
