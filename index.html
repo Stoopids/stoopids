@@ -273,7 +273,8 @@ html body #onlStrip.onl-fixed{position:fixed;z-index:29;left:12px;right:160px;bo
 html body .chat.chat-off{left:auto!important;right:max(12px,env(safe-area-inset-right,0px))!important;bottom:max(12px,env(safe-area-inset-bottom,0px))!important;width:max-content!important;max-width:min(240px,calc(100vw - 24px))!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important;overflow:visible!important}
 html body .chat.chat-pop>.chat-t{display:none!important}
 html body .chat.chat-off>.chat-t{width:auto!important;min-height:44px!important;border-radius:999px!important;padding:0 14px!important;background:#FFD400!important;color:#111!important;border-color:#FFD400!important}
-html body .chat.chat-off>.chat-t .cbm,html body .chat.chat-off>.chat-t .ca,html body .chat.chat-off>.chat-t .cdot{display:none!important}
+html body .chat.chat-off>.chat-t .cbm,html body .chat.chat-off>.chat-t .ca{display:none!important}
+html body .chat.chat-off>.chat-t .cdot:not([hidden]){display:inline-flex!important;align-items:center;justify-content:center}
 html body .chat.chat-off>.chat-t::before{content:'\1F4AC  Chat';font-weight:800}
 html body .chat.chat-off .chat-b{display:none!important}
 .chat-who{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:800;font-size:13px;line-height:1.2;color:var(--tx);cursor:default;user-select:text}
@@ -296,9 +297,7 @@ body.nochat .chat{visibility:hidden}   /* hidden (space kept) while a text field
 .cb2.mut{color:var(--mut);font-weight:500}
 .chat-t .cdot{flex:none;min-width:26px;height:26px;padding:0 8px;border-radius:99px;background:#ff3b5c;color:#fff;font-size:14px;font-weight:900;font-style:normal;line-height:26px;text-align:center;box-shadow:0 0 0 3px rgba(255,59,92,.3)}
 .chat-t .cdot[hidden]{display:none}
-.chat.unread .chat-t{border-color:var(--acc);background:#2b2510;animation:cbpulse 2.2s ease-in-out infinite}
-@keyframes cbpulse{0%,100%{box-shadow:0 0 0 0 rgba(255,210,63,0)}50%{box-shadow:0 0 0 5px rgba(255,210,63,.32),0 0 16px rgba(255,210,63,.3)}}
-@media (prefers-reduced-motion:reduce){.chat.unread .chat-t{animation:none;box-shadow:0 0 0 3px rgba(255,210,63,.5)}}
+.chat.unread .chat-t,.chat.chat-off.unread>.chat-t{border-color:#FFD400;box-shadow:0 0 0 3px rgba(255,210,63,.55);animation:none}
 .chat-h{display:flex;gap:6px;align-items:center;justify-content:space-between;margin:0 0 6px}.chat-hx{display:flex;gap:6px;align-items:center;margin-left:auto;flex:none}.chat-x{min-width:36px;min-height:36px;padding:0;border-radius:10px;border:1px solid #fff;background:#1e3a8a;color:#fff;font:inherit;font-size:18px;font-weight:800;line-height:1;cursor:pointer}
 .chat-h button{min-height:40px;padding:0 10px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--mut);font:inherit;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}
 .chat-h button[aria-pressed=true]{color:var(--acc);border-color:var(--acc)}
@@ -2961,7 +2960,6 @@ async function chatClear(){
 function chatMode(mode){
   if(mode!=='pop'&&mode!=='bar'&&mode!=='off')mode='bar';
   CH.mode=mode;CH.open=mode==='pop';
-  try{sessionStorage.setItem('stoopids.chat.mode',mode)}catch(e){}
   const sec=$('#chat');if(!sec)return;
   sec.hidden=false;
   sec.classList.toggle('chat-bar',mode==='bar');
@@ -2981,7 +2979,7 @@ function chatToggle(open){
 }
 function chatInit(){
   if(CH.started||DEMO||!D||!D.owners)return;CH.started=true;
-  const sec=$('#chat');if(!sec)return;sec.hidden=false;let start='pop';try{const s=sessionStorage.getItem('stoopids.chat.mode');if(s==='pop'||s==='bar'||s==='off')start=s}catch(e){}chatMode(start);
+  const sec=$('#chat');if(!sec)return;sec.hidden=false;chatMode('off');
   /*<CHAT-BAR>*/chatSeenLoad();CH.snd=lsGet(CB.sndKey)==='1';/*</CHAT-BAR>*/
   $('#chatT').onclick=()=>chatMode('pop');
   /*<CHAT-BAR>*/$('#chatSnd').onclick=()=>chatSndSet(!CH.snd);$('#chatMin').onclick=()=>chatMode('bar');$('#chatX').onclick=()=>chatMode('off');$('#chatI').addEventListener('input',chatTypingNote);
