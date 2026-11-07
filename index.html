@@ -4095,9 +4095,10 @@ load();setInterval(()=>load(),2*60*1000);   /* re-read the published data.js. Th
 /*<TEAMNAME-WARN>*/addEventListener('load',function(){try{const L=(window.SHARED_UI&&SHARED_UI.LIMITS.team)||15,seen={};JSON.stringify(window.STOOPIDS_DATA||{},function(k,v){if(k==='team_name'&&typeof v==='string'&&v.length>L&&!seen[v]){seen[v]=1;console.warn('Team name over '+L+' chars (shown in full, fix in config.json): '+v)}return v})}catch(e){}});/*</TEAMNAME-WARN>*/
 /*<ONLINE-STRIP>*/// "Who's online" strip under every tab: online first (green dot), then everyone else with last-seen. Reads the existing presence store only (GET); never writes.
 function placeOnl(){const el=document.getElementById('onlStrip'),sec=document.getElementById('chat');if(!el)return;const phone=window.matchMedia&&matchMedia('(max-width:700px)').matches;const mode=sec&&sec.classList.contains('chat-pop')?'pop':sec&&sec.classList.contains('chat-off')?'off':'bar';
-  if(phone&&mode!=='bar'){if(el.parentNode!==document.body)document.body.appendChild(el);el.classList.add('onl-fixed');return}
+  const fit=()=>{const t=document.getElementById('chatT');if(!t)return;const w=Math.ceil(t.getBoundingClientRect().width);if(w>0)document.documentElement.style.setProperty('--chat-btn',w+'px')};
+  if(phone&&mode!=='bar'){if(el.parentNode!==document.body)document.body.appendChild(el);el.classList.add('onl-fixed');fit();return}
   if(mode==='pop'){const panel=document.getElementById('chatB');if(panel&&el.parentNode!==panel)panel.insertBefore(el,panel.firstChild);el.classList.remove('onl-fixed')}
-  else if(mode==='off'){if(el.parentNode!==document.body)document.body.appendChild(el);el.classList.add('onl-fixed')}
+  else if(mode==='off'){if(el.parentNode!==document.body)document.body.appendChild(el);el.classList.add('onl-fixed');fit()}
   else if(sec){const btn=document.getElementById('chatT');if(btn)sec.insertBefore(el,btn);el.classList.remove('onl-fixed')}}
 function onlStrip(){const main=document.getElementById('main');if(!main||!D)return;let el=document.getElementById('onlStrip');if(!el){el=document.createElement('section');el.id='onlStrip';el.className='onl';el.setAttribute('aria-label','Who\u2019s online');main.insertAdjacentElement('afterend',el)}
   const m=PS.map||{},now=Date.now(),on=[],off=[];let g=0;presOwners().forEach(o=>{const e=m[o.name];const age=e&&e.t?now-e.t:Infinity;if(e&&e.t&&age<=PRES.onlineMs)on.push(o);else off.push([o,age])});for(const k in m)if(k.indexOf('g-')===0&&m[k]&&m[k].t&&now-m[k].t<=PRES.onlineMs)g++;off.sort((a,b)=>a[1]-b[1]);
@@ -4308,6 +4309,18 @@ html body #main .gfone>.gf3,html body #lbody .gfone>.gf3{display:block!important
 html body #main .gfone .gf2.gfpills,html body #main .gfone .gf2.gfwhen,html body #lbody .gfone .gf2.gfpills,html body #lbody .gfone .gf2.gfwhen{display:flex!important;flex-flow:row wrap!important;align-items:center!important;justify-content:flex-start!important;align-content:flex-start!important;gap:6px!important;width:100%!important;max-width:100%!important;margin:0!important;padding:0!important}
 html body #main .gfone .gfpills>.gf2-s,html body #main .gfone .gfpills>.gf2-b,html body #main .gfone .gfwhen>.gf2-s,html body #main .gfone .gfwhen>.gf2-b,html body #lbody .gfone .gfpills>.gf2-s,html body #lbody .gfone .gfpills>.gf2-b,html body #lbody .gfone .gfwhen>.gf2-s,html body #lbody .gfone .gfwhen>.gf2-b{width:auto!important;max-width:100%!important;min-width:0!important;flex:0 1 auto!important;height:28px!important;min-height:28px!important;padding:0 10px!important;font-size:12px!important}
 html body #main .gf3>.gf2.gfpills>input.gf2-s,html body #lbody .gf3>.gf2.gfpills>input.gf2-s{width:16ch!important;max-width:46%!important}
+/* Same fit as shared/ui.css, last so the 200px pill and the two-column card cannot override it. */
+html body .ggrid>.gm:not(.gfin),html body .ggrid .gbody{grid-template-columns:minmax(0,1fr)!important;min-width:0;max-width:100%}
+html body .ggrid>.gm:not(.gfin)>.gside,html body .ggrid .gbody>.gside{grid-column:1!important;display:flex!important;align-items:center;gap:6px;min-width:0;max-width:100%;margin-right:0!important}
+html body .ggrid .gside .nm{flex:1 1 auto;min-width:0;overflow:hidden}
+html body .ggrid .gside .sc2{flex:0 0 auto}
+html body .ggrid>.gm:not(.gfin) .gside a.chip,html body .ggrid .gbody .gside a.chip{flex:1 1 auto!important;width:auto!important;min-width:0!important;max-width:min(200px,100%)!important;height:40px!important;min-height:40px!important;max-height:40px!important}
+html body .ggrid>.gm:not(.gfin)>.gow,html body .ggrid .gbody>.gow{grid-column:1!important;flex-wrap:wrap;height:auto!important;max-height:none!important;white-space:normal!important;overflow:visible!important;max-width:100%}
+html body .ggrid .gow .opill{max-width:100%}
+html body .ggrid>.gm:not(.gfin)>.gow[aria-hidden="true"],html body .ggrid .gbody>.gow[aria-hidden="true"]{height:0!important;max-height:0!important;overflow:hidden!important}
+html body .gm .gh>span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+html body .gm .gh .gbtns,html body .gm .gh .mkbtns{position:static!important;flex:none!important;flex-direction:row!important;margin-left:auto!important}
+@media (max-width:700px){html body #onlStrip.onl-fixed{right:calc(max(12px,env(safe-area-inset-right,0px)) + 8px + var(--chat-btn,122px))!important}}
 /*</HELD-LAYOUT>*/
 </style><!--</S29E-PASTE>-->
 <!--<S29E-COPY>--><script>
