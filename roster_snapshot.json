@@ -5,6 +5,10 @@
    "sheet_name": "FLORIDA"
   },
   {
+   "tid": "2641",
+   "sheet_name": "TEXAS TECH"
+  },
+  {
    "tid": "333",
    "sheet_name": "ALABAMA"
   },
@@ -19,6 +23,10 @@
   {
    "tid": "2006",
    "sheet_name": "AKRON"
+  },
+  {
+   "tid": "2132",
+   "sheet_name": "CINCINNATI"
   },
   {
    "tid": "202",
@@ -69,6 +77,10 @@
    "sheet_name": "LOUISVILLE"
   },
   {
+   "tid": "2633",
+   "sheet_name": "TENNESSEE"
+  },
+  {
    "tid": "252",
    "sheet_name": "BYU"
   },
@@ -79,6 +91,14 @@
   {
    "tid": "142",
    "sheet_name": "MISSOURI"
+  },
+  {
+   "tid": "2440",
+   "sheet_name": "NEVADA"
+  },
+  {
+   "tid": "2294",
+   "sheet_name": "IOWA"
   }
  ],
  "Kentut": [
@@ -87,12 +107,20 @@
    "sheet_name": "ILLINOIS"
   },
   {
+   "tid": "2272",
+   "sheet_name": "HIGH POINT"
+  },
+  {
    "tid": "8",
    "sheet_name": "ARKANSAS"
   },
   {
    "tid": "350",
    "sheet_name": "UNC WILMINGTON"
+  },
+  {
+   "tid": "2670",
+   "sheet_name": "VCU"
   },
   {
    "tid": "152",
@@ -121,8 +149,20 @@
    "sheet_name": "SAN DIEGO STATE"
   },
   {
+   "tid": "2253",
+   "sheet_name": "GRAND CANYON"
+  },
+  {
    "tid": "235",
    "sheet_name": "MEMPHIS"
+  },
+  {
+   "tid": "2181",
+   "sheet_name": "Drake"
+  },
+  {
+   "tid": "2750",
+   "sheet_name": "Wright State"
   },
   {
    "tid": "2755",
@@ -149,6 +189,10 @@
   {
    "tid": "139",
    "sheet_name": "SAINT LOUIS"
+  },
+  {
+   "tid": "2724",
+   "sheet_name": "Wichita State"
   },
   {
    "tid": "222",
@@ -195,8 +239,20 @@
  ],
  "En Fuego": [
   {
+   "tid": "2305",
+   "sheet_name": "KANSAS"
+  },
+  {
+   "tid": "2250",
+   "sheet_name": "GONZAGA"
+  },
+  {
    "tid": "2390",
    "sheet_name": "miami"
+  },
+  {
+   "tid": "2509",
+   "sheet_name": "PURDUE"
   },
   {
    "tid": "68",
@@ -209,6 +265,10 @@
   {
    "tid": "163",
    "sheet_name": "PRINCETON"
+  },
+  {
+   "tid": "2142",
+   "sheet_name": "COLGATE"
   }
  ]
 }
