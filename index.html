@@ -3866,12 +3866,21 @@ let S29AT=0;function s29AutoSoon(){clearTimeout(S29AT);S29AT=setTimeout(()=>{con
 /*</S29D-AUTO>*/
 function s25CardRd(b){/*<S29D-AUTO>*/const an=(b.status==='open'&&b.kind!=='pool'&&s29AutoOK(b.rd))?s29AutoHtml(true):'';/*</S29D-AUTO>*/if(b.kind==='pool'||!(b.rd||b.src))return an;return an+`<div class="s25rdc" data-s25-card-rd="${b.rd?b.rd.k:''}">${b.rd?'Read as: '+s25RdLine(b.rd):''}${b.src?`${b.rd?' · ':''}from the final score: ${esc(b.src.sc)}`:''}</div>`}
 function s25Key(r){return r.sp+'|'+r.d}
-function s25Game(b){const r=b.rd;if(!r||r.k==='manual'||b.status!=='open'||b.backer!==b27Who())return null;   // spec s25 §4: only on the creator's pageconst today=S25.etDay(new Date());if(r.d>today)return {wait:'future'};
-  const c=S25P.games[s25Key(r)];if(!c||c.st==='loading'){s25Fetch(r);return {wait:'loading'}}if(c.st==='err'){s25Fetch(r);return {wait:'err'}}
-  const g=S25.match(c.sb,r);if(!g)return {wait:'nogame'};if(!g.final){s25Fetch(r);return {wait:'live',g}}return {g,p:S25.proposal(r,g)}}
-function s25Fetch(r){const k=s25Key(r),c=S25P.games[k];if(c&&(c.st==='loading'||Date.now()-c.at<S25P.refetchMs))return;
+/* The published schedule already has the final. Use it when the browser scoreboard request fails, so one rejected request does not hide every suggestion for 10 minutes. */
+function s25FromGames(r){if(!r||typeof D==='undefined'||!D||!D.games)return null;const events=[];
+  for(const g of D.games){if(!g||g.day!==r.d||!g.home||!g.away)continue;const side=s=>({team:{shortDisplayName:s.short||'',displayName:s.short||'',location:s.short||''},score:s.score!=null?String(s.score):''});
+    const fin=g.status==='final',ty=fin?{name:'STATUS_FINAL',completed:true,state:'post'}:{name:'',state:g.status||''};
+    events.push({id:g.id,date:g.start,status:{type:ty},competitions:[{competitors:[side(g.away),side(g.home)],status:{type:ty}}]})}
+  const g=S25.match({events},r);if(!g||!g.final)return null;const p=S25.proposal(r,g);return p?{g:g,p:p}:null}
+function s25Game(b){const r=b.rd;if(!r||r.k==='manual'||b.status!=='open'||b.backer!==b27Who())return null;   // spec s25 §4: only on the creator's page
+  const today=S25.etDay(new Date());if(r.d>today)return {wait:'future'};
+  const c=S25P.games[s25Key(r)];
+  if(!c||c.st==='loading'||c.st==='err'){s25Fetch(r);const loc=s25FromGames(r);if(loc)return loc;return {wait:c&&c.st==='err'?'err':'loading'}}
+  const g=S25.match(c.sb,r);if(!g){const loc=s25FromGames(r);if(loc)return loc;return {wait:'nogame'}}
+  if(!g.final){s25Fetch(r);return {wait:'live',g}}return {g,p:S25.proposal(r,g)}}
+function s25Fetch(r){const k=s25Key(r),c=S25P.games[k];const hold=c&&c.st==='err'?15000:S25P.refetchMs;if(c&&(c.st==='loading'||Date.now()-c.at<hold))return;
   S25P.games[k]={st:'loading',at:Date.now(),sb:c&&c.sb};let ac=null;try{ac=new AbortController();setTimeout(()=>ac.abort(),S25P.timeoutMs)}catch(e){}
-  fetch(S25.scoreboardUrl(r.sp,r.d),ac?{cache:'no-store',signal:ac.signal}:{cache:'no-store'}).then(x=>{if(!x.ok)throw 0;return x.json()}).then(sb=>{S25P.games[k]={st:'ok',at:Date.now(),sb}},()=>{S25P.games[k]={st:'err',at:Date.now()}})
+  fetch(S25.scoreboardUrl(r.sp,r.d),ac?{credentials:'omit',cache:'no-store',signal:ac.signal}:{credentials:'omit',cache:'no-store'}).then(x=>{if(!x.ok)throw 0;return x.json()}).then(sb=>{S25P.games[k]={st:'ok',at:Date.now(),sb}},()=>{S25P.games[k]={st:'err',at:Date.now()}})
     .then(()=>{const ae=document.activeElement;if(tab==='bets27'&&!(ae&&ae.closest&&ae.closest('#main')&&/INPUT|TEXTAREA|SELECT/.test(ae.tagName)))render()}).catch(()=>{})}
 function s25ResWho(b,r){const OP=b27Opps(b);return r==='backer'?b.backer+' won':r==='other'?(OP.length>1?'Managers won':b.other+' won'):'Wash'}
 function s25PropHtml(b,me){const G=s25Game(b);if(!G)return '';const r=b.rd;/*STEP9-AUTOSETTLE live leader*/if(G.wait==='live'&&G.g&&window.SHARED_UI&&SHARED_UI.autoLine){try{const p=S25.proposal(r,Object.assign({},G.g,{final:true}));if(p&&p.r){const OP=b27Opps(b);return SHARED_UI.autoLine({e:esc,live:true,who:p.r==='backer'?PN(b.backer):p.r==='other'?(OP.length>1?'Managers':PN(b.other)):'',sc:p.sc})}}catch(e){}}
