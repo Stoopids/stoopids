@@ -509,13 +509,26 @@ def _refresh():
     raw = None
     if not a.offline:
         try:
-            raw = http_json(ESPN + "/teams?limit=500&groups=50")
+            raw = http_json(ESPN + "/teams?limit=1000&groups=50")
             jsave(tpath, raw)
         except Exception as ex:
             log("teams fetch failed", ex)
     raw = raw or jload(tpath) or jload(os.path.join(HERE, "teams.json"))
     team_list = [x["team"] for x in raw["sports"][0]["leagues"][0]["teams"]]
     by_id = {str(t["id"]): t for t in team_list}
+    # The teams list is longer than 500. A short page drops later ids, and the roster
+    # aliases still point at them, which published a nameless pill. Keep any id the
+    # saved catalog already names when this fetch does not include it.
+    repo_teams = jload(os.path.join(HERE, "teams.json"))
+    if isinstance(repo_teams, dict):
+        try:
+            for item in repo_teams["sports"][0]["leagues"][0]["teams"]:
+                t = item.get("team") or {}
+                tid = str(t.get("id") or "")
+                if tid and tid not in by_id and (t.get("shortDisplayName") or t.get("location")):
+                    by_id[tid] = t
+        except Exception:
+            pass
     name_index = build_name_index(team_list, cfg["team_aliases"])
 
     # rosters from the sheet (live), with snapshot protection around the redraft
