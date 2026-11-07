@@ -3615,7 +3615,7 @@ const RQ=(typeof SHARED_UI!=='undefined'&&SHARED_UI.Requests)?SHARED_UI.Requests
 let OB_VIEW='form';   // Bets tab: 'form' = 2026-27 (New bet form + bet list), 'tally' = person table + Who owes who for 2026-27
 function obView(v){tab='bets27';
   if(v==='open'){OB_VIEW='all';render();setTimeout(()=>{const el=document.getElementById('rqPinned');if(el)el.scrollIntoView({block:'start'})},40);return}
-  if(v==='tally'){OB_VIEW='all';render();setTimeout(()=>{const el=document.getElementById('b27Tally');if(el){el.open=true;el.scrollIntoView({block:'start'})}},40);return}
+  if(v==='tally'){if(window.matchMedia&&matchMedia('(min-width:1000px)').matches){OB_VIEW='tally';render();window.scrollTo(0,0);return}OB_VIEW='all';render();setTimeout(()=>{const el=document.getElementById('b27Tally');if(el){el.open=true;el.scrollIntoView({block:'start'})}},40);return}
   OB_VIEW=v==='request'?'request':v==='all'?'all':'form';
   if(v==='request'){render();setTimeout(()=>{const el=document.getElementById('rqForm');if(el)el.scrollIntoView({block:'start'})},40);return}
   render();window.scrollTo(0,0)}
@@ -3638,10 +3638,10 @@ function vTally(){/* STEP11: Tally = 2026-27 Bets ledger (b27Tally / U.doc), not
   return h}
 /*</BETS-TALLY>*/
 function obToggle(){
-  /*<BETS-TALLY>*/if(!SHOW_OLD_BETS||tab==='bets27'){const entry=OB_VIEW==='form'||OB_VIEW==='request',all=OB_VIEW==='all'||OB_VIEW==='open'||OB_VIEW==='tally';
+  /*<BETS-TALLY>*/if(!SHOW_OLD_BETS||tab==='bets27'){const entry=OB_VIEW==='form'||OB_VIEW==='request',all=OB_VIEW==='all'||OB_VIEW==='open',tally=OB_VIEW==='tally';
     const sg=(k,on,t,id)=>`<button type="button" class="${on?'on':''}" aria-pressed="${on}" data-ob="${k}"${id?` id="${id}"`:''} onclick="obView('${k}')">${t}</button>`;
     const old=SHOW_OLD_BETS?`<button type="button" data-ob="bets" onclick="obGo('bets')">2025-26 (old)</button>`:'';
-    return `<div class="tabs ob-seg ob-desk" role="group" aria-label="Bets">${sg('form',entry,'Request or Write it up','b27Ob_form')}${sg('all',all,'All Bets','b27Ob_all')}${old}</div><div class="tabs ob-seg ob-phone" role="group" aria-label="Bets">${sg('request',OB_VIEW==='request','Request')}${sg('form',OB_VIEW==='form','Write it Up')}${sg('all',all,'All Bets')}${old}</div>`}/*</BETS-TALLY>*/
+    return `<div class="tabs ob-seg ob-desk" role="group" aria-label="Bets">${sg('form',entry,'Request or Write it up','b27Ob_form')}${sg('all',all,'All Bets','b27Ob_all')}${sg('tally',tally,'Tally','b27Ob_tally')}${old}</div><div class="tabs ob-seg ob-phone" role="group" aria-label="Bets">${sg('request',OB_VIEW==='request','Request')}${sg('form',OB_VIEW==='form','Write it Up')}${sg('all',all||tally,'All Bets')}${old}</div>`}/*</BETS-TALLY>*/
   const seg=(k,t,bd)=>`<button type="button" class="${tab===k?'on':''}" aria-pressed="${tab===k}" data-ob="${k}"${tab!==k&&bd?' aria-label="'+t+', new bets"':''} onclick="obGo('${k}')">${t}${tab===k?'':bd}</button>`;
   return `<div class="tabs ob-seg" role="group" aria-label="Bets season">${seg('bets27','2026-27',b27Badge())}${seg('bets','2025-26 (old)',nbBadge('bets'))}</div>`;
 }
@@ -3658,8 +3658,9 @@ function obOldNote(){   // read-only replacement of the old shared-ledger card (
   const bi=TABS.findIndex(t=>t[0]==='bets27');if(TABS.every(t=>t[0]!=='tally'))TABS.splice(bi+1,0,['tally','🧮 Tally']);NAVSHORT.tally='Tally';VIEWS.tally=()=>vTally();
   function entryPair(){const focus=OB_VIEW==='request'?'request':'form',wiu=vB27(),rq=(typeof RQ!=='undefined'&&RQ)?RQ.view():'<div class="card note">Request a bet is unavailable right now.</div>';
     return `<div class="entry-pair" data-focus="${focus}"><div class="entry-col entry-rq${focus==='request'?' is-on':''}">${rq}</div><div class="entry-col entry-wiu${focus==='form'?' is-on':''}">${wiu}</div></div>`}
-  VIEWS.bets27=()=>{if(OB_VIEW==='open'||OB_VIEW==='tally')OB_VIEW='all';
+  VIEWS.bets27=()=>{if(OB_VIEW==='open'||(OB_VIEW==='tally'&&!(window.matchMedia&&matchMedia('(min-width:1000px)').matches)))OB_VIEW='all';
     const entry=OB_VIEW==='form'||OB_VIEW==='request';
+    if(OB_VIEW==='tally')return obToggle()+vTally();
     return obToggle()+(entry?entryPair():((typeof RQ!=='undefined'&&RQ?RQ.pinned(false,true):'')+vB27()+'<details class="card tally-fold" id="b27Tally"><summary><b>Tally</b> <span class="note">Who owes who</span></summary>'+vTally()+'</details>'))};VIEWS.bets=()=>obToggle()+vBets();NAVSHORT.bets27='Bets';/*</ONE-BETS>*/
   if(typeof nbBadge==='function'){const _b=nbBadge;nbBadge=function(k){return k==='bets27'?/*<ONE-BETS>*/(tab==='bets'||tab==='bets27'?'':b27Badge()||_b('bets'))/*</ONE-BETS>*/:_b(k)}}      // 'new' badge on the one Bets tab: 2026-27 (own watermark) or the old ledger; inside the tab the toggle shows it on the other segment
   const pp=presPick;presPick=function(w){pp(w);try{U.opps=[];/*<POOL>*/U.pp=[];/*</POOL>*/if(tab==='bets27')render()}catch(e){}};
