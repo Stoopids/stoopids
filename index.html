@@ -3867,7 +3867,7 @@ let S29AT=0;function s29AutoSoon(){clearTimeout(S29AT);S29AT=setTimeout(()=>{con
 function s25CardRd(b){/*<S29D-AUTO>*/const an=(b.status==='open'&&b.kind!=='pool'&&s29AutoOK(b.rd))?s29AutoHtml(true):'';/*</S29D-AUTO>*/if(b.kind==='pool'||!(b.rd||b.src))return an;return an+`<div class="s25rdc" data-s25-card-rd="${b.rd?b.rd.k:''}">${b.rd?'Read as: '+s25RdLine(b.rd):''}${b.src?`${b.rd?' · ':''}from the final score: ${esc(b.src.sc)}`:''}</div>`}
 function s25Key(r){return r.sp+'|'+r.d}
 /* The published schedule already has the final. Use it when the browser scoreboard request fails, so one rejected request does not hide every suggestion for 10 minutes. */
-function s25FromGames(r){if(!r||typeof D==='undefined'||!D||!D.games)return null;const events=[];
+function s25FromGames(r){if(!r||r.sp!=='mcbb'||typeof D==='undefined'||!D||!D.games)return null;const events=[];
   for(const g of D.games){if(!g||g.day!==r.d||!g.home||!g.away)continue;const side=s=>({team:{shortDisplayName:s.short||'',displayName:s.short||'',location:s.short||''},score:s.score!=null?String(s.score):''});
     const fin=g.status==='final',ty=fin?{name:'STATUS_FINAL',completed:true,state:'post'}:{name:'',state:g.status||''};
     events.push({id:g.id,date:g.start,status:{type:ty},competitions:[{competitors:[side(g.away),side(g.home)],status:{type:ty}}]})}
