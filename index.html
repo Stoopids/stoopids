@@ -4331,6 +4331,8 @@ html body .ggrid>.gm:not(.gfin)>.gow[aria-hidden="true"],html body .ggrid .gbody
 html body .gm .gh>span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 html body .gm .gh .gbtns,html body .gm .gh .mkbtns{position:static!important;flex:none!important;flex-direction:row!important;margin-left:auto!important}
 @media (max-width:700px){html body #onlStrip.onl-fixed{right:calc(max(12px,env(safe-area-inset-right,0px)) + 8px + var(--chat-btn,122px))!important}}
+/* Phone bar keeps only Ranks, Games, Bets, Teams. The other tabs stay in More. Hiding them here, not after the later script pass, stops them forming a second row that shoves the page down and then jumps back. */
+@media (max-width:700px){html body nav#nav>a:not([data-tab="standings"]):not([data-tab="games"]):not([data-tab="bets"]):not([data-tab="bets27"]):not([data-tab="teams"]){display:none!important}}
 /*</HELD-LAYOUT>*/
 </style><!--</S29E-PASTE>-->
 <!--<S29E-COPY>--><script>
