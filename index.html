@@ -953,7 +953,7 @@ main,#main{padding-top:6px!important}
 </head>
 <body>
 <header>
-  <div class="hero" role="img" aria-label="The STOOPIDS crew"></div>
+  <div class="hero" role="button" tabindex="0" aria-expanded="false" aria-label="The STOOPIDS crew. Tap to enlarge the photo."></div>
   <div class="titlebar"><p class="s27-pres" id="lpres">Stoopids presents</p><div class="s12-hd"><h1>STOOP<span>IDS</span></h1><!--<STEP12-HSHARE> whole-site Share beside the title (view-only link; Profile keeps the pick-a-tab share) --><button type="button" class="s12-share" id="s12Share" aria-label="Share STOOPIDS (view-only link to the whole site)" onclick="s12ShareSite(this)">🔗 Share</button><!--</STEP12-HSHARE>--></div>
 <!--<HDR-CENTER> Refresh Live Games moved to #gamesTop (top of Games) </HDR-CENTER>-->
   <p class="tag" id="tag"></p></div>
@@ -4368,6 +4368,20 @@ html body .gm .gh .gbtns,html body .gm .gh .mkbtns{position:static!important;fle
 html body .ggrid>.gm:not(.gfin),html body .ggrid .gbody{grid-template-columns:minmax(0,1fr)!important}
 html body .ggrid .gow,html body .ggrid>.gm:not(.gfin)>.gow,html body .ggrid .gbody>.gow{grid-column:1!important;display:flex!important;flex-wrap:wrap!important;height:auto!important;max-height:none!important;overflow:visible!important;white-space:normal!important}
 html body .ggrid .gow .opill{max-width:none!important;overflow:visible!important;text-overflow:clip!important;white-space:normal!important}
+html body nav#nav{position:sticky!important;top:0!important;z-index:40!important;background:var(--bg,#0e121b)!important}
+html{scroll-padding-top:64px}
+.hero{cursor:pointer}
+.hero.hero-open{height:min(72vh,560px)!important}
+@media (max-width:700px){
+ html body .tapf,html body .lgref .tapf{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:4px!important;max-width:100%}
+ html body .tapf button,html body .lgref .tapf button{font-size:11px!important;line-height:1.15!important;padding:3px 2px!important;white-space:normal!important;min-height:32px!important;-webkit-line-clamp:unset!important;line-clamp:unset!important;overflow:visible!important}
+ html body .tapf button:first-child,html body .lgref .tapf button:first-child{grid-column:1 / -1}
+ html body{padding-bottom:calc(52px + env(safe-area-inset-bottom,0px))!important}
+}
+html body .card.tap.s27-rk th:first-child,html body .card.tap.s27-rk td:first-child{position:sticky;left:0;z-index:2;background:var(--card,#1b2030)}
+html body .card.tap.s27-rk th:first-child{z-index:3}
+html body .idline{margin:8px 0 8px!important}
+html body footer#foot{padding-bottom:8px!important}
 /*</HELD-LAYOUT>*/
 </style><!--</S29E-PASTE>-->
 <!--<S29E-COPY>--><script>
@@ -4394,5 +4408,12 @@ function s29eCopyText(b){if(!b)return '';if(b.status==='open'&&b.kind!=='pool')r
   let auto=false;try{auto=st==='open'&&!!b.rd&&s29AutoOK(b.rd)}catch(e){}if(auto)L.push('Auto-settles after the game');
   L.push(posted);return L.join('\n')}
 </script><!--</S29E-COPY>-->
+<script>
+(function(){var h=document.querySelector('.hero');if(!h)return;function set(on){h.classList.toggle('hero-open',on);h.setAttribute('aria-expanded',on?'true':'false')}
+ h.addEventListener('click',function(){set(!h.classList.contains('hero-open'))});
+ h.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();set(!h.classList.contains('hero-open'))}});
+ document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false)});
+})();
+</script>
 </body>
 </html>
