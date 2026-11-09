@@ -151,7 +151,7 @@ U.halfLs=hsLs;U.halfScores=function(g,s,first,BOX){var tot=s.score!=null?esc(Str
      A request auto-cancels when its own window starts (full game: tip-off; 2nd half: halftime) or at the poster's expiry, whichever first. */
   SHARED_UI.Requests=function(A){
     var e=A.e,S={f:null,list:[],at:0,busy:false,msg:'',bad:false,loading:false,arm:null};
-      var nf=function(){return{gid:'',side:'',cov:'game',odds:[1,1],amt:null,amtTxt:'',to:[],mode:'h',n:3,at:'',est:'',wk:'unknown'}};S.f=nf();
+      var nf=function(){return{gid:'',side:'',cov:'game',odds:[1,1],amt:null,amtTxt:'',to:[],mode:'h',n:3,at:'',est:'',wk:'unknown',expPick:false}};S.f=nf();
     var HALF_MS=70*60000;
     function parse(t){try{var o=JSON.parse(t||'{}');if(typeof o==='string')o=JSON.parse(o);return Array.isArray(o.reqs)?o.reqs.filter(function(r){return r&&r.id}):[]}catch(x){return[]}}
     function rid(){return 'rq'+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
@@ -213,6 +213,7 @@ U.halfLs=hsLs;U.halfScores=function(g,s,first,BOX){var tot=s.score!=null?esc(Str
       if(r.status==='open'&&!(me&&r.by===me&&A.canWrite()&&!nt))h+='<div class="rq-act rq-copy">'+'<button type="button" class="btn sec rq-cp" data-rq="cp" data-v="'+e(r.id)+'">Copy</button>'+'</div>';   /* STEP14-COPY: every open card can copy the Bet Requested text */
       return h+'</div>'}
     function form(){var f=S.f,now0=Date.now(),G=games().filter(function(x){var st=Date.parse(x.start)||0,ws=f.cov==='2h'?st+HALF_MS:st;if(String(x.id)===String(f.gid))return true;if(x.status==='final'||st>=now0+7*86400000)return false;if(f.cov==='2h')return !(x.period&&+x.period>=2)&&now0<ws;return x.status==='scheduled'&&now0<ws}),g=game(f.gid),me=A.me(),nOth=A.others().length;
+      if(!f.expPick)f.mode=g?'start':'h';
       /* same template as Write it Up: header, Select all / Clear, numbered questions, Amount + Odds, summary, big button. Identity stays on Profile. */
       var h='<div class="card b27-form rq-form" id="rqForm">'+SHARED_UI.entryHead('rq')+(S.edit?'<div class="note">Editing this request. Nothing is posted until you save.</div>':'');
       /* STEP10: Select all / Clear sit right-aligned on the same line as question 1; the Stoop buttons stay on the next row */
@@ -294,7 +295,7 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
       if(k==='cp'){var rc=S.list.find(function(x){return x.id===v});if(rc)copy(waText(rc,'new'),function(ok){S.msg=ok?'Message copied, paste in WhatsApp.':'Could not copy. Long-press to copy the text below.';S.bad=!ok});return}   /* STEP14-COPY */
       if(k==='wa'){if(S.fb)copy(S.fb,function(ok){if(ok){S.msg='Message copied, paste in WhatsApp.';S.bad=false}});return}
       if(k==='edit'){var re=S.list.find(function(x){return x.id===v});if(!re||re.by!==me||tk(re).length||re.status!=='open'){if(re&&tk(re).length){S.msg='Someone already accepted. Those terms stay as agreed.';S.bad=true;A.render()}return}var ws=winStart(re,game(re.gid)),pad=function(n){return String(n).padStart(2,'0')},dt=new Date(re.exp);
-        S.f={gid:re.gid,text:re.lab,side:re.k==='txt'?'':re.k+':'+(re.si||0),cov:re.cov||'game',odds:(re.odds||[1,1]).slice(),amt:A.amounts.indexOf(+re.amt)>=0?+re.amt:null,amtTxt:A.amounts.indexOf(+re.amt)>=0?'':String(re.amt),amtC:A.amounts.indexOf(+re.amt)<0,slots:re.slots||null,oddC:[[1,1],[2,1],[3,1],[4,1],[5,1]].every(function(o){return !(+(re.odds||[1,1])[0]===o[0]&&+(re.odds||[1,1])[1]===o[1])}),to:re.to.slice(),mode:re.exp>=ws?'start':'at',n:3,at:dt.getFullYear()+'-'+pad(dt.getMonth()+1)+'-'+pad(dt.getDate())+'T'+pad(dt.getHours())+':'+pad(dt.getMinutes()),est:SHARED_UI.whenKind(re)==='date'?re.est:'',wk:SHARED_UI.whenKind(re)};
+        S.f={gid:re.gid,text:re.lab,side:re.k==='txt'?'':re.k+':'+(re.si||0),cov:re.cov||'game',odds:(re.odds||[1,1]).slice(),amt:A.amounts.indexOf(+re.amt)>=0?+re.amt:null,amtTxt:A.amounts.indexOf(+re.amt)>=0?'':String(re.amt),amtC:A.amounts.indexOf(+re.amt)<0,slots:re.slots||null,oddC:[[1,1],[2,1],[3,1],[4,1],[5,1]].every(function(o){return !(+(re.odds||[1,1])[0]===o[0]&&+(re.odds||[1,1])[1]===o[1])}),to:re.to.slice(),mode:re.exp>=ws?'start':'at',expPick:true,n:3,at:dt.getFullYear()+'-'+pad(dt.getMonth()+1)+'-'+pad(dt.getDate())+'T'+pad(dt.getHours())+':'+pad(dt.getMinutes()),est:SHARED_UI.whenKind(re)==='date'?re.est:'',wk:SHARED_UI.whenKind(re)};
         S.edit=re.id;S.msg='';S.fb=null;if(A.goRequest)A.goRequest();A.render();setTimeout(function(){try{var fo=document.getElementById('rqForm');if(fo)fo.scrollIntoView({block:'start'})}catch(x){}},30);return}
       if(k==='slot-'||k==='slot+'||k==='close'){var rs=S.list.find(function(x){return x.id===v});if(!rs||rs.by!==me||rs.status!=='open')return;var nt0=tk(rs).length,want=k==='close'?null:Math.max(nt0,Math.min(rs.to.length,slots(rs)+(k==='slot+'?1:-1)));
         if(k==='close')say(waText(rs,'close'),'Request closed');
@@ -330,7 +331,7 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
           else{await A.placeBet(x,me);say(waText(x,'acc',me),'Accepted');S.posted=true;S.msg=toast(S.copied);S.bad=false}}
         catch(y){S.msg='Could not accept it. Try again.';S.bad=true}S.busy=false}
       A.render()}
-    function input(k,v){var f=S.f;if(k==='gid'){f.gid=v;f.side='';f.text=''}else if(k==='text'){f.text=v;return}else if(k==='mode'){f.mode=v}else if(k==='amtTxt'){f.amtTxt=v;f.amt=null;return}else if(k==='oddTxt'){f.oddTxt=v;var mo=/^\s*(\d{1,3})\s*[-:\/]\s*(\d{1,3})\s*$/.exec(v);if(mo&&+mo[1]>0&&+mo[2]>0)f.odds=[+mo[1],+mo[2]];A.render();return}else f[k]=v;A.render()}
+    function input(k,v){var f=S.f;if(k==='gid'){f.gid=v;f.side='';f.text=''}else if(k==='text'){f.text=v;return}else if(k==='mode'){f.mode=v;f.expPick=true}else if(k==='amtTxt'){f.amtTxt=v;f.amt=null;return}else if(k==='oddTxt'){f.oddTxt=v;var mo=/^\s*(\d{1,3})\s*[-:\/]\s*(\d{1,3})\s*$/.exec(v);if(mo&&+mo[1]>0&&+mo[2]>0)f.odds=[+mo[1],+mo[2]];A.render();return}else f[k]=v;A.render()}
     function prefill(gid,k,i){S.f=nf();S.f.gid=String(gid);if(k){S.f.side=k+':'+i;var gq=game(gid),pq=gq&&pick(gq.g,{side:S.f.side,cov:'game'});if(pq)S.f.text=pq.txt}else{var gb=game(gid);if(gb&&gb.g)S.f.text=SHARED_UI.qbBlankText(gb.g,{name:A.tname,date:A.dateET(gb.g)})};/* STEP10: the full written bet line (team vs team, spread, date), not the short chip text */S.msg='';var g=game(gid);}
     /* Requests badge: open requests waiting for ME (invited, not declined, not mine, still live) on the Bets tab; refreshed by a light GET every 60 s */
     function count(){var me=A.me(),now=Date.now();if(!me)return 0;return S.list.filter(function(r){return live(r,now)&&r.by!==me&&r.to.indexOf(me)>=0&&(r.dec||[]).indexOf(me)<0&&tk(r).indexOf(me)<0}).length}
