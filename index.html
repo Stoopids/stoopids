@@ -944,7 +944,7 @@ main,#main{padding-top:6px!important}
 /* SYNC7..SYNC14 moved to shared/ui.css (linked right after this style block) */
 
 </style>
-<link rel="stylesheet" href="shared/ui.css?v=1.35.0">
+<link rel="stylesheet" href="shared/ui.css?v=1.36.0">
 <style>/*<SORT-FIT> phone All teams: the card scrolls sideways, the page does not. Names stay full size. */@media (max-width:480px){html body .card.tap.s27-rk{padding-left:4px!important;padding-right:4px!important}html body .card.tap.s27-rk th{font-size:11px!important}html body .card.tap.s27-rk td.n,html body .card.tap.s27-rk td.to,html body .card.tap.s27-rk td.cf{font-size:13px!important}html body .card.tap.s27-rk .s27-sort i{font-size:.7em!important;margin-left:0!important}}/*</SORT-FIT>*/</style>
 </head>
 <body>
@@ -970,7 +970,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.57.0"></script>
+<script src="shared/ui.js?v=1.58.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -1093,6 +1093,10 @@ S25.parse=function(text,createdISO){
   if((m=new RegExp(String.raw`^(.*?)\sbeats?\s(.*?)\sby\s(\d{1,3})\s(?:points?\s)?or\smore`,'i').exec(t))){const a=teamL(m[1]),b=teamR(m[2]);if(!a||!b)return manual;return R({k:'spread',t:a,o:b,l:-(+m[3]-0.5)})}
   if((m=new RegExp(String.raw`^(.*?)\sbeats?\s(.*?)\sby\smore\sthan\s`+NUM,'i').exec(t))){const a=teamL(m[1]),b=teamR(m[2]);if(!a||!b)return manual;return R({k:'spread',t:a,o:b,l:gt(m[3])})}
   if(/\b(beats?|tops?|defeats?|over|wins?)\b.*\bby\s\d/i.test(t))return manual;              // "Kansas beats Duke by 5": exactly 5? at least 5? a human reads it
+  // 3b) quick-bet totals: "Over 142.5 vs Under 142.5, Houston v California"
+  if((m=new RegExp(String.raw`^(over|under)\s+`+NUM+String.raw`\s+vs\.?\s+(over|under)\s+`+NUM+String.raw`\s*,?\s*(.*?)\s+(?:vs\.?|v\.?|versus)\s+(.*)$`,'i').exec(t))){
+    if(n(m[2])!==n(m[4]))return manual;const a=teamL(m[5]),b=teamR(m[6]);if(!a||!b)return manual;
+    return R({k:'total',t:a,o:b,l:n(m[2]),ou:/^o/i.test(m[1])?'o':'u'})}
   // 4) totals: "Duke vs Kansas over 145.5", "over 145.5 in Duke vs Kansas"
   if((m=new RegExp(String.raw`\b(over|under|o|u)\s?`+NUM+String.raw`\b`,'i').exec(t))){
     const ou=/^o/i.test(m[1])?'o':'u',l=n(m[2]),rest=(t.slice(0,m.index)+' '+t.slice(m.index+m[0].length)).replace(/\b(in|points?|pts|total|combined)\b/ig,' ').replace(/\s+/g,' ').trim();
@@ -1113,7 +1117,7 @@ S25.label=function(r){if(!r||r.k==='manual')return 'Manual';const dd=r.d?', '+S2
 S25.result=function(r,ts,os){
   ts=+ts;os=+os;if(!r||r.k==='manual'||!isFinite(ts)||!isFinite(os))return null;
   if(r.k==='spread'){const m=ts+r.l-os;return {r:m>0?'backer':m<0?'other':'push',why:m>0?r.t+' covers '+fl(r.l):m<0?r.t+' does not cover '+fl(r.l):'Push: '+r.t+' '+fl(r.l)+' lands exactly'}}
-  if(r.k==='total'){const s=ts+os,d=r.ou==='o'?s-r.l:r.l-s;return {r:d>0?'backer':d<0?'other':'push',why:'Total '+s+(d===0?': push on '+r.l:(s>r.l?': over ':': under ')+r.l)+(d>0?' hits':d<0?' misses':'')}}
+  if(r.k==='total'||r.k==='ou'){if(r.ou!=='o'&&r.ou!=='u')return null;const s=ts+os,d=r.ou==='o'?s-r.l:r.l-s;return {r:d>0?'backer':d<0?'other':'push',why:'Total '+s+(d===0?': push on '+r.l:(s>r.l?': over ':': under ')+r.l)+(d>0?' hits':d<0?' misses':'')}}
   return {r:ts>os?'backer':ts<os?'other':'push',why:ts>os?r.t+' wins':ts<os?r.o+' wins':'Tie'};
 };
 
@@ -3225,8 +3229,9 @@ function b27Edit(){U.confirm=false;render()}
 }
 /* group undo: voids every still-open bet of the group that is mine and inside the 30 s window, in ONE write */
 function b27GroupUndoable(g){return g?U.doc.bets.filter(b=>b.g===g&&b27CanUndo(b)):[]}
-async function b27UndoGroup(g){
-  if(U.busy)return;const ids=b27GroupUndoable(g).map(b=>b.id);if(!ids.length)return;
+function b27GroupHash(g){return b27Hash(b27GroupUndoable(g).map(b=>b.id+':'+b27Terms(b)).sort().join('|'))}
+async function b27UndoGroup(g,hash){
+  if(U.busy||b27TapLock())return;if(b27GroupHash(g)!==hash){b27Stale();return}const ids=b27GroupUndoable(g).map(b=>b.id);if(!ids.length)return;
   U.busy=true;U.askSettle=null;render();
   try{
     const back=await b27Write(cur=>cur.map(b=>ids.includes(b.id)&&b.status==='open'&&b27CanUndo(b)?Object.assign({},b,{status:'void',settled_at:new Date().toISOString()}):b),cur=>ids.every(id=>{const b=cur.find(x=>x.id===id);return !b||b.status!=='open'}));
@@ -3234,15 +3239,25 @@ async function b27UndoGroup(g){
   }catch(e){U.msg='Couldn’t save that. Try again.';U.msgBad=true}
   U.busy=false;render();
 }
+function b27Terms(b){if(!b)return '';const o=b.odds||{};return [b.status,b.text,b.amt,o.a,o.b,b.backer,b.other,(b.opponents||[]).join(','),b.wk||'',b.est||'',b.kind||'',b.back?JSON.stringify(b.back):'',(b.places||[]).join(','),b.fx&&b.fx.r||''].join('\u001f')}
+function b27Hash(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return (h>>>0).toString(36)}
+function b27Stale(msg){U.askSettle=null;if(typeof S25P!=='undefined')S25P.ask=null;U.msg=msg||'That bet changed. Review it again.';U.msgBad=true;render()}
+function b27TapLock(){if(U.tapUntil&&Date.now()<U.tapUntil)return true;U.tapUntil=Date.now()+450;return false}
+function b27PoolTerms(b){return b27Terms(b)+'\u001f'+(U.poolTxt[b.id]||'')+'\u001f'+JSON.stringify((U.placeWho&&U.placeWho[b.id])||[])}
+function b27Void(id,hash){if(U.busy||b27TapLock())return;const b=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===id);if(!b||b.status!=='open'||b27Hash(b27Terms(b))!==hash){b27Stale();return}U.askSettle=null;b27SetStatus.skip=true;return b27SetStatus(id,'void')}
+function b27DropStale(){if(U.askSettle){const b=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===U.askSettle.id);const terms=b&&(U.askSettle.what==='pool'?b27PoolTerms(b):b27Terms(b));if(!b||terms!==U.askSettle.terms)U.askSettle=null}
+  if(typeof S25P!=='undefined'&&S25P.ask&&S25P.ask.id){const b=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===S25P.ask.id);let terms='';if(b){const G=s25Game(b);terms=b27Terms(b)+'\u001f'+(G&&G.p?G.p.text+'\u001f'+G.p.r:'')}if(!b||terms!==S25P.ask.terms)S25P.ask=null}}
 /*</MULTI-BET>*/async function b27SetStatus(id,status/*<S25>*/,extra/*</S25>*/){
-  if(U.busy)return;/*<CREATOR-SETTLE>*/const me0=b27Who(),b0=U.doc.bets.find(x=>x.id===id);if(status!=='void'&&b0&&b0.backer!==me0){U.msg=B27_ONLY;U.msgBad=true;render();return}/*</CREATOR-SETTLE>*/U.busy=true;U.askSettle=null;render();
+  if(U.busy)return;if(!b27SetStatus.skip&&b27TapLock())return;b27SetStatus.skip=false;const b0=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===id);if(!b0||b0.status!=='open'){b27Stale();return}
+  if(U.askSettle&&(U.askSettle.id!==id||U.askSettle.terms!==b27Terms(b0)||(U.askSettle.what!==status&&U.askSettle.what!=='pool'))){b27Stale();return}
+  /*<CREATOR-SETTLE>*/const me0=b27Who();if(status!=='void'&&b0.backer!==me0){U.msg=B27_ONLY;U.msgBad=true;render();return}/*</CREATOR-SETTLE>*/U.busy=true;U.askSettle=null;render();
   try{
     const back=await b27Write(cur=>/*<CREATOR-SETTLE>*/{const x=cur.find(b=>b.id===id);if(status!=='void'&&x&&x.status==='open'&&x.backer!==me0)throw new Error('notcreator');return /*</CREATOR-SETTLE>*/cur.map(b=>b.id===id&&b.status==='open'?Object.assign({},b,{status,settled_at:/*<V25>*/status==='void'?new Date().toISOString():s25At()/*</V25>*/}/*<S25>*/,extra||{}/*</S25>*/):b)/*<CREATOR-SETTLE>*/}/*</CREATOR-SETTLE>*/,cur=>{const b=cur.find(x=>x.id===id);return !b||b.status===status||b.status!=='open'});
     b27Apply(back,'force');U.msg='Saved.';U.msgBad=false;
   }catch(e){U.msg=/*<CREATOR-SETTLE>*/e&&e.message==='notcreator'?B27_ONLY:e&&e.message==='conflict'?'Couldn’t save, try again.':/*</CREATOR-SETTLE>*/'Couldn’t save that. Try again.';U.msgBad=true}
   U.busy=false;render();
 }
-function b27Ask(id,what){U.askSettle=U.askSettle&&U.askSettle.id===id&&U.askSettle.what===what?null:{id,what};render()}
+function b27Ask(id,what){if(U.busy||b27TapLock())return;const b=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===id);if(!b){U.askSettle=null;render();return}const terms=b27Terms(b);if(U.askSettle&&U.askSettle.id===id&&U.askSettle.what===what&&U.askSettle.terms===terms)U.askSettle=null;else U.askSettle={id,what,terms};render()}
 /*<POOL>*/
 /* ===== POOL (Bets 26-27): a group entry where each participant gets some back when it is done. ONE record in the same ledger key: {id,n,kind:'pool',backer:<who built it>,parts:[names],amt:<buy-in each>,back:null|{name:amount},text,created_at,status:'open'|'void',settled_at}.
    Counts as soon as the amounts back are entered (they must add up to buy-in x participants); each person's net = back - buy-in. Blank = open, entered later on the card. ===== */
@@ -3329,7 +3344,7 @@ function s26fPaint(show){const c=s26fPoolCheck(),sh=U.showErr||{};const set=(id,
   document.querySelectorAll('.s26pi').forEach(el=>el.classList.toggle('b27-errbox',!!c.e.pay));return c}
 function s26fFocus(id){const box=document.getElementById(id);if(!box)return;try{box.scrollIntoView({block:'center'})}catch(e){}try{box.focus({preventScroll:true})}catch(e){box.focus()}}
 /* settle by place: the creator picks who finished in each place */
-function s26fSettleHtml(b){const sel=U.placeWho[b.id]||(U.placeWho[b.id]=[]);const ask=U.askSettle&&U.askSettle.id===b.id&&U.askSettle.what==='pool';
+function s26fSettleHtml(b){const sel=U.placeWho[b.id]||(U.placeWho[b.id]=[]);const ask=U.askSettle&&U.askSettle.id===b.id&&U.askSettle.what==='pool'&&U.askSettle.terms===b27PoolTerms(b);
   return `<div class="s26set"><div class="b27-lb">${esc(PT('pickWho'))}</div>${b.places.map((a,i)=>`<div class="s26pr"><label for="s26w_${b.id}_${i}" class="s26pl">${esc(s26fPlaceName(i))} <span class="mut">${esc(b27Num(a))}</span></label><select id="s26w_${b.id}_${i}" class="sb-in s26ps" onchange="U.placeWho['${b.id}'][${i}]=this.value;U.poolErr['${b.id}']='';U.askSettle=null"><option value="">${esc(PT('pickOne'))}</option>${b.parts.map(p=>`<option value="${esc(p)}"${sel[i]===p?' selected':''}>${esc(PN(p))}</option>`).join('')}</select></div>`).join('')}
    ${U.poolErr[b.id]?`<div class="b27-bad-t" role="alert">${esc(U.poolErr[b.id])}</div>`:''}<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="s26fPlaceGo('${b.id}')"${U.busy?' disabled':''}>${esc(ask?POOL_TXT.again:POOL_TXT.save)}</button></div></div>`}
 function s26fPlaceGo(id){const b=U.doc.bets.find(x=>x.id===id);if(!b||!b.places)return;const sel=U.placeWho[id]||[];
@@ -3405,11 +3420,11 @@ async function b27PoolConfirm(){
 /* ---- settle later: any participant (or admin) enters the amounts back ---- */
 /*<CREATOR-SETTLE>*/const B27_ONLY='Only the person who placed this bet can settle it.';
 const b27PoolCanSettle=(b,me)=>b.status==='open'&&!b.back&&!!me&&me===b.backer;   // Paul's rule: only the creator enters the result/*</CREATOR-SETTLE>*/
-function b27PoolGo(id){const b=U.doc.bets.find(x=>x.id===id);if(!b||U.busy)return;
-  if(U.askSettle&&U.askSettle.id===id&&U.askSettle.what==='pool'){b27PoolSettle(id);return}
-  const r=b27PoolParse(b.parts,String(b.amt),U.poolTxt[id]||'');U.poolErr[id]=r.ok?(r.back?'':PT('eEmptyPay')):r.err;U.askSettle=U.poolErr[id]?null:{id,what:'pool'};render()}
+function b27PoolGo(id){const b=U.doc.bets.find(x=>x.id===id);if(!b||U.busy||b27TapLock())return;const terms=b27PoolTerms(b);
+  if(U.askSettle&&U.askSettle.id===id&&U.askSettle.what==='pool'&&U.askSettle.terms===terms){b27PoolSettle.skip=true;b27PoolSettle(id);return}
+  const r=b27PoolParse(b.parts,String(b.amt),U.poolTxt[id]||'');U.poolErr[id]=r.ok?(r.back?'':PT('eEmptyPay')):r.err;U.askSettle=U.poolErr[id]?null:{id,what:'pool',terms};render()}
 async function b27PoolSettle(id){
-  if(U.busy)return;const b=U.doc.bets.find(x=>x.id===id);if(!b)return;const r=b27PoolParse(b.parts,String(b.amt),U.poolTxt[id]||'');if(!r.ok||!r.back)return;
+  if(U.busy)return;if(!b27PoolSettle.skip&&b27TapLock())return;b27PoolSettle.skip=false;const b=U.doc.bets.find(x=>x.id===id);if(!b)return;const terms=b27PoolTerms(b);if(!U.askSettle||U.askSettle.id!==id||U.askSettle.what!=='pool'||U.askSettle.terms!==terms){b27Stale();return}const r=b27PoolParse(b.parts,String(b.amt),U.poolTxt[id]||'');if(!r.ok||!r.back){U.askSettle=null;render();return}
   U.busy=true;U.askSettle=null;render();
   /*<CREATOR-SETTLE>*/const me0=b27Who();if(b.backer!==me0){U.busy=false;U.msg=B27_ONLY;U.msgBad=true;render();return}/*</CREATOR-SETTLE>*/
   try{const back=await b27Write(cur=>/*<CREATOR-SETTLE>*/{const y=cur.find(x=>x.id===id);if(y&&y.status==='open'&&!y.back&&y.backer!==me0)throw new Error('notcreator');return /*</CREATOR-SETTLE>*/cur.map(x=>x.id!==id||x.status!=='open'||x.back?x:Object.assign({},x,{back:r.back,settled_at:/*<V25>*/s25At()/*</V25>*/}))/*<CREATOR-SETTLE>*/}/*</CREATOR-SETTLE>*/,cur=>{const x=cur.find(y=>y.id===id);return !x||x.status!=='open'||!!x.back});
@@ -3427,12 +3442,12 @@ function b27PoolCard(b,me){
   if(done)h+=`<div class="note" style="margin-top:6px"><b>${esc(POOL_TXT.result)}:</b></div>`+b27PoolResultLines(b.parts,b.amt,b.back).map((l,i)=>`<div class="${i>=b.parts.length?'b27-l':'b27-w'}" style="margin-top:2px">${esc(l)}</div>`).join('');
   /*<S25D-TS>*/h+='<div class="s25sp" aria-hidden="true"></div>'+s25dTsHtml(b);/*</S25D-TS>*/
   if(b27PoolCanSettle(b,me)&&b.places){if(!U.placeWho)U.placeWho={};h+=s26fSettleHtml(b)}
-  else if(b27PoolCanSettle(b,me)){const ask=U.askSettle&&U.askSettle.id===b.id&&U.askSettle.what==='pool';
+  else if(b27PoolCanSettle(b,me)){const ask=U.askSettle&&U.askSettle.id===b.id&&U.askSettle.what==='pool'&&U.askSettle.terms===b27PoolTerms(b);
     h+=`<div class="b27-cw"><label for="pb_${b.id}" class="sr">${esc(POOL_TXT.fPay)}</label><textarea maxlength="120" id="pb_${b.id}" class="sb-in b27-in" rows="2" autocomplete="off" placeholder="${esc(POOL_TXT.fPay)}" oninput="U.poolTxt['${b.id}']=this.value;U.poolErr['${b.id}']='';U.askSettle=null">${esc(U.poolTxt[b.id]||'')}</textarea></div>${U.poolErr[b.id]?`<div class="b27-bad-t" role="alert">${esc(U.poolErr[b.id])}</div>`:''}
      <div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27PoolGo('${b.id}')"${U.busy?' disabled':''}>${esc(ask?POOL_TXT.again:POOL_TXT.save)}</button></div>`}
   if(st==='open'&&(me===b.backer||ADMIN)){
-    if(b27CanUndo(b))h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27SetStatus('${b.id}','void')"${U.busy?' disabled':''}>${esc(POOL_TXT.undo)}</button></div>`;
-    else if((me===b.backer&&!done)||ADMIN)h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27SetStatus('${b.id}','void')"${U.busy?' disabled':''}>${esc(me===b.backer?POOL_TXT.cancel:POOL_TXT.adminCancel)}</button></div>`}
+    if(b27CanUndo(b))h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27Void('${b.id}','${b27Hash(b27Terms(b))}')"${U.busy?' disabled':''}>${esc(POOL_TXT.undo)}</button></div>`;
+    else if((me===b.backer&&!done)||ADMIN)h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27Void('${b.id}','${b27Hash(b27Terms(b))}')"${U.busy?' disabled':''}>${esc(me===b.backer?POOL_TXT.cancel:POOL_TXT.adminCancel)}</button></div>`}
   return h+/*<S25C-RX>*/s25RxHtml(b,me)/*</S25C-RX>*/+'</div>'}
 /*<S25D-TS>*/
 function s25dWhen(iso,now){const d=new Date(iso);if(!iso||isNaN(d))return '';now=now||new Date();
@@ -3493,16 +3508,16 @@ function b27Card(b,me){
   const res=BU?(st==='backer'?Bk+' won ('+OPd.join(', ')+' each owe '+Bk+' '+b27Num(b27Pay(b).ifBackerRight)+')':st==='other'?'Managers won ('+Bk+' owes each of them '+b27Num(b27Pay(b).ifOtherRight)+')':st==='push'?'Wash: whole bet cancelled, nobody owes anything':'')
    :st==='backer'?Bk+' won ('+Ot+' owes '+b27Num(b27Pay(b).ifBackerRight)+')':st==='other'?Ot+' won ('+Bk+' owes '+b27Num(b27Pay(b).ifOtherRight)+')':st==='push'?'Wash: nobody owes anything':'';
   let h=`<div class="card b27-c"${/*<S24-EDIT>*/s24Attr('b',b.id)/*</S24-EDIT>*/}><div class="s24hd"><b>Bet #${b.n}</b>${/*<S24-EDIT>*/s24FixBadge(b)/*</S24-EDIT>*/} <span class="st ${st==='open'?'open':st==='push'?'wash':st==='void'?'unparsed':'settled'}">${stTxt}</span> <span class="mut" style="font-size:12px">${esc(b27Day(Date.parse(b.created_at)))}</span>${BU?` <span class="mut" style="font-size:12px">· ${OP.length} managers, one result</span>`:''}${/*<MULTI-BET>*/b.g&&U.doc.bets.filter(x=>x.g===b.g).length>1?` <span class="mut" style="font-size:12px">· 1 of ${U.doc.bets.filter(x=>x.g===b.g).length} placed together</span>`:''/*</MULTI-BET>*/}${/*<S24-EDIT>*/s24LinkBtn('bets',b.id,'bet')/*</S24-EDIT>*/}</div>
-   ${/*<S29E-POSTED>*/s29ePosted(b)/*</S29E-POSTED>*/}<div class="b27-due" data-due="${SHARED_UI.whenClass(b)}">${esc(SHARED_UI.whenText(b))}</div><div class="b27-t${/*<CARD-SIZE>*/' s25cl'+(S25P.more[b.id]?' open':'')+'" data-s25-t="'+b.id/*</CARD-SIZE>*/}">${esc(b.text)}</div>${/*<CARD-SIZE>*/`<button type="button" class="s25more" data-s25-more="${b.id}" aria-expanded="${!!S25P.more[b.id]}" onclick="s25More('${b.id}')" hidden>${S25P.more[b.id]?'less':'more'}</button>`/*</CARD-SIZE>*/}<div class="b27-m"><b>${esc(Bk)}</b> vs <b>${esc(OPd.join(', '))}</b> · <b>${b27Num(b.amt)}</b>${BU?' each':''} · ${esc(b27OddsLabel(b.odds.a,b.odds.b))}</div>
+   ${/*<S29E-POSTED>*/s29ePosted(b)/*</S29E-POSTED>*/}<div class="b27-due" data-due="${SHARED_UI.whenShow(b)}">${esc(SHARED_UI.whenText(b))}</div><div class="b27-t${/*<CARD-SIZE>*/' s25cl'+(S25P.more[b.id]?' open':'')+'" data-s25-t="'+b.id/*</CARD-SIZE>*/}">${esc(b.text)}</div>${/*<CARD-SIZE>*/`<button type="button" class="s25more" data-s25-more="${b.id}" aria-expanded="${!!S25P.more[b.id]}" onclick="s25More('${b.id}')" hidden>${S25P.more[b.id]?'less':'more'}</button>`/*</CARD-SIZE>*/}<div class="b27-m"><b>${esc(Bk)}</b> vs <b>${esc(OPd.join(', '))}</b> · <b>${b27Num(b.amt)}</b>${BU?' each':''} · ${esc(b27OddsLabel(b.odds.a,b.odds.b))}</div>
    <div class="b27-w">${esc(L.win)}</div><div class="b27-l">${esc(L.lose)}</div>${L.rounded?'<div class="mut b27-r">Rounded to a whole number.</div>':''}${res?`<div class="note" style="margin-top:4px"><b>Result:</b> ${esc(res)}</div>`:''}${/*<S25>*/s25CardRd(b)+s25PropHtml(b,me)/*</S25>*/}${/*<CARD-SIZE>*/'<div class="s25sp" aria-hidden="true"></div>'/*</CARD-SIZE>*/}${/*<S25D-TS>*/s25dTsHtml(b)/*</S25D-TS>*/}`;
   if(st==='open'&&(isP||ADMIN)){
-    const ask=w=>U.askSettle&&U.askSettle.id===b.id&&U.askSettle.what===w;
+    const ask=w=>U.askSettle&&U.askSettle.id===b.id&&U.askSettle.what===w&&U.askSettle.terms===b27Terms(b);
     const btn=(w,label)=>`<button type="button" class="btn sec b27-b" onclick="${ask(w)?`b27SetStatus('${b.id}','${w}')`:`b27Ask('${b.id}','${w}')`}"${U.busy?' disabled':''}>${ask(w)?'Tap again to confirm':label}</button>`;
     /*<CREATOR-SETTLE>*/if(me!==b.backer)h+=`<div class="note b27-onlyc" style="margin-top:6px">Only ${esc(PN(b.backer))} (who placed it) can enter the result.</div>`;else /*</CREATOR-SETTLE>*//*<S25>*/if(!s25HideManual(b))/*</S25>*/h+=`<div class="b27-act"><span class="note">Who won?</span>${btn('backer',esc(Bk)+' won')}${btn('other',BU?'Managers won':esc(Ot)+' won')}${btn('push','Wash')}</div>`;
     /*<MULTI-BET>*/const gu=b.g?b27GroupUndoable(b.g):[];
-    if(b27CanUndo(b)&&b.g&&gu.length>1){if(U.doc.bets.filter(x=>x.g===b.g&&b27CanUndo(x)).sort((p,q)=>q.n-p.n)[0].id===b.id)h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27UndoGroup('${b.g}')"${U.busy?' disabled':''}>↩ Undo all ${gu.length} bets placed together (30 s)</button></div>`}
-    else /*</MULTI-BET>*/if(b27CanUndo(b))h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27SetStatus('${b.id}','void')"${U.busy?' disabled':''}>↩ Undo this bet (30 s)</button></div>`;
-    else if(ADMIN)h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27SetStatus('${b.id}','void')"${U.busy?' disabled':''}>Cancel bet (admin)</button></div>`;
+    if(b27CanUndo(b)&&b.g&&gu.length>1){if(U.doc.bets.filter(x=>x.g===b.g&&b27CanUndo(x)).sort((p,q)=>q.n-p.n)[0].id===b.id)h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27UndoGroup('${b.g}','${b27GroupHash(b.g)}')"${U.busy?' disabled':''}>↩ Undo all ${gu.length} bets placed together (30 s)</button></div>`}
+    else /*</MULTI-BET>*/if(b27CanUndo(b))h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27Void('${b.id}','${b27Hash(b27Terms(b))}')"${U.busy?' disabled':''}>↩ Undo this bet (30 s)</button></div>`;
+    else if(ADMIN)h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27Void('${b.id}','${b27Hash(b27Terms(b))}')"${U.busy?' disabled':''}>Cancel bet (admin)</button></div>`;
     if(me&&me===b.backer)h+=s24EstHtml(b);
   }
   /*<S24-EDIT>*/h+=s24EditedNote(b)+s24FixHtml(b,me);/*</S24-EDIT>*/
@@ -3553,12 +3568,12 @@ function wmeHtml(me){const items=b27WaitingItems(me);
 function wmeGo(kind,id){tab='bets27';OB_VIEW='all';if(kind!=='req'){try{S24.sub=id}catch(e){}}
   render();setTimeout(()=>{const el=kind==='req'?document.querySelector('[data-rq-id="'+id+'"]'):document.getElementById('bet-'+id);if(el)el.scrollIntoView({block:'center'})},40)}
 function vB27(){
-  b27Seen();
+  b27Seen();b27DropStale();
   const me=b27Who(),names=b27OwnerNames(),others=names.filter(n=>n!==me);
   /*<BETS-INTRO-BOTTOM>*/let h='';   // headline removed: New bet sits right under the season toggle + Share row
   const introBottom=`<div class="card b27-intro"><div class="note b27-note" id="b27Note">${esc(BETS_DISCLAIMER)}</div><div class="note" style="margin-top:6px">This page just <b>records</b> who bet what and who owes whom.</div>
    <div class="note" id="b27Top" style="margin-top:6px">${U.state==='ok'?'<span class="good">● live</span> · anyone with the link can add bets (no logins). Play nice.':U.state==='error'?'<span class="bad">● can’t reach the bets ledger right now</span>':/*<BALL-LOADER>*/''/*</BALL-LOADER>*/}</div></div>`;/*</BETS-INTRO-BOTTOM>*/
-  if(U.msg)h+=`<div class="card ${U.msgBad?'b27-bad':'b27-ok'}" role="status">${esc(U.msg)}${U.clip?`<pre class="rq-fb">${esc(U.clip)}</pre><div class="b27-act"><button type="button" class="btn sec" onclick="b27ClipRetry()">Copy</button></div>`:''}${/*<MULTI-BET>*/U.undoG&&b27GroupUndoable(U.undoG).length>1?`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27UndoGroup('${U.undoG}')"${U.busy?' disabled':''}>↩ Undo all ${b27GroupUndoable(U.undoG).length} bets (30 s)</button></div>`:''/*</MULTI-BET>*/}</div>`;
+  if(U.msg)h+=`<div class="card ${U.msgBad?'b27-bad':'b27-ok'}" role="status">${esc(U.msg)}${U.clip?`<pre class="rq-fb">${esc(U.clip)}</pre><div class="b27-act"><button type="button" class="btn sec" onclick="b27ClipRetry()">Copy</button></div>`:''}${/*<MULTI-BET>*/U.undoG&&b27GroupUndoable(U.undoG).length>1?`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27UndoGroup('${U.undoG}','${b27GroupHash(U.undoG)}')"${U.busy?' disabled':''}>↩ Undo all ${b27GroupUndoable(U.undoG).length} bets (30 s)</button></div>`:''/*</MULTI-BET>*/}</div>`;
   /*<ALL-BETS>*/if(OB_VIEW==='all'){}/*list only: form lives on Write it Up*/else/*</ALL-BETS>*/ if(!me){h+=`<div class="card note">Set who you are on <a href="${esc(s24Href('profile'))}" onclick="return s24NavClick(event,'profile')">Profile</a> before you write a bet.</div>`}
   /*<POOL>*/else if(U.kind==='pool'){h+=b27PoolShell()}/*</POOL>*/
   else if(U.confirm){
@@ -3864,7 +3879,8 @@ function s29AutoForm(){try{return b27Clean(U.text)?s29AutoOK(s25FormRd()):null}c
 function s29AutoHtml(ok){return ok?'<div class="s29-auto" data-s29-auto="1">'+(window.SHARED_UI&&SHARED_UI.AUTO_NOTE||'This will be auto-settled after completion.')+'</div>':(ok===false&&S29_AUTO_B?'<div class="s29-auto s29-hand" data-s29-auto="0">Settled by hand.</div>':'')}
 let S29AT=0;function s29AutoSoon(){clearTimeout(S29AT);S29AT=setTimeout(()=>{const e=document.getElementById('s29Auto');if(e)e.innerHTML=s29AutoHtml(s29AutoForm())},250)}
 /*</S29D-AUTO>*/
-function s25CardRd(b){/*<S29D-AUTO>*/const an=(b.status==='open'&&b.kind!=='pool'&&s29AutoOK(b.rd))?s29AutoHtml(true):'';/*</S29D-AUTO>*/if(b.kind==='pool'||!(b.rd||b.src))return an;return an+`<div class="s25rdc" data-s25-card-rd="${b.rd?b.rd.k:''}">${b.rd?'Read as: '+s25RdLine(b.rd):''}${b.src?`${b.rd?' · ':''}from the final score: ${esc(b.src.sc)}`:''}</div>`}
+function s25BetRd(b){const r=b&&b.rd;if(r&&r.k&&r.k!=='manual')return r;try{const p=S25.parse((b&&b.text)||'',b&&(b.created_at||b.postedAt));if(p&&p.k&&p.k!=='manual')return p}catch(e){}return r||null}
+function s25CardRd(b){/*<S29D-AUTO>*/const rd=s25BetRd(b),an=(b.status==='open'&&b.kind!=='pool'&&s29AutoOK(b.rd))?s29AutoHtml(true):'';/*</S29D-AUTO>*/if(b.kind==='pool'||!(rd||b.src))return an;const show=rd&&rd.k!=='manual';const manual=b.rd&&!show;return an+`<div class="s25rdc" data-s25-card-rd="${show?rd.k:(b.rd?b.rd.k:'')}">${show?'Read as: '+s25RdLine(rd):manual?'Read as: '+s25RdLine(b.rd):''}${b.src?`${show||b.rd?' · ':''}from the final score: ${esc(b.src.sc)}`:''}</div>`}
 function s25Key(r){return r.sp+'|'+r.d}
 /* The published schedule already has the final. Use it when the browser scoreboard request fails, so one rejected request does not hide every suggestion for 10 minutes. */
 function s25FromGames(r){if(!r||r.sp!=='mcbb'||typeof D==='undefined'||!D||!D.games)return null;const events=[];
@@ -3872,7 +3888,7 @@ function s25FromGames(r){if(!r||r.sp!=='mcbb'||typeof D==='undefined'||!D||!D.ga
     const fin=g.status==='final',ty=fin?{name:'STATUS_FINAL',completed:true,state:'post'}:{name:'',state:g.status||''};
     events.push({id:g.id,date:g.start,status:{type:ty},competitions:[{competitors:[side(g.away),side(g.home)],status:{type:ty}}]})}
   const g=S25.match({events},r);if(!g||!g.final)return null;const p=S25.proposal(r,g);return p?{g:g,p:p}:null}
-function s25Game(b){const r=b.rd;if(!r||r.k==='manual'||b.status!=='open'||b.backer!==b27Who())return null;   // spec s25 §4: only on the creator's page
+function s25Game(b){const r=s25BetRd(b);if(!r||r.k==='manual'||b.status!=='open'||b.backer!==b27Who())return null;   // spec s25 §4: only on the creator's page; a manual record is re-read from the text, never written back
   const today=S25.etDay(new Date());if(r.d>today)return {wait:'future'};
   const c=S25P.games[s25Key(r)];
   if(!c||c.st==='loading'||c.st==='err'){s25Fetch(r);const loc=s25FromGames(r);if(loc)return loc;return {wait:c&&c.st==='err'?'err':'loading'}}
@@ -3883,18 +3899,19 @@ function s25Fetch(r){const k=s25Key(r),c=S25P.games[k];const hold=c&&c.st==='err
   fetch(S25.scoreboardUrl(r.sp,r.d),ac?{credentials:'omit',cache:'no-store',signal:ac.signal}:{credentials:'omit',cache:'no-store'}).then(x=>{if(!x.ok)throw 0;return x.json()}).then(sb=>{S25P.games[k]={st:'ok',at:Date.now(),sb}},()=>{S25P.games[k]={st:'err',at:Date.now()}})
     .then(()=>{const ae=document.activeElement;if(tab==='bets27'&&!(ae&&ae.closest&&ae.closest('#main')&&/INPUT|TEXTAREA|SELECT/.test(ae.tagName)))render()}).catch(()=>{})}
 function s25ResWho(b,r){const OP=b27Opps(b);return r==='backer'?b.backer+' won':r==='other'?(OP.length>1?'Managers won':b.other+' won'):'Wash'}
-function s25PropHtml(b,me){const G=s25Game(b);if(!G)return '';const r=b.rd;/*STEP9-AUTOSETTLE live leader*/if(G.wait==='live'&&G.g&&window.SHARED_UI&&SHARED_UI.autoLine){try{const p=S25.proposal(r,Object.assign({},G.g,{final:true}));if(p&&p.r){const OP=b27Opps(b);return SHARED_UI.autoLine({e:esc,live:true,who:p.r==='backer'?PN(b.backer):p.r==='other'?(OP.length>1?'Managers':PN(b.other)):'',sc:p.sc})}}catch(e){}}
+function s25PropHtml(b,me){const G=s25Game(b);if(!G)return '';const r=s25BetRd(b)||b.rd;/*STEP9-AUTOSETTLE live leader*/if(G.wait==='live'&&G.g&&window.SHARED_UI&&SHARED_UI.autoLine){try{const p=S25.proposal(r,Object.assign({},G.g,{final:true}));if(p&&p.r){const OP=b27Opps(b);return SHARED_UI.autoLine({e:esc,live:true,who:p.r==='backer'?PN(b.backer):p.r==='other'?(OP.length>1?'Managers':PN(b.other)):'',sc:p.sc})}}catch(e){}}
   if(G.wait){const t=G.wait==='future'?'Game day '+S25.dayLbl(r.d)+'. After the final we’ll show you the score and a proposed result to confirm.':G.wait==='loading'?'Checking the final score…':G.wait==='err'?'Scores can’t be read right now: settle it by hand.':G.wait==='nogame'?'No matching game found yet: settle it by hand.':
       'No final score yet. Settle it by hand any time, or come back after the game.'+(G.g&&G.g.state==='pre'&&G.g.start?' (starts '+S25.localTime(G.g.start)+')':'');
     return `<div class="s25pp" data-s25-prop="${G.wait}">${esc(t)}</div>`}
-  const p=G.p;if(!p)return '';const ask=S25P.ask===b.id;/*STEP9-AUTOSETTLE*/if(window.SHARED_UI&&SHARED_UI.autoLine){const OP=b27Opps(b);return '<div class="s25pp" data-s25-prop="final">'+SHARED_UI.autoLine({e:esc,live:false,who:p.r==='backer'?PN(b.backer):p.r==='other'?(OP.length>1?'Managers':PN(b.other)):'',sc:p.sc,btn:`<button type="button" class="ok" data-s25-ok="${b.id}" onclick="${ask?`s25Confirm('${b.id}')`:`s25Ask('${b.id}')`}"${U.busy?' disabled':''}>${ask?'Tap again to confirm':'✅ Confirm'}</button> <button type="button" data-s25-fix="${b.id}" aria-pressed="${!!S25P.fix[b.id]}" onclick="s25Fix('${b.id}')">✏️ Fix</button>`,note:'Nothing is settled until someone taps Confirm.'})+'</div>'}
+  const p=G.p;if(!p)return '';const ask=!!(S25P.ask&&S25P.ask.id===b.id&&S25P.ask.terms===b27Terms(b)+'\u001f'+p.text+'\u001f'+p.r);/*STEP9-AUTOSETTLE*/if(window.SHARED_UI&&SHARED_UI.autoLine){const OP=b27Opps(b);return '<div class="s25pp" data-s25-prop="final">'+SHARED_UI.autoLine({e:esc,live:false,who:p.r==='backer'?PN(b.backer):p.r==='other'?(OP.length>1?'Managers':PN(b.other)):'',sc:p.sc,btn:`<button type="button" class="ok" data-s25-ok="${b.id}" onclick="${ask?`s25Confirm('${b.id}')`:`s25Ask('${b.id}')`}"${U.busy?' disabled':''}>${ask?'Tap again to confirm':'✅ Confirm'}</button> <button type="button" data-s25-fix="${b.id}" aria-pressed="${!!S25P.fix[b.id]}" onclick="s25Fix('${b.id}')">✏️ Fix</button>`,note:'Nothing is settled until someone taps Confirm.'})+'</div>'}
   return `<div class="s25pp" data-s25-prop="final"><div><b>Final:</b> ${esc(p.sc)}</div><div><b>Proposed result:</b> ${esc(s25ResWho(b,p.r))} <span class="note">(${esc(p.why)})</span></div><button type="button" class="ok" data-s25-ok="${b.id}" onclick="${ask?`s25Confirm('${b.id}')`:`s25Ask('${b.id}')`}"${U.busy?' disabled':''}>${ask?'Tap again to confirm':'✅ Confirm'}</button><button type="button" data-s25-fix="${b.id}" aria-pressed="${!!S25P.fix[b.id]}" onclick="s25Fix('${b.id}')">✏️ Fix</button><div class="note">Nothing is settled until you confirm.</div></div>`}
-function s25Ask(id){S25P.ask=S25P.ask===id?null:id;render()}
+function s25Ask(id){if(U.busy||b27TapLock())return;const b=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===id);if(!b){S25P.ask=null;render();return}const G=s25Game(b);const terms=b27Terms(b)+'\u001f'+(G&&G.p?G.p.text+'\u001f'+G.p.r:'');if(S25P.ask&&S25P.ask.id===id&&S25P.ask.terms===terms)S25P.ask=null;else S25P.ask={id,terms};render()}
 function s25HideManual(b){if(S25P.fix[b.id])return false;const G=s25Game(b);return !!(G&&G.p)}
 function s25Fix(id){S25P.fix[id]=!S25P.fix[id];render()}
-async function s25Confirm(id){const b=U.doc.bets.find(x=>x.id===id),me=b27Who();if(!b||b.backer!==me){U.msg=B27_ONLY;U.msgBad=true;render();return}
-  const G=s25Game(b);if(!G||!G.p){U.msg='No final score to confirm yet.';U.msgBad=true;render();return}
-  S25P.ask=null;return b27SetStatus(id,G.p.r,{src:{g:G.g.id,sc:G.p.sc}})}
+async function s25Confirm(id){if(U.busy||b27TapLock())return;const b=U.doc.bets.find(x=>x.id===id),me=b27Who();if(!b||b.backer!==me){U.msg=B27_ONLY;U.msgBad=true;render();return}
+  const G=s25Game(b);if(!G||!G.p){S25P.ask=null;U.msg='No final score to confirm yet.';U.msgBad=true;render();return}
+  const terms=b27Terms(b)+'\u001f'+G.p.text+'\u001f'+G.p.r;if(!S25P.ask||S25P.ask.id!==id||S25P.ask.terms!==terms){S25P.ask=null;b27Stale();return}
+  S25P.ask=null;b27SetStatus.skip=true;return b27SetStatus(id,G.p.r,{src:{g:G.g.id,sc:G.p.sc}})}
 /* --- settle sound + meme: once per bet that turns from open to settled while the page is open (own Confirm or a live refresh); never on first load --- */
 function s25Settled(prev,list){const was=new Map(prev.map(b=>[b.id,b.status])),me=b27Who();
   list.forEach(b=>{if(was.get(b.id)==='open'&&['backer','other','push'].includes(b.status)&&!S25P.done.has(b.id)){S25P.done.add(b.id);const side=S25.side(b,me);S25P.log.push({id:b.id,side,ev:'settled'});if(side){S25P.q.push({id:b.id,kind:side});if(!S25P.busy)s25Next()}}})}
@@ -4023,6 +4040,7 @@ function s24FixApply(b,me,op,a,at){
   if(op==='no'){h.push(fx.by===me?close(fx,'withdrawn'):close(fx,'declined',me));return {b:fin(Object.assign({},b)),ok:fx.by===me?'withdrawn':'declined'}}
   return {b:null,err:''}}
 /*</CREATOR-SETTLE>*/
+function s24FixGo(id,op,i,r,hash){if(U.busy||b27TapLock())return;const b=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===id);if(!b||b27Hash(b27Terms(b))!==hash){b27Stale();return}return s24Fix(id,op,i||null,r||null)}
 async function s24Fix(id,op,i,r){
   if(U.busy)return;const me=b27Who();if(!me){presAsk();return}
   const a={i:i||b27Rid(),r};let last=null;
@@ -4041,11 +4059,11 @@ function s24FixBadge(b){return b.fxh&&b.fxh.some(e=>e.out==='confirmed'/*<CREATO
   if(b.kind==='pool')return '';
   const cr=!!me&&me===b.backer,fx=b.fx,set=S24R.includes(b.status),dis=U.busy?' disabled':'';let h='';
   if(set&&fx){h+=`<div class="b27-fx" data-s24-fx="${b.id}"><div><b>🛠 Result change asked</b> by ${esc(fx.by)}: ${esc(s24ResLbl(b,b.status))} → <b>${esc(s24ResLbl(b,fx.r))}</b>. Only ${esc(PN(b.backer))} (who placed it) can change the result.</div>`;
-    if(cr)h+=`<div class="b27-act"><button type="button" class="btn b27-b" data-s24-fxok="${b.id}" onclick="s24Fix('${b.id}','ok','${fx.i}')"${dis}>✅ Change it</button><button type="button" class="btn sec b27-b" data-s24-fxno="${b.id}" onclick="s24Fix('${b.id}','no','${fx.i}')"${dis}>✖ Keep the result</button></div>`;
+    if(cr)h+=`<div class="b27-act"><button type="button" class="btn b27-b" data-s24-fxok="${b.id}" onclick="s24FixGo('${b.id}','ok','${fx.i}','','${b27Hash(b27Terms(b))}')"${dis}>✅ Change it</button><button type="button" class="btn sec b27-b" data-s24-fxno="${b.id}" onclick="s24FixGo('${b.id}','no','${fx.i}','','${b27Hash(b27Terms(b))}')"${dis}>✖ Keep the result</button></div>`;
     h+='</div>'}
   if(set&&cr){const open=U.fixOpen===b.id;
     h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" data-s24-fix="${b.id}" aria-expanded="${open}" onclick="U.fixOpen=U.fixOpen==='${b.id}'?null:'${b.id}';render()"${dis}>✏️ Fix result</button></div>`;
-    if(open)h+=`<div class="b27-fx" data-s24-fixpick="${b.id}"><div class="note">Wrong result? Now: <b>${esc(s24ResLbl(b,b.status))}</b>. Pick the right one; it changes right away.</div><div class="b27-act">${S24R.filter(r=>r!==b.status).map(r=>`<button type="button" class="btn sec b27-b" data-s24-fxr="${r}" onclick="s24Fix('${b.id}','req',null,'${r}')"${dis}>${esc(s24ResLbl(b,r))}</button>`).join('')}</div></div>`}
+    if(open)h+=`<div class="b27-fx" data-s24-fixpick="${b.id}"><div class="note">Wrong result? Now: <b>${esc(s24ResLbl(b,b.status))}</b>. Pick the right one; it changes right away.</div><div class="b27-act">${S24R.filter(r=>r!==b.status).map(r=>`<button type="button" class="btn sec b27-b" data-s24-fxr="${r}" onclick="s24FixGo('${b.id}','req','','${r}','${b27Hash(b27Terms(b))}')"${dis}>${esc(s24ResLbl(b,r))}</button>`).join('')}</div></div>`}
   if(b.fxh&&b.fxh.length){const W={confirmed:'confirmed',declined:'declined',withdrawn:'withdrawn',replaced:'replaced by a newer request',fixed:'fixed by the creator'};
     h+=`<details class="b27-fxh"><summary>Result changes (${b.fxh.length})</summary><ul>${b.fxh.slice().reverse().map(e=>`<li>${esc(e.by)} ${e.out==='fixed'?'changed':'asked'} ${esc(s24ResLbl(b,e.from))} → ${esc(s24ResLbl(b,e.r))}${e.at?' · '+esc(s24When(e.at)):''} — <b>${esc(W[e.out])}</b>${e.ans?' by '+esc(e.ans):''}${e.at2&&e.out!=='fixed'?' · '+esc(s24When(e.at2)):''}</li>`).join('')}</ul></details>`}
   return h}
