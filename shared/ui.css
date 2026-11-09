@@ -446,7 +446,7 @@ html body .b27-due{margin-top:4px;font-size:12.5px;font-weight:700}
 html body .b27-due[data-due="over"]{color:#fca5a5}
 html body .b27-due[data-due="today"]{color:#fde68a}
 html body .b27-due[data-due="up"]{color:#93c5fd}
-html body .b27-due[data-due="none"]{color:var(--mut,#9aa)}
+html body .b27-due[data-due="none"],html body .b27-due[data-due="done"]{color:var(--mut,#9aa)}
 html body .b27-due[data-due="season"]{color:#c4b5fd}
 html body .b27-due[data-due="game"]{color:#93c5fd}
 html body .b27-when-c{display:flex;flex-wrap:wrap;gap:6px}
@@ -485,7 +485,6 @@ html body .tabs.ob-seg.ob-phone{display:none!important}
  html body .entry-sub-d{display:none!important}
  html body .entry-ico{display:none!important}
  html body .entry-sub-m{display:block!important}
- html body .entry-rq [data-when="game"]{display:none!important}
  html body .entry-hd.entry-hd-wiu p,html body .entry-hd.entry-hd-rq p{margin:0;font-size:8.5px;line-height:1.15;letter-spacing:-.02em;white-space:nowrap;min-width:0}
 }
 /* Request (and the same opponent grid): 4 equal cells, so 7 invitees are 4 then 3. */
