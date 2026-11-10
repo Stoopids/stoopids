@@ -2547,12 +2547,17 @@ async function profCmGo(){if(Date.now()<PROFCM.until){PROFCM.msg='Wrong passcode
   PROFCM.tries++;if(PROFCM.tries>=5){PROFCM.until=Date.now()+30000;PROFCM.tries=0;PROFCM.msg='Wrong passcode. Locked for 30 seconds.'}else PROFCM.msg='Wrong passcode. Try again ('+(5-PROFCM.tries)+' left).';render()}
 function profCmLock(){try{localStorage.removeItem(PROF_CM_TOK)}catch(e){}PROFCM.msg='';render()}
 function profAdminOn(){return !!(ADMIN&&profCmUnlocked())}
-function profAdminHtml(){const m=D&&D.meta;
+const ADM={del:null,chat:null};
+function profAdminChatKey(){return b27Hash((CH.list||[]).map(x=>[x.i,x.t,x.w,x.x].join('\u001f')).join('\u001e'))}
+function profAdminFresh(){if(ADM.del){const b=(U.doc&&U.doc.bets||[]).find(x=>x.id===ADM.del.id);if(!b||b.status!=='open'||b27Hash(b27Terms(b))!==ADM.del.key)ADM.del=null}if(ADM.chat&&profAdminChatKey()!==ADM.chat.key)ADM.chat=null}
+function profAdminDel(id){if(!profAdminOn()||U.busy)return;const b=(U.doc&&U.doc.bets||[]).find(x=>x.id===id);if(!b||b.status!=='open'){ADM.del=null;render();return}const key=b27Hash(b27Terms(b));if(ADM.del&&ADM.del.id===id&&ADM.del.key===key){ADM.del=null;render();return b27Void(id,key)}ADM.del={id,key};ADM.chat=null;render()}
+function profAdminChat(){if(!profAdminOn())return;const key=profAdminChatKey();if(ADM.chat&&ADM.chat.key===key){ADM.chat=null;render();return chatClear(true)}ADM.chat={key};ADM.del=null;render()}
+function profAdminHtml(){profAdminFresh();const m=D&&D.meta;
   const health=m&&m.fetch&&m.odds?`<h3>Data health</h3><ul class="it"><li>Updated: ${esc(stampET())}</li><li>Mode: ${esc(m.mode)} · season ${esc(m.season)} · games loaded ${m.games_loaded} (${m.final_games} final)</li><li>Days fetched fresh ${m.fetch.days_fetched}, cached ${m.fetch.days_cached}, ncaa.com fallback ${m.fetch.days_ncaa_fallback}, failed ${m.fetch.days_failed_both}</li><li>Betting lines found ${m.odds.lines_found}/${m.odds.games_needing_line}</li><li>Rosters: ${esc(m.roster_source)}; sheet ${m.sheet_ok?'OK':'ERROR '+esc(m.sheet_error)}</li>${m.warnings&&m.warnings.length?'<li class="bad">Warnings: '+m.warnings.map(esc).join('; ')+'</li>':''}</ul>`:'';
   const bets=U.state==='ok'&&U.doc&&U.doc.bets;
-  const rows=bets?bets.filter(b=>b&&b.status==='open'&&!(b27CanUndo(b)&&b.kind!=='pool')).map(b=>`<div class="cm-bet"><b>#${b.n}</b> <button type="button" class="btn sec" onclick="b27Void('${b.id}','${b27Hash(b27Terms(b))}')"${U.busy?' disabled':''}>${b.kind==='pool'?esc(POOL_TXT.adminCancel):'Delete'}</button></div>`).join(''):'';
+  const rows=bets?bets.filter(b=>b&&b.status==='open'&&!(b27CanUndo(b)&&b.kind!=='pool')).map(b=>{const armed=ADM.del&&ADM.del.id===b.id&&ADM.del.key===b27Hash(b27Terms(b));return `<div class="cm-bet"><b>#${b.n}</b> <button type="button" class="btn sec" onclick="profAdminDel('${b.id}')"${U.busy?' disabled':''}>${armed?'Tap again to delete #'+b.n:(b.kind==='pool'?esc(POOL_TXT.adminCancel):'Delete')}</button></div>`}).join(''):'';
   const del=bets?rows:'<p class="prof-note">The ledger is still loading.</p>';
-  return `<h3>Site admin view</h3><h3>Accent colour</h3>${accPickerHtml(ACC)}<p class="prof-note">Recolours the active tab and the toggles. Saved on this device.</p>${health}<h3>Export</h3><p style="margin:8px 0 0"><button type="button" class="btn sec" onclick="sbExport()">⬇ Export JSON backup</button></p><h3>Admin delete and clear chat</h3><p style="margin:8px 0 0"><button type="button" class="btn sec" onclick="chatClear()">Clear chat (admin)</button></p>${del}`}
+  return `<h3>Site admin view</h3><h3>Accent colour</h3>${accPickerHtml(ACC)}<p class="prof-note">Recolours the active tab and the toggles. Saved on this device.</p>${health}<h3>Export</h3><p style="margin:8px 0 0"><button type="button" class="btn sec" onclick="sbExport()">⬇ Export JSON backup</button></p><h3>Admin delete and clear chat</h3><p style="margin:8px 0 0"><button type="button" class="btn sec" id="admChat" onclick="profAdminChat()">${ADM.chat?'Tap again to clear chat':'Clear chat (admin)'}</button></p>${del}`}
 function profCmHtml(){profCmLoad();
   if(!profCmUnlocked())return `<div class="card s29e-cm"><h3>Commissioner</h3><p>Commissioner: Paul</p><label class="sr" for="profPin">Commissioner passcode</label><input id="profPin" class="sb-in" type="password" autocomplete="off" placeholder="Passcode" style="margin-top:8px" onkeydown="if(event.key==='Enter'){event.preventDefault();profCmGo()}"><div class="prof-note" role="alert">${esc(PROFCM.msg||'')}</div><button type="button" class="btn" style="margin-top:8px" onclick="profCmGo()">Unlock</button></div>`;
   const adminLink=profAdminOn()?'':`<p style="margin:8px 0 0"><a class="btn" href="${esc(location.pathname+'?admin=1#profile')}">Site admin view</a></p><p class="prof-note">Adds ?admin=1. Accent colour, data health, export, and the admin delete and clear-chat buttons.</p>`;
@@ -3074,8 +3079,8 @@ async function chatSend(text){
   chatDrawList();chatUI();
   return ok;
 }
-async function chatClear(){
-  if(!ADMIN||!window.confirm('Delete ALL chat messages for everyone?'))return;
+async function chatClear(ok){
+  if(!ADMIN||(ok!==true&&!window.confirm('Delete ALL chat messages for everyone?')))return;
   try{const w=await fetch(CHAT.url,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({v:1,m:[]})});if(!w.ok)throw 0;CH.list=[];/*<CHAT-BAR>*/CH.nUnread=0;/*</CHAT-BAR>*/chatDrawList();chatSay('Chat cleared.')}catch(e){chatSay("Couldn't clear the chat.",true)}
 }
 function chatMode(mode){
