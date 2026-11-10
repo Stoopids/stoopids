@@ -268,7 +268,7 @@ nav button .nb{position:absolute;top:1px;right:2px;background:var(--acc);color:#
 .chat{position:fixed;left:auto;right:max(12px,env(safe-area-inset-right,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:30;box-sizing:border-box;width:min(320px,calc(100vw - 24px));max-height:min(70dvh,calc(100dvh - 24px));margin:0;padding:8px;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 28px rgba(0,0,0,.45);display:flex;flex-direction:column-reverse;overflow:auto}   /* expanded: narrow bottom-right overlay, no page padding */
 body{padding-bottom:0}
 html body .chat.chat-bar{left:0!important;right:0!important;bottom:0!important;width:auto!important;max-width:none!important;max-height:none!important;border-radius:0!important;border-left:0!important;border-right:0!important;border-bottom:0!important;box-shadow:none!important;background:var(--bg)!important;padding:8px max(10px,calc((100% - 1000px)/2)) calc(8px + env(safe-area-inset-bottom,0px))!important;flex-direction:column!important}
-html body{padding-bottom:var(--chatH,0px)}
+html body{padding-bottom:calc(var(--chatH, 0px) + 8px)}
 html body #onlStrip.onl-fixed{position:fixed;z-index:29;left:12px;right:160px;bottom:max(12px,env(safe-area-inset-bottom,0px));margin:0;width:auto}
 html body .chat.chat-off{left:auto!important;right:max(12px,env(safe-area-inset-right,0px))!important;bottom:max(12px,env(safe-area-inset-bottom,0px))!important;width:max-content!important;max-width:min(240px,calc(100vw - 24px))!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important;overflow:visible!important}
 html body .chat.chat-pop>.chat-t{display:none!important}
@@ -398,7 +398,7 @@ nav button .nu{position:absolute;top:1px;left:2px;min-width:15px;background:#ff3
 /*<OWES-CHART>*/
 /* plain matrix = the old Side bets matrix (table.mx inside .card.sc); only the totals get a light divider + bold */
 .mx.oqm td.t,.mx.oqm th.t{font-weight:800;border-left:1px solid var(--line)}.mx.oqm tfoot td,.mx.oqm tfoot th{font-weight:800;border-top:1px solid var(--line)}.mx.oqm td.t{color:var(--tx)}
-/*<HDR-CENTER>*/.titlebar{display:flex;flex-direction:column;align-items:center;text-align:center;padding:12px 14px 4px}.titlebar h1{text-align:center;color:var(--acc)}.titlebar h1 span{color:var(--acc)}.titlebar .tag{margin:0;line-height:1.15;text-align:center;max-width:100%;overflow-wrap:anywhere}.gtop{max-width:1000px;margin:0 auto;padding:0 14px}.gtop .lv{margin:6px 0 -4px}.gtop .lv button{min-height:44px;min-width:44px}.stfoot.fresh{display:block;width:auto;margin:16px auto 0;padding:6px 14px calc(96px + env(safe-area-inset-bottom));text-align:center;font-size:12px;color:var(--mut);opacity:.8;cursor:default;min-height:0}.stfoot[hidden]{display:none}/*</HDR-CENTER>*/
+/*<HDR-CENTER>*/.titlebar{display:flex;flex-direction:column;align-items:center;text-align:center;padding:12px 14px 4px}.titlebar h1{text-align:center;color:var(--acc)}.titlebar h1 span{color:var(--acc)}.titlebar .tag{margin:0;line-height:1.15;text-align:center;max-width:100%;overflow-wrap:anywhere}.gtop{max-width:1000px;margin:0 auto;padding:0 14px}.gtop .lv{margin:6px 0 -4px}.gtop .lv button{min-height:44px;min-width:44px}.stfoot.fresh{display:block;width:auto;margin:16px auto 0;padding:6px 14px calc(8px + env(safe-area-inset-bottom));text-align:center;font-size:12px;color:var(--mut);opacity:.8;cursor:default;min-height:0}.stfoot[hidden]{display:none}/*</HDR-CENTER>*/
 /*<OWES-RESTORE>*/.s24lb .owes-jump{margin-right:auto;min-height:44px;font-weight:800}.oqe{margin:2px 0 6px}/*</OWES-RESTORE>*/
 @media (max-width:1000px){.swipe.oqw{display:block}}
 .oqc{display:flex;flex-direction:column;gap:5px;margin-top:6px}
@@ -2521,13 +2521,58 @@ function s29CopyGame(id,btn){const g=S29G[id];if(!g)return;s27CopyText(s29GameTe
 let S29SH='';
 function s29ShTabs(){return TABS.filter(t=>t[0]!=='share'&&t[0]!=='profile'&&tabVisible(t[0])).map(t=>[t[0],t[1].slice(t[1].indexOf(' ')+1)])}
 function s29ShUrl(){return s29ViewUrl(S29SH?s24HashOf(S29SH):'')}
-/*<S29E-PROFILE>*/function vProfile(){const view=typeof VIEW_ONLY!=='undefined'&&VIEW_ONLY;
+/*<S29E-PROFILE>*/
+const PROF_ALERT='stoopids_prof_alerts',PROF_CM_URL='https://textdb.dev/api/data/stoopids-draft2-ff4dac2bc4128b72',PROF_CM_TOK='stoopidsDraft.cmtok';
+const PROFCM={checked:false,loading:false,hash:null,salt:null,hasPass:false,err:false,msg:'',tries:0,until:0};
+let PROF_TXT={season:'',bets:''};
+function profAlerts(){const o={newBets:true,settle:true};try{const v=JSON.parse(lsGet(PROF_ALERT)||'');if(v&&typeof v==='object'){if(v.newBets===false)o.newBets=false;if(v.settle===false)o.settle=false}}catch(e){}return o}
+function profAlert(k){if(k==='chat')return lsGet('stoopids_chat_snd')==='1';return profAlerts()[k]!==false}
+function profAlertSet(k,on){if(k==='chat'){if(typeof chatSndSet==='function')chatSndSet(!!on);else lsSet('stoopids_chat_snd',on?'1':'0');return}const o=profAlerts();o[k]=!!on;lsSet(PROF_ALERT,JSON.stringify(o))}
+function profSnd(on){try{localStorage.setItem('stoopids_s25_mute',on?'0':'1')}catch(e){}const m=!on;document.querySelectorAll('[data-s25-mute]').forEach(x=>{x.textContent=m?'🔇':'🔊';x.setAttribute('aria-pressed',String(m));x.setAttribute('aria-label','Settle sounds '+(m?'off':'on'));x.title='Settle sounds '+(m?'off':'on')})}
+function profMoney(n){n=Math.round(Number(n)||0);if(n<0)return '-$'+b27Num(-n);return '$'+b27Num(n)}
+function profRoster(me){let w=0,l=0;(D.games||[]).forEach(g=>{if(!g||g.status!=='final')return;['home','away'].forEach(side=>{const s=g[side];if(s&&s.owners&&s.owners.includes(me)){if(s.win)w++;else l++}})});return {w,l}}
+function profRank(o){const tied=(D.owners||[]).filter(x=>x.rank===o.rank).length>1;return (tied?'T-':'')+o.rank}
+function profBets(me){const bets=(U.doc&&U.doc.bets)||[],T=b27Tally(bets);let w=0,l=0,push=0,open=0;
+  bets.forEach(b=>{if(!b||b.kind==='pool'){if(b&&b.kind==='pool'&&(b.parts||[]).includes(me)&&b.status==='open'&&!b.back)open++;return}const opps=b27Opps(b);if(b.backer!==me&&!opps.includes(me))return;if(b.status==='open'){open++;return}if(b.status==='push'){push++;return}if(b.status!=='backer'&&b.status!=='other')return;const won=(b.status==='backer'&&b.backer===me)||(b.status==='other'&&opps.includes(me));if(won)w++;else l++});
+  return {w,l,push,open,net:(T.per[me]&&T.per[me].net)||0}}
+function profH2H(me){return b27OwnerNames().filter(n=>n!==me).map(other=>{let w=0,l=0,push=0,net=0;((U.doc&&U.doc.bets)||[]).forEach(b=>{if(!b||b.kind==='pool')return;const opps=b27Opps(b),mine=b.backer===me?'b':opps.includes(me)?'o':null,theirs=b.backer===other?'b':opps.includes(other)?'o':null;if(!mine||!theirs||mine===theirs)return;if(b.status==='open'||b.status==='void')return;if(b.status==='push'){push++;return}if(b.status!=='backer'&&b.status!=='other')return;const p=b27Pay(b),iWon=(b.status==='backer'&&mine==='b')||(b.status==='other'&&mine==='o'),amt=iWon?(mine==='b'?p.ifBackerRight:p.ifOtherRight):(mine==='b'?p.ifOtherRight:p.ifBackerRight);if(iWon){w++;net+=amt}else{l++;net-=amt}});return {other,w,l,push,net}})}
+function profSeasonText(me,o,rec){return ['STOOPIDS '+(D.meta&&D.meta.season||''),PN(me)+' · '+TN(me)+(o.emoji?' '+o.emoji:''),'Rank: '+profRank(o),'Points: '+b27Num(o.total||0),'Roster record: '+rec.w+'-'+rec.l].join('\n')}
+function profBetsText(me,s){return [PN(me)+' bets',s.w+'-'+s.l+(s.push?' · '+s.push+' wash'+(s.push===1?'':'es'):''),'Net: '+profMoney(s.net),'Open: '+s.open].join('\n')}
+function profCopy(id,text){const btn=document.getElementById(id);s27CopyText(text,()=>{if(!btn)return;btn.textContent='Copied';btn.classList.add('on');clearTimeout(btn._t);btn._t=setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('on')},1200)})}
+function profCmUnlocked(){return !!(PROFCM.hash&&lsGet(PROF_CM_TOK)===PROFCM.hash)}
+function profCmLoad(){if(PROFCM.checked||PROFCM.loading)return;PROFCM.loading=true;
+  fetch(PROF_CM_URL,{cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.text()}).then(t=>{if(!t||!String(t).trim()){PROFCM.hasPass=false;return}let d=JSON.parse(t);if(typeof d==='string')d=JSON.parse(d);const p=d&&d.pass;PROFCM.hasPass=!!(p&&typeof p.salt==='string'&&typeof p.hash==='string');PROFCM.salt=PROFCM.hasPass?p.salt:null;PROFCM.hash=PROFCM.hasPass?p.hash:null}).catch(()=>{PROFCM.err=true}).then(()=>{PROFCM.checked=true;PROFCM.loading=false;if(tab==='profile')render()})}
+async function profCmGo(){if(Date.now()<PROFCM.until){PROFCM.msg='Wrong passcode. Locked for '+Math.ceil((PROFCM.until-Date.now())/1000)+'s.';render();return}const pass=((document.getElementById('profPin')||{}).value||'');if(!PROFCM.hasPass)return;
+  let hash='';try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(PROFCM.salt+':'+pass));hash=Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){PROFCM.msg='This browser cannot check the passcode here.';render();return}
+  if(hash===PROFCM.hash){PROFCM.tries=0;PROFCM.msg='';lsSet(PROF_CM_TOK,hash);render();return}
+  PROFCM.tries++;if(PROFCM.tries>=5){PROFCM.until=Date.now()+30000;PROFCM.tries=0;PROFCM.msg='Wrong passcode. Locked for 30 seconds.'}else PROFCM.msg='Wrong passcode. Try again ('+(5-PROFCM.tries)+' left).';render()}
+function profCmLock(){try{localStorage.removeItem(PROF_CM_TOK)}catch(e){}PROFCM.msg='';render()}
+function profCmHtml(){profCmLoad();
+  if(!PROFCM.checked)return `<div class="card s29e-cm"><h3>Commissioner</h3><p class="prof-note">Checking the commissioner lock…</p></div>`;
+  if(PROFCM.err)return `<div class="card s29e-cm"><h3>Commissioner</h3><p class="prof-note">Couldn’t read the commissioner lock. Nothing was changed.</p></div>`;
+  if(!PROFCM.hasPass)return `<div class="card s29e-cm"><h3>Commissioner</h3><p class="prof-note">No commissioner passcode is set yet. It is set in the draft room, not here.</p><p style="margin:8px 0 0"><a class="btn" href="${esc(DRAFT_URL)}">Open the draft room</a></p></div>`;
+  if(!profCmUnlocked())return `<div class="card s29e-cm"><h3>Commissioner</h3><p class="prof-note">The draft-room passcode unlocks links to the tools that already exist. This page does not add any.</p><label class="sr" for="profPin">Commissioner passcode</label><input id="profPin" class="sb-in" type="password" autocomplete="off" placeholder="Passcode" style="margin-top:8px" onkeydown="if(event.key==='Enter'){event.preventDefault();profCmGo()}"><div class="prof-note" role="alert">${esc(PROFCM.msg||'')}</div><button type="button" class="btn" style="margin-top:8px" onclick="profCmGo()">Unlock</button></div>`;
+  const admin=location.pathname+'?admin=1';
+  return `<div class="card s29e-cm"><h3>Commissioner</h3><p class="prof-note">Unlocked on this device. These open the tools that already exist.</p><p style="margin:8px 0 0"><a class="btn" href="${esc(DRAFT_URL)}">Draft room</a></p><p class="prof-note">Admin tab: start, pause, undo, reset, order, clock, and the wheel. Same passcode.</p><p style="margin:8px 0 0"><a class="btn" href="${esc(admin+'#about')}">Site admin view</a></p><p class="prof-note">Adds ?admin=1. Accent colour, data health, export, and the admin delete and clear-chat buttons.</p><button type="button" class="btn sec" style="margin-top:8px" onclick="profCmLock()">Lock</button></div>`}
+function vProfile(){const view=typeof VIEW_ONLY!=='undefined'&&VIEW_ONLY;
   if(view)return `<div class="card s29e-prof"><h2 style="margin:0">👤 Profile</h2><p style="margin:6px 0 0">You're viewing a read-only link.</p></div>`+vShare();
   const me=(typeof b27Who==='function'&&b27Who())||null,o=me&&D&&D.owners?D.owners.find(x=>x.name===me):null;
-  return `<div class="card s29e-prof"><h2 style="margin:0">👤 Profile</h2><p style="margin:6px 0 0">${me?`You're using the site as <b>${esc(PN(me))}</b>`:'You haven’t picked who you are yet.'} <a href="#" onclick="presAsk();return false">(${me?'change':'pick'})</a></p></div>`+
-   `<div class="card s29e-set"><h3 style="margin:0 0 6px">My settings</h3>${me?`<div>Team: <b>${esc(TN(me))}</b>${o&&o.emoji?' · '+esc(o.emoji):''}</div>`:''}<p class="mut" style="margin:6px 0 0;font-size:12.5px">There are no personal settings to change yet. Team names and emojis are set by the commissioner.</p></div>`+
-   (ADMIN?`<div class="card s29e-acc"><h3 style="margin:0 0 6px">Commissioner: accent colour</h3>${accPickerHtml(ACC)}<p class="mut" style="margin:0;font-size:12.5px">Recolours the active tab and the toggles. Saved on this device.</p></div>`:'')+
-   `<div class="card s29e-notif"><h3 style="margin:0 0 6px">Notifications</h3><p class="mut" style="margin:0">Coming soon</p></div>`+vShare()}
+  const who=`<div class="card s29e-prof"><h2 style="margin:0">👤 Profile</h2><p style="margin:6px 0 0">${me?`You're using the site as <b>${esc(PN(me))}</b>`:'You haven’t picked who you are yet.'} <a href="#" onclick="presAsk();return false">(${me?'change':'pick'})</a></p></div>`;
+  if(!me||!o)return who+`<div class="card"><h3>My season</h3><p class="prof-note">Pick who you are to see your season, bets, and head-to-head.</p></div>`+profNotifyHtml()+profCmHtml()+vShare();
+  const rec=profRoster(me);PROF_TXT.season=profSeasonText(me,o,rec);
+  const betsReady=U.state==='ok'&&U.doc&&Array.isArray(U.doc.bets);
+  let betsCard;
+  if(!betsReady)betsCard=`<div class="card"><h3>My bets</h3><p class="prof-note">The shared ledger is still loading. Nothing is being saved.</p></div><div class="card"><h3>Head-to-head</h3><p class="prof-note">Waiting on the same ledger.</p></div>`;
+  else{const s=profBets(me),rows=profH2H(me);PROF_TXT.bets=profBetsText(me,s);
+    betsCard=`<div class="card"><div class="prof-hd"><h3>My bets</h3><button type="button" class="s27-copy" id="profBetsCopy" onclick="profCopy('profBetsCopy',PROF_TXT.bets)">Copy</button></div><p style="margin:0">${s.w}-${s.l}${s.push?' · '+s.push+' wash'+(s.push===1?'':'es'):''}</p><p style="margin:4px 0 0">Net ${esc(profMoney(s.net))} · ${s.open} open</p><p class="prof-note">One-vs-one wins and losses. The net includes settled pools. Washes owe nothing.</p></div>`+
+     `<div class="card"><h3>Head-to-head</h3><div class="sc"><table class="prof-h2h"><tr><th>Stoop</th><th class="n">Record</th><th class="n">Net</th></tr>${rows.map(r=>`<tr><td>${esc(ownerEmoji(r.other))} ${esc(PN(r.other))}</td><td class="n">${r.w}-${r.l}${r.push?' · '+r.push+' wash'+(r.push===1?'':'es'):''}</td><td class="n">${esc(profMoney(r.net))}</td></tr>`).join('')}</table></div><p class="prof-note">Settled one-vs-one bets only. A pool is not a head-to-head.</p></div>`}
+  return who+
+   `<div class="card"><div class="prof-hd"><h3>My season</h3><button type="button" class="s27-copy" id="profSeaCopy" onclick="profCopy('profSeaCopy',PROF_TXT.season)">Copy</button></div><p style="margin:0"><b>${esc(profRank(o))}</b> · ${esc(b27Num(o.total||0))} pts · roster ${rec.w}-${rec.l}</p></div>`+
+   betsCard+
+   `<div class="card"><h3>My team look</h3><p style="margin:0;font-size:18px">${o.emoji?esc(o.emoji)+' ':''}<b>${esc(TN(me))}</b></p><p class="prof-note">Set by the commissioner. Read-only.</p></div>`+
+   profNotifyHtml()+profCmHtml()+vShare()}
+function profNotifyHtml(){const a=profAlerts(),snd=lsGet('stoopids_s25_mute')!=='1',chat=lsGet('stoopids_chat_snd')==='1';
+  return `<div class="card s29e-notif"><h3>Notifications</h3><p class="prof-note">This device only. Nothing is sent anywhere.</p><label class="prof-sw"><input type="checkbox" ${snd?'checked':''} onchange="profSnd(this.checked)"> Sound on bet pop-ups</label><p class="prof-note">Settle sounds, and the sound when you place a bet. The mute button on All Bets is the same switch.</p><p style="margin:10px 0 4px"><b>Which alerts to show</b></p><label class="prof-sw"><input type="checkbox" ${a.newBets?'checked':''} onchange="profAlertSet('newBets',this.checked)"> New bet toasts</label><label class="prof-sw"><input type="checkbox" ${a.settle?'checked':''} onchange="profAlertSet('settle',this.checked)"> Settle alerts</label><label class="prof-sw"><input type="checkbox" ${chat?'checked':''} onchange="profAlertSet('chat',this.checked)"> Chat blips</label></div>`}
 /*</S29E-PROFILE>*/
 function vShare(){const u=s29ShUrl();
   return `<div class="card s29sh"><h3 style="margin:0 0 2px">Share STOOPIDS</h3><p class="s29e-shsub" style="margin:0 0 8px;font-weight:700">Read-only link for friends and family</p><label class="s29sh-l" for="s29shSel">What to share</label>
@@ -2866,7 +2911,7 @@ function chatSndSet(on){
 }
 function chatIncoming(list){      // call with a fresh list: blip once for ids never seen in this page session, from others only, never on the first poll
   const me=chatWho();
-  if(CH.known&&CH.snd&&list.some(x=>x.w!==me&&!CH.known.has(x.i)))chatBeep();
+  if(CH.known&&CH.snd&&profAlert('chat')&&list.some(x=>x.w!==me&&!CH.known.has(x.i)))chatBeep();
   CH.known=CH.known||new Set();list.forEach(x=>CH.known.add(x.i));
 }
 /* typing: a short-lived 'y' (last keystroke, ms) on MY existing presence entry {t,y}. Readers see it on their poll; only a CHANGED y counts and it is timed on the reader's own clock. */
@@ -2931,7 +2976,7 @@ function chatPlace(){      // the one bar: fixed to the bottom of the page on EV
 }
 /*<CHAT-BOTTOM>*/
 /* page bottom padding = bar height (also expanded); the bar lifts above the phone keyboard; online list that does not fit is cut with "+N more" */
-function chatLayout(){const s=document.getElementById('chat');const h=s&&s.classList.contains('chat-bar')?s.offsetHeight:0;document.documentElement.style.setProperty('--chatH',h+'px');try{placeOnl()}catch(e){}}
+function chatLayout(){const s=document.getElementById('chat');let h=0;if(s&&!s.hidden){if(s.classList.contains('chat-pop')){const t=s.querySelector('.chat-t');h=t?t.offsetHeight:0}else h=s.offsetHeight||0}document.documentElement.style.setProperty('--chatH',h+'px');try{placeOnl()}catch(e){}}
 function chatFit(el){if(!el||!el.clientWidth)return;const old=el.querySelector('.cbm2');if(old)old.remove();if(el.scrollWidth<=el.clientWidth)return;
   const more=document.createElement('span');more.className='cbg cbm2';el.appendChild(more);let n=0;
   while(el.scrollWidth>el.clientWidth&&el.children.length>3){el.removeChild(el.children[el.children.length-2]);n++;more.textContent='+'+n+' more'}
@@ -3196,8 +3241,8 @@ function b27Apply(list,fromPoll){
   if(lsGet(PULK.seenKey)==null)lsSet(PULK.seenKey,String(U.maxN));
   if(tab==='bets27')b27Seen();
   const fresh=added.filter(b=>!U.mine.has(b.id)&&b.status==='open');
-  if(fresh.length&&typeof nbShow==='function'){nbShow(fresh.map(b=>({n:b.n,_msg:/*<POOL>*/b.kind==='pool'?PT('toast',{who:PN(b.backer),names:b27Opps(b).map(PN).join(', ')}):/*</POOL>*/PN(b.backer)+' just bet '+b27Num(b.amt)+(b27IsBundle(b)?' each':'')+(b27OddsFace(b.odds.a,b.odds.b)?' '+b27OddsFace(b.odds.a,b.odds.b):'')+' with '+b27Opps(b).map(PN).join(', ')})))}
-  if(first||added.length||changed||fromPoll==='force'){const ae=document.activeElement;if(tab==='bets27'){if(!(ae&&ae.closest&&ae.closest('#main')&&/INPUT|TEXTAREA/.test(ae.tagName)))render()}else if(b27Badge())setTimeout(render,0)}
+  if(fresh.length&&profAlert('newBets')&&typeof nbShow==='function'){nbShow(fresh.map(b=>({n:b.n,_msg:/*<POOL>*/b.kind==='pool'?PT('toast',{who:PN(b.backer),names:b27Opps(b).map(PN).join(', ')}):/*</POOL>*/PN(b.backer)+' just bet '+b27Num(b.amt)+(b27IsBundle(b)?' each':'')+(b27OddsFace(b.odds.a,b.odds.b)?' '+b27OddsFace(b.odds.a,b.odds.b):'')+' with '+b27Opps(b).map(PN).join(', ')})))}
+  if(first||added.length||changed||fromPoll==='force'){const ae=document.activeElement;if(tab==='bets27'){if(!(ae&&ae.closest&&ae.closest('#main')&&/INPUT|TEXTAREA/.test(ae.tagName)))render()}else if(tab==='profile')render();else if(b27Badge())setTimeout(render,0)}
 }
 function b27Seen(){if(U.state==='ok'&&U.maxN)lsSet(PULK.seenKey,String(Math.max(U.maxN,parseInt(lsGet(PULK.seenKey),10)||0)))}
 function b27Badge(){if(tab==='bets27'||U.state!=='ok')return '';const s=parseInt(lsGet(PULK.seenKey),10);return isFinite(s)&&U.maxN>s?'<b class="nb" aria-hidden="true">new</b>':''}
@@ -4112,7 +4157,7 @@ async function s25Confirm(id){if(U.busy||b27TapLock())return;const flash=documen
   S25P.ask=null;b27SetStatus.skip=true;return b27SetStatus(id,G.p.r,{src:{g:G.g.id,sc:G.p.sc}})}
 /* --- settle sound + meme: once per bet that turns from open to settled while the page is open (own Confirm or a live refresh); never on first load --- */
 function s25Settled(prev,list){const was=new Map(prev.map(b=>[b.id,b.status])),me=b27Who();
-  list.forEach(b=>{if(was.get(b.id)==='open'&&['backer','other','push'].includes(b.status)&&!S25P.done.has(b.id)){S25P.done.add(b.id);const side=S25.side(b,me);S25P.log.push({id:b.id,side,ev:'settled'});if(side){S25P.q.push({id:b.id,kind:side});if(!S25P.busy)s25Next()}}})}
+  list.forEach(b=>{if(was.get(b.id)==='open'&&['backer','other','push'].includes(b.status)&&!S25P.done.has(b.id)){S25P.done.add(b.id);const side=S25.side(b,me);S25P.log.push({id:b.id,side,ev:'settled'});if(side&&profAlert('settle')){S25P.q.push({id:b.id,kind:side});if(!S25P.busy)s25Next()}}})}
 const s25Muted=()=>lsGet(S25P.muteKey)==='1';
 function betBlip(){if(s25Muted())return;try{s25Unlock();const c=S25P.ctx;if(!c||c.state!=='running')return;const o=c.createOscillator(),g=c.createGain(),t=c.currentTime;o.type='sine';o.frequency.value=880;o.connect(g);g.connect(c.destination);g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(0.04,t+0.02);g.gain.exponentialRampToValueAtTime(0.0001,t+0.14);o.start(t);o.stop(t+0.15)}catch(e){}}
 function betPop(text){let el=document.getElementById('betpop');if(!el){el=document.createElement('div');el.id='betpop';el.className='betpop';el.setAttribute('role','status');document.body.appendChild(el)}el.textContent=text;el.hidden=false;clearTimeout(betPop.t);betPop.t=setTimeout(()=>{el.hidden=true},4200)}
@@ -4540,7 +4585,7 @@ html body .qb-bolt{width:11px!important;height:11px!important}
  html body .chat.chat-off{bottom:max(8px,env(safe-area-inset-bottom,0px))!important;height:44px!important;max-height:44px!important;z-index:31!important}
  html body .chat.chat-off>.chat-t{height:44px!important;min-height:44px!important;max-height:44px!important}
  html body .chat.chat-pop{bottom:calc(60px + env(safe-area-inset-bottom,0px))!important;max-height:min(62dvh,calc(100dvh - 120px))!important}
- html body{padding-bottom:calc(60px + env(safe-area-inset-bottom,0px))!important}
+ html body{padding-bottom:calc(var(--chatH, 44px) + 8px + env(safe-area-inset-bottom,0px))!important}
 }
 /* Same four compact-filter rules as shared/ui.css, repeated last so they win over the earlier full-width Games rules. */
 html body #main .gfone>.gf3,html body #lbody .gfone>.gf3{display:block!important;width:100%!important;max-width:100%!important;overflow:visible!important;margin:0!important}
@@ -4681,7 +4726,7 @@ html body .s24fb .row2>*{flex:0 1 auto!important;width:auto!important;max-width:
  html body .entry-pair>.entry-col{position:absolute!important;width:0!important;height:0!important;margin:0!important;overflow:hidden!important}
  html body .entry-pair[data-focus="form"]>.entry-wiu,html body .entry-pair[data-focus="request"]>.entry-rq{position:static!important;width:100%!important;height:auto!important;margin:0!important;overflow:visible!important}
 }
-html body .b27-fine{width:100%;max-width:100%;box-sizing:border-box;margin:16px 0 calc(12px + max(0px, 64px - var(--chatH, 0px)));padding:8px 12px;border:1px solid var(--line,#2d3548);border-radius:10px;background:var(--card,#1b2030);color:var(--mut,#9aa3b5);font-size:13px;line-height:1.35}
+html body .b27-fine{width:100%;max-width:100%;box-sizing:border-box;margin:12px 0 8px;padding:8px 12px;border:1px solid var(--line,#2d3548);border-radius:10px;background:var(--card,#1b2030);color:var(--mut,#9aa3b5);font-size:13px;line-height:1.35}
 html body .b27-fine b{color:var(--tx,#eee)}
 html body #main>.segrow .rkseg>.rkseg-b:not(.segref):not(.gref),html body #main .gfone .rkseg>.rkseg-b:not(.gref),html body #main>.tabs.ob-seg>button,html body #main>.tapf>button{height:42px!important;min-height:42px!important;max-height:42px!important;padding:0 16px!important;font-size:15px!important;line-height:40px!important}
 html body #main>.tabs.ob-seg,html body #main>.segrow>.rkseg{justify-content:flex-start!important}
@@ -4689,6 +4734,11 @@ html body #main>.tabs.ob-seg,html body #main>.segrow>.rkseg{justify-content:flex
  html body #main>.tapf{display:flex!important;justify-content:center!important;width:100%!important}
 }
 html body .b27-grid>.card:has(> .b27-foot > details.b27-more){min-height:0!important;height:auto!important;align-self:start}
+.prof-hd{display:flex;align-items:center;justify-content:space-between;gap:8px}.prof-hd h3{margin:0}.prof-hd .s27-copy{margin:0}
+.prof-note{margin:6px 0 0;font-size:12.5px;color:var(--mut,#9aa3b5)}
+.prof-sw{display:flex;align-items:center;gap:8px;margin:6px 0;font-weight:700}
+.prof-h2h{width:100%;border-collapse:collapse;font-size:14px}.prof-h2h th,.prof-h2h td{padding:6px 8px;border-bottom:1px solid var(--line,#2d3548);text-align:left}.prof-h2h th.n,.prof-h2h td.n{text-align:right;white-space:nowrap}
+.s29e-cm .btn{display:inline-flex}
 @media (max-width:700px){
  html body #main>.segrow .rkseg>.rkseg-b:not(.segref):not(.gref),html body #main>.tabs.ob-seg>button,html body #main>.tapf>button:first-child,html body #main>.tapf>button:not(:first-child){height:34px!important;min-height:34px!important;max-height:34px!important;padding:0 8px!important;font-size:14px!important;line-height:32px!important}
  html body #main>.tapf>button:not(:first-child){width:100%!important;padding:0 2px!important;font-size:13px!important}

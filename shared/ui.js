@@ -324,7 +324,9 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
       return h+(me&&A.canWrite()?form():'<div class="card note rq-none">Set who you are on Profile before you request a bet.</div>')}
     async function act(k,v,st){var f=S.f,me=A.me(),now=Date.now();
       var actK=k==='acc'||k==='dec'||k==='cancel'||k==='close'||k==='slot-'||k==='slot+'||k==='edit';
-      if(actK){if(S.busy)return;if(S.lockUntil&&Date.now()<S.lockUntil)return;S.lockUntil=Date.now()+450;var curR=S.list.find(function(x){return x.id===v});if(!curR||reqHash(reqTerms(curR))!==st){S.arm=null;S.msg='That request changed. Review it again.';S.bad=true;A.render();return}}
+      if(actK){if(S.busy)return;var curR=S.list.find(function(x){return x.id===v});if(!curR||reqHash(reqTerms(curR))!==st){S.arm=null;S.msg='That request changed. Review it again.';S.bad=true;A.render();return}
+        var armOnly=k==='cancel'&&!(S.arm&&S.arm.id===v&&S.arm.act==='cancel'&&S.arm.terms===reqTerms(curR));
+        if(!armOnly){if(S.lockUntil&&Date.now()<S.lockUntil)return;S.lockUntil=Date.now()+450}}
       if(k==='coffer'){var rc0=S.list.find(function(x){return x.id===v});if(!rc0||rc0.by===me||(rc0.to||[]).indexOf(me)<0)return;S.coff={id:v,amt:String(rc0.amt||''),odds:(rc0.odds||[1,1]).join('-'),text:rc0.lab||''};A.render();return}
       if(k==='cx'){S.coff=null;A.render();return}
       if(k==='csend'){var rs0=S.list.find(function(x){return x.id===v});if(!rs0||rs0.by===me||rs0.status!=='open'||tk(rs0).indexOf(me)>=0)return;
