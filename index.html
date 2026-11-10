@@ -708,7 +708,7 @@ nav a.nt .s29nb{position:absolute;top:1px;right:2px;min-width:15px;background:#F
 .s27-copy{margin-left:auto;min-height:32px;padding:0 10px;border-radius:8px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font:inherit;font-size:12px;font-weight:700;cursor:pointer}
 .s27-copy.on,.s27-copy.flash{background:var(--acc);color:#111;border-color:var(--acc)}
 @keyframes actflash{0%{box-shadow:0 0 0 3px #FFD400}100%{box-shadow:0 0 0 0 transparent}}
-.s27-copy.flash,.act-flash{animation:actflash .7s ease}
+.s27-copy.flash,.act-flash,.ok.flash{animation:actflash .7s ease}
 .glinks{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 0}
 .glink{font-weight:800;color:var(--acc,#FFD400);text-decoration:none}
 /* select all / clear in the last opponent-grid slot */
@@ -1239,7 +1239,7 @@ S25.renderReactions=function(el,counts,mine,onToggle,opts){if(!el||!el.ownerDocu
   let wl=null;const showWho=e=>{const w=who(e);if(!w.length)return;if(!wl){wl=doc.createElement('div');wl.className='s25wl';wl.setAttribute('data-s25-wl','');el.appendChild(wl)}wl.textContent=e+' '+w.join(', ')},hideWho=()=>{if(wl){wl.remove();wl=null}};
   const fire=(e,on)=>{closeOpen();if(typeof onToggle==='function')onToggle(e,on)};
   EM.filter(e=>cnt(e)>0).forEach(e=>{const n=cnt(e),on=my.has(e),w=who(e),b=doc.createElement('button');b.type='button';b.className='s25rx'+(on?' on':'');b.setAttribute('data-s25-rx',e);b.setAttribute('aria-pressed',String(on));
-    b.setAttribute('aria-label',e+' '+n+(w.length?': '+w.join(', '):''));b.innerHTML='';b.appendChild(doc.createTextNode(e));const s=doc.createElement('span');s.className='n';s.textContent=String(n);b.appendChild(s);
+    b.setAttribute('aria-label',e+' '+n+(w.length?': '+w.join(', '):''));if(w.length)b.title=w.join(', ');b.innerHTML='';b.appendChild(doc.createTextNode(e));const s=doc.createElement('span');s.className='n';s.textContent=String(n);b.appendChild(s);
     if(ro)b.disabled=true;let lp=false,tm=null;
     b.addEventListener('pointerdown',()=>{lp=false;clearTimeout(tm);tm=setTimeout(()=>{lp=true;showWho(e)},500)});['pointerup','pointercancel','pointerleave'].forEach(t=>b.addEventListener(t,()=>clearTimeout(tm)));
     b.addEventListener('contextmenu',ev=>ev.preventDefault());
@@ -1709,7 +1709,7 @@ function gameCard(g){
   const inner=`<div class="gh">${head}<div class="gbtns">${/*<S24-EDIT>*/s29GameBtn(g)/*</S24-EDIT>*/}${/*<QUICK-BET>*/qbBtn(g)/*</QUICK-BET>*/}</div></div>${row(g.away)}${row(g.home,'H')}<div class="gl">${foot}</div>`;
   const betLinks=gBetLinkHtml(g);
   /*<GAMES-LOCAL>*/if(fin){const id=String(g.id),op=gOpen.has(id),sc=s=>`${esc(s.short||s.name||'')} ${s.score!=null?s.score:''}`;
-    /*<STEP5-GAMES>*/if(typeof SHARED_UI!=='undefined'&&SHARED_UI.finalCard)return SHARED_UI.finalCard({esc,cls:'gm',cls2:(g.h2h||g.civil?' h2h':'')+(gBetIds().has(id)?' gbet':''),attr:s24Attr('g',g.id),open:op,away:{name:g.away.short||g.away.name||'',score:g.away.score,win:g.away.win},home:{name:g.home.short||g.home.name||'',score:g.home.score,win:g.home.win},upset:g.upset&&g.upset.is,btnAttr:`data-gfin="${esc(id)}"`,btnAttr2:' onclick="gFin(this.dataset.gfin)"',body:inner+(op?boxSlot(g):'')});/*</STEP5-GAMES> fallback below*/
+    /*<STEP5-GAMES>*/if(typeof SHARED_UI!=='undefined'&&SHARED_UI.finalCard){const card=SHARED_UI.finalCard({esc,cls:'gm',cls2:(g.h2h||g.civil?' h2h':'')+(gBetIds().has(id)?' gbet':''),attr:s24Attr('g',g.id),open:op,away:{name:g.away.short||g.away.name||'',score:g.away.score,win:g.away.win},home:{name:g.home.short||g.home.name||'',score:g.home.score,win:g.home.win},upset:g.upset&&g.upset.is,btnAttr:`data-gfin="${esc(id)}"`,btnAttr2:' onclick="gFin(this.dataset.gfin)"',body:inner+(op?boxSlot(g):'')});return betLinks?card.replace(/<\/div>$/,betLinks+'</div>'):card}/*</STEP5-GAMES> fallback below*/
     return `<div class="gm gfin${op?' open':''}${g.h2h||g.civil?' h2h':''}${/*<SYNC1>*/gBetIds().has(id)?' gbet':''/*</SYNC1>*/}"${s24Attr('g',g.id)}><button type="button" class="gsum" data-gfin="${esc(id)}" aria-expanded="${op}" onclick="gFin(this.dataset.gfin)"><span class="gst">FINAL</span><span class="${g.away.win?'w':''}">${sc(g.away)}</span><span class="mut">·</span><span class="${g.home.win?'w':''}">${sc(g.home)}</span>${g.upset&&g.upset.is?'<span>😱</span>':''}<span class="gch" aria-hidden="true">${op?'▾':'▸'}</span></button><div class="gbody"${op?'':' hidden'}>${inner}${/*<SYNC2-BOX>*/op?boxSlot(g):''/*</SYNC2-BOX>*/}</div>${betLinks}</div>`}/*</GAMES-LOCAL>*/
   return `<div class="gm${g.h2h||g.civil?' h2h':''}${/*<SYNC1>*/gBetIds().has(String(g.id))?' gbet':''/*</SYNC1>*/}"${/*<S24-EDIT>*/s24Attr('g',g.id)/*</S24-EDIT>*/}>${inner}${betLinks}${/*<GAMES-LOCAL>*/'<div class="gsp" aria-hidden="true"></div>'/*</GAMES-LOCAL>*/}${/*<QUICK-BET>*/qbHtml(g)/*</QUICK-BET>*/}</div>`}
 /*<QUICK-BET>*/
@@ -1766,7 +1766,7 @@ function gBetMap(){if(gBetCache)return gBetCache;const map={};const add=(id,b)=>
 function gBetIds(){const out=new Set();try{const m=gBetMap();Object.keys(m).forEach(id=>{if(m[id].length)out.add(id)})}catch(e){}return out}
 function gOpenBet(id){tab='bets27';OB_VIEW='all';try{S24.sub=id}catch(e){}render();setTimeout(()=>{const el=document.getElementById('bet-'+id);if(el)el.scrollIntoView({block:'center'})},40);return false}
 function gBetLinkHtml(g){const list=(gBetMap()[String(g&&g.id||'')]||[]).slice().sort((a,c)=>(a.n||0)-(c.n||0));if(!list.length)return '';
-  return '<div class="glinks">'+list.map(b=>{const od=b27OddsFace(b.odds&&b.odds.a,b.odds&&b.odds.b);return '<a class="glink" href="#bets27" data-gbet="'+esc(b.id)+'" onclick="return gOpenBet(\''+esc(b.id)+'\')">#'+b.n+(od?' '+esc(od):'')+'</a>'}).join('')+'</div>'}/*</SYNC1>*/
+  return '<div class="glinks">'+list.map(b=>'<a class="glink" href="#bets27" data-gbet="'+esc(b.id)+'" onclick="return gOpenBet(\''+esc(b.id)+'\')">#'+b.n+'</a>').join('')+'</div>'}/*</SYNC1>*/
 /*<OWNED-GAMES>*/let gAll=false;   // 'Show unowned games' toggle: OFF by default
 /* a game is owned when at least one of its two teams belongs to one of the owners ON THAT GAME DAY (home/away.owners comes from the owners' team windows). The build keeps every game that touches ANY pool team, so a pool team whose owner window does not cover the day can leave a game with nobody's name on it: those are hidden unless the toggle is on. */
 const gOwned=g=>!!(g&&((g.home&&g.home.owners&&g.home.owners.length)||(g.away&&g.away.owners&&g.away.owners.length)));/*</OWNED-GAMES>*/
@@ -2551,7 +2551,8 @@ function s12ShareSite(btn){const old=document.getElementById('s12menu');if(old){
 function s27CopyText(t,ok){const fall=()=>{try{const ta=document.createElement('textarea');ta.value=t;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();const r=document.execCommand&&document.execCommand('copy');ta.remove();if(r){ok();return}}catch(e){}s24Toast('Copy failed',2600)};
   try{if(navigator.clipboard&&navigator.clipboard.writeText&&window.isSecureContext){navigator.clipboard.writeText(t).then(ok,fall);return}}catch(e){}fall()}
 function s27CopyBet(id,btn){const b=(U.doc&&U.doc.bets||[]).find(x=>x.id===id);if(!b)return;
-  s27CopyText(/*<S29E-COPY>*/s29eCopyText(b)/*</S29E-COPY>*/,()=>{if(!btn)return;btn.textContent='Copied';btn.classList.add('on','flash');clearTimeout(btn._t);btn._t=setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('on','flash')},700)})}
+  if(btn){btn.classList.add('flash');clearTimeout(btn._t);btn._t=setTimeout(()=>{if(btn.textContent!=='Copied')btn.classList.remove('flash')},700)}
+  s27CopyText(/*<S29E-COPY>*/s29eCopyText(b)/*</S29E-COPY>*/,()=>{if(!btn)return;btn.classList.add('on');btn.textContent='Copied';clearTimeout(btn._t);btn._t=setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('on','flash')},700)})}
 const S27_TIPS={who:'Tap one or more managers. Several = one bet, one result.',text:'Write it as you say it: "Kansas -4 beats Duke".',amt:()=>'Minimum '+PULK.minAmt,/*<STEP12-TIPS>*/pterms:'Say what the pool is, e.g. “STOOPIDS season-long tournament pool”.',ppl:'You’re in automatically. Tap everyone else who’s in.',buy:()=>'Buy-in per person, minimum '+PULK.minAmt+'. The pot is buy-in × people in.',pay:'Amounts only; you pick who finished where when you settle it. They must add up to the pot. Optional: leave blank to fill in when it’s over.',/*</STEP12-TIPS>*/odds:'If you’re right, they owe amount × first ÷ second. Even = 1-1.',rqwho:'Tap one or more managers.',rqamt:()=>'Amount for each acceptance. Minimum '+PULK.minAmt+'.',rqodds:'Per acceptance: if you are right, they owe amount × first ÷ second. Even = 1-1. Nothing is posted until you send the request.',rqmany:'How many Stoops can accept. Each acceptance is its own bet. This does not pick a winner.',rqexp:'The invitation closes then. It does not settle the bet or pick a winner.',auto:'A clear game bet (team, spread or total, date) can be matched to an ESPN final. After the final, scores propose the result. You confirm it; nothing settles on its own.',manual:'Unclear bets: you enter the result yourself after the game.',when:'Sorting only. It does not settle the bet, pick a winner, or close a request.'};
 const s27TipK=(k,l)=>`<button type="button" class="s27-tipk k" data-tip="${k}" aria-expanded="false" onclick="s27Tip(this)">${esc(l)}</button>`;
 function s27TipClose(){document.querySelectorAll('.s27-pop').forEach(e=>e.remove());document.querySelectorAll('.s27-tipk[aria-expanded=true]').forEach(e=>e.setAttribute('aria-expanded','false'))}
@@ -3968,16 +3969,16 @@ function s25Fetch(r){const k=s25Key(r),c=S25P.games[k];const hold=c&&c.st==='err
     .then(()=>{const ae=document.activeElement;if(tab==='bets27'&&!(ae&&ae.closest&&ae.closest('#main')&&/INPUT|TEXTAREA|SELECT/.test(ae.tagName)))render()}).catch(()=>{})}
 function s25ResWho(b,r){const OP=b27Opps(b);return r==='backer'?b.backer+' won':r==='other'?(OP.length>1?'Managers won':b.other+' won'):'💦'}
 function s25SuggestName(b,r){const OP=b27Opps(b);return r==='backer'?PN(b.backer):r==='other'?(OP.length>1?'Managers':PN(b.other)):'Wash'}
-function s25SuggestLine(b,p){return `<div class="s25sg">Suggested winner: <b>${esc(s25SuggestName(b,p.r))}</b>${p&&p.sc?` (${esc(p.sc)})`:''}</div>`}
+function s25SuggestLine(b,p){const rd=s25BetRd(b),tot=rd&&rd.k==='total';return `<div class="s25sg">Suggested ${tot?'result':'winner'}: <b>${esc(s25SuggestName(b,p.r))}</b>${p&&p.sc?` (${esc(p.sc)})`:''}${tot&&p&&p.why?': '+esc(p.why):''}</div>`}
 function s25PropHtml(b,me){const G=s25Game(b);if(!G)return '';const r=s25BetRd(b)||b.rd;
   if(G.wait==='live'&&G.g){try{const p=S25.proposal(r,Object.assign({},G.g,{final:true}));if(p&&p.r)return `<div class="s25pp" data-s25-prop="live">${s25SuggestLine(b,p)}</div>`}catch(e){}}
   if(G.wait){const t=G.wait==='future'?'Game day '+S25.dayLbl(r.d)+'. After the final we’ll show you the score and a suggested winner to confirm.':G.wait==='loading'?'Checking the final score…':(G.wait==='err'||G.wait==='nogame')?'No score found, pick the winner yourself':
       'No final score yet. Pick the winner yourself any time, or come back after the game.'+(G.g&&G.g.state==='pre'&&G.g.start?' (starts '+S25.localTime(G.g.start)+')':'');
     return `<div class="s25pp" data-s25-prop="${G.wait}">${esc(t)}</div>`}
   const p=G.p;if(!p)return '';const ask=!!(S25P.ask&&S25P.ask.id===b.id&&S25P.ask.terms===b27Terms(b)+'\u001f'+p.text+'\u001f'+p.r);
-  const btn=`<button type="button" class="ok" data-s25-ok="${b.id}" onclick="${ask?`s25Confirm('${b.id}')`:`s25Ask('${b.id}')`}"${U.busy?' disabled':''}>${ask?'Tap again to confirm':'✅ Confirm'}</button> <button type="button" data-s25-fix="${b.id}" aria-pressed="${!!S25P.fix[b.id]}" onclick="s25Fix('${b.id}')">✏️ Fix</button>`;
+  const btn=`<button type="button" class="ok${ask?' on flash':''}" data-s25-ok="${b.id}" onclick="${ask?`s25Confirm('${b.id}')`:`s25Ask('${b.id}')`}"${U.busy?' disabled':''}>${ask?'Tap again to confirm':'✅ Confirm'}</button> <button type="button" data-s25-fix="${b.id}" aria-pressed="${!!S25P.fix[b.id]}" onclick="s25Fix('${b.id}')">✏️ Fix</button>`;
   return `<div class="s25pp" data-s25-prop="final">${s25SuggestLine(b,p)}<div class="s25sg-act">${btn}</div><div class="note">Nothing is settled until someone taps Confirm.</div></div>`}
-function s25Ask(id){if(U.busy||b27TapLock())return;const b=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===id);if(!b){S25P.ask=null;render();return}const G=s25Game(b);const terms=b27Terms(b)+'\u001f'+(G&&G.p?G.p.text+'\u001f'+G.p.r:'');if(S25P.ask&&S25P.ask.id===id&&S25P.ask.terms===terms)S25P.ask=null;else S25P.ask={id,terms};render()}
+function s25Ask(id){if(U.busy||b27TapLock())return;const b=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===id);if(!b){S25P.ask=null;render();return}const G=s25Game(b);const terms=b27Terms(b)+'\u001f'+(G&&G.p?G.p.text+'\u001f'+G.p.r:'');if(S25P.ask&&S25P.ask.id===id&&S25P.ask.terms===terms)S25P.ask=null;else{S25P.ask={id,terms};try{const t=s29eCopyText(b);if(t)b27CopyNow(t)}catch(e){}}render()}
 function s25HideManual(b){if(S25P.fix[b.id])return false;const G=s25Game(b);return !!(G&&G.p)}
 function s25Fix(id){S25P.fix[id]=!S25P.fix[id];render()}
 async function s25Confirm(id){if(U.busy||b27TapLock())return;const b=U.doc.bets.find(x=>x.id===id),me=b27Who();if(!b||b.backer!==me){U.msg=B27_ONLY;U.msgBad=true;render();return}
@@ -4463,13 +4464,15 @@ html{scroll-padding-top:64px}
 .hero{cursor:pointer}
 .hero.hero-open{height:min(72vh,560px)!important}
 @media (max-width:700px){
- html body .tapf,html body .lgref .tapf{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:4px!important;max-width:100%}
- html body .tapf button,html body .lgref .tapf button{font-size:11px!important;line-height:1.15!important;padding:3px 2px!important;white-space:normal!important;min-height:32px!important;-webkit-line-clamp:unset!important;line-clamp:unset!important;overflow:visible!important}
- html body .tapf button:first-child,html body .lgref .tapf button:first-child{grid-column:1 / -1}
- html body{padding-bottom:calc(52px + env(safe-area-inset-bottom,0px))!important}
+ html body .tapf,html body .lgref .tapf{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:4px!important;width:100%!important;max-width:100%!important}
+ html body .tapf>button:first-child,html body .lgref .tapf>button:first-child{grid-column:1 / -1!important;min-height:28px!important;font-size:12px!important}
+ html body .tapf>button,html body .lgref .tapf>button{width:100%!important;min-width:0!important;height:auto!important;min-height:28px!important;max-height:none!important;padding:3px 2px!important;font-size:10px!important;line-height:1.15!important;white-space:nowrap!important}
 }
-html body .card.tap.s27-rk th:first-child,html body .card.tap.s27-rk td:first-child{position:sticky;left:0;z-index:2;background:var(--card,#1b2030)}
-html body .card.tap.s27-rk th:first-child{z-index:3}
+html body .s25pp button.ok.on,html body .s27-copy.on{outline:3px solid #FFD400!important;outline-offset:2px!important}
+html body .s25wl{opacity:1!important;color:var(--tx,#eee)!important;font-weight:700!important}
+html body .card.tap.s27-rk{overflow-x:auto!important}
+html body .card.tap.s27-rk th:first-child,html body .card.tap.s27-rk td:first-child{position:sticky!important;left:0!important;z-index:3!important;background:var(--card,#1b2030)!important;box-shadow:1px 0 0 var(--line,#2d3548)}
+html body .card.tap.s27-rk th:first-child{z-index:4!important}
 html body .idline{margin:8px 0 8px!important}
 html body footer#foot{padding-bottom:8px!important}
 html body .ggrid .gside{flex-wrap:nowrap!important;align-items:center!important;width:100%!important}
@@ -4499,6 +4502,11 @@ html body .gmon{justify-content:flex-start!important;width:auto!important;max-wi
 html body .gmon>button{flex:0 0 auto!important;width:auto!important;min-width:0!important;padding:5px 12px!important}
 html body .s24fb .row2{flex-wrap:wrap!important;gap:6px!important}
 html body .s24fb .row2>*{flex:0 1 auto!important;width:auto!important;max-width:100%!important;height:32px!important;min-height:32px!important}
+@media (max-width:999px){
+ html body .entry-pair{display:block!important}
+ html body .entry-pair>.entry-col{position:absolute!important;width:0!important;height:0!important;margin:0!important;overflow:hidden!important}
+ html body .entry-pair[data-focus="form"]>.entry-wiu,html body .entry-pair[data-focus="request"]>.entry-rq{position:static!important;width:100%!important;height:auto!important;margin:0!important;overflow:visible!important}
+}
 /*</HELD-LAYOUT>*/
 </style><!--</S29E-PASTE>-->
 <!--<S29E-COPY>--><script>
