@@ -974,7 +974,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.61.0"></script>
+<script src="shared/ui.js?v=1.62.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -1681,7 +1681,7 @@ const opills=a=>a&&a.length?a.map(n=>`<span class="opill">${esc(ownerEmoji(n))} 
 function lineTxt(ln,away,home,final){
   if(!ln)return null;
   const fav=ln.fav_name?`<b>${esc(ln.fav_name)}</b> -${ln.sp!=null?ln.sp:'?'}`:'Pick\u2019em';
-  const ou=ln.ou!=null?` · O/U ${ln.ou}`:'';
+  const ou=ln.ou!=null?` · Over/Under ${ln.ou}`:'';
   const src=ln.p?` <span class="mut">· ${esc(String(ln.p))}</span>`:'';
   return `${final?(ln.type==='close'?'Closing line':'Last line'):'Line'}: ${fav}${ou}${src}`}
 function gameCard(g){
@@ -1800,7 +1800,7 @@ function gameLine(g){/* compact line for a team-row game (roster tab) */
     else if(g.upset)up=' <span class="up ns">🐶 Underdog win</span>'}
   const ln=g.ln;if(!ln)return fin?(up?`<div class="mut" style="font-size:12px">${up}</div>`:''):'<div class="mut" style="font-size:12px">📭 line not posted yet</div>';
   const fav=ln.fav_name?`${esc(ln.fav_name)} -${ln.sp!=null?ln.sp:'?'}`:'Pick\u2019em';
-  return `<div class="mut" style="font-size:12px">${fin?(ln.type==='close'?'Closing':'Last'):'Line'}: ${fav}${ln.ou!=null?' · O/U '+ln.ou:''} · ${esc(ln.p||'')}${ln.we_dog?' · 🐶 underdog':ln.we_fav?' · ⭐ favorite':''}${up}</div>`}
+  return `<div class="mut" style="font-size:12px">${fin?(ln.type==='close'?'Closing':'Last'):'Line'}: ${fav}${ln.ou!=null?' · Over/Under '+ln.ou:''} · ${esc(ln.p||'')}${ln.we_dog?' · 🐶 underdog':ln.we_fav?' · ⭐ favorite':''}${up}</div>`}
 
 
 /* ---------- side bets ---------- */
@@ -3558,6 +3558,7 @@ function b27Card(b,me){
     else if(ADMIN)del=`<button type="button" class="btn sec b27-b" onclick="b27Void('${b.id}','${b27Hash(b27Terms(b))}')"${U.busy?' disabled':''}>Delete</button>`;
   }
   if(del||ready)h+=`<div class="b27-del">${del}${ready?'<span class="b27-ready-t">Ready to settle</span>':''}</div>`;
+  else if(st==='open')h+=`<div class="note">Awaiting settlement</div>`;
   h+=who+/*<S25>*/s25PropHtml(b,me)/*</S25>*/;
   /*<S24-EDIT>*/h+=s24EditedNote(b)+s24FixHtml(b,me);/*</S24-EDIT>*/
   h+=b27SettlesHtml(b);
@@ -3651,7 +3652,7 @@ function vB27(){
   /*<S24-EDIT>*/{const FL=s24Filter(bets,me).filter(b=>!b27Done(b)||(S24.sub&&b.id===S24.sub));
   const ready=b27SortSoon(FL.filter(b27Ready)),ids=new Set(ready.map(b=>b.id)),rest=FL.filter(b=>!ids.has(b.id));
   if(ready.length)h+=`<section id="b27Ready"><h2>Ready to settle <span class="note">${ready.length}</span></h2><div class="b27-grid">${b27Cards(ready,me)}</div></section>`;
-  h+=`<h2>All bets (${rest.length}${rest.length!==bets.length?' of '+bets.length:''})${/*<S25>*/s25MuteBtn()/*</S25>*/}</h2>`+s24FilterBar(bets,me)+(rest.length?b27Grouped(rest,me):bets.length?'<div class="card note s24fe">No unsettled bets match this filter.</div>':'<div class="card note">No bets yet. Be the first.</div>');}/*</S24-EDIT>*/
+  h+=`<h2>All bets (${rest.length}${rest.length!==bets.length?' of '+bets.length:''})${/*<S25>*/s25MuteBtn()/*</S25>*/}</h2><p class="note">Agreed bets awaiting settlement. Ready ones are marked above.</p>`+s24FilterBar(bets,me)+(rest.length?b27Grouped(rest,me):bets.length?'<div class="card note s24fe">No unsettled bets match this filter.</div>':'<div class="card note">No bets yet. Be the first.</div>');}/*</S24-EDIT>*/
   /*<BETS-INTRO-BOTTOM>*/h+=introBottom;/*</BETS-INTRO-BOTTOM>*/
   return h;
 }
@@ -3700,14 +3701,14 @@ function vTally(){/* STEP11: Tally = 2026-27 Bets ledger (b27Tally / U.doc), not
     if(L.length)h+=`<div class="card" data-tally-settle><b>If settled today</b>${L.map(([a,b,d])=>`<div class="tset">${esc(PN(a))} pays ${esc(PN(b))} ${b27Num(d)}</div>`).join('')}</div>`;
   }
   const me=b27Who(),done=(bets||[]).filter(b27Done),shown=done.filter(b=>s24Match(b,me,{st:'all'})||(S24.sub&&b.id===S24.sub));
-  h+=`<h2>Settled bets <span class="note">${shown.length}</span></h2>`+s24FilterBar(done,me)+(shown.length?b27Grouped(b27SortSoon(shown).slice(0,60),me):'<div class="card note">No settled bets match.</div>');
+  h+=`<h2>Settled bets <span class="note">${shown.length}</span></h2>`+s24FilterBar(done,me,'Search settled bets')+(shown.length?b27Grouped(b27SortSoon(shown).slice(0,60),me):'<div class="card note">No settled bets match.</div>');
   return h}
 /*</BETS-TALLY>*/
 function obToggle(){
   /*<BETS-TALLY>*/if(!SHOW_OLD_BETS||tab==='bets27'){const entry=OB_VIEW==='form'||OB_VIEW==='request',all=OB_VIEW==='all'||OB_VIEW==='open',tally=OB_VIEW==='tally';
     const sg=(k,on,t,id)=>`<button type="button" class="${on?'on':''}" aria-pressed="${on}" data-ob="${k}"${id?` id="${id}"`:''} onclick="obView('${k}')">${t}</button>`;
     const old=SHOW_OLD_BETS?`<button type="button" data-ob="bets" onclick="obGo('bets')">2025-26 (old)</button>`:'';
-    return `<div class="tabs ob-seg ob-desk" role="group" aria-label="Bets">${sg('form',entry,'Request or Write it up','b27Ob_form')}${sg('all',all,'All Bets','b27Ob_all')}${sg('tally',tally,'Tally','b27Ob_tally')}${old}</div><div class="tabs ob-seg ob-phone" role="group" aria-label="Bets">${sg('request',OB_VIEW==='request','Request')}${sg('form',OB_VIEW==='form','Write it Up')}${sg('all',all||tally,'All Bets')}${old}</div>`}/*</BETS-TALLY>*/
+    return `<div class="tabs ob-seg ob-desk" role="group" aria-label="Bets">${sg('form',entry,'Request or Write it up','b27Ob_form')}${sg('all',all,'All Bets','b27Ob_all')}${sg('tally',tally,'Tally','b27Ob_tally')}${old}</div><div class="tabs ob-seg ob-phone" role="group" aria-label="Bets">${sg('request',OB_VIEW==='request','Request')}${sg('form',OB_VIEW==='form','Write it Up')}${sg('all',all,'All Bets')}${sg('tally',tally,'Tally')}${old}</div>`}/*</BETS-TALLY>*/
   const seg=(k,t,bd)=>`<button type="button" class="${tab===k?'on':''}" aria-pressed="${tab===k}" data-ob="${k}"${tab!==k&&bd?' aria-label="'+t+', new bets"':''} onclick="obGo('${k}')">${t}${tab===k?'':bd}</button>`;
   return `<div class="tabs ob-seg" role="group" aria-label="Bets season">${seg('bets27','2026-27',b27Badge())}${seg('bets','2025-26 (old)',nbBadge('bets'))}</div>`;
 }
@@ -4157,14 +4158,15 @@ function s24Filter(bets,me){return (bets||[]).filter(b=>(S24.sub&&b.id===S24.sub
 function s24Count(bets,me,o){return (bets||[]).filter(b=>s24Match(b,me,o)).length}
 function s24ReqMatch(r){const p=s24FP(),me=b27Who(),who=p==='me'?me:p==='all'?null:p,q=s24Q.trim().toLowerCase();
   if(who&&r.by!==who&&(r.to||[]).indexOf(who)<0)return false;if(!q)return true;return [r.txt,r.lab,r.by,...(r.to||[]),r.game].join(' ').toLowerCase().includes(q)}
-function s24FilterBar(bets,me){const p=s24FP(),st=s24FSt(),ac=s24FAc(),wh=s24FWh();
+function s24FilterBar(bets,me,ph){const p=s24FP(),st=s24FSt(),ac=s24FAc(),wh=s24FWh();
   const opt=(list,cur,extra)=>list.map(([k,t])=>`<option value="${k}"${k===cur?' selected':''}>${esc(t)}${extra&&extra[k]!=null?' ('+extra[k]+')':''}</option>`).join('');
   const nMine=s24Count(bets,me,{ac:'mine'}),nTheirs=s24Count(bets,me,{ac:'theirs'});
+  const settledOnly=ph==='Search settled bets';
   return `<div class="card s24fb"><div class="row2"><select id="sbPerson" aria-label="Person" onchange="s24FSetP(this.value)"><option value="all"${p==='all'?' selected':''}>Everyone</option><option value="me"${p==='me'?' selected':''}>Me</option>${b27OwnerNames().map(o=>`<option value="${esc(o)}"${o===p?' selected':''}>${esc(PN(o))}</option>`).join('')}</select>
-   <select id="sbStatus" aria-label="Status" onchange="s24FSetS(this.value)">${opt(S24FST,st)}</select>
+   ${settledOnly?'':`<select id="sbStatus" aria-label="Status" onchange="s24FSetS(this.value)">${opt(S24FST,st)}</select>`}
    <select id="sbAction" aria-label="Action needed" onchange="s24FSetA(this.value)">${opt(S24FAC,ac,{mine:nMine,theirs:nTheirs})}</select>
    <select id="sbWhen" aria-label="When" onchange="s24FSetW(this.value)">${opt(S24FWH,wh)}</select>
-   <input id="sbQ" class="sb-in" aria-label="Search bets" placeholder="search terms…" value="${esc(s24Q)}" onchange="s24FSetQ(this.value)"></div>
+   <input id="sbQ" class="sb-in" aria-label="Search bets" placeholder="${esc(ph||'search terms…')}" value="${esc(s24Q)}" onchange="s24FSetQ(this.value)"></div>
    <div class="note" style="margin-top:6px"><a href="${esc(s24Href('howto'))}" onclick="return s24HowFilters(event)">How these filters work →</a>${(ac==='mine'||ac==='theirs')&&!me?' Pick who you are to use My turn or Their turn.':''}</div></div>`}
 
 /*</S24-EDIT>*/
@@ -4466,6 +4468,8 @@ html body .card.oc .chip.tlive{outline:2px solid #93c5fd;outline-offset:1px}
 html body .golive{box-shadow:0 0 0 2px #93c5fd!important}
 html body.haslive a[data-tab=games],html body.haslive .rkseg-b[data-gm=upcoming]{outline-color:#93c5fd!important}
 html body .card.oc.isonl .who>b{outline-color:#93c5fd!important}
+html body .s24fb .row2{flex-wrap:wrap!important;gap:6px!important}
+html body .s24fb .row2>*{flex:0 1 auto!important;width:auto!important;max-width:100%!important;height:32px!important;min-height:32px!important}
 /*</HELD-LAYOUT>*/
 </style><!--</S29E-PASTE>-->
 <!--<S29E-COPY>--><script>
