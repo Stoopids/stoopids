@@ -140,16 +140,16 @@ html body .gm:has(.gh :is(.gbtns,.mkbtns)>:nth-child(2)) .gh+.gside{margin-right
 @media (max-width:640px){.onl{font-size:14px;gap:6px}.onl-p{padding:4px 8px;font-size:14px}}
 /*</SYNC12>*/
 /*<SYNC13>*/ /* backlog: LIVE mark on Upcoming + Games tab, slightly wider toggles, score by half, Standings bottom gap */
-body.haslive .rkseg-b[data-gm=upcoming],body.haslive .gctl .rkseg-b[data-v=upcoming],body.haslive a[data-tab=games],body.haslive a[data-a=tab][data-v=games]{outline:2px solid #22c55e!important;outline-offset:-2px;position:relative}
+body.haslive .rkseg-b[data-gm=upcoming],body.haslive .gctl .rkseg-b[data-v=upcoming],body.haslive a[data-tab=games],body.haslive a[data-a=tab][data-v=games]{outline:2px solid #93c5fd!important;outline-offset:-2px;position:relative}
 html body .segrow .rkseg .rkseg-b,html body .segv .seg,html body .b27-kindrow>.tabs>button{padding-left:18px!important;padding-right:18px!important}
 @media (max-width:420px){html body .segrow .rkseg .rkseg-b,html body .segv .seg{padding-left:14px!important;padding-right:14px!important}html body .b27-kindrow>.tabs>button{padding-left:13px!important;padding-right:13px!important}}
 .hscs{display:flex;flex-wrap:wrap;gap:4px 10px;margin-top:4px;font-size:12px;opacity:.9}
 .hscs .hsc b{color:#22c55e;font-weight:800;margin-right:2px}
 /*</SYNC13>*/
 /*<SYNC14>*/ /* Standings: online Stoops = pulsing green outline + small green dot after the name; no layout shift (outline + absolute dot take no space) */
-.card.oc.isonl .who>b{position:relative;outline:2px solid #22c55e;outline-offset:3px;border-radius:6px;animation:onlglow 1.6s ease-in-out infinite}
+.card.oc.isonl .who>b{position:relative;outline:2px solid #93c5fd;outline-offset:3px;border-radius:6px;animation:onlglow 1.6s ease-in-out infinite}
 .card.oc .who>b .onlb{position:absolute;right:-13px;top:50%;width:8px;height:8px;margin-top:-4px;border-radius:50%;background:#22c55e;box-shadow:0 0 6px #22c55e;font-size:0;overflow:hidden}
-@keyframes onlglow{0%,100%{box-shadow:0 0 4px 1px rgba(34,197,94,.45)}50%{box-shadow:0 0 12px 3px rgba(34,197,94,.85)}}
+@keyframes onlglow{0%,100%{box-shadow:0 0 4px 1px rgba(147,197,253,.45)}50%{box-shadow:0 0 12px 3px rgba(147,197,253,.85)}}
 @media (prefers-reduced-motion:reduce){.card.oc.isonl .who>b{animation:none}}
 /*</SYNC14>*/
 
