@@ -976,7 +976,6 @@ main,#main{padding-top:6px!important}
 <footer id="foot"></footer>
 <script src="shared/ui.js?v=1.63.0"></script>
 <script src="archive.js?v=1"></script>
-<script src="nba-stoop.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
 /* shared-s25.js : STOOPIDS s25 shared core (auto-settle reading + result math + ESPN matching, settle sounds, settle memes, taglines, reactions).
@@ -2369,17 +2368,6 @@ function archTeams(o){
   return `<div class="sc"><table><tr><th>#</th><th>Team</th><th class="n">Wins</th><th class="n">Pts</th></tr>`+
    o.teams.map(t=>`<tr><td>${t.pick}</td><td class="t">${t.name?esc(archName(t.name)):'<i class="mut">(no team name in sheet)</i>'}${t.redraft_add?' <span class="pill" title="Picks 9–10 were added at the Jan 20 redraft">Jan 20 pick</span>':''}</td><td class="n mut">${t.wins==null?'':t.wins}</td><td class="n"><b>${t.pts==null?'—':t.pts}</b></td></tr>`).join('')+
    `</table></div>`}
-function nbaStoopHtml(){
-  const N=window.NBA_STOOP;if(!N)return '';
-  const who=o=>esc(o.name)+(o.aka?' ('+esc(o.aka)+')':'');
-  const cards=N.seasons.map(s=>{
-    const stand=`<div class="sc"><table><tr><th></th><th>Name</th><th class="n">Wins</th></tr>`+
-      s.standings.map(o=>`<tr class="${o.place==='1st'?'arow-champ':''}"><td><b>${esc(o.place)}</b></td><td>${who(o)}${o.note?`<div class="fine">${esc(o.note)}</div>`:''}</td><td class="n"><b>${o.total}</b></td></tr>`).join('')+`</table></div>`;
-    const mid=s.allstar?`<div class="note">${esc(s.allstar.label)}: ${s.allstar.rows.map(r=>esc(r[0])+' '+r[1]).join(', ')}</div>`:'';
-    return `<div class="card"><b>${esc(s.title)}</b><div class="note">${esc(N.rule)}</div>${stand}${mid}</div>`}).join('');
-  const rosters=N.seasons.map(s=>`<h2>${esc(s.season)} teams</h2><div class="agrid">`+s.entries.map(o=>`<div class="card"><div class="lb"><div class="who"><b>${who(o)}</b></div><div class="pts">${o.actual}<small>Actual wins</small></div></div><div class="note">Vegas predicted ${o.predicted}</div><div class="sc"><table><tr><th>#</th><th>Team</th><th class="n">Vegas</th><th class="n">Wins</th></tr>`+
-      o.teams.map((t,i)=>`<tr><td>${i+1}</td><td>${esc(t[0])}</td><td class="n">${t[1]}</td><td class="n"><b>${t[2]}</b></td></tr>`).join('')+`</table></div></div>`).join('')+`</div>`).join('');
-  return '<h2>Stoop bets</h2>'+cards+rosters}
 function vArchive(){
   const A=window.ARCHIVE;
   if(!A)return '<div class="card">Couldn\u2019t load the archive. Try reloading the page.</div>';
@@ -2388,7 +2376,7 @@ function vArchive(){
   if(!archSel||!seasons.some(s=>s.season===archSel))archSel=(seasons.find(s=>s.pool)||seasons[0]).season;
   const S=seasons.find(s=>s.season===archSel);
   const opts=seasons.map(s=>`<option value="${esc(s.season)}"${s.season===archSel?' selected':''}>${esc(s.season)}${s.pool?'':': no pool'}</option>`).join('');
-  let h=nbaStoopHtml()+`<h2>🗂️ Season archive</h2>
+  let h=`<h2>🗂️ Season archive</h2>
    <div class="asel"><label for="archsel" class="mut">Season</label><select id="archsel" onchange="archSel=this.value;render()">${opts}</select></div>
    <div class="note">Results as the sheet shows them. No side bets here.</div>`;
   if(!S.pool)return h+`<div class="card"><b>${esc(S.season)}: no pool</b><div class="note">${S.notes.map(esc).join(' ')}</div></div>`+archAllTime(A);
