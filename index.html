@@ -369,7 +369,10 @@ nav button .nu{position:absolute;top:1px;left:2px;min-width:15px;background:#ff3
 .b27-big:disabled,#b27Place:disabled{opacity:.45;cursor:default}
 .b27-act{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px}
 .b27-b{min-height:44px;padding:0 12px}
-.b27-t{margin:4px 0;font-size:15px;overflow-wrap:anywhere}.b27-m{font-size:13.5px}
+.b27-t{margin:4px 0;font-size:15px;overflow-wrap:anywhere}.b27-m{font-size:13.5px;overflow-wrap:anywhere}
+.b27-stake{margin:2px 0 0;font-weight:800;font-size:14px}
+.b27-meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:4px;color:var(--mut);font-size:13px}
+.b27-meta .b27-set{margin:0}
 /*<MULTI-BET>*/
 .b27-opps{display:grid;grid-template-columns:repeat(var(--n,7),minmax(0,1fr));gap:6px}   /* all opponents on ONE row at every width (7 equal columns; short names + smaller type on narrower screens, see media below) */
 .b27-opps .b27-chip{position:relative;min-height:58px;min-width:0;padding:6px 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;line-height:1.15;text-align:center;overflow:hidden;font-size:13px}
@@ -3672,6 +3675,13 @@ function b27DayBit(iso){if(!/^\d{4}-\d{2}-\d{2}$/.test(iso||''))return '';const 
 function b27WhenBit(iso){const d=new Date(iso);if(!iso||isNaN(d))return '';const wd=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()],mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];return wd+' '+mo+' '+d.getDate()}
 function b27SpreadBit(l){l=Number(l);return l===0?'PK':(l>0?'+':'')+l}
 function b27FinalBit(b){if(b.src&&b.src.sc)return String(b.src.sc).replace(/^\((.*)\)$/,'$1').trim();try{const rd=s25BetRd(b),loc=rd&&s25FromGames(rd);if(loc&&loc.p&&loc.p.sc)return String(loc.p.sc)}catch(e){}return ''}
+function b27OppSpread(l){l=Number(l);return b27SpreadBit(l===0?0:-l)}
+function b27FaceBits(b){let rd=null;try{rd=s25BetRd(b)}catch(e){}if(!rd||rd.k==='manual'||!rd.t||!rd.o)return null;
+  if(rd.k==='spread'){const mine=b27SpreadBit(rd.l),theirs=b27OppSpread(rd.l);return {match:rd.t+' '+mine+' vs '+rd.o,mine:rd.t+' '+mine,theirs:rd.o+' '+theirs,day:rd.d}}
+  if(rd.k==='total'){const mine=rd.ou==='o'?'Over':'Under',theirs=rd.ou==='o'?'Under':'Over';return {match:rd.t+' vs '+rd.o+' '+mine+' '+rd.l,mine:mine+' '+rd.l,theirs:theirs+' '+rd.l,day:rd.d}}
+  return {match:rd.t+' vs '+rd.o,mine:rd.t,theirs:rd.o,day:rd.d}}
+function b27FaceWho(b,bits){const Bk=PN(b.backer),OP=b27Opps(b).map(PN);if(!bits)return Bk+' v '+OP.join(', ');if(OP.length>1)return Bk+' · '+bits.mine+' · '+OP.join(', ');return Bk+' · '+bits.mine+' · '+OP[0]+' · '+bits.theirs}
+function b27FaceStake(b){const odds=b27OddsFace(b.odds&&b.odds.a,b.odds&&b.odds.b);return '$'+b27Num(b.amt)+(b27Opps(b).length>1?' each':'')+(odds?' · '+odds:'')}
 function b27GameLine(b){let rd=null;try{rd=s25BetRd(b)}catch(e){}
   let match=b27Matchup(b);
   if(rd&&rd.k==='spread'&&rd.t&&rd.o)match=rd.t+' '+b27SpreadBit(rd.l)+' vs '+rd.o;
@@ -3694,13 +3704,15 @@ function b27Card(b,me){
   const tail=b27OddsTail(b.odds&&b.odds.a,b.odds&&b.odds.b);
   const res=BU?(st==='backer'?Bk+' won ('+OPd.join(', ')+' each owe '+Bk+' '+b27Num(b27Pay(b).ifBackerRight)+tail+')':st==='other'?'Managers won ('+Bk+' owes each of them '+b27Num(b27Pay(b).ifOtherRight)+tail+')':st==='push'?'💦: nobody owes anything':'')
    :st==='backer'?Bk+' won ('+Ot+' owes '+b27Num(b27Pay(b).ifBackerRight)+tail+')':st==='other'?Ot+' won ('+Bk+' owes '+b27Num(b27Pay(b).ifOtherRight)+tail+')':st==='push'?'💦: nobody owes anything':'';
-  const ready=b27Ready(b),face=b27Face(b),whenDate=b27CardDate(b),oddsFace=b27OddsFace(b.odds&&b.odds.a,b.odds&&b.odds.b);
+  const ready=b27Ready(b),bits=b.kind==='pool'?null:b27FaceBits(b);
   const settled=st==='backer'||st==='other'||st==='push';
-  const title=settled?(st==='push'?`Bet #${b.n} · 💦 Wash`:`Bet #${b.n} · ${st==='backer'?Bk:(BU?'Managers':Ot)} won · $${b27Num(b.amt)}${BU?' each':''}`):`Bet #${b.n} (${stTxt}) ${b27Num(b.amt)}${BU?' each':''}${whenDate?' - '+whenDate:''}`;
-  const faceLine=settled?b27GameLine(b):b27Matchup(b);
-  const whoLine=Bk+' v '+OPd.join(', ')+(settled||!oddsFace?'':(' '+oddsFace));
+  const title=settled?(st==='push'?`Bet #${b.n} · 💦 Wash`:`Bet #${b.n} · ${st==='backer'?Bk:(BU?'Managers':Ot)} won`):`Bet #${b.n} · ${stTxt}`;
+  const faceLine=bits?bits.match:b27Matchup(b);
+  const whoLine=b.kind==='pool'?Bk+' v '+OPd.join(', '):b27FaceWho(b,bits);
+  const stake=b.kind==='pool'?'':b27FaceStake(b);
+  const day=b27DayBit(bits&&bits.day)||b27CardDate(b);
   let h=`<div class="card b27-c${ready?' b27-ready':''}${U.flashBet===b.id?' act-flash':''}"${/*<S24-EDIT>*/s24Attr('b',b.id)/*</S24-EDIT>*/}><div class="s24hd"><b>${esc(title)}</b>${/*<S24-EDIT>*/s24FixBadge(b)/*</S24-EDIT>*/}${/*<S24-EDIT>*/s24LinkBtn('bets',b.id,'bet')/*</S24-EDIT>*/}</div>
-   <div class="b27-t${settled?'':/*<CARD-SIZE>*/' s25cl'+(S25P.more[b.id]?' open':'')+'" data-s25-t="'+b.id/*</CARD-SIZE>*/}">${esc(faceLine)}</div>${settled?'':/*<CARD-SIZE>*/`<button type="button" class="s25more" data-s25-more="${b.id}" aria-expanded="${!!S25P.more[b.id]}" onclick="s25More('${b.id}')" hidden>${S25P.more[b.id]?'less':'more'}</button>`/*</CARD-SIZE>*/}<div class="b27-m">${esc(whoLine)}</div>`;
+   <div class="b27-t">${esc(faceLine)}</div><div class="b27-m">${esc(whoLine)}</div>${stake?`<div class="b27-stake">${esc(stake)}</div>`:''}${!settled?`<div class="b27-meta">${day?`<span>${esc(day)}</span>`:''}${b27SettlesHtml(b)}</div>`:day?`<div class="b27-meta"><span>${esc(day)}</span></div>`:''}`;
   let del='',who='';
   if(st==='open'&&(isP||ADMIN)){
     const ask=w=>U.askSettle&&U.askSettle.id===b.id&&U.askSettle.what===w&&U.askSettle.terms===b27Terms(b);
@@ -3713,7 +3725,6 @@ function b27Card(b,me){
   else if(st==='open')h+=`<div class="note">Awaiting settlement</div>`;
   h+=who+/*<S25>*/s25PropHtml(b,me)/*</S25>*/;
   /*<S24-EDIT>*/h+=s24EditedNote(b)+s24FixHtml(b,me);/*</S24-EDIT>*/
-  if(!settled)h+=b27SettlesHtml(b);
   const det=settled&&b.kind!=='pool'?b27SettledDet(b)+s24FixLink(b,me):[/*<MULTI-BET>*/b.g&&U.doc.bets.filter(x=>x.g===b.g).length>1?`<div class="note">1 of ${U.doc.bets.filter(x=>x.g===b.g).length} placed together</div>`:''/*</MULTI-BET>*/,res?`<div class="note"><b>Result:</b> ${esc(res)}</div>`:'',/*<S29E-POSTED>*/s29ePosted(b)/*</S29E-POSTED>*/,/*<S25D-TS>*/s25dTsHtml(b)/*</S25D-TS>*/,L.win?`<div class="b27-w">${esc(L.win)}</div>`:'',L.lose?`<div class="b27-l">${esc(L.lose)}</div>`:'',L.rounded?'<div class="mut b27-r">Rounded to a whole number.</div>':'',/*<S25>*/s25CardRd(b)/*</S25>*/].filter(Boolean).join('');
   return h+`<div class="b27-foot">${det.trim()?`<details class="b27-more"${U.fixOpen===b.id?' open':''}><summary>Details</summary>${det}</details>`:''}${/*<S25>*/s25RxHtml(b,me)/*</S25>*/}</div></div>`;
 }
