@@ -52,7 +52,7 @@ const assert = require('assert');
   assert.equal(info.readyClass, true);
   assert.equal(info.hasFold, false);
   assert.equal(info.settledOnAll, false);
-  assert.ok(info.groups.includes('Set date') && info.groups.includes('End of game'));
+  assert.ok(info.groups.includes('Set date') && !info.groups.includes('End of game'));
   assert.equal(info.status, 'Unsettled bets');
   assert.equal(info.badge, 'Unsettled');
   assert.equal(info.details, true);

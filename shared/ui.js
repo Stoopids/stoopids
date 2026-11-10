@@ -151,7 +151,7 @@ U.halfLs=hsLs;U.halfScores=function(g,s,first,BOX){var tot=s.score!=null?esc(Str
      A request auto-cancels when its own window starts (full game: tip-off; 2nd half: halftime) or at the poster's expiry, whichever first. */
   SHARED_UI.Requests=function(A){
     var e=A.e,S={f:null,list:[],at:0,busy:false,msg:'',bad:false,loading:false,arm:null};
-      var nf=function(){return{gid:'',side:'',cov:'game',odds:[1,1],amt:null,amtTxt:'',to:[],mode:'h',n:3,at:'',est:'',wk:'unknown',expPick:false}};S.f=nf();
+      var nf=function(){return{gid:'',side:'',cov:'game',odds:[1,1],amt:null,amtTxt:'',to:[],mode:'h',n:3,at:'',est:'',wk:'game',whenPick:false,expPick:false}};S.f=nf();
     var HALF_MS=70*60000;
     function parse(t){try{var o=JSON.parse(t||'{}');if(typeof o==='string')o=JSON.parse(o);return Array.isArray(o.reqs)?o.reqs.filter(function(r){return r&&r.id}):[]}catch(x){return[]}}
     function rid(){return 'rq'+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
@@ -204,7 +204,7 @@ U.halfLs=hsLs;U.halfScores=function(g,s,first,BOX){var tot=s.score!=null?esc(Str
     function card(r,now){var me=A.me(),inv=r.to.indexOf(me)>=0,dec=(r.dec||[]).indexOf(me)>=0,n=r.to.length,w=Math.min(r.exp,winStart(r,game(r.gid)));
       var nt=tk(r).length,mine=tk(r).indexOf(me)>=0;var sn=slots(r),who=n===1?'Open to '+e(A.nick(r.to[0])):sn<n?'Open to '+sn+' of '+n+' stoops':n>=A.others().length?'Open to all '+n+' stoops':'Open to '+n+' stoops';   /* STEP13-SLOTS */
       var h='<div class="card rq-card" data-rq-id="'+e(r.id)+'"><div class="rq-top"><b>📨 '+e(A.nick(r.by))+'</b> <span class="note">'+who+(nt?' · '+nt+' of '+slots(r)+' taken':'')+' · expires '+expTxt(r,now)+'</span></div>'
-        +'<div class="rq-body"><span class="rq-amt">'+e(r.amt)+'</span> <span class="rq-side">'+e(r.lab)+'</span>'+' <span class="note">at '+oddsTxt(r.odds)+' odds</span>'+(r.cov==='2h'?' <span class="pill">2nd half</span>':'')+(r.game?'<div class="note">'+e(r.game)+' · '+e(r.date||'')+'</div>':'')+'</div>'+explain(r)+'<div class="b27-due" data-due="'+SHARED_UI.whenShow(r)+'">'+e(SHARED_UI.whenText(r))+'</div>';
+        +'<div class="rq-body"><span class="rq-amt">'+e(r.amt)+'</span> <span class="rq-side">'+e(r.lab)+'</span>'+(function(){var o=r.odds||[1,1];return +o[0]===+o[1]?'':' <span class="note">at '+oddsTxt(o)+' odds</span>'})()+(r.cov==='2h'?' <span class="pill">2nd half</span>':'')+(r.game?'<div class="note">'+e(r.game)+' · '+e(r.date||'')+'</div>':'')+'</div>'+explain(r)+'<div class="b27-due" data-due="'+SHARED_UI.whenShow(r)+'">'+e(SHARED_UI.whenText(r))+'</div>';
       if(mine)h+='<div class="note good">You accepted: it is your bet now.</div>';
       else if(me&&inv&&!dec&&r.by!==me&&A.canWrite())h+='<div class="rq-act"><button type="button" class="btn rq-yes" data-rq="acc" data-v="'+e(r.id)+'"'+stAttr(r)+(S.busy?' disabled':'')+'>Accept</button><button type="button" class="btn sec rq-no" data-rq="dec" data-v="'+e(r.id)+'"'+stAttr(r)+(S.busy?' disabled':'')+'>Decline</button></div>';
       else if(dec)h+='<div class="note">You declined.</div>';
@@ -229,7 +229,7 @@ U.halfLs=hsLs;U.halfScores=function(g,s,first,BOX){var tot=s.score!=null?esc(Str
       h+='</div><div class="rq-56c">';
       h+=rqQ(6,'rqexp','Expires')+'<div class="rq-exp">'+(f.mode==='start'?'':f.mode==='at'?'<input class="sb-in b27-in rq-in" type="datetime-local" data-rq-in="at" value="'+e(f.at)+'" aria-label="Expires at">':'<input class="sb-in b27-in rq-in rq-num" data-rq-in="n" inputmode="numeric" value="'+e(f.n)+'" aria-label="Expires in">')+'<select class="sb-in b27-in rq-in rq-unit" data-rq-in="mode" aria-label="Unit">'+[['m','minutes'],['h','hours'],['d','days'],['w','weeks'],['mo','months'],].concat(g?[['start','at tipoff']]:[]).concat([['at','exact date/time']]).map(function(m){return '<option value="'+m[0]+'"'+(f.mode===m[0]?' selected':'')+'>'+m[1]+'</option>'}).join('')+'</select></div>'+(g?'<div class="note">It also closes by itself at tip-off.</div>':'');
       h+='</div></div>';
-      h+=SHARED_UI.whenBox({e:e,kind:f.wk||(SHARED_UI.estOk(f.est)?'date':'unknown'),est:f.est,seasonId:A.seasonId?A.seasonId():'',step:'7',game:true,inputId:'rqEst',pick:function(id){return 'data-rq="when" data-v="'+id+'"'},dateAttr:'data-rq-in="est"'});
+      if(!g)h+=SHARED_UI.whenBox({e:e,kind:f.whenPick?f.wk:(SHARED_UI.estOk(f.est)?'date':'unknown'),est:f.est,seasonId:A.seasonId?A.seasonId():'',step:'7',game:false,inputId:'rqEst',pick:function(id){return 'data-rq="when" data-v="'+id+'"'},dateAttr:'data-rq-in="est"'});
       var pv=rqPreview(f);
       h+='<div class="b27-sum" id="rqSum">'+e(pv.sum)+'</div><div id="rqEx">'+pv.ex+'</div>';
       if(S.msg)h+='<div class="'+(S.bad?'b27-bad-t':'good')+' rq-msg" role="status">'+e(S.msg)+'</div>';
@@ -295,20 +295,22 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
       if(k==='cp'){var rc=S.list.find(function(x){return x.id===v});if(rc)copy(waText(rc,'new'),function(ok){S.msg=ok?'Message copied, paste in WhatsApp.':'Could not copy. Long-press to copy the text below.';S.bad=!ok});return}   /* STEP14-COPY */
       if(k==='wa'){if(S.fb)copy(S.fb,function(ok){if(ok){S.msg='Message copied, paste in WhatsApp.';S.bad=false}});return}
       if(k==='edit'){var re=S.list.find(function(x){return x.id===v});if(!re||re.by!==me||tk(re).length||re.status!=='open'){if(re&&tk(re).length){S.msg='Someone already accepted. Those terms stay as agreed.';S.bad=true;A.render()}return}var ws=winStart(re,game(re.gid)),pad=function(n){return String(n).padStart(2,'0')},dt=new Date(re.exp);
-        S.f={gid:re.gid,text:re.lab,side:re.k==='txt'?'':re.k+':'+(re.si||0),cov:re.cov||'game',odds:(re.odds||[1,1]).slice(),amt:A.amounts.indexOf(+re.amt)>=0?+re.amt:null,amtTxt:A.amounts.indexOf(+re.amt)>=0?'':String(re.amt),amtC:A.amounts.indexOf(+re.amt)<0,slots:re.slots||null,oddC:[[1,1],[2,1],[3,1],[4,1],[5,1]].every(function(o){return !(+(re.odds||[1,1])[0]===o[0]&&+(re.odds||[1,1])[1]===o[1])}),to:re.to.slice(),mode:re.exp>=ws?'start':'at',expPick:true,n:3,at:dt.getFullYear()+'-'+pad(dt.getMonth()+1)+'-'+pad(dt.getDate())+'T'+pad(dt.getHours())+':'+pad(dt.getMinutes()),est:SHARED_UI.whenKind(re)==='date'?re.est:'',wk:SHARED_UI.whenKind(re)};
+        S.f={gid:re.gid,text:re.lab,side:re.k==='txt'?'':re.k+':'+(re.si||0),cov:re.cov||'game',odds:(re.odds||[1,1]).slice(),amt:A.amounts.indexOf(+re.amt)>=0?+re.amt:null,amtTxt:A.amounts.indexOf(+re.amt)>=0?'':String(re.amt),amtC:A.amounts.indexOf(+re.amt)<0,slots:re.slots||null,oddC:[[1,1],[2,1],[3,1],[4,1],[5,1]].every(function(o){return !(+(re.odds||[1,1])[0]===o[0]&&+(re.odds||[1,1])[1]===o[1])}),to:re.to.slice(),mode:re.exp>=ws?'start':'at',expPick:true,whenPick:true,n:3,at:dt.getFullYear()+'-'+pad(dt.getMonth()+1)+'-'+pad(dt.getDate())+'T'+pad(dt.getHours())+':'+pad(dt.getMinutes()),est:SHARED_UI.whenKind(re)==='date'?re.est:'',wk:SHARED_UI.whenKind(re)};
         S.edit=re.id;S.msg='';S.fb=null;if(A.goRequest)A.goRequest();A.render();setTimeout(function(){try{var fo=document.getElementById('rqForm');if(fo)fo.scrollIntoView({block:'start'})}catch(x){}},30);return}
       if(k==='slot-'||k==='slot+'||k==='close'){var rs=S.list.find(function(x){return x.id===v});if(!rs||rs.by!==me||rs.status!=='open')return;var nt0=tk(rs).length,want=k==='close'?null:Math.max(nt0,Math.min(rs.to.length,slots(rs)+(k==='slot+'?1:-1)));
         if(k==='close')say(waText(rs,'close'),'Request closed');
         S.busy=true;A.render();try{await write(function(c){return c.map(function(x){if(x.id!==v||x.by!==me||x.status!=='open')return x;var n2=tk(x).length;return k==='close'?Object.assign({},x,{status:'closed',endedAt:Date.now()}):Object.assign({},x,{slots:Math.max(n2,want)})})},function(c){var x=c.find(function(y){return y.id===v});return !x||(k==='close'?x.status!=='open':slots(x)===Math.max(tk(x).length,want))});
           if(k==='close'){S.posted=true;S.msg=toast(S.copied)}else S.msg='Spots: '+want+'.';S.bad=false}catch(x){S.msg='Could not save that. Try again.';S.bad=true}S.busy=false;A.render();return}
       if(k==='unedit'){S.edit=null;S.f=nf();A.render();return}
-      if(k==='when'){f.wk=v==='date'||v==='season'||v==='game'?v:'unknown';if(f.wk!=='date')f.est='';A.render();return}
+      if(k==='when'){f.whenPick=true;f.wk=v==='date'||v==='season'||v==='game'?v:'unknown';if(f.wk!=='date')f.est='';A.render();return}
       if(k==='to'){var i=f.to.indexOf(v);if(i>=0)f.to.splice(i,1);else f.to.push(v)}
       else if(k==='all')f.to=A.others().map(function(o){return o.id});else if(k==='clear')f.to=[];
       else if(k==='side'){f.side=v;var gg=game(f.gid),pp=gg&&pick(gg.g,{side:v,cov:'game'});if(pp)f.text=pp.txt}else if(k==='cov'){f.cov=v}else if(k==='amt'){f.amt=+v;f.amtTxt='';f.amtC=false}else if(k==='amtc'){f.amtC=true;f.amt=null}else if(k==='oddc'){f.oddC=true}else if(k==='fslotall'){f.sAll=true;f.slots=null}else if(k==='fslot-'||k==='fslot+'){var nT=f.to.length,cT=nT||A.others().length,cur=f.sAll?cT:f.slots?Math.min(f.slots,cT):(nT||1);f.sAll=false;cur+=k==='fslot+'?1:-1;f.slots=Math.max(1,Math.min(cT,cur))}else if(k==='odds'){f.odds=v.split('-').map(Number);f.oddC=false;f.oddTxt=''}
       else if(k==='send'){var g=game(f.gid),p=pick(g&&g.g,f),amt=f.amtC?(+f.amtTxt>0?Math.round(+f.amtTxt):null):f.amt,ex=expAt(f,now,g?winStart({cov:f.cov,start:g.start},g):null);
         var err=!p?'Write the bet.':!amt?'Choose an amount.':!ex||ex<=now?'Choose when it expires (up to a year).':null;
-        var pack=SHARED_UI.whenPack(f.wk||'unknown',f.est,A.seasonId?A.seasonId():'');if(!err&&(f.wk||'unknown')==='date'&&!pack)err='Use a real date, or pick End of season or Not sure yet.';
+        var hasGame=!!g,wk=hasGame?'game':(f.whenPick&&(f.wk==='date'||f.wk==='season'||f.wk==='unknown')?f.wk:'');
+        if(!err&&!hasGame&&!wk)err='Say when it settles: end of season, a date, or not sure yet.';
+        var pack=SHARED_UI.whenPack(hasGame?'game':f.wk,f.est,A.seasonId?A.seasonId():'');if(!err&&!hasGame&&f.wk==='date'&&!pack)err='Use a real date, or pick End of season or Not sure yet.';
         if(!err){var r0={id:rid(),gid:g?String(g.id):'',start:g&&g.start||null};if(started(Object.assign({cov:f.cov},r0),now))err='That '+(f.cov==='2h'?'half':'game')+' has already started.'}
         if(err){S.msg=err;S.bad=true;A.render();return}
         if(S.edit)r0.id=S.edit;
@@ -394,7 +396,7 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
   SHARED_UI.whenBox=function(o){o=o||{};var e=o.e||function(s){return String(s==null?'':s)},k=o.kind==='date'||o.kind==='season'||o.kind==='game'?o.kind:'unknown';
     var btn=function(id,lab){return '<button type="button" class="b27-chip" data-when="'+id+'" aria-pressed="'+(k===id?'true':'false')+'" '+(o.pick?o.pick(id):'')+'>'+e(lab)+'</button>'};
     var q=(o.step?String(o.step)+'. ':'')+'When can this be settled?';
-    var h='<div class="b27-when"><div class="b27-q"><button type="button" class="s27-tipk" data-tip="when" aria-expanded="false" onfocus="s27TipShow(this)" onclick="s27WhenClick(this)">'+e(q)+'</button></div><div class="b27-when-c" role="group" aria-label="When can this be settled?">'+btn('date','Choose a date')+btn('season','End of season')+(o.game||k==='game'?btn('game','End game'):'')+btn('unknown','Not sure yet')+'</div>';
+    var h='<div class="b27-when"><div class="b27-q"><button type="button" class="s27-tipk" data-tip="when" aria-expanded="false" onfocus="s27TipShow(this)" onclick="s27WhenClick(this)">'+e(q)+'</button></div><div class="b27-when-c" role="group" aria-label="When can this be settled?">'+btn('date','Set a date')+btn('season','End of season')+(o.game||k==='game'?btn('game','End game'):'')+btn('unknown','Not sure yet')+'</div>';
     if(k==='date')h+='<input class="sb-in b27-in" type="date" id="'+(o.inputId||'whenDate')+'" aria-label="Choose a date" value="'+e(o.est||'')+'" '+(o.dateAttr||'')+'>';
     if(k==='season'){var id=o.seasonId||'';h+='<div class="note">'+(id?e('End of '+id+'. No calendar end date is set, so this only groups the bet.'):e('End of season. No season id is on file, so this only groups the bet.'))+'</div>'}
     if(k==='game')h+='<div class="note">'+e('End game. No game end is linked, so this only groups it.')+'</div>';
