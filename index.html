@@ -708,7 +708,7 @@ nav a.nt .s29nb{position:absolute;top:1px;right:2px;min-width:15px;background:#F
 .s27-copy{margin-left:auto;min-height:32px;padding:0 10px;border-radius:8px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font:inherit;font-size:12px;font-weight:700;cursor:pointer}
 .s27-copy.on,.s27-copy.flash{background:var(--acc);color:#111;border-color:var(--acc)}
 @keyframes actflash{0%{box-shadow:0 0 0 3px #FFD400}100%{box-shadow:0 0 0 0 transparent}}
-.s27-copy.flash,.act-flash{animation:actflash .7s ease}
+.s27-copy.flash,.act-flash,.ok.flash{animation:actflash .7s ease}
 .glinks{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 0}
 .glink{font-weight:800;color:var(--acc,#FFD400);text-decoration:none}
 /* select all / clear in the last opponent-grid slot */
@@ -974,7 +974,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.61.0"></script>
+<script src="shared/ui.js?v=1.62.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -1238,7 +1238,7 @@ S25.renderReactions=function(el,counts,mine,onToggle,opts){if(!el||!el.ownerDocu
   let wl=null;const showWho=e=>{const w=who(e);if(!w.length)return;if(!wl){wl=doc.createElement('div');wl.className='s25wl';wl.setAttribute('data-s25-wl','');el.appendChild(wl)}wl.textContent=e+' '+w.join(', ')},hideWho=()=>{if(wl){wl.remove();wl=null}};
   const fire=(e,on)=>{closeOpen();if(typeof onToggle==='function')onToggle(e,on)};
   EM.filter(e=>cnt(e)>0).forEach(e=>{const n=cnt(e),on=my.has(e),w=who(e),b=doc.createElement('button');b.type='button';b.className='s25rx'+(on?' on':'');b.setAttribute('data-s25-rx',e);b.setAttribute('aria-pressed',String(on));
-    b.setAttribute('aria-label',e+' '+n+(w.length?': '+w.join(', '):''));b.innerHTML='';b.appendChild(doc.createTextNode(e));const s=doc.createElement('span');s.className='n';s.textContent=String(n);b.appendChild(s);
+    b.setAttribute('aria-label',e+' '+n+(w.length?': '+w.join(', '):''));if(w.length)b.title=w.join(', ');b.innerHTML='';b.appendChild(doc.createTextNode(e));const s=doc.createElement('span');s.className='n';s.textContent=String(n);b.appendChild(s);
     if(ro)b.disabled=true;let lp=false,tm=null;
     b.addEventListener('pointerdown',()=>{lp=false;clearTimeout(tm);tm=setTimeout(()=>{lp=true;showWho(e)},500)});['pointerup','pointercancel','pointerleave'].forEach(t=>b.addEventListener(t,()=>clearTimeout(tm)));
     b.addEventListener('contextmenu',ev=>ev.preventDefault());
@@ -1765,7 +1765,7 @@ function gBetMap(){if(gBetCache)return gBetCache;const map={};const add=(id,b)=>
 function gBetIds(){const out=new Set();try{const m=gBetMap();Object.keys(m).forEach(id=>{if(m[id].length)out.add(id)})}catch(e){}return out}
 function gOpenBet(id){tab='bets27';OB_VIEW='all';try{S24.sub=id}catch(e){}render();setTimeout(()=>{const el=document.getElementById('bet-'+id);if(el)el.scrollIntoView({block:'center'})},40);return false}
 function gBetLinkHtml(g){const list=(gBetMap()[String(g&&g.id||'')]||[]).slice().sort((a,c)=>(a.n||0)-(c.n||0));if(!list.length)return '';
-  return '<div class="glinks">'+list.map(b=>{const od=b27OddsFace(b.odds&&b.odds.a,b.odds&&b.odds.b);return '<a class="glink" href="#bets27" data-gbet="'+esc(b.id)+'" onclick="return gOpenBet(\''+esc(b.id)+'\')">#'+b.n+(od?' '+esc(od):'')+'</a>'}).join('')+'</div>'}/*</SYNC1>*/
+  return '<div class="glinks">'+list.map(b=>{const od=b27OddsFace(b.odds&&b.odds.a,b.odds&&b.odds.b);return '<a class="glink" href="#bets27" data-gbet="'+esc(b.id)+'" onclick="return gOpenBet(\''+esc(b.id)+'\')">Bet #'+b.n+(od?' '+esc(od):'')+'</a>'}).join('')+'</div>'}/*</SYNC1>*/
 /*<OWNED-GAMES>*/let gAll=false;   // 'Show unowned games' toggle: OFF by default
 /* a game is owned when at least one of its two teams belongs to one of the owners ON THAT GAME DAY (home/away.owners comes from the owners' team windows). The build keeps every game that touches ANY pool team, so a pool team whose owner window does not cover the day can leave a game with nobody's name on it: those are hidden unless the toggle is on. */
 const gOwned=g=>!!(g&&((g.home&&g.home.owners&&g.home.owners.length)||(g.away&&g.away.owners&&g.away.owners.length)));/*</OWNED-GAMES>*/
@@ -3955,16 +3955,16 @@ function s25Fetch(r){const k=s25Key(r),c=S25P.games[k];const hold=c&&c.st==='err
     .then(()=>{const ae=document.activeElement;if(tab==='bets27'&&!(ae&&ae.closest&&ae.closest('#main')&&/INPUT|TEXTAREA|SELECT/.test(ae.tagName)))render()}).catch(()=>{})}
 function s25ResWho(b,r){const OP=b27Opps(b);return r==='backer'?b.backer+' won':r==='other'?(OP.length>1?'Managers won':b.other+' won'):'💦'}
 function s25SuggestName(b,r){const OP=b27Opps(b);return r==='backer'?PN(b.backer):r==='other'?(OP.length>1?'Managers':PN(b.other)):'Wash'}
-function s25SuggestLine(b,p){return `<div class="s25sg">Suggested winner: <b>${esc(s25SuggestName(b,p.r))}</b>${p&&p.sc?` (${esc(p.sc)})`:''}</div>`}
+function s25SuggestLine(b,p){const rd=s25BetRd(b),tot=rd&&rd.k==='total';return `<div class="s25sg">Suggested ${tot?'result':'winner'}: <b>${esc(s25SuggestName(b,p.r))}</b>${p&&p.sc?` (${esc(p.sc)})`:''}${tot&&p&&p.why?': '+esc(p.why):''}</div>`}
 function s25PropHtml(b,me){const G=s25Game(b);if(!G)return '';const r=s25BetRd(b)||b.rd;
   if(G.wait==='live'&&G.g){try{const p=S25.proposal(r,Object.assign({},G.g,{final:true}));if(p&&p.r)return `<div class="s25pp" data-s25-prop="live">${s25SuggestLine(b,p)}</div>`}catch(e){}}
   if(G.wait){const t=G.wait==='future'?'Game day '+S25.dayLbl(r.d)+'. After the final we’ll show you the score and a suggested winner to confirm.':G.wait==='loading'?'Checking the final score…':(G.wait==='err'||G.wait==='nogame')?'No score found, pick the winner yourself':
       'No final score yet. Pick the winner yourself any time, or come back after the game.'+(G.g&&G.g.state==='pre'&&G.g.start?' (starts '+S25.localTime(G.g.start)+')':'');
     return `<div class="s25pp" data-s25-prop="${G.wait}">${esc(t)}</div>`}
   const p=G.p;if(!p)return '';const ask=!!(S25P.ask&&S25P.ask.id===b.id&&S25P.ask.terms===b27Terms(b)+'\u001f'+p.text+'\u001f'+p.r);
-  const btn=`<button type="button" class="ok" data-s25-ok="${b.id}" onclick="${ask?`s25Confirm('${b.id}')`:`s25Ask('${b.id}')`}"${U.busy?' disabled':''}>${ask?'Tap again to confirm':'✅ Confirm'}</button> <button type="button" data-s25-fix="${b.id}" aria-pressed="${!!S25P.fix[b.id]}" onclick="s25Fix('${b.id}')">✏️ Fix</button>`;
+  const btn=`<button type="button" class="ok${ask?' flash':''}" data-s25-ok="${b.id}" onclick="${ask?`s25Confirm('${b.id}')`:`s25Ask('${b.id}')`}"${U.busy?' disabled':''}>${ask?'Tap again to confirm':'✅ Confirm'}</button> <button type="button" data-s25-fix="${b.id}" aria-pressed="${!!S25P.fix[b.id]}" onclick="s25Fix('${b.id}')">✏️ Fix</button>`;
   return `<div class="s25pp" data-s25-prop="final">${s25SuggestLine(b,p)}<div class="s25sg-act">${btn}</div><div class="note">Nothing is settled until someone taps Confirm.</div></div>`}
-function s25Ask(id){if(U.busy||b27TapLock())return;const b=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===id);if(!b){S25P.ask=null;render();return}const G=s25Game(b);const terms=b27Terms(b)+'\u001f'+(G&&G.p?G.p.text+'\u001f'+G.p.r:'');if(S25P.ask&&S25P.ask.id===id&&S25P.ask.terms===terms)S25P.ask=null;else S25P.ask={id,terms};render()}
+function s25Ask(id){if(U.busy||b27TapLock())return;const b=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===id);if(!b){S25P.ask=null;render();return}const G=s25Game(b);const terms=b27Terms(b)+'\u001f'+(G&&G.p?G.p.text+'\u001f'+G.p.r:'');if(S25P.ask&&S25P.ask.id===id&&S25P.ask.terms===terms)S25P.ask=null;else{S25P.ask={id,terms};try{const t=s29eCopyText(b);if(t)b27CopyNow(t)}catch(e){}}render()}
 function s25HideManual(b){if(S25P.fix[b.id])return false;const G=s25Game(b);return !!(G&&G.p)}
 function s25Fix(id){S25P.fix[id]=!S25P.fix[id];render()}
 async function s25Confirm(id){if(U.busy||b27TapLock())return;const b=U.doc.bets.find(x=>x.id===id),me=b27Who();if(!b||b.backer!==me){U.msg=B27_ONLY;U.msgBad=true;render();return}
@@ -4451,8 +4451,9 @@ html{scroll-padding-top:64px}
 @media (max-width:700px){
  html body .tapf,html body .lgref .tapf{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:4px!important;max-width:100%}
  html body .tapf button,html body .lgref .tapf button{font-size:11px!important;line-height:1.15!important;padding:3px 2px!important;white-space:normal!important;min-height:32px!important;-webkit-line-clamp:unset!important;line-clamp:unset!important;overflow:visible!important}
- html body .tapf button:first-child,html body .lgref .tapf button:first-child{grid-column:1 / -1}
- html body{padding-bottom:calc(52px + env(safe-area-inset-bottom,0px))!important}
+ html body .tapf>button,html body .lgref .tapf>button{grid-column:auto!important;min-height:36px!important}
+ html body{padding-bottom:12px!important}
+ html body .card.tap.s27-rk td:first-child,html body .card.tap.s27-rk th:first-child{position:sticky;left:0;z-index:2;background:var(--card,#1b2030)}
 }
 html body .card.tap.s27-rk th:first-child,html body .card.tap.s27-rk td:first-child{position:sticky;left:0;z-index:2;background:var(--card,#1b2030)}
 html body .card.tap.s27-rk th:first-child{z-index:3}
