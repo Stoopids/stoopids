@@ -268,7 +268,7 @@ nav button .nb{position:absolute;top:1px;right:2px;background:var(--acc);color:#
 .chat{position:fixed;left:auto;right:max(12px,env(safe-area-inset-right,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:30;box-sizing:border-box;width:min(320px,calc(100vw - 24px));max-height:min(70dvh,calc(100dvh - 24px));margin:0;padding:8px;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 28px rgba(0,0,0,.45);display:flex;flex-direction:column-reverse;overflow:auto}   /* expanded: narrow bottom-right overlay, no page padding */
 body{padding-bottom:0}
 html body .chat.chat-bar{left:0!important;right:0!important;bottom:0!important;width:auto!important;max-width:none!important;max-height:none!important;border-radius:0!important;border-left:0!important;border-right:0!important;border-bottom:0!important;box-shadow:none!important;background:var(--bg)!important;padding:8px max(10px,calc((100% - 1000px)/2)) calc(8px + env(safe-area-inset-bottom,0px))!important;flex-direction:column!important}
-html body{padding-bottom:var(--chatH,0px)}
+html body{padding-bottom:calc(var(--chatH, 0px) + 8px)}
 html body #onlStrip.onl-fixed{position:fixed;z-index:29;left:12px;right:160px;bottom:max(12px,env(safe-area-inset-bottom,0px));margin:0;width:auto}
 html body .chat.chat-off{left:auto!important;right:max(12px,env(safe-area-inset-right,0px))!important;bottom:max(12px,env(safe-area-inset-bottom,0px))!important;width:max-content!important;max-width:min(240px,calc(100vw - 24px))!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important;overflow:visible!important}
 html body .chat.chat-pop>.chat-t{display:none!important}
@@ -398,7 +398,7 @@ nav button .nu{position:absolute;top:1px;left:2px;min-width:15px;background:#ff3
 /*<OWES-CHART>*/
 /* plain matrix = the old Side bets matrix (table.mx inside .card.sc); only the totals get a light divider + bold */
 .mx.oqm td.t,.mx.oqm th.t{font-weight:800;border-left:1px solid var(--line)}.mx.oqm tfoot td,.mx.oqm tfoot th{font-weight:800;border-top:1px solid var(--line)}.mx.oqm td.t{color:var(--tx)}
-/*<HDR-CENTER>*/.titlebar{display:flex;flex-direction:column;align-items:center;text-align:center;padding:12px 14px 4px}.titlebar h1{text-align:center;color:var(--acc)}.titlebar h1 span{color:var(--acc)}.titlebar .tag{margin:0;line-height:1.15;text-align:center;max-width:100%;overflow-wrap:anywhere}.gtop{max-width:1000px;margin:0 auto;padding:0 14px}.gtop .lv{margin:6px 0 -4px}.gtop .lv button{min-height:44px;min-width:44px}.stfoot.fresh{display:block;width:auto;margin:16px auto 0;padding:6px 14px calc(96px + env(safe-area-inset-bottom));text-align:center;font-size:12px;color:var(--mut);opacity:.8;cursor:default;min-height:0}.stfoot[hidden]{display:none}/*</HDR-CENTER>*/
+/*<HDR-CENTER>*/.titlebar{display:flex;flex-direction:column;align-items:center;text-align:center;padding:12px 14px 4px}.titlebar h1{text-align:center;color:var(--acc)}.titlebar h1 span{color:var(--acc)}.titlebar .tag{margin:0;line-height:1.15;text-align:center;max-width:100%;overflow-wrap:anywhere}.gtop{max-width:1000px;margin:0 auto;padding:0 14px}.gtop .lv{margin:6px 0 -4px}.gtop .lv button{min-height:44px;min-width:44px}.stfoot.fresh{display:block;width:auto;margin:16px auto 0;padding:6px 14px calc(8px + env(safe-area-inset-bottom));text-align:center;font-size:12px;color:var(--mut);opacity:.8;cursor:default;min-height:0}.stfoot[hidden]{display:none}/*</HDR-CENTER>*/
 /*<OWES-RESTORE>*/.s24lb .owes-jump{margin-right:auto;min-height:44px;font-weight:800}.oqe{margin:2px 0 6px}/*</OWES-RESTORE>*/
 @media (max-width:1000px){.swipe.oqw{display:block}}
 .oqc{display:flex;flex-direction:column;gap:5px;margin-top:6px}
@@ -975,7 +975,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.64.1"></script>
+<script src="shared/ui.js?v=1.64.2"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -2930,7 +2930,7 @@ function chatPlace(){      // the one bar: fixed to the bottom of the page on EV
 }
 /*<CHAT-BOTTOM>*/
 /* page bottom padding = bar height (also expanded); the bar lifts above the phone keyboard; online list that does not fit is cut with "+N more" */
-function chatLayout(){const s=document.getElementById('chat');const h=s&&s.classList.contains('chat-bar')?s.offsetHeight:0;document.documentElement.style.setProperty('--chatH',h+'px');try{placeOnl()}catch(e){}}
+function chatLayout(){const s=document.getElementById('chat');let h=0;if(s&&!s.hidden){if(s.classList.contains('chat-pop')){const t=s.querySelector('.chat-t');h=t?t.offsetHeight:0}else h=s.offsetHeight||0}document.documentElement.style.setProperty('--chatH',h+'px');try{placeOnl()}catch(e){}}
 function chatFit(el){if(!el||!el.clientWidth)return;const old=el.querySelector('.cbm2');if(old)old.remove();if(el.scrollWidth<=el.clientWidth)return;
   const more=document.createElement('span');more.className='cbg cbm2';el.appendChild(more);let n=0;
   while(el.scrollWidth>el.clientWidth&&el.children.length>3){el.removeChild(el.children[el.children.length-2]);n++;more.textContent='+'+n+' more'}
@@ -4537,7 +4537,7 @@ html body .qb-bolt{width:11px!important;height:11px!important}
  html body .chat.chat-off{bottom:max(8px,env(safe-area-inset-bottom,0px))!important;height:44px!important;max-height:44px!important;z-index:31!important}
  html body .chat.chat-off>.chat-t{height:44px!important;min-height:44px!important;max-height:44px!important}
  html body .chat.chat-pop{bottom:calc(60px + env(safe-area-inset-bottom,0px))!important;max-height:min(62dvh,calc(100dvh - 120px))!important}
- html body{padding-bottom:calc(60px + env(safe-area-inset-bottom,0px))!important}
+ html body{padding-bottom:calc(var(--chatH, 44px) + 8px + env(safe-area-inset-bottom,0px))!important}
 }
 /* Same four compact-filter rules as shared/ui.css, repeated last so they win over the earlier full-width Games rules. */
 html body #main .gfone>.gf3,html body #lbody .gfone>.gf3{display:block!important;width:100%!important;max-width:100%!important;overflow:visible!important;margin:0!important}
@@ -4678,7 +4678,7 @@ html body .s24fb .row2>*{flex:0 1 auto!important;width:auto!important;max-width:
  html body .entry-pair>.entry-col{position:absolute!important;width:0!important;height:0!important;margin:0!important;overflow:hidden!important}
  html body .entry-pair[data-focus="form"]>.entry-wiu,html body .entry-pair[data-focus="request"]>.entry-rq{position:static!important;width:100%!important;height:auto!important;margin:0!important;overflow:visible!important}
 }
-html body .b27-fine{width:100%;max-width:100%;box-sizing:border-box;margin:16px 0 calc(12px + max(0px, 64px - var(--chatH, 0px)));padding:8px 12px;border:1px solid var(--line,#2d3548);border-radius:10px;background:var(--card,#1b2030);color:var(--mut,#9aa3b5);font-size:13px;line-height:1.35}
+html body .b27-fine{width:100%;max-width:100%;box-sizing:border-box;margin:12px 0 8px;padding:8px 12px;border:1px solid var(--line,#2d3548);border-radius:10px;background:var(--card,#1b2030);color:var(--mut,#9aa3b5);font-size:13px;line-height:1.35}
 html body .b27-fine b{color:var(--tx,#eee)}
 html body #main>.segrow .rkseg>.rkseg-b:not(.segref):not(.gref),html body #main .gfone .rkseg>.rkseg-b:not(.gref),html body #main>.tabs.ob-seg>button,html body #main>.tapf>button{height:42px!important;min-height:42px!important;max-height:42px!important;padding:0 16px!important;font-size:15px!important;line-height:40px!important}
 html body #main>.tabs.ob-seg,html body #main>.segrow>.rkseg{justify-content:flex-start!important}

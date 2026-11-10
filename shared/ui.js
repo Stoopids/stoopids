@@ -317,7 +317,9 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
       return h+(me&&A.canWrite()?form():'<div class="card note rq-none">Set who you are on Profile before you request a bet.</div>')}
     async function act(k,v,st){var f=S.f,me=A.me(),now=Date.now();
       var actK=k==='acc'||k==='dec'||k==='cancel'||k==='close'||k==='slot-'||k==='slot+'||k==='edit';
-      if(actK){if(S.busy)return;if(S.lockUntil&&Date.now()<S.lockUntil)return;S.lockUntil=Date.now()+450;var curR=S.list.find(function(x){return x.id===v});if(!curR||reqHash(reqTerms(curR))!==st){S.arm=null;S.msg='That request changed. Review it again.';S.bad=true;A.render();return}}
+      if(actK){if(S.busy)return;var curR=S.list.find(function(x){return x.id===v});if(!curR||reqHash(reqTerms(curR))!==st){S.arm=null;S.msg='That request changed. Review it again.';S.bad=true;A.render();return}
+        var armOnly=k==='cancel'&&!(S.arm&&S.arm.id===v&&S.arm.act==='cancel'&&S.arm.terms===reqTerms(curR));
+        if(!armOnly){if(S.lockUntil&&Date.now()<S.lockUntil)return;S.lockUntil=Date.now()+450}}
       if(k==='cp'){var rc=S.list.find(function(x){return x.id===v});if(rc)copy(waText(rc,'new'),function(ok){S.msg=ok?'Message copied, paste in WhatsApp.':'Could not copy. Long-press to copy the text below.';S.bad=!ok});return}   /* STEP14-COPY */
       if(k==='wa'){if(S.fb)copy(S.fb,function(ok){if(ok){S.msg='Message copied, paste in WhatsApp.';S.bad=false}});return}
       if(k==='edit'){var re=S.list.find(function(x){return x.id===v});if(!re||re.by!==me||tk(re).length||re.status!=='open'){if(re&&tk(re).length){S.msg='Someone already accepted. Those terms stay as agreed.';S.bad=true;A.render()}return}var ws=winStart(re,game(re.gid)),pad=function(n){return String(n).padStart(2,'0')},dt=new Date(re.exp);
