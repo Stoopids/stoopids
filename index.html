@@ -974,7 +974,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.60.0"></script>
+<script src="shared/ui.js?v=1.61.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -3904,7 +3904,7 @@ function s29Sb(day){const T=s=>{const t=D.teams[s.id]||{};return {location:t.nam
   return {events:(D.games||[]).filter(g=>g.day===day&&g.home&&g.away).map(g=>({id:g.id,date:g.start,competitions:[{competitors:[{team:T(g.home)},{team:T(g.away)}]}],status:{type:{}}}))}}
 function s29AutoOK(r){try{if(!r||r.k==='manual'||!r.t||!r.o||!r.d)return false;return !!S25.match(s29Sb(r.d),r)}catch(e){return false}}
 function s29AutoForm(){try{return b27Clean(U.text)?s29AutoOK(s25FormRd()):null}catch(e){return null}}
-function s29AutoHtml(ok){return ok?'<div class="s29-auto" data-s29-auto="1">'+(window.SHARED_UI&&SHARED_UI.AUTO_NOTE||'This will be auto-settled after completion.')+'</div>':(ok===false&&S29_AUTO_B?'<div class="s29-auto s29-hand" data-s29-auto="0">Settled by hand.</div>':'')}
+function s29AutoHtml(ok){return ok?'<div class="s29-auto" data-s29-auto="1">'+(window.SHARED_UI&&SHARED_UI.AUTO_NOTE||'After the final we suggest the winner. Nothing is settled until someone taps Confirm.')+'</div>':(ok===false&&S29_AUTO_B?'<div class="s29-auto s29-hand" data-s29-auto="0">Settled by hand.</div>':'')}
 let S29AT=0;function s29AutoSoon(){clearTimeout(S29AT);S29AT=setTimeout(()=>{const e=document.getElementById('s29Auto');if(e)e.innerHTML=s29AutoHtml(s29AutoForm())},250)}
 /*</S29D-AUTO>*/
 function s25BetRd(b){const r=b&&b.rd;if(r&&r.k&&r.k!=='manual')return r;try{const p=S25.parse((b&&b.text)||'',b&&(b.created_at||b.postedAt));if(p&&p.k&&p.k!=='manual')return p}catch(e){}return r||null}
@@ -3927,12 +3927,16 @@ function s25Fetch(r){const k=s25Key(r),c=S25P.games[k];const hold=c&&c.st==='err
   fetch(S25.scoreboardUrl(r.sp,r.d),ac?{credentials:'omit',cache:'no-store',signal:ac.signal}:{credentials:'omit',cache:'no-store'}).then(x=>{if(!x.ok)throw 0;return x.json()}).then(sb=>{S25P.games[k]={st:'ok',at:Date.now(),sb}},()=>{S25P.games[k]={st:'err',at:Date.now()}})
     .then(()=>{const ae=document.activeElement;if(tab==='bets27'&&!(ae&&ae.closest&&ae.closest('#main')&&/INPUT|TEXTAREA|SELECT/.test(ae.tagName)))render()}).catch(()=>{})}
 function s25ResWho(b,r){const OP=b27Opps(b);return r==='backer'?b.backer+' won':r==='other'?(OP.length>1?'Managers won':b.other+' won'):'💦'}
-function s25PropHtml(b,me){const G=s25Game(b);if(!G)return '';const r=s25BetRd(b)||b.rd;/*STEP9-AUTOSETTLE live leader*/if(G.wait==='live'&&G.g&&window.SHARED_UI&&SHARED_UI.autoLine){try{const p=S25.proposal(r,Object.assign({},G.g,{final:true}));if(p&&p.r){const OP=b27Opps(b);return SHARED_UI.autoLine({e:esc,live:true,who:p.r==='backer'?PN(b.backer):p.r==='other'?(OP.length>1?'Managers':PN(b.other)):'',sc:p.sc})}}catch(e){}}
-  if(G.wait){const t=G.wait==='future'?'Game day '+S25.dayLbl(r.d)+'. After the final we’ll show you the score and a proposed result to confirm.':G.wait==='loading'?'Checking the final score…':G.wait==='err'?'Scores can’t be read right now: settle it by hand.':G.wait==='nogame'?'No matching game found yet: settle it by hand.':
-      'No final score yet. Settle it by hand any time, or come back after the game.'+(G.g&&G.g.state==='pre'&&G.g.start?' (starts '+S25.localTime(G.g.start)+')':'');
+function s25SuggestName(b,r){const OP=b27Opps(b);return r==='backer'?PN(b.backer):r==='other'?(OP.length>1?'Managers':PN(b.other)):'Wash'}
+function s25SuggestLine(b,p){return `<div class="s25sg">Suggested winner: <b>${esc(s25SuggestName(b,p.r))}</b>${p&&p.sc?` (${esc(p.sc)})`:''}</div>`}
+function s25PropHtml(b,me){const G=s25Game(b);if(!G)return '';const r=s25BetRd(b)||b.rd;
+  if(G.wait==='live'&&G.g){try{const p=S25.proposal(r,Object.assign({},G.g,{final:true}));if(p&&p.r)return `<div class="s25pp" data-s25-prop="live">${s25SuggestLine(b,p)}</div>`}catch(e){}}
+  if(G.wait){const t=G.wait==='future'?'Game day '+S25.dayLbl(r.d)+'. After the final we’ll show you the score and a suggested winner to confirm.':G.wait==='loading'?'Checking the final score…':(G.wait==='err'||G.wait==='nogame')?'No score found, pick the winner yourself':
+      'No final score yet. Pick the winner yourself any time, or come back after the game.'+(G.g&&G.g.state==='pre'&&G.g.start?' (starts '+S25.localTime(G.g.start)+')':'');
     return `<div class="s25pp" data-s25-prop="${G.wait}">${esc(t)}</div>`}
-  const p=G.p;if(!p)return '';const ask=!!(S25P.ask&&S25P.ask.id===b.id&&S25P.ask.terms===b27Terms(b)+'\u001f'+p.text+'\u001f'+p.r);/*STEP9-AUTOSETTLE*/if(window.SHARED_UI&&SHARED_UI.autoLine){const OP=b27Opps(b);return '<div class="s25pp" data-s25-prop="final">'+SHARED_UI.autoLine({e:esc,live:false,who:p.r==='backer'?PN(b.backer):p.r==='other'?(OP.length>1?'Managers':PN(b.other)):'',sc:p.sc,btn:`<button type="button" class="ok" data-s25-ok="${b.id}" onclick="${ask?`s25Confirm('${b.id}')`:`s25Ask('${b.id}')`}"${U.busy?' disabled':''}>${ask?'Tap again to confirm':'✅ Confirm'}</button> <button type="button" data-s25-fix="${b.id}" aria-pressed="${!!S25P.fix[b.id]}" onclick="s25Fix('${b.id}')">✏️ Fix</button>`,note:'Nothing is settled until someone taps Confirm.'})+'</div>'}
-  return `<div class="s25pp" data-s25-prop="final"><div><b>Final:</b> ${esc(p.sc)}</div><div><b>Proposed result:</b> ${esc(s25ResWho(b,p.r))} <span class="note">(${esc(p.why)})</span></div><button type="button" class="ok" data-s25-ok="${b.id}" onclick="${ask?`s25Confirm('${b.id}')`:`s25Ask('${b.id}')`}"${U.busy?' disabled':''}>${ask?'Tap again to confirm':'✅ Confirm'}</button><button type="button" data-s25-fix="${b.id}" aria-pressed="${!!S25P.fix[b.id]}" onclick="s25Fix('${b.id}')">✏️ Fix</button><div class="note">Nothing is settled until you confirm.</div></div>`}
+  const p=G.p;if(!p)return '';const ask=!!(S25P.ask&&S25P.ask.id===b.id&&S25P.ask.terms===b27Terms(b)+'\u001f'+p.text+'\u001f'+p.r);
+  const btn=`<button type="button" class="ok" data-s25-ok="${b.id}" onclick="${ask?`s25Confirm('${b.id}')`:`s25Ask('${b.id}')`}"${U.busy?' disabled':''}>${ask?'Tap again to confirm':'✅ Confirm'}</button> <button type="button" data-s25-fix="${b.id}" aria-pressed="${!!S25P.fix[b.id]}" onclick="s25Fix('${b.id}')">✏️ Fix</button>`;
+  return `<div class="s25pp" data-s25-prop="final">${s25SuggestLine(b,p)}<div class="s25sg-act">${btn}</div><div class="note">Nothing is settled until someone taps Confirm.</div></div>`}
 function s25Ask(id){if(U.busy||b27TapLock())return;const b=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===id);if(!b){S25P.ask=null;render();return}const G=s25Game(b);const terms=b27Terms(b)+'\u001f'+(G&&G.p?G.p.text+'\u001f'+G.p.r:'');if(S25P.ask&&S25P.ask.id===id&&S25P.ask.terms===terms)S25P.ask=null;else S25P.ask={id,terms};render()}
 function s25HideManual(b){if(S25P.fix[b.id])return false;const G=s25Game(b);return !!(G&&G.p)}
 function s25Fix(id){S25P.fix[id]=!S25P.fix[id];render()}
@@ -4398,6 +4402,8 @@ html body .b27-drop .b27-chip{width:100%!important;text-align:left}
 html body .b27-drop .b27-in{width:100%;box-sizing:border-box;margin-top:6px}
 html body .b27-drop .b27-act{margin-top:6px}
 html body .b27-gh{margin:12px 0 6px;font-size:15px}
+html body .s25sg{margin:6px 0 0;font-size:13.5px;font-weight:700;line-height:1.35}
+html body .s25sg-act{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:6px}
 html body .b27-foot{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;column-gap:8px;margin-top:8px}
 html body .b27-foot>.b27-more>summary{min-height:36px;line-height:36px}
 html body .b27-foot>.b27-more{grid-column:1;grid-row:1;margin-top:0;min-width:0}
@@ -4445,7 +4451,7 @@ function s29eCopyText(b){if(!b)return '';if(b.status==='open'&&b.kind!=='pool')r
   L.push('Bet #'+b.n+' · '+stTxt+win,b27Clean(b.text),Bk+' vs '+OPd.join(', ')+' · '+b27Num(b.amt)+(BU?' each':'')+' '+b27OddsShort(b.odds.a,b.odds.b));
   L.push('If '+Bk+' is right: '+OPd.join(', ')+(BU?' each owe ':' owes ')+Bk+' '+b27Num(P.ifBackerRight));
   L.push('If '+OPd.join(', ')+(BU?' are':' is')+' right: '+Bk+' owes '+(BU?'each of them ':OPd[0]+' ')+b27Num(P.ifOtherRight));
-  let auto=false;try{auto=st==='open'&&!!b.rd&&s29AutoOK(b.rd)}catch(e){}if(auto)L.push('Auto-settles after the game');
+  let auto=false;try{auto=st==='open'&&!!b.rd&&s29AutoOK(b.rd)}catch(e){}if(auto)L.push('Suggested winner after the game');
   L.push(posted);return L.join('\n')}
 </script><!--</S29E-COPY>-->
 <script>
