@@ -3957,7 +3957,7 @@ function s25Fetch(r){const k=s25Key(r),c=S25P.games[k];const hold=c&&c.st==='err
     .then(()=>{const ae=document.activeElement;if(tab==='bets27'&&!(ae&&ae.closest&&ae.closest('#main')&&/INPUT|TEXTAREA|SELECT/.test(ae.tagName)))render()}).catch(()=>{})}
 function s25ResWho(b,r){const OP=b27Opps(b);return r==='backer'?b.backer+' won':r==='other'?(OP.length>1?'Managers won':b.other+' won'):'💦'}
 function s25SuggestName(b,r){const OP=b27Opps(b);return r==='backer'?PN(b.backer):r==='other'?(OP.length>1?'Managers':PN(b.other)):'Wash'}
-function s25SuggestLine(b,p){return `<div class="s25sg">Suggested winner: <b>${esc(s25SuggestName(b,p.r))}</b>${p&&p.sc?` (${esc(p.sc)})`:''}</div>`}
+function s25SuggestLine(b,p){const sc=p&&p.sc?String(p.sc).replace(/^\((.*)\)$/,'$1').trim():'';return `<div class="s25sg"><div>Suggested winner: <b>${esc(s25SuggestName(b,p.r))}</b></div>${sc?`<div class="s25sc">${esc(sc)}</div>`:''}</div>`}
 function s25PropHtml(b,me){const G=s25Game(b);if(!G)return '';const r=s25BetRd(b)||b.rd;
   if(G.wait==='live'&&G.g){try{const p=S25.proposal(r,Object.assign({},G.g,{final:true}));if(p&&p.r)return `<div class="s25pp" data-s25-prop="live">${s25SuggestLine(b,p)}</div>`}catch(e){}}
   if(G.wait){const t=G.wait==='future'?'Game day '+S25.dayLbl(r.d)+'. After the final we’ll show you the score and a suggested winner to confirm.':G.wait==='loading'?'Checking the final score…':(G.wait==='err'||G.wait==='nogame')?'No score found, pick the winner yourself':
@@ -4442,6 +4442,7 @@ html body .b27-drop .b27-in{width:100%;box-sizing:border-box;margin-top:6px}
 html body .b27-drop .b27-act{margin-top:6px}
 html body .b27-gh{margin:12px 0 6px;font-size:15px}
 html body .s25sg{margin:6px 0 0;font-size:13.5px;font-weight:700;line-height:1.35}
+html body .s25sg .s25sc{display:block;margin-top:2px;font-weight:600}
 html body .s25sg-act{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:6px}
 html body .b27-foot{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;column-gap:8px;margin-top:8px}
 html body .b27-foot>.b27-more>summary{min-height:36px;line-height:36px}
