@@ -3728,9 +3728,12 @@ function b27Card(b,me){
   else if(st==='open')h+=`<div class="note">Awaiting settlement</div>`;
   h+=who+/*<S25>*/s25PropHtml(b,me)/*</S25>*/;
   /*<S24-EDIT>*/h+=s24EditedNote(b)+s24FixHtml(b,me);/*</S24-EDIT>*/
-  const det=settled&&b.kind!=='pool'?b27SettledDet(b)+s24FixLink(b,me):[/*<MULTI-BET>*/b.g&&U.doc.bets.filter(x=>x.g===b.g).length>1?`<div class="note">1 of ${U.doc.bets.filter(x=>x.g===b.g).length} placed together</div>`:''/*</MULTI-BET>*/,res?`<div class="note"><b>Result:</b> ${esc(res)}</div>`:'',/*<S29E-POSTED>*/s29ePosted(b)/*</S29E-POSTED>*/,/*<S25D-TS>*/s25dTsHtml(b)/*</S25D-TS>*/,L.win?`<div class="b27-w">${esc(L.win)}</div>`:'',L.lose?`<div class="b27-l">${esc(L.lose)}</div>`:'',L.rounded?'<div class="mut b27-r">Rounded to a whole number.</div>':'',/*<S25>*/s25CardRd(b)/*</S25>*/].filter(Boolean).join('');
-  return h+`<div class="b27-foot">${det.trim()?`<details class="b27-more"${U.fixOpen===b.id?' open':''}><summary>Details</summary>${det}</details>`:''}${/*<S25>*/s25RxHtml(b,me)/*</S25>*/}</div></div>`;
+  const posted=b27PostedLine(b),fix=settled&&b.kind!=='pool'?s24FixLink(b,me):'';
+  return h+fix+`<div class="b27-foot">${posted}${/*<S25>*/s25RxHtml(b,me)/*</S25>*/}</div></div>`;
 }
+function b27PostedLine(b){const who=b&&b.postedBy?PN(b.postedBy):'',placed=s25dWhen((b&&(b.postedAt||b.created_at))||''),done=['backer','other','push'].includes(b&&b.status),settled=done?s25dWhen(b.settled_at):'';
+  const bits=[];if(who)bits.push('Posted by '+who);if(placed)bits.push('Placed '+placed);if(settled)bits.push('Settled '+settled);
+  return bits.length?`<div class="b27-ts">${esc(bits.join(' · '))}</div>`:''}
 /*<OWES-TABLE>*/
 const b27E1=e=>{e=String(e||'');try{return new Intl.Segmenter(undefined,{granularity:'grapheme'}).segment(e)[Symbol.iterator]().next().value.segment}catch(_){return Array.from(e)[0]||''}};   // first emoji only (phones: two-emoji names stay short)
 const b27Nm=n=>{const o=(D&&D.owners||[]).find(x=>x.name===n)||{},sh=b27ShortName(n);return `<span class="oqn${sh!==PN(n)?' hs':''}" data-n="${esc(n)}" data-em="${esc(o.emoji||'')}" data-e1="${esc(b27E1(o.emoji))}"><span class="f">${esc(PN(n))}</span>${sh!==PN(n)?`<span class="s">${esc(sh)}</span>`:''}</span>`};
@@ -4429,17 +4432,18 @@ function s24SetStab(v){if(v==='need'){lsSet(S24FSK,'open');lsSet(S24FAK,'mine')}
 function s24Chrono(){try{return localStorage.getItem('stoopids_b27_chrono')==='old'?'old':'new'}catch(e){return 'new'}}
 function s24ChronoToggle(){lsSet('stoopids_b27_chrono',s24Chrono()==='new'?'old':'new');render()}
 function s24ChronoList(list,me){const dir=s24Chrono()==='old'?1:-1;const g=(list||[]).slice().sort((a,b)=>{const ca=Date.parse(a.created_at)||0,cb=Date.parse(b.created_at)||0;if(ca!==cb)return (ca-cb)*dir;return ((a.n||0)-(b.n||0))*dir});let show=g.slice(0,60);if(S24.sub){const x=g.find(b=>b.id===S24.sub);if(x&&!show.some(b=>b.id===x.id))show=show.concat([x])}return `<div class="b27-grid">${b27Cards(show,me)}</div>`+(g.length>60?'<p class="note">Showing the first 60.</p>':'')}
-function s24FilterBar(bets,me,ph){const p=s24FP(),st=s24FSt(),ac=s24FAc(),wh=s24FWh(),stab=s24Stab(),ch=s24Chrono();
+function s24FilterBar(bets,me,ph){const settledOnly=ph==='Search settled bets';
+  if(!settledOnly&&s24FSt()!=='open'&&s24FSt()!=='all')lsSet(S24FSK,'open');
+  const p=s24FP(),ac=s24FAc(),wh=s24FWh(),stab=s24Stab(),ch=s24Chrono();
   const tab=(k,t)=>`<button type="button" role="tab" aria-selected="${stab===k?'true':'false'}" class="${stab===k?'on':''}" onclick="s24SetStab('${k}')">${t}</button>`;
-  const settledOnly=ph==='Search settled bets';
-  const tabs=settledOnly?'':`<div class="s24st" role="tablist" aria-label="Bet status">${tab('need','Needs action')}${tab('open','Open')}${tab('settled','Settled')}${tab('all','All')}<button type="button" class="s24ch" aria-pressed="${ch==='old'?'true':'false'}" onclick="s24ChronoToggle()">${ch==='old'?'Oldest first':'Newest first'}</button></div>`;
+  const tabs=settledOnly?'':`<div class="s24st" role="tablist" aria-label="Bet status">${tab('need','Needs action')}${tab('open','Open')}${tab('all','All')}</div>`;
   const opt=(list,cur,extra)=>list.map(([k,t])=>`<option value="${k}"${k===cur?' selected':''}>${esc(t)}${extra&&extra[k]!=null?' ('+extra[k]+')':''}</option>`).join('');
   const nMine=s24Count(bets,me,{ac:'mine'}),nTheirs=s24Count(bets,me,{ac:'theirs'});
-  return `<div class="card s24fb">${tabs}<div class="row2"><select id="sbPerson" aria-label="Person" onchange="s24FSetP(this.value)"><option value="all"${p==='all'?' selected':''}>Everyone</option><option value="me"${p==='me'?' selected':''}>Me</option>${b27OwnerNames().map(o=>`<option value="${esc(o)}"${o===p?' selected':''}>${esc(PN(o))}</option>`).join('')}</select>
-   ${settledOnly?'':`<select id="sbStatus" aria-label="Status" onchange="s24FSetS(this.value)">${opt(S24FST,st)}</select>
-   <select id="sbAction" aria-label="Action needed" onchange="s24FSetA(this.value)">${opt(S24FAC,ac,{mine:nMine,theirs:nTheirs})}</select>
-   <select id="sbWhen" aria-label="When" onchange="s24FSetW(this.value)">${opt(S24FWH,wh)}</select>`}
-   <input id="sbQ" class="sb-in" aria-label="Search bets" placeholder="${esc(ph||'search terms…')}" value="${esc(s24Q)}" onchange="s24FSetQ(this.value)"></div>
+  const person=`<label class="s24lb">Person<select id="sbPerson" aria-label="Person" onchange="s24FSetP(this.value)"><option value="all"${p==='all'?' selected':''}>Everyone</option><option value="me"${p==='me'?' selected':''}>Me</option>${b27OwnerNames().map(o=>`<option value="${esc(o)}"${o===p?' selected':''}>${esc(PN(o))}</option>`).join('')}</select></label>`;
+  const sort=`<button type="button" class="s24ch" aria-pressed="${ch==='old'?'true':'false'}" onclick="s24ChronoToggle()">${ch==='old'?'Oldest first':'Newest first'}</button>`;
+  const row=settledOnly?`<div class="row2">${person}<input id="sbQ" class="sb-in" aria-label="Search bets" placeholder="${esc(ph||'search terms…')}" value="${esc(s24Q)}" onchange="s24FSetQ(this.value)"></div>`
+    :`<div class="s24r2">${person}<label class="s24lb">Bet type<select id="sbAction" aria-label="Bet type" onchange="s24FSetA(this.value)">${opt(S24FAC,ac,{mine:nMine,theirs:nTheirs})}</select></label><label class="s24lb">Settles when<select id="sbWhen" aria-label="Settles when" onchange="s24FSetW(this.value)">${opt(S24FWH,wh)}</select></label>${sort}</div><input id="sbQ" class="sb-in s24q" aria-label="Search bets" placeholder="${esc(ph||'search terms…')}" value="${esc(s24Q)}" onchange="s24FSetQ(this.value)">`;
+  return `<div class="card s24fb">${tabs}${row}
    ${settledOnly?'':`<div class="note" style="margin-top:6px"><a href="${esc(s24Href('howto'))}" onclick="return s24HowFilters(event)">How these filters work →</a>${(ac==='mine'||ac==='theirs')&&!me?' Pick who you are to use My turn or Their turn.':''}</div>`}</div>`}
 
 /*</S24-EDIT>*/
@@ -4710,7 +4714,16 @@ html body .b27-gh{margin:12px 0 6px;font-size:15px}
 html body .s25sg{margin:6px 0 0;font-size:13.5px;font-weight:700;line-height:1.35}
 html body .s25sg .s25sc{display:block;margin-top:2px;font-weight:600}
 html body .s25sg-act{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:6px}
-html body .b27-foot{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;column-gap:8px;margin-top:8px}
+html body .b27-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;margin-top:8px}
+html body .b27-ts{flex:1 1 auto;min-width:0;color:var(--mut,#9aa3b5);font-size:12px;line-height:1.35;font-weight:500}
+html body .s24st{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;width:min(100%,480px)!important;gap:6px!important;margin:0 0 8px!important}
+html body .s24st>button{width:100%!important;flex:none!important;box-sizing:border-box!important;height:36px!important;min-height:36px!important;max-height:36px!important;padding:0 4px!important;font-size:13px!important;font-weight:800!important;line-height:34px!important;text-align:center!important;white-space:nowrap!important}
+html body .s24r2{display:flex;align-items:flex-end;flex-wrap:wrap;gap:6px;width:100%}
+html body .s24r2 .s24lb{flex:1 1 100px;min-width:100px;display:flex;flex-direction:column;gap:2px;color:var(--mut,#9aa3b5);font-size:11px;font-weight:700;line-height:1.2}
+html body .s24r2 select{width:100%;height:36px;min-height:36px;font-size:13px;padding:0 6px}
+html body .s24r2 .s24ch{flex:1 1 0;min-width:0;box-sizing:border-box;height:36px;min-height:36px;max-height:36px;padding:0 4px;border-radius:999px;border:1px solid var(--line,#2d3548);background:transparent;color:inherit;font:inherit;font-size:12px;font-weight:800;line-height:34px;text-align:center;white-space:nowrap;cursor:pointer}
+html body .s24r2 .s24ch[aria-pressed="true"]{background:#ffd400;color:#111;border-color:#ffd400}
+html body .s24fb input.s24q{width:100%;margin-top:6px;box-sizing:border-box}
 html body .b27-foot>.b27-more>summary{min-height:36px;line-height:36px}
 html body .b27-foot>.b27-more{grid-column:1;grid-row:1;margin-top:0;min-width:0}
 html body .b27-foot>.s25rxr{grid-column:2;grid-row:1;margin:0;justify-content:flex-end}
@@ -4800,6 +4813,10 @@ html body .gmon{justify-content:flex-start!important;width:auto!important;max-wi
 html body .gmon>button{flex:0 0 auto!important;width:auto!important;min-width:0!important;padding:5px 12px!important}
 html body .s24fb .row2{flex-wrap:wrap!important;gap:6px!important}
 html body .s24fb .row2>*{flex:0 1 auto!important;width:auto!important;max-width:100%!important;height:32px!important;min-height:32px!important}
+html body .s24r2{flex-wrap:wrap!important;gap:6px!important}
+html body .s24r2 .s24lb{flex:1 1 100px!important;min-width:100px!important}
+html body .s24r2 select{height:36px!important;min-height:36px!important;max-height:36px!important;font-size:13px!important;padding:0 16px 0 8px!important}
+html body .s24r2 .s24ch{flex:0 0 auto!important;width:auto!important;margin-left:auto!important;height:36px!important;min-height:36px!important;max-height:36px!important;padding:0 12px!important;font-size:13px!important}
 @media (max-width:999px){
  html body .entry-pair{display:block!important}
  html body .entry-pair>.entry-col{position:absolute!important;width:0!important;height:0!important;margin:0!important;overflow:hidden!important}
