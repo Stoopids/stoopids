@@ -72,9 +72,9 @@ U.halfLs=hsLs;U.halfScores=function(g,s,first,BOX){var tot=s.score!=null?esc(Str
     return '<div class="'+o.cls+' gfin'+(op?' open':'')+(o.cls2||'')+'"'+(o.attr||'')+'><button type="button" class="gsum" '+o.btnAttr+' aria-expanded="'+op+'"'+(o.btnAttr2||'')+'><span class="gst">FINAL</span><span class="'+(o.away.win?'w':'')+'">'+sc(o.away)+'</span><span class="mut">·</span><span class="'+(o.home.win?'w':'')+'">'+sc(o.home)+'</span>'+(o.upset?'<span>😱</span>':'')+'<span class="gch" aria-hidden="true">'+(op?'▾':'▸')+'</span></button><div class="'+(o.bodyCls||'gbody')+'"'+(o.bodyAttr||'')+(op?'':' hidden')+'>'+o.body+'</div></div>'};
 
   /* STEP9-AUTOSETTLE: suggestion only, never writes. o={e, live:bool, who:'Paul'|'' (''=tied/wash), sc:'score text', btn:'<button…>' (final only), note} */
-  SHARED_UI.autoLine=function(o){var e=o.e,w=o.who?e(o.who)+(o.live?' leads':' wins'):(o.live?'Tied':'Wash');
-    return '<div class="s29-auto au-'+(o.live?'live':'fin')+'" data-au="'+(o.live?'live':'final')+'">Auto-settle: <b>'+w+'</b>'+(o.sc?' <span class="note">('+e(o.sc)+')</span>':'')+(o.btn?' \u00b7 '+o.btn:'')+(o.note?'<div class="note">'+e(o.note)+'</div>':'')+'</div>'};
-  SHARED_UI.AUTO_NOTE='Auto-settle: after the final we suggest the winner; it settles only when someone taps Confirm.';
+  SHARED_UI.autoLine=function(o){var e=o.e,w=o.who?e(o.who):(o.live?'Tied':'Wash');
+    return '<div class="s29-auto au-'+(o.live?'live':'fin')+'" data-au="'+(o.live?'live':'final')+'"><div class="s25sg">Suggested winner: <b>'+w+'</b>'+(o.sc?' ('+e(o.sc)+')':'')+'</div>'+(o.btn?'<div class="s25sg-act">'+o.btn+'</div>':'')+(o.note?'<div class="note">'+e(o.note)+'</div>':'')+'</div>'};
+  SHARED_UI.AUTO_NOTE='After the final we suggest the winner. Nothing is settled until someone taps Confirm.';
   /* REFRESH-NOW: on-demand refresh, both sites. sel = the Refresh button selector (looked up again after re-render); tasks = functions returning promises
      (data reload with cache bypass, ESPN check), run in parallel, each capped at 8 s so it never hangs; then done() re-renders; read-only. */
   SHARED_UI.refreshNow=function(sel,tasks,done){var q=function(){return document.querySelector(sel)},b=q();if(SHARED_UI._rfBusy)return;SHARED_UI._rfBusy=true;
@@ -275,8 +275,8 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
     function pinned(only,mark){dropArm();var now=Date.now(),L=S.list.filter(function(r){return shown(r,now)}).filter(function(r){return !A.reqMatch||A.reqMatch(r)}).sort(function(a,b){return a.exp-b.exp});
       if(mark){markOpenSeen();try{paint()}catch(e){}}
       armExpiry();
-      if(!L.length)return only?'<div class="card note rq-none">No open requests right now.</div>':'';
-      return '<div class="rq-pin" id="rqPinned"><h2 class="rq-h">Open requests</h2><p class="note">Nothing is agreed until someone accepts. Expired or filled requests leave this list.</p><div class="rq-grid">'+L.map(function(r){return card(r,now)}).join('')+'</div></div>'}
+      if(!L.length)return only?'<div class="card note rq-none">No pending requests right now.</div>':'';
+      return '<div class="rq-pin" id="rqPinned"><h2 class="rq-h">Pending requests</h2><p class="note">Nothing is agreed until someone accepts. Expired or filled requests leave this list.</p><div class="rq-grid">'+L.map(function(r){return card(r,now)}).join('')+'</div></div>'}
     /* STEP10: view('open') = the Open tab (open request cards only); view() = the Request tab (form only) */
     function seenKey(){return 'rq_open_seen:'+String(A.seenScope?A.seenScope():(A.me()||'guest'))}
     function seenIds(){try{var ls=typeof localStorage!=='undefined'?localStorage:null;if(!ls)return [];var a=JSON.parse(ls.getItem(seenKey())||'[]');return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -287,7 +287,7 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
       armExpiry();
       var L=S.list.filter(function(r){return shown(r,now)}).sort(function(a,b){return a.exp-b.exp}),me=A.me();
       var h='';if(S.msg&&!S.f.gid)h+='<div class="card '+(S.bad?'b27-bad':'b27-ok')+'" role="status">'+e(S.msg)+(S.fb?'<pre class="rq-fb">'+e(S.fb)+'</pre><div class="rq-act"><button type="button" class="btn" data-rq="wa">Copy</button></div>':'')+'</div>';
-      if(mode==='open')return h+(L.length?'<h2 class="rq-h">Open requests</h2><div class="rq-grid">'+L.map(function(r){return card(r,now)}).join('')+'</div>':'<div class="card note rq-none">No open requests right now.</div>');
+      if(mode==='open')return h+(L.length?'<h2 class="rq-h">Pending requests</h2><div class="rq-grid">'+L.map(function(r){return card(r,now)}).join('')+'</div>':'<div class="card note rq-none">No pending requests right now.</div>');
       return h+(me&&A.canWrite()?form():'<div class="card note rq-none">Set who you are on Profile before you request a bet.</div>')}
     async function act(k,v,st){var f=S.f,me=A.me(),now=Date.now();
       var actK=k==='acc'||k==='dec'||k==='cancel'||k==='close'||k==='slot-'||k==='slot+'||k==='edit';

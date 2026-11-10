@@ -974,7 +974,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.59.0"></script>
+<script src="shared/ui.js?v=1.61.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -2558,17 +2558,17 @@ function vHowTo(){const m=PULK.minAmt;
   <div class="card"><b>Request a bet</b><p>Use this when nothing is agreed yet. Pick who it is open to. Leave them unpicked, or choose <b>All</b>, and it is open to the other Stoops. A shorter list is only those invitees. Set how many can accept, and when the invitation expires. Expiry is not the settlement estimate. Then <b>7. When can this be settled?</b>, same three sorting choices. Tap <b>Request bet</b>. It stays under <b>Open requests</b> at the top of <b>All Bets</b> until someone accepts, it expires, or you delete or close it.</p></div>
   <div class="card"><b>Who sees an open request</b><p>The page shows an open request to the Stoop who sent it, and to invitees who can still take it. Other Stoops do not get that card or a request badge. A guest does not see those cards. Accept still only works for an invitee. This is how the page filters the list. The request record itself is still read as one shared list, so the page is not a private lock.</p></div>
   <div class="card"><b>After it is agreed</b><p>An accepted request becomes a bet on <b>All Bets</b>, same as Write it Up. The description, people, amount, and odds stay as written. <b>Edit</b> on an open bet only changes the sorting note. The person who posted it enters who won, or <b>Wash</b>, and confirms. If the words match a finished game, the score can propose a result; nothing changes until they tap <b>Confirm</b>. They can correct a settled result. <b>My turn</b> under Action needed is for those result actions. <a href="${esc(s24Href('howto'))}" onclick="return s24HowFilters(event)">How the filters work →</a></p></div></section>
-  <div class="card"><b>Settling</b><p>The person who posted the bet enters who won, or a Wash. A proposed score waits for their Confirm. They can correct a settled result. Totals stay in <b>Tally</b> at the bottom of <b>All Bets</b>.</p></div>
+  <div class="card"><b>Settling</b><p>The person who posted the bet enters who won, or a Wash. A proposed score waits for their Confirm. They can correct a settled result. Totals stay on the <b>Tally</b> page. Settled bets are listed there, under the charts.</p></div>
   <section id="howto-pool" class="s29-hnb"><h3>Pools</h3><div class="card"><b>Pool / buy-in</b><p>Pick <b>Pool</b> (phone) or <b>Pool / buy-in</b> at the top of Write it Up for a buy-in pool.</p></div>
   <div class="card"><b>1. What’s the pool?</b><p>Say what the pool is, e.g. “STOOPIDS season-long tournament pool”.</p></div>
   <div class="card"><b>2. Who’s in?</b><p>You’re in automatically. Tap everyone else who’s in (<b>Select all</b> / <b>Clear</b> work here too).</p></div>
   <div class="card"><b>3. Buy-in per person</b><p>A whole number, minimum ${m}. The pot is buy-in × people in.</p></div>
   <div class="card"><b>4. Payouts by place</b><p>Amounts only; you pick who finished where when you settle it. They must add up to the pot. Optional: leave blank to fill in when it’s over.</p></div></section>
-  <div class="card"><b>Request and Open</b><p>Open requests sit at the top of <b>All Bets</b>. The badge counts unseen requests for this account only.</p></div>
+  <div class="card"><b>Pending requests</b><p>Pending requests sit at the top of <b>All Bets</b>. The badge counts unseen requests for this account only. An agreed bet that is not settled is an <b>Unsettled bet</b>, not a pending request.</p></div>
   <section id="howto-filters" class="s29-hnb"><h3>How the All Bets filters work</h3>
   <div class="card"><b>This update only</b><p>This is how the filters work in this held update. They are not on the public site yet. Nothing here settles a bet by itself.</p></div>
-  <div class="card"><b>Five controls</b><p><b>Everyone / a person</b> and <b>search</b> stay. The old long status list is now three controls that all apply at once. A bet has to pass every one of them. <b>Status</b> is All, Open, Settled, Wash, or Cancelled. <b>Action needed</b> is Any, My turn, or Their turn. <b>When</b> is Any time, Upcoming, Today, Past settle date, End game, End of season, or Not sure yet. The page opens on <b>Open</b>, <b>Any</b> action, and <b>Any time</b>.</p></div>
-  <div class="card"><b>Status</b><p><b>Open</b> is still open. A pool whose payouts are already entered is not open. <b>Settled</b> has a winner, or it is a pool with payouts entered. <b>Wash</b> is a push: nobody owes anything. <b>Cancelled</b> was voided. <b>All</b> includes every one of those.</p></div>
+  <div class="card"><b>Five controls</b><p><b>Everyone / a person</b> and <b>search</b> stay. The old long status list is now three controls that all apply at once. A bet has to pass every one of them. <b>Status</b> is All, Unsettled bets, Settled, Wash, or Cancelled. <b>Action needed</b> is Any, My turn, or Their turn. <b>When</b> is Any time, Upcoming, Today, Past settle date, End game, End of season, or Not sure yet. All Bets opens on <b>Unsettled bets</b>, <b>Any</b> action, and <b>Any time</b>.</p></div>
+  <div class="card"><b>Status</b><p><b>Unsettled bets</b> are agreed and not settled yet. A pool whose payouts are already entered is not unsettled. <b>Settled</b> has a winner, or it is a pool with payouts entered. <b>Wash</b> is a push: nobody owes anything. <b>Cancelled</b> was voided. <b>All</b> includes every one of those. Settled and washed bets are listed on Tally.</p></div>
   <div class="card"><b>Whose turn</b><p><b>My turn</b> means there is a real step with your name on it: answer someone else’s correction, confirm a score that has already been proposed, or enter the result because that bet’s game is final and no score was proposed. A sorting date does not do this. A game later today, and a game still being played, are not your turn. A correction you still have to answer counts even if that game has not been played. <b>Their turn</b> is the same kind of step for the other person, on a bet you are in. An open bet is not “their turn” only because they wrote it. The number on My turn or Their turn is how many bets match that choice together with the other controls. It is not the yellow new-bet badge, and it is not the new-request badge. Those unseen numbers clear when you open All Bets. Changing a filter does not clear them.</p></div>
   <div class="card"><b>When</b><p>Today, Upcoming, and Past settle date use this device’s calendar day, the same day the page already uses for sorting. They are not Eastern Time and not the tip-off. <b>Past settle date</b> means the sorting date is before today. The bet stays open until someone enters the result. <b>End of season</b> and <b>End game</b> are only those labels. No season-end date and no game-end time is invented, and neither one settles the bet.</p></div>
   <div class="card"><b>Requests stay separate</b><p>Open requests stay in their own list at the top of All Bets. Status, Action needed, and When do not try to classify a request. Everyone, Me, a named person, and search do apply to that list, but only after the page has already hidden requests you cannot see. You see a request you sent, or one you were invited to and can still take. You never see someone else’s request just because you searched their name. A guest does not see those cards.</p></div>
@@ -3267,7 +3267,7 @@ function b27DropStale(){if(U.askSettle){const b=U.doc&&U.doc.bets&&U.doc.bets.fi
   try{
     const back=await b27Write(cur=>/*<CREATOR-SETTLE>*/{const x=cur.find(b=>b.id===id);if(status!=='void'&&x&&x.status==='open'&&x.backer!==me0)throw new Error('notcreator');return /*</CREATOR-SETTLE>*/cur.map(b=>b.id===id&&b.status==='open'?Object.assign({},b,{status,settled_at:/*<V25>*/status==='void'?new Date().toISOString():s25At()/*</V25>*/}/*<S25>*/,extra||{}/*</S25>*/):b)/*<CREATOR-SETTLE>*/}/*</CREATOR-SETTLE>*/,cur=>{const b=cur.find(x=>x.id===id);return !b||b.status===status||b.status!=='open'});
     b27Apply(back,'force');U.msg='Saved.';U.msgBad=false;
-    if(status==='backer'||status==='other'||status==='push'){U.flashBet=id;try{const t=s29eCopyText(b0);if(t)b27CopyNow(t)}catch(e){}}
+    if(status==='backer'||status==='other'||status==='push'){U.flashBet=id;try{const t=s29eCopyText(Object.assign({},b0,{status}));if(t)b27CopyNow(t)}catch(e){}}
   }catch(e){U.msg=/*<CREATOR-SETTLE>*/e&&e.message==='notcreator'?B27_ONLY:e&&e.message==='conflict'?'Couldn’t save, try again.':/*</CREATOR-SETTLE>*/'Couldn’t save that. Try again.';U.msgBad=true}
   U.busy=false;render();
 }
@@ -3515,15 +3515,19 @@ function b27LiveHtml(){
     return '<b>'+esc(BL.top)+'</b><div class="b27-w">'+esc(BL.win)+'</div><div class="b27-l">'+esc(BL.lose)+'</div>'+(BL.rounded?'<div class="mut b27-r">Rounded to a whole number.</div>':'')}/*</MULTI-BET>*/
   return '<b>'+esc(L.top)+'</b><div class="b27-w">'+esc(L.win)+'</div><div class="b27-l">'+esc(L.lose)+'</div>'+(L.rounded?'<div class="mut b27-r">Rounded to a whole number.</div>':'');
 }
+function b27Face(b){const text=String(b&&b.text||'');let dt=null;try{dt=S25.dateFrom(text,b&&b.created_at?S25.etDay(b.created_at):undefined)}catch(e){}if(!dt)return {face:text,gameDate:''};const k=SHARED_UI.whenKind(b);let whenD='';if(k==='date'&&SHARED_UI.estOk(b.est))whenD=b.est;else if(k==='game'){const rd=s25BetRd(b);if(rd&&rd.d)whenD=rd.d}if(k==='game'&&whenD&&dt.d===whenD)return {face:text,gameDate:''};const face=text.replace(dt.raw,' ').replace(/\s+,/g,',').replace(/,\s*(,|$)/g,'$1').replace(/^[, ]+|[, ]+$/g,'').replace(/\s{2,}/g,' ').trim();return {face:face||text,gameDate:dt.raw.trim()}}
+function b27SettlesLabel(b){const k=SHARED_UI.whenKind(b);if(k==='game')return 'Settles: when the game ends';if(k==='season')return 'Settles: end of season';if(k==='date')return 'Settles: '+SHARED_UI.estLabel(b.est);return 'Settles: date not set'}
+function b27SettlesHtml(b){const lab=esc(b27SettlesLabel(b)),open=!!(estDraft&&estDraft.id===b.id);if(!s24EstOwner(b))return `<div class="b27-set"><span class="b27-pill b27-pill-plain">${lab}</span></div>`;return `<div class="b27-set"><button type="button" class="b27-pill" data-settles="${esc(b.id)}" aria-expanded="${open?'true':'false'}" aria-controls="settles-${esc(b.id)}" onclick="s24EditStart('${b.id}')"${U.busy?' disabled':''}>${lab}<span class="b27-chev" aria-hidden="true"></span></button>${open?s24EstHtml(b):''}</div>`}
 function b27Card(b,me){
   const L=b27Lines(b),OP=b27Opps(b),BU=OP.length>1,isP=me&&(b.backer===me||OP.includes(me)),st=b.status;
-  const stTxt={open:'Open',backer:'Settled',other:'Settled',push:'💦',void:'Cancelled'}[st];
+  const stTxt={open:'Unsettled',backer:'Settled',other:'Settled',push:'💦',void:'Cancelled'}[st];
   /*<OWNER-NAMES>*/const OPd=OP.map(PN),Bk=PN(b.backer),Ot=PN(b.other);/*</OWNER-NAMES>*/
   const res=BU?(st==='backer'?Bk+' won ('+OPd.join(', ')+' each owe '+Bk+' '+b27Num(b27Pay(b).ifBackerRight)+')':st==='other'?'Managers won ('+Bk+' owes each of them '+b27Num(b27Pay(b).ifOtherRight)+')':st==='push'?'💦: nobody owes anything':'')
    :st==='backer'?Bk+' won ('+Ot+' owes '+b27Num(b27Pay(b).ifBackerRight)+')':st==='other'?Ot+' won ('+Bk+' owes '+b27Num(b27Pay(b).ifOtherRight)+')':st==='push'?'💦: nobody owes anything':'';
-  let h=`<div class="card b27-c${U.flashBet===b.id?' act-flash':''}"${/*<S24-EDIT>*/s24Attr('b',b.id)/*</S24-EDIT>*/}><div class="s24hd"><b>Bet #${b.n}</b>${/*<S24-EDIT>*/s24FixBadge(b)/*</S24-EDIT>*/} <span class="st ${st==='open'?'open':st==='push'?'wash':st==='void'?'unparsed':'settled'}">${stTxt}</span> <span class="mut" style="font-size:12px">${esc(b27Day(Date.parse(b.created_at)))}</span>${BU?` <span class="mut" style="font-size:12px">· ${OP.length} managers, one result</span>`:''}${/*<MULTI-BET>*/b.g&&U.doc.bets.filter(x=>x.g===b.g).length>1?` <span class="mut" style="font-size:12px">· 1 of ${U.doc.bets.filter(x=>x.g===b.g).length} placed together</span>`:''/*</MULTI-BET>*/}${/*<S24-EDIT>*/s24LinkBtn('bets',b.id,'bet')/*</S24-EDIT>*/}</div>
-   ${/*<S29E-POSTED>*/s29ePosted(b)/*</S29E-POSTED>*/}<div class="b27-due" data-due="${SHARED_UI.whenShow(b)}">${esc(SHARED_UI.whenText(b))}</div><div class="b27-t${/*<CARD-SIZE>*/' s25cl'+(S25P.more[b.id]?' open':'')+'" data-s25-t="'+b.id/*</CARD-SIZE>*/}">${esc(b.text)}</div>${/*<CARD-SIZE>*/`<button type="button" class="s25more" data-s25-more="${b.id}" aria-expanded="${!!S25P.more[b.id]}" onclick="s25More('${b.id}')" hidden>${S25P.more[b.id]?'less':'more'}</button>`/*</CARD-SIZE>*/}<div class="b27-m"><b>${esc(Bk)}</b> vs <b>${esc(OPd.join(', '))}</b> · <b>${b27Num(b.amt)}</b>${BU?' each':''} · ${esc(b27OddsLabel(b.odds.a,b.odds.b))}</div>
-   <div class="b27-w">${esc(L.win)}</div><div class="b27-l">${esc(L.lose)}</div>${L.rounded?'<div class="mut b27-r">Rounded to a whole number.</div>':''}${res?`<div class="note" style="margin-top:4px"><b>Result:</b> ${esc(res)}</div>`:''}${/*<S25>*/s25CardRd(b)+s25PropHtml(b,me)/*</S25>*/}${/*<CARD-SIZE>*/'<div class="s25sp" aria-hidden="true"></div>'/*</CARD-SIZE>*/}${/*<S25D-TS>*/s25dTsHtml(b)/*</S25D-TS>*/}`;
+  const ready=b27Ready(b),face=b27Face(b);
+  let h=`<div class="card b27-c${ready?' b27-ready':''}${U.flashBet===b.id?' act-flash':''}"${/*<S24-EDIT>*/s24Attr('b',b.id)/*</S24-EDIT>*/}><div class="s24hd"><b>Bet #${b.n}</b>${/*<S24-EDIT>*/s24FixBadge(b)/*</S24-EDIT>*/} <span class="st ${st==='open'?'open':st==='push'?'wash':st==='void'?'unparsed':'settled'}">${stTxt}</span>${BU?` <span class="mut" style="font-size:12px">· ${OP.length} managers, one result</span>`:''}${/*<MULTI-BET>*/b.g&&U.doc.bets.filter(x=>x.g===b.g).length>1?` <span class="mut" style="font-size:12px">· 1 of ${U.doc.bets.filter(x=>x.g===b.g).length} placed together</span>`:''/*</MULTI-BET>*/}${/*<S24-EDIT>*/s24LinkBtn('bets',b.id,'bet')/*</S24-EDIT>*/}</div>
+   <div class="b27-t${/*<CARD-SIZE>*/' s25cl'+(S25P.more[b.id]?' open':'')+'" data-s25-t="'+b.id/*</CARD-SIZE>*/}">${esc(face.face)}</div>${/*<CARD-SIZE>*/`<button type="button" class="s25more" data-s25-more="${b.id}" aria-expanded="${!!S25P.more[b.id]}" onclick="s25More('${b.id}')" hidden>${S25P.more[b.id]?'less':'more'}</button>`/*</CARD-SIZE>*/}<div class="b27-m"><b>${esc(Bk)}</b> vs <b>${esc(OPd.join(', '))}</b> · <b>${b27Num(b.amt)}</b>${BU?' each':''} · ${esc(b27OddsLabel(b.odds.a,b.odds.b))}</div>
+   ${ready?'<div class="b27-ready-t">Ready to settle</div>':''}${res?`<div class="note" style="margin-top:4px"><b>Result:</b> ${esc(res)}</div>`:''}${/*<S25>*/s25PropHtml(b,me)/*</S25>*/}`;
   if(st==='open'&&(isP||ADMIN)){
     const ask=w=>U.askSettle&&U.askSettle.id===b.id&&U.askSettle.what===w&&U.askSettle.terms===b27Terms(b);
     const btn=(w,label)=>`<button type="button" class="btn sec b27-b" onclick="${ask(w)?`b27SetStatus('${b.id}','${w}')`:`b27Ask('${b.id}','${w}')`}"${U.busy?' disabled':''}>${ask(w)?'Tap again to confirm':label}</button>`;
@@ -3532,10 +3536,11 @@ function b27Card(b,me){
     if(b27CanUndo(b)&&b.g&&gu.length>1){if(U.doc.bets.filter(x=>x.g===b.g&&b27CanUndo(x)).sort((p,q)=>q.n-p.n)[0].id===b.id)h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27UndoGroup('${b.g}','${b27GroupHash(b.g)}')"${U.busy?' disabled':''}>↩ Undo all ${gu.length} bets placed together (30 s)</button></div>`}
     else /*</MULTI-BET>*/if(b27CanUndo(b))h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27Void('${b.id}','${b27Hash(b27Terms(b))}')"${U.busy?' disabled':''}>↩ Undo this bet (30 s)</button></div>`;
     else if(ADMIN)h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27Void('${b.id}','${b27Hash(b27Terms(b))}')"${U.busy?' disabled':''}>Cancel bet (admin)</button></div>`;
-    if(me&&me===b.backer)h+=s24EstHtml(b);
   }
   /*<S24-EDIT>*/h+=s24EditedNote(b)+s24FixHtml(b,me);/*</S24-EDIT>*/
-  return h+/*<S25>*/s25RxHtml(b,me)/*</S25>*/+'</div>';
+  h+=b27SettlesHtml(b);
+  const det=[face.gameDate?`<div class="note">Game date: ${esc(face.gameDate)}</div>`:'',/*<S29E-POSTED>*/s29ePosted(b)/*</S29E-POSTED>*/,/*<S25D-TS>*/s25dTsHtml(b)/*</S25D-TS>*/,L.win?`<div class="b27-w">${esc(L.win)}</div>`:'',L.lose?`<div class="b27-l">${esc(L.lose)}</div>`:'',L.rounded?'<div class="mut b27-r">Rounded to a whole number.</div>':'',/*<S25>*/s25CardRd(b)/*</S25>*/].filter(Boolean).join('');
+  return h+`<div class="b27-foot">${det.trim()?`<details class="b27-more"><summary>Details</summary>${det}</details>`:''}${/*<S25>*/s25RxHtml(b,me)/*</S25>*/}</div></div>`;
 }
 /*<OWES-TABLE>*/
 const b27E1=e=>{e=String(e||'');try{return new Intl.Segmenter(undefined,{granularity:'grapheme'}).segment(e)[Symbol.iterator]().next().value.segment}catch(_){return Array.from(e)[0]||''}};   // first emoji only (phones: two-emoji names stay short)
@@ -3581,6 +3586,13 @@ function wmeHtml(me){const items=b27WaitingItems(me);
   return `<details class="card wme" id="wme"${wmeOpen?' open':''} ontoggle="wmeOpen=this.open"><summary><b>Waiting on me</b> <span class="note">${items.length}</span></summary>${items.length?rows:'<div class="note">Nothing needs you right now. A bet that is only open for later is not listed.</div>'}</details>`}
 function wmeGo(kind,id){tab='bets27';OB_VIEW='all';if(kind!=='req'){try{S24.sub=id}catch(e){}}
   render();setTimeout(()=>{const el=kind==='req'?document.querySelector('[data-rq-id="'+id+'"]'):document.getElementById('bet-'+id);if(el)el.scrollIntoView({block:'center'})},40)}
+function b27Done(b){return !!(b&&(b.status==='backer'||b.status==='other'||b.status==='push'||(b.kind==='pool'&&b.status==='open'&&b.back)))}
+function b27WhenGroup(b){const k=SHARED_UI.whenKind(b);return k==='game'||k==='season'||k==='date'?k:'unknown'}
+function b27SortSoon(list){return (list||[]).slice().sort((a,b)=>{const da=b27WhenGroup(a)==='date'?a.est:((typeof s25BetRd==='function'?s25BetRd(a):a.rd)||{}).d||'',db=b27WhenGroup(b)==='date'?b.est:((typeof s25BetRd==='function'?s25BetRd(b):b.rd)||{}).d||'';if(da&&db&&da!==db)return da<db?-1:1;if(da!==db)return da?-1:1;const ca=Date.parse(a.created_at)||0,cb=Date.parse(b.created_at)||0;if(ca!==cb)return ca-cb;return (a.n||0)-(b.n||0)})}
+function b27GameFinal(b){try{const rd=s25BetRd(b);if(!rd||rd.k==='manual'||!rd.d)return false;const loc=s25FromGames(rd);return !!(loc&&loc.g&&loc.g.final)}catch(e){return false}}
+function b27Ready(b){if(!s24IsOpen(b))return false;const k=SHARED_UI.whenKind(b),today=SHARED_UI.estToday();if(k==='date')return !!(SHARED_UI.estOk(b.est)&&b.est<=today);if(k==='game')return b27GameFinal(b);return false}
+function b27Cards(list,me){return (list||[]).map(b=>b.kind==='pool'?b27PoolCard(b,me):b27Card(b,me)).join('')}
+function b27Grouped(list,me){const names=[['game','End of game'],['season','End of season'],['date','Set date'],['unknown','Not sure yet']];let left=60,h='',n=0;names.forEach(([k,lab])=>{const g=b27SortSoon(list.filter(b=>b27WhenGroup(b)===k));if(!g.length||left<=0)return;const show=g.slice(0,left);left-=show.length;n+=g.length;h+=`<h3 class="b27-gh">${lab}</h3><div class="b27-grid">${b27Cards(show,me)}</div>`});if(n>60)h+='<p class="note">Showing the first 60 in these groups.</p>';return h}
 function vB27(){
   b27Seen();b27DropStale();
   const me=b27Who(),names=b27OwnerNames(),others=names.filter(n=>n!==me);
@@ -3609,15 +3621,15 @@ function vB27(){
      <div class="b27-sum" id="b27Sum">${esc(b27Summary())}</div><div id="s29Auto">${/*<S29D-AUTO>*/s29AutoHtml(s29AutoForm())/*</S29D-AUTO>*/}</div><div class="b27-bad-t" id="b27Hint"></div>
      <button type="button" id="b27Place" class="btn b27-big" onclick="b27Place()"${b27FormOK()?' disabled':''}>Place bet</button></div>`;
   }
-  const bets=SHARED_UI.estSort(U.doc.bets,SHARED_UI.estToday()),T=b27Tally(bets);
-  const ppl=Object.entries(T.per).sort((a,b)=>b[1].net-a[1].net);
+  const bets=U.doc.bets||[];
   /*<BALL-LOADER>*/if(U.state==='init'){h+=ballLoader();h+=introBottom;return h}   // ledger still loading: loader instead of an empty owes table / "No bets yet/*</BALL-LOADER>*/
   /*<ALL-BETS>*/if(OB_VIEW!=='all'){h+=introBottom;return h}/*Write it Up = form only; the list is on All bets*//*</ALL-BETS>*/
   /*<OWES-TABLE>*//*<S26F-WIU>*/// Write it Up: no Who Owes Who grid / Net per manager here; they live on Tally only (vTally, unchanged)/*</S26F-WIU>*//*</OWES-TABLE>*/
   /*<S26F-WIU> 'Still open' line removed from Write it Up (its closing </div> belonged to the removed owes card) </S26F-WIU>*/
-  /*<S24-EDIT>*/{const FL=s24Filter(bets,me);
-  h+=`<h2>Bets (${FL.length}${FL.length!==bets.length?' of '+bets.length:''})${/*<S25>*/s25MuteBtn()/*</S25>*/}</h2>`+s24FilterBar(bets,me)+(FL.length?FL.slice(0,60).concat(S24.sub&&tab==='bets27'?FL.slice(60).filter(b=>b.id===S24.sub):[]).map(b=>/*<POOL>*/b.kind==='pool'?b27PoolCard(b,me):/*</POOL>*/b27Card(b,me)).join('')/*<S25>*/.replace(/^/,'<div class="b27-grid">')+'</div>'/*</S25>*/:bets.length?'<div class="card note s24fe">No bets match this filter.</div>':'<div class="card note">No bets yet. Be the first.</div>');}/*</S24-EDIT>*/
-  if(bets.length>60)h+='<p class="note">Showing the latest 60.</p>';
+  /*<S24-EDIT>*/{const FL=s24Filter(bets,me).filter(b=>!b27Done(b)||(S24.sub&&b.id===S24.sub));
+  const ready=b27SortSoon(FL.filter(b27Ready)),ids=new Set(ready.map(b=>b.id)),rest=FL.filter(b=>!ids.has(b.id));
+  if(ready.length)h+=`<section id="b27Ready"><h2>Ready to settle <span class="note">${ready.length}</span></h2><div class="b27-grid">${b27Cards(ready,me)}</div></section>`;
+  h+=`<h2>All bets (${rest.length}${rest.length!==bets.length?' of '+bets.length:''})${/*<S25>*/s25MuteBtn()/*</S25>*/}</h2>`+s24FilterBar(bets,me)+(rest.length?b27Grouped(rest,me):bets.length?'<div class="card note s24fe">No unsettled bets match this filter.</div>':'<div class="card note">No bets yet. Be the first.</div>');}/*</S24-EDIT>*/
   /*<BETS-INTRO-BOTTOM>*/h+=introBottom;/*</BETS-INTRO-BOTTOM>*/
   return h;
 }
@@ -3644,7 +3656,7 @@ const RQ=(typeof SHARED_UI!=='undefined'&&SHARED_UI.Requests)?SHARED_UI.Requests
 let OB_VIEW='form';   // Bets tab: 'form' = 2026-27 (New bet form + bet list), 'tally' = person table + Who owes who for 2026-27
 function obView(v){tab='bets27';
   if(v==='open'){OB_VIEW='all';render();setTimeout(()=>{const el=document.getElementById('rqPinned');if(el)el.scrollIntoView({block:'start'})},40);return}
-  if(v==='tally'){if(window.matchMedia&&matchMedia('(min-width:1000px)').matches){OB_VIEW='tally';render();window.scrollTo(0,0);return}OB_VIEW='all';render();setTimeout(()=>{const el=document.getElementById('b27Tally');if(el){el.open=true;el.scrollIntoView({block:'start'})}},40);return}
+  if(v==='tally'){OB_VIEW='tally';render();window.scrollTo(0,0);return}
   OB_VIEW=v==='request'?'request':v==='all'?'all':'form';
   if(v==='request'){render();setTimeout(()=>{const el=document.getElementById('rqForm');if(el)el.scrollIntoView({block:'start'})},40);return}
   render();window.scrollTo(0,0)}
@@ -3664,6 +3676,8 @@ function vTally(){/* STEP11: Tally = 2026-27 Bets ledger (b27Tally / U.doc), not
     const L=[];names.forEach((a,x)=>names.slice(x+1).forEach(b=>{const d=M(a,b)-M(b,a);if(d>0)L.push([a,b,d]);else if(d<0)L.push([b,a,-d])}));
     if(L.length)h+=`<div class="card" data-tally-settle><b>If settled today</b>${L.map(([a,b,d])=>`<div class="tset">${esc(PN(a))} pays ${esc(PN(b))} ${b27Num(d)}</div>`).join('')}</div>`;
   }
+  const me=b27Who(),done=(bets||[]).filter(b27Done),shown=done.filter(b=>s24Match(b,me,{st:'all'})||(S24.sub&&b.id===S24.sub));
+  h+=`<h2>Settled bets <span class="note">${shown.length}</span></h2>`+s24FilterBar(done,me)+(shown.length?b27Grouped(b27SortSoon(shown).slice(0,60),me):'<div class="card note">No settled bets match.</div>');
   return h}
 /*</BETS-TALLY>*/
 function obToggle(){
@@ -3687,10 +3701,10 @@ function obOldNote(){   // read-only replacement of the old shared-ledger card (
   const bi=TABS.findIndex(t=>t[0]==='bets27');if(TABS.every(t=>t[0]!=='tally'))TABS.splice(bi+1,0,['tally','🧮 Tally']);NAVSHORT.tally='Tally';VIEWS.tally=()=>vTally();
   function entryPair(){const focus=OB_VIEW==='request'?'request':'form',wiu=vB27(),rq=(typeof RQ!=='undefined'&&RQ)?RQ.view():'<div class="card note">Request a bet is unavailable right now.</div>';
     return `<div class="entry-pair" data-focus="${focus}"><div class="entry-col entry-rq${focus==='request'?' is-on':''}">${rq}</div><div class="entry-col entry-wiu${focus==='form'?' is-on':''}">${wiu}</div></div>`}
-  VIEWS.bets27=()=>{if(OB_VIEW==='open'||(OB_VIEW==='tally'&&!(window.matchMedia&&matchMedia('(min-width:1000px)').matches)))OB_VIEW='all';
+  VIEWS.bets27=()=>{if(OB_VIEW==='open')OB_VIEW='all';
     const entry=OB_VIEW==='form'||OB_VIEW==='request';
     if(OB_VIEW==='tally')return obToggle()+vTally();
-    return obToggle()+(entry?entryPair():((typeof RQ!=='undefined'&&RQ?RQ.pinned(false,true):'')+vB27()+'<details class="card tally-fold" id="b27Tally"><summary><b>Tally</b> <span class="note">Who owes who</span></summary>'+vTally()+'</details>'))};VIEWS.bets=()=>obToggle()+vBets();NAVSHORT.bets27='Bets';/*</ONE-BETS>*/
+    return obToggle()+(entry?entryPair():((typeof RQ!=='undefined'&&RQ?RQ.pinned(false,true):'')+vB27()))};VIEWS.bets=()=>obToggle()+vBets();NAVSHORT.bets27='Bets';/*</ONE-BETS>*/
   if(typeof nbBadge==='function'){const _b=nbBadge;nbBadge=function(k){return k==='bets27'?/*<ONE-BETS>*/(tab==='bets'||tab==='bets27'?'':b27Badge()||_b('bets'))/*</ONE-BETS>*/:_b(k)}}      // 'new' badge on the one Bets tab: 2026-27 (own watermark) or the old ledger; inside the tab the toggle shows it on the other segment
   const pp=presPick;presPick=function(w){pp(w);try{U.opps=[];/*<POOL>*/U.pp=[];/*</POOL>*/if(tab==='bets27')render()}catch(e){}};
   /* toast: own text, and 'View' opens this tab when every pending item is a Bets 26-27 bet (wraps the existing functions; nothing in them is edited) */
@@ -3807,26 +3821,30 @@ function s24AfterLoad(){/*<NO-JUMP>*/const first=!S24.al;S24.al=1;/*</NO-JUMP>*/
 /* ---- 1) Edit ---- */
 function s24ResetForm(){Object.assign(U,{/*<S25>*/rdEd:null,rdOpen:false,/*</S25>*/opps:[],amt:null,amtCustom:false,amtTxt:'',amtErr:'',odds:[1,1],custom:false,customTxt:'',oddsErr:'',text:'',confirm:false,fids:{},qb:null,est:'',wk:'unknown'})}
 let estDraft=null;
-function s24EstKind(k){if(!estDraft)return;estDraft.kind=k==='date'||k==='season'||k==='game'?k:'unknown';if(estDraft.kind!=='date')estDraft.val='';render()}
-function s24EstHtml(b){const open=estDraft&&estDraft.id===b.id;
-  if(!open)return `<div class="b27-act"><span class="note">${esc(SHARED_UI.whenText(b))}.</span> <button type="button" class="btn sec b27-b" data-est-edit="${esc(b.id)}" onclick="s24EditStart('${b.id}')">Edit</button></div>`;
-  return `<div class="b27-est" data-est-editor="${esc(b.id)}">${SHARED_UI.whenBox({e:esc,kind:estDraft.kind,est:estDraft.val,seasonId:b27Season(),game:!!estDraft.allowGame,inputId:'estIn',pick:id=>`onclick="s24EstKind('${id}')"`,dateAttr:'onchange="if(estDraft)estDraft.val=this.value"'})}<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="s24EstSave('${b.id}')">Save</button><button type="button" class="btn sec b27-b" onclick="s24EstClear('${b.id}')">Clear</button><button type="button" class="btn sec b27-b" onclick="s24EstCancel()">Cancel</button></div><div class="note">Description, people, amount, and odds stay as written.</div></div>`}
+function b27HasGame(b){const r=b&&b.rd;return !!(r&&(r.k==='spread'||r.k==='ml'||r.k==='total')&&r.t&&r.o)||!!(b&&b.src&&b.src.g)}
+function s24EstKind(k){if(U.busy||!estDraft)return;estDraft.kind=k==='date'||k==='season'||k==='game'?k:'unknown';if(estDraft.kind!=='date')estDraft.val='';render()}
+function s24EstPick(id,k){if(U.busy||!estDraft||estDraft.id!==id)return;const kind=k==='date'||k==='season'||k==='game'?k:'unknown';if(kind==='date'){estDraft.kind='date';render();return}const b=(U.doc.bets||[]).find(x=>x.id===id);if(b&&SHARED_UI.whenKind(b)===kind){estDraft.kind=kind;estDraft.val='';render();return}s24EstWrite(id,kind,null)}
+function s24EstHtml(b){if(!(estDraft&&estDraft.id===b.id))return '';const k=estDraft.kind,dis=U.busy?' disabled':'',chip=(id,lab)=>`<button type="button" class="b27-chip" data-when="${id}" aria-pressed="${k===id?'true':'false'}" onclick="s24EstPick('${b.id}','${id}')"${dis}>${esc(lab)}</button>`;
+  const opts=(estDraft.allowGame?chip('game','End of game'):'')+chip('season','End of season')+chip('date','Set a date')+chip('unknown','Not sure yet');
+  const date=k==='date'?`<input class="sb-in b27-in" type="date" id="estIn" aria-label="Set a date" value="${esc(estDraft.val||'')}" onchange="if(estDraft&&estDraft.id==='${b.id}')estDraft.val=this.value"${dis}><div class="b27-act"><button type="button" class="btn sec b27-b" onclick="s24EstSave('${b.id}')"${dis}>${U.busy?'Saving…':'Save'}</button><button type="button" class="btn sec b27-b" onclick="s24EstCancel()"${dis}>Cancel</button></div>`:'';
+  return `<div class="b27-drop" id="settles-${esc(b.id)}" data-est-editor="${esc(b.id)}" role="group" aria-label="When this bet can be settled"><div class="b27-when-c">${opts}</div>${date}</div>`}
 function s24EstOwner(b){const me=b27Who();return !!(b&&b.status==='open'&&b.kind!=='pool'&&me&&b.backer===me)}
-function s24EditStart(id){const b=(U.doc.bets||[]).find(x=>x.id===id);
+function s24EditStart(id){if(U.busy)return;if(estDraft&&estDraft.id===id){estDraft=null;render();return}const b=(U.doc.bets||[]).find(x=>x.id===id);
   if(!s24EstOwner(b)){estDraft=null;U.msg=b&&b.status!=='open'?'This bet is already settled. The sorting note stays as it is.':'Only the person who posted this bet can set when it might be settled.';U.msgBad=true;render();return}
-  const kind=SHARED_UI.whenKind(b);estDraft={id,kind,val:kind==='date'?b.est:'',allowGame:kind==='game'};U.msg='';render()}
-function s24EstCancel(){estDraft=null;render()}
-async function s24EstWrite(id,kind,est){const b=(U.doc.bets||[]).find(x=>x.id===id);if(!s24EstOwner(b)){estDraft=null;U.msg='Only the person who posted this unsettled bet can set when it might be settled.';U.msgBad=true;render();return}
+  const kind=SHARED_UI.whenKind(b);estDraft={id,kind,val:kind==='date'?b.est:'',allowGame:kind==='game'||b27HasGame(b)};U.msg='';render()}
+function s24EstCancel(){if(U.busy)return;estDraft=null;render()}
+async function s24EstWrite(id,kind,est){if(U.busy)return;const b=(U.doc.bets||[]).find(x=>x.id===id);if(!s24EstOwner(b)){estDraft=null;U.msg='Only the person who posted this unsettled bet can set when it might be settled.';U.msgBad=true;render();return}
   const pack=SHARED_UI.whenPack(kind,est,b27Season());if(kind==='date'&&!pack){U.msg='Use a real calendar date, or pick End of season or Not sure yet.';U.msgBad=true;render();return}
   const w=pack||SHARED_UI.whenPack('unknown');
   const sig=x=>JSON.stringify({text:x.text,amt:x.amt,odds:x.odds,backer:x.backer,other:x.other,opponents:x.opponents||null,rd:x.rd||null});
   const before=sig(b);
+  U.busy=true;render();
   try{const back=await b27Write(cur=>cur.map(x=>{if(x.id!==id)return x;const y=SHARED_UI.whenApply(x,w);if(!y)throw new Error('locked');return y}),cur=>cur.some(x=>x.id===id&&x.wk===w.wk&&(w.est?x.est===w.est:!x.est)&&(w.sid?x.sid===w.sid:!x.sid)));
     const now=back.find(x=>x.id===id);if(!now||sig(now)!==before)throw new Error('locked');
     b27Apply(back);estDraft=null;U.msg='Sorting note saved. The terms are unchanged.';U.msgBad=false}
   catch(e){U.msg='The sorting note was not saved. The terms were not changed.';U.msgBad=true}
-  render()}
-function s24EstSave(id){const raw=(document.getElementById('estIn')||{}).value||'';const kind=estDraft&&estDraft.id===id?estDraft.kind:'unknown';s24EstWrite(id,kind,raw||null)}
+  U.busy=false;render()}
+function s24EstSave(id){if(U.busy||!estDraft||estDraft.id!==id)return;const raw=(document.getElementById('estIn')||{}).value||'';s24EstWrite(id,estDraft.kind,raw||null)}
 function s24EstClear(id){s24EstWrite(id,'unknown',null)}
 function s24EditCancel(){estDraft=null;U.editOf=null;U.msg='';render()}
 function s24EditHint(){if(!U.editOf)return '';const o=U.doc.bets.find(x=>x.id===U.editOf),n=o?'#'+o.n:'';
@@ -3890,7 +3908,7 @@ function s29Sb(day){const T=s=>{const t=D.teams[s.id]||{};return {location:t.nam
   return {events:(D.games||[]).filter(g=>g.day===day&&g.home&&g.away).map(g=>({id:g.id,date:g.start,competitions:[{competitors:[{team:T(g.home)},{team:T(g.away)}]}],status:{type:{}}}))}}
 function s29AutoOK(r){try{if(!r||r.k==='manual'||!r.t||!r.o||!r.d)return false;return !!S25.match(s29Sb(r.d),r)}catch(e){return false}}
 function s29AutoForm(){try{return b27Clean(U.text)?s29AutoOK(s25FormRd()):null}catch(e){return null}}
-function s29AutoHtml(ok){return ok?'<div class="s29-auto" data-s29-auto="1">'+(window.SHARED_UI&&SHARED_UI.AUTO_NOTE||'This will be auto-settled after completion.')+'</div>':(ok===false&&S29_AUTO_B?'<div class="s29-auto s29-hand" data-s29-auto="0">Settled by hand.</div>':'')}
+function s29AutoHtml(ok){return ok?'<div class="s29-auto" data-s29-auto="1">'+(window.SHARED_UI&&SHARED_UI.AUTO_NOTE||'After the final we suggest the winner. Nothing is settled until someone taps Confirm.')+'</div>':(ok===false&&S29_AUTO_B?'<div class="s29-auto s29-hand" data-s29-auto="0">Settled by hand.</div>':'')}
 let S29AT=0;function s29AutoSoon(){clearTimeout(S29AT);S29AT=setTimeout(()=>{const e=document.getElementById('s29Auto');if(e)e.innerHTML=s29AutoHtml(s29AutoForm())},250)}
 /*</S29D-AUTO>*/
 function s25BetRd(b){const r=b&&b.rd;if(r&&r.k&&r.k!=='manual')return r;try{const p=S25.parse((b&&b.text)||'',b&&(b.created_at||b.postedAt));if(p&&p.k&&p.k!=='manual')return p}catch(e){}return r||null}
@@ -3913,12 +3931,16 @@ function s25Fetch(r){const k=s25Key(r),c=S25P.games[k];const hold=c&&c.st==='err
   fetch(S25.scoreboardUrl(r.sp,r.d),ac?{credentials:'omit',cache:'no-store',signal:ac.signal}:{credentials:'omit',cache:'no-store'}).then(x=>{if(!x.ok)throw 0;return x.json()}).then(sb=>{S25P.games[k]={st:'ok',at:Date.now(),sb}},()=>{S25P.games[k]={st:'err',at:Date.now()}})
     .then(()=>{const ae=document.activeElement;if(tab==='bets27'&&!(ae&&ae.closest&&ae.closest('#main')&&/INPUT|TEXTAREA|SELECT/.test(ae.tagName)))render()}).catch(()=>{})}
 function s25ResWho(b,r){const OP=b27Opps(b);return r==='backer'?b.backer+' won':r==='other'?(OP.length>1?'Managers won':b.other+' won'):'💦'}
-function s25PropHtml(b,me){const G=s25Game(b);if(!G)return '';const r=s25BetRd(b)||b.rd;/*STEP9-AUTOSETTLE live leader*/if(G.wait==='live'&&G.g&&window.SHARED_UI&&SHARED_UI.autoLine){try{const p=S25.proposal(r,Object.assign({},G.g,{final:true}));if(p&&p.r){const OP=b27Opps(b);return SHARED_UI.autoLine({e:esc,live:true,who:p.r==='backer'?PN(b.backer):p.r==='other'?(OP.length>1?'Managers':PN(b.other)):'',sc:p.sc})}}catch(e){}}
-  if(G.wait){const t=G.wait==='future'?'Game day '+S25.dayLbl(r.d)+'. After the final we’ll show you the score and a proposed result to confirm.':G.wait==='loading'?'Checking the final score…':G.wait==='err'?'Scores can’t be read right now: settle it by hand.':G.wait==='nogame'?'No matching game found yet: settle it by hand.':
-      'No final score yet. Settle it by hand any time, or come back after the game.'+(G.g&&G.g.state==='pre'&&G.g.start?' (starts '+S25.localTime(G.g.start)+')':'');
+function s25SuggestName(b,r){const OP=b27Opps(b);return r==='backer'?PN(b.backer):r==='other'?(OP.length>1?'Managers':PN(b.other)):'Wash'}
+function s25SuggestLine(b,p){return `<div class="s25sg">Suggested winner: <b>${esc(s25SuggestName(b,p.r))}</b>${p&&p.sc?` (${esc(p.sc)})`:''}</div>`}
+function s25PropHtml(b,me){const G=s25Game(b);if(!G)return '';const r=s25BetRd(b)||b.rd;
+  if(G.wait==='live'&&G.g){try{const p=S25.proposal(r,Object.assign({},G.g,{final:true}));if(p&&p.r)return `<div class="s25pp" data-s25-prop="live">${s25SuggestLine(b,p)}</div>`}catch(e){}}
+  if(G.wait){const t=G.wait==='future'?'Game day '+S25.dayLbl(r.d)+'. After the final we’ll show you the score and a suggested winner to confirm.':G.wait==='loading'?'Checking the final score…':(G.wait==='err'||G.wait==='nogame')?'No score found, pick the winner yourself':
+      'No final score yet. Pick the winner yourself any time, or come back after the game.'+(G.g&&G.g.state==='pre'&&G.g.start?' (starts '+S25.localTime(G.g.start)+')':'');
     return `<div class="s25pp" data-s25-prop="${G.wait}">${esc(t)}</div>`}
-  const p=G.p;if(!p)return '';const ask=!!(S25P.ask&&S25P.ask.id===b.id&&S25P.ask.terms===b27Terms(b)+'\u001f'+p.text+'\u001f'+p.r);/*STEP9-AUTOSETTLE*/if(window.SHARED_UI&&SHARED_UI.autoLine){const OP=b27Opps(b);return '<div class="s25pp" data-s25-prop="final">'+SHARED_UI.autoLine({e:esc,live:false,who:p.r==='backer'?PN(b.backer):p.r==='other'?(OP.length>1?'Managers':PN(b.other)):'',sc:p.sc,btn:`<button type="button" class="ok" data-s25-ok="${b.id}" onclick="${ask?`s25Confirm('${b.id}')`:`s25Ask('${b.id}')`}"${U.busy?' disabled':''}>${ask?'Tap again to confirm':'✅ Confirm'}</button> <button type="button" data-s25-fix="${b.id}" aria-pressed="${!!S25P.fix[b.id]}" onclick="s25Fix('${b.id}')">✏️ Fix</button>`,note:'Nothing is settled until someone taps Confirm.'})+'</div>'}
-  return `<div class="s25pp" data-s25-prop="final"><div><b>Final:</b> ${esc(p.sc)}</div><div><b>Proposed result:</b> ${esc(s25ResWho(b,p.r))} <span class="note">(${esc(p.why)})</span></div><button type="button" class="ok" data-s25-ok="${b.id}" onclick="${ask?`s25Confirm('${b.id}')`:`s25Ask('${b.id}')`}"${U.busy?' disabled':''}>${ask?'Tap again to confirm':'✅ Confirm'}</button><button type="button" data-s25-fix="${b.id}" aria-pressed="${!!S25P.fix[b.id]}" onclick="s25Fix('${b.id}')">✏️ Fix</button><div class="note">Nothing is settled until you confirm.</div></div>`}
+  const p=G.p;if(!p)return '';const ask=!!(S25P.ask&&S25P.ask.id===b.id&&S25P.ask.terms===b27Terms(b)+'\u001f'+p.text+'\u001f'+p.r);
+  const btn=`<button type="button" class="ok" data-s25-ok="${b.id}" onclick="${ask?`s25Confirm('${b.id}')`:`s25Ask('${b.id}')`}"${U.busy?' disabled':''}>${ask?'Tap again to confirm':'✅ Confirm'}</button> <button type="button" data-s25-fix="${b.id}" aria-pressed="${!!S25P.fix[b.id]}" onclick="s25Fix('${b.id}')">✏️ Fix</button>`;
+  return `<div class="s25pp" data-s25-prop="final">${s25SuggestLine(b,p)}<div class="s25sg-act">${btn}</div><div class="note">Nothing is settled until someone taps Confirm.</div></div>`}
 function s25Ask(id){if(U.busy||b27TapLock())return;const b=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===id);if(!b){S25P.ask=null;render();return}const G=s25Game(b);const terms=b27Terms(b)+'\u001f'+(G&&G.p?G.p.text+'\u001f'+G.p.r:'');if(S25P.ask&&S25P.ask.id===id&&S25P.ask.terms===terms)S25P.ask=null;else S25P.ask={id,terms};render()}
 function s25HideManual(b){if(S25P.fix[b.id])return false;const G=s25Game(b);return !!(G&&G.p)}
 function s25Fix(id){S25P.fix[id]=!S25P.fix[id];render()}
@@ -4084,7 +4106,7 @@ function s24FixBadge(b){return b.fxh&&b.fxh.some(e=>e.out==='confirmed'/*<CREATO
 /*</CREATOR-SETTLE>*/
 /* ---- Bets filter (2026-27 view): the older STOOPIDS two-select design (Wagers list: Everyone / person + status), plus "Me" and "Waiting on me".
    Remembered per device in localStorage (stoopids_b27_person / stoopids_b27_status): only the filter value ("me" is stored as the word me, never a name for it). ---- */
-const S24FST=[['open','Open'],['all','All'],['settled','Settled'],['wash','Wash'],['void','Cancelled']],S24FAC=[['any','Any'],['mine','My turn'],['theirs','Their turn']],S24FWH=[['any','Any time'],['up','Upcoming'],['today','Today'],['over','Past settle date'],['game','End game'],['season','End of season'],['none','Not sure yet']],S24FPK='stoopids_b27_person',S24FSK='stoopids_b27_status',S24FAK='stoopids_b27_action',S24FWK='stoopids_b27_when';
+const S24FST=[['open','Unsettled bets'],['all','All'],['settled','Settled'],['wash','Wash'],['void','Cancelled']],S24FAC=[['any','Any'],['mine','My turn'],['theirs','Their turn']],S24FWH=[['any','Any time'],['up','Upcoming'],['today','Today'],['over','Past settle date'],['game','End game'],['season','End of season'],['none','Not sure yet']],S24FPK='stoopids_b27_person',S24FSK='stoopids_b27_status',S24FAK='stoopids_b27_action',S24FWK='stoopids_b27_when';
 const s24FP=()=>{const v=lsGet(S24FPK);return v==='me'||b27OwnerNames().includes(v)?v:'all'};
 const s24One=(key,list,fb)=>{const v=lsGet(key);return list.some(x=>x[0]===v)?v:fb};
 const s24FSt=()=>s24One(S24FSK,S24FST,'open');
@@ -4368,6 +4390,35 @@ html body .gm .gh .gbtns,html body .gm .gh .mkbtns{position:static!important;fle
 html body .ggrid>.gm:not(.gfin),html body .ggrid .gbody{grid-template-columns:minmax(0,1fr)!important}
 html body .ggrid .gow,html body .ggrid>.gm:not(.gfin)>.gow,html body .ggrid .gbody>.gow{grid-column:1!important;display:flex!important;flex-wrap:wrap!important;height:auto!important;max-height:none!important;overflow:visible!important;white-space:normal!important}
 html body .ggrid .gow .opill{max-width:none!important;overflow:visible!important;text-overflow:clip!important;white-space:normal!important}
+html body .b27-c.b27-ready{outline:2px solid #f87171;outline-offset:0}
+html body .b27-ready-t{margin-top:4px;color:#fca5a5;font-weight:800;font-size:13px}
+html body .b27-set{margin-top:6px}
+html body .b27-pill{display:inline-flex;align-items:center;gap:6px;max-width:100%;padding:4px 10px 4px 12px;border-radius:999px;border:1px solid var(--line,#334);background:var(--card2,#1b2030);color:var(--tx,#eee);font:inherit;font-size:12.5px;font-weight:700;line-height:1.3;text-align:left}
+html body button.b27-pill{cursor:pointer;appearance:none}
+html body .b27-pill-plain{cursor:default}
+html body .b27-pill[aria-expanded="true"]{border-color:var(--acc,#ffd400)}
+html body .b27-pill:disabled{opacity:.55;cursor:default}
+html body .b27-chev{width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid currentColor;opacity:.75;flex:none}
+html body .b27-pill[aria-expanded="true"] .b27-chev{border-top:0;border-bottom:5px solid currentColor}
+html body .b27-drop{margin-top:6px;padding:8px;border:1px solid var(--line,#334);border-radius:12px;background:var(--card2,#1b2030)}
+html body .b27-drop .b27-when-c{flex-direction:column}
+html body .b27-drop .b27-chip{width:100%!important;text-align:left}
+html body .b27-drop .b27-chip[aria-pressed="true"]{background:var(--acc,#ffd400);color:#111;border-color:var(--acc,#ffd400)}
+html body .b27-drop .b27-in{width:100%;box-sizing:border-box;margin-top:6px}
+html body .b27-drop .b27-act{margin-top:6px}
+html body .b27-gh{margin:12px 0 6px;font-size:15px}
+html body .s25sg{margin:6px 0 0;font-size:13.5px;font-weight:700;line-height:1.35}
+html body .s25sg-act{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:6px}
+html body .b27-foot{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;column-gap:8px;margin-top:8px}
+html body .b27-foot>.b27-more>summary{min-height:36px;line-height:36px}
+html body .b27-foot>.b27-more{grid-column:1;grid-row:1;margin-top:0;min-width:0}
+html body .b27-foot>.s25rxr{grid-column:2;grid-row:1;margin:0;justify-content:flex-end}
+html body .b27-more{margin-top:8px}
+html body .b27-more summary{cursor:pointer;font-weight:700}
+html body .s24fb{padding:8px!important}
+html body .s24fb .row2{display:flex;flex-wrap:wrap;gap:4px}
+html body .s24fb select,html body .s24fb input.sb-in{height:30px;min-height:30px;font-size:12px;flex:1 1 120px;min-width:0}
+html body .s24fb .note{margin-top:4px!important;font-size:12px}
 html body nav#nav{position:sticky!important;top:0!important;z-index:40!important;background:var(--bg,#0e121b)!important}
 html{scroll-padding-top:64px}
 .hero{cursor:pointer}
@@ -4402,10 +4453,11 @@ function s29eCopyText(b){if(!b)return '';if(b.status==='open'&&b.kind!=='pool')r
   const OP=b27Opps(b),BU=OP.length>1,Bk=PN(b.backer),OPd=OP.map(PN),st=b.status,P=b27Pay(b);
   const stTxt={open:'Open',backer:'Settled',other:'Settled',push:'Wash',void:'Cancelled'}[st]||'Open';
   const win=st==='backer'?' · '+Bk+' won':st==='other'?' · '+(BU?'Managers':OPd[0])+' won':'';
+  if(st==='backer'||st==='other'||st==='push'){const mark=st==='push'?'💦':'💥',head=st==='push'?mark+' Bet #'+b.n+' · Wash '+mark:mark+' Bet #'+b.n+' · Settled'+win+' '+mark;return [head,b27Clean(b.text),Bk+' vs '+OPd.join(', ')+' · '+b27Num(b.amt)+(BU?' each':'')+' '+b27OddsShort(b.odds.a,b.odds.b)].join('\n')}
   L.push('Bet #'+b.n+' · '+stTxt+win,b27Clean(b.text),Bk+' vs '+OPd.join(', ')+' · '+b27Num(b.amt)+(BU?' each':'')+' '+b27OddsShort(b.odds.a,b.odds.b));
   L.push('If '+Bk+' is right: '+OPd.join(', ')+(BU?' each owe ':' owes ')+Bk+' '+b27Num(P.ifBackerRight));
   L.push('If '+OPd.join(', ')+(BU?' are':' is')+' right: '+Bk+' owes '+(BU?'each of them ':OPd[0]+' ')+b27Num(P.ifOtherRight));
-  let auto=false;try{auto=st==='open'&&!!b.rd&&s29AutoOK(b.rd)}catch(e){}if(auto)L.push('Auto-settles after the game');
+  let auto=false;try{auto=st==='open'&&!!b.rd&&s29AutoOK(b.rd)}catch(e){}if(auto)L.push('Suggested winner after the game');
   L.push(posted);return L.join('\n')}
 </script><!--</S29E-COPY>-->
 <script>
