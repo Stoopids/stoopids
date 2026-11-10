@@ -4791,6 +4791,9 @@ html body .gfin.open>.gsum>span:not(.gst):not(.gch){display:none!important}
 .cm-row .sb-in,.cm-acts{margin-top:4px}
 .cm-acts{display:flex;flex-wrap:wrap;gap:6px}
 .cm-acts .btn,.cm-row .btn{margin-top:6px}
+/* The Bets sub-tabs were sticking over the blue Request heading. Keep them in normal flow, above the form. */
+html body #main>.tabs.ob-seg{position:static!important;top:auto!important;z-index:auto!important;margin-bottom:12px!important}
+html body .entry-hd.entry-hd-rq,html body .entry-hd.entry-hd-wiu{margin-top:0!important}
 @media (max-width:700px){
  html body #main>.tapf{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;grid-auto-rows:26px!important;gap:4px!important;width:100%!important}
  html body #main>.tapf>button:first-child{grid-column:1 / -1!important;grid-row:auto!important;width:100%!important;height:26px!important;min-height:26px!important;max-height:26px!important;padding:0 8px!important;font-size:12px!important;line-height:24px!important}
