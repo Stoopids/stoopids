@@ -3021,7 +3021,7 @@ function chatInit(){
    Remove everything between the BETS-2627 markers (CSS, JS, load hook) to drop the tab. */
 const BETS_DISCLAIMER="Bets here are just for fun and are settled in pullups, not money. Betting is Stoopid, and we don't endorse or facilitate gambling for money.";   // the ONLY place the unit word appears in the tab; rendered once above the form
 const PULK={url:'https://textdb.dev/api/data/stoopids-bets-2627-9eaa4f66',amounts:[5,10,20,25,50],minAmt:5,maxAmt:1000,oddsChips:[[1,1],[2,1],[3,1],[4,1],[5,1]],maxOdds:100,maxText:140,maxBets:300,undoMs:300000,seenKey:'stoopids_bets2627_seen',pollMs:45000,pollOpenMs:15000};
-const U={state:'init',doc:{bets:[]},known:null,maxN:0,mine:new Set(),opps:[],amt:null,amtCustom:false,amtTxt:'',amtErr:'',odds:[1,1],custom:false,customTxt:'',oddsErr:'',text:'',confirm:false,busy:false,msg:'',msgBad:false,fids:{},gid:null,askSettle:null,fails:0,timer:null,started:false,undoT:null,est:'',wk:'game',whenPick:false};
+const U={state:'init',doc:{bets:[]},known:null,maxN:0,mine:new Set(),opps:[],amt:null,amtCustom:false,amtTxt:'',amtErr:'',odds:[1,1],custom:false,customTxt:'',oddsErr:'',text:'',confirm:false,busy:false,msg:'',msgBad:false,fids:{},gid:null,askSettle:null,askDel:null,editOf:null,fails:0,timer:null,started:false,undoT:null,est:'',wk:'game',whenPick:false};
 /*<POOL>*/Object.assign(U,{kind:'bet',pp:[],entry:'',backTxt:'',poolTxt:{},poolErr:{}});/*</POOL>*/
 /* ---- pure helpers (unit-tested) ---- */
 const b27Num=n=>{const neg=n<0;n=Math.abs(Math.round(n));return (neg?'-':'')+n.toLocaleString('en-US')};      // plain whole number, thousands separator, no unit
@@ -3222,7 +3222,7 @@ function b27Place(){/*<POOL>*/if(U.kind==='pool'){U.confirm=false;return}/*</POO
 function b27Edit(){U.confirm=false;render()}
 /*<MULTI-BET>*/async function b27Confirm(){
   if(U.busy)return;/*<POOL>*/if(U.kind==='pool')return b27PoolConfirm();/*</POOL>*/
-  if(U.editOf){U.editOf=null;U.confirm=false;U.msg='Once a bet is posted, its terms stay as written. Only the result can be entered.';U.msgBad=true;render();return}
+  if(U.editOf)return b27SaveEdit();
   const e=b27FormOK();if(e){b27Err(e);U.confirm=false;render();return}
   const nbs=b27BetsFromForm(),ids=nbs.map(b=>b.id),clip=nbs.map(b27ClipText).filter(Boolean).join('\n\n');
   U.busy=true;U.msg='Saving…';U.msgBad=false;U.clip=null;render();
@@ -3260,7 +3260,7 @@ function b27Stale(msg){U.askSettle=null;if(typeof S25P!=='undefined')S25P.ask=nu
 function b27TapLock(){if(U.tapUntil&&Date.now()<U.tapUntil)return true;U.tapUntil=Date.now()+450;return false}
 function b27PoolTerms(b){return b27Terms(b)+'\u001f'+(U.poolTxt[b.id]||'')+'\u001f'+JSON.stringify((U.placeWho&&U.placeWho[b.id])||[])}
 function b27Void(id,hash){if(U.busy||b27TapLock())return;const b=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===id);if(!b||b.status!=='open'||b27Hash(b27Terms(b))!==hash){b27Stale();return}U.askSettle=null;b27SetStatus.skip=true;return b27SetStatus(id,'void')}
-function b27DropStale(){if(U.askSettle){const b=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===U.askSettle.id);const terms=b&&(U.askSettle.what==='pool'?b27PoolTerms(b):b27Terms(b));if(!b||terms!==U.askSettle.terms)U.askSettle=null}
+function b27DropStale(){if(U.askDel){const b=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===U.askDel);if(!b||!b27CanUndo(b))U.askDel=null}if(U.askSettle){const b=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===U.askSettle.id);const terms=b&&(U.askSettle.what==='pool'?b27PoolTerms(b):b27Terms(b));if(!b||terms!==U.askSettle.terms)U.askSettle=null}
   if(typeof S25P!=='undefined'&&S25P.ask&&S25P.ask.id){const b=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===S25P.ask.id);let terms='';if(b){const G=s25Game(b);terms=b27Terms(b)+'\u001f'+(G&&G.p?G.p.text+'\u001f'+G.p.r:'')}if(!b||terms!==S25P.ask.terms)S25P.ask=null}}
 /*</MULTI-BET>*/async function b27SetStatus(id,status/*<S25>*/,extra/*</S25>*/){
   if(U.busy)return;if(!b27SetStatus.skip&&b27TapLock())return;b27SetStatus.skip=false;const b0=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===id);if(!b0||b0.status!=='open'){b27Stale();return}
@@ -3477,7 +3477,20 @@ function b27PoolOwesHtml(T){if(!T.poolOwes.length)return '';
   const rows=[];let last=null;T.poolOwes.forEach(o=>{if(o.n!==last){last=o.n;rows.push(`<tr class="oqh"><td colspan="4">${esc(PT('tTag',{n:o.n,text:o.text}))}</td></tr>`)}rows.push(`<tr><td>${b27Nm(o.from)}</td><td class="ow">owes</td><td>${b27Nm(o.to)}</td><td class="n"><b>${b27Num(o.num)}</b></td></tr>`)});
   return `<details class="b27-pd"${/*<OWES-CHART>*/U.poolOpen?' open':''/*</OWES-CHART>*/} ontoggle="U.poolOpen=this.open"><summary>${esc(POOL_TXT.tHead)}</summary><div class="oqs">${esc(POOL_TXT.tNote)}</div><table class="oq oqx" aria-label="${esc(POOL_TXT.tHead)}"><colgroup><col class="a"><col class="m"><col class="b"><col class="v"></colgroup><tr><th>Who</th><th></th><th>To</th><th class="n">Net</th></tr>${rows.join('')}</table></details>`}
 /*</POOL>*/
-function b27CanUndo(b){return b.status==='open'&&(b.backer===b27Who()||(b.postedBy&&b.postedBy===b27Who()))&&Date.now()-Date.parse(b.created_at)<PULK.undoMs}
+function b27CanUndo(b){return !!b&&b.status==='open'&&(b.backer===b27Who()||(b.postedBy&&b.postedBy===b27Who()))&&Date.now()-Date.parse(b.created_at)<PULK.undoMs}
+function b27OpenEdit(id){if(U.busy)return;const b=(U.doc.bets||[]).find(x=>x.id===id);if(!b||b.kind==='pool'||!b27CanUndo(b)){U.askDel=null;U.msg='Only the person who posted this bet can edit it, and only for 5 minutes.';U.msgBad=true;render();return}
+  const odds=[+(b.odds&&b.odds.a)||1,+(b.odds&&b.odds.b)||1],chip=PULK.oddsChips.some(([a,c])=>a===odds[0]&&c===odds[1]),amtChip=PULK.amounts.includes(+b.amt),k=SHARED_UI.whenKind(b),me=b27Who();
+  Object.assign(U,{kind:'bet',confirm:false,editOf:id,askDel:null,msg:'',msgBad:false,backer:b.backer&&b.backer!==me?b.backer:null,opps:b27Opps(b).slice(),text:b.text||'',amt:+b.amt,amtCustom:!amtChip,amtTxt:amtChip?'':String(b.amt),amtErr:'',odds:odds,custom:!chip,customTxt:chip?'':odds[0]+'-'+odds[1],oddsErr:'',wk:k==='date'||k==='season'||k==='game'?k:'unknown',est:k==='date'?(b.est||''):'',whenPick:k!=='game',rdEd:null,rdOpen:false});
+  obView('form')}
+function b27AskDel(id){if(U.busy||b27TapLock())return;const b=(U.doc.bets||[]).find(x=>x.id===id);if(!b||!b27CanUndo(b)){U.askDel=null;b27Stale('The 5 minutes are up. Nothing was deleted.');return}U.askDel=id;render()}
+function b27DoDel(id,hash){if(U.busy||b27TapLock())return;if(U.askDel!==id){U.askDel=null;b27Stale('That confirm was for a different bet. Nothing was deleted.');return}const b=(U.doc.bets||[]).find(x=>x.id===id);if(!b||!b27CanUndo(b)){U.askDel=null;b27Stale('The 5 minutes are up. Nothing was deleted.');return}U.askDel=null;return b27Void(id,hash)}
+async function b27SaveEdit(){const id=U.editOf,e=b27FormOK();if(e){b27Err(e);U.confirm=false;render();return}const nb=b27BetsFromForm()[0];
+  U.busy=true;U.msg='Saving…';U.msgBad=false;render();
+  try{const back=await b27Write(cur=>{const old=cur.find(c=>c.id===id);if(!old||old.kind==='pool'||!b27CanUndo(old))throw new Error('late');return cur.map(c=>{if(c.id!==id)return c;const y=Object.assign({},c,{backer:nb.backer,other:nb.other,amt:nb.amt,odds:nb.odds,text:nb.text,status:'open',wk:nb.wk,rd:nb.rd});if(nb.opponents)y.opponents=nb.opponents.slice();else delete y.opponents;if(nb.est)y.est=nb.est;else delete y.est;if(nb.sid)y.sid=nb.sid;else delete y.sid;return y})},cur=>{const hits=cur.filter(c=>c.id===id);return hits.length===1&&hits[0].status==='open'&&hits[0].text===nb.text});
+    b27Apply(back);const saved=back.find(c=>c.id===id);U.msg='Updated bet #'+(saved?saved.n:'')+'. Same number, no second bet.';U.msgBad=false;U.editOf=null;U.confirm=false;
+    Object.assign(U,{opps:[],backer:null,amt:null,amtCustom:false,amtTxt:'',amtErr:'',odds:[1,1],custom:false,customTxt:'',oddsErr:'',text:'',est:'',wk:'game',whenPick:false,fids:{},rdEd:null,rdOpen:false});
+  }catch(err){if(err&&err.message==='late'){U.editOf=null;U.confirm=false;U.msg='Too late to edit. Nothing was saved.';U.msgBad=true}else{U.msg=err&&err.message==='conflict'?'Couldn’t save, try again.':'Couldn’t save. Nothing was replaced.';U.msgBad=true;U.confirm=true}}
+  U.busy=false;render()}
 /* ---- view ---- */
 function b27SyncDom(){
   const m=document.getElementById('main');if(!m)return;
@@ -3536,9 +3549,7 @@ function b27Card(b,me){
     const ask=w=>U.askSettle&&U.askSettle.id===b.id&&U.askSettle.what===w&&U.askSettle.terms===b27Terms(b);
     const btn=(w,label)=>`<button type="button" class="btn sec b27-b" onclick="${ask(w)?`b27SetStatus('${b.id}','${w}')`:`b27Ask('${b.id}','${w}')`}"${U.busy?' disabled':''}>${ask(w)?'Tap again to confirm':label}</button>`;
     /*<CREATOR-SETTLE>*/if(me!==b.backer)who=`<div class="note b27-onlyc" style="margin-top:6px">Only ${esc(PN(b.backer))} (who placed it) can enter the result.</div>`;else /*</CREATOR-SETTLE>*//*<S25>*/if(!s25HideManual(b))/*</S25>*/who=`<div class="b27-act"><span class="note">Who won?</span>${btn('backer',esc(Bk)+' won')}${btn('other',BU?'Managers won':esc(Ot)+' won')}${btn('push','Wash')}</div>`;
-    /*<MULTI-BET>*/const gu=b.g?b27GroupUndoable(b.g):[];
-    if(b27CanUndo(b)&&b.g&&gu.length>1){if(U.doc.bets.filter(x=>x.g===b.g&&b27CanUndo(x)).sort((p,q)=>q.n-p.n)[0].id===b.id)del=`<button type="button" class="btn sec b27-b" onclick="b27UndoGroup('${b.g}','${b27GroupHash(b.g)}')"${U.busy?' disabled':''}>Delete</button>`}
-    else /*</MULTI-BET>*/if(b27CanUndo(b))del=`<button type="button" class="btn sec b27-b" onclick="b27Void('${b.id}','${b27Hash(b27Terms(b))}')"${U.busy?' disabled':''}>Delete</button>`;
+    if(b27CanUndo(b)&&b.kind!=='pool'){const ask=U.askDel===b.id;del=`<button type="button" class="btn sec b27-b" onclick="b27OpenEdit('${b.id}')"${U.busy?' disabled':''}>Edit</button><button type="button" class="btn sec b27-b" onclick="${ask?`b27DoDel('${b.id}','${b27Hash(b27Terms(b))}')`:`b27AskDel('${b.id}')`}"${U.busy?' disabled':''}>${ask?'Tap again to delete bet #'+b.n:'Delete'}</button>`}
     else if(ADMIN)del=`<button type="button" class="btn sec b27-b" onclick="b27Void('${b.id}','${b27Hash(b27Terms(b))}')"${U.busy?' disabled':''}>Delete</button>`;
   }
   if(del||ready)h+=`<div class="b27-del">${del}${ready?'<span class="b27-ready-t">Ready to settle</span>':''}</div>`;
@@ -3611,7 +3622,7 @@ function vB27(){
   else if(U.confirm){
     const e=b27FormOK();
     h+=s26kModal(`<div class="card b27-confirm"><b>Check it, then confirm</b>${/*<S24-EDIT>*/s24EditHint()/*</S24-EDIT>*/}${/*<S26F-TERMS>*/b27Clean(U.text)?`<div class="s26terms">${esc(b27Clean(U.text))}</div>`:''/*</S26F-TERMS>*/}<div class="b27-sum">${esc(b27Summary())}</div>${/*<S25>*/s25ConfirmLine()/*</S25>*/}<div id="b27Live">${b27LiveHtml()}</div>
-     <div class="b27-act"><button type="button" class="btn b27-big" onclick="b27Confirm()"${U.busy?' disabled':''}>${U.busy?'Saving…':'✅ Yes, place it'}</button><button type="button" class="btn sec b27-big" onclick="b27Edit()"${U.busy?' disabled':''}>← Change</button></div></div>`);
+     <div class="b27-act"><button type="button" class="btn b27-big" onclick="b27Confirm()"${U.busy?' disabled':''}>${U.busy?'Saving…':U.editOf?'✅ Yes, update it':'✅ Yes, place it'}</button><button type="button" class="btn sec b27-big" onclick="b27Edit()"${U.busy?' disabled':''}>← Change</button></div></div>`);
   }else{
     const oc=U.odds?U.odds.join('-'):'';
     /*<S29E-PASTE>*/if(PASTE_BET&&U.kind!=='pool')h+=s29ePasteBox();/*</S29E-PASTE>*/
@@ -3625,7 +3636,7 @@ function vB27(){
      ${b27FormHasGame()?'':SHARED_UI.whenBox({e:esc,kind:U.whenPick?U.wk:'unknown',est:U.est,seasonId:b27Season(),step:'5',game:false,inputId:'b27Est',pick:id=>`onclick="b27When('${id}')"`,dateAttr:'onchange="U.est=this.value;U.whenPick=true"'})}
      <div class="b27-livebox" id="b27Live" aria-live="polite">${b27LiveHtml()}</div>
      <div class="b27-sum" id="b27Sum">${esc(b27Summary())}</div><div id="s29Auto">${/*<S29D-AUTO>*/s29AutoHtml(s29AutoForm())/*</S29D-AUTO>*/}</div><div class="b27-bad-t" id="b27Hint"></div>
-     <button type="button" id="b27Place" class="btn b27-big" onclick="b27Place()"${b27FormOK()?' disabled':''}>Place bet</button></div>`;
+     <button type="button" id="b27Place" class="btn b27-big" onclick="b27Place()"${b27FormOK()?' disabled':''}>${U.editOf?'Update bet':'Place bet'}</button></div>`;
   }
   const bets=U.doc.bets||[];
   /*<BALL-LOADER>*/if(U.state==='init'){h+=ballLoader();h+=introBottom;return h}   // ledger still loading: loader instead of an empty owes table / "No bets yet/*</BALL-LOADER>*/
@@ -3852,10 +3863,10 @@ async function s24EstWrite(id,kind,est){if(U.busy)return;const b=(U.doc.bets||[]
   U.busy=false;render()}
 function s24EstSave(id){if(U.busy||!estDraft||estDraft.id!==id)return;const raw=(document.getElementById('estIn')||{}).value||'';s24EstWrite(id,estDraft.kind,raw||null)}
 function s24EstClear(id){s24EstWrite(id,'unknown',null)}
-function s24EditCancel(){estDraft=null;U.editOf=null;U.msg='';render()}
+function s24EditCancel(){estDraft=null;if(U.editOf){U.editOf=null;Object.assign(U,{opps:[],backer:null,amt:null,amtCustom:false,amtTxt:'',amtErr:'',odds:[1,1],custom:false,customTxt:'',oddsErr:'',text:'',confirm:false,est:'',wk:'game',whenPick:false,rdEd:null})}U.msg='';render()}
 function s24EditHint(){if(!U.editOf)return '';const o=U.doc.bets.find(x=>x.id===U.editOf),n=o?'#'+o.n:'';
-  const late=!o||o.status!=='open';
-  return `<div class="b27-edn note" role="status" data-s24-editing="${esc(U.editOf)}">✏️ Editing bet ${n}. ${late?'<b class="bad">It was already settled or cancelled, so it can’t be edited any more.</b>':`Nothing changes until you place it: then bet ${n} is cancelled and this one replaces it.`} <a href="#" onclick="s24EditCancel();return false">Cancel edit</a></div>`}
+  const late=!o||!b27CanUndo(o);
+  return `<div class="b27-edn note" role="status" data-s24-editing="${esc(U.editOf)}">Editing bet ${n}. ${late?'<b class="bad">The 5 minutes are up, so this bet can’t be edited any more.</b>':`Updating keeps bet ${n}, the same number, and replaces its wording. No second bet.`} <a href="#" onclick="s24EditCancel();return false">Cancel edit</a></div>`}
 function s24EditedNote(b){let h='';
   if(b.edTo){const n=U.doc.bets.find(x=>x.id===b.edTo);h+=`<div class="note" style="margin-top:4px">✏️ Edited: replaced by ${n?'bet #'+n.n:'a newer bet'}.</div>`}
   if(b.ed){const o=U.doc.bets.find(x=>x.id===b.ed);h+=`<div class="note" style="margin-top:4px">✏️ Edited version of ${o?'bet #'+o.n:'an earlier bet'}.</div>`}
