@@ -948,7 +948,7 @@ main,#main{padding-top:6px!important}
 /* SYNC7..SYNC14 moved to shared/ui.css (linked right after this style block) */
 
 </style>
-<link rel="stylesheet" href="shared/ui.css?v=1.37.0">
+<link rel="stylesheet" href="shared/ui.css?v=1.39.0">
 <style>/*<SORT-FIT> phone All teams: the card scrolls sideways, the page does not. Names stay full size. */@media (max-width:480px){html body .card.tap.s27-rk{padding-left:4px!important;padding-right:4px!important}html body .card.tap.s27-rk th{font-size:11px!important}html body .card.tap.s27-rk td.n,html body .card.tap.s27-rk td.to,html body .card.tap.s27-rk td.cf{font-size:13px!important}html body .card.tap.s27-rk .s27-sort i{font-size:.7em!important;margin-left:0!important}}/*</SORT-FIT>*/</style>
 </head>
 <body>
@@ -1337,7 +1337,7 @@ function boxHtml(g){const id=String(g.id),b=BOX[id],lk=`<a class="gbx-lk" href="
 const boxSlot=g=>g&&g.status==='final'?`<div class="gbx" data-box="${esc(String(g.id))}">${boxHtml(g)}</div>`:'';
 function boxFill(games){document.querySelectorAll('.gbx[data-box]').forEach(el=>{if(el.closest('[hidden]'))return;const id=el.dataset.box,g=(games||[]).find(x=>String(x.id)===id);if(!g)return;
   if(BOX[id]){if(!BOX[id].loading)el.innerHTML=boxHtml(g);return}
-  BOX[id]={loading:1};fetch(boxUrl(id)).then(r=>r.ok?r.json():Promise.reject(r.status)).then(j=>{BOX[id]=boxParse(j)}).catch(()=>{BOX[id]={err:1,teams:[]}}).then(()=>{document.querySelectorAll('.gbx[data-box="'+id+'"]').forEach(e=>e.innerHTML=boxHtml(g))})})}
+  BOX[id]={loading:1};fetch(boxUrl(id)).then(r=>r.ok?r.json():Promise.reject(r.status)).then(j=>{BOX[id]=boxParse(j)}).catch(()=>{BOX[id]={err:1,teams:[]}}).then(()=>{document.querySelectorAll('.gbx[data-box="'+id+'"]').forEach(e=>e.innerHTML=boxHtml(g));const card=document.getElementById('g-'+id);if(!card||!hsLs(g,g.away)&&!hsLs(g,g.home))return;const rows=card.querySelectorAll('.gside');if(rows[0]){rows[0].classList.add('hs1');const sc=rows[0].querySelector('.sc2');if(sc)sc.innerHTML=hsHtml(g,g.away,true)}if(rows[1]){const sc=rows[1].querySelector('.sc2');if(sc)sc.innerHTML=hsHtml(g,g.home,false)}})})}
 /*</SYNC2-BOX>*/
 /*<SYNC2>*/ // STOOPIDS has no writable league-settings store from the page (config.json is static, the shared ledger is live bets), so the commissioner accent is saved in localStorage on this device
 const ACC_KEY='stoopids_accent';let ACC=(()=>{try{return accApply(localStorage.getItem(ACC_KEY))}catch(e){return accApply(null)}})();
@@ -1597,7 +1597,7 @@ function lvNote(g){   // live-feed finals can still flag an upset by seed or an 
   if(!g||!g._lv||g.status!=='final')return '';
   const w=g.home.win?g.home:g.away.win?g.away:null,l=w===g.home?g.away:g.home;
   if(w&&g.kind==='ncaa'&&w.seed!=null&&l.seed!=null){if(+w.seed>+l.seed)return ' <span class="up ns">😱 UPSET (by seed, no points until the next data update)</span>'}
-  else if(w&&g.line&&String(g.line.dog)===String(w.id))return ' <span class="up ns">🐶 Underdog win</span>';
+  else if(w&&g.line&&String(g.line.dog)===String(w.id))return '';
   return '';
 }
 /*<LAST-UPDATED>*/
@@ -1678,12 +1678,13 @@ const gOpen=new Set();function gFin(id){id=String(id);gOpen.has(id)?gOpen.delete
 const fml=n=>n==null?'–':(n>0?'+'+n:String(n));
 const ownerEmoji=n=>{const o=D.owners.find(x=>x.name===n);return o?o.emoji:''};
 const opills=a=>a&&a.length?a.map(n=>`<span class="opill">${esc(ownerEmoji(n))} ${esc(PN(n))}</span>`).join(''):'';
+function lineSrc(name){const raw=String(name==null?'':name).replace(/\s+/g,' ').trim();if(!raw)return '';const low=raw.toLowerCase();if(/draft\s*kings/.test(low))return 'DraftKings';if(/\bespn\b/.test(low))return 'ESPN';return raw.split(/\s*[·,]\s*/)[0].trim()}
 function lineTxt(ln,away,home,final){
   if(!ln)return null;
   const fav=ln.fav_name?`<b>${esc(ln.fav_name)}</b> -${ln.sp!=null?ln.sp:'?'}`:'Pick\u2019em';
   const ou=ln.ou!=null?` · O/U ${ln.ou}`:'';
-  const src=ln.p?` <span class="mut">· ${esc(String(ln.p))}</span>`:'';
-  return `${final?(ln.type==='close'?'Closing line':'Last line'):'Line'}: ${fav}${ou}${src}`}
+  const src=lineSrc(ln.p);
+  return `${final?(ln.type==='close'?'Closing line':'Last line'):'Line'}: ${fav}${ou}${src?` <span class="mut">· ${esc(src)}</span>`:''}`}
 function gameCard(g){
   const fin=g.status==='final',live=g.status==='live';
   const dog=g.line&&g.line.dog;
@@ -1702,8 +1703,7 @@ function gameCard(g){
   let lt=lineTxt(g.line,g.away.short,g.home.short,fin);
   let foot=lt||(fin?'<span class="mut">No betting line on file for this game.</span>':'<span class="mut">📭 line not posted yet</span>');
   if(fin&&g.upset){const u=g.upset;
-    if(g.kind==='ncaa'){if(u.is)foot+=` <span class="up${u.scored?'':' ns'}">😱 UPSET${u.scored?' +'+D.meta.points.upset:' (no bonus)'}</span>`;else if(u.is===false)foot+=' <span class="mut">· no upset</span>'}
-    else if(u.is)foot+=' <span class="up ns">🐶 Underdog win</span>';}
+    if(g.kind==='ncaa'){if(u.is)foot+=` <span class="up${u.scored?'':' ns'}">😱 UPSET${u.scored?' +'+D.meta.points.upset:' (no bonus)'}</span>`;else if(u.is===false)foot+=' <span class="mut">· no upset</span>'}}
   /*<REFRESH-NOW>*/foot+=lvNote(g);/* HALF-SCORES footer line replaced by HS-INLINE *//*</REFRESH-NOW>*/
   const inner=`<div class="gh">${head}<div class="gbtns">${/*<S24-EDIT>*/s29GameBtn(g)/*</S24-EDIT>*/}${/*<QUICK-BET>*/qbBtn(g)/*</QUICK-BET>*/}</div></div>${row(g.away)}${row(g.home,'H')}<div class="gl">${foot}</div>`;
   const betLinks=gBetLinkHtml(g);
@@ -4458,14 +4458,31 @@ html body .card.tap.s27-rk th:first-child,html body .card.tap.s27-rk td:first-ch
 html body .card.tap.s27-rk th:first-child{z-index:3}
 html body .idline{margin:8px 0 8px!important}
 html body footer#foot{padding-bottom:8px!important}
-html body .ggrid .gside{flex-wrap:wrap!important;align-items:center!important}
-html body .ggrid .gside .nm{flex:1 1 100%!important;max-width:100%!important;min-width:0!important}
-html body .ggrid .gside a.chip,html body .ggrid>.gm .gside a.chip,html body .ggrid .gbody .gside a.chip{flex:0 0 auto!important;width:min(280px,100%)!important;min-width:min(280px,100%)!important;max-width:min(280px,100%)!important;height:40px!important;min-height:40px!important;max-height:40px!important}
-html body .ggrid .gside .sc2{margin-left:auto;flex:0 0 auto}
+html body .ggrid .gside{flex-wrap:nowrap!important;align-items:center!important;width:100%!important}
+html body .ggrid .gside .nm{flex:1 1 auto!important;display:flex!important;align-items:center!important;max-width:none!important;min-width:0!important;overflow:hidden!important}
+html body .ggrid .gside a.chip,html body .ggrid>.gm .gside a.chip,html body .ggrid .gbody .gside a.chip{flex:1 1 auto!important;width:auto!important;min-width:0!important;max-width:100%!important;height:40px!important;min-height:40px!important;max-height:40px!important}
+html body .ggrid .gside .sc2{margin-left:6px!important;flex:0 0 auto!important}
+html body .ggrid .gh,html body .ggrid .gbody>.gh{position:relative!important;display:flex!important;flex-wrap:nowrap!important;align-items:center!important;min-height:28px!important;margin-bottom:0!important;padding-bottom:0!important}
+html body .ggrid .gh .gbtns,html body .ggrid .gbody>.gh .gbtns{position:static!important;flex:none!important;margin:0 0 0 auto!important}
+html body .ggrid .gside.hs1{margin-top:18px!important}
 html body .card.oc .chip.tlive{outline:2px solid #93c5fd;outline-offset:1px}
 html body .golive{box-shadow:0 0 0 2px #93c5fd!important}
 html body.haslive a[data-tab=games],html body.haslive .rkseg-b[data-gm=upcoming]{outline-color:#93c5fd!important}
 html body .card.oc.isonl .who>b{outline-color:#93c5fd!important}
+/* Secondary rows keep one look, at the width of their label. They do not stretch to fill the row. */
+html body .segrow>.rkseg,html body #main .gfone .rkseg,html body #lbody .gfone .rkseg,html body .rkseg.g4{display:inline-flex!important;flex-flow:row wrap!important;justify-content:flex-start!important;align-items:center!important;flex:0 0 auto!important;width:auto!important;max-width:100%!important;gap:6px!important;grid-template-columns:none!important;margin:0!important;padding:0!important;background:transparent!important;border:0!important;border-radius:0!important}
+html body .segrow>.rkseg>.rkseg-b:not(.segref):not(.gref),html body #main .gfone .rkseg>.rkseg-b:not(.gref),html body #lbody .gfone .rkseg>.rkseg-b:not(.gref),html body .rkseg.g4>.rkseg-b,html body .tabs.ob-seg>button,html body .tapf>button,html body .lgref .tapf>button,html body .tabs:not(.s29-kind)>button{box-sizing:border-box!important;width:auto!important;flex:0 0 auto!important;height:36px!important;min-height:36px!important;max-height:36px!important;margin:0!important;padding:0 14px!important;font-size:13px!important;font-weight:800!important;line-height:34px!important;letter-spacing:0!important;text-align:center!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important;border-radius:10px!important;border:1px solid var(--line,#2d3548)!important;background:var(--card,#1b2030)!important;color:var(--tx,#eee)!important}
+html body .segrow>.rkseg>.rkseg-b.on:not(.segref),html body #main .gfone .rkseg>.rkseg-b.on,html body #lbody .gfone .rkseg>.rkseg-b.on,html body .tabs.ob-seg>button.on,html body .tapf>button.on,html body .lgref .tapf>button.on{background:var(--pill,#FFD400)!important;color:var(--pill-ink,#111)!important;border-color:var(--pill,#FFD400)!important}
+html body .tabs.ob-seg{flex-flow:row wrap!important;justify-content:flex-start!important;align-items:center!important;width:auto!important;max-width:100%!important;gap:6px!important;grid-template-columns:none!important;grid-auto-flow:unset!important;grid-auto-columns:unset!important}
+html body .tabs.ob-seg.ob-desk{display:inline-flex!important}
+html body .tabs.ob-seg.ob-phone{display:none!important}
+@media (max-width:999px){html body .tabs.ob-seg.ob-desk{display:none!important}html body .tabs.ob-seg.ob-phone{display:inline-flex!important}}
+html body .tabs:not(.ob-seg):not(.s29-kind){display:flex!important;flex-flow:row wrap!important;justify-content:flex-start!important;align-items:center!important;width:auto!important;max-width:100%!important;gap:6px!important;grid-template-columns:none!important}
+html body .tapf,html body .lgref .tapf{display:flex!important;flex-flow:row wrap!important;justify-content:flex-start!important;align-items:center!important;width:auto!important;max-width:100%!important;gap:6px!important;grid-template-columns:none!important;margin:0 0 10px!important}
+html body .tapf>button,html body .lgref .tapf>button{flex:0 0 auto!important;width:auto!important;min-width:0!important;height:36px!important;min-height:36px!important;max-height:36px!important;padding:0 14px!important;line-height:34px!important;white-space:nowrap!important;grid-column:auto!important}
+html body .tapf>button.on,html body .lgref .tapf>button.on{outline:2px solid #fff!important;outline-offset:1px!important}
+html body .gmon{justify-content:flex-start!important;width:auto!important;max-width:100%!important}
+html body .gmon>button{flex:0 0 auto!important;width:auto!important;min-width:0!important;padding:5px 12px!important}
 /*</HELD-LAYOUT>*/
 </style><!--</S29E-PASTE>-->
 <!--<S29E-COPY>--><script>
