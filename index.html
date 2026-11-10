@@ -3743,7 +3743,8 @@ function vTally(){/* STEP11: Tally = 2026-27 Bets ledger (b27Tally / U.doc), not
     if(L.length)h+=`<div class="card" data-tally-settle><b>If settled today</b>${L.map(([a,b,d])=>`<div class="tset">${esc(PN(a))} pays ${esc(PN(b))} ${b27Num(d)}</div>`).join('')}</div>`;
   }
   const me=b27Who(),done=(bets||[]).filter(b27Done),shown=done.filter(b=>s24Match(b,me,{st:'all',ac:'any',wh:'any'})||(S24.sub&&b.id===S24.sub));
-  h+=`<h2>Settled bets <span class="note">${shown.length}</span></h2>`+s24FilterBar(done,me,'Search settled bets')+(shown.length?b27Grouped(b27SortSoon(shown).slice(0,60),me):'<div class="card note">No settled bets match.</div>');
+  const byN=shown.slice().sort((a,b)=>(b.n||0)-(a.n||0));
+  h+=`<h2>Settled bets <span class="note">${shown.length}</span></h2>`+s24FilterBar(done,me,'Search settled bets')+(shown.length?`<div class="b27-grid">${b27Cards(byN.slice(0,60),me)}</div>`+(byN.length>60?'<p class="note">Showing the first 60.</p>':''):'<div class="card note">No settled bets match.</div>');
   return h}
 /*</BETS-TALLY>*/
 function obToggle(){
