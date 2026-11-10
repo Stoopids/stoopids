@@ -2546,10 +2546,17 @@ async function profCmGo(){if(Date.now()<PROFCM.until){PROFCM.msg='Wrong passcode
   if(hash===PROF_CM_HASH){PROFCM.tries=0;PROFCM.msg='';lsSet(PROF_CM_TOK,PROF_CM_HASH);render();return}
   PROFCM.tries++;if(PROFCM.tries>=5){PROFCM.until=Date.now()+30000;PROFCM.tries=0;PROFCM.msg='Wrong passcode. Locked for 30 seconds.'}else PROFCM.msg='Wrong passcode. Try again ('+(5-PROFCM.tries)+' left).';render()}
 function profCmLock(){try{localStorage.removeItem(PROF_CM_TOK)}catch(e){}PROFCM.msg='';render()}
+function profAdminOn(){return !!(ADMIN&&profCmUnlocked())}
+function profAdminHtml(){const m=D&&D.meta;
+  const health=m&&m.fetch&&m.odds?`<h3>Data health</h3><ul class="it"><li>Updated: ${esc(stampET())}</li><li>Mode: ${esc(m.mode)} · season ${esc(m.season)} · games loaded ${m.games_loaded} (${m.final_games} final)</li><li>Days fetched fresh ${m.fetch.days_fetched}, cached ${m.fetch.days_cached}, ncaa.com fallback ${m.fetch.days_ncaa_fallback}, failed ${m.fetch.days_failed_both}</li><li>Betting lines found ${m.odds.lines_found}/${m.odds.games_needing_line}</li><li>Rosters: ${esc(m.roster_source)}; sheet ${m.sheet_ok?'OK':'ERROR '+esc(m.sheet_error)}</li>${m.warnings&&m.warnings.length?'<li class="bad">Warnings: '+m.warnings.map(esc).join('; ')+'</li>':''}</ul>`:'';
+  const bets=U.state==='ok'&&U.doc&&U.doc.bets;
+  const rows=bets?bets.filter(b=>b&&b.status==='open'&&!(b27CanUndo(b)&&b.kind!=='pool')).map(b=>`<div class="cm-bet"><b>#${b.n}</b> <button type="button" class="btn sec" onclick="b27Void('${b.id}','${b27Hash(b27Terms(b))}')"${U.busy?' disabled':''}>${b.kind==='pool'?esc(POOL_TXT.adminCancel):'Delete'}</button></div>`).join(''):'';
+  const del=bets?rows:'<p class="prof-note">The ledger is still loading.</p>';
+  return `<h3>Site admin view</h3><h3>Accent colour</h3>${accPickerHtml(ACC)}<p class="prof-note">Recolours the active tab and the toggles. Saved on this device.</p>${health}<h3>Export</h3><p style="margin:8px 0 0"><button type="button" class="btn sec" onclick="sbExport()">⬇ Export JSON backup</button></p><h3>Admin delete and clear chat</h3><p style="margin:8px 0 0"><button type="button" class="btn sec" onclick="chatClear()">Clear chat (admin)</button></p>${del}`}
 function profCmHtml(){profCmLoad();
   if(!profCmUnlocked())return `<div class="card s29e-cm"><h3>Commissioner</h3><p>Commissioner: Paul</p><label class="sr" for="profPin">Commissioner passcode</label><input id="profPin" class="sb-in" type="password" autocomplete="off" placeholder="Passcode" style="margin-top:8px" onkeydown="if(event.key==='Enter'){event.preventDefault();profCmGo()}"><div class="prof-note" role="alert">${esc(PROFCM.msg||'')}</div><button type="button" class="btn" style="margin-top:8px" onclick="profCmGo()">Unlock</button></div>`;
-  const admin=location.pathname+'?admin=1';
-  return `<div class="card s29e-cm" id="cmTools"><h3>Commissioner</h3><p>Commissioner: Paul</p><p class="prof-note">Unlocked on this device.</p><p style="margin:8px 0 0"><a class="btn" href="${esc(DRAFT_URL)}">Draft room</a></p><p class="prof-note">Admin tab: start, pause, undo, reset, order, clock, and the wheel.</p><p style="margin:8px 0 0"><a class="btn" href="${esc(admin+'#about')}">Site admin view</a></p><p class="prof-note">Adds ?admin=1. Accent colour, data health, export, and the admin delete and clear-chat buttons.</p>${cmToolsHtml()}<button type="button" class="btn sec" style="margin-top:8px" onclick="profCmLock()">Lock</button></div>`}
+  const adminLink=profAdminOn()?'':`<p style="margin:8px 0 0"><a class="btn" href="${esc(location.pathname+'?admin=1#profile')}">Site admin view</a></p><p class="prof-note">Adds ?admin=1. Accent colour, data health, export, and the admin delete and clear-chat buttons.</p>`;
+  return `<div class="card s29e-cm" id="cmTools"><h3>Commissioner</h3><p>Commissioner: Paul</p><p class="prof-note">Unlocked on this device.</p><p style="margin:8px 0 0"><a class="btn" href="${esc(DRAFT_URL)}">Draft room</a></p><p class="prof-note">Admin tab: start, pause, undo, reset, order, clock, and the wheel.</p>${adminLink}${cmToolsHtml()}<button type="button" class="btn sec" style="margin-top:8px" onclick="profCmLock()">Lock</button></div>`}
 const CM_URL='https://textdb.dev/api/data/stoopids-commish-2627-9eaa4f66';
 const CM={ready:false,loading:false,looks:{},off:[],access:{},msg:'',arm:null};
 function cmBlank(){return {v:1,looks:{},off:[],access:{}}}
@@ -2587,7 +2594,8 @@ function vProfile(){const view=typeof VIEW_ONLY!=='undefined'&&VIEW_ONLY;
   if(view)return `<div class="card s29e-prof"><h2 style="margin:0">👤 Profile</h2><p style="margin:6px 0 0">You're viewing a read-only link.</p></div>`+vShare();
   const me=(typeof b27Who==='function'&&b27Who())||null,o=me&&D&&D.owners?D.owners.find(x=>x.name===me):null;
   const who=`<div class="card s29e-prof"><h2 style="margin:0">👤 Profile</h2><p style="margin:6px 0 0">${me?`You're using the site as <b>${esc(PN(me))}</b>`:'You haven’t picked who you are yet.'} <a href="#" onclick="presAsk();return false">(${me?'change':'pick'})</a></p></div>`;
-  if(!me||!o)return who+`<div class="card"><h3>My season</h3><p class="prof-note">Pick who you are to see your season, bets, and head-to-head.</p></div>`+profNotifyHtml()+profCmHtml()+vShare();
+  const adminView=profAdminOn()?`<div class="card s29e-cm" id="siteAdmin">${profAdminHtml()}</div>`:'';
+  if(!me||!o)return who+adminView+`<div class="card"><h3>My season</h3><p class="prof-note">Pick who you are to see your season, bets, and head-to-head.</p></div>`+profNotifyHtml()+profCmHtml()+vShare();
   const rec=profRoster(me);PROF_TXT.season=profSeasonText(me,o,rec);
   const betsReady=U.state==='ok'&&U.doc&&Array.isArray(U.doc.bets);
   let betsCard;
@@ -2595,7 +2603,7 @@ function vProfile(){const view=typeof VIEW_ONLY!=='undefined'&&VIEW_ONLY;
   else{const s=profBets(me),rows=profH2H(me);PROF_TXT.bets=profBetsText(me,s);
     betsCard=`<div class="card"><div class="prof-hd"><h3>My bets</h3><button type="button" class="s27-copy" id="profBetsCopy" onclick="profCopy('profBetsCopy',PROF_TXT.bets)">Copy</button></div><p style="margin:0">${s.w}-${s.l}${s.push?' · '+s.push+' wash'+(s.push===1?'':'es'):''}</p><p style="margin:4px 0 0">Net ${esc(profMoney(s.net))} · ${s.open} open</p><p class="prof-note">One-vs-one wins and losses. The net includes settled pools. Washes owe nothing.</p></div>`+
      `<div class="card"><h3>Head-to-head</h3><div class="sc"><table class="prof-h2h"><tr><th>Stoop</th><th class="n">Record</th><th class="n">Net</th></tr>${rows.map(r=>`<tr><td>${esc(ownerEmoji(r.other))} ${esc(PN(r.other))}</td><td class="n">${r.w}-${r.l}${r.push?' · '+r.push+' wash'+(r.push===1?'':'es'):''}</td><td class="n">${esc(profMoney(r.net))}</td></tr>`).join('')}</table></div><p class="prof-note">Settled one-vs-one bets only. A pool is not a head-to-head.</p></div>`}
-  return who+
+  return who+adminView+
    `<div class="card"><div class="prof-hd"><h3>My season</h3><button type="button" class="s27-copy" id="profSeaCopy" onclick="profCopy('profSeaCopy',PROF_TXT.season)">Copy</button></div><p style="margin:0"><b>${esc(profRank(o))}</b> · ${esc(b27Num(o.total||0))} pts · roster ${rec.w}-${rec.l}</p></div>`+
    betsCard+
    `<div class="card"><h3>My team look</h3><p style="margin:0;font-size:18px">${o.emoji?esc(o.emoji)+' ':''}<b>${esc(TN(me))}</b></p><p class="prof-note">Set by the commissioner. Read-only.</p></div>`+
