@@ -4473,7 +4473,7 @@ function s29eCopyText(b){if(!b)return '';if(b.status==='open'&&b.kind!=='pool')r
   const OP=b27Opps(b),BU=OP.length>1,Bk=PN(b.backer),OPd=OP.map(PN),st=b.status,P=b27Pay(b);
   const stTxt={open:'Open',backer:'Settled',other:'Settled',push:'Wash',void:'Cancelled'}[st]||'Open';
   const win=st==='backer'?' · '+Bk+' won':st==='other'?' · '+(BU?'Managers':OPd[0])+' won':'';
-  if(st==='backer'||st==='other'||st==='push'){const mark=st==='push'?'💦':'💥',head=st==='push'?mark+' Bet #'+b.n+' · Settled '+mark:mark+' Bet #'+b.n+' · Settled'+win+' '+mark,lines=[head,b27Clean(b.text),Bk+' vs '+OPd.join(', ')+' · '+b27Num(b.amt)+(BU?' each':'')+' '+b27OddsShort(b.odds.a,b.odds.b)];if(st==='push')lines.push('Result: 💦: nobody owes anything');return lines.join('\n')}
+  if(st==='backer'||st==='other'||st==='push'){const mark=st==='push'?'💦':'💥',head=st==='push'?'Bet #'+b.n+' · Settled':mark+' Bet #'+b.n+' · Settled'+win+' '+mark,lines=[head,b27Clean(b.text),Bk+' vs '+OPd.join(', ')+' · '+b27Num(b.amt)+(BU?' each':'')+' '+b27OddsShort(b.odds.a,b.odds.b)];if(st==='push')lines.push('Result: 💦: nobody owes anything');return lines.join('\n')}
   L.push('Bet #'+b.n+' · '+stTxt+win,b27Clean(b.text),Bk+' vs '+OPd.join(', ')+' · '+b27Num(b.amt)+(BU?' each':'')+' '+b27OddsShort(b.odds.a,b.odds.b));
   L.push('If '+Bk+' is right: '+OPd.join(', ')+(BU?' each owe ':' owes ')+Bk+' '+b27Num(P.ifBackerRight));
   L.push('If '+OPd.join(', ')+(BU?' are':' is')+' right: '+Bk+' owes '+(BU?'each of them ':OPd[0]+' ')+b27Num(P.ifOtherRight));
