@@ -975,7 +975,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.65.0"></script>
+<script src="shared/ui.js?v=1.66.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -3376,8 +3376,11 @@ function b27Stale(msg){U.askSettle=null;if(typeof S25P!=='undefined')S25P.ask=nu
 function b27TapLock(){if(U.tapUntil&&Date.now()<U.tapUntil)return true;U.tapUntil=Date.now()+450;return false}
 function b27PoolTerms(b){return b27Terms(b)+'\u001f'+(U.poolTxt[b.id]||'')+'\u001f'+JSON.stringify((U.placeWho&&U.placeWho[b.id])||[])}
 function b27Void(id,hash){if(U.busy||b27TapLock())return;const b=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===id);if(!b||b.status!=='open'||b27Hash(b27Terms(b))!==hash){b27Stale();return}U.askSettle=null;b27SetStatus.skip=true;return b27SetStatus(id,'void')}
-function b27DropStale(){if(U.askDel){const b=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===U.askDel);if(!b||!b27CanUndo(b))U.askDel=null}if(U.askSettle){const b=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===U.askSettle.id);const terms=b&&(U.askSettle.what==='pool'?b27PoolTerms(b):b27Terms(b));if(!b||terms!==U.askSettle.terms)U.askSettle=null}
-  if(typeof S25P!=='undefined'&&S25P.ask&&S25P.ask.id){const b=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===S25P.ask.id);let terms='';if(b){const G=s25Game(b);terms=b27Terms(b)+'\u001f'+(G&&G.p?G.p.text+'\u001f'+G.p.r:'')}if(!b||terms!==S25P.ask.terms)S25P.ask=null}}
+const ARM_MS=30000;
+function b27ArmOld(a){return !!(a&&a.at&&Date.now()-a.at>=ARM_MS)}
+function b27ArmTick(){clearTimeout(b27ArmTick.t);b27ArmTick.t=setTimeout(()=>{b27DropStale();if(typeof render==='function')render()},ARM_MS+40)}
+function b27DropStale(){if(U.askDel){const b=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===U.askDel);if(!b||!b27CanUndo(b)||b27ArmOld(U.askDelAt)||(U.askDelAt&&U.askDelAt.terms&&U.askDelAt.terms!==b27Terms(b))){U.askDel=null;U.askDelAt=null}}if(U.askSettle){if(b27ArmOld(U.askSettle))U.askSettle=null;else{const b=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===U.askSettle.id);const terms=b&&(U.askSettle.what==='pool'?b27PoolTerms(b):b27Terms(b));if(!b||terms!==U.askSettle.terms)U.askSettle=null}}
+  if(typeof S25P!=='undefined'&&S25P.ask&&S25P.ask.id){if(b27ArmOld(S25P.ask))S25P.ask=null;else{const b=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===S25P.ask.id);let terms='';if(b){const G=s25Game(b);terms=b27Terms(b)+'\u001f'+(G&&G.p?G.p.text+'\u001f'+G.p.r:'')}if(!b||terms!==S25P.ask.terms)S25P.ask=null}}}
 /*</MULTI-BET>*/async function b27SetStatus(id,status/*<S25>*/,extra/*</S25>*/){
   if(U.busy)return;if(!b27SetStatus.skip&&b27TapLock())return;b27SetStatus.skip=false;const b0=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===id);if(!b0||b0.status!=='open'){b27Stale();return}
   if(U.askSettle&&(U.askSettle.id!==id||U.askSettle.terms!==b27Terms(b0)||(U.askSettle.what!==status&&U.askSettle.what!=='pool'))){b27Stale();return}
@@ -3389,7 +3392,7 @@ function b27DropStale(){if(U.askDel){const b=U.doc&&U.doc.bets&&U.doc.bets.find(
   }catch(e){U.msg=/*<CREATOR-SETTLE>*/e&&e.message==='notcreator'?B27_ONLY:e&&e.message==='conflict'?'Couldn’t save, try again.':/*</CREATOR-SETTLE>*/'Couldn’t save that. Try again.';U.msgBad=true}
   U.busy=false;render();
 }
-function b27Ask(id,what){if(U.busy||b27TapLock())return;const b=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===id);if(!b){U.askSettle=null;render();return}const terms=b27Terms(b);if(U.askSettle&&U.askSettle.id===id&&U.askSettle.what===what&&U.askSettle.terms===terms)U.askSettle=null;else U.askSettle={id,what,terms};render()}
+function b27Ask(id,what){if(U.busy)return;const b=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===id);if(!b){U.askSettle=null;render();return}const terms=what==='pool'?b27PoolTerms(b):b27Terms(b);if(typeof S25P!=='undefined')S25P.ask=null;if(U.askSettle&&U.askSettle.id===id&&U.askSettle.what===what&&U.askSettle.terms===terms&&!b27ArmOld(U.askSettle))U.askSettle=null;else{U.askSettle={id,what,terms,at:Date.now()};U.askDel=null;b27ArmTick()}render()}
 /*<POOL>*/
 /* ===== POOL (Bets 26-27): a group entry where each participant gets some back when it is done. ONE record in the same ledger key: {id,n,kind:'pool',backer:<who built it>,parts:[names],amt:<buy-in each>,back:null|{name:amount},text,created_at,status:'open'|'void',settled_at}.
    Counts as soon as the amounts back are entered (they must add up to buy-in x participants); each person's net = back - buy-in. Blank = open, entered later on the card. ===== */
@@ -3552,9 +3555,9 @@ async function b27PoolConfirm(){
 /* ---- settle later: any participant (or admin) enters the amounts back ---- */
 /*<CREATOR-SETTLE>*/const B27_ONLY='Only the person who placed this bet can settle it.';
 const b27PoolCanSettle=(b,me)=>b.status==='open'&&!b.back&&!!me&&me===b.backer;   // Paul's rule: only the creator enters the result/*</CREATOR-SETTLE>*/
-function b27PoolGo(id){const b=U.doc.bets.find(x=>x.id===id);if(!b||U.busy||b27TapLock())return;const terms=b27PoolTerms(b);
-  if(U.askSettle&&U.askSettle.id===id&&U.askSettle.what==='pool'&&U.askSettle.terms===terms){b27PoolSettle.skip=true;b27PoolSettle(id);return}
-  const r=b27PoolParse(b.parts,String(b.amt),U.poolTxt[id]||'');U.poolErr[id]=r.ok?(r.back?'':PT('eEmptyPay')):r.err;U.askSettle=U.poolErr[id]?null:{id,what:'pool',terms};render()}
+function b27PoolGo(id){const b=U.doc.bets.find(x=>x.id===id);if(!b||U.busy)return;const terms=b27PoolTerms(b);
+  if(U.askSettle&&U.askSettle.id===id&&U.askSettle.what==='pool'&&U.askSettle.terms===terms&&!b27ArmOld(U.askSettle)){b27PoolSettle.skip=true;b27PoolSettle(id);return}
+  const r=b27PoolParse(b.parts,String(b.amt),U.poolTxt[id]||'');U.poolErr[id]=r.ok?(r.back?'':PT('eEmptyPay')):r.err;U.askSettle=U.poolErr[id]?null:{id,what:'pool',terms,at:Date.now()};if(U.askSettle)b27ArmTick();render()}
 async function b27PoolSettle(id){
   if(U.busy)return;if(!b27PoolSettle.skip&&b27TapLock())return;b27PoolSettle.skip=false;const b=U.doc.bets.find(x=>x.id===id);if(!b)return;const terms=b27PoolTerms(b);if(!U.askSettle||U.askSettle.id!==id||U.askSettle.what!=='pool'||U.askSettle.terms!==terms){b27Stale();return}const r=b27PoolParse(b.parts,String(b.amt),U.poolTxt[id]||'');if(!r.ok||!r.back){U.askSettle=null;render();return}
   U.busy=true;U.askSettle=null;render();
@@ -3598,7 +3601,7 @@ function b27OpenEdit(id){if(U.busy)return;const b=(U.doc.bets||[]).find(x=>x.id=
   const odds=[+(b.odds&&b.odds.a)||1,+(b.odds&&b.odds.b)||1],chip=PULK.oddsChips.some(([a,c])=>a===odds[0]&&c===odds[1]),amtChip=PULK.amounts.includes(+b.amt),k=SHARED_UI.whenKind(b),me=b27Who();
   Object.assign(U,{kind:'bet',confirm:false,editOf:id,askDel:null,msg:'',msgBad:false,backer:b.backer&&b.backer!==me?b.backer:null,opps:b27Opps(b).slice(),text:b.text||'',amt:+b.amt,amtCustom:!amtChip,amtTxt:amtChip?'':String(b.amt),amtErr:'',odds:odds,custom:!chip,customTxt:chip?'':odds[0]+'-'+odds[1],oddsErr:'',wk:k==='date'||k==='season'||k==='game'?k:'unknown',est:k==='date'?(b.est||''):'',whenPick:k!=='game',rdEd:null,rdOpen:false});
   obView('form')}
-function b27AskDel(id){if(U.busy||b27TapLock())return;const b=(U.doc.bets||[]).find(x=>x.id===id);if(!b||!b27CanUndo(b)){U.askDel=null;b27Stale('The 5 minutes are up. Nothing was deleted.');return}U.askDel=id;render()}
+function b27AskDel(id){if(U.busy)return;const b=(U.doc.bets||[]).find(x=>x.id===id);if(!b||!b27CanUndo(b)){U.askDel=null;U.askDelAt=null;b27Stale('The 5 minutes are up. Nothing was deleted.');return}U.askDel=id;U.askDelAt={at:Date.now(),terms:b27Terms(b)};U.askSettle=null;if(typeof S25P!=='undefined')S25P.ask=null;b27ArmTick();render()}
 function b27DoDel(id,hash){if(U.busy||b27TapLock())return;if(U.askDel!==id){U.askDel=null;b27Stale('That confirm was for a different bet. Nothing was deleted.');return}const b=(U.doc.bets||[]).find(x=>x.id===id);if(!b||!b27CanUndo(b)){U.askDel=null;b27Stale('The 5 minutes are up. Nothing was deleted.');return}U.askDel=null;return b27Void(id,hash)}
 async function b27SaveEdit(){const id=U.editOf,e=b27FormOK();if(e){b27Err(e);U.confirm=false;render();return}const nb=b27BetsFromForm()[0];
   U.busy=true;U.msg='Saving…';U.msgBad=false;render();
@@ -3704,9 +3707,9 @@ function b27Card(b,me){
   let del='',who='';
   if(st==='open'&&(isP||ADMIN)){
     const ask=w=>U.askSettle&&U.askSettle.id===b.id&&U.askSettle.what===w&&U.askSettle.terms===b27Terms(b);
-    const btn=(w,label)=>`<button type="button" class="btn sec b27-b" onclick="${ask(w)?`b27SetStatus('${b.id}','${w}')`:`b27Ask('${b.id}','${w}')`}"${U.busy?' disabled':''}>${ask(w)?'Tap again to confirm':label}</button>`;
+    const btn=(w,label)=>`<button type="button" class="btn sec b27-b" onclick="${ask(w)?`b27SetStatus('${b.id}','${w}')`:`b27Ask('${b.id}','${w}')`}"${U.busy?' disabled':''}>${ask(w)?'Tap again to '+(w==='push'?'wash':'settle')+' #'+b.n:label}</button>`;
     /*<CREATOR-SETTLE>*/if(me!==b.backer)who=`<div class="note b27-onlyc" style="margin-top:6px">Only ${esc(PN(b.backer))} (who placed it) can enter the result.</div>`;else /*</CREATOR-SETTLE>*//*<S25>*/if(!s25HideManual(b))/*</S25>*/who=`<div class="b27-act"><span class="note">Who won?</span>${btn('backer',esc(Bk)+' won')}${btn('other',BU?'Managers won':esc(Ot)+' won')}${btn('push','Wash')}</div>`;
-    if(b27CanUndo(b)&&b.kind!=='pool'){const ask=U.askDel===b.id;del=`<button type="button" class="btn sec b27-b" onclick="b27OpenEdit('${b.id}')"${U.busy?' disabled':''}>Edit</button><button type="button" class="btn sec b27-b" onclick="${ask?`b27DoDel('${b.id}','${b27Hash(b27Terms(b))}')`:`b27AskDel('${b.id}')`}"${U.busy?' disabled':''}>${ask?'Tap again to delete bet #'+b.n:'Delete'}</button>`}
+    if(b27CanUndo(b)&&b.kind!=='pool'){const ask=U.askDel===b.id&&U.askDelAt&&U.askDelAt.terms===b27Terms(b);del=`<button type="button" class="btn sec b27-b" onclick="b27OpenEdit('${b.id}')"${U.busy?' disabled':''}>Edit</button><button type="button" class="btn sec b27-b" onclick="${ask?`b27DoDel('${b.id}','${b27Hash(b27Terms(b))}')`:`b27AskDel('${b.id}')`}"${U.busy?' disabled':''}>${ask?'Tap again to delete bet #'+b.n:'Delete'}</button>`}
     else if(ADMIN)del=`<button type="button" class="btn sec b27-b" onclick="b27Void('${b.id}','${b27Hash(b27Terms(b))}')"${U.busy?' disabled':''}>Delete</button>`;
   }
   if(del||ready)h+=`<div class="b27-del">${del}${ready?'<span class="b27-ready-t">Ready to settle</span>':''}</div>`;
@@ -3815,6 +3818,21 @@ function vB27(){
 const OB_LABELS={form:'Request or Write it up',all:'All Bets',tally:'All Bets',request:'Request or Write it up',open:'All Bets'};
 /*<STEP8-REQUEST>*/ /* Request a bet: shared module (shared/ui.js SHARED_UI.Requests); requests live in their OWN textdb record (not the bets ledger) */
 const REQ_URL='https://textdb.dev/api/data/stoopids-requests-2627-9eaa4f66';
+function b27TeamHit(name,teams){const n=String(name||'').toLowerCase();return teams.find(t=>{const x=t.toLowerCase();return x===n||x.indexOf(n)>=0||n.indexOf(x)>=0})||''}
+function b27ReqBet(r){const raw=b27Clean(r&&(r.txt||r.lab))||'';let parsed=null;try{parsed=S25.parse(raw,r&&(r.start||r.at)||new Date().toISOString())}catch(e){}
+  if(parsed&&parsed.k&&parsed.k!=='manual')return {text:raw,rd:parsed};
+  const gm=/^(.*?)\s+vs\.?\s+(.*?)(?:\s+·.*)?$/i.exec(String(r&&r.game||'').trim());
+  if(!gm)return {text:raw,rd:parsed||{k:'manual'}};
+  const teams=[gm[1].trim(),gm[2].trim()],src=String((r&&(r.lab||r.txt))||'').trim();
+  const sp=/^(.*?)\s+([+-]\d+(?:\.\d+)?|pk)$/i.exec(src),ou=/^(over|under)\s+(\d+(?:\.\d+)?)$/i.exec(src);
+  const fl=n=>n===0?'PK':(n>0?'+':'')+n,dateBit=r&&r.date?', '+String(r.date).replace(/,?\s+20\d\d$/,''):'';
+  const when=r&&(r.start||r.at)||new Date().toISOString();
+  let text=raw,rd=null;
+  if(sp){const l=/^p/i.test(sp[2])?0:Math.round(parseFloat(sp[2])*2)/2,side=b27TeamHit(sp[1],teams)||sp[1].trim(),other=teams.find(t=>t.toLowerCase()!==side.toLowerCase())||'';
+    if(other){text=b27Clean(side+' '+fl(l)+' vs '+other+' '+fl(l===0?0:-l)+dateBit);try{rd=S25.parse(text,when)}catch(e){}
+      if(!rd||rd.k==='manual'){let d='';try{const dt=S25.dateFrom(String(r.date||text),S25.etDay(new Date(when)));if(dt)d=dt.d}catch(e){}if(!d&&r.start){try{d=S25.etDay(new Date(r.start))}catch(e){}}if(d)rd={k:'spread',t:side,o:other,l,sp:S25.sportOf(teams.join(' ')),d}}}}
+  else if(ou){const side=/^o/i.test(ou[1])?'Over':'Under',other=side==='Over'?'Under':'Over';text=b27Clean(side+' '+ou[2]+' vs '+other+' '+ou[2]+', '+teams[0]+' v '+teams[1]+dateBit);try{rd=S25.parse(text,when)}catch(e){}}
+  return {text:text||raw,rd:rd&&rd.k&&rd.k!=='manual'?rd:(parsed||{k:'manual'})}}
 const RQ=(typeof SHARED_UI!=='undefined'&&SHARED_UI.Requests)?SHARED_UI.Requests({maxText:PULK.maxText,change:"presAsk();return false",
   e:esc,me:()=>b27Who(),others:()=>b27Others().map(n=>({id:n,emoji:ownerEmoji(n),nick:TN(n)})),nick:n=>TN(n),real:n=>PN(n),
   canWrite:()=>!DEMO&&!!b27Who()&&b27OwnerNames().includes(b27Who()),amounts:PULK.amounts,
@@ -3822,7 +3840,7 @@ const RQ=(typeof SHARED_UI!=='undefined'&&SHARED_UI.Requests)?SHARED_UI.Requests
   tname:s=>qbNm(s),dateET:g=>qbDate(g),link:()=>location.href.split('#')[0]+'#bets27',goRequest:()=>{tab='bets27';OB_VIEW='request'},waiting:()=>{try{const me=b27Who();return me&&U.doc&&U.doc.bets?U.doc.bets.filter(b=>s24Waiting(b,me)).length:0}catch(e){return 0}},navEl:()=>document.querySelector('a.nt[data-tab="bets27"]')||document.querySelector('a.nt[data-tab="bets"]'),
   get:async()=>{const r=await fetch(REQ_URL,{cache:'no-store'});if(!r.ok)throw 0;return r.text()},
   set:async txt=>{const w=await fetch(REQ_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:txt});if(!w.ok)throw 0},
-  placeBet:async(r,me)=>{const id=b27Rid(),at=new Date().toISOString(),text=b27Clean(r.txt);let rd;try{rd=S25.parse(text,at)}catch(_){}
+  placeBet:async(r,me)=>{const id=b27Rid(),at=new Date().toISOString(),built=(r&&(r.gid||r.game))?b27ReqBet(r):{text:b27Clean(r.txt)};const text=built.text||b27Clean(r.txt);if(text){if(!r.lab||r.lab===r.txt)r.lab=text;r.txt=text}let rd=built.rd;if(!rd||rd.k==='manual'){try{rd=S25.parse(text,r.start||at)}catch(_){}}
     const w=SHARED_UI.whenPack(r.wk,r.est,r.sid)||SHARED_UI.whenPack('unknown');
     const nb=Object.assign({id,backer:r.by,other:me,postedBy:me,postedAt:at,amt:r.amt,odds:{a:(r.odds||[1,1])[0],b:(r.odds||[1,1])[1]},text,status:'open',req:r.id,wk:w.wk,est:w.est,sid:w.sid},rd?{rd}:{});
     const back=await b27Write(cur=>{if(cur.some(c=>c.id===id))return cur;let n=b27MaxN(cur);return cur.concat([Object.assign({},nb,{n:n+1,created_at:at,settled_at:null})])},cur=>cur.some(c=>c.id===id));b27Apply(back)},
@@ -4196,12 +4214,12 @@ function s25PropHtml(b,me){const G=s25Game(b);if(!G)return '';const r=s25BetRd(b
       'No final score yet. Pick the winner yourself any time, or come back after the game.'+(G.g&&G.g.state==='pre'&&G.g.start?' (starts '+S25.localTime(G.g.start)+')':'');
     return `<div class="s25pp" data-s25-prop="${G.wait}">${esc(t)}</div>`}
   const p=G.p;if(!p)return '';const ask=!!(S25P.ask&&S25P.ask.id===b.id&&S25P.ask.terms===b27Terms(b)+'\u001f'+p.text+'\u001f'+p.r);
-  const btn=`<button type="button" class="ok${ask?' on flash':''}" data-s25-ok="${b.id}" onclick="${ask?`s25Confirm('${b.id}')`:`s25Ask('${b.id}')`}"${U.busy?' disabled':''}>${ask?'Tap again to confirm':'✅ Confirm'}</button> <button type="button" data-s25-fix="${b.id}" aria-pressed="${!!S25P.fix[b.id]}" onclick="s25Fix('${b.id}')">✏️ Fix</button>`;
+  const btn=`<button type="button" class="ok${ask?' on flash':''}" data-s25-ok="${b.id}" onclick="${ask?`s25Confirm('${b.id}')`:`s25Ask('${b.id}')`}"${U.busy?' disabled':''}>${ask?'Tap again to confirm #'+b.n:'✅ Confirm'}</button> <button type="button" data-s25-fix="${b.id}" aria-pressed="${!!S25P.fix[b.id]}" onclick="s25Fix('${b.id}')">✏️ Fix</button>`;
   return `<div class="s25pp" data-s25-prop="final">${s25SuggestLine(b,p)}<div class="s25sg-act">${btn}</div><div class="note">Nothing is settled until someone taps Confirm.</div></div>`}
-function s25Ask(id){if(U.busy||b27TapLock())return;const b=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===id);if(!b){S25P.ask=null;render();return}const G=s25Game(b);const terms=b27Terms(b)+'\u001f'+(G&&G.p?G.p.text+'\u001f'+G.p.r:'');if(S25P.ask&&S25P.ask.id===id&&S25P.ask.terms===terms)S25P.ask=null;else S25P.ask={id,terms};render()}
+function s25Ask(id){if(U.busy)return;const b=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===id);if(!b){S25P.ask=null;render();return}const G=s25Game(b);const terms=b27Terms(b)+'\u001f'+(G&&G.p?G.p.text+'\u001f'+G.p.r:'');U.askSettle=null;if(S25P.ask&&S25P.ask.id===id&&S25P.ask.terms===terms&&!b27ArmOld(S25P.ask))S25P.ask=null;else{S25P.ask={id,terms,at:Date.now()};b27ArmTick()}render()}
 function s25HideManual(b){if(S25P.fix[b.id])return false;const G=s25Game(b);return !!(G&&G.p)}
 function s25Fix(id){S25P.fix[id]=!S25P.fix[id];render()}
-async function s25Confirm(id){if(U.busy||b27TapLock())return;const flash=document.querySelector('[data-s25-ok="'+id+'"]');if(flash)flash.classList.add('on','flash');const b=U.doc.bets.find(x=>x.id===id),me=b27Who();if(!b||b.backer!==me){U.msg=B27_ONLY;U.msgBad=true;render();return}
+async function s25Confirm(id){if(U.busy)return;const flash=document.querySelector('[data-s25-ok="'+id+'"]');if(flash)flash.classList.add('on','flash');const b=U.doc.bets.find(x=>x.id===id),me=b27Who();if(!b||b.backer!==me){U.msg=B27_ONLY;U.msgBad=true;render();return}
   const G=s25Game(b);if(!G||!G.p){S25P.ask=null;U.msg='No final score to confirm yet.';U.msgBad=true;render();return}
   const terms=b27Terms(b)+'\u001f'+G.p.text+'\u001f'+G.p.r;if(!S25P.ask||S25P.ask.id!==id||S25P.ask.terms!==terms){S25P.ask=null;b27Stale();return}
   S25P.ask=null;b27SetStatus.skip=true;return b27SetStatus(id,G.p.r,{src:{g:G.g.id,sc:G.p.sc}})}
