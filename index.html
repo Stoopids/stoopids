@@ -1764,7 +1764,10 @@ function gBetMap(){if(gBetCache)return gBetCache;const map={};const add=(id,b)=>
     let rd=null;try{rd=s25BetRd(b)}catch(e){}if(rd&&rd.k&&rd.k!=='manual'&&rd.d){try{const m=S25.match(s29Sb(rd.d),rd);if(m&&m.id)add(String(m.id),b)}catch(e){}}}}catch(e){}
   return gBetCache=map}
 function gBetIds(){const out=new Set();try{const m=gBetMap();Object.keys(m).forEach(id=>{if(m[id].length)out.add(id)})}catch(e){}return out}
-function gOpenBet(id){tab='bets27';OB_VIEW='all';try{S24.sub=id}catch(e){}render();setTimeout(()=>{const el=document.getElementById('bet-'+id);if(el)el.scrollIntoView({block:'center'})},40);return false}
+function gOpenBet(id){id=String(id||'');const b=(U.doc&&U.doc.bets||[]).find(x=>x.id===id);tab='bets27';const done=!!(b&&b27Done(b));OB_VIEW=done?'tally':'all';
+  if(!done){lsSet(S24FSK,'open');lsSet(S24FAK,'any')}
+  if(b){const me=typeof b27Who==='function'?b27Who():null,who=s24FP()==='me'?me:s24FP()==='all'?null:s24FP();if(s24FP()!=='all'&&!(who&&s24InBet(b,who)))lsSet(S24FPK,'all');if(s24Q&&!s24Hay(b).includes(s24Q.trim().toLowerCase()))s24Q='';if(!done&&!s24WhenOk(b,s24FWh()))lsSet(S24FWK,'any')}
+  S24.prep='bets27/'+id;S24.sub=id;S24.done=null;S24.hlUntil=0;if(window.S26W)window.S26W.user=true;render();return false}
 function gBetLinkHtml(g){const list=(gBetMap()[String(g&&g.id||'')]||[]).slice().sort((a,c)=>(a.n||0)-(c.n||0));if(!list.length)return '';
   return '<div class="glinks">'+list.map(b=>'<a class="glink" href="#bets27" data-gbet="'+esc(b.id)+'" onclick="return gOpenBet(\''+esc(b.id)+'\')">#'+b.n+'</a>').join('')+'</div>'}/*</SYNC1>*/
 /*<OWNED-GAMES>*/let gAll=false;   // 'Show unowned games' toggle: OFF by default
@@ -3827,9 +3830,11 @@ const RQ=(typeof SHARED_UI!=='undefined'&&SHARED_UI.Requests)?SHARED_UI.Requests
   render:()=>{if(tab==='bets27'&&(OB_VIEW==='request'||OB_VIEW==='form'||OB_VIEW==='all'||OB_VIEW==='open'))render()},ping:()=>{try{betBlip()}catch(e){}}}):null;
 /*</STEP8-REQUEST>*/
 let OB_VIEW='form';   // Bets tab: 'form' = 2026-27 (New bet form + bet list), 'tally' = person table + Who owes who for 2026-27
-function obLandEl(){const phone=document.querySelector('.tabs.ob-seg.ob-phone');if(!phone)return null;let n=phone.nextElementSibling;while(n&&n.classList&&(n.classList.contains('ob-seg')||n.classList.contains('s24nf')))n=n.nextElementSibling;if(!n)return null;if(n.classList.contains('entry-pair'))return n.querySelector('.entry-col.is-on .entry-hd')||n.querySelector('.entry-hd');return n.matches('h2,h3')?n:(n.querySelector('h2,h3,.entry-hd')||n)}
-function obAlign(){const nav=document.getElementById('nav'),phone=window.matchMedia('(max-width:999px)').matches,el=document.querySelector(phone?'.tabs.ob-seg.ob-phone':'.tabs.ob-seg.ob-desk')||document.querySelector('.tabs.ob-seg');if(!nav||!el||!el.getBoundingClientRect().height)return;if(window.S26W)window.S26W.user=true;const y=Math.round(el.getBoundingClientRect().top+window.scrollY-nav.getBoundingClientRect().height);window.scrollTo(0,Math.max(0,y))}
-function betsLand(){if(tab!=='bets27'&&tab!=='bets')return;if(window.S26W)window.S26W.user=true;const go=()=>{try{obAlign()}catch(e){}};go();requestAnimationFrame(()=>requestAnimationFrame(go));setTimeout(go,80)}
+function obLandEl(){const row=[...document.querySelectorAll('#main>.tabs.ob-seg')].pop();if(!row)return null;let n=row.nextElementSibling;while(n&&n.classList&&(n.classList.contains('ob-seg')||n.classList.contains('s24nf')))n=n.nextElementSibling;if(!n)return null;if(n.classList.contains('entry-pair'))return n.querySelector('.entry-col.is-on .entry-hd')||n.querySelector('.entry-hd');return n.matches('h2,h3')?n:(n.querySelector('h2,h3,.entry-hd')||n)}
+function obRows(){const nav=document.getElementById('nav');let h=nav?Math.ceil(nav.getBoundingClientRect().height):0;const seg=[...document.querySelectorAll('#main>.tabs.ob-seg')].find(e=>e.getClientRects().length);if(seg)h+=Math.ceil(seg.getBoundingClientRect().height);return h}
+function stickTo(el){if(!el)return;if(window.S26W)window.S26W.user=true;const go=()=>{const mt=parseFloat(getComputedStyle(el).marginTop)||0;const y=Math.round(el.getBoundingClientRect().top+window.scrollY-obRows()-mt);if(Math.abs((window.scrollY||0)-y)>1)window.scrollTo(0,Math.max(0,y))};go();requestAnimationFrame(()=>requestAnimationFrame(go));setTimeout(go,80)}
+function obAlign(){const head=obLandEl();if(head)stickTo(head)}
+function betsLand(){if(tab!=='bets27'&&tab!=='bets')return;obAlign()}
 function obView(v){tab='bets27';
   if(v==='open')OB_VIEW='all';
   else if(v==='tally')OB_VIEW='tally';
@@ -3853,7 +3858,8 @@ function vTally(){/* STEP11: Tally = 2026-27 Bets ledger (b27Tally / U.doc), not
   }
   const me=b27Who(),done=(bets||[]).filter(b27Done),shown=done.filter(b=>s24Match(b,me,{st:'all',ac:'any',wh:'any'})||(S24.sub&&b.id===S24.sub));
   const byN=shown.slice().sort((a,b)=>(b.n||0)-(a.n||0));
-  h+=`<h2>Settled bets <span class="note">${shown.length}</span></h2>`+s24FilterBar(done,me,'Search settled bets')+(shown.length?`<div class="b27-grid">${b27Cards(byN.slice(0,60),me)}</div>`+(byN.length>60?'<p class="note">Showing the first 60.</p>':''):'<div class="card note">No settled bets match.</div>');
+  let showN=byN.slice(0,60);if(S24.sub){const x=byN.find(b=>b.id===S24.sub);if(x&&!showN.some(b=>b.id===x.id))showN=showN.concat([x])}
+  h+=`<h2>Settled bets <span class="note">${shown.length}</span></h2>`+s24FilterBar(done,me,'Search settled bets')+(shown.length?`<div class="b27-grid">${b27Cards(showN,me)}</div>`+(byN.length>60?'<p class="note">Showing the first 60.</p>':''):'<div class="card note">No settled bets match.</div>');
   return h}
 /*</BETS-TALLY>*/
 function obToggle(){
@@ -3968,7 +3974,7 @@ function njPut(k){if(!k)return;const ds=[];for(const x of k.a){const e=document.
   let best=ds[0],bn=0;for(const d of ds){const c=ds.filter(z=>Math.abs(z-d)<=2).length;if(c>bn||(c===bn&&Math.abs(d)<Math.abs(best))){bn=c;best=d}}
   if(Math.abs(best)>=1)njScroll(window.scrollY+best)}
 /*</NO-JUMP>*/
-function pinNavH(){const n=document.getElementById('nav');if(n)document.documentElement.style.setProperty('--navh',Math.ceil(n.getBoundingClientRect().height)+'px')}
+function pinNavH(){const n=document.getElementById('nav');if(n)document.documentElement.style.setProperty('--navh',Math.ceil(n.getBoundingClientRect().height)+'px');const seg=document.querySelector('#main[data-tab="games"]>.segrow');document.documentElement.style.setProperty('--segh',(seg?Math.ceil(seg.getBoundingClientRect().height):0)+'px')}
 addEventListener('resize',()=>{try{pinNavH()}catch(e){}});
 /* Header (photo + STOOPIDS) is ordinary page content: it scrolls away and comes back only at the very top.
    Once it has left, the main nav stays fixed and the page's second row stays stuck under it, in both directions.
@@ -4065,7 +4071,7 @@ function s24DeepGo(){
     S24.prep=key;
   }else return;
   const el=document.querySelector('#main [data-'+(tab==='games'?'gid':'bid')+'="'+sub+'"]');if(!el)return;
-  if(S24.done!==key){S24.done=key;S24.hlUntil=Date.now()+2600;try{el.scrollIntoView({block:'center'})}catch(_){}/*<S26V>*/s24Put(false);/*</S26V>*/clearTimeout(S24.ht);S24.ht=setTimeout(()=>{document.querySelectorAll('.dl-hl').forEach(e=>e.classList.remove('dl-hl'));/*<S26G>*/if(tab+'/'+S24.sub===key){S24.sub=null;s24Put(false)}/*</S26G>*/},2650)}
+  if(S24.done!==key){S24.done=key;S24.hlUntil=Date.now()+2600;try{if(tab==='bets27')stickTo(el);else el.scrollIntoView({block:'center'})}catch(_){}/*<S26V>*/s24Put(false);/*</S26V>*/clearTimeout(S24.ht);S24.ht=setTimeout(()=>{document.querySelectorAll('.dl-hl').forEach(e=>e.classList.remove('dl-hl'));/*<S26G>*/if(tab+'/'+S24.sub===key){S24.sub=null;s24Put(false)}/*</S26G>*/},2650)}
   if(Date.now()<S24.hlUntil)el.classList.add('dl-hl');
 }
 function s24AfterLoad(){/*<NO-JUMP>*/const first=!S24.al;S24.al=1;/*</NO-JUMP>*/if(S24.sub)s24DeepGo()/*<TAB-TOP>*/;else if(first){if(tab==='bets27'||tab==='bets')betsLand();else window.scrollTo(0,0)}/*</TAB-TOP>*//*<S26W>*/;try{window.S26W&&S26W.top()}catch(_){}/*</S26W>*/}   // the 5-min reload never scrolls
@@ -4393,7 +4399,7 @@ function s24Stab(){const st=s24FSt(),ac=s24FAc();if(ac==='mine'&&st==='open')ret
 function s24SetStab(v){if(v==='need'){lsSet(S24FSK,'open');lsSet(S24FAK,'mine')}else if(v==='settled'){lsSet(S24FSK,'settled');lsSet(S24FAK,'any')}else if(v==='all'){lsSet(S24FSK,'all');lsSet(S24FAK,'any')}else{lsSet(S24FSK,'open');lsSet(S24FAK,'any')}render()}
 function s24Chrono(){try{return localStorage.getItem('stoopids_b27_chrono')==='old'?'old':'new'}catch(e){return 'new'}}
 function s24ChronoToggle(){lsSet('stoopids_b27_chrono',s24Chrono()==='new'?'old':'new');render()}
-function s24ChronoList(list,me){const dir=s24Chrono()==='old'?1:-1;const g=(list||[]).slice().sort((a,b)=>{const ca=Date.parse(a.created_at)||0,cb=Date.parse(b.created_at)||0;if(ca!==cb)return (ca-cb)*dir;return ((a.n||0)-(b.n||0))*dir});const show=g.slice(0,60);return `<div class="b27-grid">${b27Cards(show,me)}</div>`+(g.length>60?'<p class="note">Showing the first 60.</p>':'')}
+function s24ChronoList(list,me){const dir=s24Chrono()==='old'?1:-1;const g=(list||[]).slice().sort((a,b)=>{const ca=Date.parse(a.created_at)||0,cb=Date.parse(b.created_at)||0;if(ca!==cb)return (ca-cb)*dir;return ((a.n||0)-(b.n||0))*dir});let show=g.slice(0,60);if(S24.sub){const x=g.find(b=>b.id===S24.sub);if(x&&!show.some(b=>b.id===x.id))show=show.concat([x])}return `<div class="b27-grid">${b27Cards(show,me)}</div>`+(g.length>60?'<p class="note">Showing the first 60.</p>':'')}
 function s24FilterBar(bets,me,ph){const p=s24FP(),st=s24FSt(),ac=s24FAc(),wh=s24FWh(),stab=s24Stab(),ch=s24Chrono();
   const tab=(k,t)=>`<button type="button" role="tab" aria-selected="${stab===k?'true':'false'}" class="${stab===k?'on':''}" onclick="s24SetStab('${k}')">${t}</button>`;
   const settledOnly=ph==='Search settled bets';
@@ -4800,9 +4806,11 @@ html body .gfin.open>.gsum>span:not(.gst):not(.gch){display:none!important}
 .cm-row .sb-in,.cm-acts{margin-top:4px}
 .cm-acts{display:flex;flex-wrap:wrap;gap:6px}
 .cm-acts .btn,.cm-row .btn{margin-top:6px}
-/* The Bets sub-tabs were sticking over the blue Request heading. Keep them in normal flow, above the form. */
-html body #main>.tabs.ob-seg{position:static!important;top:auto!important;z-index:auto!important;margin-bottom:12px!important}
+/* Bets sub-tabs stay frozen under the main tab row. The open section's heading is scrolled to sit just below them. */
+html body #main>.tabs.ob-seg{position:sticky!important;top:var(--navh,56px)!important;z-index:35!important;background:var(--bg,#0e121b)!important;margin-bottom:8px!important}
 html body .entry-hd.entry-hd-rq,html body .entry-hd.entry-hd-wiu{margin-top:0!important}
+html body #main[data-tab="games"]>.segrow{position:sticky!important;top:var(--navh,56px)!important;z-index:36!important;background:var(--bg,#0e121b)!important;margin-bottom:0!important}
+html body #main[data-tab="games"]>.gfone{position:sticky!important;top:calc(var(--navh,56px) + var(--segh,0px))!important;z-index:35!important;background:var(--bg,#0e121b)!important;padding-bottom:6px!important}
 @media (max-width:700px){
  html body #main>.tapf{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;grid-auto-rows:26px!important;gap:4px!important;width:100%!important}
  html body #main>.tapf>button:first-child{grid-column:1 / -1!important;grid-row:auto!important;width:100%!important;height:26px!important;min-height:26px!important;max-height:26px!important;padding:0 8px!important;font-size:12px!important;line-height:24px!important}
