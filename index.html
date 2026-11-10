@@ -3821,14 +3821,17 @@ function s24AfterLoad(){/*<NO-JUMP>*/const first=!S24.al;S24.al=1;/*</NO-JUMP>*/
 /* ---- 1) Edit ---- */
 function s24ResetForm(){Object.assign(U,{/*<S25>*/rdEd:null,rdOpen:false,/*</S25>*/opps:[],amt:null,amtCustom:false,amtTxt:'',amtErr:'',odds:[1,1],custom:false,customTxt:'',oddsErr:'',text:'',confirm:false,fids:{},qb:null,est:'',wk:'unknown'})}
 let estDraft=null;
+function b27HasGame(b){const r=b&&b.rd;return !!(r&&(r.k==='spread'||r.k==='ml'||r.k==='total')&&r.t&&r.o)||!!(b&&b.src&&b.src.g)}
 function s24EstKind(k){if(U.busy||!estDraft)return;estDraft.kind=k==='date'||k==='season'||k==='game'?k:'unknown';if(estDraft.kind!=='date')estDraft.val='';render()}
-function s24EstHtml(b){if(!(estDraft&&estDraft.id===b.id))return '';const k=estDraft.kind,dis=U.busy?' disabled':'',chip=(id,lab)=>`<button type="button" class="b27-chip" data-when="${id}" aria-pressed="${k===id?'true':'false'}" onclick="s24EstKind('${id}')"${dis}>${esc(lab)}</button>`;
-  const opts=chip('date','Choose a date')+chip('season','End of season')+(estDraft.allowGame||k==='game'?chip('game','End game'):'')+chip('unknown','Not sure yet');
-  return `<div class="b27-drop" id="settles-${esc(b.id)}" data-est-editor="${esc(b.id)}" role="group" aria-label="When this bet can be settled"><div class="b27-when-c">${opts}</div>${k==='date'?`<input class="sb-in b27-in" type="date" id="estIn" aria-label="Choose a date" value="${esc(estDraft.val||'')}" onchange="if(estDraft&&estDraft.id==='${b.id}')estDraft.val=this.value"${dis}>`:''}<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="s24EstSave('${b.id}')"${dis}>${U.busy?'Saving…':'Save'}</button><button type="button" class="btn sec b27-b" onclick="s24EstCancel()"${dis}>Cancel</button></div></div>`}
+function s24EstPick(id,k){if(U.busy||!estDraft||estDraft.id!==id)return;const kind=k==='date'||k==='season'||k==='game'?k:'unknown';if(kind==='date'){estDraft.kind='date';render();return}const b=(U.doc.bets||[]).find(x=>x.id===id);if(b&&SHARED_UI.whenKind(b)===kind){estDraft.kind=kind;estDraft.val='';render();return}s24EstWrite(id,kind,null)}
+function s24EstHtml(b){if(!(estDraft&&estDraft.id===b.id))return '';const k=estDraft.kind,dis=U.busy?' disabled':'',chip=(id,lab)=>`<button type="button" class="b27-chip" data-when="${id}" aria-pressed="${k===id?'true':'false'}" onclick="s24EstPick('${b.id}','${id}')"${dis}>${esc(lab)}</button>`;
+  const opts=(estDraft.allowGame?chip('game','End of game'):'')+chip('season','End of season')+chip('date','Set a date')+chip('unknown','Not sure yet');
+  const date=k==='date'?`<input class="sb-in b27-in" type="date" id="estIn" aria-label="Set a date" value="${esc(estDraft.val||'')}" onchange="if(estDraft&&estDraft.id==='${b.id}')estDraft.val=this.value"${dis}><div class="b27-act"><button type="button" class="btn sec b27-b" onclick="s24EstSave('${b.id}')"${dis}>${U.busy?'Saving…':'Save'}</button><button type="button" class="btn sec b27-b" onclick="s24EstCancel()"${dis}>Cancel</button></div>`:'';
+  return `<div class="b27-drop" id="settles-${esc(b.id)}" data-est-editor="${esc(b.id)}" role="group" aria-label="When this bet can be settled"><div class="b27-when-c">${opts}</div>${date}</div>`}
 function s24EstOwner(b){const me=b27Who();return !!(b&&b.status==='open'&&b.kind!=='pool'&&me&&b.backer===me)}
 function s24EditStart(id){if(U.busy)return;if(estDraft&&estDraft.id===id){estDraft=null;render();return}const b=(U.doc.bets||[]).find(x=>x.id===id);
   if(!s24EstOwner(b)){estDraft=null;U.msg=b&&b.status!=='open'?'This bet is already settled. The sorting note stays as it is.':'Only the person who posted this bet can set when it might be settled.';U.msgBad=true;render();return}
-  const kind=SHARED_UI.whenKind(b);estDraft={id,kind,val:kind==='date'?b.est:'',allowGame:kind==='game'};U.msg='';render()}
+  const kind=SHARED_UI.whenKind(b);estDraft={id,kind,val:kind==='date'?b.est:'',allowGame:kind==='game'||b27HasGame(b)};U.msg='';render()}
 function s24EstCancel(){if(U.busy)return;estDraft=null;render()}
 async function s24EstWrite(id,kind,est){if(U.busy)return;const b=(U.doc.bets||[]).find(x=>x.id===id);if(!s24EstOwner(b)){estDraft=null;U.msg='Only the person who posted this unsettled bet can set when it might be settled.';U.msgBad=true;render();return}
   const pack=SHARED_UI.whenPack(kind,est,b27Season());if(kind==='date'&&!pack){U.msg='Use a real calendar date, or pick End of season or Not sure yet.';U.msgBad=true;render();return}
@@ -4400,6 +4403,7 @@ html body .b27-pill[aria-expanded="true"] .b27-chev{border-top:0;border-bottom:5
 html body .b27-drop{margin-top:6px;padding:8px;border:1px solid var(--line,#334);border-radius:12px;background:var(--card2,#1b2030)}
 html body .b27-drop .b27-when-c{flex-direction:column}
 html body .b27-drop .b27-chip{width:100%!important;text-align:left}
+html body .b27-drop .b27-chip[aria-pressed="true"]{background:var(--acc,#ffd400);color:#111;border-color:var(--acc,#ffd400)}
 html body .b27-drop .b27-in{width:100%;box-sizing:border-box;margin-top:6px}
 html body .b27-drop .b27-act{margin-top:6px}
 html body .b27-gh{margin:12px 0 6px;font-size:15px}
