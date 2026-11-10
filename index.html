@@ -3020,7 +3020,7 @@ function chatInit(){
    Rounding rule: all maths is integer; amt x a/b is rounded HALF UP to a whole number (7.5 -> 8, 3.33 -> 3), and never below 1; the card says so when it happened.
    Remove everything between the BETS-2627 markers (CSS, JS, load hook) to drop the tab. */
 const BETS_DISCLAIMER="Bets here are just for fun and are settled in pullups, not money. Betting is Stoopid, and we don't endorse or facilitate gambling for money.";   // the ONLY place the unit word appears in the tab; rendered once above the form
-const PULK={url:'https://textdb.dev/api/data/stoopids-bets-2627-9eaa4f66',amounts:[5,10,20,25,50],minAmt:5,maxAmt:1000,oddsChips:[[1,1],[2,1],[3,1],[4,1],[5,1]],maxOdds:100,maxText:140,maxBets:300,undoMs:30000,seenKey:'stoopids_bets2627_seen',pollMs:45000,pollOpenMs:15000};
+const PULK={url:'https://textdb.dev/api/data/stoopids-bets-2627-9eaa4f66',amounts:[5,10,20,25,50],minAmt:5,maxAmt:1000,oddsChips:[[1,1],[2,1],[3,1],[4,1],[5,1]],maxOdds:100,maxText:140,maxBets:300,undoMs:300000,seenKey:'stoopids_bets2627_seen',pollMs:45000,pollOpenMs:15000};
 const U={state:'init',doc:{bets:[]},known:null,maxN:0,mine:new Set(),opps:[],amt:null,amtCustom:false,amtTxt:'',amtErr:'',odds:[1,1],custom:false,customTxt:'',oddsErr:'',text:'',confirm:false,busy:false,msg:'',msgBad:false,fids:{},gid:null,askSettle:null,fails:0,timer:null,started:false,undoT:null,est:'',wk:'game',whenPick:false};
 /*<POOL>*/Object.assign(U,{kind:'bet',pp:[],entry:'',backTxt:'',poolTxt:{},poolErr:{}});/*</POOL>*/
 /* ---- pure helpers (unit-tested) ---- */
@@ -3234,7 +3234,7 @@ function b27Edit(){U.confirm=false;render()}
       return cur.concat(miss.map(b=>Object.assign({},b,{n:++n,created_at:at,settled_at:null})))},cur=>ids.every(id=>cur.some(b=>b.id===id))/*<S24-EDIT>*/&&(!edOf||!cur.some(c=>c.id===edOf&&c.status==='open'))/*</S24-EDIT>*/);
     ids.forEach(id=>U.mine.add(id));b27Apply(back);
     const mine=ids.map(id=>back.find(b=>b.id===id)).filter(Boolean);
-    {const m=mine[0],k=m?b27Opps(m).length:1;let copied=false;try{copied=clip?await b27CopyNow(clip):false}catch(err){copied=false}U.msg='Placed! Bet #'+(m?m.n:'')+(k>1?' against '+k+' managers ('+b27Num(U.amt)+' each)':'')+' is open. You can undo it for 30 seconds.';if(copied){U.clip=null;U.msg+=' Message copied. Paste it in WhatsApp.'}else{U.clip=clip;U.msg+=' Could not copy it. Copy the message below.'}U.msgBad=false;/*<S25C-FX>*/s25PlacedFx(m&&m.id)/*</S25C-FX>*/}
+    {const m=mine[0],k=m?b27Opps(m).length:1;let copied=false;try{copied=clip?await b27CopyNow(clip):false}catch(err){copied=false}U.msg='Placed! Bet #'+(m?m.n:'')+(k>1?' against '+k+' managers ('+b27Num(U.amt)+' each)':'')+' is open. You can undo it for 5 minutes.';if(copied){U.clip=null;U.msg+=' Message copied. Paste it in WhatsApp.'}else{U.clip=clip;U.msg+=' Could not copy it. Copy the message below.'}U.msgBad=false;/*<S25C-FX>*/s25PlacedFx(m&&m.id)/*</S25C-FX>*/}
     U.undoG=null;/*<S24-EDIT>*/if(edOf){const o=back.find(x=>x.id===edOf);U.msg+=o?' It replaces bet #'+o.n+' (now cancelled).':'';U.editOf=null}/*</S24-EDIT>*/
     U.opps=[];U.backer=null;U.pz=null;U.amt=null;U.amtCustom=false;U.amtTxt='';U.amtErr='';U.odds=[1,1];U.custom=false;U.customTxt='';U.oddsErr='';U.text='';U.est='';U.wk='game';U.whenPick=false;U.confirm=false;U.fids={};U.gid=null;/*<S25E-RD>*/U.rdEd=null;U.rdOpen=false;/*</S25E-RD>*/
     clearTimeout(U.undoT);U.undoT=setTimeout(()=>{if(tab==='bets27')render()},PULK.undoMs+300);
@@ -3242,7 +3242,7 @@ function b27Edit(){U.confirm=false;render()}
     if(e&&e.message==='late'){const o=U.doc.bets.find(x=>x.id===U.editOf);U.editOf=null;U.confirm=false;U.busy=false;U.msg='Too late to edit: bet'+(o?' #'+o.n:'')+' was already settled or cancelled. Nothing was saved; your changes are still in the form.';U.msgBad=true;b27Poll();render();return}/*</S24-EDIT>*/U.msg=e&&e.message==='full'?'The bets ledger is full.':/*<SAFE-RACE>*/e&&e.message==='conflict'?'Couldn’t save, try again. Someone else was saving at the same moment.':/*</SAFE-RACE>*/'Couldn’t save. Check your connection and tap Place bet again (it won’t double-post).';U.msgBad=true;U.confirm=true}
   U.busy=false;render();
 }
-/* group undo: voids every still-open bet of the group that is mine and inside the 30 s window, in ONE write */
+/* group undo: voids every still-open bet of the group that is mine and inside the 5 minute window, in ONE write */
 function b27GroupUndoable(g){return g?U.doc.bets.filter(b=>b.g===g&&b27CanUndo(b)):[]}
 function b27GroupHash(g){return b27Hash(b27GroupUndoable(g).map(b=>b.id+':'+b27Terms(b)).sort().join('|'))}
 async function b27UndoGroup(g,hash){
@@ -3291,10 +3291,10 @@ const POOL_TXT={
   eSum:'payouts add up to {sum} but the pot is {total}', eUnknown:'Unknown name "{x}". Use these short names for payouts: {keys}', eNotIn:'"{x}" is not in this pool.', eDup:'"{x}" is listed twice.', eEmptyPay:'Fill in the payouts first.',
   confirmTitle:'Check it, then confirm', sum:'Pool of {names} · buy-in {buy} each · total {tot}', open:'Payouts left open: it stays open until someone fills them in below.',
   row:'{name}: gets {got}, net {net}', settleUp:'{from} owes {to} {n}', go:'✅ Yes, build it', change:'← Change',
-  placed:'Built! Pool #{n} is open until the payouts are entered. You can undo it for 30 seconds.', placedDone:'Built! Pool #{n} counts now. You can undo it for 30 seconds.',
+  placed:'Built! Pool #{n} is open until the payouts are entered. You can undo it for 5 minutes.', placedDone:'Built! Pool #{n} counts now. You can undo it for 5 minutes.',
   word:'Pool', stOpen:'Open', stDone:'Settled', stVoid:'Cancelled', who:'{n} managers', with:'With: {names}',
   line:'Buy-in each {buy} · total {tot}', noPay:'Payouts not entered yet.',
-  save:'Save payouts', again:'Tap again to confirm', cancel:'Cancel this pool', undo:'↩ Undo this pool (30 s)', adminCancel:'Cancel pool (admin)', result:'Result',
+  save:'Save payouts', again:'Tap again to confirm', cancel:'Cancel this pool', undo:'↩ Undo this pool (5 min)', adminCancel:'Cancel pool (admin)', result:'Result',
   already:'Already settled.', saved:'Saved.',
   tHead:'Pool settle-up', tNote:'From each settled pool, the biggest loser owes the biggest winner, then the next. Net per manager includes pools.', tTag:'Pool #{n}: {text}',
   toast:'{who} just built a pool with {names}', cantSave:'Couldn’t save. Check your connection and tap Build again (it won’t double-post).'
@@ -3605,7 +3605,7 @@ function vB27(){
   /*<BETS-INTRO-BOTTOM>*/let h='';   // headline removed: New bet sits right under the season toggle + Share row
   const introBottom=`<div class="card b27-intro"><div class="note b27-note" id="b27Note">${esc(BETS_DISCLAIMER)}</div><div class="note" style="margin-top:6px">This page just <b>records</b> who bet what and who owes whom.</div>
    <div class="note" id="b27Top" style="margin-top:6px">${U.state==='ok'?'<span class="good">● live</span> · anyone with the link can add bets (no logins). Play nice.':U.state==='error'?'<span class="bad">● can’t reach the bets ledger right now</span>':/*<BALL-LOADER>*/''/*</BALL-LOADER>*/}</div></div>`;/*</BETS-INTRO-BOTTOM>*/
-  if(U.msg)h+=`<div class="card ${U.msgBad?'b27-bad':'b27-ok'}" role="status">${esc(U.msg)}${U.clip?`<pre class="rq-fb">${esc(U.clip)}</pre><div class="b27-act"><button type="button" class="btn sec" onclick="b27ClipRetry()">Copy</button></div>`:''}${/*<MULTI-BET>*/U.undoG&&b27GroupUndoable(U.undoG).length>1?`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27UndoGroup('${U.undoG}','${b27GroupHash(U.undoG)}')"${U.busy?' disabled':''}>↩ Undo all ${b27GroupUndoable(U.undoG).length} bets (30 s)</button></div>`:''/*</MULTI-BET>*/}</div>`;
+  if(U.msg)h+=`<div class="card ${U.msgBad?'b27-bad':'b27-ok'}" role="status">${esc(U.msg)}${U.clip?`<pre class="rq-fb">${esc(U.clip)}</pre><div class="b27-act"><button type="button" class="btn sec" onclick="b27ClipRetry()">Copy</button></div>`:''}${/*<MULTI-BET>*/U.undoG&&b27GroupUndoable(U.undoG).length>1?`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27UndoGroup('${U.undoG}','${b27GroupHash(U.undoG)}')"${U.busy?' disabled':''}>↩ Undo all ${b27GroupUndoable(U.undoG).length} bets (5 min)</button></div>`:''/*</MULTI-BET>*/}</div>`;
   /*<ALL-BETS>*/if(OB_VIEW==='all'){}/*list only: form lives on Write it Up*/else/*</ALL-BETS>*/ if(!me){h+=`<div class="card note">Set who you are on <a href="${esc(s24Href('profile'))}" onclick="return s24NavClick(event,'profile')">Profile</a> before you write a bet.</div>`}
   /*<POOL>*/else if(U.kind==='pool'){h+=b27PoolShell()}/*</POOL>*/
   else if(U.confirm){
