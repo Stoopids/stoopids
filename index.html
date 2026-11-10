@@ -535,7 +535,8 @@ nav a.nt{text-decoration:none}
 
 /*</S29D-GGRID>*/
 /*<S29D-NEWBETS>*/ /* Bets tab: yellow new-bets count top-right, red chat count with a small 💬 top-left (existing .nu, label prefixed) */
-nav a.nt .s29nb{position:absolute;top:1px;right:2px;min-width:15px;background:#FFD400;color:#111;border-radius:99px;font-size:9px;font-weight:900;line-height:1;padding:2px 4px;text-align:center;pointer-events:none}
+nav a.nt .s29nb,nav .nm-b>.s29nb,.nm-i>.s29nb{position:absolute;top:1px;right:2px;min-width:15px;background:#FFD400;color:#111;border-radius:99px;font-size:9px;font-weight:900;line-height:1;padding:2px 4px;text-align:center;pointer-events:none}
+nav .nm-b.on>.s29nb,.nm-i.on>.s29nb{background:#111;color:#FFD400}
 /*</S29D-NEWBETS>*/
 /*<S29D-HNB>*/.s29-hnb>h3{margin:12px 0 6px;font-size:1.05em}.s29-hnb{scroll-margin-top:8px}/*</S29D-HNB>*/
 /*<S29D-NAV>*/ /* main nav tabs ~+12% (font, icon, height, padding) over the s29c sizes; same breakpoints as before; must come after every other nav rule */
@@ -974,7 +975,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.64.0"></script>
+<script src="shared/ui.js?v=1.64.1"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -2456,7 +2457,22 @@ const D27_START='2026-11-01T13:00:00Z',D27_OWNERS=8,D27_ROUNDS=8,D27_TOTAL=D27_O
 function d27Done(){const r=DRAFT27_RESULTS;if(!r)return false;const t=r.draft_completed_at||r.completed_at,ms=t?Date.parse(t):NaN;
   return isFinite(ms)&&ms>=Date.parse(D27_START)&&Array.isArray(r.picks)&&r.picks.length===D27_TOTAL}
 /* Weekly write-ups for the Recap tab: Monday recaps + milestone specials. Newest first by date. Add entries like {date:'2026-11-09',title:'Week 1',kind:'weekly',body:'...'} (kind 'weekly' | 'special'). body is plain text (escaped). */
-const RECAPS=[];
+const RECAPS=[{date:'2026-11-09',title:'Week 1',kind:'special',body:`Opening week (Nov 1-9) started everyone at zero. Four people are still tied at the top: Mark, Jake, Kurt, and Jim, all on 17. Ken has 15, Murf 14, and Paul and Scotty are tied at 13. Every point so far is a win. No bonuses, and nobody has the lead alone.
+
+Best team: Jake's Texas, 3-0 by a combined 129 (109-59 Chicago St, 98-50 Gardner-Webb, 93-62 Grambling). Worst team: Scotty's Colgate, 0-2, the only roster team still on zero (76-90 Washington, 74-77 Drexel).
+
+Biggest roster upset: Murf's Memphis, a 15.5-point dog, beat Paul's Iowa State 80-76 on Nov 2.
+
+Pullups: 23 bets settled, 5 of them a wash, including Kurt and Paul pushing rock-paper-scissors for 20. That Memphis ticket was 2-1, so Paul owes Murf 10 on it and 15 on the week after their other tickets. Jim is owed 10 by Paul and 5 by Kurt. Mark owes Paul 5, Scotty owes Paul 5 on net, and Ken owes Kurt 5 on an under. Jake did not settle a bet. Ten more are still open.
+
+Mark: a perfect 17, and he still has to share first place.
+Jake: Texas won by 129. The tie did not care.
+Kurt: Virginia blew out Arkansas, then Paul's Saint Louis beat his Missouri.
+Jim: tied for first while his Arizona lost to Jake's UCLA.
+Ken: two teams went 3-0, and he is still two points short.
+Murf: the upset of the week, and a 31-point loss, same week.
+Paul: UConn beat Michigan. The standings tied him for last anyway.
+Scotty: his Gonzaga beat his Purdue, and Colgate is still on zero.`}];
 function vDraftTab(){return vDraft27()}   /* s26s: STOOPIDS drafted by hand; board always shows, no gate, no draft-room button */
 function vRecap(){/*<S27-RECAP> weekly write-ups first (newest first), then the draft grades, then the draft board (was the Draft tab) */
   const L=RECAPS.filter(x=>x&&x.title).slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
@@ -2587,13 +2603,16 @@ function s29NbUpdate(){const nav=$('#nav');if(!nav||!D)return;if(s29NbListOn())l
   if(!n){if(e)e.remove();return}if(!e){e=document.createElement('b');e.className='s29nb';e.setAttribute('aria-hidden','true');a.appendChild(e)}e.textContent=n>99?'99+':String(n);a.title=n+' new bet'+(n>1?'s':'')}
 setInterval(()=>{try{s29NbUpdate()}catch(_){}},3000);
 /*</S29D-NEWBETS>*/
-/*<STEP12-RECAPNEW>*/ // yellow count on the Recap tab = weekly write-ups (RECAPS) this device hasn't seen yet. Seen = a list of date|title keys in localStorage stoopids_recap_seen. First load ever: everything already there counts as seen (no flood). Opening Recap marks all seen. localStorage only, nothing remote.
-const S12RC_KEY='stoopids_recap_seen';
+/*<STEP12-RECAPNEW>*/ // yellow count on the Recap tab = weekly write-ups (RECAPS) this device has not opened yet. Same pill as the Bets new-bet count. Seen = date|title keys in localStorage, written only when Recap is actually open. A missing key means none seen (Week 1 counts). v1 (stoopids_recap_seen) marked the list on first paint, so it could not tell "opened" from "loaded". localStorage only, nothing remote.
+const S12RC_KEY='stoopids_recap_seen2';
 const s12RcKeys=()=>(typeof RECAPS!=='undefined'?RECAPS:[]).filter(x=>x&&x.title).map(x=>String(x.date||'')+'|'+String(x.title));
-function s12RcSeen(){let v=null;try{v=JSON.parse(lsGet(S12RC_KEY)||'null')}catch(_){}if(!Array.isArray(v)){v=s12RcKeys();lsSet(S12RC_KEY,JSON.stringify(v))}return v}
-function s12RcUpdate(){const nav=$('#nav');if(!nav||!D)return;const ks=s12RcKeys(),sn=s12RcSeen();if(tab==='recap'&&ks.some(k=>!sn.includes(k)))lsSet(S12RC_KEY,JSON.stringify(ks));
-  const a=nav.querySelector('a.nt[data-tab="recap"]');if(!a)return;const n=tab==='recap'?0:ks.filter(k=>!sn.includes(k)).length;let e=a.querySelector('.s29nb');
-  if(!n){if(e){e.remove();a.removeAttribute('title')}return}if(!e){e=document.createElement('b');e.className='s29nb';e.setAttribute('aria-hidden','true');a.appendChild(e)}e.textContent=n>99?'99+':String(n);a.title=n+' new recap'+(n>1?'s':'')}
+function s12RcSeen(){let v=null;try{v=JSON.parse(lsGet(S12RC_KEY)||'null')}catch(_){}return Array.isArray(v)?v:[]}
+function s12RcMark(el,n){if(!el)return;let e=el.querySelector(':scope>.s29nb');if(!n){if(e)e.remove();return}if(!e){e=document.createElement('b');e.className='s29nb';e.setAttribute('aria-hidden','true');el.appendChild(e)}e.textContent=n>99?'99+':String(n)}
+function s12RcUpdate(){const nav=$('#nav');if(!nav||!D)return;const ks=s12RcKeys();let sn=s12RcSeen();
+  if(tab==='recap'&&!(sn.length===ks.length&&ks.every(k=>sn.includes(k)))){sn=ks.slice();try{lsSet(S12RC_KEY,JSON.stringify(sn))}catch(_){}}
+  const n=tab==='recap'?0:ks.filter(k=>!sn.includes(k)).length,a=nav.querySelector('a.nt[data-tab="recap"]');
+  s12RcMark(a,n);if(a){if(n)a.title=n+' new recap'+(n>1?'s':'');else if(a.title&&/new recap/.test(a.title))a.removeAttribute('title')}
+  s12RcMark(nav.querySelector(':scope>.nm-b'),n);s12RcMark(document.querySelector('.nm-i[data-tab="recap"]'),n)}
 setInterval(()=>{try{s12RcUpdate()}catch(_){}},3000);
 /*</STEP12-RECAPNEW>*/
 /*<S29D-HNB>*/ // the form tips' link opens How to bet AT the New bet section (#howto-newbet); only this link skips the open-at-top rule
@@ -3816,15 +3835,15 @@ function s29ViewUrl(h){h=String(h||'').replace(/[^A-Za-z0-9_\/-]/g,'');return lo
 /*<S26W-MANIFEST>*/ // Install / Add to home screen from any tab opens that tab: the manifest link points at a per-tab manifest whose start_url is ./#<tab>
 const S26W_MT=["standings", "games", "bets", "bets-2025-26", "teams", "draft", "recap", "howto", "rules", "archive", "share", "profile", "postseason", "redraft", "rosters", "points"];function s26wMan(h){try{h=String(h||'').split('/')[0];const l=document.querySelector('link[rel=manifest]');if(!l)return;const want=S26W_MT.includes(h)?'manifest-'+h+'.webmanifest':'manifest.webmanifest';if(l.getAttribute('href')!==want)l.setAttribute('href',want)}catch(e){}}/*</S26W-MANIFEST>*/
 function s24Put(push){try{s26wMan(s24HashOf(tab));const want=s24Url(s24RouteHash());try{sessionStorage.setItem('stoopids.tab',s24HashOf(tab))}catch(_){}if(location.pathname+location.search+location.hash===want)return;history[push?'pushState':'replaceState'](null,'',want)}catch(e){}}
-function s24NavClick(e,t){if(e&&(e.button>0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey))return true;if(e&&e.preventDefault)e.preventDefault();tab=t;S24.sub=null;render();if(t==='bets27'||t==='bets')betsLand();else window.scrollTo(0,0);return false}
+function s24NavClick(e,t){if(e&&(e.button>0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey))return true;if(e&&e.preventDefault)e.preventDefault();tab=t;S24.sub=null;render();if(t==='bets27'||t==='bets')betsLand();else{if(window.hdrShow)window.hdrShow();window.scrollTo(0,0)}return false}
 function s24OnNav(){const r=s24Read(location.hash);/*<S26W>*/try{if(r&&r.sub&&window.S26W)S26W.deep=true}catch(_){}/*</S26W>*/if(!r&&location.hash.length>1)return;const R=r||{t:'standings',sub:null};if(R.t===tab&&R.sub===S24.sub)return;/*<S26W>*/if(R.t===tab&&!R.sub&&S24.sub&&S24.done===tab+'/'+S24.sub)return;/*</S26W> the deep link just cleaned its own hash: popstate after hashchange must not undo the jump */
   tab=R.t;S24.sub=R.sub;S24.prep=null;S24.done=null;S24.nf=null;S24.last=tab;try{sessionStorage.setItem('stoopids.tab',s24HashOf(tab))}catch(_){}
   if(tab==='bets27'&&S24.sub&&/^(open|request|tally|form|write|all)$/i.test(S24.sub)){const a=S24.sub.toLowerCase();S24.sub=null;obView(a==='write'?'form':a);return}
-  render();/*<S27> alias hashes (#draft) settle to the tab hash + its manifest */try{if(!R.sub)s24Put(false)}catch(_){}if(!R.sub){if(tab==='bets27'||tab==='bets')betsLand();else window.scrollTo(0,0)}}
+  render();/*<S27> alias hashes (#draft) settle to the tab hash + its manifest */try{if(!R.sub)s24Put(false)}catch(_){}if(!R.sub){if(tab==='bets27'||tab==='bets')betsLand();else{if(window.hdrShow)window.hdrShow();window.scrollTo(0,0)}}}
 window.addEventListener('popstate',s24OnNav);window.addEventListener('hashchange',s24OnNav);
 /*<TAB-TOP>*/ // every tab switch opens at the top; the browser must not restore an old scroll position on reload/back. Only a link to one bet/game (#bets/<id>) scrolls to it.
 try{if('scrollRestoration' in history)history.scrollRestoration='manual'}catch(e){}
-window.addEventListener('pageshow',()=>{if(!S24.sub)window.scrollTo(0,0)});/*</TAB-TOP>*/
+window.addEventListener('pageshow',()=>{if(!S24.sub){if(window.hdrShow)window.hdrShow();window.scrollTo(0,0)}});/*</TAB-TOP>*/
 /* first load: the hash wins over ?tab=; a reload that lost its hash falls back to this browser tab's last route; plain URLs are left alone */
 (function(){let r=s24Read(location.hash);
   if(!r&&!params.has('tab')){try{const nv=performance.getEntriesByType&&performance.getEntriesByType('navigation')[0];if(nv&&nv.type==='reload'){const x=s24Read(sessionStorage.getItem('stoopids.tab')||'');if(x)r=x}}catch(e){}}
@@ -3861,11 +3880,84 @@ function njPut(k){if(!k)return;const ds=[];for(const x of k.a){const e=document.
 /*</NO-JUMP>*/
 function pinNavH(){const n=document.getElementById('nav');if(n)document.documentElement.style.setProperty('--navh',Math.ceil(n.getBoundingClientRect().height)+'px')}
 addEventListener('resize',()=>{try{pinNavH()}catch(e){}});
-render=function(){/*<NO-JUMP>*/const NK=(!S24.top0||tab!==S24.last||(S24.sub&&S24.done!==tab+'/'+S24.sub))?null:njTake();/*</NO-JUMP>*/s24Render0.apply(this,arguments);try{s24After()}catch(e){}/*<NO-JUMP>*/try{njPut(NK)}catch(e){}try{pinNavH()}catch(e){}/*</NO-JUMP>*/};
+/* Header (photo + STOOPIDS) is ordinary page content: it scrolls away and comes back only at the very top.
+   Once it has left, the main nav stays fixed and the page's second row stays stuck under it, in both directions.
+   Sticky alone cannot do that: the in-flow header pushes the bars down as soon as you scroll back into it. */
+(function(){
+  var away=false,passed=false,mute=0,lastY=0;
+  function hdr(){return document.querySelector('header')}
+  function navEl(){return document.getElementById('nav')}
+  function pinLine(){
+    var h=hdr(),n=navEl();if(!h||!n||away)return 0;
+    var gap=(parseFloat(getComputedStyle(h).marginBottom)||0)+(parseFloat(getComputedStyle(n).marginTop)||0);
+    return Math.max(0,Math.round(h.getBoundingClientRect().bottom+(window.scrollY||0)+gap));
+  }
+  function hold(on,px){
+    var n=navEl();if(!n)return;
+    var s=document.getElementById('navHold');
+    if(!on){if(s)s.style.height='0px';return}
+    if(!s){s=document.createElement('div');s.id='navHold';s.setAttribute('aria-hidden','true');n.parentNode.insertBefore(s,n)}
+    s.style.height=Math.max(0,px||0)+'px';
+  }
+  function hush(){mute++;requestAnimationFrame(function(){requestAnimationFrame(function(){mute=Math.max(0,mute-1)})})}
+  var scrollTo0=window.scrollTo.bind(window),scrollBy0=window.scrollBy.bind(window);
+  window.scrollTo=function(){hush();return scrollTo0.apply(window,arguments)};
+  window.scrollBy=function(){hush();return scrollBy0.apply(window,arguments)};
+  function enter(y){
+    if(away)return;
+    var n=navEl(),line=pinLine();if(!n||line<8)return;
+    if(y>=line-2)passed=true;
+    if(!passed||y<1)return;
+    var nh=Math.ceil(n.getBoundingClientRect().height),next=Math.max(0,Math.round(y-line));
+    away=true;
+    document.body.classList.add('hdr-away');
+    hold(true,nh);
+    try{pinNavH()}catch(e){}
+    if(Math.abs((window.scrollY||0)-next)>1)window.scrollTo(0,next);
+    lastY=window.scrollY||0;
+  }
+  function show(force){
+    if(!away||(!force&&mute))return;
+    away=false;passed=false;
+    document.body.classList.remove('hdr-away');
+    hold(false);
+    try{pinNavH()}catch(e){}
+    if((window.scrollY||0)>0)window.scrollTo(0,0);
+    lastY=window.scrollY||0;
+  }
+  window.hdrShow=function(){show(true)};
+  window.hdrSync=function(){if(!away)enter(window.scrollY||0)};
+  addEventListener('scroll',function(){
+    var y=window.scrollY||0,dy=y-lastY;
+    if(!away){if(y>0)enter(y)}
+    else if(!mute&&y<=0&&dy<0)show(false);
+    lastY=window.scrollY||0;
+  },{passive:true});
+  addEventListener('wheel',function(e){
+    if(mute||!away)return;
+    if((window.scrollY||0)<=0&&e.deltaY<0)show(false);
+  },{passive:true});
+  var ty=0;
+  addEventListener('touchstart',function(e){ty=e.touches&&e.touches[0]?e.touches[0].clientY:0},{passive:true});
+  addEventListener('touchmove',function(e){
+    var ny=e.touches&&e.touches[0]?e.touches[0].clientY:ty,d=ny-ty;ty=ny;
+    if(!mute&&away&&(window.scrollY||0)<=0&&d>12)show(false);
+  },{passive:true});
+  addEventListener('keydown',function(e){
+    if(!away||mute||(window.scrollY||0)>0)return;
+    if(e.key==='ArrowUp'||e.key==='PageUp'||e.key==='Home')show(false);
+  });
+  addEventListener('resize',function(){
+    var n=navEl();if(!n)return;
+    if(away){hold(true,Math.ceil(n.getBoundingClientRect().height));try{pinNavH()}catch(e){}}
+    else enter(window.scrollY||0);
+  });
+})();
+render=function(){/*<NO-JUMP>*/const NK=(!S24.top0||tab!==S24.last||(S24.sub&&S24.done!==tab+'/'+S24.sub))?null:njTake();/*</NO-JUMP>*/s24Render0.apply(this,arguments);try{s24After()}catch(e){}/*<NO-JUMP>*/try{njPut(NK)}catch(e){}try{pinNavH()}catch(e){}try{if(window.hdrSync)hdrSync()}catch(e){}/*</NO-JUMP>*/};
 function s24After(){
   if(!D)return;
-  if(tab!==S24.last){if(S24.sub&&S24.prep!==tab+'/'+S24.sub)S24.sub=null;S24.last=tab;S24.nf=null;s24Put(true)/*<TAB-TOP>*/;if(!S24.sub){if(tab==='bets27'||tab==='bets')betsLand();else window.scrollTo(0,0)}/*</TAB-TOP>*/}
-  /*<TAB-TOP>*/if(!S24.top0){S24.top0=1;if(!S24.sub)window.scrollTo(0,0)}/*</TAB-TOP>*/
+  if(tab!==S24.last){if(S24.sub&&S24.prep!==tab+'/'+S24.sub)S24.sub=null;S24.last=tab;S24.nf=null;s24Put(true)/*<TAB-TOP>*/;if(!S24.sub){if(tab==='bets27'||tab==='bets')betsLand();else{if(window.hdrShow)window.hdrShow();window.scrollTo(0,0)}}/*</TAB-TOP>*/}
+  /*<TAB-TOP>*/if(!S24.top0){S24.top0=1;if(!S24.sub&&tab!=='bets27'&&tab!=='bets'){if(window.hdrShow)window.hdrShow();window.scrollTo(0,0)}}/*</TAB-TOP>*/
   const m=document.getElementById('main');if(!m)return;
   const seg=m.querySelector(':scope > .ob-seg');/*<S27-SHARE> per-tab Share row removed: one Share button in the header </S27-SHARE>*/if(S24.nf&&S24.nf.t===tab)(seg||m).insertAdjacentHTML(seg?'afterend':'afterbegin',`<div class="card s24nf note" role="status">${esc(S24.nf.msg)}</div>`);
   s24DeepGo();
@@ -4521,6 +4613,10 @@ html body .s24fb select,html body .s24fb input.sb-in{height:30px;min-height:30px
 html body .s24fb .note{margin-top:4px!important;font-size:12px}
 html body header{position:static!important}
 html body nav#nav{position:sticky!important;top:0!important;z-index:40!important;background:var(--bg,#0e121b)!important}
+#navHold{height:0;margin:0;padding:0;border:0;overflow:hidden;pointer-events:none;line-height:0}
+body.hdr-away{overflow-anchor:none}
+body.hdr-away header{display:none!important}
+body.hdr-away nav#nav{position:fixed!important;top:0!important;left:0!important;right:0!important;margin:0 auto!important;width:100%!important;max-width:var(--nav-max,1080px)!important;z-index:40!important;background:var(--bg,#0e121b)!important}
 html body #main .s24fb .row2>select,html body #main .s24fb .row2>input,html body #main .b27-fr>select,html body #main .b27-fr>input{height:32px!important;min-height:32px!important;font-size:13px!important;padding:0 10px!important}
 html{scroll-padding-top:64px}
 .hero{cursor:pointer}
