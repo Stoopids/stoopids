@@ -3516,17 +3516,18 @@ function b27LiveHtml(){
   return '<b>'+esc(L.top)+'</b><div class="b27-w">'+esc(L.win)+'</div><div class="b27-l">'+esc(L.lose)+'</div>'+(L.rounded?'<div class="mut b27-r">Rounded to a whole number.</div>':'');
 }
 function b27Face(b){const text=String(b&&b.text||'');let dt=null;try{dt=S25.dateFrom(text,b&&b.created_at?S25.etDay(b.created_at):undefined)}catch(e){}if(!dt)return {face:text,gameDate:''};const k=SHARED_UI.whenKind(b);let whenD='';if(k==='date'&&SHARED_UI.estOk(b.est))whenD=b.est;else if(k==='game'){const rd=s25BetRd(b);if(rd&&rd.d)whenD=rd.d}if(k==='game'&&whenD&&dt.d===whenD)return {face:text,gameDate:''};const face=text.replace(dt.raw,' ').replace(/\s+,/g,',').replace(/,\s*(,|$)/g,'$1').replace(/^[, ]+|[, ]+$/g,'').replace(/\s{2,}/g,' ').trim();return {face:face||text,gameDate:dt.raw.trim()}}
-function b27WhenFace(b,ready){let t=SHARED_UI.whenText(b),due=SHARED_UI.whenShow(b);if(!ready){t=t.replace(/ · Overdue$/,'');if(due==='over')due='none'}return {t,due}}
+function b27SettlesLabel(b){const k=SHARED_UI.whenKind(b);if(k==='game')return 'Settles: when the game ends';if(k==='season')return 'Settles: end of season';if(k==='date')return 'Settles: '+SHARED_UI.estLabel(b.est);return 'Settles: date not set'}
+function b27SettlesHtml(b){const lab=esc(b27SettlesLabel(b)),open=!!(estDraft&&estDraft.id===b.id);if(!s24EstOwner(b))return `<div class="b27-set"><span class="b27-pill b27-pill-plain">${lab}</span></div>`;return `<div class="b27-set"><button type="button" class="b27-pill" data-settles="${esc(b.id)}" aria-expanded="${open?'true':'false'}" aria-controls="settles-${esc(b.id)}" onclick="s24EditStart('${b.id}')"${U.busy?' disabled':''}>${lab}<span class="b27-chev" aria-hidden="true"></span></button>${open?s24EstHtml(b):''}</div>`}
 function b27Card(b,me){
   const L=b27Lines(b),OP=b27Opps(b),BU=OP.length>1,isP=me&&(b.backer===me||OP.includes(me)),st=b.status;
   const stTxt={open:'Unsettled',backer:'Settled',other:'Settled',push:'💦',void:'Cancelled'}[st];
   /*<OWNER-NAMES>*/const OPd=OP.map(PN),Bk=PN(b.backer),Ot=PN(b.other);/*</OWNER-NAMES>*/
   const res=BU?(st==='backer'?Bk+' won ('+OPd.join(', ')+' each owe '+Bk+' '+b27Num(b27Pay(b).ifBackerRight)+')':st==='other'?'Managers won ('+Bk+' owes each of them '+b27Num(b27Pay(b).ifOtherRight)+')':st==='push'?'💦: nobody owes anything':'')
    :st==='backer'?Bk+' won ('+Ot+' owes '+b27Num(b27Pay(b).ifBackerRight)+')':st==='other'?Ot+' won ('+Bk+' owes '+b27Num(b27Pay(b).ifOtherRight)+')':st==='push'?'💦: nobody owes anything':'';
-  const ready=b27Ready(b),face=b27Face(b),when=b27WhenFace(b,ready);
+  const ready=b27Ready(b),face=b27Face(b);
   let h=`<div class="card b27-c${ready?' b27-ready':''}${U.flashBet===b.id?' act-flash':''}"${/*<S24-EDIT>*/s24Attr('b',b.id)/*</S24-EDIT>*/}><div class="s24hd"><b>Bet #${b.n}</b>${/*<S24-EDIT>*/s24FixBadge(b)/*</S24-EDIT>*/} <span class="st ${st==='open'?'open':st==='push'?'wash':st==='void'?'unparsed':'settled'}">${stTxt}</span>${BU?` <span class="mut" style="font-size:12px">· ${OP.length} managers, one result</span>`:''}${/*<MULTI-BET>*/b.g&&U.doc.bets.filter(x=>x.g===b.g).length>1?` <span class="mut" style="font-size:12px">· 1 of ${U.doc.bets.filter(x=>x.g===b.g).length} placed together</span>`:''/*</MULTI-BET>*/}${/*<S24-EDIT>*/s24LinkBtn('bets',b.id,'bet')/*</S24-EDIT>*/}</div>
    <div class="b27-t${/*<CARD-SIZE>*/' s25cl'+(S25P.more[b.id]?' open':'')+'" data-s25-t="'+b.id/*</CARD-SIZE>*/}">${esc(face.face)}</div>${/*<CARD-SIZE>*/`<button type="button" class="s25more" data-s25-more="${b.id}" aria-expanded="${!!S25P.more[b.id]}" onclick="s25More('${b.id}')" hidden>${S25P.more[b.id]?'less':'more'}</button>`/*</CARD-SIZE>*/}<div class="b27-m"><b>${esc(Bk)}</b> vs <b>${esc(OPd.join(', '))}</b> · <b>${b27Num(b.amt)}</b>${BU?' each':''} · ${esc(b27OddsLabel(b.odds.a,b.odds.b))}</div>
-   <div class="b27-due" data-due="${when.due}">${esc(when.t)}</div>${ready?'<div class="b27-ready-t">Ready to settle</div>':''}${res?`<div class="note" style="margin-top:4px"><b>Result:</b> ${esc(res)}</div>`:''}${/*<S25>*/s25PropHtml(b,me)/*</S25>*/}`;
+   ${b27SettlesHtml(b)}${ready?'<div class="b27-ready-t">Ready to settle</div>':''}${res?`<div class="note" style="margin-top:4px"><b>Result:</b> ${esc(res)}</div>`:''}${/*<S25>*/s25PropHtml(b,me)/*</S25>*/}`;
   if(st==='open'&&(isP||ADMIN)){
     const ask=w=>U.askSettle&&U.askSettle.id===b.id&&U.askSettle.what===w&&U.askSettle.terms===b27Terms(b);
     const btn=(w,label)=>`<button type="button" class="btn sec b27-b" onclick="${ask(w)?`b27SetStatus('${b.id}','${w}')`:`b27Ask('${b.id}','${w}')`}"${U.busy?' disabled':''}>${ask(w)?'Tap again to confirm':label}</button>`;
@@ -3535,7 +3536,6 @@ function b27Card(b,me){
     if(b27CanUndo(b)&&b.g&&gu.length>1){if(U.doc.bets.filter(x=>x.g===b.g&&b27CanUndo(x)).sort((p,q)=>q.n-p.n)[0].id===b.id)h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27UndoGroup('${b.g}','${b27GroupHash(b.g)}')"${U.busy?' disabled':''}>↩ Undo all ${gu.length} bets placed together (30 s)</button></div>`}
     else /*</MULTI-BET>*/if(b27CanUndo(b))h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27Void('${b.id}','${b27Hash(b27Terms(b))}')"${U.busy?' disabled':''}>↩ Undo this bet (30 s)</button></div>`;
     else if(ADMIN)h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27Void('${b.id}','${b27Hash(b27Terms(b))}')"${U.busy?' disabled':''}>Cancel bet (admin)</button></div>`;
-    if(me&&me===b.backer)h+=s24EstHtml(b);
   }
   /*<S24-EDIT>*/h+=s24EditedNote(b)+s24FixHtml(b,me);/*</S24-EDIT>*/
   const det=[face.gameDate?`<div class="note">Game date: ${esc(face.gameDate)}</div>`:'',/*<S29E-POSTED>*/s29ePosted(b)/*</S29E-POSTED>*/,/*<S25D-TS>*/s25dTsHtml(b)/*</S25D-TS>*/,L.win?`<div class="b27-w">${esc(L.win)}</div>`:'',L.lose?`<div class="b27-l">${esc(L.lose)}</div>`:'',L.rounded?'<div class="mut b27-r">Rounded to a whole number.</div>':'',/*<S25>*/s25CardRd(b)/*</S25>*/].filter(Boolean).join('');
@@ -3821,26 +3821,27 @@ function s24AfterLoad(){/*<NO-JUMP>*/const first=!S24.al;S24.al=1;/*</NO-JUMP>*/
 /* ---- 1) Edit ---- */
 function s24ResetForm(){Object.assign(U,{/*<S25>*/rdEd:null,rdOpen:false,/*</S25>*/opps:[],amt:null,amtCustom:false,amtTxt:'',amtErr:'',odds:[1,1],custom:false,customTxt:'',oddsErr:'',text:'',confirm:false,fids:{},qb:null,est:'',wk:'unknown'})}
 let estDraft=null;
-function s24EstKind(k){if(!estDraft)return;estDraft.kind=k==='date'||k==='season'||k==='game'?k:'unknown';if(estDraft.kind!=='date')estDraft.val='';render()}
-function s24EstHtml(b){const open=estDraft&&estDraft.id===b.id;
-  if(!open)return `<div class="b27-act"><button type="button" class="btn sec b27-b" data-est-edit="${esc(b.id)}" onclick="s24EditStart('${b.id}')">Edit</button></div>`;
-  return `<div class="b27-est" data-est-editor="${esc(b.id)}">${SHARED_UI.whenBox({e:esc,kind:estDraft.kind,est:estDraft.val,seasonId:b27Season(),game:!!estDraft.allowGame,inputId:'estIn',pick:id=>`onclick="s24EstKind('${id}')"`,dateAttr:'onchange="if(estDraft)estDraft.val=this.value"'})}<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="s24EstSave('${b.id}')">Save</button><button type="button" class="btn sec b27-b" onclick="s24EstClear('${b.id}')">Clear</button><button type="button" class="btn sec b27-b" onclick="s24EstCancel()">Cancel</button></div><div class="note">Description, people, amount, and odds stay as written.</div></div>`}
+function s24EstKind(k){if(U.busy||!estDraft)return;estDraft.kind=k==='date'||k==='season'||k==='game'?k:'unknown';if(estDraft.kind!=='date')estDraft.val='';render()}
+function s24EstHtml(b){if(!(estDraft&&estDraft.id===b.id))return '';const k=estDraft.kind,dis=U.busy?' disabled':'',chip=(id,lab)=>`<button type="button" class="b27-chip" data-when="${id}" aria-pressed="${k===id?'true':'false'}" onclick="s24EstKind('${id}')"${dis}>${esc(lab)}</button>`;
+  const opts=chip('date','Choose a date')+chip('season','End of season')+(estDraft.allowGame||k==='game'?chip('game','End game'):'')+chip('unknown','Not sure yet');
+  return `<div class="b27-drop" id="settles-${esc(b.id)}" data-est-editor="${esc(b.id)}" role="group" aria-label="When this bet can be settled"><div class="b27-when-c">${opts}</div>${k==='date'?`<input class="sb-in b27-in" type="date" id="estIn" aria-label="Choose a date" value="${esc(estDraft.val||'')}" onchange="if(estDraft&&estDraft.id==='${b.id}')estDraft.val=this.value"${dis}>`:''}<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="s24EstSave('${b.id}')"${dis}>${U.busy?'Saving…':'Save'}</button><button type="button" class="btn sec b27-b" onclick="s24EstCancel()"${dis}>Cancel</button></div></div>`}
 function s24EstOwner(b){const me=b27Who();return !!(b&&b.status==='open'&&b.kind!=='pool'&&me&&b.backer===me)}
-function s24EditStart(id){const b=(U.doc.bets||[]).find(x=>x.id===id);
+function s24EditStart(id){if(U.busy)return;if(estDraft&&estDraft.id===id){estDraft=null;render();return}const b=(U.doc.bets||[]).find(x=>x.id===id);
   if(!s24EstOwner(b)){estDraft=null;U.msg=b&&b.status!=='open'?'This bet is already settled. The sorting note stays as it is.':'Only the person who posted this bet can set when it might be settled.';U.msgBad=true;render();return}
   const kind=SHARED_UI.whenKind(b);estDraft={id,kind,val:kind==='date'?b.est:'',allowGame:kind==='game'};U.msg='';render()}
-function s24EstCancel(){estDraft=null;render()}
-async function s24EstWrite(id,kind,est){const b=(U.doc.bets||[]).find(x=>x.id===id);if(!s24EstOwner(b)){estDraft=null;U.msg='Only the person who posted this unsettled bet can set when it might be settled.';U.msgBad=true;render();return}
+function s24EstCancel(){if(U.busy)return;estDraft=null;render()}
+async function s24EstWrite(id,kind,est){if(U.busy)return;const b=(U.doc.bets||[]).find(x=>x.id===id);if(!s24EstOwner(b)){estDraft=null;U.msg='Only the person who posted this unsettled bet can set when it might be settled.';U.msgBad=true;render();return}
   const pack=SHARED_UI.whenPack(kind,est,b27Season());if(kind==='date'&&!pack){U.msg='Use a real calendar date, or pick End of season or Not sure yet.';U.msgBad=true;render();return}
   const w=pack||SHARED_UI.whenPack('unknown');
   const sig=x=>JSON.stringify({text:x.text,amt:x.amt,odds:x.odds,backer:x.backer,other:x.other,opponents:x.opponents||null,rd:x.rd||null});
   const before=sig(b);
+  U.busy=true;render();
   try{const back=await b27Write(cur=>cur.map(x=>{if(x.id!==id)return x;const y=SHARED_UI.whenApply(x,w);if(!y)throw new Error('locked');return y}),cur=>cur.some(x=>x.id===id&&x.wk===w.wk&&(w.est?x.est===w.est:!x.est)&&(w.sid?x.sid===w.sid:!x.sid)));
     const now=back.find(x=>x.id===id);if(!now||sig(now)!==before)throw new Error('locked');
     b27Apply(back);estDraft=null;U.msg='Sorting note saved. The terms are unchanged.';U.msgBad=false}
   catch(e){U.msg='The sorting note was not saved. The terms were not changed.';U.msgBad=true}
-  render()}
-function s24EstSave(id){const raw=(document.getElementById('estIn')||{}).value||'';const kind=estDraft&&estDraft.id===id?estDraft.kind:'unknown';s24EstWrite(id,kind,raw||null)}
+  U.busy=false;render()}
+function s24EstSave(id){if(U.busy||!estDraft||estDraft.id!==id)return;const raw=(document.getElementById('estIn')||{}).value||'';s24EstWrite(id,estDraft.kind,raw||null)}
 function s24EstClear(id){s24EstWrite(id,'unknown',null)}
 function s24EditCancel(){estDraft=null;U.editOf=null;U.msg='';render()}
 function s24EditHint(){if(!U.editOf)return '';const o=U.doc.bets.find(x=>x.id===U.editOf),n=o?'#'+o.n:'';
@@ -4384,6 +4385,19 @@ html body .ggrid .gow,html body .ggrid>.gm:not(.gfin)>.gow,html body .ggrid .gbo
 html body .ggrid .gow .opill{max-width:none!important;overflow:visible!important;text-overflow:clip!important;white-space:normal!important}
 html body .b27-c.b27-ready{outline:2px solid #f87171;outline-offset:0}
 html body .b27-ready-t{margin-top:4px;color:#fca5a5;font-weight:800;font-size:13px}
+html body .b27-set{margin-top:6px}
+html body .b27-pill{display:inline-flex;align-items:center;gap:6px;max-width:100%;padding:4px 10px 4px 12px;border-radius:999px;border:1px solid var(--line,#334);background:var(--card2,#1b2030);color:var(--tx,#eee);font:inherit;font-size:12.5px;font-weight:700;line-height:1.3;text-align:left}
+html body button.b27-pill{cursor:pointer;appearance:none}
+html body .b27-pill-plain{cursor:default}
+html body .b27-pill[aria-expanded="true"]{border-color:var(--acc,#ffd400)}
+html body .b27-pill:disabled{opacity:.55;cursor:default}
+html body .b27-chev{width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid currentColor;opacity:.75;flex:none}
+html body .b27-pill[aria-expanded="true"] .b27-chev{border-top:0;border-bottom:5px solid currentColor}
+html body .b27-drop{margin-top:6px;padding:8px;border:1px solid var(--line,#334);border-radius:12px;background:var(--card2,#1b2030)}
+html body .b27-drop .b27-when-c{flex-direction:column}
+html body .b27-drop .b27-chip{width:100%!important;text-align:left}
+html body .b27-drop .b27-in{width:100%;box-sizing:border-box;margin-top:6px}
+html body .b27-drop .b27-act{margin-top:6px}
 html body .b27-gh{margin:12px 0 6px;font-size:15px}
 html body .b27-more{margin-top:8px}
 html body .b27-more summary{cursor:pointer;font-weight:700}
