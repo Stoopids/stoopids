@@ -449,7 +449,8 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
    '.nm-bd{position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.55);display:flex;align-items:flex-end;justify-content:center}.nm-bd[hidden]{display:none}'+
    '.nm-sh{width:100%;max-width:520px;max-height:70vh;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;background:var(--card,#1b2030);border:1px solid var(--line,#333);border-radius:16px 16px 0 0;padding:10px 12px calc(14px + env(safe-area-inset-bottom))}'+
    '.nm-h{display:flex;justify-content:space-between;align-items:center;font-weight:800;margin:2px 2px 8px}.nm-h button{background:none;border:0;color:var(--tx,#eee);font-size:18px;cursor:pointer;padding:4px 8px}'+
-   '.nm-i{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:transparent;color:var(--tx,#eee);border:1px solid var(--line,#333);border-radius:10px;padding:12px;margin:0 0 6px;font:inherit;font-size:15px;font-weight:700;cursor:pointer}.nm-i.on{background:var(--pill,#FFD400);color:var(--pill-ink,#111);border-color:var(--pill,#FFD400)}';
+   '.nm-i{position:relative;display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:transparent;color:var(--tx,#eee);border:1px solid var(--line,#333);border-radius:10px;padding:12px;margin:0 0 6px;font:inherit;font-size:15px;font-weight:700;cursor:pointer}.nm-i.on{background:var(--pill,#FFD400);color:var(--pill-ink,#111);border-color:var(--pill,#FFD400)}'+
+   '.nm-b>.s29nb,.nm-i>.s29nb{position:absolute;top:1px;right:2px;min-width:15px;background:#FFD400;color:#111;border-radius:99px;font-size:9px;font-weight:900;line-height:1;padding:2px 4px;text-align:center;pointer-events:none}.nm-b.on>.s29nb,.nm-i.on>.s29nb{background:#111;color:#FFD400}';
   var key=function(a){return a.getAttribute('data-tab')||a.getAttribute('data-v')||''};
   var lab=function(a){var f=a.querySelector('.nl.f');return (f?f.textContent:a.getAttribute('aria-label')||a.textContent).trim()};
   var bd=null,cur=null;
@@ -457,14 +458,15 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
   function open(nav){cur=nav;if(!bd){bd=document.createElement('div');bd.className='nm-bd';bd.hidden=true;bd.innerHTML='<div class="nm-sh" role="dialog" aria-modal="true" aria-label="More pages"><div class="nm-h"><span>More</span><button type="button" class="nm-c" aria-label="Close">\u2715</button></div><div class="nm-l"></div></div>';
       bd.addEventListener('click',function(e){if(e.target===bd||e.target.closest('.nm-c'))close()});document.addEventListener('keydown',function(e){if(e.key==='Escape'&&bd&&!bd.hidden)close()});document.body.appendChild(bd)}
     var l=bd.querySelector('.nm-l');l.innerHTML='';[].slice.call(nav.querySelectorAll(':scope>.nm-x')).forEach(function(a){var b=document.createElement('button');b.type='button';b.className='nm-i'+(a.classList.contains('on')?' on':'');
-      var ic=a.querySelector('.ni');b.innerHTML='<span aria-hidden="true">'+(ic?ic.textContent:'')+'</span><span></span>';b.lastChild.textContent=lab(a);if(a.classList.contains('on'))b.setAttribute('aria-current','page');
+      var ic=a.querySelector('.ni');b.innerHTML='<span aria-hidden="true">'+(ic?ic.textContent:'')+'</span><span></span>';b.lastChild.textContent=lab(a);b.setAttribute('data-tab',key(a));if(a.classList.contains('on'))b.setAttribute('aria-current','page');
+      var nb=a.querySelector('.s29nb');if(nb)b.appendChild(nb.cloneNode(true));
       b.addEventListener('click',function(){close();a.click()});l.appendChild(b)});
     bd.hidden=false;nav.querySelector('.nm-b').setAttribute('aria-expanded','true');var f=l.querySelector('.nm-i');if(f)try{f.focus()}catch(e){}}
   function fix(nav){if(nav.classList.contains('pre'))return;var items=[].slice.call(nav.children).filter(function(a){return a.tagName==='A'});if(items.length<=5)return;
     var any=false;items.forEach(function(a){var x=KEEP.indexOf(key(a))<0;a.classList.toggle('nm-x',x);if(x&&a.classList.contains('on'))any=true});
     var b=nav.querySelector(':scope>.nm-b');if(!b){b=document.createElement('button');b.type='button';b.className='nm-b';b.setAttribute('aria-haspopup','dialog');b.setAttribute('aria-expanded','false');b.setAttribute('aria-label','More pages');
       b.innerHTML='<span class="ni" aria-hidden="true">\u2630</span><span>More</span>';b.addEventListener('click',function(e){e.preventDefault();open(nav)})}
-    if(nav.lastElementChild!==b)nav.appendChild(b);b.classList.toggle('on',any);nav.classList.add('nm5')}
+    if(nav.lastElementChild!==b)nav.appendChild(b);b.classList.toggle('on',any);nav.classList.add('nm5');try{if(typeof s12RcUpdate==='function')s12RcUpdate()}catch(e){}}
   function scan(){[].slice.call(document.querySelectorAll('nav#nav,nav#ltabs')).forEach(fix)}
   function init(){var st=document.createElement('style');st.textContent=css;document.head.appendChild(st);scan();var busy=false;
     new MutationObserver(function(){if(busy)return;busy=true;setTimeout(function(){scan();busy=false},0)}).observe(document.body,{childList:true,subtree:true})}
