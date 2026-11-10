@@ -232,11 +232,15 @@ U.halfLs=hsLs;U.halfScores=function(g,s,first,BOX){var tot=s.score!=null?esc(Str
       h+='</div></div>';
       if(!g)h+=SHARED_UI.whenBox({e:e,kind:f.whenPick?f.wk:(SHARED_UI.estOk(f.est)?'date':'unknown'),est:f.est,seasonId:A.seasonId?A.seasonId():'',step:'7',game:false,inputId:'rqEst',pick:function(id){return 'data-rq="when" data-v="'+id+'"'},dateAttr:'data-rq-in="est"'});
       var pv=rqPreview(f);
-      h+='<div class="b27-sum" id="rqSum">'+e(pv.sum)+'</div><div id="rqEx">'+pv.ex+'</div>';
+      h+='<div class="rq-prev" id="rqEx">'+pv.ex+'</div>';
       if(S.msg)h+='<div class="'+(S.bad?'b27-bad-t':'good')+' rq-msg" role="status">'+e(S.msg)+'</div>';
       return h+'<button type="button" class="btn b27-big rq-send" data-rq="send"'+(S.busy||!A.canWrite()?' disabled':'')+'>'+(S.edit?'Save changes':'Request bet')+'</button>'+(S.edit?'<button type="button" class="btn sec rq-send" data-rq="unedit">Stop editing</button>':'')+'</div>'}
     
 function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
+    function rqMoney(n){var x=Math.round(Number(n)*100)/100;if(!(x>0))return '';return '$'+(Math.abs(x-Math.round(x))<0.001?String(Math.round(x)):x.toFixed(2))}
+    function rqWin(amt,a,b){a=+a||1;b=+b||1;return Math.max(1,Math.floor((amt*a*2+b)/(2*b)))}
+    function rqTeam(lab){return String(lab||'').replace(/\s*[+-]\d+(?:\.\d+)?$/,'').trim()}
+    function rqExp(f){if(f.mode==='start')return 'Tip';var n=+f.n,u={m:'m',h:'h',d:'d',w:'w',mo:'mo'};if(u[f.mode]&&n>0)return n+u[f.mode];if(f.mode==='at'&&f.at){var d=new Date(f.at);if(!isNaN(d)){var wd=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()],mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];return wd+' '+mo+' '+d.getDate()}}return ''}
     function expTxt(r,now){var ws=winStart(r,game(r.gid));return r.exp>=ws?(r.cov==='2h'?'when the 2nd half starts':'at tipoff'):'in '+left(r.exp-now)}
     function ifTxt(r,side){var s=String(side||''),k=r.k;if(k==='txt')return s?'If '+s+' hits':'If it misses';if(k==='ou')return 'If it goes '+s;s=s.replace(/\s[+-]\d+(\.\d+)?$/,k==='sp'?'$&':'');return 'If '+s+(k==='sp'?' covers':' wins')}
     function explainParts(r){var o=r.odds||[1,1],rn=(A.real||A.nick)(r.by),win2=Math.round(r.amt*o[0]/o[1]*100)/100,ot=r.k==='ou'?r.other:String(r.other||'').replace(/\s[+-]?\d+(\.\d+)?$/,'');
@@ -244,14 +248,24 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
     function explain(r){var p=explainParts(r);return '<div class="rq-ex note">'+e(p.win)+'<br>'+e(p.lose)+'</div>'}
     function rqQ(n,tip,label){return '<div class="b27-q"><button type="button" class="s27-tipk" data-tip="'+tip+'" aria-expanded="false" onfocus="s27TipShow(this)" onclick="s27WhenClick(this)">'+n+'. '+label+'</button></div>'}
     function rqPreview(f){var g=game(f.gid),p=pick(g&&g.g,f),me=A.me(),amt=f.amtC?(+f.amtTxt>0?+f.amtTxt:null):f.amt,o=f.odds||[1,1];
-      var nTo=f.to.length,nOth=A.others().length,cap=nTo||nOth,sl=f.sAll?cap:f.slots?Math.max(1,Math.min(f.slots,cap)):(nTo||1);
-      var who=nTo?(nTo===1?(A.real||A.nick)(f.to[0]):nTo>=nOth?'all stoops':(f.to||[]).map(function(id){return (A.real||A.nick)(id)}).join(', ')):'any stoop';
-      var sum=(p?p.txt:'Write the bet')+' · '+(amt||'?')+' · '+oddsTxt(o)+' odds · open to '+who+(nTo&&sl<nTo?', first '+sl:'')+' · each acceptance is its own bet';
-      var ex='';
-      if(p&&String(f.text||'').trim()&&amt>0){var parts=explainParts({by:me,k:p.k,lab:p.lab,other:p.other||'',odds:o,amt:amt});
-        ex='<b>'+e((A.real||A.nick)(me)+' offers '+amt+' at '+oddsTxt(o)+' odds. Not agreed yet.')+'</b><div class="b27-w">'+e(parts.win)+'</div><div class="b27-l">'+e(parts.lose)+'</div><div class="note">Open to '+e(who)+'. Each acceptance is its own bet.</div>'}
-      return {sum:sum,ex:ex}}
-    function rqPaintExplain(){var box=rqPreview(S.f),s=document.getElementById('rqSum'),x=document.getElementById('rqEx');if(s)s.textContent=box.sum;if(x)x.innerHTML=box.ex}
+      var nTo=f.to.length,nOth=A.others().length,nm=function(id){return (A.real||A.nick)(id)};
+      var who=nTo===1?nm(f.to[0]):nTo?(nTo>=nOth?'all Stoops':f.to.map(nm).join(', ')):'any Stoop';
+      var acceptor=nTo===1?who:'the Stoop who accepts',creator=nm(me)||'You';
+      var typed=String(f.text||'').trim();
+      if(!p&&!typed&&!(amt>0))return {sum:'',ex:''};
+      var half=f.cov==='2h'?'2nd half: ':'',match=typed||'Write the bet';
+      if(p&&(p.k==='sp'||p.k==='ou')&&p.lab&&p.other)match=half+p.lab+' vs '+p.other;
+      var stake=amt>0?rqMoney(amt):'',odds=(+o[0]===+o[1])?'':' · '+o[0]+'-'+o[1];
+      var line1=creator+': '+match+(stake?' · '+stake:'')+odds;
+      var date=g&&A.dateET?A.dateET(g):'',exp=rqExp(f);
+      var line2=[date,'Open to '+who,exp?'Exp: '+exp:''].filter(Boolean).join(' · ');
+      var line3='';
+      if(p&&amt>0){var winC=rqMoney(rqWin(amt,o[0],o[1])),winO=rqMoney(amt);
+        if(p.k==='sp')line3=rqTeam(p.lab)+' covers, '+creator+' wins '+winC+'. '+rqTeam(p.other)+' covers, '+acceptor+' wins '+winO+'.';
+        else if(p.k==='ou')line3=p.lab+', '+creator+' wins '+winC+'. '+p.other+', '+acceptor+' wins '+winO+'.';
+        else line3=(p.lab||match)+', '+creator+' wins '+winC+'. Otherwise, '+acceptor+' wins '+winO+'.'}
+      return {sum:'',ex:'<b>'+e(line1)+'</b>'+(line2?'<div>'+e(line2)+'</div>':'')+(line3?'<div>'+e(line3)+'</div>':'')}}
+    function rqPaintExplain(){var box=rqPreview(S.f),x=document.getElementById('rqEx');if(x)x.innerHTML=box.ex}
     function nmOf(id){return (A.real||A.nick)(id)}
     function descLine(r){var t=String(r.txt||r.lab||'').replace(/\s+/g,' ').trim(),o=r.odds||[1,1];
       if(+o[0]===+o[1])return t;

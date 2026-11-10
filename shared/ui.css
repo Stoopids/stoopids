@@ -567,3 +567,9 @@ html body .tapf>button,html body .lgref .tapf>button{grid-column:auto!important;
 html body .tapf>button.on,html body .lgref .tapf>button.on{outline:2px solid #fff!important;outline-offset:1px!important}
 html body .gm .gh>span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 html body .gm .gh .gbtns,html body .gm .gh .mkbtns{position:static!important;flex:none!important;flex-direction:row!important;margin-left:auto!important}
+html body header{position:static!important}
+html body nav#nav{position:sticky!important;top:0!important;z-index:40!important;background:var(--bg,#0e121b)!important}
+html body .s24fb .row2>select,html body .s24fb .row2>input,html body .b27-fr>select,html body .b27-fr>input{height:32px!important;min-height:32px!important;font-size:13px!important;padding:0 10px!important}
+html body .s24st{display:flex;flex-flow:row wrap;align-items:center;gap:6px;margin:0 0 8px}
+html body .s24st>button{flex:0 0 auto;width:auto;height:32px;min-height:32px;padding:0 12px;border-radius:999px;border:1px solid var(--line,#2d3548);background:transparent;color:inherit;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+html body .s24st>button.on{background:#ffd400;color:#111;border-color:#ffd400}
