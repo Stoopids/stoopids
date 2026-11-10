@@ -3539,8 +3539,7 @@ function b27Card(b,me){
   }
   /*<S24-EDIT>*/h+=s24EditedNote(b)+s24FixHtml(b,me);/*</S24-EDIT>*/
   const det=[face.gameDate?`<div class="note">Game date: ${esc(face.gameDate)}</div>`:'',/*<S29E-POSTED>*/s29ePosted(b)/*</S29E-POSTED>*/,/*<S25D-TS>*/s25dTsHtml(b)/*</S25D-TS>*/,L.win?`<div class="b27-w">${esc(L.win)}</div>`:'',L.lose?`<div class="b27-l">${esc(L.lose)}</div>`:'',L.rounded?'<div class="mut b27-r">Rounded to a whole number.</div>':'',/*<S25>*/s25CardRd(b)/*</S25>*/].filter(Boolean).join('');
-  if(det.trim())h+=`<details class="b27-more"><summary>Details</summary>${det}</details>`;
-  return h+/*<S25>*/s25RxHtml(b,me)/*</S25>*/+'</div>';
+  return h+`<div class="b27-foot">${det.trim()?`<details class="b27-more"><summary>Details</summary>${det}</details>`:''}${/*<S25>*/s25RxHtml(b,me)/*</S25>*/}</div></div>`;
 }
 /*<OWES-TABLE>*/
 const b27E1=e=>{e=String(e||'');try{return new Intl.Segmenter(undefined,{granularity:'grapheme'}).segment(e)[Symbol.iterator]().next().value.segment}catch(_){return Array.from(e)[0]||''}};   // first emoji only (phones: two-emoji names stay short)
@@ -4399,6 +4398,10 @@ html body .b27-drop .b27-chip{width:100%!important;text-align:left}
 html body .b27-drop .b27-in{width:100%;box-sizing:border-box;margin-top:6px}
 html body .b27-drop .b27-act{margin-top:6px}
 html body .b27-gh{margin:12px 0 6px;font-size:15px}
+html body .b27-foot{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;column-gap:8px;margin-top:8px}
+html body .b27-foot>.b27-more>summary{min-height:36px;line-height:36px}
+html body .b27-foot>.b27-more{grid-column:1;grid-row:1;margin-top:0;min-width:0}
+html body .b27-foot>.s25rxr{grid-column:2;grid-row:1;margin:0;justify-content:flex-end}
 html body .b27-more{margin-top:8px}
 html body .b27-more summary{cursor:pointer;font-weight:700}
 html body .s24fb{padding:8px!important}
