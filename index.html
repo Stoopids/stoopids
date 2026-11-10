@@ -1748,7 +1748,7 @@ const qbList=g=>SHARED_UI.qbOptions(g,{name:qbNm,date:qbDate(g)});
 function qbGo(id,k,i){const g=(D.games||[]).find(x=>String(x.id)===String(id));if(!g||!qbOk(g))return;
   if(!(typeof RQ!=='undefined'&&RQ)){qbMsg='Request a bet is unavailable right now.';render();return}
   RQ.prefill(id,k,i);qbG=null;qbMsg='';tab='bets27';OB_VIEW='request';render();
-  setTimeout(()=>{try{const f=document.getElementById('rqForm');if(f)f.scrollIntoView({block:'start'})}catch(_){}},30)}
+  setTimeout(()=>{try{obAlign()}catch(_){}},30)}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&qbG!=null&&document.querySelector('.qbd,.qb-pick')){e.preventDefault();qbToggle(null)}});
 document.addEventListener('click',e=>{if(qbG==null)return;const t=e.target;if(t&&t.closest&&t.closest('.qbd,.qb-pick,.qb-btn'))return;qbToggle(null)},true);
 /*</STEP7-QB>*/
@@ -1786,7 +1786,7 @@ function vGames(){gBetCache=null;
   const monHtml=`<select class="gf2-s gmon-sel${curMon?' on':''}" aria-label="Jump to month" onchange="if(this.value){gDay=this.value;render()}"><option value="">Month</option>${GMON.map(([m,l])=>{const f=firstIn(m);return `<option value="${f||''}" data-mon="${m}"${m===curMon?' selected':''}${f?'':' disabled'}>${l}</option>`}).join('')}</select>`;
   let gCapped=0;if(gDay==='all'&&gMode==='upcoming'){const near=days.slice().sort().slice(0,12),ns=new Set(near),n0=list.length;list=list.filter(g=>ns.has(etKey(g)));gCapped=n0-list.length}   // full schedule is loaded: 'All days' shows the next 12 game days; later days via the day list or month chips/*</S26U-MONTH-JUMP>*/
   if(gMode==='upcoming'){const sk=g=>etKey(g)+(isTBD(g)?'~':' ')+(g.start||'');list.sort((a,b)=>sk(a).localeCompare(sk(b)))}   // 'time TBD' games last within their day
-  /*<S29D-GF>*/let h=`<div class="gfone"><div class="gfrow"><div class="segrow"><div class="rkseg" role="group" aria-label="Games view"><button type="button" class="rkseg-b${gMode==='upcoming'?' on':''}" data-gm="upcoming" aria-pressed="${gMode==='upcoming'}" onclick="gMode='upcoming';gDay='all';render()">Upcoming</button><button type="button" class="rkseg-b${gMode==='scores'?' on':''}" aria-pressed="${gMode==='scores'}" onclick="gMode='scores';gDay='all';render()">Past games</button></div>${/*<SYNC1>*/'<button type="button" class="rkseg-b segref gref" aria-label="Refresh live games" title="Refresh live games" onclick="lvManual()">'+lvBtnTxt()+'</button>'/*</SYNC1>*/}</div></div><div class="gf3"><div class="gf2 gfpills"><select class="gf2-s${gOwner!=='all'?' on':''}" aria-label="Owner" onchange="gOwner=this.value;render()"><option value="all">All Stoops</option>${D.owners.map(o=>`<option value="${esc(o.name)}"${o.name===gOwner?' selected':''}>${esc(o.emoji)} ${esc(PN(o.name))}</option>`).join('')}</select><button type="button" class="gf2-b${gH2H?' on':''}" aria-pressed="${gH2H}" title="Only games where both teams are owned by Stoops" onclick="gH2H=!gH2H;render()">Stoop vs Stoop</button>${monHtml}<select class="gf2-s${gDay!=='all'?' on':''}" aria-label="Day" onchange="gDay=this.value;render()"><option value="all">All days</option>${days.map(k=>`<option value="${k}"${k===gDay?' selected':''}>${esc(etLabel(k))}</option>`).join('')}</select><input type="search" class="gf2-s gq${gQ?' on':''}" aria-label="Search teams" placeholder="Search teams" value="${esc(gQ)}" onchange="gQ=this.value.trim();render()"></div></div></div>${/*<OWNED-GAMES>*/nHidden?`<label class="gUn"><input type="checkbox" id="gUnowned"${gAll?' checked':''} onchange="gAll=this.checked;render()"> Show unowned games <span class="mut">(${nHidden} hidden)</span></label>`:''/*</OWNED-GAMES>*/}`;/*</S29D-GF>*/
+  /*<S29D-GF>*/let h=`<div class="segrow"><div class="rkseg" role="group" aria-label="Games view"><button type="button" class="rkseg-b${gMode==='upcoming'?' on':''}" data-gm="upcoming" aria-pressed="${gMode==='upcoming'}" onclick="gMode='upcoming';gDay='all';render()">Upcoming</button><button type="button" class="rkseg-b${gMode==='scores'?' on':''}" aria-pressed="${gMode==='scores'}" onclick="gMode='scores';gDay='all';render()">Past games</button></div>${/*<SYNC1>*/'<button type="button" class="rkseg-b segref gref" aria-label="Refresh live games" title="Refresh live games" onclick="lvManual()">'+lvBtnTxt()+'</button>'/*</SYNC1>*/}</div><div class="gfone"><div class="gf3"><div class="gf2 gfpills"><select class="gf2-s${gOwner!=='all'?' on':''}" aria-label="Owner" onchange="gOwner=this.value;render()"><option value="all">All Stoops</option>${D.owners.map(o=>`<option value="${esc(o.name)}"${o.name===gOwner?' selected':''}>${esc(o.emoji)} ${esc(PN(o.name))}</option>`).join('')}</select><button type="button" class="gf2-b${gH2H?' on':''}" aria-pressed="${gH2H}" title="Only games where both teams are owned by Stoops" onclick="gH2H=!gH2H;render()">Stoop vs Stoop</button>${monHtml}<select class="gf2-s${gDay!=='all'?' on':''}" aria-label="Day" onchange="gDay=this.value;render()"><option value="all">All days</option>${days.map(k=>`<option value="${k}"${k===gDay?' selected':''}>${esc(etLabel(k))}</option>`).join('')}</select><input type="search" class="gf2-s gq${gQ?' on':''}" aria-label="Search teams" placeholder="Search teams" value="${esc(gQ)}" onchange="gQ=this.value.trim();render()"></div></div></div>${/*<OWNED-GAMES>*/nHidden?`<label class="gUn"><input type="checkbox" id="gUnowned"${gAll?' checked':''} onchange="gAll=this.checked;render()"> Show unowned games <span class="mut">(${nHidden} hidden)</span></label>`:''/*</OWNED-GAMES>*/}`;/*</S29D-GF>*/
   if(!list.length)return h+`<div class="card">${all.length?'Nothing matches those filters.':nHidden/*<OWNED-GAMES>*/?'No games with an owned team right now 🏀 Check back soon. (Games where nobody in the pool owns either team are hidden.)'/*</OWNED-GAMES>*/:'No games for rostered teams yet. Check back when the schedule fills in.'}</div>`;
   if(gMode==='upcoming'&&D.meta.mode==='preseason')h+=`<div class="card note">Preseason: sportsbooks have posted lines for just some of the next few nights so far (lines are pulled for about the next 10 days). Everything refreshes automatically.</div>`;
   let cur=null;
@@ -3676,13 +3676,15 @@ const RQ=(typeof SHARED_UI!=='undefined'&&SHARED_UI.Requests)?SHARED_UI.Requests
   render:()=>{if(tab==='bets27'&&(OB_VIEW==='request'||OB_VIEW==='form'||OB_VIEW==='all'||OB_VIEW==='open'))render()}}):null;
 /*</STEP8-REQUEST>*/
 let OB_VIEW='form';   // Bets tab: 'form' = 2026-27 (New bet form + bet list), 'tally' = person table + Who owes who for 2026-27
-function obAlign(){const nav=document.getElementById('nav'),el=document.querySelector('.entry-pair')||document.querySelector('.ob-seg');if(!el){window.scrollTo(0,0);return}const y=el.getBoundingClientRect().top+window.scrollY-(nav?nav.getBoundingClientRect().height:0)-6;window.scrollTo(0,Math.max(0,y))}
+function obLandEl(){const phone=document.querySelector('.tabs.ob-seg.ob-phone');if(!phone)return null;let n=phone.nextElementSibling;while(n&&n.classList&&(n.classList.contains('ob-seg')||n.classList.contains('s24nf')))n=n.nextElementSibling;if(!n)return null;if(n.classList.contains('entry-pair'))return n.querySelector('.entry-col.is-on .entry-hd')||n.querySelector('.entry-hd');return n.matches('h2,h3')?n:(n.querySelector('h2,h3,.entry-hd')||n)}
+function obAlign(){const nav=document.getElementById('nav'),phone=window.matchMedia('(max-width:999px)').matches,el=phone?obLandEl():(document.querySelector('.entry-pair')||document.querySelector('.ob-seg'));if(!nav||!el){window.scrollTo(0,0);return}if(window.S26W)window.S26W.user=true;const y=Math.round(el.getBoundingClientRect().top+window.scrollY-nav.getBoundingClientRect().height)-(phone?0:6);window.scrollTo(0,Math.max(0,y))}
 function obView(v){tab='bets27';
   if(v==='open'){OB_VIEW='all';render();setTimeout(()=>{const el=document.getElementById('rqPinned');if(el)el.scrollIntoView({block:'start'})},40);return}
   if(v==='tally'){OB_VIEW='tally';render();window.scrollTo(0,0);return}
   OB_VIEW=v==='request'?'request':v==='all'?'all':'form';
-  if(v==='request'||v==='form'){render();setTimeout(obAlign,40);return}
-  render();window.scrollTo(0,0)}
+  render();
+  if(v==='request'||v==='form'||(v==='all'&&window.matchMedia('(max-width:999px)').matches)){requestAnimationFrame(()=>requestAnimationFrame(obAlign));return}
+  window.scrollTo(0,0)}
 const TALLY_NM={mark:'DIRTY DRAYMOND',jake:'STOCK RISING',kurt:'KURMOJI',ken:'KENTUT',neal:'COCKCHALKROCK',paul:'PARTY PAUL',jim:'NASTY PEACOCK',scott:'EN FUEGO'};   // Tally display = team nickname in caps (ids unchanged); neal = Neal Murf (archive). matthew has no nickname: shown as MATTHEW
 const tNm=i=>TALLY_NM[i]||String(P(i).name||i).toUpperCase();
 function vTally(){/* STEP11: Tally = 2026-27 Bets ledger (b27Tally / U.doc), not D.bets.tallies.ledger */
@@ -3815,7 +3817,9 @@ function njPut(k){if(!k)return;const ds=[];for(const x of k.a){const e=document.
   let best=ds[0],bn=0;for(const d of ds){const c=ds.filter(z=>Math.abs(z-d)<=2).length;if(c>bn||(c===bn&&Math.abs(d)<Math.abs(best))){bn=c;best=d}}
   if(Math.abs(best)>=1)njScroll(window.scrollY+best)}
 /*</NO-JUMP>*/
-render=function(){/*<NO-JUMP>*/const NK=(!S24.top0||tab!==S24.last||(S24.sub&&S24.done!==tab+'/'+S24.sub))?null:njTake();/*</NO-JUMP>*/s24Render0.apply(this,arguments);try{s24After()}catch(e){}/*<NO-JUMP>*/try{njPut(NK)}catch(e){}/*</NO-JUMP>*/};
+function pinNavH(){const n=document.getElementById('nav');if(n)document.documentElement.style.setProperty('--navh',Math.ceil(n.getBoundingClientRect().height)+'px')}
+addEventListener('resize',()=>{try{pinNavH()}catch(e){}});
+render=function(){/*<NO-JUMP>*/const NK=(!S24.top0||tab!==S24.last||(S24.sub&&S24.done!==tab+'/'+S24.sub))?null:njTake();/*</NO-JUMP>*/s24Render0.apply(this,arguments);try{s24After()}catch(e){}/*<NO-JUMP>*/try{njPut(NK)}catch(e){}try{pinNavH()}catch(e){}/*</NO-JUMP>*/};
 function s24After(){
   if(!D)return;
   if(tab!==S24.last){if(S24.sub&&S24.prep!==tab+'/'+S24.sub)S24.sub=null;S24.last=tab;S24.nf=null;s24Put(true)/*<TAB-TOP>*/;if(!S24.sub)window.scrollTo(0,0)/*</TAB-TOP>*/}
@@ -4474,6 +4478,17 @@ html body .ggrid .gside .sc2{margin-left:auto;flex:0 0 auto}
 html body .card.oc .chip.tlive{outline:2px solid #93c5fd;outline-offset:1px}
 html body .golive{box-shadow:0 0 0 2px #93c5fd!important}
 html body.haslive a[data-tab=games],html body.haslive .rkseg-b[data-gm=upcoming]{outline-color:#93c5fd!important}
+html body #main>.segrow,html body #main .gfone>.gfrow,html body #main>.tapf{position:sticky;top:var(--navh,56px);z-index:35;background:var(--bg,#0e121b);box-sizing:border-box}
+html body #main>.segrow,html body #main>.tapf{margin-top:0}
+html body .tabs.ob-seg{position:static!important}
+@media (max-width:700px){
+ html body #main>.segrow,html body #main .gfone>.gfrow,html body #main>.tapf{margin-left:-16px;margin-right:-16px;padding-left:16px;padding-right:16px;padding-top:4px;padding-bottom:6px;width:auto}
+ html body #main>.segrow{gap:6px}
+ html body #main>.segrow .rkseg-b,html body #main>.segrow .segref{height:28px!important;min-height:28px!important;padding:0 6px!important;font-size:12px!important;line-height:26px!important}
+ html body #main>.segrow .segupd{gap:4px;font-size:11px;flex:0 0 auto}
+ html body #main>.tapf{display:flex!important;flex-flow:row wrap!important;justify-content:flex-start!important;align-items:center!important;gap:4px!important;grid-template-columns:none!important}
+ html body #main>.tapf>button{width:auto!important;flex:0 0 auto!important;grid-column:auto!important;height:28px!important;min-height:28px!important;max-height:28px!important;padding:0 8px!important;font-size:12px!important;line-height:26px!important;white-space:nowrap!important}
+}
 html body .card.oc.isonl .who>b{outline-color:#93c5fd!important}
 /*</HELD-LAYOUT>*/
 </style><!--</S29E-PASTE>-->
