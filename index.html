@@ -948,7 +948,7 @@ main,#main{padding-top:6px!important}
 /* SYNC7..SYNC14 moved to shared/ui.css (linked right after this style block) */
 
 </style>
-<link rel="stylesheet" href="shared/ui.css?v=1.37.0">
+<link rel="stylesheet" href="shared/ui.css?v=1.38.0">
 <style>/*<SORT-FIT> phone All teams: the card scrolls sideways, the page does not. Names stay full size. */@media (max-width:480px){html body .card.tap.s27-rk{padding-left:4px!important;padding-right:4px!important}html body .card.tap.s27-rk th{font-size:11px!important}html body .card.tap.s27-rk td.n,html body .card.tap.s27-rk td.to,html body .card.tap.s27-rk td.cf{font-size:13px!important}html body .card.tap.s27-rk .s27-sort i{font-size:.7em!important;margin-left:0!important}}/*</SORT-FIT>*/</style>
 </head>
 <body>
@@ -4466,6 +4466,12 @@ html body .card.oc .chip.tlive{outline:2px solid #93c5fd;outline-offset:1px}
 html body .golive{box-shadow:0 0 0 2px #93c5fd!important}
 html body.haslive a[data-tab=games],html body.haslive .rkseg-b[data-gm=upcoming]{outline-color:#93c5fd!important}
 html body .card.oc.isonl .who>b{outline-color:#93c5fd!important}
+/* Secondary rows share one tab look. Labels, order, and what each button does stay as they are. */
+html body .segrow>.rkseg,html body #main .gfone .rkseg,html body #lbody .gfone .rkseg{display:grid!important;grid-template-columns:1fr 1fr!important;gap:6px!important;flex:1 1 auto!important;width:auto!important;min-width:0!important;margin:0!important;padding:0!important;background:transparent!important;border:0!important;border-radius:0!important}
+html body .segrow>.rkseg>.rkseg-b:not(.segref):not(.gref),html body #main .gfone .rkseg>.rkseg-b:not(.gref),html body #lbody .gfone .rkseg>.rkseg-b:not(.gref),html body .tabs.ob-seg>button,html body .tapf>button,html body .lgref .tapf>button{box-sizing:border-box!important;width:100%!important;height:36px!important;min-height:36px!important;max-height:36px!important;margin:0!important;padding:0 8px!important;font-size:13px!important;font-weight:800!important;line-height:34px!important;letter-spacing:0!important;text-align:center!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important;border-radius:10px!important;border:1px solid var(--line,#2d3548)!important;background:var(--card,#1b2030)!important;color:var(--tx,#eee)!important}
+html body .segrow>.rkseg>.rkseg-b.on:not(.segref),html body #main .gfone .rkseg>.rkseg-b.on,html body #lbody .gfone .rkseg>.rkseg-b.on,html body .tabs.ob-seg>button.on,html body .tapf>button.on,html body .lgref .tapf>button.on{background:var(--pill,#FFD400)!important;color:var(--pill-ink,#111)!important;border-color:var(--pill,#FFD400)!important}
+html body .tabs.ob-seg{display:grid!important;grid-auto-flow:column!important;grid-auto-columns:minmax(0,1fr)!important;gap:6px!important;width:100%!important;max-width:none!important}
+@media (max-width:700px){html body .tapf,html body .lgref .tapf{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:6px!important;width:100%!important;max-width:100%!important}html body .tapf>button:first-child,html body .lgref .tapf>button:first-child{grid-column:1 / -1}html body .tapf>button,html body .lgref .tapf>button{height:auto!important;min-height:36px!important;max-height:none!important;line-height:1.15!important;padding:6px 4px!important;white-space:normal!important;overflow:visible!important}}
 /*</HELD-LAYOUT>*/
 </style><!--</S29E-PASTE>-->
 <!--<S29E-COPY>--><script>
