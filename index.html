@@ -1337,7 +1337,7 @@ function boxHtml(g){const id=String(g.id),b=BOX[id],lk=`<a class="gbx-lk" href="
 const boxSlot=g=>g&&g.status==='final'?`<div class="gbx" data-box="${esc(String(g.id))}">${boxHtml(g)}</div>`:'';
 function boxFill(games){document.querySelectorAll('.gbx[data-box]').forEach(el=>{if(el.closest('[hidden]'))return;const id=el.dataset.box,g=(games||[]).find(x=>String(x.id)===id);if(!g)return;
   if(BOX[id]){if(!BOX[id].loading)el.innerHTML=boxHtml(g);return}
-  BOX[id]={loading:1};fetch(boxUrl(id)).then(r=>r.ok?r.json():Promise.reject(r.status)).then(j=>{BOX[id]=boxParse(j)}).catch(()=>{BOX[id]={err:1,teams:[]}}).then(()=>{document.querySelectorAll('.gbx[data-box="'+id+'"]').forEach(e=>e.innerHTML=boxHtml(g))})})}
+  BOX[id]={loading:1};fetch(boxUrl(id)).then(r=>r.ok?r.json():Promise.reject(r.status)).then(j=>{BOX[id]=boxParse(j)}).catch(()=>{BOX[id]={err:1,teams:[]}}).then(()=>{document.querySelectorAll('.gbx[data-box="'+id+'"]').forEach(e=>e.innerHTML=boxHtml(g));const card=document.getElementById('g-'+id);if(!card||!hsLs(g,g.away)&&!hsLs(g,g.home))return;const rows=card.querySelectorAll('.gside');if(rows[0]){rows[0].classList.add('hs1');const sc=rows[0].querySelector('.sc2');if(sc)sc.innerHTML=hsHtml(g,g.away,true)}if(rows[1]){const sc=rows[1].querySelector('.sc2');if(sc)sc.innerHTML=hsHtml(g,g.home,false)}})})}
 /*</SYNC2-BOX>*/
 /*<SYNC2>*/ // STOOPIDS has no writable league-settings store from the page (config.json is static, the shared ledger is live bets), so the commissioner accent is saved in localStorage on this device
 const ACC_KEY='stoopids_accent';let ACC=(()=>{try{return accApply(localStorage.getItem(ACC_KEY))}catch(e){return accApply(null)}})();
@@ -4457,11 +4457,11 @@ html body .card.tap.s27-rk th:first-child,html body .card.tap.s27-rk td:first-ch
 html body .card.tap.s27-rk th:first-child{z-index:3}
 html body .idline{margin:8px 0 8px!important}
 html body footer#foot{padding-bottom:8px!important}
-html body .ggrid .gside{flex-wrap:wrap!important;align-items:center!important}
-html body .ggrid .gside .nm{flex:1 1 100%!important;max-width:100%!important;min-width:0!important}
-html body .ggrid .gside a.chip,html body .ggrid>.gm .gside a.chip,html body .ggrid .gbody .gside a.chip{flex:0 0 auto!important;width:min(280px,100%)!important;min-width:min(280px,100%)!important;max-width:min(280px,100%)!important;height:40px!important;min-height:40px!important;max-height:40px!important;align-items:center!important;justify-content:center!important}
-html body .ggrid .gside a.chip .cn{flex:0 1 auto!important;text-align:center!important}
-html body .ggrid .gside .sc2{margin-left:auto;flex:0 0 auto}
+html body .ggrid .gside{flex-wrap:nowrap!important;align-items:center!important;width:100%!important}
+html body .ggrid .gside .nm{flex:1 1 auto!important;display:flex!important;align-items:center!important;max-width:none!important;min-width:0!important;overflow:hidden!important}
+html body .ggrid .gside a.chip,html body .ggrid>.gm .gside a.chip,html body .ggrid .gbody .gside a.chip{flex:1 1 auto!important;width:auto!important;min-width:0!important;max-width:100%!important;height:40px!important;min-height:40px!important;max-height:40px!important;align-items:center!important;justify-content:center!important}
+html body .ggrid .gside a.chip .cn{flex:0 1 auto!important;min-width:0!important;text-align:center!important}
+html body .ggrid .gside .sc2{margin-left:6px!important;flex:0 0 auto!important}
 html body .card.oc .chip.tlive{outline:2px solid #93c5fd;outline-offset:1px}
 html body .golive{box-shadow:0 0 0 2px #93c5fd!important}
 html body.haslive a[data-tab=games],html body.haslive .rkseg-b[data-gm=upcoming]{outline-color:#93c5fd!important}
