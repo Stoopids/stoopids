@@ -3677,14 +3677,12 @@ const RQ=(typeof SHARED_UI!=='undefined'&&SHARED_UI.Requests)?SHARED_UI.Requests
 /*</STEP8-REQUEST>*/
 let OB_VIEW='form';   // Bets tab: 'form' = 2026-27 (New bet form + bet list), 'tally' = person table + Who owes who for 2026-27
 function obLandEl(){const phone=document.querySelector('.tabs.ob-seg.ob-phone');if(!phone)return null;let n=phone.nextElementSibling;while(n&&n.classList&&(n.classList.contains('ob-seg')||n.classList.contains('s24nf')))n=n.nextElementSibling;if(!n)return null;if(n.classList.contains('entry-pair'))return n.querySelector('.entry-col.is-on .entry-hd')||n.querySelector('.entry-hd');return n.matches('h2,h3')?n:(n.querySelector('h2,h3,.entry-hd')||n)}
-function obAlign(){const nav=document.getElementById('nav'),phone=window.matchMedia('(max-width:999px)').matches,el=phone?obLandEl():(document.querySelector('.entry-pair')||document.querySelector('.ob-seg'));if(!nav||!el){window.scrollTo(0,0);return}if(window.S26W)window.S26W.user=true;const y=Math.round(el.getBoundingClientRect().top+window.scrollY-nav.getBoundingClientRect().height)-(phone?0:6);window.scrollTo(0,Math.max(0,y))}
+function obAlign(){const nav=document.getElementById('nav'),phone=window.matchMedia('(max-width:999px)').matches,el=document.querySelector(phone?'.tabs.ob-seg.ob-phone':'.tabs.ob-seg.ob-desk')||document.querySelector('.tabs.ob-seg');if(!nav||!el){window.scrollTo(0,0);return}if(window.S26W)window.S26W.user=true;const y=Math.round(el.getBoundingClientRect().top+window.scrollY-nav.getBoundingClientRect().height);window.scrollTo(0,Math.max(0,y))}
 function obView(v){tab='bets27';
-  if(v==='open'){OB_VIEW='all';render();setTimeout(()=>{const el=document.getElementById('rqPinned');if(el)el.scrollIntoView({block:'start'})},40);return}
-  if(v==='tally'){OB_VIEW='tally';render();window.scrollTo(0,0);return}
-  OB_VIEW=v==='request'?'request':v==='all'?'all':'form';
-  render();
-  if(v==='request'||v==='form'||(v==='all'&&window.matchMedia('(max-width:999px)').matches)){requestAnimationFrame(()=>requestAnimationFrame(obAlign));return}
-  window.scrollTo(0,0)}
+  if(v==='open')OB_VIEW='all';
+  else if(v==='tally')OB_VIEW='tally';
+  else OB_VIEW=v==='request'?'request':v==='all'?'all':'form';
+  render();requestAnimationFrame(()=>requestAnimationFrame(obAlign))}
 const TALLY_NM={mark:'DIRTY DRAYMOND',jake:'STOCK RISING',kurt:'KURMOJI',ken:'KENTUT',neal:'COCKCHALKROCK',paul:'PARTY PAUL',jim:'NASTY PEACOCK',scott:'EN FUEGO'};   // Tally display = team nickname in caps (ids unchanged); neal = Neal Murf (archive). matthew has no nickname: shown as MATTHEW
 const tNm=i=>TALLY_NM[i]||String(P(i).name||i).toUpperCase();
 function vTally(){/* STEP11: Tally = 2026-27 Bets ledger (b27Tally / U.doc), not D.bets.tallies.ledger */
@@ -4480,7 +4478,8 @@ html body .golive{box-shadow:0 0 0 2px #93c5fd!important}
 html body.haslive a[data-tab=games],html body.haslive .rkseg-b[data-gm=upcoming]{outline-color:#93c5fd!important}
 html body #main>.segrow,html body #main .gfone>.gfrow,html body #main>.tapf{position:sticky;top:var(--navh,56px);z-index:35;background:var(--bg,#0e121b);box-sizing:border-box}
 html body #main>.segrow,html body #main>.tapf{margin-top:0}
-html body .tabs.ob-seg{position:static!important}
+html body #main>.tabs.ob-seg{position:sticky!important;top:var(--navh,56px);z-index:35;background:var(--bg,#0e121b);box-sizing:border-box;margin-top:0}
+@media (max-width:640px){html body #main>.tabs.ob-seg.ob-phone{margin-left:-16px;margin-right:-16px;padding:4px 10px 6px;width:auto;max-width:none}}
 @media (max-width:700px){
  html body #main>.segrow,html body #main .gfone>.gfrow,html body #main>.tapf{margin-left:-16px;margin-right:-16px;padding-left:16px;padding-right:16px;padding-top:4px;padding-bottom:6px;width:auto}
  html body #main>.segrow{gap:6px}
