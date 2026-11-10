@@ -1765,7 +1765,7 @@ function gBetMap(){if(gBetCache)return gBetCache;const map={};const add=(id,b)=>
 function gBetIds(){const out=new Set();try{const m=gBetMap();Object.keys(m).forEach(id=>{if(m[id].length)out.add(id)})}catch(e){}return out}
 function gOpenBet(id){tab='bets27';OB_VIEW='all';try{S24.sub=id}catch(e){}render();setTimeout(()=>{const el=document.getElementById('bet-'+id);if(el)el.scrollIntoView({block:'center'})},40);return false}
 function gBetLinkHtml(g){const list=(gBetMap()[String(g&&g.id||'')]||[]).slice().sort((a,c)=>(a.n||0)-(c.n||0));if(!list.length)return '';
-  return '<div class="glinks">'+list.map(b=>{const od=b27OddsFace(b.odds&&b.odds.a,b.odds&&b.odds.b);return '<a class="glink" href="#bets27" data-gbet="'+esc(b.id)+'" onclick="return gOpenBet(\''+esc(b.id)+'\')">Bet #'+b.n+(od?' '+esc(od):'')+'</a>'}).join('')+'</div>'}/*</SYNC1>*/
+  return '<div class="glinks">'+list.map(b=>'<a class="glink" href="#bets27" data-gbet="'+esc(b.id)+'" onclick="return gOpenBet(\''+esc(b.id)+'\')">#'+b.n+'</a>').join('')+'</div>'}/*</SYNC1>*/
 /*<OWNED-GAMES>*/let gAll=false;   // 'Show unowned games' toggle: OFF by default
 /* a game is owned when at least one of its two teams belongs to one of the owners ON THAT GAME DAY (home/away.owners comes from the owners' team windows). The build keeps every game that touches ANY pool team, so a pool team whose owner window does not cover the day can leave a game with nobody's name on it: those are hidden unless the toggle is on. */
 const gOwned=g=>!!(g&&((g.home&&g.home.owners&&g.home.owners.length)||(g.away&&g.away.owners&&g.away.owners.length)));/*</OWNED-GAMES>*/
@@ -3962,7 +3962,7 @@ function s25PropHtml(b,me){const G=s25Game(b);if(!G)return '';const r=s25BetRd(b
       'No final score yet. Pick the winner yourself any time, or come back after the game.'+(G.g&&G.g.state==='pre'&&G.g.start?' (starts '+S25.localTime(G.g.start)+')':'');
     return `<div class="s25pp" data-s25-prop="${G.wait}">${esc(t)}</div>`}
   const p=G.p;if(!p)return '';const ask=!!(S25P.ask&&S25P.ask.id===b.id&&S25P.ask.terms===b27Terms(b)+'\u001f'+p.text+'\u001f'+p.r);
-  const btn=`<button type="button" class="ok${ask?' flash':''}" data-s25-ok="${b.id}" onclick="${ask?`s25Confirm('${b.id}')`:`s25Ask('${b.id}')`}"${U.busy?' disabled':''}>${ask?'Tap again to confirm':'✅ Confirm'}</button> <button type="button" data-s25-fix="${b.id}" aria-pressed="${!!S25P.fix[b.id]}" onclick="s25Fix('${b.id}')">✏️ Fix</button>`;
+  const btn=`<button type="button" class="ok${ask?' on flash':''}" data-s25-ok="${b.id}" onclick="${ask?`s25Confirm('${b.id}')`:`s25Ask('${b.id}')`}"${U.busy?' disabled':''}>${ask?'Tap again to confirm':'✅ Confirm'}</button> <button type="button" data-s25-fix="${b.id}" aria-pressed="${!!S25P.fix[b.id]}" onclick="s25Fix('${b.id}')">✏️ Fix</button>`;
   return `<div class="s25pp" data-s25-prop="final">${s25SuggestLine(b,p)}<div class="s25sg-act">${btn}</div><div class="note">Nothing is settled until someone taps Confirm.</div></div>`}
 function s25Ask(id){if(U.busy||b27TapLock())return;const b=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===id);if(!b){S25P.ask=null;render();return}const G=s25Game(b);const terms=b27Terms(b)+'\u001f'+(G&&G.p?G.p.text+'\u001f'+G.p.r:'');if(S25P.ask&&S25P.ask.id===id&&S25P.ask.terms===terms)S25P.ask=null;else{S25P.ask={id,terms};try{const t=s29eCopyText(b);if(t)b27CopyNow(t)}catch(e){}}render()}
 function s25HideManual(b){if(S25P.fix[b.id])return false;const G=s25Game(b);return !!(G&&G.p)}
@@ -4449,14 +4449,15 @@ html{scroll-padding-top:64px}
 .hero{cursor:pointer}
 .hero.hero-open{height:min(72vh,560px)!important}
 @media (max-width:700px){
- html body .tapf,html body .lgref .tapf{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:4px!important;max-width:100%}
- html body .tapf button,html body .lgref .tapf button{font-size:11px!important;line-height:1.15!important;padding:3px 2px!important;white-space:normal!important;min-height:32px!important;-webkit-line-clamp:unset!important;line-clamp:unset!important;overflow:visible!important}
- html body .tapf>button,html body .lgref .tapf>button{grid-column:auto!important;min-height:36px!important}
- html body{padding-bottom:12px!important}
- html body .card.tap.s27-rk td:first-child,html body .card.tap.s27-rk th:first-child{position:sticky;left:0;z-index:2;background:var(--card,#1b2030)}
+ html body .tapf,html body .lgref .tapf{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:4px!important;width:100%!important;max-width:100%!important}
+ html body .tapf>button:first-child,html body .lgref .tapf>button:first-child{grid-column:1 / -1!important;min-height:28px!important;font-size:12px!important}
+ html body .tapf>button,html body .lgref .tapf>button{width:100%!important;min-width:0!important;height:auto!important;min-height:28px!important;max-height:none!important;padding:3px 2px!important;font-size:10px!important;line-height:1.15!important;white-space:nowrap!important}
 }
-html body .card.tap.s27-rk th:first-child,html body .card.tap.s27-rk td:first-child{position:sticky;left:0;z-index:2;background:var(--card,#1b2030)}
-html body .card.tap.s27-rk th:first-child{z-index:3}
+html body .s25pp button.ok.on,html body .s27-copy.on{outline:3px solid #FFD400!important;outline-offset:2px!important}
+html body .s25wl{opacity:1!important;color:var(--tx,#eee)!important;font-weight:700!important}
+html body .card.tap.s27-rk{overflow-x:auto!important}
+html body .card.tap.s27-rk th:first-child,html body .card.tap.s27-rk td:first-child{position:sticky!important;left:0!important;z-index:3!important;background:var(--card,#1b2030)!important;box-shadow:1px 0 0 var(--line,#2d3548)}
+html body .card.tap.s27-rk th:first-child{z-index:4!important}
 html body .idline{margin:8px 0 8px!important}
 html body footer#foot{padding-bottom:8px!important}
 html body .ggrid .gside{flex-wrap:wrap!important;align-items:center!important}
