@@ -2522,8 +2522,8 @@ let S29SH='';
 function s29ShTabs(){return TABS.filter(t=>t[0]!=='share'&&t[0]!=='profile'&&tabVisible(t[0])).map(t=>[t[0],t[1].slice(t[1].indexOf(' ')+1)])}
 function s29ShUrl(){return s29ViewUrl(S29SH?s24HashOf(S29SH):'')}
 /*<S29E-PROFILE>*/
-const PROF_ALERT='stoopids_prof_alerts',PROF_CM_URL='https://textdb.dev/api/data/stoopids-draft2-ff4dac2bc4128b72',PROF_CM_TOK='stoopidsDraft.cmtok';
-const PROFCM={checked:false,loading:false,hash:null,salt:null,hasPass:false,err:false,msg:'',tries:0,until:0};
+const PROF_ALERT='stoopids_prof_alerts',PROF_CM_SALT='263256bf61928c71',PROF_CM_HASH='e66a42e9a43f14938ec07992f73a26193c7a0cfe9af88d1e409bce63f454f74e',PROF_CM_TOK='stoopids_cm_tok';
+const PROFCM={checked:true,loading:false,hash:PROF_CM_HASH,salt:PROF_CM_SALT,hasPass:true,err:false,msg:'',tries:0,until:0};
 let PROF_TXT={season:'',bets:''};
 function profAlerts(){const o={newBets:true,settle:true};try{const v=JSON.parse(lsGet(PROF_ALERT)||'');if(v&&typeof v==='object'){if(v.newBets===false)o.newBets=false;if(v.settle===false)o.settle=false}}catch(e){}return o}
 function profAlert(k){if(k==='chat')return lsGet('stoopids_chat_snd')==='1';return profAlerts()[k]!==false}
@@ -2539,21 +2539,17 @@ function profH2H(me){return b27OwnerNames().filter(n=>n!==me).map(other=>{let w=
 function profSeasonText(me,o,rec){return ['STOOPIDS '+(D.meta&&D.meta.season||''),PN(me)+' · '+TN(me)+(o.emoji?' '+o.emoji:''),'Rank: '+profRank(o),'Points: '+b27Num(o.total||0),'Roster record: '+rec.w+'-'+rec.l].join('\n')}
 function profBetsText(me,s){return [PN(me)+' bets',s.w+'-'+s.l+(s.push?' · '+s.push+' wash'+(s.push===1?'':'es'):''),'Net: '+profMoney(s.net),'Open: '+s.open].join('\n')}
 function profCopy(id,text){const btn=document.getElementById(id);s27CopyText(text,()=>{if(!btn)return;btn.textContent='Copied';btn.classList.add('on');clearTimeout(btn._t);btn._t=setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('on')},1200)})}
-function profCmUnlocked(){return !!(PROFCM.hash&&lsGet(PROF_CM_TOK)===PROFCM.hash)}
-function profCmLoad(){if(PROFCM.checked||PROFCM.loading)return;PROFCM.loading=true;
-  fetch(PROF_CM_URL,{cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.text()}).then(t=>{if(!t||!String(t).trim()){PROFCM.hasPass=false;return}let d=JSON.parse(t);if(typeof d==='string')d=JSON.parse(d);const p=d&&d.pass;PROFCM.hasPass=!!(p&&typeof p.salt==='string'&&typeof p.hash==='string');PROFCM.salt=PROFCM.hasPass?p.salt:null;PROFCM.hash=PROFCM.hasPass?p.hash:null}).catch(()=>{PROFCM.err=true}).then(()=>{PROFCM.checked=true;PROFCM.loading=false;if(tab==='profile')render()})}
-async function profCmGo(){if(Date.now()<PROFCM.until){PROFCM.msg='Wrong passcode. Locked for '+Math.ceil((PROFCM.until-Date.now())/1000)+'s.';render();return}const pass=((document.getElementById('profPin')||{}).value||'');if(!PROFCM.hasPass)return;
-  let hash='';try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(PROFCM.salt+':'+pass));hash=Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){PROFCM.msg='This browser cannot check the passcode here.';render();return}
-  if(hash===PROFCM.hash){PROFCM.tries=0;PROFCM.msg='';lsSet(PROF_CM_TOK,hash);render();return}
+function profCmUnlocked(){return lsGet(PROF_CM_TOK)===PROF_CM_HASH}
+function profCmLoad(){}
+async function profCmGo(){if(Date.now()<PROFCM.until){PROFCM.msg='Wrong passcode. Locked for '+Math.ceil((PROFCM.until-Date.now())/1000)+'s.';render();return}const pin=document.getElementById('profPin');const pass=pin?pin.value:'';if(pin)pin.value='';
+  let hash='';try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(PROF_CM_SALT+pass));hash=Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){PROFCM.msg='This browser cannot check the passcode here.';render();return}
+  if(hash===PROF_CM_HASH){PROFCM.tries=0;PROFCM.msg='';lsSet(PROF_CM_TOK,PROF_CM_HASH);render();return}
   PROFCM.tries++;if(PROFCM.tries>=5){PROFCM.until=Date.now()+30000;PROFCM.tries=0;PROFCM.msg='Wrong passcode. Locked for 30 seconds.'}else PROFCM.msg='Wrong passcode. Try again ('+(5-PROFCM.tries)+' left).';render()}
 function profCmLock(){try{localStorage.removeItem(PROF_CM_TOK)}catch(e){}PROFCM.msg='';render()}
 function profCmHtml(){profCmLoad();
-  if(!PROFCM.checked)return `<div class="card s29e-cm"><h3>Commissioner</h3><p class="prof-note">Checking the commissioner lock…</p></div>`;
-  if(PROFCM.err)return `<div class="card s29e-cm"><h3>Commissioner</h3><p class="prof-note">Couldn’t read the commissioner lock. Nothing was changed.</p></div>`;
-  if(!PROFCM.hasPass)return `<div class="card s29e-cm"><h3>Commissioner</h3><p class="prof-note">No commissioner passcode is set yet. It is set in the draft room, not here.</p><p style="margin:8px 0 0"><a class="btn" href="${esc(DRAFT_URL)}">Open the draft room</a></p></div>`;
-  if(!profCmUnlocked())return `<div class="card s29e-cm"><h3>Commissioner</h3><p class="prof-note">The draft-room passcode unlocks the commissioner tools.</p><label class="sr" for="profPin">Commissioner passcode</label><input id="profPin" class="sb-in" type="password" autocomplete="off" placeholder="Passcode" style="margin-top:8px" onkeydown="if(event.key==='Enter'){event.preventDefault();profCmGo()}"><div class="prof-note" role="alert">${esc(PROFCM.msg||'')}</div><button type="button" class="btn" style="margin-top:8px" onclick="profCmGo()">Unlock</button></div>`;
+  if(!profCmUnlocked())return `<div class="card s29e-cm"><h3>Commissioner</h3><p>Commissioner: Paul</p><label class="sr" for="profPin">Commissioner passcode</label><input id="profPin" class="sb-in" type="password" autocomplete="off" placeholder="Passcode" style="margin-top:8px" onkeydown="if(event.key==='Enter'){event.preventDefault();profCmGo()}"><div class="prof-note" role="alert">${esc(PROFCM.msg||'')}</div><button type="button" class="btn" style="margin-top:8px" onclick="profCmGo()">Unlock</button></div>`;
   const admin=location.pathname+'?admin=1';
-  return `<div class="card s29e-cm" id="cmTools"><h3>Commissioner</h3><p class="prof-note">Unlocked on this device.</p><p style="margin:8px 0 0"><a class="btn" href="${esc(DRAFT_URL)}">Draft room</a></p><p class="prof-note">Admin tab: start, pause, undo, reset, order, clock, and the wheel. Same passcode.</p><p style="margin:8px 0 0"><a class="btn" href="${esc(admin+'#about')}">Site admin view</a></p><p class="prof-note">Adds ?admin=1. Accent colour, data health, export, and the admin delete and clear-chat buttons.</p>${cmToolsHtml()}<button type="button" class="btn sec" style="margin-top:8px" onclick="profCmLock()">Lock</button></div>`}
+  return `<div class="card s29e-cm" id="cmTools"><h3>Commissioner</h3><p>Commissioner: Paul</p><p class="prof-note">Unlocked on this device.</p><p style="margin:8px 0 0"><a class="btn" href="${esc(DRAFT_URL)}">Draft room</a></p><p class="prof-note">Admin tab: start, pause, undo, reset, order, clock, and the wheel.</p><p style="margin:8px 0 0"><a class="btn" href="${esc(admin+'#about')}">Site admin view</a></p><p class="prof-note">Adds ?admin=1. Accent colour, data health, export, and the admin delete and clear-chat buttons.</p>${cmToolsHtml()}<button type="button" class="btn sec" style="margin-top:8px" onclick="profCmLock()">Lock</button></div>`}
 const CM_URL='https://textdb.dev/api/data/stoopids-commish-2627-9eaa4f66';
 const CM={ready:false,loading:false,looks:{},off:[],access:{},msg:'',arm:null};
 function cmBlank(){return {v:1,looks:{},off:[],access:{}}}
