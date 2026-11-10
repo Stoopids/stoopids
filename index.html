@@ -1764,7 +1764,7 @@ function gBetMap(){if(gBetCache)return gBetCache;const map={};const add=(id,b)=>
 function gBetIds(){const out=new Set();try{const m=gBetMap();Object.keys(m).forEach(id=>{if(m[id].length)out.add(id)})}catch(e){}return out}
 function gOpenBet(id){tab='bets27';OB_VIEW='all';try{S24.sub=id}catch(e){}render();setTimeout(()=>{const el=document.getElementById('bet-'+id);if(el)el.scrollIntoView({block:'center'})},40);return false}
 function gBetLinkHtml(g){const list=(gBetMap()[String(g&&g.id||'')]||[]).slice().sort((a,c)=>(a.n||0)-(c.n||0));if(!list.length)return '';
-  return '<div class="glinks">'+list.map(b=>'<a class="glink" href="#bets27" data-gbet="'+esc(b.id)+'" onclick="return gOpenBet(\''+esc(b.id)+'\')">#'+b.n+'</a>').join('')+'</div>'}/*</SYNC1>*/
+  return '<div class="glinks">'+list.map(b=>{const od=b27OddsFace(b.odds&&b.odds.a,b.odds&&b.odds.b);return '<a class="glink" href="#bets27" data-gbet="'+esc(b.id)+'" onclick="return gOpenBet(\''+esc(b.id)+'\')">#'+b.n+(od?' '+esc(od):'')+'</a>'}).join('')+'</div>'}/*</SYNC1>*/
 /*<OWNED-GAMES>*/let gAll=false;   // 'Show unowned games' toggle: OFF by default
 /* a game is owned when at least one of its two teams belongs to one of the owners ON THAT GAME DAY (home/away.owners comes from the owners' team windows). The build keeps every game that touches ANY pool team, so a pool team whose owner window does not cover the day can leave a game with nobody's name on it: those are hidden unless the toggle is on. */
 const gOwned=g=>!!(g&&((g.home&&g.home.owners&&g.home.owners.length)||(g.away&&g.away.owners&&g.away.owners.length)));/*</OWNED-GAMES>*/
@@ -3049,6 +3049,7 @@ function b27ParseOdds(t){
   return {ok:true,a,b};
 }
 const b27OddsLabel=(a,b)=>a===1&&b===1?'Even (1-1)':a+'-'+b;
+const b27OddsFace=(a,b)=>{a=+a;b=+b;return a>=1&&b>=1&&!(a===1&&b===1)?a+'-'+b:''};
 const b27OddsShort=(a,b)=>a===1&&b===1?'at even odds':'at '+a+'-'+b;
 function b27Clean(t,max){
   t=String(t==null?'':t).replace(/[\u0000-\u001f\u007f-\u009f\u200b-\u200f\u202a-\u202e\u2060-\u2069\ufeff]/g,' ').replace(/\s+/g,' ').trim();
@@ -3171,7 +3172,7 @@ function b27Apply(list,fromPoll){
   if(lsGet(PULK.seenKey)==null)lsSet(PULK.seenKey,String(U.maxN));
   if(tab==='bets27')b27Seen();
   const fresh=added.filter(b=>!U.mine.has(b.id)&&b.status==='open');
-  if(fresh.length&&typeof nbShow==='function'){nbShow(fresh.map(b=>({n:b.n,_msg:/*<POOL>*/b.kind==='pool'?PT('toast',{who:PN(b.backer),names:b27Opps(b).map(PN).join(', ')}):/*</POOL>*/PN(b.backer)+' just bet '+b27Num(b.amt)+(b27IsBundle(b)?' each ':' ')+b27OddsShort(b.odds.a,b.odds.b)+' with '+b27Opps(b).map(PN).join(', ')})))}
+  if(fresh.length&&typeof nbShow==='function'){nbShow(fresh.map(b=>({n:b.n,_msg:/*<POOL>*/b.kind==='pool'?PT('toast',{who:PN(b.backer),names:b27Opps(b).map(PN).join(', ')}):/*</POOL>*/PN(b.backer)+' just bet '+b27Num(b.amt)+(b27IsBundle(b)?' each':'')+(b27OddsFace(b.odds.a,b.odds.b)?' '+b27OddsFace(b.odds.a,b.odds.b):'')+' with '+b27Opps(b).map(PN).join(', ')})))}
   if(first||added.length||changed||fromPoll==='force'){const ae=document.activeElement;if(tab==='bets27'){if(!(ae&&ae.closest&&ae.closest('#main')&&/INPUT|TEXTAREA/.test(ae.tagName)))render()}else if(b27Badge())setTimeout(render,0)}
 }
 function b27Seen(){if(U.state==='ok'&&U.maxN)lsSet(PULK.seenKey,String(Math.max(U.maxN,parseInt(lsGet(PULK.seenKey),10)||0)))}
@@ -3517,6 +3518,8 @@ function b27LiveHtml(){
 }
 function b27Face(b){const text=String(b&&b.text||'');let dt=null;try{dt=S25.dateFrom(text,b&&b.created_at?S25.etDay(b.created_at):undefined)}catch(e){}if(!dt)return {face:text,gameDate:''};const k=SHARED_UI.whenKind(b);let whenD='';if(k==='date'&&SHARED_UI.estOk(b.est))whenD=b.est;else if(k==='game'){const rd=s25BetRd(b);if(rd&&rd.d)whenD=rd.d}if(k==='game'&&whenD&&dt.d===whenD)return {face:text,gameDate:''};const face=text.replace(dt.raw,' ').replace(/\s+,/g,',').replace(/,\s*(,|$)/g,'$1').replace(/^[, ]+|[, ]+$/g,'').replace(/\s{2,}/g,' ').trim();return {face:face||text,gameDate:dt.raw.trim()}}
 function b27SettlesLabel(b){const k=SHARED_UI.whenKind(b);if(k==='game')return 'Settles: when the game ends';if(k==='season')return 'Settles: end of season';if(k==='date')return 'Settles: '+SHARED_UI.estLabel(b.est);return 'Settles: date not set'}
+function b27CardDate(b){let iso='';try{const rd=s25BetRd(b);if(rd&&rd.d&&/^\d{4}-\d{2}-\d{2}$/.test(rd.d))iso=rd.d}catch(e){}if(!iso&&SHARED_UI.whenKind(b)==='date'&&SHARED_UI.estOk(b.est))iso=b.est;if(!iso)return '';const p=iso.split('-'),mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+p[1]-1],y=+p[0];return mo+' '+Number(p[2])+(y!==new Date().getFullYear()?', '+y:'')}
+function b27Matchup(b){let rd=null;try{rd=s25BetRd(b)}catch(e){}if(rd&&rd.k&&rd.k!=='manual'&&rd.t&&rd.o)return rd.t+' v '+rd.o;let t=b27Clean(b&&b.text||'');try{const dt=S25.dateFrom(t,b&&b.created_at?S25.etDay(b.created_at):undefined);if(dt&&dt.raw)t=t.replace(dt.raw,' ')}catch(e){}return t.replace(/\s+(?:vs\.?|versus)\s+/ig,' v ').replace(/\s+,/g,',').replace(/^[, ]+|[, ]+$/g,'').replace(/\s{2,}/g,' ').trim()}
 function b27SettlesHtml(b){const lab=esc(b27SettlesLabel(b)),open=!!(estDraft&&estDraft.id===b.id);if(!s24EstOwner(b))return `<div class="b27-set"><span class="b27-pill b27-pill-plain">${lab}</span></div>`;return `<div class="b27-set"><button type="button" class="b27-pill" data-settles="${esc(b.id)}" aria-expanded="${open?'true':'false'}" aria-controls="settles-${esc(b.id)}" onclick="s24EditStart('${b.id}')"${U.busy?' disabled':''}>${lab}<span class="b27-chev" aria-hidden="true"></span></button>${open?s24EstHtml(b):''}</div>`}
 function b27Card(b,me){
   const L=b27Lines(b),OP=b27Opps(b),BU=OP.length>1,isP=me&&(b.backer===me||OP.includes(me)),st=b.status;
@@ -3524,22 +3527,24 @@ function b27Card(b,me){
   /*<OWNER-NAMES>*/const OPd=OP.map(PN),Bk=PN(b.backer),Ot=PN(b.other);/*</OWNER-NAMES>*/
   const res=BU?(st==='backer'?Bk+' won ('+OPd.join(', ')+' each owe '+Bk+' '+b27Num(b27Pay(b).ifBackerRight)+')':st==='other'?'Managers won ('+Bk+' owes each of them '+b27Num(b27Pay(b).ifOtherRight)+')':st==='push'?'💦: nobody owes anything':'')
    :st==='backer'?Bk+' won ('+Ot+' owes '+b27Num(b27Pay(b).ifBackerRight)+')':st==='other'?Ot+' won ('+Bk+' owes '+b27Num(b27Pay(b).ifOtherRight)+')':st==='push'?'💦: nobody owes anything':'';
-  const ready=b27Ready(b),face=b27Face(b);
-  let h=`<div class="card b27-c${ready?' b27-ready':''}${U.flashBet===b.id?' act-flash':''}"${/*<S24-EDIT>*/s24Attr('b',b.id)/*</S24-EDIT>*/}><div class="s24hd"><b>Bet #${b.n}</b>${/*<S24-EDIT>*/s24FixBadge(b)/*</S24-EDIT>*/} <span class="st ${st==='open'?'open':st==='push'?'wash':st==='void'?'unparsed':'settled'}">${stTxt}</span>${BU?` <span class="mut" style="font-size:12px">· ${OP.length} managers, one result</span>`:''}${/*<MULTI-BET>*/b.g&&U.doc.bets.filter(x=>x.g===b.g).length>1?` <span class="mut" style="font-size:12px">· 1 of ${U.doc.bets.filter(x=>x.g===b.g).length} placed together</span>`:''/*</MULTI-BET>*/}${/*<S24-EDIT>*/s24LinkBtn('bets',b.id,'bet')/*</S24-EDIT>*/}</div>
-   <div class="b27-t${/*<CARD-SIZE>*/' s25cl'+(S25P.more[b.id]?' open':'')+'" data-s25-t="'+b.id/*</CARD-SIZE>*/}">${esc(face.face)}</div>${/*<CARD-SIZE>*/`<button type="button" class="s25more" data-s25-more="${b.id}" aria-expanded="${!!S25P.more[b.id]}" onclick="s25More('${b.id}')" hidden>${S25P.more[b.id]?'less':'more'}</button>`/*</CARD-SIZE>*/}<div class="b27-m"><b>${esc(Bk)}</b> vs <b>${esc(OPd.join(', '))}</b> · <b>${b27Num(b.amt)}</b>${BU?' each':''} · ${esc(b27OddsLabel(b.odds.a,b.odds.b))}</div>
-   ${ready?'<div class="b27-ready-t">Ready to settle</div>':''}${res?`<div class="note" style="margin-top:4px"><b>Result:</b> ${esc(res)}</div>`:''}${/*<S25>*/s25PropHtml(b,me)/*</S25>*/}`;
+  const ready=b27Ready(b),face=b27Face(b),whenDate=b27CardDate(b),oddsFace=b27OddsFace(b.odds&&b.odds.a,b.odds&&b.odds.b);
+  let h=`<div class="card b27-c${ready?' b27-ready':''}${U.flashBet===b.id?' act-flash':''}"${/*<S24-EDIT>*/s24Attr('b',b.id)/*</S24-EDIT>*/}><div class="s24hd"><b>Bet #${b.n} (${stTxt}) ${b27Num(b.amt)}${BU?' each':''}${whenDate?' - '+esc(whenDate):''}</b>${/*<S24-EDIT>*/s24FixBadge(b)/*</S24-EDIT>*/}${/*<S24-EDIT>*/s24LinkBtn('bets',b.id,'bet')/*</S24-EDIT>*/}</div>
+   <div class="b27-t${/*<CARD-SIZE>*/' s25cl'+(S25P.more[b.id]?' open':'')+'" data-s25-t="'+b.id/*</CARD-SIZE>*/}">${esc(b27Matchup(b))}</div>${/*<CARD-SIZE>*/`<button type="button" class="s25more" data-s25-more="${b.id}" aria-expanded="${!!S25P.more[b.id]}" onclick="s25More('${b.id}')" hidden>${S25P.more[b.id]?'less':'more'}</button>`/*</CARD-SIZE>*/}<div class="b27-m">${esc(Bk)} v ${esc(OPd.join(', '))}${oddsFace?' '+esc(oddsFace):''}</div>`;
+  let del='',who='';
   if(st==='open'&&(isP||ADMIN)){
     const ask=w=>U.askSettle&&U.askSettle.id===b.id&&U.askSettle.what===w&&U.askSettle.terms===b27Terms(b);
     const btn=(w,label)=>`<button type="button" class="btn sec b27-b" onclick="${ask(w)?`b27SetStatus('${b.id}','${w}')`:`b27Ask('${b.id}','${w}')`}"${U.busy?' disabled':''}>${ask(w)?'Tap again to confirm':label}</button>`;
-    /*<CREATOR-SETTLE>*/if(me!==b.backer)h+=`<div class="note b27-onlyc" style="margin-top:6px">Only ${esc(PN(b.backer))} (who placed it) can enter the result.</div>`;else /*</CREATOR-SETTLE>*//*<S25>*/if(!s25HideManual(b))/*</S25>*/h+=`<div class="b27-act"><span class="note">Who won?</span>${btn('backer',esc(Bk)+' won')}${btn('other',BU?'Managers won':esc(Ot)+' won')}${btn('push','Wash')}</div>`;
+    /*<CREATOR-SETTLE>*/if(me!==b.backer)who=`<div class="note b27-onlyc" style="margin-top:6px">Only ${esc(PN(b.backer))} (who placed it) can enter the result.</div>`;else /*</CREATOR-SETTLE>*//*<S25>*/if(!s25HideManual(b))/*</S25>*/who=`<div class="b27-act"><span class="note">Who won?</span>${btn('backer',esc(Bk)+' won')}${btn('other',BU?'Managers won':esc(Ot)+' won')}${btn('push','Wash')}</div>`;
     /*<MULTI-BET>*/const gu=b.g?b27GroupUndoable(b.g):[];
-    if(b27CanUndo(b)&&b.g&&gu.length>1){if(U.doc.bets.filter(x=>x.g===b.g&&b27CanUndo(x)).sort((p,q)=>q.n-p.n)[0].id===b.id)h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27UndoGroup('${b.g}','${b27GroupHash(b.g)}')"${U.busy?' disabled':''}>↩ Undo all ${gu.length} bets placed together (30 s)</button></div>`}
-    else /*</MULTI-BET>*/if(b27CanUndo(b))h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27Void('${b.id}','${b27Hash(b27Terms(b))}')"${U.busy?' disabled':''}>↩ Undo this bet (30 s)</button></div>`;
-    else if(ADMIN)h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27Void('${b.id}','${b27Hash(b27Terms(b))}')"${U.busy?' disabled':''}>Cancel bet (admin)</button></div>`;
+    if(b27CanUndo(b)&&b.g&&gu.length>1){if(U.doc.bets.filter(x=>x.g===b.g&&b27CanUndo(x)).sort((p,q)=>q.n-p.n)[0].id===b.id)del=`<button type="button" class="btn sec b27-b" onclick="b27UndoGroup('${b.g}','${b27GroupHash(b.g)}')"${U.busy?' disabled':''}>Delete</button>`}
+    else /*</MULTI-BET>*/if(b27CanUndo(b))del=`<button type="button" class="btn sec b27-b" onclick="b27Void('${b.id}','${b27Hash(b27Terms(b))}')"${U.busy?' disabled':''}>Delete</button>`;
+    else if(ADMIN)del=`<button type="button" class="btn sec b27-b" onclick="b27Void('${b.id}','${b27Hash(b27Terms(b))}')"${U.busy?' disabled':''}>Delete</button>`;
   }
+  if(del||ready)h+=`<div class="b27-del">${del}${ready?'<span class="b27-ready-t">Ready to settle</span>':''}</div>`;
+  h+=who+/*<S25>*/s25PropHtml(b,me)/*</S25>*/;
   /*<S24-EDIT>*/h+=s24EditedNote(b)+s24FixHtml(b,me);/*</S24-EDIT>*/
   h+=b27SettlesHtml(b);
-  const det=[face.gameDate?`<div class="note">Game date: ${esc(face.gameDate)}</div>`:'',/*<S29E-POSTED>*/s29ePosted(b)/*</S29E-POSTED>*/,/*<S25D-TS>*/s25dTsHtml(b)/*</S25D-TS>*/,L.win?`<div class="b27-w">${esc(L.win)}</div>`:'',L.lose?`<div class="b27-l">${esc(L.lose)}</div>`:'',L.rounded?'<div class="mut b27-r">Rounded to a whole number.</div>':'',/*<S25>*/s25CardRd(b)/*</S25>*/].filter(Boolean).join('');
+  const det=[/*<MULTI-BET>*/b.g&&U.doc.bets.filter(x=>x.g===b.g).length>1?`<div class="note">1 of ${U.doc.bets.filter(x=>x.g===b.g).length} placed together</div>`:''/*</MULTI-BET>*/,res?`<div class="note"><b>Result:</b> ${esc(res)}</div>`:'',/*<S29E-POSTED>*/s29ePosted(b)/*</S29E-POSTED>*/,/*<S25D-TS>*/s25dTsHtml(b)/*</S25D-TS>*/,L.win?`<div class="b27-w">${esc(L.win)}</div>`:'',L.lose?`<div class="b27-l">${esc(L.lose)}</div>`:'',L.rounded?'<div class="mut b27-r">Rounded to a whole number.</div>':'',/*<S25>*/s25CardRd(b)/*</S25>*/].filter(Boolean).join('');
   return h+`<div class="b27-foot">${det.trim()?`<details class="b27-more"><summary>Details</summary>${det}</details>`:''}${/*<S25>*/s25RxHtml(b,me)/*</S25>*/}</div></div>`;
 }
 /*<OWES-TABLE>*/
@@ -4392,6 +4397,8 @@ html body .ggrid .gow,html body .ggrid>.gm:not(.gfin)>.gow,html body .ggrid .gbo
 html body .ggrid .gow .opill{max-width:none!important;overflow:visible!important;text-overflow:clip!important;white-space:normal!important}
 html body .b27-c.b27-ready{outline:2px solid #f87171;outline-offset:0}
 html body .b27-ready-t{margin-top:4px;color:#fca5a5;font-weight:800;font-size:13px}
+html body .b27-del{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px}
+html body .b27-del .b27-ready-t{margin-top:0}
 html body .b27-set{margin-top:6px}
 html body .b27-pill{display:inline-flex;align-items:center;gap:6px;max-width:100%;padding:4px 10px 4px 12px;border-radius:999px;border:1px solid var(--line,#334);background:var(--card2,#1b2030);color:var(--tx,#eee);font:inherit;font-size:12.5px;font-weight:700;line-height:1.3;text-align:left}
 html body button.b27-pill{cursor:pointer;appearance:none}
@@ -4437,13 +4444,14 @@ html body footer#foot{padding-bottom:8px!important}
 </style><!--</S29E-PASTE>-->
 <!--<S29E-COPY>--><script>
 /* s29e: the per-bet Copy button copies the whole card as WhatsApp-ready plain text (no link). Same words, numbers (b27Num) and odds math (b27Pay) as the card. */
-function s29eOpenCopy(b){if(!b)return '';const od=(b.odds&&b.odds.a||1)+'\u2013'+(b.odds&&b.odds.b||1),who=(b27Opps(b).map(PN).join(', ')||PN(b.other));
+function s29eOpenCopy(b){if(!b)return '';const who=(b27Opps(b).map(PN).join(', ')||PN(b.other));
   let line2=b27Clean(b.text||'');const rd=typeof s25BetRd==='function'?s25BetRd(b):b.rd;
   if(rd&&rd.k==='spread'&&rd.t&&rd.o){const fl=rd.l===0?'PK':(rd.l>0?'+':'')+rd.l;line2=rd.t+' '+fl+' v '+rd.o}
   else{const m=/^(.*?)\s+([+-]\d+(?:\.\d+)?)\s+(?:vs\.?|v\.?)\s+(.*?)\s+([+-]\d+(?:\.\d+)?)(.*)$/i.exec(line2);if(m&&Math.abs(+m[2]+ +m[4])<0.05)line2=(m[1]+' '+m[2]+' v '+m[3]+(m[5]||'')).replace(/\s+/g,' ').trim();else line2=line2.replace(/\s+(?:vs\.?|versus)\s+/ig,' v ')}
   const iso=(rd&&rd.d)||(SHARED_UI.whenKind(b)==='date'?b.est:'');let when='';if(iso&&/^\d{4}-\d{2}-\d{2}$/.test(iso)){const d=new Date(iso+'T12:00:00');const wd=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()],mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];when=wd+' '+mo+' '+d.getDate()}
   const k=SHARED_UI.whenKind(b),exp=k==='season'?'Season':k==='date'&&b.est?SHARED_UI.estLabel(b.est).replace(/,?\s+\d{4}$/,''):'Tip';
-  return ['\uD83D\uDCA3 $'+b.amt+' '+PN(b.backer)+' v '+who+' \u00b7 '+od+' \uD83D\uDCA3',line2,(when?when+' \u00b7 ':'')+'Exp: '+exp].join('\n')}
+  const aa=+(b.odds&&b.odds.a||1),bb=+(b.odds&&b.odds.b||1),od=aa===1&&bb===1?'':' \u00b7 '+aa+'\u2013'+bb;
+  return ['\uD83D\uDCA3 $'+b.amt+' '+PN(b.backer)+' v '+who+od+' \uD83D\uDCA3',line2,(when?when+' \u00b7 ':'')+'Exp: '+exp].join('\n')}
 function s29eCopyText(b){if(!b)return '';if(b.status==='open'&&b.kind!=='pool')return s29eOpenCopy(b);const day=b27Day(Date.parse(b.created_at)),posted='Posted '+day+(b.postedBy?' by '+PN(b.postedBy):'')+' · STOOPIDS',L=[];
   if(b.kind==='pool'){const done=b.status==='open'&&!!b.back,stTxt=b.status==='void'?POOL_TXT.stVoid:b.back?POOL_TXT.stDone:POOL_TXT.stOpen;
     L.push(POOL_TXT.word+' #'+b.n+' · '+stTxt,b27Clean(b.text),'Buy-in '+b27Num(b.amt)+' · '+PT('who',{n:b.parts.length})+' · Total '+b27Num(b.amt*b.parts.length));
