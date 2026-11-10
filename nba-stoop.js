@@ -5,7 +5,7 @@
 window.NBA_STOOP={
   rule:'500K entry. 2nd place gets money back, winner gets the rest.',
   seasons:[
-    {season:'2023-24',title:'NBA 2023-24 Stoop Bet',
+    {season:'2023-24',title:'STOOPIDS 2023-24',
       standings:[
         {place:'1st',total:281,name:'Kentut',aka:'Ken',note:'Kurt, Murf, Jake owe Ken 500K each'},
         {place:'2nd',total:256,name:'Small Dong',note:'Mark gets his money back'},
@@ -20,7 +20,7 @@ window.NBA_STOOP={
         {name:'Kurmoji',predicted:237,actual:226,teams:[['Cavaliers',50.5,48],['Warriors',47.5,46],['Pacers',38.5,47],['Pelicans',44.5,49],['Spurs',28.5,22],['Pistons',27.5,14]]},
         {name:'Stockrising',predicted:251,actual:224,teams:[['Nuggets',53.5,57],['Heat',44.5,46],['Lakers',46.5,47],['Grizz',45.5,27],['Nets',37.5,32],['Bullets',23.5,15]]}
       ]},
-    {season:'2024-25',title:'NBA 2024-25 Stoop Bet',
+    {season:'2024-25',title:'STOOPIDS 2024-25',
       standings:[
         {place:'1st',total:231,name:'Ken',aka:'Kentut',note:'Jim, Kurt, Mark, Jake owe 500K each to Ken'},
         {place:'2nd',total:216,name:'Neal',aka:'Chalk Cock',note:'Neal gets his money back'},

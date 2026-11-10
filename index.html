@@ -2379,7 +2379,7 @@ function nbaStoopHtml(){
     return `<div class="card"><b>${esc(s.title)}</b><div class="note">${esc(N.rule)}</div>${stand}${mid}</div>`}).join('');
   const rosters=N.seasons.map(s=>`<h2>${esc(s.season)} teams</h2><div class="agrid">`+s.entries.map(o=>`<div class="card"><div class="lb"><div class="who"><b>${who(o)}</b></div><div class="pts">${o.actual}<small>Actual wins</small></div></div><div class="note">Vegas predicted ${o.predicted}</div><div class="sc"><table><tr><th>#</th><th>Team</th><th class="n">Vegas</th><th class="n">Wins</th></tr>`+
       o.teams.map((t,i)=>`<tr><td>${i+1}</td><td>${esc(t[0])}</td><td class="n">${t[1]}</td><td class="n"><b>${t[2]}</b></td></tr>`).join('')+`</table></div></div>`).join('')+`</div>`).join('');
-  return '<h2>NBA Stoop Bet</h2>'+cards+rosters}
+  return '<h2>Stoop bets</h2>'+cards+rosters}
 function vArchive(){
   const A=window.ARCHIVE;
   if(!A)return '<div class="card">Couldn\u2019t load the archive. Try reloading the page.</div>';
