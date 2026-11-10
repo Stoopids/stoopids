@@ -974,7 +974,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.61.0"></script>
+<script src="shared/ui.js?v=1.61.1"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -3509,7 +3509,7 @@ function b27SyncDom(){
   const cb=m.querySelector('[data-b27-custom]');if(cb)cb.setAttribute('aria-pressed',String(U.custom));
   const cw=document.getElementById('b27Cw');if(cw)cw.hidden=!U.custom;
   const ce=document.getElementById('b27Ce');if(ce)ce.textContent=U.oddsErr;
-  const live=document.getElementById('b27Live');if(live)live.innerHTML=b27LiveHtml();
+  const live=document.getElementById('b27Live');if(live)live.innerHTML=live.hasAttribute('data-brief')?b27FormBrief():b27LiveHtml();
   /*<S25>*/const rdb=document.getElementById('s25Rd');if(rdb&&!U.rdOpen)rdb.innerHTML=s25RdHtml();/*</S25>*/
   const sum=document.getElementById('b27Sum');const err=b27FormOK();
   if(sum)sum.textContent=b27Summary();/*<S29D-AUTO>*/s29AutoSoon();/*</S29D-AUTO>*/
@@ -3525,7 +3525,24 @@ const b27SelTxt=()=>U.opps.length?U.opps.length+' selected':'None selected';
 /* "3 bets of 10 each" / "1 bet of 10" */
 const b27CountTxt=()=>{const n=U.opps.length;return n>1?(U.amt?b27Num(U.amt):'?')+' each':n+' bet of '+(U.amt?b27Num(U.amt):'?')};   // bundle: "10 each" / single: "1 bet of 10"
 function b27Summary(){const me=(U.backer||b27Who())?PN(U.backer||b27Who()):'You',o=U.opps.length?U.opps.map(PN).join(', '):'…',od=U.odds?b27OddsShort(U.odds[0],U.odds[1]).replace(/^at /,''):'?',t=b27Clean(U.text);
-  return me+' vs '+o+' · '+(U.opps.length?b27CountTxt():(U.amt?b27Num(U.amt):'?'))+' · '+od+(t?' · '+t:'')}/*</MULTI-BET>*/
+  return me+' vs '+o+' · '+(U.opps.length?b27CountTxt():(U.amt?b27Num(U.amt):'?'))+' · '+od+(t?' · '+t:'')}
+function b27Money(n){const x=Math.round(Number(n)*100)/100;if(!(x>0))return '';return '$'+(Math.abs(x-Math.round(x))<0.001?String(Math.round(x)):x.toFixed(2))}
+function b27FormBrief(){const me=PN(U.backer||b27Who())||'You',opps=(U.opps||[]).map(PN),other=opps.length===1?opps[0]:'the Stoop who accepts',text=b27Clean(U.text||'').replace(/\s+/g,' ').trim();
+  if(!text&&!U.amt)return '';
+  const sp=/^(?:2nd half:\s*)?(.+?)\s+([+-]\d+(?:\.\d+)?)\s+vs\.?\s+(.+?)\s+([+-]\d+(?:\.\d+)?)(?:\s*,\s*(.+))?$/i.exec(text);
+  const ou=/^(?:2nd half:\s*)?(Over|Under)\s+(\d+(?:\.\d+)?)\s+vs\.?\s+(Over|Under)\s+(\d+(?:\.\d+)?)(?:\s*,\s*(.+))?$/i.exec(text);
+  const half=/^2nd half:/i.test(text)?'2nd half: ':'';
+  let match=text||'Write the bet',date='';
+  if(sp){match=half+sp[1]+' '+sp[2]+' vs '+sp[3]+' '+sp[4];date=String(sp[5]||'').split(',')[0].trim()}
+  else if(ou){match=half+ou[1]+' '+ou[2]+' vs '+ou[3]+' '+ou[4];date=String(ou[5]||'').split(',')[0].trim()}
+  const a=U.odds&&U.odds[0],b=U.odds&&U.odds[1],odds=a&&b&&a!==b?' · '+a+'-'+b:'',stake=U.amt?b27Money(U.amt):'';
+  const line1=me+': '+match+(stake?' · '+stake:'')+odds,line2=[date,opps.length===1?'vs '+opps[0]:opps.join(', ')].filter(Boolean).join(' · ');
+  let line3='';
+  if(U.amt&&a&&b){const winC=b27Money(b27Win(U.amt,a,b)),winO=b27Money(U.amt);
+    if(sp)line3=sp[1]+' covers, '+me+' wins '+winC+'. '+sp[3]+' covers, '+other+' wins '+winO+'.';
+    else if(ou)line3=ou[1]+' '+ou[2]+', '+me+' wins '+winC+'. '+ou[3]+' '+ou[4]+', '+other+' wins '+winO+'.';
+    else if(text)line3=text+', '+me+' wins '+winC+'. Otherwise, '+other+' wins '+winO+'.'}
+  return '<b>'+esc(line1)+'</b>'+(line2?'<div>'+esc(line2)+'</div>':'')+(line3?'<div>'+esc(line3)+'</div>':'')}/*</MULTI-BET>*/
 function b27LiveHtml(){
   const me=U.backer||b27Who();if(!me||!U.opps.length||!U.amt||!U.odds)return '';
   const L=b27Lines({backer:me,other:U.opps[0],amt:U.amt,odds:{a:U.odds[0],b:U.odds[1]}});
@@ -3639,8 +3656,8 @@ function vB27(){
      <div class="b27-q"><button type="button" class="s27-tipk" data-tip="odds" aria-expanded="false" onfocus="s27TipShow(this)" onclick="s27WhenClick(this)">4. Odds</button></div><div class="b27-chips" role="group" aria-label="Odds">${PULK.oddsChips.map(([a,b])=>`<button type="button" class="b27-chip" data-b27-odds="${a}-${b}" aria-pressed="${!U.custom&&!!U.odds&&U.odds[0]===a&&U.odds[1]===b}" onclick="b27Odds(${a},${b})">${a===1&&b===1?'Even':a+'-'+b}</button>`).join('')}<button type="button" class="b27-chip cu" data-b27-custom="1" aria-pressed="${U.custom}" onclick="b27CustomOpen()">Custom</button></div>
      <div id="b27Cw" class="b27-cw"${U.custom?'':' hidden'}><label for="b27Co" class="sr">Custom odds</label><input id="b27Co" class="sb-in b27-in" inputmode="text" autocomplete="off" maxlength="9" placeholder="e.g. 7-2 or 10-1" value="${esc(U.customTxt)}" oninput="b27CustomApply(this.value);b27Sync()" onkeydown="if(event.key==='Enter'){event.preventDefault();b27Place()}"><div id="b27Ce" class="b27-bad-t" role="alert">${esc(U.oddsErr)}</div></div></div></div>
      ${b27FormHasGame()?'':SHARED_UI.whenBox({e:esc,kind:U.whenPick?U.wk:'unknown',est:U.est,seasonId:b27Season(),step:'5',game:false,inputId:'b27Est',pick:id=>`onclick="b27When('${id}')"`,dateAttr:'onchange="U.est=this.value;U.whenPick=true"'})}
-     <div class="b27-livebox" id="b27Live" aria-live="polite">${b27LiveHtml()}</div>
-     <div class="b27-sum" id="b27Sum">${esc(b27Summary())}</div><div id="s29Auto">${/*<S29D-AUTO>*/s29AutoHtml(s29AutoForm())/*</S29D-AUTO>*/}</div><div class="b27-bad-t" id="b27Hint"></div>
+     <div class="b27-livebox" id="b27Live" data-brief aria-live="polite">${b27FormBrief()}</div>
+     <div id="s29Auto">${/*<S29D-AUTO>*/s29AutoHtml(s29AutoForm())/*</S29D-AUTO>*/}</div><div class="b27-bad-t" id="b27Hint"></div>
      <button type="button" id="b27Place" class="btn b27-big" onclick="b27Place()"${b27FormOK()?' disabled':''}>${U.editOf?'Update bet':'Place bet'}</button></div>`;
   }
   const bets=U.doc.bets||[];
