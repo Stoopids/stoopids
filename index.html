@@ -975,7 +975,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.64.1"></script>
+<script src="shared/ui.js?v=1.65.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -1683,11 +1683,12 @@ function lineSrc(name){const raw=String(name==null?'':name).replace(/\s+/g,' ').
 function lineTxt(ln,away,home,final){
   if(!ln)return null;
   const fav=ln.fav_name?`<b>${esc(ln.fav_name)}</b> -${ln.sp!=null?ln.sp:'?'}`:'Pick\u2019em';
-  const ou=ln.ou!=null?` · Over/Under ${ln.ou}`:'';
+  const ou=ln.ou!=null?` · O/U ${ln.ou}`:'';
   const src=lineSrc(ln.p);
   return `${final?(ln.type==='close'?'Closing line':'Last line'):'Line'}: ${fav}${ou}${src?` <span class="mut">· ${esc(src)}</span>`:''}`}
+function gWentOt(g){const n=a=>Array.isArray(a)?a.length:0,lv=g&&g._lv&&g._lv.ls;return Math.max(n(g&&g.away&&g.away.ls),n(g&&g.home&&g.home.ls),n(lv&&lv.a),n(lv&&lv.h))>2}
 function gameCard(g){
-  const fin=g.status==='final',live=g.status==='live';
+  const fin=g.status==='final',live=g.status==='live',stLab=fin?(gWentOt(g)?'FINAL/OT':'FINAL'):'';
   const dog=g.line&&g.line.dog;
   const row=(s,other)=>{
     const lose=fin&&!s.win;const tag=g.line?(String(dog)===String(s.id)?' <span title="betting underdog">🐶</span>':(String(g.line.fav)===String(s.id)?' <span title="betting favorite">⭐</span>':'')):'';
@@ -1697,7 +1698,7 @@ function gameCard(g){
     const ch=chip(s.id,{big:1,name:s.short,cn:1}).replace('<span class="cn','<span title="'+fn+'" class="cn').replace(/<\/a>$/,extra+'</a>');/*</SYNC1>*/
     if(window.SHARED_UI&&SHARED_UI.gameRow)return SHARED_UI.gameRow({chip:ch,seed:s.seed,tag,owners:s.owners&&s.owners.length?opills(s.owners):'',scores:(fin||live)?hsHtml(g,s,s===g.away):'',lose,hs1:(fin||live)&&s===g.away&&!!(hsLs(g,g.away)||hsLs(g,g.home))},esc);
     return `<div class="gside${lose?' lose':''}${(fin||live)&&s===g.away&&(hsLs(g,g.away)||hsLs(g,g.home))?' hs1':''}"><div class="nm">${/*<GAMES-EVEN>*/ch/*</GAMES-EVEN>*/}${s.seed?`<span class="seed">(${s.seed})</span>`:''}${tag}</div>${/*<GAMES-EVEN>*/`<div class="gow"${s.owners&&s.owners.length?'':' aria-hidden="true"'}>${opills(s.owners)||'&nbsp;'}</div>`/*</GAMES-EVEN>*/}<div class="sc2">${(fin||live)?hsHtml(g,s,s===g.away):''}</div></div>`};
-  let head=`<span>${fin?'FINAL':live?'<b class="good">LIVE</b>'/*<REFRESH-NOW>*/+(g._lv&&g._lv.detail?' <span class="mut">'+esc(g._lv.detail)+'</span>':'')/*</REFRESH-NOW>*/:'<b>'+/*<GAMES-LOCAL>*/gTime(g)/*</GAMES-LOCAL>*/+'</b>'}</span>`;
+  let head=`<span>${fin?'':live?'<b class="good">LIVE</b>'/*<REFRESH-NOW>*/+(g._lv&&g._lv.detail?' <span class="mut">'+esc(g._lv.detail)+'</span>':'')/*</REFRESH-NOW>*/:'<b>'+/*<GAMES-LOCAL>*/gTime(g)/*</GAMES-LOCAL>*/+'</b>'}</span>`;
   if(g.round)head+=`<span>· ${esc(g.round)}</span>`;else if(g.kind==='conf')head+='<span>· Conf tournament</span>';
   if(g.h2h)head+=`<span class="h2b">🥊 ${esc(g.away.owners.map(PN).join('/'))} vs ${esc(g.home.owners.map(PN).join('/'))}</span>`;
   if(g.civil)head+=`<span class="h2b">🙃 CIVIL WAR (${esc(g.away.owners.join('/'))} wins either way)</span>`;
@@ -1709,8 +1710,8 @@ function gameCard(g){
   const inner=`<div class="gh">${head}<div class="gbtns">${/*<S24-EDIT>*/s29GameBtn(g)/*</S24-EDIT>*/}${/*<QUICK-BET>*/qbBtn(g)/*</QUICK-BET>*/}</div></div>${row(g.away)}${row(g.home,'H')}<div class="gl">${foot}</div>`;
   const betLinks=gBetLinkHtml(g);
   /*<GAMES-LOCAL>*/if(fin){const id=String(g.id),op=gOpen.has(id),sc=s=>`${esc(s.short||s.name||'')} ${s.score!=null?s.score:''}`;
-    /*<STEP5-GAMES>*/if(typeof SHARED_UI!=='undefined'&&SHARED_UI.finalCard){const card=SHARED_UI.finalCard({esc,cls:'gm',cls2:(g.h2h||g.civil?' h2h':'')+(gBetIds().has(id)?' gbet':''),attr:s24Attr('g',g.id),open:op,away:{name:g.away.short||g.away.name||'',score:g.away.score,win:g.away.win},home:{name:g.home.short||g.home.name||'',score:g.home.score,win:g.home.win},upset:g.upset&&g.upset.is,btnAttr:`data-gfin="${esc(id)}"`,btnAttr2:' onclick="gFin(this.dataset.gfin)"',body:inner+(op?boxSlot(g):'')});return betLinks?card.replace(/<\/div>$/,betLinks+'</div>'):card}/*</STEP5-GAMES> fallback below*/
-    return `<div class="gm gfin${op?' open':''}${g.h2h||g.civil?' h2h':''}${/*<SYNC1>*/gBetIds().has(id)?' gbet':''/*</SYNC1>*/}"${s24Attr('g',g.id)}><button type="button" class="gsum" data-gfin="${esc(id)}" aria-expanded="${op}" onclick="gFin(this.dataset.gfin)"><span class="gst">FINAL</span><span class="${g.away.win?'w':''}">${sc(g.away)}</span><span class="mut">·</span><span class="${g.home.win?'w':''}">${sc(g.home)}</span>${g.upset&&g.upset.is?'<span>😱</span>':''}<span class="gch" aria-hidden="true">${op?'▾':'▸'}</span></button><div class="gbody"${op?'':' hidden'}>${inner}${/*<SYNC2-BOX>*/op?boxSlot(g):''/*</SYNC2-BOX>*/}</div>${betLinks}</div>`}/*</GAMES-LOCAL>*/
+    /*<STEP5-GAMES>*/if(typeof SHARED_UI!=='undefined'&&SHARED_UI.finalCard){const card=SHARED_UI.finalCard({esc,cls:'gm',cls2:(g.h2h||g.civil?' h2h':'')+(gBetIds().has(id)?' gbet':''),attr:s24Attr('g',g.id),open:op,status:stLab,away:{name:g.away.short||g.away.name||'',score:g.away.score,win:g.away.win},home:{name:g.home.short||g.home.name||'',score:g.home.score,win:g.home.win},upset:g.upset&&g.upset.is,btnAttr:`data-gfin="${esc(id)}"`,btnAttr2:' onclick="gFin(this.dataset.gfin)"',body:inner+(op?boxSlot(g):'')});return betLinks?card.replace(/<\/div>$/,betLinks+'</div>'):card}/*</STEP5-GAMES> fallback below*/
+    return `<div class="gm gfin${op?' open':''}${g.h2h||g.civil?' h2h':''}${/*<SYNC1>*/gBetIds().has(id)?' gbet':''/*</SYNC1>*/}"${s24Attr('g',g.id)}><button type="button" class="gsum" data-gfin="${esc(id)}" aria-expanded="${op}" onclick="gFin(this.dataset.gfin)"><span class="gst">${esc(stLab)}</span><span class="${g.away.win?'w':''}">${sc(g.away)}</span><span class="mut">·</span><span class="${g.home.win?'w':''}">${sc(g.home)}</span>${g.upset&&g.upset.is?'<span>😱</span>':''}<span class="gch" aria-hidden="true">${op?'▾':'▸'}</span></button><div class="gbody"${op?'':' hidden'}>${inner}${/*<SYNC2-BOX>*/op?boxSlot(g):''/*</SYNC2-BOX>*/}</div>${betLinks}</div>`}/*</GAMES-LOCAL>*/
   return `<div class="gm${g.h2h||g.civil?' h2h':''}${/*<SYNC1>*/gBetIds().has(String(g.id))?' gbet':''/*</SYNC1>*/}"${/*<S24-EDIT>*/s24Attr('g',g.id)/*</S24-EDIT>*/}>${inner}${betLinks}${/*<GAMES-LOCAL>*/'<div class="gsp" aria-hidden="true"></div>'/*</GAMES-LOCAL>*/}${/*<QUICK-BET>*/qbHtml(g)/*</QUICK-BET>*/}</div>`}
 /*<QUICK-BET>*/
 /* Quick bet opens Request a bet with the selected side and spread filled in. It is an invitation, including when both teams are owned. It never fills Write it Up (that form is only for a bet the two Stoops already agreed). Nothing is posted until Request bet. */
@@ -1800,7 +1801,7 @@ function gameLine(g){/* compact line for a team-row game (roster tab) */
     else if(g.upset)up=' <span class="up ns">🐶 Underdog win</span>'}
   const ln=g.ln;if(!ln)return fin?(up?`<div class="mut" style="font-size:12px">${up}</div>`:''):'<div class="mut" style="font-size:12px">📭 line not posted yet</div>';
   const fav=ln.fav_name?`${esc(ln.fav_name)} -${ln.sp!=null?ln.sp:'?'}`:'Pick\u2019em';
-  return `<div class="mut" style="font-size:12px">${fin?(ln.type==='close'?'Closing':'Last'):'Line'}: ${fav}${ln.ou!=null?' · Over/Under '+ln.ou:''} · ${esc(ln.p||'')}${ln.we_dog?' · 🐶 underdog':ln.we_fav?' · ⭐ favorite':''}${up}</div>`}
+  return `<div class="mut" style="font-size:12px">${fin?(ln.type==='close'?'Closing':'Last'):'Line'}: ${fav}${ln.ou!=null?' · O/U '+ln.ou:''} · ${esc(ln.p||'')}${ln.we_dog?' · 🐶 underdog':ln.we_fav?' · ⭐ favorite':''}${up}</div>`}
 
 
 /* ---------- side bets ---------- */
@@ -2708,7 +2709,7 @@ function nbEnsure(){
 function nbShow(list){
   const e=nbEnsure();NB.pending=NB.pending.concat(list);
   e.querySelector('.nbm').textContent=NB.pending.length===1?nbText(NB.pending[0]):NB.pending.length+' new side bets just added';
-  e.hidden=false;clearTimeout(NB.timer);NB.timer=setTimeout(nbHide,10000);
+  e.hidden=false;clearTimeout(NB.timer);NB.timer=setTimeout(nbHide,10000);try{betBlip()}catch(_){}
 }
 function nbHide(){clearTimeout(NB.timer);NB.pending=[];if(NB.el)NB.el.hidden=true}
 try{nbEnsure()}catch(_){}
@@ -3734,7 +3735,7 @@ const RQ=(typeof SHARED_UI!=='undefined'&&SHARED_UI.Requests)?SHARED_UI.Requests
     const nb=Object.assign({id,backer:r.by,other:me,postedBy:me,postedAt:at,amt:r.amt,odds:{a:(r.odds||[1,1])[0],b:(r.odds||[1,1])[1]},text,status:'open',req:r.id,wk:w.wk,est:w.est,sid:w.sid},rd?{rd}:{});
     const back=await b27Write(cur=>{if(cur.some(c=>c.id===id))return cur;let n=b27MaxN(cur);return cur.concat([Object.assign({},nb,{n:n+1,created_at:at,settled_at:null})])},cur=>cur.some(c=>c.id===id));b27Apply(back)},
   watchExpiry:()=>OB_VIEW==='all'||OB_VIEW==='open',reqMatch:r=>s24ReqMatch(r),
-  render:()=>{if(tab==='bets27'&&(OB_VIEW==='request'||OB_VIEW==='form'||OB_VIEW==='all'||OB_VIEW==='open'))render()}}):null;
+  render:()=>{if(tab==='bets27'&&(OB_VIEW==='request'||OB_VIEW==='form'||OB_VIEW==='all'||OB_VIEW==='open'))render()},ping:()=>{try{betBlip()}catch(e){}}}):null;
 /*</STEP8-REQUEST>*/
 let OB_VIEW='form';   // Bets tab: 'form' = 2026-27 (New bet form + bet list), 'tally' = person table + Who owes who for 2026-27
 function obLandEl(){const phone=document.querySelector('.tabs.ob-seg.ob-phone');if(!phone)return null;let n=phone.nextElementSibling;while(n&&n.classList&&(n.classList.contains('ob-seg')||n.classList.contains('s24nf')))n=n.nextElementSibling;if(!n)return null;if(n.classList.contains('entry-pair'))return n.querySelector('.entry-col.is-on .entry-hd')||n.querySelector('.entry-hd');return n.matches('h2,h3')?n:(n.querySelector('h2,h3,.entry-hd')||n)}
@@ -4102,10 +4103,10 @@ function s25PropHtml(b,me){const G=s25Game(b);if(!G)return '';const r=s25BetRd(b
   const p=G.p;if(!p)return '';const ask=!!(S25P.ask&&S25P.ask.id===b.id&&S25P.ask.terms===b27Terms(b)+'\u001f'+p.text+'\u001f'+p.r);
   const btn=`<button type="button" class="ok${ask?' on flash':''}" data-s25-ok="${b.id}" onclick="${ask?`s25Confirm('${b.id}')`:`s25Ask('${b.id}')`}"${U.busy?' disabled':''}>${ask?'Tap again to confirm':'✅ Confirm'}</button> <button type="button" data-s25-fix="${b.id}" aria-pressed="${!!S25P.fix[b.id]}" onclick="s25Fix('${b.id}')">✏️ Fix</button>`;
   return `<div class="s25pp" data-s25-prop="final">${s25SuggestLine(b,p)}<div class="s25sg-act">${btn}</div><div class="note">Nothing is settled until someone taps Confirm.</div></div>`}
-function s25Ask(id){if(U.busy||b27TapLock())return;const b=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===id);if(!b){S25P.ask=null;render();return}const G=s25Game(b);const terms=b27Terms(b)+'\u001f'+(G&&G.p?G.p.text+'\u001f'+G.p.r:'');if(S25P.ask&&S25P.ask.id===id&&S25P.ask.terms===terms)S25P.ask=null;else{S25P.ask={id,terms};try{const t=s29eCopyText(b);if(t)b27CopyNow(t)}catch(e){}}render()}
+function s25Ask(id){if(U.busy||b27TapLock())return;const b=U.doc&&U.doc.bets&&U.doc.bets.find(x=>x.id===id);if(!b){S25P.ask=null;render();return}const G=s25Game(b);const terms=b27Terms(b)+'\u001f'+(G&&G.p?G.p.text+'\u001f'+G.p.r:'');if(S25P.ask&&S25P.ask.id===id&&S25P.ask.terms===terms)S25P.ask=null;else S25P.ask={id,terms};render()}
 function s25HideManual(b){if(S25P.fix[b.id])return false;const G=s25Game(b);return !!(G&&G.p)}
 function s25Fix(id){S25P.fix[id]=!S25P.fix[id];render()}
-async function s25Confirm(id){if(U.busy||b27TapLock())return;const b=U.doc.bets.find(x=>x.id===id),me=b27Who();if(!b||b.backer!==me){U.msg=B27_ONLY;U.msgBad=true;render();return}
+async function s25Confirm(id){if(U.busy||b27TapLock())return;const flash=document.querySelector('[data-s25-ok="'+id+'"]');if(flash)flash.classList.add('on','flash');const b=U.doc.bets.find(x=>x.id===id),me=b27Who();if(!b||b.backer!==me){U.msg=B27_ONLY;U.msgBad=true;render();return}
   const G=s25Game(b);if(!G||!G.p){S25P.ask=null;U.msg='No final score to confirm yet.';U.msgBad=true;render();return}
   const terms=b27Terms(b)+'\u001f'+G.p.text+'\u001f'+G.p.r;if(!S25P.ask||S25P.ask.id!==id||S25P.ask.terms!==terms){S25P.ask=null;b27Stale();return}
   S25P.ask=null;b27SetStatus.skip=true;return b27SetStatus(id,G.p.r,{src:{g:G.g.id,sc:G.p.sc}})}
@@ -4113,6 +4114,8 @@ async function s25Confirm(id){if(U.busy||b27TapLock())return;const b=U.doc.bets.
 function s25Settled(prev,list){const was=new Map(prev.map(b=>[b.id,b.status])),me=b27Who();
   list.forEach(b=>{if(was.get(b.id)==='open'&&['backer','other','push'].includes(b.status)&&!S25P.done.has(b.id)){S25P.done.add(b.id);const side=S25.side(b,me);S25P.log.push({id:b.id,side,ev:'settled'});if(side){S25P.q.push({id:b.id,kind:side});if(!S25P.busy)s25Next()}}})}
 const s25Muted=()=>lsGet(S25P.muteKey)==='1';
+function betBlip(){if(s25Muted())return;try{s25Unlock();const c=S25P.ctx;if(!c||c.state!=='running')return;const o=c.createOscillator(),g=c.createGain(),t=c.currentTime;o.type='sine';o.frequency.value=880;o.connect(g);g.connect(c.destination);g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(0.04,t+0.02);g.gain.exponentialRampToValueAtTime(0.0001,t+0.14);o.start(t);o.stop(t+0.15)}catch(e){}}
+function betPop(text){let el=document.getElementById('betpop');if(!el){el=document.createElement('div');el.id='betpop';el.className='betpop';el.setAttribute('role','status');document.body.appendChild(el)}el.textContent=text;el.hidden=false;clearTimeout(betPop.t);betPop.t=setTimeout(()=>{el.hidden=true},4200)}
 function s25MuteBtn(){const m=s25Muted();return ` <button type="button" class="s25mute" data-s25-mute="1" aria-pressed="${m}" aria-label="Settle sounds ${m?'off':'on'}" title="Settle sounds ${m?'off':'on'}" onclick="s25Mute()">${m?'🔇':'🔊'}</button>`}
 function s25Mute(){try{localStorage.setItem(S25P.muteKey,s25Muted()?'0':'1')}catch(e){}const m=s25Muted();document.querySelectorAll('[data-s25-mute]').forEach(x=>{x.textContent=m?'🔇':'🔊';x.setAttribute('aria-pressed',String(m));x.setAttribute('aria-label','Settle sounds '+(m?'off':'on'));x.title='Settle sounds '+(m?'off':'on')})}
 function s25Unlock(){try{let c=S25P.ctx||(typeof CH!=='undefined'&&CH.ctx)||null;   // one shared AudioContext with the chat blip
@@ -4121,7 +4124,7 @@ function s25Unlock(){try{let c=S25P.ctx||(typeof CH!=='undefined'&&CH.ctx)||null
 ['pointerdown','touchend','keydown'].forEach(t=>document.addEventListener(t,s25Unlock,{capture:true,passive:true}));
 function s25Next(){const it=S25P.q.shift();if(!it){S25P.busy=false;return}S25P.busy=true;let snd=false;
   if(!s25Muted()&&S25P.ctx&&S25P.ctx.state==='running'){try{S25.synth(S25P.ctx,it.kind);snd=true}catch(e){}}   // not unlocked yet / muted: silently no sound
-  S25P.log.push({id:it.id,kind:it.kind,sound:snd,ev:'play'});/*<MEMES-OFF>*/if(!MEMES_ENABLED){setTimeout(s25Next,Math.round(S25.soundLen(it.kind)*1000)+200);return}/*</MEMES-OFF>*/s25Meme(it.kind,()=>setTimeout(s25Next,200))}
+  S25P.log.push({id:it.id,kind:it.kind,sound:snd,ev:'play'});/*<MEMES-OFF>*/if(!MEMES_ENABLED){const b=(U.doc&&U.doc.bets||[]).find(x=>x.id===it.id);betPop(b?'Bet #'+b.n+' settled':'A bet was settled');setTimeout(s25Next,700);return}/*</MEMES-OFF>*/s25Meme(it.kind,()=>setTimeout(s25Next,200))}
 function s25Meme(kind,done){const m=S25.MEMES[kind];if(!m/*<MEMES-OFF>*/||!MEMES_ENABLED/*</MEMES-OFF>*/){done&&done();return}
   const el=document.createElement('div');el.className='s25pop s25-'+kind;el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');el.setAttribute('aria-label',m.cap);el.setAttribute('data-s25-pop',kind);el.tabIndex=-1;
   el.innerHTML=`<div class="s25box">${m.svg}<div class="s25cap">${esc(m.cap)}</div><div class="s25hint">tap to close</div></div>`;
@@ -4693,6 +4696,16 @@ html body .b27-grid>.card:has(> .b27-foot > details.b27-more){min-height:0!impor
  html body #main>.tabs.ob-seg>button{padding:0 6px!important}
 }
 /*</HELD-LAYOUT>*/
+html body .gfin.open>.gsum>span:not(.gst):not(.gch){display:none!important}
+.betpop{position:fixed;left:50%;bottom:calc(var(--chatH, 0px) + 72px);transform:translateX(-50%);z-index:80;max-width:min(420px,calc(100% - 24px));background:#1b2030;color:#fff;border:2px solid #93c5fd;border-radius:12px;padding:10px 14px;font-weight:800;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.betpop[hidden]{display:none}
+.rq-coff{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.rq-off{margin-top:8px}
+@media (max-width:700px){
+ html body #main>.tapf{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;grid-auto-rows:26px!important;gap:4px!important;width:100%!important}
+ html body #main>.tapf>button:first-child{grid-column:1 / -1!important;grid-row:auto!important;width:100%!important;height:26px!important;min-height:26px!important;max-height:26px!important;padding:0 8px!important;font-size:12px!important;line-height:24px!important}
+ html body #main>.tapf>button:not(:first-child){grid-column:auto!important;grid-row:auto!important;width:100%!important;height:26px!important;min-height:26px!important;max-height:26px!important;padding:0 2px!important;font-size:11px!important;line-height:24px!important}
+}
 </style><!--</S29E-PASTE>-->
 <!--<S29E-COPY>--><script>
 /* s29e: the per-bet Copy button copies the whole card as WhatsApp-ready plain text (no link). Same words, numbers (b27Num) and odds math (b27Pay) as the card. */
@@ -4705,18 +4718,19 @@ function s29eOpenCopy(b){if(!b)return '';const who=(b27Opps(b).map(PN).join(', '
   const aa=+(b.odds&&b.odds.a||1),bb=+(b.odds&&b.odds.b||1),od=aa===1&&bb===1?'':' \u00b7 '+aa+'\u2013'+bb;
   return ['\uD83D\uDCA3 $'+b.amt+' '+PN(b.backer)+' v '+who+od+' \uD83D\uDCA3',line2,(when?when+' \u00b7 ':'')+'Exp: '+exp].join('\n')}
 function s29eCopyText(b){if(!b)return '';if(b.status==='open'&&b.kind!=='pool')return s29eOpenCopy(b);const day=b27Day(Date.parse(b.created_at)),posted='Posted '+day+(b.postedBy?' by '+PN(b.postedBy):'')+' · STOOPIDS',L=[];
+  const money=n=>'$'+b27Num(n);
   if(b.kind==='pool'){const done=b.status==='open'&&!!b.back,stTxt=b.status==='void'?POOL_TXT.stVoid:b.back?POOL_TXT.stDone:POOL_TXT.stOpen;
-    L.push(POOL_TXT.word+' #'+b.n+' · '+stTxt,b27Clean(b.text),'Buy-in '+b27Num(b.amt)+' · '+PT('who',{n:b.parts.length})+' · Total '+b27Num(b.amt*b.parts.length));
-    if(b.places)L.push(PT('payLine',{x:b.places.map((a,i)=>s26fPlaceName(i)+' '+b27Num(a)).join(' · ')}));
+    L.push(POOL_TXT.word+' #'+b.n+' · '+stTxt,b27Clean(b.text),'Buy-in '+money(b.amt)+' · '+PT('who',{n:b.parts.length})+' · Total '+money(b.amt*b.parts.length));
+    if(b.places)L.push(PT('payLine',{x:b.places.map((a,i)=>s26fPlaceName(i)+' '+money(a)).join(' · ')}));
     if(done)b27PoolResultLines(b.parts,b.amt,b.back).forEach(l=>L.push(l));else if(b.status==='open'&&!b.places)L.push(POOL_TXT.noPay);
     L.push('Members: '+b.parts.map(PN).join(', '),posted);return L.join('\n')}
   const OP=b27Opps(b),BU=OP.length>1,Bk=PN(b.backer),OPd=OP.map(PN),st=b.status,P=b27Pay(b);
   const stTxt={open:'Open',backer:'Settled',other:'Settled',push:'Wash',void:'Cancelled'}[st]||'Open';
   const win=st==='backer'?' · '+Bk+' won':st==='other'?' · '+(BU?'Managers':OPd[0])+' won':'';
-  if(st==='backer'||st==='other'||st==='push'){const mark=st==='push'?'💦':'💥',head=st==='push'?'Bet #'+b.n+' · Settled':mark+' Bet #'+b.n+' · Settled'+win+' '+mark,lines=[head,b27Clean(b.text),Bk+' vs '+OPd.join(', ')+' · '+b27Num(b.amt)+(BU?' each':'')+b27OddsTail(b.odds&&b.odds.a,b.odds&&b.odds.b)];if(st==='push')lines.push('Result: 💦: nobody owes anything');return lines.join('\n')}
-  L.push('Bet #'+b.n+' · '+stTxt+win,b27Clean(b.text),Bk+' vs '+OPd.join(', ')+' · '+b27Num(b.amt)+(BU?' each':'')+' '+b27OddsShort(b.odds.a,b.odds.b));
-  L.push('If '+Bk+' is right: '+OPd.join(', ')+(BU?' each owe ':' owes ')+Bk+' '+b27Num(P.ifBackerRight));
-  L.push('If '+OPd.join(', ')+(BU?' are':' is')+' right: '+Bk+' owes '+(BU?'each of them ':OPd[0]+' ')+b27Num(P.ifOtherRight));
+  if(st==='backer'||st==='other'||st==='push'){const mark=st==='push'?'💦':'💥',head=st==='push'?'💦 Bet #'+b.n+' · Wash':mark+' Bet #'+b.n+' · Settled'+win+' '+mark,lines=[head,b27Clean(b.text),Bk+' vs '+OPd.join(', ')+' · '+money(b.amt)+(BU?' each':'')+b27OddsTail(b.odds&&b.odds.a,b.odds&&b.odds.b)];if(st==='push')lines.push('Result: 💦: nobody owes anything');return lines.join('\n')}
+  L.push('Bet #'+b.n+' · '+stTxt+win,b27Clean(b.text),Bk+' vs '+OPd.join(', ')+' · '+money(b.amt)+(BU?' each':'')+b27OddsTail(b.odds&&b.odds.a,b.odds&&b.odds.b));
+  L.push('If '+Bk+' is right: '+OPd.join(', ')+(BU?' each owe ':' owes ')+Bk+' '+money(P.ifBackerRight));
+  L.push('If '+OPd.join(', ')+(BU?' are':' is')+' right: '+Bk+' owes '+(BU?'each of them ':OPd[0]+' ')+money(P.ifOtherRight));
   let auto=false;try{auto=st==='open'&&!!b.rd&&s29AutoOK(b.rd)}catch(e){}if(auto)L.push('Suggested winner after the game');
   L.push(posted);return L.join('\n')}
 </script><!--</S29E-COPY>-->
