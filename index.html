@@ -3556,6 +3556,25 @@ function b27SettlesLabel(b){const k=SHARED_UI.whenKind(b);if(k==='game')return '
 function b27CardDate(b){let iso='';try{const rd=s25BetRd(b);if(rd&&rd.d&&/^\d{4}-\d{2}-\d{2}$/.test(rd.d))iso=rd.d}catch(e){}if(!iso&&SHARED_UI.whenKind(b)==='date'&&SHARED_UI.estOk(b.est))iso=b.est;if(!iso)return '';const p=iso.split('-'),mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+p[1]-1],y=+p[0];return mo+' '+Number(p[2])+(y!==new Date().getFullYear()?', '+y:'')}
 function b27Matchup(b){let rd=null;try{rd=s25BetRd(b)}catch(e){}if(rd&&rd.k&&rd.k!=='manual'&&rd.t&&rd.o)return rd.t+' v '+rd.o;let t=b27Clean(b&&b.text||'');try{const dt=S25.dateFrom(t,b&&b.created_at?S25.etDay(b.created_at):undefined);if(dt&&dt.raw)t=t.replace(dt.raw,' ')}catch(e){}return t.replace(/\s+(?:vs\.?|versus)\s+/ig,' v ').replace(/\s+,/g,',').replace(/^[, ]+|[, ]+$/g,'').replace(/\s{2,}/g,' ').trim()}
 function b27SettlesHtml(b){const lab=esc(b27SettlesLabel(b)),open=!!(estDraft&&estDraft.id===b.id);if(!s24EstOwner(b))return `<div class="b27-set"><span class="b27-pill b27-pill-plain">${lab}</span></div>`;return `<div class="b27-set"><button type="button" class="b27-pill" data-settles="${esc(b.id)}" aria-expanded="${open?'true':'false'}" aria-controls="settles-${esc(b.id)}" onclick="s24EditStart('${b.id}')"${U.busy?' disabled':''}>${lab}<span class="b27-chev" aria-hidden="true"></span></button>${open?s24EstHtml(b):''}</div>`}
+function b27DayBit(iso){if(!/^\d{4}-\d{2}-\d{2}$/.test(iso||''))return '';const d=new Date(iso+'T12:00:00');if(isNaN(d))return '';const wd=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()],mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];return wd+' '+mo+' '+d.getDate()}
+function b27WhenBit(iso){const d=new Date(iso);if(!iso||isNaN(d))return '';const wd=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()],mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];return wd+' '+mo+' '+d.getDate()}
+function b27SpreadBit(l){l=Number(l);return l===0?'PK':(l>0?'+':'')+l}
+function b27FinalBit(b){if(b.src&&b.src.sc)return String(b.src.sc).replace(/^\((.*)\)$/,'$1').trim();try{const rd=s25BetRd(b),loc=rd&&s25FromGames(rd);if(loc&&loc.p&&loc.p.sc)return String(loc.p.sc)}catch(e){}return ''}
+function b27SettledDet(b){const st=b.status,OP=b27Opps(b),Bk=PN(b.backer),pay=b27Pay(b),odds=b27OddsFace(b.odds&&b.odds.a,b.odds&&b.odds.b);
+  let line1;
+  if(st==='push')line1='Result: 💦: nobody owes anything';
+  else if(st==='backer'){const owe=OP.length>1?OP.map(PN).join(', ')+' each owe $'+b27Num(pay.ifBackerRight):PN(OP[0])+' owes $'+b27Num(pay.ifBackerRight);line1='Result: '+Bk+' won · '+owe+(odds?' · '+odds:'')}
+  else{const who=OP.length>1?'Managers':PN(OP[0]),owe=OP.length>1?Bk+' owes each $'+b27Num(pay.ifOtherRight):Bk+' owes $'+b27Num(pay.ifOtherRight);line1='Result: '+who+' won · '+owe+(odds?' · '+odds:'')}
+  let rd=null;try{rd=s25BetRd(b)}catch(e){}
+  let match=b27Matchup(b);
+  if(rd&&rd.k==='spread'&&rd.t&&rd.o)match=rd.t+' '+b27SpreadBit(rd.l)+' vs '+rd.o;
+  else if(rd&&rd.k==='total'&&rd.t&&rd.o)match=rd.t+' vs '+rd.o+' '+(rd.ou==='o'?'Over':'Under')+' '+rd.l;
+  else if(rd&&rd.k==='ml'&&rd.t&&rd.o)match=rd.t+' vs '+rd.o;
+  const day=b27DayBit(rd&&rd.d);
+  const line2=match+(day?' · '+day:'');
+  const fin=b27FinalBit(b),line3=fin?'Final: '+fin:'';
+  const set=b27WhenBit(b.settled_at),line4='Posted by '+PN(b.postedBy||b.backer)+(set?' · Settled '+set:'');
+  return `<div class="b27-sd"><b>${esc(line1)}</b><div>${esc(line2)}</div>${line3?`<div>${esc(line3)}</div>`:''}<div class="mut b27-sd4">${esc(line4)}</div></div>`}
 function b27Card(b,me){
   const L=b27Lines(b),OP=b27Opps(b),BU=OP.length>1,isP=me&&(b.backer===me||OP.includes(me)),st=b.status;
   const stTxt={open:'Unsettled',backer:'Settled',other:'Settled',push:'💦',void:'Cancelled'}[st];
@@ -3579,7 +3598,8 @@ function b27Card(b,me){
   h+=who+/*<S25>*/s25PropHtml(b,me)/*</S25>*/;
   /*<S24-EDIT>*/h+=s24EditedNote(b)+s24FixHtml(b,me);/*</S24-EDIT>*/
   h+=b27SettlesHtml(b);
-  const det=[/*<MULTI-BET>*/b.g&&U.doc.bets.filter(x=>x.g===b.g).length>1?`<div class="note">1 of ${U.doc.bets.filter(x=>x.g===b.g).length} placed together</div>`:''/*</MULTI-BET>*/,res?`<div class="note"><b>Result:</b> ${esc(res)}</div>`:'',/*<S29E-POSTED>*/s29ePosted(b)/*</S29E-POSTED>*/,/*<S25D-TS>*/s25dTsHtml(b)/*</S25D-TS>*/,L.win?`<div class="b27-w">${esc(L.win)}</div>`:'',L.lose?`<div class="b27-l">${esc(L.lose)}</div>`:'',L.rounded?'<div class="mut b27-r">Rounded to a whole number.</div>':'',/*<S25>*/s25CardRd(b)/*</S25>*/].filter(Boolean).join('');
+  const settled=st==='backer'||st==='other'||st==='push';
+  const det=settled&&b.kind!=='pool'?b27SettledDet(b):[/*<MULTI-BET>*/b.g&&U.doc.bets.filter(x=>x.g===b.g).length>1?`<div class="note">1 of ${U.doc.bets.filter(x=>x.g===b.g).length} placed together</div>`:''/*</MULTI-BET>*/,res?`<div class="note"><b>Result:</b> ${esc(res)}</div>`:'',/*<S29E-POSTED>*/s29ePosted(b)/*</S29E-POSTED>*/,/*<S25D-TS>*/s25dTsHtml(b)/*</S25D-TS>*/,L.win?`<div class="b27-w">${esc(L.win)}</div>`:'',L.lose?`<div class="b27-l">${esc(L.lose)}</div>`:'',L.rounded?'<div class="mut b27-r">Rounded to a whole number.</div>':'',/*<S25>*/s25CardRd(b)/*</S25>*/].filter(Boolean).join('');
   return h+`<div class="b27-foot">${det.trim()?`<details class="b27-more"><summary>Details</summary>${det}</details>`:''}${/*<S25>*/s25RxHtml(b,me)/*</S25>*/}</div></div>`;
 }
 /*<OWES-TABLE>*/
@@ -4471,6 +4491,8 @@ html body .b27-foot>.b27-more{grid-column:1;grid-row:1;margin-top:0;min-width:0}
 html body .b27-foot>.s25rxr{grid-column:2;grid-row:1;margin:0;justify-content:flex-end}
 html body .b27-more{margin-top:8px}
 html body .b27-more summary{cursor:pointer;font-weight:700}
+html body .b27-sd{font-size:13.5px;line-height:1.4}
+html body .b27-sd4{font-size:12px;margin-top:2px}
 html body .s24fb{padding:8px!important}
 html body .s24fb .row2{display:flex;flex-wrap:wrap;gap:4px}
 html body .s24fb select,html body .s24fb input.sb-in{height:30px;min-height:30px;font-size:12px;flex:1 1 120px;min-width:0}
