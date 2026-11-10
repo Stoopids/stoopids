@@ -2551,9 +2551,42 @@ function profCmHtml(){profCmLoad();
   if(!PROFCM.checked)return `<div class="card s29e-cm"><h3>Commissioner</h3><p class="prof-note">Checking the commissioner lock…</p></div>`;
   if(PROFCM.err)return `<div class="card s29e-cm"><h3>Commissioner</h3><p class="prof-note">Couldn’t read the commissioner lock. Nothing was changed.</p></div>`;
   if(!PROFCM.hasPass)return `<div class="card s29e-cm"><h3>Commissioner</h3><p class="prof-note">No commissioner passcode is set yet. It is set in the draft room, not here.</p><p style="margin:8px 0 0"><a class="btn" href="${esc(DRAFT_URL)}">Open the draft room</a></p></div>`;
-  if(!profCmUnlocked())return `<div class="card s29e-cm"><h3>Commissioner</h3><p class="prof-note">The draft-room passcode unlocks links to the tools that already exist. This page does not add any.</p><label class="sr" for="profPin">Commissioner passcode</label><input id="profPin" class="sb-in" type="password" autocomplete="off" placeholder="Passcode" style="margin-top:8px" onkeydown="if(event.key==='Enter'){event.preventDefault();profCmGo()}"><div class="prof-note" role="alert">${esc(PROFCM.msg||'')}</div><button type="button" class="btn" style="margin-top:8px" onclick="profCmGo()">Unlock</button></div>`;
+  if(!profCmUnlocked())return `<div class="card s29e-cm"><h3>Commissioner</h3><p class="prof-note">The draft-room passcode unlocks the commissioner tools.</p><label class="sr" for="profPin">Commissioner passcode</label><input id="profPin" class="sb-in" type="password" autocomplete="off" placeholder="Passcode" style="margin-top:8px" onkeydown="if(event.key==='Enter'){event.preventDefault();profCmGo()}"><div class="prof-note" role="alert">${esc(PROFCM.msg||'')}</div><button type="button" class="btn" style="margin-top:8px" onclick="profCmGo()">Unlock</button></div>`;
   const admin=location.pathname+'?admin=1';
-  return `<div class="card s29e-cm"><h3>Commissioner</h3><p class="prof-note">Unlocked on this device. These open the tools that already exist.</p><p style="margin:8px 0 0"><a class="btn" href="${esc(DRAFT_URL)}">Draft room</a></p><p class="prof-note">Admin tab: start, pause, undo, reset, order, clock, and the wheel. Same passcode.</p><p style="margin:8px 0 0"><a class="btn" href="${esc(admin+'#about')}">Site admin view</a></p><p class="prof-note">Adds ?admin=1. Accent colour, data health, export, and the admin delete and clear-chat buttons.</p><button type="button" class="btn sec" style="margin-top:8px" onclick="profCmLock()">Lock</button></div>`}
+  return `<div class="card s29e-cm" id="cmTools"><h3>Commissioner</h3><p class="prof-note">Unlocked on this device.</p><p style="margin:8px 0 0"><a class="btn" href="${esc(DRAFT_URL)}">Draft room</a></p><p class="prof-note">Admin tab: start, pause, undo, reset, order, clock, and the wheel. Same passcode.</p><p style="margin:8px 0 0"><a class="btn" href="${esc(admin+'#about')}">Site admin view</a></p><p class="prof-note">Adds ?admin=1. Accent colour, data health, export, and the admin delete and clear-chat buttons.</p>${cmToolsHtml()}<button type="button" class="btn sec" style="margin-top:8px" onclick="profCmLock()">Lock</button></div>`}
+const CM_URL='https://textdb.dev/api/data/stoopids-commish-2627-9eaa4f66';
+const CM={ready:false,loading:false,looks:{},off:[],access:{},msg:'',arm:null};
+function cmBlank(){return {v:1,looks:{},off:[],access:{}}}
+function cmNorm(d){const names=b27OwnerNames(),looks={},access={};if(d&&d.looks&&typeof d.looks==='object')names.forEach(n=>{const L=d.looks[n];if(L&&String(L.team||'').trim()&&String(L.emoji||'').trim())looks[n]={team:String(L.team).trim().slice(0,24),emoji:String(L.emoji).trim().slice(0,16)}});const off=Array.isArray(d&&d.off)?d.off.map(String).filter(n=>names.includes(n)):[];if(d&&d.access&&typeof d.access==='object')names.forEach(n=>{if(d.access[n]!=null)access[n]=Math.max(0,Math.floor(+d.access[n]||0))});return {v:1,looks,off,access}}
+function cmGens(){try{const v=JSON.parse(lsGet('stoopids_acc_gen')||'{}');return v&&typeof v==='object'?v:{}}catch(e){return {}}}
+function cmGen(name){return +(cmGens()[name]||0)}
+function cmGenSet(name,n){const g=cmGens();g[name]=n;lsSet('stoopids_acc_gen',JSON.stringify(g))}
+function cmAllowed(name){if((CM.off||[]).includes(name))return false;return cmGen(name)>=(+((CM.access||{})[name]||0))}
+function cmApply(){(D&&D.owners||[]).forEach(o=>{const L=CM.looks&&CM.looks[o.name];if(!L)return;if(L.emoji)o.emoji=L.emoji;if(L.team){if(!OWNER_DISP[o.name])OWNER_DISP[o.name]={team:L.team,person:PN(o.name)};else OWNER_DISP[o.name].team=L.team}});const me=legacyOwner(lsGet('stoopids_who')||'');if(me&&me!==PRES.guestKey&&!cmAllowed(me)){try{localStorage.removeItem('stoopids_who')}catch(e){}if(typeof PS!=='undefined'&&PS)PS.who=null;CM.kicked=true}}
+async function cmGet(){const r=await fetch(CM_URL,{cache:'no-store'});if(!r.ok)return cmBlank();const t=await r.text();if(!t||!String(t).trim())return cmBlank();let d=JSON.parse(t);if(typeof d==='string')d=JSON.parse(d);return cmNorm(d)}
+function cmLoad(){if(CM.loading||CM.ready||!D)return;CM.loading=true;cmGet().then(d=>{CM.looks=d.looks;CM.off=d.off;CM.access=d.access;CM.ready=true;CM.loading=false;cmApply();if(CM.kicked&&typeof presAsk==='function')presAsk(true);if(typeof render==='function')render()}).catch(()=>{CM.loading=false;CM.ready=true})}
+async function cmWrite(mut){if(!profCmUnlocked())return;CM.msg='Saving…';render();
+  try{for(let i=0;i<2;i++){const cur=await cmGet(),next=cmNorm(mut(cur)),body=JSON.stringify(next);const w=await fetch(CM_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body});if(!w.ok)throw 0;const back=cmNorm(await cmGet());if(JSON.stringify(back)===JSON.stringify(next)){CM.looks=back.looks;CM.off=back.off;CM.access=back.access;CM.ready=true;cmApply();CM.msg='Saved.';render();return}}}catch(e){}
+  CM.msg='Not saved. Try again.';render()}
+function cmSaveLook(name){if(!profCmUnlocked()||!b27OwnerNames().includes(name))return;const row=document.querySelector('.cm-row[data-n="'+name.replace(/"/g,'')+'"]');if(!row)return;const team=(row.querySelector('[data-cm-team]')||{}).value.trim(),emoji=(row.querySelector('[data-cm-emoji]')||{}).value.trim();if(!team||!emoji){CM.msg='Enter a team name and an emoji.';render();return}if(team.length>24||Array.from(emoji).length>8){CM.msg='Keep the team name to 24 characters and the emoji short.';render();return}return cmWrite(doc=>{const looks=Object.assign({},doc.looks);looks[name]={team,emoji};return Object.assign({},doc,{looks})})}
+function cmStoop(name,on){if(!profCmUnlocked()||!b27OwnerNames().includes(name))return;return cmWrite(doc=>{const off=(doc.off||[]).filter(n=>n!==name);if(!on)off.push(name);return Object.assign({},doc,{off})})}
+function cmReset(name){if(!profCmUnlocked()||!b27OwnerNames().includes(name))return;return cmWrite(doc=>{const access=Object.assign({},doc.access);access[name]=(+access[name]||0)+1;return Object.assign({},doc,{access})})}
+function cmBetKey(b,act){const o=b.odds||{};return b27Hash([b.id,b.status,b.text,b.amt,o.a,o.b,b.backer,b.other,(b.opponents||[]).join(','),b.kind||'',act].join('\u001f'))}
+function cmArm(id,act){if(!profCmUnlocked()||U.busy)return;const b=(U.doc&&U.doc.bets||[]).find(x=>x.id===id);if(!b||!/^(backer|other|push|void)$/.test(act)||b.status===act){CM.arm=null;render();return}const key=cmBetKey(b,act);if(CM.arm&&CM.arm.id===id&&CM.arm.act===act&&CM.arm.key===key)return cmBetGo(b,act,key);CM.arm={id,act,key};CM.msg='';render()}
+async function cmBetGo(b0,act,key){if(!profCmUnlocked())return;if(cmBetKey(b0,act)!==key){CM.arm=null;CM.msg='That bet changed. Look at it again.';render();return}CM.arm=null;U.busy=true;render();
+  try{const back=await b27Write(cur=>cur.map(x=>{if(x.id!==b0.id)return x;if(cmBetKey(x,act)!==key)throw new Error('stale');return Object.assign({},x,{status:act,settled_at:new Date().toISOString()})}),cur=>{const x=cur.find(y=>y.id===b0.id);return !!(x&&x.status===act)});b27Apply(back,'force');CM.msg=act==='void'?'Bet #'+b0.n+' voided.':'Bet #'+b0.n+' updated.'}catch(e){CM.arm=null;CM.msg='That bet was not changed.'}
+  U.busy=false;render()}
+function cmToolsHtml(){if(!profCmUnlocked())return '';const names=b27OwnerNames();
+  const look=names.map(n=>{const o=(D.owners||[]).find(x=>x.name===n)||{},L=CM.looks&&CM.looks[n],team=L&&L.team||TN(n),emoji=L&&L.emoji||o.emoji||'';
+    return `<div class="cm-row" data-n="${esc(n)}"><b>${esc(PN(n))}</b><label>Team name<input class="sb-in" data-cm-team value="${esc(team)}" maxlength="24"></label><label>Emoji<input class="sb-in" data-cm-emoji value="${esc(emoji)}" maxlength="16"></label><button type="button" class="btn" data-cm="look" data-n="${esc(n)}">Save name and emoji</button></div>`}).join('');
+  const stoops=names.map(n=>{const off=(CM.off||[]).includes(n);return `<div class="cm-row"><b>${esc(PN(n))}</b><button type="button" class="btn sec" data-cm="stoop" data-n="${esc(n)}" data-on="${off?'1':'0'}">${off?'Turn sign-in on':'Turn sign-in off'}</button></div>`}).join('');
+  const resets=names.map(n=>`<div class="cm-row"><b>${esc(PN(n))}</b><button type="button" class="btn sec" data-cm="reset" data-n="${esc(n)}">Reset access</button></div>`).join('');
+  const bets=(U.state==='ok'&&U.doc&&U.doc.bets)||null;
+  const betHtml=!bets?'<p class="prof-note">The ledger is still loading.</p>':bets.slice().sort((a,b)=>(b.n||0)-(a.n||0)).map(b=>{const acts=[];if(b.kind!=='pool'){if(b.status!=='backer')acts.push(['backer',PN(b.backer)+' won']);if(b.status!=='other')acts.push(['other',(b27Opps(b).length>1?'Managers':PN(b.other||''))+' won']);if(b.status!=='push')acts.push(['push','Wash'])}if(b.status!=='void')acts.push(['void','Void']);
+    const btns=acts.map(([act,lab])=>{const armed=CM.arm&&CM.arm.id===b.id&&CM.arm.act===act&&CM.arm.key===cmBetKey(b,act);return `<button type="button" class="btn sec" data-cm="bet" data-id="${esc(b.id)}" data-act="${act}">${armed?'Tap again to confirm #'+b.n:esc(lab)}</button>`}).join('');
+    return `<div class="cm-bet"><b>#${b.n}</b> <span class="mut">${esc(b.status)}</span><div>${esc(String(b.text||'').replace(/\s+/g,' ').slice(0,80))}</div><div class="cm-acts">${btns}</div></div>`}).join('');
+  return `<h3>Team names and emojis</h3><p class="prof-note">This is the name and emoji on My team look.</p>${look}<h3>Stoops</h3><p class="prof-note">Sign-in off keeps them on the standings. They cannot pick that name until it is back on.</p>${stoops}<h3>Fix or void a bet</h3><p class="prof-note">Tap once, then tap again. The second tap only counts for that exact bet.</p>${betHtml}<h3>Reset access</h3><p class="prof-note">That manager has to pick their name again on each device.</p>${resets}${CM.msg?`<p class="prof-note" role="status">${esc(CM.msg)}</p>`:''}`}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-cm]');if(!b||!profCmUnlocked())return;const k=b.dataset.cm,n=b.dataset.n;if(k==='look')cmSaveLook(n);else if(k==='stoop')cmStoop(n,b.dataset.on==='1');else if(k==='reset')cmReset(n);else if(k==='bet')cmArm(b.dataset.id,b.dataset.act)});
 function vProfile(){const view=typeof VIEW_ONLY!=='undefined'&&VIEW_ONLY;
   if(view)return `<div class="card s29e-prof"><h2 style="margin:0">👤 Profile</h2><p style="margin:6px 0 0">You're viewing a read-only link.</p></div>`+vShare();
   const me=(typeof b27Who==='function'&&b27Who())||null,o=me&&D&&D.owners?D.owners.find(x=>x.name===me):null;
@@ -2768,7 +2801,7 @@ function presDev(){if(PS.dev)return PS.dev;let d=lsGet('stoopids_dev');if(!d||!/
 const LEGACY_OWNER={'Poo':'Paul','Party Paul':'Paul'/*<OWNER-NAMES>*/,'Mark':'Dirty Draymond','Jake':'Stock','Stock Rising':'Stock','Kurt':'Kurmoji','Ken':'Kentut','Cockchalkrock':'Murf','Murfcockchalkrock':'Murf','Jim':'Nasty','Nasty Peacock':'Nasty','Scotty':'En Fuego'/*</OWNER-NAMES>*/};const legacyOwner=n=>(typeof n==='string'&&Object.prototype.hasOwnProperty.call(LEGACY_OWNER,n))?LEGACY_OWNER[n]:n;   /* owner was "Poo", then "Party Paul", now "Paul": old saved identity / textdb records (presence, chat, 2026-27 bets) under either old name still resolve to "Paul" (merged, never two Pauls) */
 /*<OWNER-NAMES>*/try{const w0=localStorage.getItem('stoopids_who');if(w0&&legacyOwner(w0)!==w0)localStorage.setItem('stoopids_who',legacyOwner(w0))}catch(e){}   // migrate an old saved identity once/*</OWNER-NAMES>*/
 const presOwners=()=>(D&&D.owners||[]);
-function presWho(){const w=legacyOwner(lsGet('stoopids_who'));if(!w)return null;if(w===PRES.guestKey)return w;return presOwners().some(o=>o.name===w)?w:null}
+function presWho(){const w=legacyOwner(lsGet('stoopids_who'));if(!w)return null;if(w===PRES.guestKey)return w;if(!presOwners().some(o=>o.name===w))return null;if(CM.ready&&!cmAllowed(w))return null;return w}
 const presMyKey=()=>PS.who===PRES.guestKey?'g-'+presDev():PS.who;
 function presAgo(ms){const m=Math.floor(ms/60000);if(m<1)return 'just now';if(m<60)return m+'m ago';const h=Math.floor(m/60);if(h<24)return h+'h ago';if(h<48)return 'yesterday';return Math.floor(h/24)+'d ago'}
 function presParse(txt){try{if(!txt||!txt.trim())return {};let d=JSON.parse(txt);if(typeof d==='string')d=JSON.parse(d);if(!d||typeof d!=='object'||Array.isArray(d))return {};const o={};for(const k0 in d){const k=legacyOwner(k0),t=d[k0]&&Number(d[k0].t);if(isFinite(t)&&t>0&&!(o[k]&&o[k].t>=t)){o[k]={t};/*<CHAT-BAR>*/const y=Number(d[k0].y);if(isFinite(y)&&y>0)o[k].y=y;/*</CHAT-BAR>*/}}return o}catch(e){return {}}}
@@ -2797,6 +2830,8 @@ function presAsk(first){
 function presPick(w){
   const d=document.getElementById('pwho');if(d)d.remove();
   if(!w)return;
+  if(w&&w!==PRES.guestKey&&CM.ready&&(CM.off||[]).includes(w))return;
+  if(w&&w!==PRES.guestKey)cmGenSet(w,+((CM.access||{})[w]||0));
   if(w!==PS.who){const oldKey=PS.who&&presMyKey();PS.who=w;lsSet('stoopids_who',w);if(oldKey&&oldKey!==presMyKey()&&PS.map[oldKey]&&oldKey.indexOf('g-')===0)delete PS.map[oldKey]}
   presBeat();presTick();
   try{if(typeof render==='function')render()}catch(e){}
@@ -3187,7 +3222,7 @@ function b27Tally(bets){
   return {owes,per,openTotal:openC,openCount:openN,lost,won,M/*<POOL>*/,poolOwes/*</POOL>*/};
 }
 /* ---- state / network (own key only) ---- */
-const b27Who=()=>{const w=PS.who||legacyOwner(lsGet('stoopids_who'));return b27OwnerNames().includes(w)?w:null};
+const b27Who=()=>{const w=PS.who||legacyOwner(lsGet('stoopids_who'));if(!b27OwnerNames().includes(w))return null;if(CM.ready&&!cmAllowed(w))return null;return w};
 const b27Rid=()=>{const a=new Uint8Array(6);(window.crypto||window.msCrypto).getRandomValues(a);return /*<V25>*/'v25'/*</V25>*/+Array.from(a,b=>('0'+b.toString(16)).slice(-2)).join('')};
 /*<V25>*/
 /* version marker (s25c). Old (pre-s25) clients rebuild every record from known fields only, so a marker must live in fields they keep:
@@ -4368,7 +4403,7 @@ function s24FilterBar(bets,me,ph){const p=s24FP(),st=s24FSt(),ac=s24FAc(),wh=s24
 let ST_CHK=0;function stRefresh(btn){/*REFRESH-NOW shared*/if(window.SHARED_UI&&SHARED_UI.refreshNow){ST_CHK=Date.now();LV.fails=0;LV.paused=false;return SHARED_UI.refreshNow('.segref:not(.gref)',[()=>new Promise(r=>load(r)),()=>lvCheck(true)],()=>render())}if(btn){btn.disabled=true;btn.textContent='Refreshing\u2026'}ST_CHK=Date.now();try{lvManual()}catch(e){}load();setTimeout(()=>{try{const u=document.getElementById('stUpd'),d=genDate();if(u)u.textContent='Updated '+(d?relAgo(Date.now()-d.getTime()):'')+(window.SHARED_UI&&SHARED_UI.checkedText?SHARED_UI.checkedText(ST_CHK):' \u00b7 checked just now');const b=document.querySelector('.segref');if(b){b.disabled=false;b.innerHTML='&#8635; Refresh'}}catch(e){}},1500)}/*</ST-REFRESH>*/
 function load(cb){
   const s=document.createElement('script');s.src=(DEMO?'demo/':'')+'data.js?v='+Date.now();
-  s.onload=()=>{D=window.STOOPIDS_DATA;D._base=D.bets;applyShared();/*<REFRESH-NOW>*/try{lvReapply()}catch(e){}/*</REFRESH-NOW>*/render();try{presInit()}catch(e){}try{chatInit()}catch(e){}/*<REFRESH-NOW>*/try{lvInit()}catch(e){}/*</REFRESH-NOW>*/
+  s.onload=()=>{D=window.STOOPIDS_DATA;D._base=D.bets;applyShared();/*<REFRESH-NOW>*/try{lvReapply()}catch(e){}/*</REFRESH-NOW>*/try{cmLoad()}catch(e){}render();try{presInit()}catch(e){}try{chatInit()}catch(e){}/*<REFRESH-NOW>*/try{lvInit()}catch(e){}/*</REFRESH-NOW>*/
     /*<BETS-2627>*/try{b27Init()}catch(e){}/*</BETS-2627>*//*<S24-EDIT>*/try{s24AfterLoad()}catch(e){}/*</S24-EDIT>*/if(typeof cb==='function')cb()};   /* chatInit = CHAT hook */
   s.onerror=()=>{if(typeof cb==='function')cb();if(!D)$('#main').innerHTML='<div class="card">Couldn\u2019t load the latest data. Try reloading the page.'+(ADMIN?' (data.js missing: run <code>python3 refresh.py</code> first.)':'')+'</div>'};
   document.head.appendChild(s);
@@ -4751,6 +4786,11 @@ html body .gfin.open>.gsum>span:not(.gst):not(.gch){display:none!important}
 .betpop[hidden]{display:none}
 .rq-coff{display:flex;flex-direction:column;gap:6px;margin-top:8px}
 .rq-off{margin-top:8px}
+.cm-row,.cm-bet{margin-top:10px;padding-top:8px;border-top:1px solid var(--line,#2d3548)}
+.cm-row label{display:block;margin-top:6px;font-size:13px;font-weight:700}
+.cm-row .sb-in,.cm-acts{margin-top:4px}
+.cm-acts{display:flex;flex-wrap:wrap;gap:6px}
+.cm-acts .btn,.cm-row .btn{margin-top:6px}
 @media (max-width:700px){
  html body #main>.tapf{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;grid-auto-rows:26px!important;gap:4px!important;width:100%!important}
  html body #main>.tapf>button:first-child{grid-column:1 / -1!important;grid-row:auto!important;width:100%!important;height:26px!important;min-height:26px!important;max-height:26px!important;padding:0 8px!important;font-size:12px!important;line-height:24px!important}
