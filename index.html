@@ -535,7 +535,8 @@ nav a.nt{text-decoration:none}
 
 /*</S29D-GGRID>*/
 /*<S29D-NEWBETS>*/ /* Bets tab: yellow new-bets count top-right, red chat count with a small 💬 top-left (existing .nu, label prefixed) */
-nav a.nt .s29nb{position:absolute;top:1px;right:2px;min-width:15px;background:#FFD400;color:#111;border-radius:99px;font-size:9px;font-weight:900;line-height:1;padding:2px 4px;text-align:center;pointer-events:none}
+nav a.nt .s29nb,nav .nm-b>.s29nb,.nm-i>.s29nb{position:absolute;top:1px;right:2px;min-width:15px;background:#FFD400;color:#111;border-radius:99px;font-size:9px;font-weight:900;line-height:1;padding:2px 4px;text-align:center;pointer-events:none}
+nav .nm-b.on>.s29nb,.nm-i.on>.s29nb{background:#111;color:#FFD400}
 /*</S29D-NEWBETS>*/
 /*<S29D-HNB>*/.s29-hnb>h3{margin:12px 0 6px;font-size:1.05em}.s29-hnb{scroll-margin-top:8px}/*</S29D-HNB>*/
 /*<S29D-NAV>*/ /* main nav tabs ~+12% (font, icon, height, padding) over the s29c sizes; same breakpoints as before; must come after every other nav rule */
@@ -974,7 +975,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.64.0"></script>
+<script src="shared/ui.js?v=1.64.1"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -2602,13 +2603,16 @@ function s29NbUpdate(){const nav=$('#nav');if(!nav||!D)return;if(s29NbListOn())l
   if(!n){if(e)e.remove();return}if(!e){e=document.createElement('b');e.className='s29nb';e.setAttribute('aria-hidden','true');a.appendChild(e)}e.textContent=n>99?'99+':String(n);a.title=n+' new bet'+(n>1?'s':'')}
 setInterval(()=>{try{s29NbUpdate()}catch(_){}},3000);
 /*</S29D-NEWBETS>*/
-/*<STEP12-RECAPNEW>*/ // yellow count on the Recap tab = weekly write-ups (RECAPS) this device hasn't seen yet. Seen = a list of date|title keys in localStorage stoopids_recap_seen. First load ever: everything already there counts as seen (no flood). Opening Recap marks all seen. localStorage only, nothing remote.
-const S12RC_KEY='stoopids_recap_seen';
+/*<STEP12-RECAPNEW>*/ // yellow count on the Recap tab = weekly write-ups (RECAPS) this device has not opened yet. Same pill as the Bets new-bet count. Seen = date|title keys in localStorage, written only when Recap is actually open. A missing key means none seen (Week 1 counts). v1 (stoopids_recap_seen) marked the list on first paint, so it could not tell "opened" from "loaded". localStorage only, nothing remote.
+const S12RC_KEY='stoopids_recap_seen2';
 const s12RcKeys=()=>(typeof RECAPS!=='undefined'?RECAPS:[]).filter(x=>x&&x.title).map(x=>String(x.date||'')+'|'+String(x.title));
-function s12RcSeen(){let v=null;try{v=JSON.parse(lsGet(S12RC_KEY)||'null')}catch(_){}if(!Array.isArray(v)){v=s12RcKeys();lsSet(S12RC_KEY,JSON.stringify(v))}return v}
-function s12RcUpdate(){const nav=$('#nav');if(!nav||!D)return;const ks=s12RcKeys(),sn=s12RcSeen();if(tab==='recap'&&ks.some(k=>!sn.includes(k)))lsSet(S12RC_KEY,JSON.stringify(ks));
-  const a=nav.querySelector('a.nt[data-tab="recap"]');if(!a)return;const n=tab==='recap'?0:ks.filter(k=>!sn.includes(k)).length;let e=a.querySelector('.s29nb');
-  if(!n){if(e){e.remove();a.removeAttribute('title')}return}if(!e){e=document.createElement('b');e.className='s29nb';e.setAttribute('aria-hidden','true');a.appendChild(e)}e.textContent=n>99?'99+':String(n);a.title=n+' new recap'+(n>1?'s':'')}
+function s12RcSeen(){let v=null;try{v=JSON.parse(lsGet(S12RC_KEY)||'null')}catch(_){}return Array.isArray(v)?v:[]}
+function s12RcMark(el,n){if(!el)return;let e=el.querySelector(':scope>.s29nb');if(!n){if(e)e.remove();return}if(!e){e=document.createElement('b');e.className='s29nb';e.setAttribute('aria-hidden','true');el.appendChild(e)}e.textContent=n>99?'99+':String(n)}
+function s12RcUpdate(){const nav=$('#nav');if(!nav||!D)return;const ks=s12RcKeys();let sn=s12RcSeen();
+  if(tab==='recap'&&!(sn.length===ks.length&&ks.every(k=>sn.includes(k)))){sn=ks.slice();try{lsSet(S12RC_KEY,JSON.stringify(sn))}catch(_){}}
+  const n=tab==='recap'?0:ks.filter(k=>!sn.includes(k)).length,a=nav.querySelector('a.nt[data-tab="recap"]');
+  s12RcMark(a,n);if(a){if(n)a.title=n+' new recap'+(n>1?'s':'');else if(a.title&&/new recap/.test(a.title))a.removeAttribute('title')}
+  s12RcMark(nav.querySelector(':scope>.nm-b'),n);s12RcMark(document.querySelector('.nm-i[data-tab="recap"]'),n)}
 setInterval(()=>{try{s12RcUpdate()}catch(_){}},3000);
 /*</STEP12-RECAPNEW>*/
 /*<S29D-HNB>*/ // the form tips' link opens How to bet AT the New bet section (#howto-newbet); only this link skips the open-at-top rule
