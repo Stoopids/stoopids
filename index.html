@@ -3575,6 +3575,25 @@ function b27SettlesLabel(b){const k=SHARED_UI.whenKind(b);if(k==='game')return '
 function b27CardDate(b){let iso='';try{const rd=s25BetRd(b);if(rd&&rd.d&&/^\d{4}-\d{2}-\d{2}$/.test(rd.d))iso=rd.d}catch(e){}if(!iso&&SHARED_UI.whenKind(b)==='date'&&SHARED_UI.estOk(b.est))iso=b.est;if(!iso)return '';const p=iso.split('-'),mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+p[1]-1],y=+p[0];return mo+' '+Number(p[2])+(y!==new Date().getFullYear()?', '+y:'')}
 function b27Matchup(b){let rd=null;try{rd=s25BetRd(b)}catch(e){}if(rd&&rd.k&&rd.k!=='manual'&&rd.t&&rd.o)return rd.t+' v '+rd.o;let t=b27Clean(b&&b.text||'');try{const dt=S25.dateFrom(t,b&&b.created_at?S25.etDay(b.created_at):undefined);if(dt&&dt.raw)t=t.replace(dt.raw,' ')}catch(e){}return t.replace(/\s+(?:vs\.?|versus)\s+/ig,' v ').replace(/\s+,/g,',').replace(/^[, ]+|[, ]+$/g,'').replace(/\s{2,}/g,' ').trim()}
 function b27SettlesHtml(b){const lab=esc(b27SettlesLabel(b)),open=!!(estDraft&&estDraft.id===b.id);if(!s24EstOwner(b))return `<div class="b27-set"><span class="b27-pill b27-pill-plain">${lab}</span></div>`;return `<div class="b27-set"><button type="button" class="b27-pill" data-settles="${esc(b.id)}" aria-expanded="${open?'true':'false'}" aria-controls="settles-${esc(b.id)}" onclick="s24EditStart('${b.id}')"${U.busy?' disabled':''}>${lab}<span class="b27-chev" aria-hidden="true"></span></button>${open?s24EstHtml(b):''}</div>`}
+function b27DayBit(iso){if(!/^\d{4}-\d{2}-\d{2}$/.test(iso||''))return '';const d=new Date(iso+'T12:00:00');if(isNaN(d))return '';const wd=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()],mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];return wd+' '+mo+' '+d.getDate()}
+function b27WhenBit(iso){const d=new Date(iso);if(!iso||isNaN(d))return '';const wd=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()],mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];return wd+' '+mo+' '+d.getDate()}
+function b27SpreadBit(l){l=Number(l);return l===0?'PK':(l>0?'+':'')+l}
+function b27FinalBit(b){if(b.src&&b.src.sc)return String(b.src.sc).replace(/^\((.*)\)$/,'$1').trim();try{const rd=s25BetRd(b),loc=rd&&s25FromGames(rd);if(loc&&loc.p&&loc.p.sc)return String(loc.p.sc)}catch(e){}return ''}
+function b27GameLine(b){let rd=null;try{rd=s25BetRd(b)}catch(e){}
+  let match=b27Matchup(b);
+  if(rd&&rd.k==='spread'&&rd.t&&rd.o)match=rd.t+' '+b27SpreadBit(rd.l)+' vs '+rd.o;
+  else if(rd&&rd.k==='total'&&rd.t&&rd.o)match=rd.t+' vs '+rd.o+' '+(rd.ou==='o'?'Over':'Under')+' '+rd.l;
+  else if(rd&&rd.k==='ml'&&rd.t&&rd.o)match=rd.t+' vs '+rd.o;
+  const day=b27DayBit(rd&&rd.d);return match+(day?' · '+day:'')}
+function b27SettledDet(b){const st=b.status,OP=b27Opps(b),Bk=PN(b.backer),pay=b27Pay(b),odds=b27OddsFace(b.odds&&b.odds.a,b.odds&&b.odds.b);
+  let line1;
+  if(st==='push')line1='Result: 💦: nobody owes anything';
+  else if(st==='backer'){const owe=OP.length>1?OP.map(PN).join(', ')+' each owe $'+b27Num(pay.ifBackerRight):PN(OP[0])+' owes $'+b27Num(pay.ifBackerRight);line1='Result: '+Bk+' won · '+owe+(odds?' · '+odds:'')}
+  else{const who=OP.length>1?'Managers':PN(OP[0]),owe=OP.length>1?Bk+' owes each $'+b27Num(pay.ifOtherRight):Bk+' owes $'+b27Num(pay.ifOtherRight);line1='Result: '+who+' won · '+owe+(odds?' · '+odds:'')}
+  const line2=b27GameLine(b);
+  const fin=b27FinalBit(b),line3=fin?'Final: '+fin:'';
+  const set=b27WhenBit(b.settled_at),line4='Posted by '+PN(b.postedBy||b.backer)+(set?' · Settled '+set:'');
+  return `<div class="b27-sd"><b>${esc(line1)}</b><div>${esc(line2)}</div>${line3?`<div>${esc(line3)}</div>`:''}<div class="mut b27-sd4">${esc(line4)}</div></div>`}
 function b27Card(b,me){
   const L=b27Lines(b),OP=b27Opps(b),BU=OP.length>1,isP=me&&(b.backer===me||OP.includes(me)),st=b.status;
   const stTxt={open:'Unsettled',backer:'Settled',other:'Settled',push:'💦',void:'Cancelled'}[st];
@@ -3583,8 +3602,12 @@ function b27Card(b,me){
   const res=BU?(st==='backer'?Bk+' won ('+OPd.join(', ')+' each owe '+Bk+' '+b27Num(b27Pay(b).ifBackerRight)+tail+')':st==='other'?'Managers won ('+Bk+' owes each of them '+b27Num(b27Pay(b).ifOtherRight)+tail+')':st==='push'?'💦: nobody owes anything':'')
    :st==='backer'?Bk+' won ('+Ot+' owes '+b27Num(b27Pay(b).ifBackerRight)+tail+')':st==='other'?Ot+' won ('+Bk+' owes '+b27Num(b27Pay(b).ifOtherRight)+tail+')':st==='push'?'💦: nobody owes anything':'';
   const ready=b27Ready(b),face=b27Face(b),whenDate=b27CardDate(b),oddsFace=b27OddsFace(b.odds&&b.odds.a,b.odds&&b.odds.b);
-  let h=`<div class="card b27-c${ready?' b27-ready':''}${U.flashBet===b.id?' act-flash':''}"${/*<S24-EDIT>*/s24Attr('b',b.id)/*</S24-EDIT>*/}><div class="s24hd"><b>Bet #${b.n} (${stTxt}) ${b27Num(b.amt)}${BU?' each':''}${whenDate?' - '+esc(whenDate):''}</b>${/*<S24-EDIT>*/s24FixBadge(b)/*</S24-EDIT>*/}${/*<S24-EDIT>*/s24LinkBtn('bets',b.id,'bet')/*</S24-EDIT>*/}</div>
-   <div class="b27-t${/*<CARD-SIZE>*/' s25cl'+(S25P.more[b.id]?' open':'')+'" data-s25-t="'+b.id/*</CARD-SIZE>*/}">${esc(b27Matchup(b))}</div>${/*<CARD-SIZE>*/`<button type="button" class="s25more" data-s25-more="${b.id}" aria-expanded="${!!S25P.more[b.id]}" onclick="s25More('${b.id}')" hidden>${S25P.more[b.id]?'less':'more'}</button>`/*</CARD-SIZE>*/}<div class="b27-m">${esc(Bk)} v ${esc(OPd.join(', '))}${oddsFace?' '+esc(oddsFace):''}</div>`;
+  const settled=st==='backer'||st==='other'||st==='push';
+  const title=settled?(st==='push'?`Bet #${b.n} · 💦 Wash`:`Bet #${b.n} · ${st==='backer'?Bk:(BU?'Managers':Ot)} won · $${b27Num(b.amt)}${BU?' each':''}`):`Bet #${b.n} (${stTxt}) ${b27Num(b.amt)}${BU?' each':''}${whenDate?' - '+whenDate:''}`;
+  const faceLine=settled?b27GameLine(b):b27Matchup(b);
+  const whoLine=Bk+' v '+OPd.join(', ')+(settled||!oddsFace?'':(' '+oddsFace));
+  let h=`<div class="card b27-c${ready?' b27-ready':''}${U.flashBet===b.id?' act-flash':''}"${/*<S24-EDIT>*/s24Attr('b',b.id)/*</S24-EDIT>*/}><div class="s24hd"><b>${esc(title)}</b>${/*<S24-EDIT>*/s24FixBadge(b)/*</S24-EDIT>*/}${/*<S24-EDIT>*/s24LinkBtn('bets',b.id,'bet')/*</S24-EDIT>*/}</div>
+   <div class="b27-t${settled?'':/*<CARD-SIZE>*/' s25cl'+(S25P.more[b.id]?' open':'')+'" data-s25-t="'+b.id/*</CARD-SIZE>*/}">${esc(faceLine)}</div>${settled?'':/*<CARD-SIZE>*/`<button type="button" class="s25more" data-s25-more="${b.id}" aria-expanded="${!!S25P.more[b.id]}" onclick="s25More('${b.id}')" hidden>${S25P.more[b.id]?'less':'more'}</button>`/*</CARD-SIZE>*/}<div class="b27-m">${esc(whoLine)}</div>`;
   let del='',who='';
   if(st==='open'&&(isP||ADMIN)){
     const ask=w=>U.askSettle&&U.askSettle.id===b.id&&U.askSettle.what===w&&U.askSettle.terms===b27Terms(b);
@@ -3597,9 +3620,9 @@ function b27Card(b,me){
   else if(st==='open')h+=`<div class="note">Awaiting settlement</div>`;
   h+=who+/*<S25>*/s25PropHtml(b,me)/*</S25>*/;
   /*<S24-EDIT>*/h+=s24EditedNote(b)+s24FixHtml(b,me);/*</S24-EDIT>*/
-  h+=b27SettlesHtml(b);
-  const det=[/*<MULTI-BET>*/b.g&&U.doc.bets.filter(x=>x.g===b.g).length>1?`<div class="note">1 of ${U.doc.bets.filter(x=>x.g===b.g).length} placed together</div>`:''/*</MULTI-BET>*/,res?`<div class="note"><b>Result:</b> ${esc(res)}</div>`:'',/*<S29E-POSTED>*/s29ePosted(b)/*</S29E-POSTED>*/,/*<S25D-TS>*/s25dTsHtml(b)/*</S25D-TS>*/,L.win?`<div class="b27-w">${esc(L.win)}</div>`:'',L.lose?`<div class="b27-l">${esc(L.lose)}</div>`:'',L.rounded?'<div class="mut b27-r">Rounded to a whole number.</div>':'',/*<S25>*/s25CardRd(b)/*</S25>*/].filter(Boolean).join('');
-  return h+`<div class="b27-foot">${det.trim()?`<details class="b27-more"><summary>Details</summary>${det}</details>`:''}${/*<S25>*/s25RxHtml(b,me)/*</S25>*/}</div></div>`;
+  if(!settled)h+=b27SettlesHtml(b);
+  const det=settled&&b.kind!=='pool'?b27SettledDet(b)+s24FixLink(b,me):[/*<MULTI-BET>*/b.g&&U.doc.bets.filter(x=>x.g===b.g).length>1?`<div class="note">1 of ${U.doc.bets.filter(x=>x.g===b.g).length} placed together</div>`:''/*</MULTI-BET>*/,res?`<div class="note"><b>Result:</b> ${esc(res)}</div>`:'',/*<S29E-POSTED>*/s29ePosted(b)/*</S29E-POSTED>*/,/*<S25D-TS>*/s25dTsHtml(b)/*</S25D-TS>*/,L.win?`<div class="b27-w">${esc(L.win)}</div>`:'',L.lose?`<div class="b27-l">${esc(L.lose)}</div>`:'',L.rounded?'<div class="mut b27-r">Rounded to a whole number.</div>':'',/*<S25>*/s25CardRd(b)/*</S25>*/].filter(Boolean).join('');
+  return h+`<div class="b27-foot">${det.trim()?`<details class="b27-more"${U.fixOpen===b.id?' open':''}><summary>Details</summary>${det}</details>`:''}${/*<S25>*/s25RxHtml(b,me)/*</S25>*/}</div></div>`;
 }
 /*<OWES-TABLE>*/
 const b27E1=e=>{e=String(e||'');try{return new Intl.Segmenter(undefined,{granularity:'grapheme'}).segment(e)[Symbol.iterator]().next().value.segment}catch(_){return Array.from(e)[0]||''}};   // first emoji only (phones: two-emoji names stay short)
@@ -3652,12 +3675,14 @@ function b27GameFinal(b){try{const rd=s25BetRd(b);if(!rd||rd.k==='manual'||!rd.d
 function b27Ready(b){if(!s24IsOpen(b))return false;const k=SHARED_UI.whenKind(b),today=SHARED_UI.estToday();if(k==='date')return !!(SHARED_UI.estOk(b.est)&&b.est<=today);if(k==='game')return b27GameFinal(b);return false}
 function b27Cards(list,me){return (list||[]).map(b=>b.kind==='pool'?b27PoolCard(b,me):b27Card(b,me)).join('')}
 function b27Grouped(list,me){const names=[['game',''],['season','End of season'],['date','Set date'],['unknown','Not sure yet']];let left=60,h='',n=0;names.forEach(([k,lab])=>{const g=b27SortSoon(list.filter(b=>b27WhenGroup(b)===k));if(!g.length||left<=0)return;const show=g.slice(0,left);left-=show.length;n+=g.length;h+=(lab?`<h3 class="b27-gh">${lab}</h3>`:'')+`<div class="b27-grid">${b27Cards(show,me)}</div>`});if(n>60)h+='<p class="note">Showing the first 60 in these groups.</p>';return h}
+function b27Fine(){
+  const live=U.state==='ok'?' <span class="good">\u25cf live</span> \u00b7 anyone with the link can add bets (no logins). Play nice.':U.state==='error'?' <span class="bad">\u25cf can\u2019t reach the bets ledger right now</span>':'';
+  return `<div class="b27-fine" id="b27Note">${esc(BETS_DISCLAIMER)} This page just <b>records</b> who bet what and who owes whom.${live}</div>`}
 function vB27(){
   b27Seen();b27DropStale();
   const me=b27Who(),names=b27OwnerNames(),others=names.filter(n=>n!==me);
   /*<BETS-INTRO-BOTTOM>*/let h='';   // headline removed: New bet sits right under the season toggle + Share row
-  const introBottom=`<div class="card b27-intro"><div class="note b27-note" id="b27Note">${esc(BETS_DISCLAIMER)}</div><div class="note" style="margin-top:6px">This page just <b>records</b> who bet what and who owes whom.</div>
-   <div class="note" id="b27Top" style="margin-top:6px">${U.state==='ok'?'<span class="good">● live</span> · anyone with the link can add bets (no logins). Play nice.':U.state==='error'?'<span class="bad">● can’t reach the bets ledger right now</span>':/*<BALL-LOADER>*/''/*</BALL-LOADER>*/}</div></div>`;/*</BETS-INTRO-BOTTOM>*/
+  /*</BETS-INTRO-BOTTOM>*/
   if(U.msg)h+=`<div class="card ${U.msgBad?'b27-bad':'b27-ok'}" role="status">${esc(U.msg)}${U.clip?`<pre class="rq-fb">${esc(U.clip)}</pre><div class="b27-act"><button type="button" class="btn sec" onclick="b27ClipRetry()">Copy</button></div>`:''}${/*<MULTI-BET>*/U.undoG&&b27GroupUndoable(U.undoG).length>1?`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27UndoGroup('${U.undoG}','${b27GroupHash(U.undoG)}')"${U.busy?' disabled':''}>↩ Undo all ${b27GroupUndoable(U.undoG).length} bets (5 min)</button></div>`:''/*</MULTI-BET>*/}</div>`;
   /*<ALL-BETS>*/if(OB_VIEW==='all'){}/*list only: form lives on Write it Up*/else/*</ALL-BETS>*/ if(!me){h+=`<div class="card note">Set who you are on <a href="${esc(s24Href('profile'))}" onclick="return s24NavClick(event,'profile')">Profile</a> before you write a bet.</div>`}
   /*<POOL>*/else if(U.kind==='pool'){h+=b27PoolShell()}/*</POOL>*/
@@ -3681,15 +3706,14 @@ function vB27(){
      <button type="button" id="b27Place" class="btn b27-big" onclick="b27Place()"${b27FormOK()?' disabled':''}>${U.editOf?'Update bet':'Place bet'}</button></div>`;
   }
   const bets=U.doc.bets||[];
-  /*<BALL-LOADER>*/if(U.state==='init'){h+=ballLoader();h+=introBottom;return h}   // ledger still loading: loader instead of an empty owes table / "No bets yet/*</BALL-LOADER>*/
-  /*<ALL-BETS>*/if(OB_VIEW!=='all'){h+=introBottom;return h}/*Write it Up = form only; the list is on All bets*//*</ALL-BETS>*/
+  /*<BALL-LOADER>*/if(U.state==='init'){h+=ballLoader();return h}   // ledger still loading: loader instead of an empty owes table / "No bets yet/*</BALL-LOADER>*/
+  /*<ALL-BETS>*/if(OB_VIEW!=='all')return h/*Write it Up = form only; the list is on All bets*//*</ALL-BETS>*/
   /*<OWES-TABLE>*//*<S26F-WIU>*/// Write it Up: no Who Owes Who grid / Net per manager here; they live on Tally only (vTally, unchanged)/*</S26F-WIU>*//*</OWES-TABLE>*/
   /*<S26F-WIU> 'Still open' line removed from Write it Up (its closing </div> belonged to the removed owes card) </S26F-WIU>*/
   /*<S24-EDIT>*/{const FL=s24Filter(bets,me).filter(b=>!b27Done(b)||(S24.sub&&b.id===S24.sub));
   const ready=b27SortSoon(FL.filter(b27Ready)),ids=new Set(ready.map(b=>b.id)),rest=FL.filter(b=>!ids.has(b.id));
   if(ready.length)h+=`<section id="b27Ready"><h2>Ready to settle <span class="note">${ready.length}</span></h2><div class="b27-grid">${b27Cards(ready,me)}</div></section>`;
   h+=`<h2>All bets (${rest.length}${rest.length!==bets.length?' of '+bets.length:''})${/*<S25>*/s25MuteBtn()/*</S25>*/}</h2><p class="note">Agreed bets awaiting settlement. Ready ones are marked above.</p>`+s24FilterBar(bets,me)+(rest.length?s24ChronoList(rest,me):bets.length?'<div class="card note s24fe">No unsettled bets match this filter.</div>':'<div class="card note">No bets yet. Be the first.</div>');}/*</S24-EDIT>*/
-  /*<BETS-INTRO-BOTTOM>*/h+=introBottom;/*</BETS-INTRO-BOTTOM>*/
   return h;
 }
 /*<ONE-BETS>*/
@@ -3737,8 +3761,9 @@ function vTally(){/* STEP11: Tally = 2026-27 Bets ledger (b27Tally / U.doc), not
     const L=[];names.forEach((a,x)=>names.slice(x+1).forEach(b=>{const d=M(a,b)-M(b,a);if(d>0)L.push([a,b,d]);else if(d<0)L.push([b,a,-d])}));
     if(L.length)h+=`<div class="card" data-tally-settle><b>If settled today</b>${L.map(([a,b,d])=>`<div class="tset">${esc(PN(a))} pays ${esc(PN(b))} ${b27Num(d)}</div>`).join('')}</div>`;
   }
-  const me=b27Who(),done=(bets||[]).filter(b27Done),shown=done.filter(b=>s24Match(b,me,{st:'all'})||(S24.sub&&b.id===S24.sub));
-  h+=`<h2>Settled bets <span class="note">${shown.length}</span></h2>`+s24FilterBar(done,me,'Search settled bets')+(shown.length?b27Grouped(b27SortSoon(shown).slice(0,60),me):'<div class="card note">No settled bets match.</div>');
+  const me=b27Who(),done=(bets||[]).filter(b27Done),shown=done.filter(b=>s24Match(b,me,{st:'all',ac:'any',wh:'any'})||(S24.sub&&b.id===S24.sub));
+  const byN=shown.slice().sort((a,b)=>(b.n||0)-(a.n||0));
+  h+=`<h2>Settled bets <span class="note">${shown.length}</span></h2>`+s24FilterBar(done,me,'Search settled bets')+(shown.length?`<div class="b27-grid">${b27Cards(byN.slice(0,60),me)}</div>`+(byN.length>60?'<p class="note">Showing the first 60.</p>':''):'<div class="card note">No settled bets match.</div>');
   return h}
 /*</BETS-TALLY>*/
 function obToggle(){
@@ -3764,8 +3789,8 @@ function obOldNote(){   // read-only replacement of the old shared-ledger card (
     return `<div class="entry-pair" data-focus="${focus}"><div class="entry-col entry-rq${focus==='request'?' is-on':''}">${rq}</div><div class="entry-col entry-wiu${focus==='form'?' is-on':''}">${wiu}</div></div>`}
   VIEWS.bets27=()=>{if(OB_VIEW==='open')OB_VIEW='all';
     const entry=OB_VIEW==='form'||OB_VIEW==='request';
-    if(OB_VIEW==='tally')return obToggle()+vTally();
-    return obToggle()+(entry?entryPair():((typeof RQ!=='undefined'&&RQ?RQ.pinned(false,true):'')+vB27()))};VIEWS.bets=()=>obToggle()+vBets();NAVSHORT.bets27='Bets';/*</ONE-BETS>*/
+    if(OB_VIEW==='tally')return obToggle()+vTally()+b27Fine();
+    return obToggle()+(entry?entryPair():((typeof RQ!=='undefined'&&RQ?RQ.pinned(false,true):'')+vB27()))+b27Fine()};VIEWS.bets=()=>obToggle()+vBets();NAVSHORT.bets27='Bets';/*</ONE-BETS>*/
   if(typeof nbBadge==='function'){const _b=nbBadge;nbBadge=function(k){return k==='bets27'?/*<ONE-BETS>*/(tab==='bets'||tab==='bets27'?'':b27Badge()||_b('bets'))/*</ONE-BETS>*/:_b(k)}}      // 'new' badge on the one Bets tab: 2026-27 (own watermark) or the old ledger; inside the tab the toggle shows it on the other segment
   const pp=presPick;presPick=function(w){pp(w);try{U.opps=[];/*<POOL>*/U.pp=[];/*</POOL>*/if(tab==='bets27')render()}catch(e){}};
   /* toast: own text, and 'View' opens this tab when every pending item is a Bets 26-27 bet (wraps the existing functions; nothing in them is edited) */
@@ -4233,11 +4258,13 @@ function s24FixBadge(b){return b.fxh&&b.fxh.some(e=>e.out==='confirmed'/*<CREATO
   if(set&&fx){h+=`<div class="b27-fx" data-s24-fx="${b.id}"><div><b>🛠 Result change asked</b> by ${esc(fx.by)}: ${esc(s24ResLbl(b,b.status))} → <b>${esc(s24ResLbl(b,fx.r))}</b>. Only ${esc(PN(b.backer))} (who placed it) can change the result.</div>`;
     if(cr)h+=`<div class="b27-act"><button type="button" class="btn b27-b" data-s24-fxok="${b.id}" onclick="s24FixGo('${b.id}','ok','${fx.i}','','${b27Hash(b27Terms(b))}')"${dis}>✅ Change it</button><button type="button" class="btn sec b27-b" data-s24-fxno="${b.id}" onclick="s24FixGo('${b.id}','no','${fx.i}','','${b27Hash(b27Terms(b))}')"${dis}>✖ Keep the result</button></div>`;
     h+='</div>'}
-  if(set&&cr){const open=U.fixOpen===b.id;
-    h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" data-s24-fix="${b.id}" aria-expanded="${open}" onclick="U.fixOpen=U.fixOpen==='${b.id}'?null:'${b.id}';render()"${dis}>✏️ Fix result</button></div>`;
-    if(open)h+=`<div class="b27-fx" data-s24-fixpick="${b.id}"><div class="note">Wrong result? Now: <b>${esc(s24ResLbl(b,b.status))}</b>. Pick the right one; it changes right away.</div><div class="b27-act">${S24R.filter(r=>r!==b.status).map(r=>`<button type="button" class="btn sec b27-b" data-s24-fxr="${r}" onclick="s24FixGo('${b.id}','req','','${r}','${b27Hash(b27Terms(b))}')"${dis}>${esc(s24ResLbl(b,r))}</button>`).join('')}</div></div>`}
   if(b.fxh&&b.fxh.length){const W={confirmed:'confirmed',declined:'declined',withdrawn:'withdrawn',replaced:'replaced by a newer request',fixed:'fixed by the creator'};
     h+=`<details class="b27-fxh"><summary>Result changes (${b.fxh.length})</summary><ul>${b.fxh.slice().reverse().map(e=>`<li>${esc(e.by)} ${e.out==='fixed'?'changed':'asked'} ${esc(s24ResLbl(b,e.from))} → ${esc(s24ResLbl(b,e.r))}${e.at?' · '+esc(s24When(e.at)):''} — <b>${esc(W[e.out])}</b>${e.ans?' by '+esc(e.ans):''}${e.at2&&e.out!=='fixed'?' · '+esc(s24When(e.at2)):''}</li>`).join('')}</ul></details>`}
+  return h}
+function s24FixLink(b,me){if(!b||b.kind==='pool'||!me||me!==b.backer||!S24R.includes(b.status))return '';
+  const dis=U.busy?' disabled':'',open=U.fixOpen===b.id;
+  let h=`<button type="button" class="b27-fixlink" data-s24-fix="${b.id}" aria-expanded="${open}" onclick="U.fixOpen=U.fixOpen==='${b.id}'?null:'${b.id}';render()"${dis}>Fix result</button>`;
+  if(open)h+=`<div class="b27-fx" data-s24-fixpick="${b.id}"><div class="note">Wrong result? Now: <b>${esc(s24ResLbl(b,b.status))}</b>. Pick the right one; it changes right away.</div><div class="b27-act">${S24R.filter(r=>r!==b.status).map(r=>`<button type="button" class="btn sec b27-b" data-s24-fxr="${r}" onclick="s24FixGo('${b.id}','req','','${r}','${b27Hash(b27Terms(b))}')"${dis}>${esc(s24ResLbl(b,r))}</button>`).join('')}</div></div>`;
   return h}
 /*</CREATOR-SETTLE>*/
 /* ---- Bets filter (2026-27 view): the older STOOPIDS two-select design (Wagers list: Everyone / person + status), plus "Me" and "Waiting on me".
@@ -4282,11 +4309,11 @@ function s24FilterBar(bets,me,ph){const p=s24FP(),st=s24FSt(),ac=s24FAc(),wh=s24
   const opt=(list,cur,extra)=>list.map(([k,t])=>`<option value="${k}"${k===cur?' selected':''}>${esc(t)}${extra&&extra[k]!=null?' ('+extra[k]+')':''}</option>`).join('');
   const nMine=s24Count(bets,me,{ac:'mine'}),nTheirs=s24Count(bets,me,{ac:'theirs'});
   return `<div class="card s24fb">${tabs}<div class="row2"><select id="sbPerson" aria-label="Person" onchange="s24FSetP(this.value)"><option value="all"${p==='all'?' selected':''}>Everyone</option><option value="me"${p==='me'?' selected':''}>Me</option>${b27OwnerNames().map(o=>`<option value="${esc(o)}"${o===p?' selected':''}>${esc(PN(o))}</option>`).join('')}</select>
-   ${settledOnly?'':`<select id="sbStatus" aria-label="Status" onchange="s24FSetS(this.value)">${opt(S24FST,st)}</select>`}
+   ${settledOnly?'':`<select id="sbStatus" aria-label="Status" onchange="s24FSetS(this.value)">${opt(S24FST,st)}</select>
    <select id="sbAction" aria-label="Action needed" onchange="s24FSetA(this.value)">${opt(S24FAC,ac,{mine:nMine,theirs:nTheirs})}</select>
-   <select id="sbWhen" aria-label="When" onchange="s24FSetW(this.value)">${opt(S24FWH,wh)}</select>
+   <select id="sbWhen" aria-label="When" onchange="s24FSetW(this.value)">${opt(S24FWH,wh)}</select>`}
    <input id="sbQ" class="sb-in" aria-label="Search bets" placeholder="${esc(ph||'search terms…')}" value="${esc(s24Q)}" onchange="s24FSetQ(this.value)"></div>
-   <div class="note" style="margin-top:6px"><a href="${esc(s24Href('howto'))}" onclick="return s24HowFilters(event)">How these filters work →</a>${(ac==='mine'||ac==='theirs')&&!me?' Pick who you are to use My turn or Their turn.':''}</div></div>`}
+   ${settledOnly?'':`<div class="note" style="margin-top:6px"><a href="${esc(s24Href('howto'))}" onclick="return s24HowFilters(event)">How these filters work →</a>${(ac==='mine'||ac==='theirs')&&!me?' Pick who you are to use My turn or Their turn.':''}</div>`}</div>`}
 
 /*</S24-EDIT>*/
 /*<ST-REFRESH>*/// Standings Refresh: re-fetch data.js + an immediate live-scores check, with visible feedback ("Refreshing…", then "checked just now")
@@ -4562,6 +4589,24 @@ html body .b27-foot>.b27-more{grid-column:1;grid-row:1;margin-top:0;min-width:0}
 html body .b27-foot>.s25rxr{grid-column:2;grid-row:1;margin:0;justify-content:flex-end}
 html body .b27-more{margin-top:8px}
 html body .b27-more summary{cursor:pointer;font-weight:700}
+html body .b27-sd{font-size:13.5px;line-height:1.4}
+html body .b27-sd4{font-size:12px;margin-top:2px}
+html body .b27-fixlink{display:inline-block;margin-top:6px;padding:0;border:0;background:none;color:var(--mut,#9aa3b5);font:inherit;font-size:12px;font-weight:700;text-decoration:underline;cursor:pointer}
+@media (min-width:701px){
+ html body .card.sc.tt-w{width:fit-content!important;max-width:100%;margin-left:auto!important;margin-right:auto!important}
+ html body table.tt{width:auto!important;max-width:860px;table-layout:fixed}
+ html body table.tt .tt-p{width:5.6rem}
+ html body table.tt th.tt-o{width:3.8rem;text-align:center;padding-left:2px;padding-right:2px}
+ html body table.tt th.n{width:3.3rem;text-align:center}
+ html body .tt-k{width:fit-content;max-width:100%;margin-left:auto;margin-right:auto}
+}
+html body table.tt th,html body table.tt td,html body table.tt thead th,html body table.tt tbody tr:nth-child(even) td,html body table.tt tbody tr:nth-child(even) th,html body table.tt .tt-p,html body table.tt tbody tr:nth-child(even) .tt-p{background:var(--card,#1b2030)!important;color:var(--tx,#eee);opacity:1}
+html body table.tt th,html body table.tt td{border-right:1px solid rgba(255,255,255,.08)!important;border-bottom:1px solid rgba(255,255,255,.08)!important}
+html body table.tt th.tt-s1,html body table.tt td.tt-s1{border-left:1px solid rgba(255,255,255,.08)!important}
+html body table.tt td.tt-d{background:color-mix(in srgb,var(--card,#1b2030) 78%,black)!important}
+html body table.tt td.bad{background:var(--card,#1b2030)!important}
+html body table.tt td.bad,html body table.tt b.bad{color:var(--bad,#ef4444)!important}
+html body table.tt .good{color:var(--good,#22c55e)!important}
 html body .s24fb{padding:8px!important}
 html body .s24fb .row2{display:flex;flex-wrap:wrap;gap:4px}
 html body .s24fb select,html body .s24fb input.sb-in{height:30px;min-height:30px;font-size:12px;flex:1 1 120px;min-width:0}
@@ -4632,6 +4677,20 @@ html body .s24fb .row2>*{flex:0 1 auto!important;width:auto!important;max-width:
  html body .entry-pair{display:block!important}
  html body .entry-pair>.entry-col{position:absolute!important;width:0!important;height:0!important;margin:0!important;overflow:hidden!important}
  html body .entry-pair[data-focus="form"]>.entry-wiu,html body .entry-pair[data-focus="request"]>.entry-rq{position:static!important;width:100%!important;height:auto!important;margin:0!important;overflow:visible!important}
+}
+html body .b27-fine{width:100%;max-width:100%;box-sizing:border-box;margin:16px 0 calc(12px + max(0px, 64px - var(--chatH, 0px)));padding:8px 12px;border:1px solid var(--line,#2d3548);border-radius:10px;background:var(--card,#1b2030);color:var(--mut,#9aa3b5);font-size:13px;line-height:1.35}
+html body .b27-fine b{color:var(--tx,#eee)}
+html body #main>.segrow .rkseg>.rkseg-b:not(.segref):not(.gref),html body #main .gfone .rkseg>.rkseg-b:not(.gref),html body #main>.tabs.ob-seg>button,html body #main>.tapf>button{height:42px!important;min-height:42px!important;max-height:42px!important;padding:0 16px!important;font-size:15px!important;line-height:40px!important}
+html body #main>.tabs.ob-seg,html body #main>.segrow>.rkseg{justify-content:flex-start!important}
+@media (min-width:701px){
+ html body #main>.tapf{display:flex!important;justify-content:center!important;width:100%!important}
+}
+html body .b27-grid>.card:has(> .b27-foot > details.b27-more){min-height:0!important;height:auto!important;align-self:start}
+@media (max-width:700px){
+ html body #main>.segrow .rkseg>.rkseg-b:not(.segref):not(.gref),html body #main>.tabs.ob-seg>button,html body #main>.tapf>button:first-child,html body #main>.tapf>button:not(:first-child){height:34px!important;min-height:34px!important;max-height:34px!important;padding:0 8px!important;font-size:14px!important;line-height:32px!important}
+ html body #main>.tapf>button:not(:first-child){width:100%!important;padding:0 2px!important;font-size:13px!important}
+ html body #main>.tapf>button:first-child{width:auto!important;padding:0 8px!important}
+ html body #main>.tabs.ob-seg>button{padding:0 6px!important}
 }
 /*</HELD-LAYOUT>*/
 </style><!--</S29E-PASTE>-->
