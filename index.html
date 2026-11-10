@@ -2456,7 +2456,22 @@ const D27_START='2026-11-01T13:00:00Z',D27_OWNERS=8,D27_ROUNDS=8,D27_TOTAL=D27_O
 function d27Done(){const r=DRAFT27_RESULTS;if(!r)return false;const t=r.draft_completed_at||r.completed_at,ms=t?Date.parse(t):NaN;
   return isFinite(ms)&&ms>=Date.parse(D27_START)&&Array.isArray(r.picks)&&r.picks.length===D27_TOTAL}
 /* Weekly write-ups for the Recap tab: Monday recaps + milestone specials. Newest first by date. Add entries like {date:'2026-11-09',title:'Week 1',kind:'weekly',body:'...'} (kind 'weekly' | 'special'). body is plain text (escaped). */
-const RECAPS=[];
+const RECAPS=[{date:'2026-11-09',title:'Week 1',kind:'special',body:`Opening week (Nov 1-9) started everyone at zero. Four people are still tied at the top: Mark, Jake, Kurt, and Jim, all on 17. Ken has 15, Murf 14, and Paul and Scotty are tied at 13. Every point so far is a win. No bonuses, and nobody has the lead alone.
+
+Best team: Jake's Texas, 3-0 by a combined 129 (109-59 Chicago St, 98-50 Gardner-Webb, 93-62 Grambling). Worst team: Scotty's Colgate, 0-2, the only roster team still on zero (76-90 Washington, 74-77 Drexel).
+
+Biggest roster upset: Murf's Memphis, a 15.5-point dog, beat Paul's Iowa State 80-76 on Nov 2.
+
+Pullups: 23 bets settled, 5 of them a wash, including Kurt and Paul pushing rock-paper-scissors for 20. That Memphis ticket was 2-1, so Paul owes Murf 10 on it and 15 on the week after their other tickets. Jim is owed 10 by Paul and 5 by Kurt. Mark owes Paul 5, Scotty owes Paul 5 on net, and Ken owes Kurt 5 on an under. Jake did not settle a bet. Ten more are still open.
+
+Mark: a perfect 17, and he still has to share first place.
+Jake: Texas won by 129. The tie did not care.
+Kurt: Virginia blew out Arkansas, then Paul's Saint Louis beat his Missouri.
+Jim: tied for first while his Arizona lost to Jake's UCLA.
+Ken: two teams went 3-0, and he is still two points short.
+Murf: the upset of the week, and a 31-point loss, same week.
+Paul: UConn beat Michigan. The standings tied him for last anyway.
+Scotty: his Gonzaga beat his Purdue, and Colgate is still on zero.`}];
 function vDraftTab(){return vDraft27()}   /* s26s: STOOPIDS drafted by hand; board always shows, no gate, no draft-room button */
 function vRecap(){/*<S27-RECAP> weekly write-ups first (newest first), then the draft grades, then the draft board (was the Draft tab) */
   const L=RECAPS.filter(x=>x&&x.title).slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
