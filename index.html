@@ -1593,15 +1593,12 @@ function lvInit(){
   if(!document.hidden)lvCheck(false).catch(()=>{});
   lvUI();
 }
-function lvNote(g){   // text appended to a game card: marks live-feed games as unofficial; flags upsets by seed (same seed is never an upset) and underdog wins
-  if(!g||!g._lv)return '';
-  let s=' <span class="mut">· live ESPN feed, unofficial until the next data update</span>';
-  if(g.status==='final'){
-    const w=g.home.win?g.home:g.away.win?g.away:null,l=w===g.home?g.away:g.home;
-    if(w&&g.kind==='ncaa'&&w.seed!=null&&l.seed!=null){if(+w.seed>+l.seed)s+=' <span class="up ns">😱 UPSET (by seed, no points until the next data update)</span>'}
-    else if(w&&g.line&&String(g.line.dog)===String(w.id))s+=' <span class="up ns">🐶 Underdog win</span>';
-  }
-  return s;
+function lvNote(g){   // live-feed finals can still flag an upset by seed or an underdog win; the line row does not add a feed disclaimer
+  if(!g||!g._lv||g.status!=='final')return '';
+  const w=g.home.win?g.home:g.away.win?g.away:null,l=w===g.home?g.away:g.home;
+  if(w&&g.kind==='ncaa'&&w.seed!=null&&l.seed!=null){if(+w.seed>+l.seed)return ' <span class="up ns">😱 UPSET (by seed, no points until the next data update)</span>'}
+  else if(w&&g.line&&String(g.line.dog)===String(w.id))return ' <span class="up ns">🐶 Underdog win</span>';
+  return '';
 }
 /*<LAST-UPDATED>*/
 function lvEtTime(ms){try{return S25.localTime(new Date(ms))}catch(e){return ''}}   // /*<LOCAL-TIME>*/e.g. "9:42 AM WIB" (viewer's zone)/*</LOCAL-TIME>*/ (when live games were last fetched OK from ESPN)/*</LAST-UPDATED>*/
@@ -1685,7 +1682,8 @@ function lineTxt(ln,away,home,final){
   if(!ln)return null;
   const fav=ln.fav_name?`<b>${esc(ln.fav_name)}</b> -${ln.sp!=null?ln.sp:'?'}`:'Pick\u2019em';
   const ou=ln.ou!=null?` · O/U ${ln.ou}`:'';
-  return `${final?(ln.type==='close'?'Closing line':'Last line'):'Line'}: ${fav}${ou} <span class="mut">· DraftKings</span>`}
+  const src=ln.p?` <span class="mut">· ${esc(String(ln.p))}</span>`:'';
+  return `${final?(ln.type==='close'?'Closing line':'Last line'):'Line'}: ${fav}${ou}${src}`}
 function gameCard(g){
   const fin=g.status==='final',live=g.status==='live';
   const dog=g.line&&g.line.dog;
