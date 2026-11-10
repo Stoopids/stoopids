@@ -571,5 +571,7 @@ html body .tabs.ob-seg{display:grid!important;grid-auto-flow:column!important;gr
  html body .tapf,html body .lgref .tapf{display:flex!important;flex-wrap:wrap!important;justify-content:flex-start!important;width:auto!important;max-width:100%!important}
  html body .tapf>button,html body .lgref .tapf>button{width:auto!important;flex:0 0 auto!important;padding:0 14px!important}
 }
+html body .tapf>button,html body .lgref .tapf>button,html body #main .tapf>button,html body #lbody .tapf>button{height:34px!important;min-height:34px!important;max-height:34px!important;font-size:12px!important;line-height:32px!important}
+@media (max-width:700px){html body #main .tapf>button,html body #lbody .tapf>button{height:34px!important;min-height:34px!important;max-height:34px!important;font-size:12px!important;line-height:32px!important;padding:0 4px!important;white-space:normal!important;overflow:visible!important}}
 html body .gm .gh>span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 html body .gm .gh .gbtns,html body .gm .gh .mkbtns{position:static!important;flex:none!important;flex-direction:row!important;margin-left:auto!important}
