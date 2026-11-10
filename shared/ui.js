@@ -275,8 +275,8 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
     function pinned(only,mark){dropArm();var now=Date.now(),L=S.list.filter(function(r){return shown(r,now)}).filter(function(r){return !A.reqMatch||A.reqMatch(r)}).sort(function(a,b){return a.exp-b.exp});
       if(mark){markOpenSeen();try{paint()}catch(e){}}
       armExpiry();
-      if(!L.length)return only?'<div class="card note rq-none">No open requests right now.</div>':'';
-      return '<div class="rq-pin" id="rqPinned"><h2 class="rq-h">Open requests</h2><p class="note">Nothing is agreed until someone accepts. Expired or filled requests leave this list.</p><div class="rq-grid">'+L.map(function(r){return card(r,now)}).join('')+'</div></div>'}
+      if(!L.length)return only?'<div class="card note rq-none">No pending requests right now.</div>':'';
+      return '<div class="rq-pin" id="rqPinned"><h2 class="rq-h">Pending requests</h2><p class="note">Nothing is agreed until someone accepts. Expired or filled requests leave this list.</p><div class="rq-grid">'+L.map(function(r){return card(r,now)}).join('')+'</div></div>'}
     /* STEP10: view('open') = the Open tab (open request cards only); view() = the Request tab (form only) */
     function seenKey(){return 'rq_open_seen:'+String(A.seenScope?A.seenScope():(A.me()||'guest'))}
     function seenIds(){try{var ls=typeof localStorage!=='undefined'?localStorage:null;if(!ls)return [];var a=JSON.parse(ls.getItem(seenKey())||'[]');return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -287,7 +287,7 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
       armExpiry();
       var L=S.list.filter(function(r){return shown(r,now)}).sort(function(a,b){return a.exp-b.exp}),me=A.me();
       var h='';if(S.msg&&!S.f.gid)h+='<div class="card '+(S.bad?'b27-bad':'b27-ok')+'" role="status">'+e(S.msg)+(S.fb?'<pre class="rq-fb">'+e(S.fb)+'</pre><div class="rq-act"><button type="button" class="btn" data-rq="wa">Copy</button></div>':'')+'</div>';
-      if(mode==='open')return h+(L.length?'<h2 class="rq-h">Open requests</h2><div class="rq-grid">'+L.map(function(r){return card(r,now)}).join('')+'</div>':'<div class="card note rq-none">No open requests right now.</div>');
+      if(mode==='open')return h+(L.length?'<h2 class="rq-h">Pending requests</h2><div class="rq-grid">'+L.map(function(r){return card(r,now)}).join('')+'</div>':'<div class="card note rq-none">No pending requests right now.</div>');
       return h+(me&&A.canWrite()?form():'<div class="card note rq-none">Set who you are on Profile before you request a bet.</div>')}
     async function act(k,v,st){var f=S.f,me=A.me(),now=Date.now();
       var actK=k==='acc'||k==='dec'||k==='cancel'||k==='close'||k==='slot-'||k==='slot+'||k==='edit';
