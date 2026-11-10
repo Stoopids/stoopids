@@ -974,7 +974,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.63.0"></script>
+<script src="shared/ui.js?v=1.64.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -1747,8 +1747,7 @@ function qbPick(id,k,i){qbGo(id,k,i)}
 const qbList=g=>SHARED_UI.qbOptions(g,{name:qbNm,date:qbDate(g)});
 function qbGo(id,k,i){const g=(D.games||[]).find(x=>String(x.id)===String(id));if(!g||!qbOk(g))return;
   if(!(typeof RQ!=='undefined'&&RQ)){qbMsg='Request a bet is unavailable right now.';render();return}
-  RQ.prefill(id,k,i);qbG=null;qbMsg='';tab='bets27';OB_VIEW='request';render();
-  setTimeout(()=>{try{obAlign()}catch(_){}},30)}
+  RQ.prefill(id,k,i);qbG=null;qbMsg='';tab='bets27';OB_VIEW='request';render();betsLand()}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&qbG!=null&&document.querySelector('.qbd,.qb-pick')){e.preventDefault();qbToggle(null)}});
 document.addEventListener('click',e=>{if(qbG==null)return;const t=e.target;if(t&&t.closest&&t.closest('.qbd,.qb-pick,.qb-btn'))return;qbToggle(null)},true);
 /*</STEP7-QB>*/
@@ -3696,12 +3695,13 @@ const RQ=(typeof SHARED_UI!=='undefined'&&SHARED_UI.Requests)?SHARED_UI.Requests
 /*</STEP8-REQUEST>*/
 let OB_VIEW='form';   // Bets tab: 'form' = 2026-27 (New bet form + bet list), 'tally' = person table + Who owes who for 2026-27
 function obLandEl(){const phone=document.querySelector('.tabs.ob-seg.ob-phone');if(!phone)return null;let n=phone.nextElementSibling;while(n&&n.classList&&(n.classList.contains('ob-seg')||n.classList.contains('s24nf')))n=n.nextElementSibling;if(!n)return null;if(n.classList.contains('entry-pair'))return n.querySelector('.entry-col.is-on .entry-hd')||n.querySelector('.entry-hd');return n.matches('h2,h3')?n:(n.querySelector('h2,h3,.entry-hd')||n)}
-function obAlign(){const nav=document.getElementById('nav'),phone=window.matchMedia('(max-width:999px)').matches,el=document.querySelector(phone?'.tabs.ob-seg.ob-phone':'.tabs.ob-seg.ob-desk')||document.querySelector('.tabs.ob-seg');if(!nav||!el){window.scrollTo(0,0);return}if(window.S26W)window.S26W.user=true;const y=Math.round(el.getBoundingClientRect().top+window.scrollY-nav.getBoundingClientRect().height);window.scrollTo(0,Math.max(0,y))}
+function obAlign(){const nav=document.getElementById('nav'),phone=window.matchMedia('(max-width:999px)').matches,el=document.querySelector(phone?'.tabs.ob-seg.ob-phone':'.tabs.ob-seg.ob-desk')||document.querySelector('.tabs.ob-seg');if(!nav||!el||!el.getBoundingClientRect().height)return;if(window.S26W)window.S26W.user=true;const y=Math.round(el.getBoundingClientRect().top+window.scrollY-nav.getBoundingClientRect().height);window.scrollTo(0,Math.max(0,y))}
+function betsLand(){if(tab!=='bets27'&&tab!=='bets')return;if(window.S26W)window.S26W.user=true;const go=()=>{try{obAlign()}catch(e){}};go();requestAnimationFrame(()=>requestAnimationFrame(go));setTimeout(go,80)}
 function obView(v){tab='bets27';
   if(v==='open')OB_VIEW='all';
   else if(v==='tally')OB_VIEW='tally';
   else OB_VIEW=v==='request'?'request':v==='all'?'all':'form';
-  render();requestAnimationFrame(()=>requestAnimationFrame(obAlign))}
+  render();betsLand()}
 const TALLY_NM={mark:'DIRTY DRAYMOND',jake:'STOCK RISING',kurt:'KURMOJI',ken:'KENTUT',neal:'COCKCHALKROCK',paul:'PARTY PAUL',jim:'NASTY PEACOCK',scott:'EN FUEGO'};   // Tally display = team nickname in caps (ids unchanged); neal = Neal Murf (archive). matthew has no nickname: shown as MATTHEW
 const tNm=i=>TALLY_NM[i]||String(P(i).name||i).toUpperCase();
 function vTally(){/* STEP11: Tally = 2026-27 Bets ledger (b27Tally / U.doc), not D.bets.tallies.ledger */
@@ -3791,11 +3791,11 @@ function s29ViewUrl(h){h=String(h||'').replace(/[^A-Za-z0-9_\/-]/g,'');return lo
 /*<S26W-MANIFEST>*/ // Install / Add to home screen from any tab opens that tab: the manifest link points at a per-tab manifest whose start_url is ./#<tab>
 const S26W_MT=["standings", "games", "bets", "bets-2025-26", "teams", "draft", "recap", "howto", "rules", "archive", "share", "profile", "postseason", "redraft", "rosters", "points"];function s26wMan(h){try{h=String(h||'').split('/')[0];const l=document.querySelector('link[rel=manifest]');if(!l)return;const want=S26W_MT.includes(h)?'manifest-'+h+'.webmanifest':'manifest.webmanifest';if(l.getAttribute('href')!==want)l.setAttribute('href',want)}catch(e){}}/*</S26W-MANIFEST>*/
 function s24Put(push){try{s26wMan(s24HashOf(tab));const want=s24Url(s24RouteHash());try{sessionStorage.setItem('stoopids.tab',s24HashOf(tab))}catch(_){}if(location.pathname+location.search+location.hash===want)return;history[push?'pushState':'replaceState'](null,'',want)}catch(e){}}
-function s24NavClick(e,t){if(e&&(e.button>0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey))return true;if(e&&e.preventDefault)e.preventDefault();tab=t;S24.sub=null;render();window.scrollTo(0,0);return false}
+function s24NavClick(e,t){if(e&&(e.button>0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey))return true;if(e&&e.preventDefault)e.preventDefault();tab=t;S24.sub=null;render();if(t==='bets27'||t==='bets')betsLand();else window.scrollTo(0,0);return false}
 function s24OnNav(){const r=s24Read(location.hash);/*<S26W>*/try{if(r&&r.sub&&window.S26W)S26W.deep=true}catch(_){}/*</S26W>*/if(!r&&location.hash.length>1)return;const R=r||{t:'standings',sub:null};if(R.t===tab&&R.sub===S24.sub)return;/*<S26W>*/if(R.t===tab&&!R.sub&&S24.sub&&S24.done===tab+'/'+S24.sub)return;/*</S26W> the deep link just cleaned its own hash: popstate after hashchange must not undo the jump */
   tab=R.t;S24.sub=R.sub;S24.prep=null;S24.done=null;S24.nf=null;S24.last=tab;try{sessionStorage.setItem('stoopids.tab',s24HashOf(tab))}catch(_){}
   if(tab==='bets27'&&S24.sub&&/^(open|request|tally|form|write|all)$/i.test(S24.sub)){const a=S24.sub.toLowerCase();S24.sub=null;obView(a==='write'?'form':a);return}
-  render();/*<S27> alias hashes (#draft) settle to the tab hash + its manifest */try{if(!R.sub)s24Put(false)}catch(_){}if(!R.sub)window.scrollTo(0,0)}
+  render();/*<S27> alias hashes (#draft) settle to the tab hash + its manifest */try{if(!R.sub)s24Put(false)}catch(_){}if(!R.sub){if(tab==='bets27'||tab==='bets')betsLand();else window.scrollTo(0,0)}}
 window.addEventListener('popstate',s24OnNav);window.addEventListener('hashchange',s24OnNav);
 /*<TAB-TOP>*/ // every tab switch opens at the top; the browser must not restore an old scroll position on reload/back. Only a link to one bet/game (#bets/<id>) scrolls to it.
 try{if('scrollRestoration' in history)history.scrollRestoration='manual'}catch(e){}
@@ -3839,7 +3839,7 @@ addEventListener('resize',()=>{try{pinNavH()}catch(e){}});
 render=function(){/*<NO-JUMP>*/const NK=(!S24.top0||tab!==S24.last||(S24.sub&&S24.done!==tab+'/'+S24.sub))?null:njTake();/*</NO-JUMP>*/s24Render0.apply(this,arguments);try{s24After()}catch(e){}/*<NO-JUMP>*/try{njPut(NK)}catch(e){}try{pinNavH()}catch(e){}/*</NO-JUMP>*/};
 function s24After(){
   if(!D)return;
-  if(tab!==S24.last){if(S24.sub&&S24.prep!==tab+'/'+S24.sub)S24.sub=null;S24.last=tab;S24.nf=null;s24Put(true)/*<TAB-TOP>*/;if(!S24.sub)window.scrollTo(0,0)/*</TAB-TOP>*/}
+  if(tab!==S24.last){if(S24.sub&&S24.prep!==tab+'/'+S24.sub)S24.sub=null;S24.last=tab;S24.nf=null;s24Put(true)/*<TAB-TOP>*/;if(!S24.sub){if(tab==='bets27'||tab==='bets')betsLand();else window.scrollTo(0,0)}/*</TAB-TOP>*/}
   /*<TAB-TOP>*/if(!S24.top0){S24.top0=1;if(!S24.sub)window.scrollTo(0,0)}/*</TAB-TOP>*/
   const m=document.getElementById('main');if(!m)return;
   const seg=m.querySelector(':scope > .ob-seg');/*<S27-SHARE> per-tab Share row removed: one Share button in the header </S27-SHARE>*/if(S24.nf&&S24.nf.t===tab)(seg||m).insertAdjacentHTML(seg?'afterend':'afterbegin',`<div class="card s24nf note" role="status">${esc(S24.nf.msg)}</div>`);
@@ -3861,7 +3861,7 @@ function s24DeepGo(){
   if(S24.done!==key){S24.done=key;S24.hlUntil=Date.now()+2600;try{el.scrollIntoView({block:'center'})}catch(_){}/*<S26V>*/s24Put(false);/*</S26V>*/clearTimeout(S24.ht);S24.ht=setTimeout(()=>{document.querySelectorAll('.dl-hl').forEach(e=>e.classList.remove('dl-hl'));/*<S26G>*/if(tab+'/'+S24.sub===key){S24.sub=null;s24Put(false)}/*</S26G>*/},2650)}
   if(Date.now()<S24.hlUntil)el.classList.add('dl-hl');
 }
-function s24AfterLoad(){/*<NO-JUMP>*/const first=!S24.al;S24.al=1;/*</NO-JUMP>*/if(S24.sub)s24DeepGo()/*<TAB-TOP>*/;else if(first)window.scrollTo(0,0)/*</TAB-TOP>*//*<S26W>*/;try{window.S26W&&S26W.top()}catch(_){}/*</S26W>*/}   // the 5-min reload never scrolls
+function s24AfterLoad(){/*<NO-JUMP>*/const first=!S24.al;S24.al=1;/*</NO-JUMP>*/if(S24.sub)s24DeepGo()/*<TAB-TOP>*/;else if(first){if(tab==='bets27'||tab==='bets')betsLand();else window.scrollTo(0,0)}/*</TAB-TOP>*//*<S26W>*/;try{window.S26W&&S26W.top()}catch(_){}/*</S26W>*/}   // the 5-min reload never scrolls
 /* ---- 1) Edit ---- */
 function s24ResetForm(){Object.assign(U,{/*<S25>*/rdEd:null,rdOpen:false,/*</S25>*/opps:[],amt:null,amtCustom:false,amtTxt:'',amtErr:'',odds:[1,1],custom:false,customTxt:'',oddsErr:'',text:'',confirm:false,fids:{},qb:null,est:'',wk:'game',whenPick:false})}
 let estDraft=null;

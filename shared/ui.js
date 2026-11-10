@@ -243,9 +243,20 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
     function rqExp(f){if(f.mode==='start')return 'Tip';var n=+f.n,u={m:'m',h:'h',d:'d',w:'w',mo:'mo'};if(u[f.mode]&&n>0)return n+u[f.mode];if(f.mode==='at'&&f.at){var d=new Date(f.at);if(!isNaN(d)){var wd=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()],mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];return wd+' '+mo+' '+d.getDate()}}return ''}
     function expTxt(r,now){var ws=winStart(r,game(r.gid));return r.exp>=ws?(r.cov==='2h'?'when the 2nd half starts':'at tipoff'):'in '+left(r.exp-now)}
     function ifTxt(r,side){var s=String(side||''),k=r.k;if(k==='txt')return s?'If '+s+' hits':'If it misses';if(k==='ou')return 'If it goes '+s;s=s.replace(/\s[+-]\d+(\.\d+)?$/,k==='sp'?'$&':'');return 'If '+s+(k==='sp'?' covers':' wins')}
-    function explainParts(r){var o=r.odds||[1,1],rn=(A.real||A.nick)(r.by),win2=Math.round(r.amt*o[0]/o[1]*100)/100,ot=r.k==='ou'?r.other:String(r.other||'').replace(/\s[+-]?\d+(\.\d+)?$/,'');
-      return {win:ifTxt(r,r.lab)+', '+rn+' wins '+r.amt+'$ from whoever accepts.',lose:ifTxt(r,ot)+', the Stoop who accepts wins '+win2+'$'+(+o[0]===+o[1]?'':' ('+oddsTxt(o)+')')+' from '+rn+'.'}}
-    function explain(r){var p=explainParts(r);return '<div class="rq-ex note">'+e(p.win)+'<br>'+e(p.lose)+'</div>'}
+    function rqExpSaved(r){var ws=winStart(r,game(r.gid));if(ws<Infinity&&r.exp>=ws-1500)return r.cov==='2h'?'2nd half':'Tip';if(!r.exp)return '';var ms=r.exp-Date.now();return ms<=0?'closed':left(ms)}
+    function explain(r){var o=r.odds||[1,1],nm=function(id){return (A.real||A.nick)(id)},nTo=(r.to||[]).length,nOth=A.others().length;
+      var who=nTo===1?nm(r.to[0]):nTo?(nTo>=nOth?'all Stoops':(r.to||[]).map(nm).join(', ')):'any Stoop';
+      var acceptor=nTo===1?who:'the Stoop who accepts',creator=nm(r.by)||'You',half=r.cov==='2h'?'2nd half: ':'';
+      var match=String(r.txt||r.lab||'').trim()||'the bet';
+      if((r.k==='sp'||r.k==='ou')&&r.lab&&r.other)match=half+r.lab+' vs '+r.other;
+      var stake=r.amt>0?rqMoney(r.amt):'',odds=+o[0]===+o[1]?'':' · '+o[0]+'-'+o[1];
+      var line1=creator+': '+match+(stake?' · '+stake:'')+odds,exp=rqExpSaved(r);
+      var line2=[r.date||'','Open to '+who,exp?'Exp: '+exp:''].filter(Boolean).join(' · '),line3='';
+      if(r.amt>0){var winC=rqMoney(rqWin(r.amt,o[0],o[1])),winO=rqMoney(r.amt);
+        if(r.k==='sp'&&r.lab&&r.other)line3=rqTeam(r.lab)+' covers, '+creator+' wins '+winC+'. '+rqTeam(r.other)+' covers, '+acceptor+' wins '+winO+'.';
+        else if(r.k==='ou'&&r.lab&&r.other)line3=r.lab+', '+creator+' wins '+winC+'. '+r.other+', '+acceptor+' wins '+winO+'.';
+        else line3=(r.lab||match)+', '+creator+' wins '+winC+'. Otherwise, '+acceptor+' wins '+winO+'.'}
+      return '<div class="rq-ex"><b>'+e(line1)+'</b>'+(line2?'<div>'+e(line2)+'</div>':'')+(line3?'<div>'+e(line3)+'</div>':'')+'</div>'}
     function rqQ(n,tip,label){return '<div class="b27-q"><button type="button" class="s27-tipk" data-tip="'+tip+'" aria-expanded="false" onfocus="s27TipShow(this)" onclick="s27WhenClick(this)">'+n+'. '+label+'</button></div>'}
     function rqPreview(f){var g=game(f.gid),p=pick(g&&g.g,f),me=A.me(),amt=f.amtC?(+f.amtTxt>0?+f.amtTxt:null):f.amt,o=f.odds||[1,1];
       var nTo=f.to.length,nOth=A.others().length,nm=function(id){return (A.real||A.nick)(id)};
