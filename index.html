@@ -1678,12 +1678,13 @@ const gOpen=new Set();function gFin(id){id=String(id);gOpen.has(id)?gOpen.delete
 const fml=n=>n==null?'–':(n>0?'+'+n:String(n));
 const ownerEmoji=n=>{const o=D.owners.find(x=>x.name===n);return o?o.emoji:''};
 const opills=a=>a&&a.length?a.map(n=>`<span class="opill">${esc(ownerEmoji(n))} ${esc(PN(n))}</span>`).join(''):'';
+function lineSrc(name){const raw=String(name==null?'':name).replace(/\s+/g,' ').trim();if(!raw)return '';const low=raw.toLowerCase();if(/draft\s*kings/.test(low))return 'DraftKings';if(/\bespn\b/.test(low))return 'ESPN';return raw.split(/\s*[·,]\s*/)[0].trim()}
 function lineTxt(ln,away,home,final){
   if(!ln)return null;
   const fav=ln.fav_name?`<b>${esc(ln.fav_name)}</b> -${ln.sp!=null?ln.sp:'?'}`:'Pick\u2019em';
   const ou=ln.ou!=null?` · O/U ${ln.ou}`:'';
-  const src=ln.p?` <span class="mut">· ${esc(String(ln.p))}</span>`:'';
-  return `${final?(ln.type==='close'?'Closing line':'Last line'):'Line'}: ${fav}${ou}${src}`}
+  const src=lineSrc(ln.p);
+  return `${final?(ln.type==='close'?'Closing line':'Last line'):'Line'}: ${fav}${ou}${src?` <span class="mut">· ${esc(src)}</span>`:''}`}
 function gameCard(g){
   const fin=g.status==='final',live=g.status==='live';
   const dog=g.line&&g.line.dog;
@@ -4459,8 +4460,7 @@ html body .idline{margin:8px 0 8px!important}
 html body footer#foot{padding-bottom:8px!important}
 html body .ggrid .gside{flex-wrap:nowrap!important;align-items:center!important;width:100%!important}
 html body .ggrid .gside .nm{flex:1 1 auto!important;display:flex!important;align-items:center!important;max-width:none!important;min-width:0!important;overflow:hidden!important}
-html body .ggrid .gside a.chip,html body .ggrid>.gm .gside a.chip,html body .ggrid .gbody .gside a.chip{flex:1 1 auto!important;width:auto!important;min-width:0!important;max-width:100%!important;height:40px!important;min-height:40px!important;max-height:40px!important;align-items:center!important;justify-content:center!important}
-html body .ggrid .gside a.chip .cn{flex:0 1 auto!important;min-width:0!important;text-align:center!important}
+html body .ggrid .gside a.chip,html body .ggrid>.gm .gside a.chip,html body .ggrid .gbody .gside a.chip{flex:1 1 auto!important;width:auto!important;min-width:0!important;max-width:100%!important;height:40px!important;min-height:40px!important;max-height:40px!important}
 html body .ggrid .gside .sc2{margin-left:6px!important;flex:0 0 auto!important}
 html body .card.oc .chip.tlive{outline:2px solid #93c5fd;outline-offset:1px}
 html body .golive{box-shadow:0 0 0 2px #93c5fd!important}
@@ -4475,8 +4475,9 @@ html body .tabs.ob-seg.ob-desk{display:inline-flex!important}
 html body .tabs.ob-seg.ob-phone{display:none!important}
 @media (max-width:999px){html body .tabs.ob-seg.ob-desk{display:none!important}html body .tabs.ob-seg.ob-phone{display:inline-flex!important}}
 html body .tabs:not(.ob-seg):not(.s29-kind){display:flex!important;flex-flow:row wrap!important;justify-content:flex-start!important;align-items:center!important;width:auto!important;max-width:100%!important;gap:6px!important;grid-template-columns:none!important}
-html body .tapf,html body .lgref .tapf{display:flex!important;flex-flow:row wrap!important;justify-content:flex-start!important;align-items:center!important;width:auto!important;max-width:100%!important;gap:6px!important;grid-template-columns:none!important;margin:0 0 10px!important}
-html body .tapf>button,html body .lgref .tapf>button{grid-column:auto!important;white-space:nowrap!important}
+html body .tapf,html body .lgref .tapf{display:grid!important;grid-template-columns:repeat(9,minmax(0,1fr))!important;justify-content:stretch!important;align-items:center!important;width:100%!important;max-width:100%!important;gap:6px!important;margin:0 0 10px!important}
+html body .tapf>button,html body .lgref .tapf>button{flex:none!important;width:100%!important;min-width:0!important;height:auto!important;min-height:0!important;max-height:none!important;padding:8px 6px!important;line-height:1.2!important;text-align:center!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;white-space:nowrap!important;grid-column:auto!important}
+@media (max-width:700px){html body .tapf,html body .lgref .tapf{grid-template-columns:repeat(4,minmax(0,1fr))!important}}
 html body .tapf>button.on,html body .lgref .tapf>button.on{outline:2px solid #fff!important;outline-offset:1px!important}
 html body .gmon{justify-content:flex-start!important;width:auto!important;max-width:100%!important}
 html body .gmon>button{flex:0 0 auto!important;width:auto!important;min-width:0!important;padding:5px 12px!important}
