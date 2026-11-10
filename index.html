@@ -4503,8 +4503,9 @@ html body #main>.tabs.ob-seg{position:sticky!important;top:var(--navh,56px);z-in
  html body #main>.segrow{gap:6px}
  html body #main>.segrow .rkseg-b,html body #main>.segrow .segref{height:28px!important;min-height:28px!important;padding:0 6px!important;font-size:12px!important;line-height:26px!important}
  html body #main>.segrow .segupd{gap:4px;font-size:11px;flex:0 0 auto}
- html body #main>.tapf{display:flex!important;flex-flow:row wrap!important;justify-content:flex-start!important;align-items:center!important;gap:4px!important;grid-template-columns:none!important}
- html body #main>.tapf>button{width:auto!important;flex:0 0 auto!important;grid-column:auto!important;height:28px!important;min-height:28px!important;max-height:28px!important;padding:0 8px!important;font-size:12px!important;line-height:26px!important;white-space:nowrap!important}
+ html body #main>.tapf{display:grid!important;grid-template-columns:auto repeat(4,minmax(0,1fr))!important;grid-template-rows:auto auto!important;align-items:center!important;justify-items:stretch!important;gap:4px!important}
+ html body #main>.tapf>button:first-child{grid-column:1!important;grid-row:1 / span 2!important;width:auto!important;height:28px!important;min-height:28px!important;max-height:28px!important;align-self:center!important;justify-self:start!important;padding:0 8px!important;font-size:12px!important;line-height:26px!important;white-space:nowrap!important}
+ html body #main>.tapf>button:not(:first-child){width:100%!important;min-width:0!important;height:28px!important;min-height:28px!important;max-height:28px!important;padding:0 2px!important;font-size:12px!important;line-height:26px!important;text-align:center!important;white-space:nowrap!important}
 }
 html body .card.oc.isonl .who>b{outline-color:#93c5fd!important}
 /*</HELD-LAYOUT>*/
