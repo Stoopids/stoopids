@@ -68,8 +68,8 @@ U.halfLs=hsLs;U.halfScores=function(g,s,first,BOX){var tot=s.score!=null?esc(Str
 
   /* STEP5-GAMES: collapsed FINAL game card (summary button + hidden body), both sites. o: {cls,attr,open,away:{name,score,win},home,upset,btnAttr,bodyCls,bodyAttr,body} */
   SHARED_UI.finalCard=function(o){var e=o.esc||function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})};
-    var sc=function(s){return e(s.name)+' '+(s.score!=null?e(String(s.score)):'')};var op=!!o.open;
-    return '<div class="'+o.cls+' gfin'+(op?' open':'')+(o.cls2||'')+'"'+(o.attr||'')+'><button type="button" class="gsum" '+o.btnAttr+' aria-expanded="'+op+'"'+(o.btnAttr2||'')+'><span class="gst">FINAL</span><span class="'+(o.away.win?'w':'')+'">'+sc(o.away)+'</span><span class="mut">·</span><span class="'+(o.home.win?'w':'')+'">'+sc(o.home)+'</span>'+(o.upset?'<span>😱</span>':'')+'<span class="gch" aria-hidden="true">'+(op?'▾':'▸')+'</span></button><div class="'+(o.bodyCls||'gbody')+'"'+(o.bodyAttr||'')+(op?'':' hidden')+'>'+o.body+'</div></div>'};
+    var sc=function(s){return e(s.name)+' '+(s.score!=null?e(String(s.score)):'')};var op=!!o.open,st=o.status||'FINAL';
+    return '<div class="'+o.cls+' gfin'+(op?' open':'')+(o.cls2||'')+'"'+(o.attr||'')+'><button type="button" class="gsum" '+o.btnAttr+' aria-expanded="'+op+'"'+(o.btnAttr2||'')+'><span class="gst">'+e(st)+'</span><span class="'+(o.away.win?'w':'')+'">'+sc(o.away)+'</span><span class="mut">·</span><span class="'+(o.home.win?'w':'')+'">'+sc(o.home)+'</span>'+(o.upset?'<span>😱</span>':'')+'<span class="gch" aria-hidden="true">'+(op?'▾':'▸')+'</span></button><div class="'+(o.bodyCls||'gbody')+'"'+(o.bodyAttr||'')+(op?'':' hidden')+'>'+o.body+'</div></div>'};
 
   /* STEP9-AUTOSETTLE: suggestion only, never writes. o={e, live:bool, who:'Paul'|'' (''=tied/wash), sc:'score text', btn:'<button…>' (final only), note} */
   SHARED_UI.autoLine=function(o){var e=o.e,w=o.who?e(o.who):(o.live?'Tied':'Wash');
@@ -195,7 +195,7 @@ U.halfLs=hsLs;U.halfScores=function(g,s,first,BOX){var tot=s.score!=null?esc(Str
       var events=responseEvents(list,me);
       if(S.noteMe!==me||!S.noteKeys){S.noteMe=me;S.noteKeys={};events.forEach(function(ev){S.noteKeys[ev.key]=1});clearNotes();return}
       var fresh=events.filter(function(ev){return !S.noteKeys[ev.key]});
-      events.forEach(function(ev){S.noteKeys[ev.key]=1});fresh.forEach(pushNote)}
+      events.forEach(function(ev){S.noteKeys[ev.key]=1});fresh.forEach(function(ev){pushNote(ev);if(A.ping)A.ping()})}
     async function load(){if(S.loading)return;S.loading=true;S.at=Date.now();try{S.list=parse(await A.get());S.at=Date.now();observe(S.list);paint();
         var now=Date.now(),dead=S.list.filter(function(r){return r.status==='open'&&!live(r,now)}).map(function(r){return r.id});
         if(dead.length&&A.canWrite())await write(function(c){return c.map(function(r){return dead.indexOf(r.id)>=0&&r.status==='open'&&!live(r,now)?Object.assign({},r,{status:tk(r).length>=slots(r)?'full':'closed',endedAt:now}):r})},function(c){return c.every(function(r){return dead.indexOf(r.id)<0||r.status!=='open'})})}
@@ -207,12 +207,19 @@ U.halfLs=hsLs;U.halfScores=function(g,s,first,BOX){var tot=s.score!=null?esc(Str
       var h='<div class="card rq-card" data-rq-id="'+e(r.id)+'"><div class="rq-top"><b>📨 '+e(A.nick(r.by))+'</b> <span class="note">'+who+(nt?' · '+nt+' of '+slots(r)+' taken':'')+' · expires '+expTxt(r,now)+'</span></div>'+(stage?'<div class="note">'+stage+'</div>':'')
         +'<div class="rq-body"><span class="rq-amt">'+e(r.amt)+'</span> <span class="rq-side">'+e(r.lab)+'</span>'+(function(){var o=r.odds||[1,1];return +o[0]===+o[1]?'':' <span class="note">at '+oddsTxt(o)+' odds</span>'})()+(r.cov==='2h'?' <span class="pill">2nd half</span>':'')+(r.game?'<div class="note">'+e(r.game)+' · '+e(r.date||'')+'</div>':'')+'</div>'+explain(r)+'<div class="b27-due" data-due="'+SHARED_UI.whenShow(r)+'">'+e(SHARED_UI.whenText(r))+'</div>';
       if(mine)h+='<div class="note good">You accepted: it is your bet now.</div>';
-      else if(me&&inv&&!dec&&r.by!==me&&A.canWrite())h+='<div class="rq-act"><button type="button" class="btn rq-yes" data-rq="acc" data-v="'+e(r.id)+'"'+stAttr(r)+(S.busy?' disabled':'')+'>Accept</button><button type="button" class="btn sec rq-no" data-rq="dec" data-v="'+e(r.id)+'"'+stAttr(r)+(S.busy?' disabled':'')+'>Decline</button></div>';
+      else if(me&&inv&&!dec&&r.by!==me&&A.canWrite())h+='<div class="rq-act"><button type="button" class="btn rq-yes" data-rq="acc" data-v="'+e(r.id)+'"'+stAttr(r)+(S.busy?' disabled':'')+'>Accept</button><button type="button" class="btn sec rq-no" data-rq="dec" data-v="'+e(r.id)+'"'+stAttr(r)+(S.busy?' disabled':'')+'>Decline</button>'+(r.offer&&r.offer.by===me?'':'<button type="button" class="btn sec" data-rq="coffer" data-v="'+e(r.id)+'"'+(S.busy?' disabled':'')+'>Counter</button>')+'</div>';
       else if(dec)h+='<div class="note">You declined.</div>';
       else if(me&&r.by===me&&A.canWrite()&&nt)h+='<div class="rq-act rq-spots"><span class="note">Spots</span><button type="button" class="btn sec" data-rq="slot-" data-v="'+e(r.id)+'"'+stAttr(r)+(S.busy||slots(r)<=nt+0?' disabled':'')+' aria-label="One spot less">\u2212</button><b>'+slots(r)+'</b><button type="button" class="btn sec" data-rq="slot+" data-v="'+e(r.id)+'"'+stAttr(r)+(S.busy||slots(r)>=r.to.length?' disabled':'')+' aria-label="One spot more">+</button><button type="button" class="btn sec rq-no" data-rq="close" data-v="'+e(r.id)+'"'+stAttr(r)+(S.busy?' disabled':'')+'>Close to others</button></div>';
       else if(me&&r.by===me&&A.canWrite()&&!nt){var armed=S.arm&&S.arm.id===r.id&&S.arm.act==='cancel'&&S.arm.terms===reqTerms(r);h+='<div class="rq-act rq-own"><button type="button" class="btn sec" data-rq="edit" data-v="'+e(r.id)+'"'+stAttr(r)+(S.busy?' disabled':'')+'>Edit</button><button type="button" class="btn sec rq-no" data-rq="cancel" data-v="'+e(r.id)+'"'+stAttr(r)+(S.busy?' disabled':'')+'>'+(armed?'Tap again to cancel':'Cancel')+'</button>'+'<button type="button" class="btn sec rq-cp" data-rq="cp" data-v="'+e(r.id)+'">Copy</button>'+'</div>';}
+      if(r.offer&&!r.offer.ok){var ol=offerLine(r.offer);
+        if(me===r.by)h+='<div class="rq-off"><b>Counter from '+e((A.real||A.nick)(r.offer.by))+'</b><div>'+e(ol)+'</div><div class="rq-act"><button type="button" class="btn" data-rq="caccept" data-v="'+e(r.id)+'" data-st="'+reqHash(offerKey(r.offer))+'"'+(S.busy?' disabled':'')+'>Accept these terms</button><button type="button" class="btn sec" data-rq="cno" data-v="'+e(r.id)+'"'+(S.busy?' disabled':'')+'>Decline counter</button></div><div class="note">Nothing changes until you accept these exact terms.</div></div>';
+        else if(me===r.offer.by)h+='<div class="note">Counter sent: '+e(ol)+'. Waiting on them to accept it.</div>';
+        else h+='<div class="note">A counter is in. Only '+e((A.real||A.nick)(r.by))+' can accept it.</div>'}
+      if(S.coff&&S.coff.id===r.id)h+='<div class="rq-coff" data-v="'+e(r.id)+'"><div class="note">Propose a stake, spread, and odds. The original stays until they accept these exact terms.</div><input class="sb-in b27-in" data-co="amt" inputmode="numeric" placeholder="Stake" aria-label="Counter stake" value="'+e(S.coff.amt||'')+'"><input class="sb-in b27-in" data-co="odds" placeholder="Odds, 1-1" aria-label="Counter odds" value="'+e(S.coff.odds||'')+'"><input class="sb-in b27-in" data-co="text" maxlength="'+(A.maxText||140)+'" placeholder="Spread or bet" aria-label="Counter spread" value="'+e(S.coff.text!=null?S.coff.text:(r.lab||''))+'"><div class="rq-act"><button type="button" class="btn" data-rq="csend" data-v="'+e(r.id)+'"'+(S.busy?' disabled':'')+'>Send counter</button><button type="button" class="btn sec" data-rq="cx" data-v="'+e(r.id)+'">Cancel</button></div></div>';
       if(r.status==='open'&&!(me&&r.by===me&&A.canWrite()&&!nt))h+='<div class="rq-act rq-copy">'+'<button type="button" class="btn sec rq-cp" data-rq="cp" data-v="'+e(r.id)+'">Copy</button>'+'</div>';   /* STEP14-COPY: every open card can copy the Bet Requested text */
       return h+'</div>'}
+    function offerKey(o){o=o||{};return [o.by,o.amt,(o.odds||[]).join('-'),o.lab||'',o.txt||''].join('\u001f')}
+    function offerLine(o){var a=o.odds&&o.odds[0],b=o.odds&&o.odds[1],od=+a===+b?'':' · '+a+'-'+b;return '$'+o.amt+od+' · '+(o.lab||o.txt||'')}
     function form(){var f=S.f,now0=Date.now(),G=games().filter(function(x){var st=Date.parse(x.start)||0,ws=f.cov==='2h'?st+HALF_MS:st;if(String(x.id)===String(f.gid))return true;if(x.status==='final'||st>=now0+7*86400000)return false;if(f.cov==='2h')return !(x.period&&+x.period>=2)&&now0<ws;return x.status==='scheduled'&&now0<ws}),g=game(f.gid),me=A.me(),nOth=A.others().length;
       if(!f.expPick)f.mode=g?'start':'h';
       /* same template as Write it Up: header, Select all / Clear, numbered questions, Amount + Odds, summary, big button. Identity stays on Profile. */
@@ -320,6 +327,30 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
       if(actK){if(S.busy)return;var curR=S.list.find(function(x){return x.id===v});if(!curR||reqHash(reqTerms(curR))!==st){S.arm=null;S.msg='That request changed. Review it again.';S.bad=true;A.render();return}
         var armOnly=k==='cancel'&&!(S.arm&&S.arm.id===v&&S.arm.act==='cancel'&&S.arm.terms===reqTerms(curR));
         if(!armOnly){if(S.lockUntil&&Date.now()<S.lockUntil)return;S.lockUntil=Date.now()+450}}
+      if(k==='coffer'){var rc0=S.list.find(function(x){return x.id===v});if(!rc0||rc0.by===me||(rc0.to||[]).indexOf(me)<0)return;S.coff={id:v,amt:String(rc0.amt||''),odds:(rc0.odds||[1,1]).join('-'),text:rc0.lab||''};A.render();return}
+      if(k==='cx'){S.coff=null;A.render();return}
+      if(k==='csend'){var rs0=S.list.find(function(x){return x.id===v});if(!rs0||rs0.by===me||rs0.status!=='open'||tk(rs0).indexOf(me)>=0)return;
+        var box=typeof document!=='undefined'&&document.querySelector('.rq-coff[data-v="'+v+'"]');
+        var rawA=box?box.querySelector('[data-co="amt"]').value:(S.coff&&S.coff.amt),rawO=box?box.querySelector('[data-co="odds"]').value:(S.coff&&S.coff.odds),rawT=box?box.querySelector('[data-co="text"]').value:(S.coff&&S.coff.text);
+        var amt=Math.round(+rawA),mo=/^\s*(\d{1,3})\s*[-:\/]\s*(\d{1,3})\s*$/.exec(String(rawO||'')),text=String(rawT||'').trim().slice(0,A.maxText||140);
+        if(!(amt>=1)||!mo||!text){S.msg='Enter a stake, odds like 1-1, and the spread.';S.bad=true;A.render();return}
+        var offer={by:me,amt:amt,odds:[+mo[1],+mo[2]],lab:text,txt:text,at:Date.now()};
+        S.busy=true;A.render();
+        try{await write(function(c){return c.map(function(x){if(x.id!==v||x.status!=='open'||x.by===me||tk(x).indexOf(me)>=0)return x;var y=Object.assign({},x);y.offer=offer;return y})},function(c){var x=c.find(function(y){return y.id===v});return !!(x&&x.offer&&x.offer.by===me&&x.offer.amt===amt&&x.amt===rs0.amt&&x.lab===rs0.lab&&String((x.odds||[]))===String(rs0.odds||[]))});
+          S.coff=null;S.msg='Counter sent. The original terms stay until they accept these.';S.bad=false}
+        catch(x){S.msg='Could not send that counter.';S.bad=true}
+        S.busy=false;A.render();return}
+      if(k==='cno'){var rn=S.list.find(function(x){return x.id===v});if(!rn||rn.by!==me||!rn.offer)return;S.busy=true;A.render();
+        try{await write(function(c){return c.map(function(x){if(x.id!==v||x.by!==me||!x.offer)return x;var y=Object.assign({},x);delete y.offer;return y})},function(c){var x=c.find(function(y){return y.id===v});return !x||!x.offer});S.msg='Counter declined. The original terms are unchanged.';S.bad=false}
+        catch(x){S.msg='Could not save that.';S.bad=true}S.busy=false;A.render();return}
+      if(k==='caccept'){var ra=S.list.find(function(x){return x.id===v}),off=ra&&ra.offer;if(!ra||ra.by!==me||!off||off.ok)return;if(reqHash(offerKey(off))!==st){S.msg='That counter changed. Review the exact terms.';S.bad=true;A.render();return}
+        S.busy=true;S.didBet=S.didBet||{};A.render();
+        try{var preview=Object.assign({},ra,{amt:off.amt,odds:off.odds.slice(),lab:off.lab,txt:off.txt,k:'txt'});
+          if(!S.didBet[v]){await A.placeBet(preview,off.by);S.didBet[v]=1}
+          await write(function(c){return c.map(function(x){if(x.id!==v||x.by!==me||!x.offer||offerKey(x.offer)!==offerKey(off))return x;var y=Object.assign({},x,{amt:off.amt,odds:off.odds.slice(),lab:off.lab,txt:off.txt,k:'txt',took:(x.took||[]).concat([{m:off.by,at:Date.now(),counter:1}])});y.offer=Object.assign({},x.offer,{ok:true});return y})},function(c){var x=c.find(function(y){return y.id===v});return !!(x&&x.offer&&x.offer.ok&&x.amt===off.amt&&x.txt===off.txt)});
+          S.msg='Accepted. The bet uses those exact terms.';S.bad=false}
+        catch(x){S.msg='Could not accept that counter. The original terms were not changed.';S.bad=true}
+        S.busy=false;A.render();return}
       if(k==='cp'){var rc=S.list.find(function(x){return x.id===v});if(rc)copy(waText(rc,'new'),function(ok){S.msg=ok?'Message copied, paste in WhatsApp.':'Could not copy. Long-press to copy the text below.';S.bad=!ok});return}   /* STEP14-COPY */
       if(k==='wa'){if(S.fb)copy(S.fb,function(ok){if(ok){S.msg='Message copied, paste in WhatsApp.';S.bad=false}});return}
       if(k==='edit'){var re=S.list.find(function(x){return x.id===v});if(!re||re.by!==me||tk(re).length||re.status!=='open'){if(re&&tk(re).length){S.msg='Someone already accepted. Those terms stay as agreed.';S.bad=true;A.render()}return}var ws=winStart(re,game(re.gid)),pad=function(n){return String(n).padStart(2,'0')},dt=new Date(re.exp);
@@ -377,7 +408,7 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
     if(typeof window!=='undefined'&&typeof setInterval!=='undefined'){setTimeout(function(){if(A.me())load()},3000);setInterval(function(){if(A.me()&&!S.busy)load()},60000);setInterval(paint,2000)}
     if(typeof document!=='undefined'){document.addEventListener('click',function(ev){var t=ev.target.closest&&ev.target.closest('[data-rq]');if(!t)return;ev.preventDefault();act(t.dataset.rq,t.dataset.v,t.getAttribute('data-st'))});
       document.addEventListener('change',function(ev){var t=ev.target;if(t&&t.dataset&&t.dataset.rqIn)input(t.dataset.rqIn,t.value)});
-      document.addEventListener('input',function(ev){var t=ev.target;if(!(t&&t.dataset&&(t.dataset.rqIn==='amtTxt'||t.dataset.rqIn==='n'||t.dataset.rqIn==='oddTxt'||t.dataset.rqIn==='text')))return;S.f[t.dataset.rqIn]=t.value;if(t.dataset.rqIn==='text'||t.dataset.rqIn==='amtTxt')rqPaintExplain()})}
+      document.addEventListener('input',function(ev){var t=ev.target;if(t&&t.dataset&&t.dataset.co&&S.coff){S.coff[t.dataset.co]=t.value;return}if(!(t&&t.dataset&&(t.dataset.rqIn==='amtTxt'||t.dataset.rqIn==='n'||t.dataset.rqIn==='oddTxt'||t.dataset.rqIn==='text')))return;S.f[t.dataset.rqIn]=t.value;if(t.dataset.rqIn==='text'||t.dataset.rqIn==='amtTxt')rqPaintExplain()})}
     return {view:view,openN:openN,pinned:pinned,prefill:prefill,load:load,count:count,paint:paint,observe:observe,S:S,waText:waText,label:'\u{1F4E8} Request a bet'}};
   /* STEP7-NAMES: Stoop label rule (both sites): roomy spots = emoji + team nickname; tight spots use the real name.
      shortName/tinyName = the bet-form chip's phone labels (same cut on both sites). */

@@ -114,6 +114,9 @@ S25.parse=function(text,createdISO){
   if((m=new RegExp(String.raw`^(.*?)\sbeats?\s(.*?)\sby\s(\d{1,3})\s(?:points?\s)?or\smore`,'i').exec(t))){const a=teamL(m[1]),b=teamR(m[2]);if(!a||!b)return manual;return R({k:'spread',t:a,o:b,l:-(+m[3]-0.5)})}
   if((m=new RegExp(String.raw`^(.*?)\sbeats?\s(.*?)\sby\smore\sthan\s`+NUM,'i').exec(t))){const a=teamL(m[1]),b=teamR(m[2]);if(!a||!b)return manual;return R({k:'spread',t:a,o:b,l:gt(m[3])})}
   if(/\b(beats?|tops?|defeats?|over|wins?)\b.*\bby\s\d/i.test(t))return manual;              // "Kansas beats Duke by 5": exactly 5? at least 5? a human reads it
+  if((m=new RegExp(String.raw`^(over|under)\s+`+NUM+String.raw`\s+vs\.?\s+(over|under)\s+`+NUM+String.raw`\s*,?\s*(.*?)\s+(?:vs\.?|v\.?|versus)\s+(.*)$`,'i').exec(t))){
+    if(n(m[2])!==n(m[4]))return manual;const a=teamL(m[5]),b=teamR(m[6]);if(!a||!b)return manual;
+    return R({k:'total',t:a,o:b,l:n(m[2]),ou:/^o/i.test(m[1])?'o':'u'})}
   // 4) totals: "Duke vs Kansas over 145.5", "over 145.5 in Duke vs Kansas"
   if((m=new RegExp(String.raw`\b(over|under|o|u)\s?`+NUM+String.raw`\b`,'i').exec(t))){
     const ou=/^o/i.test(m[1])?'o':'u',l=n(m[2]),rest=(t.slice(0,m.index)+' '+t.slice(m.index+m[0].length)).replace(/\b(in|points?|pts|total|combined)\b/ig,' ').replace(/\s+/g,' ').trim();
