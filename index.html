@@ -3267,7 +3267,7 @@ function b27DropStale(){if(U.askSettle){const b=U.doc&&U.doc.bets&&U.doc.bets.fi
   try{
     const back=await b27Write(cur=>/*<CREATOR-SETTLE>*/{const x=cur.find(b=>b.id===id);if(status!=='void'&&x&&x.status==='open'&&x.backer!==me0)throw new Error('notcreator');return /*</CREATOR-SETTLE>*/cur.map(b=>b.id===id&&b.status==='open'?Object.assign({},b,{status,settled_at:/*<V25>*/status==='void'?new Date().toISOString():s25At()/*</V25>*/}/*<S25>*/,extra||{}/*</S25>*/):b)/*<CREATOR-SETTLE>*/}/*</CREATOR-SETTLE>*/,cur=>{const b=cur.find(x=>x.id===id);return !b||b.status===status||b.status!=='open'});
     b27Apply(back,'force');U.msg='Saved.';U.msgBad=false;
-    if(status==='backer'||status==='other'||status==='push'){U.flashBet=id;try{const t=s29eCopyText(b0);if(t)b27CopyNow(t)}catch(e){}}
+    if(status==='backer'||status==='other'||status==='push'){U.flashBet=id;try{const t=s29eCopyText(Object.assign({},b0,{status}));if(t)b27CopyNow(t)}catch(e){}}
   }catch(e){U.msg=/*<CREATOR-SETTLE>*/e&&e.message==='notcreator'?B27_ONLY:e&&e.message==='conflict'?'Couldn’t save, try again.':/*</CREATOR-SETTLE>*/'Couldn’t save that. Try again.';U.msgBad=true}
   U.busy=false;render();
 }
@@ -4448,6 +4448,7 @@ function s29eCopyText(b){if(!b)return '';if(b.status==='open'&&b.kind!=='pool')r
   const OP=b27Opps(b),BU=OP.length>1,Bk=PN(b.backer),OPd=OP.map(PN),st=b.status,P=b27Pay(b);
   const stTxt={open:'Open',backer:'Settled',other:'Settled',push:'Wash',void:'Cancelled'}[st]||'Open';
   const win=st==='backer'?' · '+Bk+' won':st==='other'?' · '+(BU?'Managers':OPd[0])+' won':'';
+  if(st==='backer'||st==='other'||st==='push'){const mark=st==='push'?'💦':'💥',head=st==='push'?mark+' Bet #'+b.n+' · Wash '+mark:mark+' Bet #'+b.n+' · Settled'+win+' '+mark;return [head,b27Clean(b.text),Bk+' vs '+OPd.join(', ')+' · '+b27Num(b.amt)+(BU?' each':'')+' '+b27OddsShort(b.odds.a,b.odds.b)].join('\n')}
   L.push('Bet #'+b.n+' · '+stTxt+win,b27Clean(b.text),Bk+' vs '+OPd.join(', ')+' · '+b27Num(b.amt)+(BU?' each':'')+' '+b27OddsShort(b.odds.a,b.odds.b));
   L.push('If '+Bk+' is right: '+OPd.join(', ')+(BU?' each owe ':' owes ')+Bk+' '+b27Num(P.ifBackerRight));
   L.push('If '+OPd.join(', ')+(BU?' are':' is')+' right: '+Bk+' owes '+(BU?'each of them ':OPd[0]+' ')+b27Num(P.ifOtherRight));
