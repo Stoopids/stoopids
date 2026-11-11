@@ -242,7 +242,8 @@ U.halfLs=hsLs;U.halfScores=function(g,s,first,BOX){var tot=s.score!=null?esc(Str
       h+='</div><div class="rq-56c">';
       h+=rqQ(6,'rqexp','Expires')+'<div class="rq-exp">'+(f.mode==='start'?'':f.mode==='at'?'<input class="sb-in b27-in rq-in" type="datetime-local" data-rq-in="at" value="'+e(f.at)+'" aria-label="Expires at">':'<input class="sb-in b27-in rq-in rq-num" data-rq-in="n" inputmode="numeric" value="'+e(f.n)+'" aria-label="Expires in">')+'<select class="sb-in b27-in rq-in rq-unit" data-rq-in="mode" aria-label="Unit">'+[['m','minutes'],['h','hours'],['d','days'],['w','weeks'],['mo','months'],].concat(g?[['start','at tipoff']]:[]).concat([['at','exact date/time']]).map(function(m){return '<option value="'+m[0]+'"'+(f.mode===m[0]?' selected':'')+'>'+m[1]+'</option>'}).join('')+'</select></div>'+(g?'<div class="note">It also closes by itself at tip-off.</div>':'');
       h+='</div></div>';
-      if(!g)h+=SHARED_UI.whenBox({e:e,kind:f.whenPick?f.wk:(SHARED_UI.estOk(f.est)?'date':'unknown'),est:f.est,seasonId:A.seasonId?A.seasonId():'',step:'7',game:false,inputId:'rqEst',pick:function(id){return 'data-rq="when" data-v="'+id+'"'},dateAttr:'data-rq-in="est"'});
+      var rqHasGame=!!g,rqKind=rqHasGame&&(!f.whenPick||f.wk==='game')?'game':(f.whenPick&&f.wk!=='game'?f.wk:'unknown');
+      h+=SHARED_UI.whenBox({e:e,kind:rqKind,est:f.est,seasonId:A.seasonId?A.seasonId():'',step:'7',game:rqHasGame,inputId:'rqEst',pick:function(id){return 'data-rq="when" data-v="'+id+'"'},dateAttr:'data-rq-in="est"'});
       var pv=rqPreview(f);
       h+='<div class="rq-prev" id="rqEx">'+pv.ex+'</div>';
       if(S.msg)h+='<div class="'+(S.bad?'b27-bad-t':'good')+' rq-msg" role="status">'+e(S.msg)+'</div>';
@@ -375,9 +376,9 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
       else if(k==='side'){f.side=v;var gg=game(f.gid),pp=gg&&pick(gg.g,{side:v,cov:'game'});if(pp)f.text=pp.txt}else if(k==='cov'){f.cov=v}else if(k==='amt'){f.amt=+v;f.amtTxt='';f.amtC=false}else if(k==='amtc'){f.amtC=true;f.amt=null}else if(k==='oddc'){f.oddC=true}else if(k==='fslotall'){f.sAll=true;f.slots=null}else if(k==='fslot-'||k==='fslot+'){var nT=f.to.length,cT=nT||A.others().length,cur=f.sAll?cT:f.slots?Math.min(f.slots,cT):(nT||1);f.sAll=false;cur+=k==='fslot+'?1:-1;f.slots=Math.max(1,Math.min(cT,cur))}else if(k==='odds'){f.odds=v.split('-').map(Number);f.oddC=false;f.oddTxt=''}
       else if(k==='send'){var g=game(f.gid),p=pick(g&&g.g,f),amt=f.amtC?(+f.amtTxt>0?Math.round(+f.amtTxt):null):f.amt,ex=expAt(f,now,g?winStart({cov:f.cov,start:g.start},g):null);
         var err=!p?'Write the bet.':!amt?'Choose an amount.':!ex||ex<=now?'Choose when it expires (up to a year).':null;
-        var hasGame=!!g,wk=hasGame?'game':(f.whenPick&&(f.wk==='date'||f.wk==='season'||f.wk==='unknown')?f.wk:'');
-        if(!err&&!hasGame&&!wk)err='Say when it settles: end of season, a date, or not sure yet.';
-        var pack=SHARED_UI.whenPack(hasGame?'game':f.wk,f.est,A.seasonId?A.seasonId():'');if(!err&&!hasGame&&f.wk==='date'&&!pack)err='Use a real date, or pick End of season or Not sure yet.';
+        var hasGame=!!g,wk=hasGame&&(!f.whenPick||f.wk==='game')?'game':(f.whenPick&&(f.wk==='date'||f.wk==='season'||f.wk==='unknown')?f.wk:'');
+        if(!err&&!wk)err='Say when it settles: end of season, a date, or not sure yet.';
+        var pack=SHARED_UI.whenPack(wk||'unknown',f.est,A.seasonId?A.seasonId():'');if(!err&&wk==='date'&&!pack)err='Use a real date, or pick End Of Season or Not Sure Yet.';
         if(!err){var r0={id:rid(),gid:g?String(g.id):'',start:g&&g.start||null};if(started(Object.assign({cov:f.cov},r0),now))err='That '+(f.cov==='2h'?'half':'game')+' has already started.'}
         if(err){S.msg=err;S.bad=true;A.render();return}
         if(S.edit)r0.id=S.edit;
@@ -463,10 +464,12 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
   SHARED_UI.whenBox=function(o){o=o||{};var e=o.e||function(s){return String(s==null?'':s)},k=o.kind==='date'||o.kind==='season'||o.kind==='game'?o.kind:'unknown';
     var btn=function(id,lab){return '<button type="button" class="b27-chip" data-when="'+id+'" aria-pressed="'+(k===id?'true':'false')+'" '+(o.pick?o.pick(id):'')+'>'+e(lab)+'</button>'};
     var q=(o.step?String(o.step)+'. ':'')+'When can this be settled?';
-    var h='<div class="b27-when"><div class="b27-q"><button type="button" class="s27-tipk" data-tip="when" aria-expanded="false" onfocus="s27TipShow(this)" onclick="s27WhenClick(this)">'+e(q)+'</button></div><div class="b27-when-c" role="group" aria-label="When can this be settled?">'+btn('date','Set a date')+btn('season','End of season')+(o.game||k==='game'?btn('game','End game'):'')+btn('unknown','Not sure yet')+'</div>';
+    if(k==='game'&&!o.game)k='unknown';
+    var opts=(o.game?btn('game','End Of Game'):'')+btn('season','End Of Season')+btn('unknown','Not Sure Yet')+btn('date','Set A Date');
+    var h='<div class="b27-when"><div class="b27-q"><button type="button" class="s27-tipk" data-tip="when" aria-expanded="false" onfocus="s27TipShow(this)" onclick="s27WhenClick(this)">'+e(q)+'</button></div><div class="b27-when-c" role="group" aria-label="When can this be settled?">'+opts+'</div>';
     if(k==='date')h+='<input class="sb-in b27-in" type="date" id="'+(o.inputId||'whenDate')+'" aria-label="Choose a date" value="'+e(o.est||'')+'" '+(o.dateAttr||'')+'>';
     if(k==='season'){var id=o.seasonId||'';h+='<div class="note">'+(id?e('End of '+id+'. No calendar end date is set, so this only groups the bet.'):e('End of season. No season id is on file, so this only groups the bet.'))+'</div>'}
-    if(k==='game')h+='<div class="note">'+e('End game. No game end is linked, so this only groups it.')+'</div>';
+    if(k==='game')h+='<div class="note">'+e('Settles when the game ends.')+'</div>';
     return h+'</div>'};
   SHARED_UI.entryHead=function(k){return k==='rq'
     ?'<div class="entry-hd entry-hd-rq"><h2><span class="entry-ico" aria-hidden="true">💣</span>Request a bet</h2><p class="entry-sub-d">Nothing agreed yet? Find a stoop who wants to feel something.</p><p class="entry-sub-m">Nothing agreed yet—find a Stoop who wants to feel something.</p></div>'

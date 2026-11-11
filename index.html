@@ -978,7 +978,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.66.1"></script>
+<script src="shared/ui.js?v=1.66.2"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -3315,14 +3315,15 @@ function b27FormOK(){
   if(!b27Clean(U.text))return 'Say what the bet is about.';
   if(!Number.isInteger(U.amt)||U.amt<PULK.minAmt||U.amt>PULK.maxAmt)return U.amtCustom?b27ParseAmt(U.amtTxt).err||'Pick an amount.':'Tap an amount or type your own (minimum '+PULK.minAmt+').';
   if(!(U.odds&&U.odds[0]>=1&&U.odds[1]>=1))return 'Pick the odds.';
-  if(!b27FormHasGame()){if(!U.whenPick||U.wk==='game')return 'Say when this settles: end of season, a date, or not sure yet.';if(U.wk==='date'&&!SHARED_UI.estOk(U.est))return 'Use a real date, or pick End of season or Not sure yet.'}
+  if(b27FormHasGame()){if(U.whenPick&&U.wk==='date'&&!SHARED_UI.estOk(U.est))return 'Use a real date, or pick End Of Game, End Of Season, or Not Sure Yet.'}
+  else{if(!U.whenPick||U.wk==='game')return 'Say when this settles: end of season, a date, or not sure yet.';if(U.wk==='date'&&!SHARED_UI.estOk(U.est))return 'Use a real date, or pick End Of Season or Not Sure Yet.'}
   return '';
 }
 function b27FormHasGame(){try{const r=s25FormRd();return !!(r&&r.k&&r.k!=='manual'&&r.t&&r.o)}catch(e){return false}}
 /*<MULTI-BET>*//* ONE bet record however many opponents are ticked (<BUNDLE>): with 2+ it carries `opponents:[...]` (other = the first one); with 1 it is the plain single-opponent record, exactly as before. The id is kept across a failed save (per selection) so a retry never double-posts. */
 function b27Season(){const s=D&&D.meta&&D.meta.season;return typeof s==='string'&&/^[0-9]{4}-[0-9]{2}$/.test(s)?s:''}
 function b27When(k){U.whenPick=true;U.wk=k==='date'||k==='season'||k==='game'?k:'unknown';if(U.wk!=='date')U.est='';render()}
-function b27BetsFromForm(){const k=U.opps.join('|'),kind=b27FormHasGame()?'game':(U.wk==='date'||U.wk==='season'||U.wk==='unknown'?U.wk:'unknown'),w=SHARED_UI.whenPack(kind,U.est,b27Season())||SHARED_UI.whenPack('unknown');
+function b27BetsFromForm(){const k=U.opps.join('|'),has=b27FormHasGame(),kind=has&&(!U.whenPick||U.wk==='game')?'game':(U.whenPick&&(U.wk==='date'||U.wk==='season'||U.wk==='unknown')?U.wk:(has?'game':'unknown')),w=SHARED_UI.whenPack(kind,U.est,b27Season())||SHARED_UI.whenPack('unknown');
   return [Object.assign({id:U.fids[k]||(U.fids[k]=b27Rid()),backer:U.backer||b27Who(),other:U.opps[0]/*<S29E-POSTED>*/,postedBy:b27Who(),postedAt:new Date().toISOString()/*</S29E-POSTED>*/},U.opps.length>1?{opponents:U.opps.slice()}:{},{amt:U.amt,odds:{a:U.odds[0],b:U.odds[1]},text:b27Clean(U.text),status:'open',wk:w.wk,est:w.est,sid:w.sid}/*<S25>*/,{rd:s25FormRd()}/*</S25>*/)]}
 const b27Others=()=>b27OwnerNames().filter(n=>n!==b27Who());
 function b27Opp(i){const n=b27Others()[i];if(!n)return;const k=U.opps.indexOf(n);if(k>=0)U.opps.splice(k,1);else{U.opps.push(n);const o=b27Others();U.opps.sort((x,y)=>o.indexOf(x)-o.indexOf(y))}b27Sync()}
@@ -3822,7 +3823,7 @@ function vB27(){
      <div id="b27Aw" class="b27-cw"${U.amtCustom?'':' hidden'}><label for="b27Ao" class="sr">Custom amount</label><input id="b27Ao" class="sb-in b27-in" inputmode="numeric" pattern="[0-9]*" autocomplete="off" maxlength="6" placeholder="Whole number, ${PULK.minAmt} to ${PULK.maxAmt}" value="${esc(U.amtTxt)}" oninput="b27AmtApply(this.value);b27Sync()" onkeydown="if(event.key==='Enter'){event.preventDefault();b27Place()}"><div id="b27Ae" class="b27-bad-t" role="alert">${esc(U.amtErr)}</div></div></div><div class="b27-ao-c">
      <div class="b27-q"><button type="button" class="s27-tipk" data-tip="odds" aria-expanded="false" onfocus="s27TipShow(this)" onclick="s27WhenClick(this)">4. Odds</button></div><div class="b27-chips" role="group" aria-label="Odds">${PULK.oddsChips.map(([a,b])=>`<button type="button" class="b27-chip" data-b27-odds="${a}-${b}" aria-pressed="${!U.custom&&!!U.odds&&U.odds[0]===a&&U.odds[1]===b}" onclick="b27Odds(${a},${b})">${a===1&&b===1?'Even':a+'-'+b}</button>`).join('')}<button type="button" class="b27-chip cu" data-b27-custom="1" aria-pressed="${U.custom}" onclick="b27CustomOpen()">Custom</button></div>
      <div id="b27Cw" class="b27-cw"${U.custom?'':' hidden'}><label for="b27Co" class="sr">Custom odds</label><input id="b27Co" class="sb-in b27-in" inputmode="text" autocomplete="off" maxlength="9" placeholder="e.g. 7-2 or 10-1" value="${esc(U.customTxt)}" oninput="b27CustomApply(this.value);b27Sync()" onkeydown="if(event.key==='Enter'){event.preventDefault();b27Place()}"><div id="b27Ce" class="b27-bad-t" role="alert">${esc(U.oddsErr)}</div></div></div></div>
-     ${b27FormHasGame()?'':SHARED_UI.whenBox({e:esc,kind:U.whenPick?U.wk:'unknown',est:U.est,seasonId:b27Season(),step:'5',game:false,inputId:'b27Est',pick:id=>`onclick="b27When('${id}')"`,dateAttr:'onchange="U.est=this.value;U.whenPick=true"'})}
+     ${SHARED_UI.whenBox({e:esc,kind:b27FormHasGame()&&(!U.whenPick||U.wk==='game')?'game':(U.whenPick&&U.wk!=='game'?U.wk:'unknown'),est:U.est,seasonId:b27Season(),step:'5',game:b27FormHasGame(),inputId:'b27Est',pick:id=>`onclick="b27When('${id}')"`,dateAttr:'onchange="U.est=this.value;U.whenPick=true"'})}
      <div class="b27-livebox" id="b27Live" data-brief aria-live="polite">${b27FormBrief()}</div>
      <div id="s29Auto">${/*<S29D-AUTO>*/s29AutoHtml(s29AutoForm())/*</S29D-AUTO>*/}</div><div class="b27-bad-t" id="b27Hint"></div>
      <button type="button" id="b27Place" class="btn b27-big" onclick="b27Place()"${b27FormOK()?' disabled':''}>${U.editOf?'Update bet':'Place bet'}</button></div>`;
@@ -4892,8 +4893,9 @@ html body .tt-b table.tt tbody tr:nth-child(even) td,html body .tt-b table.tt tb
 html body .tt-b table.tt thead th{background:#1b2030!important}
 html body .tt-b table.tt .tt-sum,html body .tt-b table.tt thead .tt-sum{background:#2c3548!important}
 html body .tt-b table.tt th.tt-s1,html body .tt-b table.tt td.tt-s1{border-left:10px solid var(--bg,#0e121b)!important}
-html body .tt-b table.tt td.tt-d{text-align:center!important;overflow:hidden}
-html body .tt-b table.tt td.tt-d .tz{display:block;text-align:center;line-height:1}
+html body #main .tt-b table.tt th.tt-o{text-align:center!important}
+html body #main .tt-b table.tt td.tt-d{position:relative;text-align:center!important;padding-left:0!important;padding-right:0!important}
+html body #main .tt-b table.tt td.tt-d .tz{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:block;width:auto;line-height:1;text-align:center}
 html body .tt-split{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);grid-template-areas:"mine h2h" "settle h2h";gap:10px;align-items:start;margin-top:10px}
 html body .tt-split>.tt-mine{grid-area:mine;margin:0!important}
 html body .tt-split>.tt-h2h{grid-area:h2h;margin:0!important}
