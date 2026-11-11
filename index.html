@@ -2545,8 +2545,8 @@ function profH2H(me){return b27OwnerNames().filter(n=>n!==me).map(other=>{let w=
 function profSeasonText(me,o,rec){return ['STOOPIDS '+(D.meta&&D.meta.season||''),PN(me)+' · '+TN(me)+(o.emoji?' '+o.emoji:''),'Rank: '+profRank(o),'Points: '+b27Num(o.total||0),'Roster record: '+rec.w+'-'+rec.l].join('\n')}
 function profBetsText(me,s){return [PN(me)+' bets',s.w+'-'+s.l+(s.push?' · '+s.push+' wash'+(s.push===1?'':'es'):''),'Net: '+profMoney(s.net),'Open: '+s.open].join('\n')}
 function profLedgerCards(me){const s=profBets(me),rows=profH2H(me);PROF_TXT.bets=profBetsText(me,s);
-  return `<div class="card"><div class="prof-hd"><h3>My bets</h3><button type="button" class="s27-copy" id="profBetsCopy" onclick="profCopy('profBetsCopy',PROF_TXT.bets)">Copy</button></div><p style="margin:0">${s.w}-${s.l}</p><p style="margin:4px 0 0">Washes ${s.push||0}</p><p style="margin:4px 0 0">Net ${esc(profMoney(s.net))} · ${s.open} open</p><p class="prof-note">One-vs-one wins and losses. The net includes settled pools. Washes owe nothing.</p></div>`+
-   `<div class="card"><h3>Head-to-head</h3><div class="sc"><table class="prof-h2h"><tr><th>Stoop</th><th class="n">W-L</th><th class="n">Washes</th><th class="n">Net</th></tr>${rows.map(r=>`<tr><td>${esc(ownerEmoji(r.other))} ${esc(PN(r.other))}</td><td class="n">${r.w}-${r.l}</td><td class="n">${r.push||0}</td><td class="n">${esc(profMoney(r.net))}</td></tr>`).join('')}</table></div><p class="prof-note">Settled one-vs-one bets only. A pool is not a head-to-head.</p></div>`}
+  return `<div class="card tt-mine"><div class="prof-hd"><h3>My bets</h3><button type="button" class="s27-copy" id="profBetsCopy" onclick="profCopy('profBetsCopy',PROF_TXT.bets)">Copy</button></div><p style="margin:0">${s.w}-${s.l}</p><p style="margin:4px 0 0">Washes ${s.push||0}</p><p style="margin:4px 0 0">Net ${esc(profMoney(s.net))} · ${s.open} open</p><p class="prof-note">One-vs-one wins and losses. The net includes settled pools. Washes owe nothing.</p></div>`+
+   `<div class="card tt-h2h"><h3>Head-to-head</h3><div class="sc"><table class="prof-h2h"><tr><th>Stoop</th><th class="n">W-L</th><th class="n">Washes</th><th class="n">Net</th></tr>${rows.map(r=>`<tr><td>${esc(ownerEmoji(r.other))} ${esc(PN(r.other))}</td><td class="n">${r.w}-${r.l}</td><td class="n">${r.push||0}</td><td class="n">${esc(profMoney(r.net))}</td></tr>`).join('')}</table></div><p class="prof-note">Settled one-vs-one bets only. A pool is not a head-to-head.</p></div>`}
 function profCopy(id,text){const btn=document.getElementById(id);s27CopyText(text,()=>{if(!btn)return;btn.textContent='Copied';btn.classList.add('on');clearTimeout(btn._t);btn._t=setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('on')},1200)})}
 function profCmUnlocked(){return lsGet(PROF_CM_TOK)===PROF_CM_HASH}
 function profCmLoad(){}
@@ -3886,11 +3886,6 @@ function obView(v){tab='bets27';
   render();betsLand()}
 const TALLY_NM={mark:'DIRTY DRAYMOND',jake:'STOCK RISING',kurt:'KURMOJI',ken:'KENTUT',neal:'COCKCHALKROCK',paul:'PARTY PAUL',jim:'NASTY PEACOCK',scott:'EN FUEGO'};   // Tally display = team nickname in caps (ids unchanged); neal = Neal Murf (archive). matthew has no nickname: shown as MATTHEW
 const tNm=i=>TALLY_NM[i]||String(P(i).name||i).toUpperCase();
-function ttSkin(){try{const q=new URLSearchParams(location.search).get('tt');if(q==='a'||q==='b'||q==='c'){localStorage.setItem('stoopids_tt',q);return 'tt-'+q}const s=localStorage.getItem('stoopids_tt');if(s==='a'||s==='b'||s==='c')return 'tt-'+s}catch(e){}return 'tt-a'}
-function ttPeopleList(names,M,per,Lo,Wo){const rows=names.slice().sort((a,b)=>(per(b).net||0)-(per(a).net||0));
-  return '<div class="tt-list">'+rows.map(id=>{const name=String(PN(id)||id).split(' ')[0],net=per(id).net||0,cls=net>0?'good':net<0?'bad':'',ns=net?(net>0?'+':'-')+b27Num(Math.abs(net)):'–';
-    const owes=names.filter(o=>o!==id&&(M(id,o)||0)>0).map(o=>'<div class="tt-ow">owes '+esc(String(PN(o)||o).split(' ')[0])+' <b class="bad">'+b27Num(M(id,o))+'</b></div>').join('');
-    return '<div class="tt-person"><div class="tt-ph"><b>'+esc(name)+'</b><b class="'+cls+'">'+ns+'</b></div>'+(owes||'<div class="tt-ow">owes no one</div>')+'<div class="tt-ps">'+(per(id).bets||'–')+' bets · won '+(Wo(id)?b27Num(Wo(id)):'–')+' · lost '+(Lo(id)?b27Num(Lo(id)):'–')+'</div></div>'}).join('')+'</div>'}
 function vTally(){/* STEP11: Tally = 2026-27 Bets ledger (b27Tally / U.doc), not D.bets.tallies.ledger */
   if(U.state==='init')return '<div class="card"><b>🧮 Tally · 2026-27</b><div class="note">Loading the 2026-27 bets ledger…</div></div>'+(typeof ballLoader==='function'?ballLoader():'');
   const bets=(U.doc&&U.doc.bets)||[],T=b27Tally(bets),names=b27OwnerNames();
@@ -3898,8 +3893,8 @@ function vTally(){/* STEP11: Tally = 2026-27 Bets ledger (b27Tally / U.doc), not
   let h=`<div class="card"><b>🧮 Tally · 2026-27</b><div class="note">From the 2026-27 shared ledger only. Rows owe columns.</div></div>`;
   const empty=!names.some(n=>per(n).bets||Lo(n)||Wo(n));
   if(empty)h+='<div class="card note" data-tally-empty>No 2026-27 bets with amounts yet'+(T.openCount?` (${T.openCount} still open)`:'')+'.</div>';
-  else if(typeof SHARED_UI!=='undefined'&&SHARED_UI.tallyTable){const raw=SHARED_UI.tallyTable(names.map(n=>({id:n,name:String(PN(n)||n).split(' ')[0],lost:Lo(n),won:Wo(n),net:per(n).net,bets:per(n).bets})),M,{e:esc,fmt:b27Num,rowKey:'data-pid'}),cut=raw.indexOf('<div class="card tt-s">'),table=cut<0?raw:raw.slice(0,cut),settle=cut<0?'':raw.slice(cut),who=b27Who(),mine=who?profLedgerCards(who):'<div class="card"><h3>My bets</h3><p class="prof-note">Pick who you are to see your bets.</p></div><div class="card"><h3>Head-to-head</h3><p class="prof-note">Pick who you are to see head-to-head.</p></div>';
-    h+=`<div class="tt-skin ${ttSkin()}" id="ttShot">${table}${ttPeopleList(names,M,per,Lo,Wo)}<div class="tt-trio">${mine}${settle}</div></div>`}
+  else if(typeof SHARED_UI!=='undefined'&&SHARED_UI.tallyTable){const raw=SHARED_UI.tallyTable(names.map(n=>({id:n,name:String(PN(n)||n).split(' ')[0],lost:Lo(n),won:Wo(n),net:per(n).net,bets:per(n).bets})),M,{e:esc,fmt:b27Num,rowKey:'data-pid'}),cut=raw.indexOf('<div class="card tt-s">'),table=cut<0?raw:raw.slice(0,cut),settle=cut<0?'':raw.slice(cut),who=b27Who(),mine=who?profLedgerCards(who):'<div class="card tt-mine"><h3>My bets</h3><p class="prof-note">Pick who you are to see your bets.</p></div><div class="card tt-h2h"><h3>Head-to-head</h3><p class="prof-note">Pick who you are to see head-to-head.</p></div>';
+    h+=`<div class="tt-skin tt-b" id="ttShot">${table}<div class="tt-split">${mine}${settle}</div></div>`}
   else{/* fallback without SHARED_UI.tallyTable */
     const ids=names.filter(n=>per(n).bets||Lo(n)||Wo(n));
     h+=`<div class="card sc"><table data-tally="people"><tr><th>Person</th><th class="n">Lost</th><th class="n">Won</th><th class="n">Net</th><th class="n">Bets</th></tr>${ids.slice().sort((a,b)=>per(b).net-per(a).net).map(n=>{const nt=per(n).net;return`<tr data-pid="${esc(n)}"><td>${esc(PN(n))}</td><td class="n">${b27Num(Lo(n))}</td><td class="n">${b27Num(Wo(n))}</td><td class="n"><b class="${nt>0?'good':nt<0?'bad':''}">${nt>0?'+':nt<0?'-':''}${b27Num(Math.abs(nt))}</b></td><td class="n">${per(n).bets}</td></tr>`}).join('')}</table></div>`;
@@ -4873,32 +4868,31 @@ html body #main[data-tab="games"]>.gfone{position:sticky!important;top:calc(var(
  html body #main>.tapf>button:first-child{grid-column:1 / -1!important;grid-row:auto!important;width:100%!important;height:26px!important;min-height:26px!important;max-height:26px!important;padding:0 8px!important;font-size:12px!important;line-height:24px!important}
  html body #main>.tapf>button:not(:first-child){grid-column:auto!important;grid-row:auto!important;width:100%!important;height:26px!important;min-height:26px!important;max-height:26px!important;padding:0 2px!important;font-size:11px!important;line-height:24px!important}
 }
-/* Tally preview skins. Same numbers. A flat, B zebra plus a summary block, C compact list on a phone. */
-html body .tt-list{display:none}
-html body .tt-skin table.tt th,html body .tt-skin table.tt td,html body .tt-skin table.tt thead th,html body .tt-skin table.tt tbody tr:nth-child(even) td,html body .tt-skin table.tt tbody tr:nth-child(even) th,html body .tt-skin table.tt .tt-p,html body .tt-skin table.tt tbody tr:nth-child(even) .tt-p,html body .tt-skin table.tt td.tt-d,html body .tt-skin table.tt td.bad{background:var(--card,#1b2030)!important;opacity:1}
-html body .tt-skin table.tt td.bad,html body .tt-skin table.tt b.bad{color:#f87171!important;font-weight:700}
-html body .tt-skin table.tt .good{color:#4ade80!important}
-html body .tt-skin table.tt .tz{color:#8b93a7;opacity:1}
-html body .tt-a table.tt th,html body .tt-a table.tt td{border-right:0!important;border-bottom:1px solid rgba(255,255,255,.14)!important}
-html body .tt-a table.tt thead th{color:#c5cad6;font-weight:800}
+/* Tally: zebra rows, summary block, one dash centered on the self cell. */
+html body .tt-skin{max-width:100%;min-width:0}
+html body .tt-b table.tt th,html body .tt-b table.tt td,html body .tt-b table.tt thead th,html body .tt-b table.tt tbody tr:nth-child(even) td,html body .tt-b table.tt tbody tr:nth-child(even) th,html body .tt-b table.tt .tt-p,html body .tt-b table.tt td.tt-d,html body .tt-b table.tt td.bad{background:#1b2030!important;opacity:1}
+html body .tt-b table.tt td.bad,html body .tt-b table.tt b.bad{color:#f87171!important;font-weight:700}
+html body .tt-b table.tt .good{color:#4ade80!important}
+html body .tt-b table.tt .tz{color:#8b93a7;opacity:1}
 html body .tt-b table.tt tbody tr:nth-child(odd) td,html body .tt-b table.tt tbody tr:nth-child(odd) th{background:#1b2030!important}
 html body .tt-b table.tt tbody tr:nth-child(even) td,html body .tt-b table.tt tbody tr:nth-child(even) th,html body .tt-b table.tt tbody tr:nth-child(even) .tt-p{background:#242b3c!important}
 html body .tt-b table.tt thead th{background:#1b2030!important}
 html body .tt-b table.tt .tt-sum,html body .tt-b table.tt thead .tt-sum{background:#2c3548!important}
 html body .tt-b table.tt th.tt-s1,html body .tt-b table.tt td.tt-s1{border-left:10px solid var(--bg,#0e121b)!important}
-html body .tt-c table.tt th,html body .tt-c table.tt td{padding:4px 6px!important;font-size:13px}
-html body .tt-c table.tt .tt-p{position:sticky;left:0;z-index:2;background:#1b2030!important}
-html body .tt-person{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.12)}
-html body .tt-ph,html body .tt-ow,html body .tt-ps{display:flex;justify-content:space-between;gap:8px}
-html body .tt-ph{font-size:16px}
-html body .tt-ow{margin-top:4px;color:#e8eaf0}
-html body .tt-ps{margin-top:6px;color:#aeb6c6;font-size:13px}
-html body .tt-trio{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.5fr) minmax(0,.9fr);gap:10px;align-items:stretch;margin-top:10px}
-html body .tt-trio>.card{margin:0;height:100%;box-sizing:border-box}
+html body .tt-b table.tt td.tt-d{text-align:center!important;overflow:hidden}
+html body .tt-b table.tt td.tt-d .tz{display:block;text-align:center;line-height:1}
+html body .tt-split{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);grid-template-areas:"mine h2h" "settle h2h";gap:10px;align-items:start;margin-top:10px}
+html body .tt-split>.tt-mine{grid-area:mine;margin:0!important}
+html body .tt-split>.tt-h2h{grid-area:h2h;margin:0!important}
+html body .tt-split>.tt-s{grid-area:settle;margin:0!important}
 @media (max-width:700px){
- html body .tt-trio{grid-template-columns:1fr}
- html body .tt-c .tt-w{display:none}
- html body .tt-c .tt-list{display:block;background:var(--card,#1b2030);border:1px solid var(--line,#2d3548);border-radius:14px}
+ html body .tt-split{grid-template-columns:1fr;grid-template-areas:"mine" "settle" "h2h"}
+ html body .tt-b .tt-w{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}
+ html body .tt-b table.tt{width:max-content!important;min-width:640px;table-layout:auto}
+ html body .tt-b table.tt th.tt-o,html body .tt-b table.tt td.n,html body .tt-b table.tt td.tt-d{min-width:3.2rem}
+ html body .tt-b table.tt .tt-p{position:sticky;left:0;z-index:3;min-width:4.8rem;background:#1b2030!important;box-shadow:8px 0 8px -6px rgba(0,0,0,.55)}
+ html body .tt-b table.tt thead .tt-p{z-index:4;background:#1b2030!important}
+ html body .tt-b table.tt tbody tr:nth-child(even) .tt-p{background:#242b3c!important}
 }
 </style><!--</S29E-PASTE>-->
 <!--<S29E-COPY>--><script>
