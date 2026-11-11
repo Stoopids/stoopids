@@ -3683,7 +3683,7 @@ function b27FaceBits(b){let rd=null;try{rd=s25BetRd(b)}catch(e){}if(!rd||rd.k===
   if(rd.k==='spread'){const mine=b27SpreadBit(rd.l),theirs=b27OppSpread(rd.l);return {match:rd.t+' '+mine+' vs '+rd.o,mine:rd.t+' '+mine,theirs:rd.o+' '+theirs,day:rd.d}}
   if(rd.k==='total'){const mine=rd.ou==='o'?'Over':'Under',theirs=rd.ou==='o'?'Under':'Over';return {match:rd.t+' vs '+rd.o+' '+mine+' '+rd.l,mine:mine+' '+rd.l,theirs:theirs+' '+rd.l,day:rd.d}}
   return {match:rd.t+' vs '+rd.o,mine:rd.t,theirs:rd.o,day:rd.d}}
-function b27FaceWho(b,bits){const Bk=PN(b.backer),OP=b27Opps(b).map(PN);if(!bits)return Bk+' v '+OP.join(', ');if(OP.length>1)return Bk+' · '+bits.mine+' · '+OP.join(', ');return Bk+' · '+bits.mine+' · '+OP[0]+' · '+bits.theirs}
+function b27FaceOne(b){const Bk=PN(b.backer),OP=b27Opps(b).map(PN).join(', ');if(b.kind==='pool')return Bk+' v '+OP;const bits=b27FaceBits(b),pick=bits&&bits.mine?bits.mine:b27Clean(b&&b.text||'');return pick?Bk+' '+pick+' v '+OP:Bk+' v '+OP}
 function b27FaceStake(b){const odds=b27OddsFace(b.odds&&b.odds.a,b.odds&&b.odds.b);return '$'+b27Num(b.amt)+(b27Opps(b).length>1?' each':'')+(odds?' · '+odds:'')}
 function b27GameLine(b){let rd=null;try{rd=s25BetRd(b)}catch(e){}
   let match=b27Matchup(b);
@@ -3710,17 +3710,16 @@ function b27Card(b,me){
   const ready=b27Ready(b),bits=b.kind==='pool'?null:b27FaceBits(b);
   const settled=st==='backer'||st==='other'||st==='push';
   const title=settled?(st==='push'?`Bet #${b.n} · 💦 Wash`:`Bet #${b.n} · ${st==='backer'?Bk:(BU?'Managers':Ot)} won`):`Bet #${b.n} · ${stTxt}`;
-  const faceLine=bits?bits.match:b27Matchup(b);
-  const whoLine=b.kind==='pool'?Bk+' v '+OPd.join(', '):b27FaceWho(b,bits);
+  const faceLine=b.kind==='pool'?Bk+' v '+OPd.join(', '):b27FaceOne(b);
   const stake=b.kind==='pool'?'':b27FaceStake(b);
   const day=b27DayBit(bits&&bits.day)||b27CardDate(b);
   let h=`<div class="card b27-c${ready?' b27-ready':''}${U.flashBet===b.id?' act-flash':''}"${/*<S24-EDIT>*/s24Attr('b',b.id)/*</S24-EDIT>*/}><div class="s24hd"><b>${esc(title)}</b>${/*<S24-EDIT>*/s24FixBadge(b)/*</S24-EDIT>*/}${/*<S24-EDIT>*/s24LinkBtn('bets',b.id,'bet')/*</S24-EDIT>*/}</div>
-   <div class="b27-t">${esc(faceLine)}</div><div class="b27-m">${esc(whoLine)}</div>${stake?`<div class="b27-stake">${esc(stake)}</div>`:''}${!settled?`<div class="b27-meta">${day?`<span>${esc(day)}</span>`:''}${b27SettlesHtml(b)}</div>`:day?`<div class="b27-meta"><span>${esc(day)}</span></div>`:''}`;
+   <div class="b27-t">${esc(faceLine)}</div>${stake?`<div class="b27-stake">${esc(stake)}</div>`:''}${!settled?`<div class="b27-meta">${day?`<span>${esc(day)}</span>`:''}${b27SettlesHtml(b)}</div>`:day?`<div class="b27-meta"><span>${esc(day)}</span></div>`:''}`;
   let del='',who='';
   if(st==='open'&&(isP||ADMIN)){
     const ask=w=>U.askSettle&&U.askSettle.id===b.id&&U.askSettle.what===w&&U.askSettle.terms===b27Terms(b);
     const btn=(w,label)=>`<button type="button" class="btn sec b27-b" onclick="${ask(w)?`b27SetStatus('${b.id}','${w}')`:`b27Ask('${b.id}','${w}')`}"${U.busy?' disabled':''}>${ask(w)?'Tap again to '+(w==='push'?'wash':'settle')+' #'+b.n:label}</button>`;
-    /*<CREATOR-SETTLE>*/if(me!==b.backer)who=`<div class="note b27-onlyc" style="margin-top:6px">Only ${esc(PN(b.backer))} (who placed it) can enter the result.</div>`;else /*</CREATOR-SETTLE>*//*<S25>*/if(!s25HideManual(b))/*</S25>*/who=`<div class="b27-act"><span class="note">Who won?</span>${btn('backer',esc(Bk)+' won')}${btn('other',BU?'Managers won':esc(Ot)+' won')}${btn('push','Wash')}</div>`;
+    /*<CREATOR-SETTLE>*/if(me!==b.backer)who=`<div class="note b27-onlyc" style="margin-top:6px">Only ${esc(PN(b.backer))} can enter result.</div>`;else /*</CREATOR-SETTLE>*//*<S25>*/if(!s25HideManual(b))/*</S25>*/who=`<div class="b27-act"><span class="note">Who won?</span>${btn('backer',esc(Bk)+' won')}${btn('other',BU?'Managers won':esc(Ot)+' won')}${btn('push','Wash')}</div>`;
     if(b27CanUndo(b)&&b.kind!=='pool'){const ask=U.askDel===b.id&&U.askDelAt&&U.askDelAt.terms===b27Terms(b);del=`<button type="button" class="btn sec b27-b" onclick="b27OpenEdit('${b.id}')"${U.busy?' disabled':''}>Edit</button><button type="button" class="btn sec b27-b" onclick="${ask?`b27DoDel('${b.id}','${b27Hash(b27Terms(b))}')`:`b27AskDel('${b.id}')`}"${U.busy?' disabled':''}>${ask?'Tap again to delete bet #'+b.n:'Delete'}</button>`}
     else if(ADMIN)del=`<button type="button" class="btn sec b27-b" onclick="b27Void('${b.id}','${b27Hash(b27Terms(b))}')"${U.busy?' disabled':''}>Delete</button>`;
   }
@@ -4439,10 +4438,10 @@ function s24FilterBar(bets,me,ph){const settledOnly=ph==='Search settled bets';
   const tabs=settledOnly?'':`<div class="s24st" role="tablist" aria-label="Bet status">${tab('need','Needs action')}${tab('open','Open')}${tab('all','All')}</div>`;
   const opt=(list,cur,extra)=>list.map(([k,t])=>`<option value="${k}"${k===cur?' selected':''}>${esc(t)}${extra&&extra[k]!=null?' ('+extra[k]+')':''}</option>`).join('');
   const nMine=s24Count(bets,me,{ac:'mine'}),nTheirs=s24Count(bets,me,{ac:'theirs'});
-  const person=`<label class="s24lb">Person<select id="sbPerson" aria-label="Person" onchange="s24FSetP(this.value)"><option value="all"${p==='all'?' selected':''}>Everyone</option><option value="me"${p==='me'?' selected':''}>Me</option>${b27OwnerNames().map(o=>`<option value="${esc(o)}"${o===p?' selected':''}>${esc(PN(o))}</option>`).join('')}</select></label>`;
-  const sort=`<button type="button" class="s24ch" aria-pressed="${ch==='old'?'true':'false'}" onclick="s24ChronoToggle()">${ch==='old'?'Oldest first':'Newest first'}</button>`;
+  const person=`<select id="sbPerson" aria-label="Person" onchange="s24FSetP(this.value)"><option value="all"${p==='all'?' selected':''}>Everyone</option><option value="me"${p==='me'?' selected':''}>Me</option>${b27OwnerNames().map(o=>`<option value="${esc(o)}"${o===p?' selected':''}>${esc(PN(o))}</option>`).join('')}</select>`;
+  const sort=`<button type="button" class="s24ch" aria-label="Sort" aria-pressed="${ch==='old'?'true':'false'}" onclick="s24ChronoToggle()">${ch==='old'?'Oldest first':'Newest first'}</button>`;
   const row=settledOnly?`<div class="row2">${person}<input id="sbQ" class="sb-in" aria-label="Search bets" placeholder="${esc(ph||'search terms…')}" value="${esc(s24Q)}" onchange="s24FSetQ(this.value)"></div>`
-    :`<div class="s24r2">${person}<label class="s24lb">Bet type<select id="sbAction" aria-label="Bet type" onchange="s24FSetA(this.value)">${opt(S24FAC,ac,{mine:nMine,theirs:nTheirs})}</select></label><label class="s24lb">Settles when<select id="sbWhen" aria-label="Settles when" onchange="s24FSetW(this.value)">${opt(S24FWH,wh)}</select></label>${sort}</div><input id="sbQ" class="sb-in s24q" aria-label="Search bets" placeholder="${esc(ph||'search terms…')}" value="${esc(s24Q)}" onchange="s24FSetQ(this.value)">`;
+    :`<div class="s24r2">${person}<select id="sbAction" aria-label="Bet type" onchange="s24FSetA(this.value)">${opt(S24FAC,ac,{mine:nMine,theirs:nTheirs})}</select><select id="sbWhen" aria-label="Settles when" onchange="s24FSetW(this.value)">${opt(S24FWH,wh)}</select>${sort}</div><input id="sbQ" class="sb-in s24q" aria-label="Search bets" placeholder="${esc(ph||'search terms…')}" value="${esc(s24Q)}" onchange="s24FSetQ(this.value)">`;
   return `<div class="card s24fb">${tabs}${row}
    ${settledOnly?'':`<div class="note" style="margin-top:6px"><a href="${esc(s24Href('howto'))}" onclick="return s24HowFilters(event)">How these filters work →</a>${(ac==='mine'||ac==='theirs')&&!me?' Pick who you are to use My turn or Their turn.':''}</div>`}</div>`}
 
@@ -4718,10 +4717,10 @@ html body .b27-foot{display:flex;align-items:flex-end;justify-content:space-betw
 html body .b27-ts{flex:1 1 auto;min-width:0;color:var(--mut,#9aa3b5);font-size:12px;line-height:1.35;font-weight:500}
 html body .s24st{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;width:min(100%,480px)!important;gap:6px!important;margin:0 0 8px!important}
 html body .s24st>button{width:100%!important;flex:none!important;box-sizing:border-box!important;height:36px!important;min-height:36px!important;max-height:36px!important;padding:0 4px!important;font-size:13px!important;font-weight:800!important;line-height:34px!important;text-align:center!important;white-space:nowrap!important}
-html body .s24r2{display:flex;align-items:flex-end;flex-wrap:wrap;gap:6px;width:100%}
-html body .s24r2 .s24lb{flex:1 1 100px;min-width:100px;display:flex;flex-direction:column;gap:2px;color:var(--mut,#9aa3b5);font-size:11px;font-weight:700;line-height:1.2}
-html body .s24r2 select{width:100%;height:36px;min-height:36px;font-size:13px;padding:0 6px}
-html body .s24r2 .s24ch{flex:1 1 0;min-width:0;box-sizing:border-box;height:36px;min-height:36px;max-height:36px;padding:0 4px;border-radius:999px;border:1px solid var(--line,#2d3548);background:transparent;color:inherit;font:inherit;font-size:12px;font-weight:800;line-height:34px;text-align:center;white-space:nowrap;cursor:pointer}
+html body .s24r2{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));align-items:center;gap:4px;width:100%}
+html body .s24r2 select,html body .s24r2 .s24ch{width:100%;min-width:0;box-sizing:border-box;height:32px;font-size:11px}
+html body .s24r2 select{padding:0 14px 0 4px;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%23aab'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 4px center;background-size:8px 5px}
+html body .s24r2 .s24ch{margin:0;padding:0 2px;border-radius:999px;border:1px solid var(--line,#2d3548);background:transparent;color:inherit;font:inherit;font-size:11px;font-weight:800;line-height:30px;text-align:center;white-space:nowrap;cursor:pointer}
 html body .s24r2 .s24ch[aria-pressed="true"]{background:#ffd400;color:#111;border-color:#ffd400}
 html body .s24fb input.s24q{width:100%;margin-top:6px;box-sizing:border-box}
 html body .b27-foot>.b27-more>summary{min-height:36px;line-height:36px}
@@ -4813,10 +4812,8 @@ html body .gmon{justify-content:flex-start!important;width:auto!important;max-wi
 html body .gmon>button{flex:0 0 auto!important;width:auto!important;min-width:0!important;padding:5px 12px!important}
 html body .s24fb .row2{flex-wrap:wrap!important;gap:6px!important}
 html body .s24fb .row2>*{flex:0 1 auto!important;width:auto!important;max-width:100%!important;height:32px!important;min-height:32px!important}
-html body .s24r2{flex-wrap:wrap!important;gap:6px!important}
-html body .s24r2 .s24lb{flex:1 1 100px!important;min-width:100px!important}
-html body .s24r2 select{height:36px!important;min-height:36px!important;max-height:36px!important;font-size:13px!important;padding:0 16px 0 8px!important}
-html body .s24r2 .s24ch{flex:0 0 auto!important;width:auto!important;margin-left:auto!important;height:36px!important;min-height:36px!important;max-height:36px!important;padding:0 12px!important;font-size:13px!important}
+html body .s24r2{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:4px!important}
+html body .s24r2 select,html body .s24r2 .s24ch{width:100%!important;min-width:0!important;height:32px!important;min-height:32px!important;max-height:32px!important;font-size:11px!important}
 @media (max-width:999px){
  html body .entry-pair{display:block!important}
  html body .entry-pair>.entry-col{position:absolute!important;width:0!important;height:0!important;margin:0!important;overflow:hidden!important}
