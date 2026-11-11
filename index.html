@@ -3683,7 +3683,7 @@ function b27FaceBits(b){let rd=null;try{rd=s25BetRd(b)}catch(e){}if(!rd||rd.k===
   if(rd.k==='spread'){const mine=b27SpreadBit(rd.l),theirs=b27OppSpread(rd.l);return {match:rd.t+' '+mine+' vs '+rd.o,mine:rd.t+' '+mine,theirs:rd.o+' '+theirs,day:rd.d}}
   if(rd.k==='total'){const mine=rd.ou==='o'?'Over':'Under',theirs=rd.ou==='o'?'Under':'Over';return {match:rd.t+' vs '+rd.o+' '+mine+' '+rd.l,mine:mine+' '+rd.l,theirs:theirs+' '+rd.l,day:rd.d}}
   return {match:rd.t+' vs '+rd.o,mine:rd.t,theirs:rd.o,day:rd.d}}
-function b27FaceOne(b){const Bk=PN(b.backer),OP=b27Opps(b).map(PN).join(', ');if(b.kind==='pool')return Bk+' v '+OP;const bits=b27FaceBits(b),pick=bits&&bits.mine?bits.mine:b27Clean(b&&b.text||'');return pick?Bk+' '+pick+' v '+OP:Bk+' v '+OP}
+function b27FacePick(b){if(!b||b.kind==='pool')return '';const bits=b27FaceBits(b);return bits&&bits.mine?bits.mine:b27Clean(b.text||'')}
 function b27FaceStake(b){const odds=b27OddsFace(b.odds&&b.odds.a,b.odds&&b.odds.b);return '$'+b27Num(b.amt)+(b27Opps(b).length>1?' each':'')+(odds?' · '+odds:'')}
 function b27GameLine(b){let rd=null;try{rd=s25BetRd(b)}catch(e){}
   let match=b27Matchup(b);
@@ -3710,11 +3710,11 @@ function b27Card(b,me){
   const ready=b27Ready(b),bits=b.kind==='pool'?null:b27FaceBits(b);
   const settled=st==='backer'||st==='other'||st==='push';
   const title=settled?(st==='push'?`Bet #${b.n} · 💦 Wash`:`Bet #${b.n} · ${st==='backer'?Bk:(BU?'Managers':Ot)} won`):`Bet #${b.n} · ${stTxt}`;
-  const faceLine=b.kind==='pool'?Bk+' v '+OPd.join(', '):b27FaceOne(b);
+  const pick=b27FacePick(b),whoLine=Bk+' v '+OPd.join(', ');
   const stake=b.kind==='pool'?'':b27FaceStake(b);
   const day=b27DayBit(bits&&bits.day)||b27CardDate(b);
   let h=`<div class="card b27-c${ready?' b27-ready':''}${U.flashBet===b.id?' act-flash':''}"${/*<S24-EDIT>*/s24Attr('b',b.id)/*</S24-EDIT>*/}><div class="s24hd"><b>${esc(title)}</b>${/*<S24-EDIT>*/s24FixBadge(b)/*</S24-EDIT>*/}${/*<S24-EDIT>*/s24LinkBtn('bets',b.id,'bet')/*</S24-EDIT>*/}</div>
-   <div class="b27-t">${esc(faceLine)}</div>${stake?`<div class="b27-stake">${esc(stake)}</div>`:''}${!settled?`<div class="b27-meta">${day?`<span>${esc(day)}</span>`:''}${b27SettlesHtml(b)}</div>`:day?`<div class="b27-meta"><span>${esc(day)}</span></div>`:''}`;
+   ${pick?`<div class="b27-t">${esc(pick)}</div>`:''}<div class="b27-m">${esc(whoLine)}</div>${stake?`<div class="b27-stake">${esc(stake)}</div>`:''}${!settled?`<div class="b27-meta">${day?`<span>${esc(day)}</span>`:''}${b27SettlesHtml(b)}</div>`:day?`<div class="b27-meta"><span>${esc(day)}</span></div>`:''}`;
   let del='',who='';
   if(st==='open'&&(isP||ADMIN)){
     const ask=w=>U.askSettle&&U.askSettle.id===b.id&&U.askSettle.what===w&&U.askSettle.terms===b27Terms(b);
