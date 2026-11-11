@@ -3712,14 +3712,15 @@ function b27Card(b,me){
   const settled=st==='backer'||st==='other'||st==='push';
   const title=settled?(st==='push'?`Bet #${b.n} · 💦 Wash`:`Bet #${b.n} · ${st==='backer'?Bk:(BU?'Managers':Ot)} won`):`Bet #${b.n} · ${stTxt}`;
   const sides=b.kind==='pool'?'':b27FaceSides(b),whoStake=b.kind==='pool'?Bk+' v '+OPd.join(', '):b27FaceWhoStake(b);
+  const onlyLine=st==='open'&&b.kind!=='pool'&&me!==b.backer?`<div class="note b27-onlyc">Only ${esc(Bk)} can enter result.</div>`:'';
   const day=b27DayBit(bits&&bits.day)||b27CardDate(b);
   let h=`<div class="card b27-c${ready?' b27-ready':''}${U.flashBet===b.id?' act-flash':''}"${/*<S24-EDIT>*/s24Attr('b',b.id)/*</S24-EDIT>*/}><div class="s24hd"><b>${esc(title)}</b>${/*<S24-EDIT>*/s24FixBadge(b)/*</S24-EDIT>*/}${/*<S24-EDIT>*/s24LinkBtn('bets',b.id,'bet')/*</S24-EDIT>*/}</div>
-   ${sides?`<div class="b27-t">${esc(sides)}</div>`:''}<div class="b27-m">${esc(whoStake)}</div>${!settled?`<div class="b27-meta">${day?`<span>${esc(day)}</span>`:''}${b27SettlesHtml(b)}</div>`:day?`<div class="b27-meta"><span>${esc(day)}</span></div>`:''}`;
+   ${sides?`<div class="b27-t">${esc(sides)}</div>`:''}<div class="b27-m">${esc(whoStake)}</div>${onlyLine}${!settled?`<div class="b27-meta">${day?`<span>${esc(day)}</span>`:''}${b27SettlesHtml(b)}</div>`:day?`<div class="b27-meta"><span>${esc(day)}</span></div>`:''}`;
   let del='',who='';
   if(st==='open'&&(isP||ADMIN)){
     const ask=w=>U.askSettle&&U.askSettle.id===b.id&&U.askSettle.what===w&&U.askSettle.terms===b27Terms(b);
     const btn=(w,label)=>`<button type="button" class="btn sec b27-b" onclick="${ask(w)?`b27SetStatus('${b.id}','${w}')`:`b27Ask('${b.id}','${w}')`}"${U.busy?' disabled':''}>${ask(w)?'Tap again to '+(w==='push'?'wash':'settle')+' #'+b.n:label}</button>`;
-    const due=b27Due(b);/*<CREATOR-SETTLE>*/if(!due)who='';else if(me!==b.backer)who=`<div class="note b27-onlyc" style="margin-top:6px">Only ${esc(PN(b.backer))} can enter result.</div>`;else /*</CREATOR-SETTLE>*//*<S25>*/if(!s25HideManual(b))/*</S25>*/who=`<div class="b27-act"><span class="note">Who won?</span>${btn('backer',esc(Bk)+' won')}${btn('other',BU?'Managers won':esc(Ot)+' won')}${btn('push','Wash')}</div>`;
+    const due=b27Due(b);/*<CREATOR-SETTLE>*/if(due&&me===b.backer&&!s25HideManual(b))/*</CREATOR-SETTLE>*//*<S25>*/who=`<div class="b27-act"><span class="note">Who won?</span>${btn('backer',esc(Bk)+' won')}${btn('other',BU?'Managers won':esc(Ot)+' won')}${btn('push','Wash')}</div>`;
     if(b27CanUndo(b)&&b.kind!=='pool'){const ask=U.askDel===b.id&&U.askDelAt&&U.askDelAt.terms===b27Terms(b);del=`<button type="button" class="btn sec b27-b" onclick="b27OpenEdit('${b.id}')"${U.busy?' disabled':''}>Edit</button><button type="button" class="btn sec b27-b" onclick="${ask?`b27DoDel('${b.id}','${b27Hash(b27Terms(b))}')`:`b27AskDel('${b.id}')`}"${U.busy?' disabled':''}>${ask?'Tap again to delete bet #'+b.n:'Delete'}</button>`}
     else if(ADMIN)del=`<button type="button" class="btn sec b27-b" onclick="b27Void('${b.id}','${b27Hash(b27Terms(b))}')"${U.busy?' disabled':''}>Delete</button>`;
   }
