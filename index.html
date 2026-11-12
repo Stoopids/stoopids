@@ -175,6 +175,7 @@ main{max-width:1000px;margin:0 auto;padding:12px 10px 60px}
 .chip.big{font-size:15px;padding:3px 11px 3px 3px}
 .chip.big img{width:30px;height:30px}
 .chip.out{opacity:.55;text-decoration:line-through}
+.arch-drop{text-decoration:line-through}
 table{width:100%;border-collapse:collapse;font-size:14px}
 th,td{padding:7px 6px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}
 th{color:var(--mut);font-size:12px;text-transform:uppercase;letter-spacing:.04em;position:sticky;top:0}
@@ -2376,7 +2377,11 @@ function archName(n){n=String(n==null?'':n);if(n!==n.toUpperCase()||!/[A-Z]{2}/.
   return n.replace(/[A-Za-z][A-Za-z.'&-]*/g,w=>{const u=w.toUpperCase();if(ACRO[u])return ACRO[u];if(/^([A-Z]\.)+$/.test(w))return w;if(w.length<=2&&u!=='ST'&&u!=='OF')return u;if(u==='OF'||u==='THE'||u==='AND')return u.toLowerCase();return u[0]+u.slice(1).toLowerCase().replace(/(^|[-'])([a-z])/g,(m0,p1,p2)=>p1+p2.toUpperCase())})}
 function archTeams(o){
   return `<div class="sc"><table><tr><th>#</th><th>Team</th><th class="n">Wins</th><th class="n">Pts</th></tr>`+
-   o.teams.map(t=>`<tr><td>${t.pick}</td><td class="t">${t.name?esc(archName(t.name)):'<i class="mut">(no team name in sheet)</i>'}${t.redraft_add?' <span class="pill" title="Picks 9–10 were added at the Jan 20 redraft">Jan 20 pick</span>':''}</td><td class="n mut">${t.wins==null?'':t.wins}</td><td class="n"><b>${t.pts==null?'—':t.pts}</b></td></tr>`).join('')+
+   o.teams.map(t=>{const name=t.name?esc(archName(t.name)):'<i class="mut">(no team name in sheet)</i>';
+    const drop=t.redraft_drop===true&&!t.redraft_add;
+    const shown=drop?`<s class="arch-drop">${name}</s>`:name;
+    const tag=t.redraft_add?' <span class="pill" title="Added at the Jan 20 redraft">Jan 20 pick</span>':'';
+    return `<tr><td>${t.pick}</td><td class="t">${shown}${tag}</td><td class="n mut">${t.wins==null?'':t.wins}</td><td class="n"><b>${t.pts==null?'—':t.pts}</b></td></tr>`}).join('')+
    `</table></div>`}
 function vArchive(){
   const A=window.ARCHIVE;
