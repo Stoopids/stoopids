@@ -176,7 +176,8 @@ U.halfLs=hsLs;U.halfScores=function(g,s,first,BOX){var tot=s.score!=null?esc(Str
     var YEAR=366*86400000;
     function expAt(f,now,ws){if(f.mode==='start')return ws||null;var x;if(f.mode==='at'){x=Date.parse(f.at);if(isNaN(x))return null}else{var n=+f.n;if(!(n>0))return null;x=now+n*({m:60000,h:3600000,d:86400000,w:604800000,mo:2592000000}[f.mode]||3600000)}return x>now+YEAR?null:x}
     function sides(g){return SHARED_UI.qbOptions(g,{name:A.tname,date:A.dateET(g)})}
-    function pick(g,f){var tt=String(f.text||'').trim().slice(0,A.maxText||140);if(!g)return tt?{k:'txt',si:0,lab:tt,other:'',txt:tt}:null;if(tt&&!(f.side&&(function(){var q=f.side.split(':'),oo=sides(g).find(function(x){return x.k===q[0]});return oo&&oo.s[+q[1]]&&(oo.s[+q[1]].lab===tt||oo.s[+q[1]].txt===tt)})()))return {k:'txt',si:0,lab:tt,other:'',txt:tt+' ('+A.tname(g.away)+' vs '+A.tname(g.home)+', '+A.dateET(g)+')'};if(!f.side)return null;var p=f.side.split(':'),o=sides(g).find(function(x){return x.k===p[0]}),s=o&&o.s[+p[1]];var ot=o.s[1-(+p[1])];return s?{k:p[0],si:+p[1],lab:s.lab,other:ot?ot.lab:'',txt:(f.cov==='2h'?'2nd half: ':'')+s.txt}:null}
+    function hasBothTeams(tt,g){var low=String(tt||'').toLowerCase(),a=String(A.tname(g.away)||'').toLowerCase(),h=String(A.tname(g.home)||'').toLowerCase();return !!(a&&h&&low.indexOf(a)>=0&&low.indexOf(h)>=0)}
+    function pick(g,f){var tt=String(f.text||'').trim().slice(0,A.maxText||140);if(!g)return tt?{k:'txt',si:0,lab:tt,other:'',txt:tt}:null;if(tt&&!(f.side&&(function(){var q=f.side.split(':'),oo=sides(g).find(function(x){return x.k===q[0]});return oo&&oo.s[+q[1]]&&(oo.s[+q[1]].lab===tt||oo.s[+q[1]].txt===tt)})()))return {k:'txt',si:0,lab:tt,other:'',txt:tt+(hasBothTeams(tt,g)?'':' ('+A.tname(g.away)+' vs '+A.tname(g.home)+', '+A.dateET(g)+')')};if(!f.side)return null;var p=f.side.split(':'),o=sides(g).find(function(x){return x.k===p[0]}),s=o&&o.s[+p[1]];var ot=o.s[1-(+p[1])];return s?{k:p[0],si:+p[1],lab:s.lab,other:ot?ot.lab:'',txt:(f.cov==='2h'?'2nd half: ':'')+s.txt}:null}
     async function write(mut,ok){for(var k=0;k<3;k++){var cur=parse(await A.get());if(!ok(cur)){await A.set(JSON.stringify({v:1,reqs:mut(cur)}))}
         await new Promise(function(r){setTimeout(r,350+Math.random()*400)});var back=parse(await A.get());if(ok(back)){S.list=back;S.at=Date.now();return back}}throw new Error('conflict')}
     function responseEvents(list,me){var out=[];(list||[]).forEach(function(r){if(!r||r.by!==me||!r.id)return;var sum=String(r.txt||r.lab||'Request').replace(/\s+/g,' ').trim().slice(0,90);
@@ -291,7 +292,8 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
       return {sum:'',ex:'<b>'+e(line1)+'</b>'+(line2?'<div>'+e(line2)+'</div>':'')+(line3?'<div>'+e(line3)+'</div>':'')}}
     function rqPaintExplain(){var box=rqPreview(S.f),x=document.getElementById('rqEx');if(x)x.innerHTML=box.ex}
     function nmOf(id){return (A.real||A.nick)(id)}
-    function descLine(r){var t=String(r.txt||r.lab||'').replace(/\s+/g,' ').trim(),o=r.odds||[1,1];
+    function onceGame(t){return String(t||'').replace(/\s*\(([^)]+)\)\s*$/,function(all,inner){var head=String(t).slice(0,String(t).lastIndexOf(all)),m=/^(.*?)\s+vs\.?\s+(.*?)(?:,\s*([A-Za-z]{3}\s+\d{1,2}))?\s*$/i.exec(String(inner).trim()),h=head.toLowerCase();if(!m||h.indexOf(m[1].trim().toLowerCase())<0||h.indexOf(m[2].trim().toLowerCase())<0)return all;if(m[3]&&h.indexOf(m[3].toLowerCase())<0)return all;return ''}).replace(/\s+/g,' ').trim()}
+    function descLine(r){var t=onceGame(String(r.txt||r.lab||'').replace(/\s+/g,' ').trim()),o=r.odds||[1,1];
       if(+o[0]===+o[1])return t;
       var od=o[0]+'-'+o[1];if(t.toLowerCase().indexOf(od.toLowerCase())>=0)return t;return (t?t+' ':'')+'at '+od}
     function vsRight(r,acc){if(acc)return nmOf(acc);if(r.to&&r.to.length===1)return nmOf(r.to[0]);var n=slots(r)||(r.to?r.to.length:0);return 'Open to '+n+' stoop'+(n===1?'':'s')}
