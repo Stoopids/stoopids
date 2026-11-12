@@ -3339,7 +3339,7 @@ function b27Text(t){U.text=t;b27Sync()}
 function b27ClipText(b){if(!b||!RQ||!RQ.waText)return '';return RQ.waText({by:b.backer,to:b27Opps(b),amt:b.amt,odds:[b.odds.a,b.odds.b],txt:b.text||'',lab:b.text||''},'bet')}
 function b27CopyNow(t){return new Promise(resolve=>{const fin=ok=>resolve(!!ok);const fb=()=>{let ok=false;try{const ta=document.createElement('textarea');ta.value=t;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();ok=!!(document.execCommand&&document.execCommand('copy'));ta.remove()}catch(e){}fin(ok)};try{if(navigator.clipboard&&navigator.clipboard.writeText&&window.isSecureContext){const p=navigator.clipboard.writeText(t);if(p&&p.then){p.then(()=>fin(true),fb);return}} }catch(e){}fb()})}
 async function b27ClipRetry(){if(!U.clip)return;const ok=await b27CopyNow(U.clip);if(ok){const base=String(U.msg||'').replace(/ Could not copy it\. Copy the message below\.$/,'').replace(/ Message copied\. Paste it in WhatsApp\.$/,'');U.clip=null;U.msg=base+' Message copied. Paste it in WhatsApp.';U.msgBad=false}else U.msgBad=false;render()}
-function b27Place(){/*<POOL>*/if(U.kind==='pool'){U.confirm=false;return}/*</POOL>*/const e=b27FormOK();if(e){b27Err(e);render();return}U.msg='';U.clip=null;U.confirm=true;render()}
+function b27Place(){/*<POOL>*/if(U.kind==='pool')return b27PoolPlace();/*</POOL>*/const e=b27FormOK();if(e){b27Err(e);render();return}U.msg='';U.clip=null;U.confirm=true;render()}
 function b27Edit(){U.confirm=false;render()}
 /*<MULTI-BET>*/async function b27Confirm(){
   if(U.busy)return;/*<POOL>*/if(U.kind==='pool')return b27PoolConfirm();/*</POOL>*/
@@ -3463,7 +3463,7 @@ function s26fPoolCheck(){const e={},parts=b27PoolParts();
   if(parts.length<2)e.people=PT('ePeople');
   let amt=null;const bt=String(U.entry==null?'':U.entry).trim();
   if(!bt)e.buy=PT('eBuy');else{amt=b27PoolNum(bt);if(amt===null||amt<PULK.minAmt){e.buy=amt===null&&parseAmount(bt,false)===null?PT('eBuy'):PT('eBuyMin',{min:PULK.minAmt});amt=null}}
-  const pot=amt!==null&&parts.length>=2?amt*parts.length:null;
+  const pot=amt!==null&&parts.length>=1?amt*parts.length:null;
   const vals=U.places.map(s=>String(s==null?'':s).trim());let places=null,sum=0,bad=false;
   vals.forEach(v=>{if(!v)return;const n=b27PoolNum(v);if(n===null)bad=true;else sum+=n});
   if(bad)e.pay=PT('ePlaceNum');
@@ -3502,13 +3502,13 @@ function b27PoolValid(x,names){
   const n=Number(x.n),t=Date.parse(x.created_at),amt=Number(x.amt),backer=legacyOwner(x.backer),has=(o,k)=>Object.prototype.hasOwnProperty.call(o,k);
   if(typeof x.id!=='string'||!/^[a-z0-9]{6,24}$/.test(x.id)||!Array.isArray(x.parts)||typeof x.text!=='string')return null;
   const parts=x.parts.map(legacyOwner);
-  if(parts.length<2||parts.length>names.length||parts.some(p=>typeof p!=='string'||!names.includes(p))||new Set(parts).size!==parts.length||!parts.includes(backer))return null;
+  if(!names.includes(backer)||parts.length<2||parts.length>names.length||parts.some(p=>typeof p!=='string'||!names.includes(p))||new Set(parts).size!==parts.length)return null;
   if(!Number.isInteger(amt)||amt<PULK.minAmt||amt>POOL_MAX||!Number.isInteger(n)||n<1||!isFinite(t))return null;
   let back=null;
   if(x.back&&typeof x.back==='object'&&!Array.isArray(x.back)){const raw={};for(const k of Object.keys(x.back))raw[legacyOwner(k)]=x.back[k];const bk={};let ok=true;
     for(const k of Object.keys(raw)){if(!parts.includes(k)||!Number.isInteger(raw[k])||raw[k]<0||raw[k]>POOL_MAX)ok=false;else bk[k]=raw[k]}
     if(ok){parts.forEach(p=>{if(!has(bk,p))bk[p]=0});if(parts.reduce((s,p)=>s+bk[p],0)===amt*parts.length)back=bk}}
-  return {id:x.id,n,kind:'pool',backer,parts,amt,back,/*<S29E-POSTED>*/...(typeof x.postedBy==='string'&&names.includes(legacyOwner(x.postedBy))?{postedBy:legacyOwner(x.postedBy)}:{}),...(x.postedAt&&isFinite(Date.parse(x.postedAt))?{postedAt:new Date(x.postedAt).toISOString()}:{}),/*</S29E-POSTED>*/text:b27Clean(x.text),created_at:new Date(t).toISOString(),status:['open','void'].includes(x.status)?x.status:'open',settled_at:x.settled_at&&isFinite(Date.parse(x.settled_at))?new Date(x.settled_at).toISOString():null/*<S26F-POOL>*/,...(Array.isArray(x.places)&&x.places.length&&x.places.length<=10&&x.places.every(v=>Number.isInteger(v)&&v>=0&&v<=POOL_MAX)&&x.places.reduce((s,v)=>s+v,0)===amt*parts.length?{places:x.places.slice()}:{})/*</S26F-POOL>*//*<S25C-RX>*/,...(s25ValidExtra(x,names,'open').rx?{rx:s25ValidExtra(x,names,'open').rx}:{})/*</S25C-RX>*/};
+  return {id:x.id,n,kind:'pool',backer,parts,amt,back,/*<S29E-POSTED>*/...(typeof x.postedBy==='string'&&names.includes(legacyOwner(x.postedBy))?{postedBy:legacyOwner(x.postedBy)}:{}),...(x.postedAt&&isFinite(Date.parse(x.postedAt))?{postedAt:new Date(x.postedAt).toISOString()}:{}),/*</S29E-POSTED>*/text:b27Clean(x.text),created_at:new Date(t).toISOString(),status:['open','void'].includes(x.status)?x.status:'open',settled_at:x.settled_at&&isFinite(Date.parse(x.settled_at))?new Date(x.settled_at).toISOString():null/*<S26F-POOL>*/,...(Array.isArray(x.places)&&x.places.length&&x.places.length<=10&&x.places.every(v=>Number.isInteger(v)&&v>=0&&v<=POOL_MAX)&&x.places.reduce((s,v)=>s+v,0)===amt*parts.length?{places:x.places.slice()}:{})/*</S26F-POOL>*/, ...b27WhenFields(x)/*<S25C-RX>*/,...(s25ValidExtra(x,names,'open').rx?{rx:s25ValidExtra(x,names,'open').rx}:{})/*</S25C-RX>*/};
 }
 /* ---- the form (same components / classes as the live New bet form) ---- */
 function b27Kind(k){U.kind=k;U.msg='';U.confirm=false;render()}
@@ -3516,23 +3516,31 @@ function b27Kind(k){U.kind=k;U.msg='';U.confirm=false;render()}
 const b27KindTabs=(sel='')=>`<div class="b27-kindrow">${U.editOf?'':`<div class="tabs s29-kind" role="group" aria-label="Bet type"><button type="button" class="${U.kind==='bet'?'on':''}" onclick="b27Kind('bet')"><span class="kf">${esc(POOL_TXT.toggleBet)}</span><span class="ks">1 vs 1</span></button><button type="button" class="${U.kind==='pool'?'on':''}" onclick="b27Kind('pool')"><span class="kf">${esc(POOL_TXT.toggle)}</span><span class="ks">Pool</span></button></div>`}${sel}</div>`;
 const b27UtilTile=(all,clear)=>`<div class="b27-util" role="group" aria-label="Select people"><button type="button" class="s27-selb" ${all}><span class="f">Select all</span><span class="s">All</span></button><button type="button" class="s27-selb" ${clear}>Clear</button></div>`;
 const b27SelAbove=(n,html)=>n%4?'' :html;
-const b27PoolParts=()=>{const me=b27Who();return b27OwnerNames().filter(n=>n===me||U.pp.includes(n))};
+const b27PoolPeople=()=>b27OwnerNames();
+function b27PoolSeed(){const me=b27Who();if(!me||U.ppSeed===me)return;U.pp=[me];U.ppSeed=me}
+const b27PoolParts=()=>b27PoolPeople().filter(n=>(U.pp||[]).includes(n));
 function b27PoolFormOK(){
   const me=b27Who();if(!me)return PT('eMe');
   /*<S26F-POOL>*/return s26fFirstErr(s26fPoolCheck())/*</S26F-POOL>*/;
 }
-function b27PoolPP(i){const n=b27Others()[i];if(!n)return;const k=U.pp.indexOf(n);if(k>=0)U.pp.splice(k,1);else U.pp.push(n);b27PSync()}
-function b27PoolAll(){U.pp=b27Others().slice();b27PSync()}
+function b27PoolPP(i){const n=b27PoolPeople()[i];if(!n)return;const k=U.pp.indexOf(n);if(k>=0)U.pp.splice(k,1);else U.pp.push(n);b27PSync()}
+function b27PoolAll(){U.pp=b27PoolPeople().slice();b27PSync()}
 function b27PoolClear(){U.pp=[];b27PSync()}
 function b27PSync(){try{const m=document.getElementById('main');if(!m)return;
-  m.querySelectorAll('[data-b27-pp]').forEach(b=>b.setAttribute('aria-pressed',String(U.pp.includes(b27Others()[+b.getAttribute('data-b27-pp')]))));
-  const sc=document.getElementById('b27SelCnt');if(sc)sc.textContent=U.pp.length?U.pp.length+' selected':'None selected';
+  m.querySelectorAll('[data-b27-pp]').forEach(b=>b.setAttribute('aria-pressed',String(U.pp.includes(b27PoolPeople()[+b.getAttribute('data-b27-pp')]))));
+  const sc=document.getElementById('b27SelCnt');if(sc)sc.textContent=(U.pp.length||0)+' selected';
   /*<S26F-POOL>*/const pb=document.getElementById('b27Place');if(pb){pb.disabled=!!U.busy;pb.removeAttribute('aria-disabled')}s26fPaint()/*</S26F-POOL>*/}catch(e){}}
 function b27PoolShell(){return `<div class="card b27-form">${typeof SHARED_UI!=='undefined'&&SHARED_UI.entryHead?SHARED_UI.entryHead('wiu'):''}${b27KindTabs('')}</div>`}
-function b27PoolForm(me){const others=b27Others();/*<S26F-POOL>*/setTimeout(()=>{try{s26fPaint()}catch(e){}},0);/*</S26F-POOL>*/
-  return `<div class="card b27-form">${typeof SHARED_UI!=='undefined'&&SHARED_UI.entryHead?SHARED_UI.entryHead('wiu'):''}${b27KindTabs(b27SelAbove(others.length,`<div class="s27-sel"><button type="button" class="s27-selb" onclick="b27PoolAll()"><span class="f">Select all</span><span class="s">All</span></button><button type="button" class="s27-selb" onclick="b27PoolClear()">Clear</button></div>`))}
+function b27PoolPostedDay(ms){const d=new Date(ms);if(!ms||isNaN(d))return '';const wd=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()],mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];return wd+', '+mo+' '+d.getDate()}
+function b27PoolSettleWord(b){const k=window.SHARED_UI?SHARED_UI.whenKind(b):'unknown';if(k==='game')return 'End Of Game';if(k==='season')return 'End Of Season';if(k==='date')return SHARED_UI.estOk(b.est)?SHARED_UI.estLabel(b.est):'Set A Date';return 'Not Sure Yet'}
+function b27PoolClip(b){if(!b)return '';const money=n=>'$'+b27Num(n),st=b.status==='void'?'Cancelled':b.back?'Settled':'Open';
+  const pay=b.places&&b.places.length?'Payouts: '+b.places.map((a,i)=>s26fPlaceName(i)+' '+money(a)).join(' · '):'Payouts not entered yet.';
+  const when=b27PoolPostedDay(Date.parse(b.postedAt||b.created_at));
+  return ['Pool #'+(b.n||'')+' · '+st,b27Clean(b.text),'Buy-in '+money(b.amt)+' · '+(b.parts||[]).length+' managers · Total '+money(b.amt*(b.parts||[]).length),pay,'Members: '+(b.parts||[]).map(PN).join(', '),'Posted '+(when||'')+' by '+PN(b.postedBy||b.backer)+' · '+b27PoolSettleWord(b)].join('\n')}
+function b27PoolForm(me){b27PoolSeed();const people=b27PoolPeople();/*<S26F-POOL>*/setTimeout(()=>{try{s26fPaint()}catch(e){}},0);/*</S26F-POOL>*/
+  return `<div class="card b27-form">${typeof SHARED_UI!=='undefined'&&SHARED_UI.entryHead?SHARED_UI.entryHead('wiu'):''}${b27KindTabs('')}
    <div class="s26st"><div class="b27-lb"><span class="s26n">1</span><button type="button" class="s27-tipk" data-tip="pterms" aria-expanded="false" onclick="s27Tip(this)">${esc(PT('s1'))}</button><label for="b27Text" class="sr">${esc(PT('s1'))}</label></div><textarea id="b27Text" class="sb-in b27-in" rows="2" maxlength="${PULK.maxText}" placeholder="${esc(PT('termsPh'))}" aria-describedby="s26eTerms" oninput="U.text=this.value;b27PSync()">${esc(U.text)}</textarea><div id="s26eTerms" class="s26err" role="alert"></div></div>
-   <div class="s26st"><div class="b27-lb" id="s26lPeople"><span class="s26n">2</span><button type="button" class="s27-tipk" data-tip="ppl" aria-expanded="false" onclick="s27Tip(this)">${esc(PT('s2'))}</button></div><div class="b27-opps" role="group" aria-labelledby="s26lPeople" style="--n:${others.length}">${others.map((n,i)=>{const o=(D.owners.find(x=>x.name===n)||{});const on=U.pp.includes(n);return `<button type="button" class="b27-chip op" data-b27-pp="${i}" data-b27-name="${esc(n)}" aria-label="${esc(TN(n))}" aria-pressed="${on}" onclick="b27PoolPP(${i})"><span class="ck" aria-hidden="true">✓</span><span class="em" aria-hidden="true">${esc(o.emoji||'')}</span><span class="nm" aria-hidden="true"><span class="f">${esc(TN(n))}</span><span class="sh">${esc(b27ShortT(n))}</span><span class="xs">${esc(b27TinyT(n))}</span></span></button>`}).join('')}${others.length%4?b27UtilTile('onclick="b27PoolAll()"','onclick="b27PoolClear()"'):''}</div><span class="sr" id="b27SelCnt" aria-live="polite">${U.pp.length?U.pp.length+' selected':'None selected'}</span>
+   <div class="s26st"><div class="b27-lb" id="s26lPeople"><span class="s26n">2</span><button type="button" class="s27-tipk" data-tip="ppl" aria-expanded="false" onclick="s27Tip(this)">${esc(PT('s2'))}</button></div><div class="b27-opps pool-pick" role="group" aria-labelledby="s26lPeople">${people.map((n,i)=>{const o=(D.owners.find(x=>x.name===n)||{});const on=U.pp.includes(n);return `<button type="button" class="b27-chip op" data-b27-pp="${i}" data-b27-name="${esc(n)}" aria-label="${esc(TN(n))}" aria-pressed="${on}" onclick="b27PoolPP(${i})"><span class="ck" aria-hidden="true">✓</span><span class="em" aria-hidden="true">${esc(o.emoji||'')}</span><span class="nm" aria-hidden="true"><span class="f">${esc(TN(n))}</span><span class="sh">${esc(b27ShortT(n))}</span><span class="xs">${esc(b27TinyT(n))}</span></span></button>`}).join('')}</div><div class="s26tools">${b27UtilTile('onclick="b27PoolAll()"','onclick="b27PoolClear()"')}</div><div class="s26sel" id="b27SelCnt" aria-live="polite">${(U.pp||[]).length} selected</div>
    <div id="s26ePeople" class="s26err" role="alert"></div></div>
    <div class="s26st"><div class="b27-lb"><span class="s26n">3</span><button type="button" class="s27-tipk" data-tip="buy" aria-expanded="false" onclick="s27Tip(this)">${esc(PT('s3'))}</button><label for="b27En" class="sr">${esc(PT('s3'))}</label></div><input maxlength="8" id="b27En" class="sb-in b27-in s26buy" inputmode="decimal" autocomplete="off" placeholder="${esc(PT('buyPh'))}" value="${esc(U.entry)}" aria-describedby="s26Pot s26eBuy" oninput="U.entry=this.value;b27PSync()"><div id="s26Pot" class="s26pot" aria-live="polite"></div><div id="s26eBuy" class="s26err" role="alert"></div></div>
    <div class="s26st"><div class="b27-lb"><span class="s26n">4</span><button type="button" class="s27-tipk" data-tip="pay" aria-expanded="false" onclick="s27Tip(this)">${esc(PT('s4'))}</button></div>${s26fPlaceRows()}<button type="button" class="b27-sm s26add" onclick="s26fAddPlace()"${U.places.length>=10?' disabled':''}>${esc(PT('addPlace'))}</button><div id="s26Sum" class="s26sum" aria-live="polite"></div><div id="s26ePay" class="s26err" role="alert"></div></div>
@@ -3552,7 +3560,8 @@ async function b27PoolConfirm(){
   try{
     const back=await b27Write(cur=>{if(cur.some(c=>c.id===nb.id))return cur;if(cur.length+1>PULK.maxBets)throw new Error('full');const at=new Date().toISOString();return cur.concat([Object.assign({},nb,{n:b27MaxN(cur)+1,created_at:at,settled_at:/*<V25>*/nb.back?s25At():/*</V25>*/null})])},cur=>cur.some(b=>b.id===nb.id));
     U.mine.add(nb.id);b27Apply(back);const m=back.find(b=>b.id===nb.id);
-    U.msg=PT(m&&m.back?'placedDone':'placed',{n:m?m.n:''});/*<S25C-FX>*/s25PlacedFx(nb.id);/*</S25C-FX>*/U.msgBad=false;U.opps=[];U.pp=[];U.entry='';U.backTxt='';U.text='';U.places=['',''];U.showErr={};U.confirm=false;U.fids={};
+    const clip=b27PoolClip(m||nb);let copied=false;try{copied=clip?await b27CopyNow(clip):false}catch(err){copied=false}
+    U.clip=clip;U.msg=PT(m&&m.back?'placedDone':'placed',{n:m?m.n:''})+(copied?' Message copied. Paste it in WhatsApp.':' Could not copy it. Copy the message below.');/*<S25C-FX>*/s25PlacedFx(nb.id);/*</S25C-FX>*/U.msgBad=false;U.opps=[];U.pp=[];U.ppSeed=null;U.entry='';U.backTxt='';U.text='';U.places=['',''];U.showErr={};U.confirm=false;U.fids={};
     clearTimeout(U.undoT);U.undoT=setTimeout(()=>{if(tab==='bets27')render()},PULK.undoMs+300);
   }catch(e){U.msg=e&&e.message==='full'?'The bets ledger is full.':PT('cantSave');U.msgBad=true;U.confirm=true}
   U.busy=false;render();
@@ -3808,7 +3817,7 @@ function vB27(){
   /*</BETS-INTRO-BOTTOM>*/
   if(U.msg)h+=`<div class="card ${U.msgBad?'b27-bad':'b27-ok'}" role="status">${esc(U.msg)}${U.clip?`<pre class="rq-fb">${esc(U.clip)}</pre><div class="b27-act"><button type="button" class="btn sec" onclick="b27ClipRetry()">Copy</button></div>`:''}${/*<MULTI-BET>*/U.undoG&&b27GroupUndoable(U.undoG).length>1?`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27UndoGroup('${U.undoG}','${b27GroupHash(U.undoG)}')"${U.busy?' disabled':''}>↩ Undo all ${b27GroupUndoable(U.undoG).length} bets (5 min)</button></div>`:''/*</MULTI-BET>*/}</div>`;
   /*<ALL-BETS>*/if(OB_VIEW==='all'){}/*list only: form lives on Write it Up*/else/*</ALL-BETS>*/ if(!me){h+=`<div class="card note">Set who you are on <a href="${esc(s24Href('profile'))}" onclick="return s24NavClick(event,'profile')">Profile</a> before you write a bet.</div>`}
-  /*<POOL>*/else if(U.kind==='pool'){h+=b27PoolShell()}/*</POOL>*/
+  /*<POOL>*/else if(U.kind==='pool'){h+=U.confirm?s26kModal(b27PoolConfirmHtml()):b27PoolForm(me)}/*</POOL>*/
   else if(U.confirm){
     const e=b27FormOK();
     h+=s26kModal(`<div class="card b27-confirm"><b>Check it, then confirm</b>${/*<S24-EDIT>*/s24EditHint()/*</S24-EDIT>*/}${/*<S26F-TERMS>*/b27Clean(U.text)?`<div class="s26terms">${esc(b27Clean(U.text))}</div>`:''/*</S26F-TERMS>*/}<div class="b27-sum">${esc(b27Summary())}</div>${/*<S25>*/s25ConfirmLine()/*</S25>*/}<div id="b27Live">${b27LiveHtml()}</div>
@@ -4913,6 +4922,9 @@ html body .s24np-b{padding:0 8px;border-radius:8px;border:1px solid var(--line,#
 html body .s24np-p{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 html body .s24nm{height:28px;padding:0 10px;border-radius:999px;border:1px solid var(--line,#2d3548);background:transparent;color:inherit;font:inherit;font-size:12px;font-weight:800;cursor:pointer}
 html body .s24nm.on{background:#ffd400;color:#111;border-color:#ffd400}
+html body .s26sel{margin-top:6px;font-size:13px;font-weight:800}
+html body .s26tools{margin-top:8px}
+html body .s26tools .b27-util{display:flex;gap:6px}
 @media (min-width:701px){
  html body .s24set{grid-template-columns:140px minmax(120px,200px) minmax(0,1fr)}
  html body .s24set input{grid-column:auto}
@@ -4930,11 +4942,7 @@ function s29eOpenCopy(b){if(!b)return '';const who=(b27Opps(b).map(PN).join(', '
   return ['\uD83D\uDCA3 $'+b.amt+' '+PN(b.backer)+' v '+who+od+' \uD83D\uDCA3',line2,(when?when+' \u00b7 ':'')+'Exp: '+exp].join('\n')}
 function s29eCopyText(b){if(!b)return '';if(b.status==='open'&&b.kind!=='pool')return s29eOpenCopy(b);const day=b27Day(Date.parse(b.created_at)),posted='Posted '+day+(b.postedBy?' by '+PN(b.postedBy):'')+' · STOOPIDS',L=[];
   const money=n=>'$'+b27Num(n);
-  if(b.kind==='pool'){const done=b.status==='open'&&!!b.back,stTxt=b.status==='void'?POOL_TXT.stVoid:b.back?POOL_TXT.stDone:POOL_TXT.stOpen;
-    L.push(POOL_TXT.word+' #'+b.n+' · '+stTxt,b27Clean(b.text),'Buy-in '+money(b.amt)+' · '+PT('who',{n:b.parts.length})+' · Total '+money(b.amt*b.parts.length));
-    if(b.places)L.push(PT('payLine',{x:b.places.map((a,i)=>s26fPlaceName(i)+' '+money(a)).join(' · ')}));
-    if(done)b27PoolResultLines(b.parts,b.amt,b.back).forEach(l=>L.push(l));else if(b.status==='open'&&!b.places)L.push(POOL_TXT.noPay);
-    L.push('Members: '+b.parts.map(PN).join(', '),posted);return L.join('\n')}
+  if(b.kind==='pool')return b27PoolClip(b);
   const OP=b27Opps(b),BU=OP.length>1,Bk=PN(b.backer),OPd=OP.map(PN),st=b.status,P=b27Pay(b);
   const stTxt={open:'Open',backer:'Settled',other:'Settled',push:'Wash',void:'Cancelled'}[st]||'Open';
   const win=st==='backer'?' · '+Bk+' won':st==='other'?' · '+(BU?'Managers':OPd[0])+' won':'';
