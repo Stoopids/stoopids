@@ -2679,12 +2679,11 @@ function vHowTo(){const m=PULK.minAmt;
   <div class="card"><b>Pending requests</b><p>Pending requests sit at the top of <b>All Bets</b>. The badge counts unseen requests for this account only. An agreed bet that is not settled is an <b>Unsettled bet</b>, not a pending request.</p></div>
   <section id="howto-filters" class="s29-hnb"><h3>How the All Bets filters work</h3>
   <div class="card"><b>This update only</b><p>This is how the filters work in this held update. They are not on the public site yet. Nothing here settles a bet by itself.</p></div>
-  <div class="card"><b>Five controls</b><p><b>Everyone / a person</b> and <b>search</b> stay. The old long status list is now three controls that all apply at once. A bet has to pass every one of them. <b>Status</b> is All, Unsettled bets, Settled, Wash, or Cancelled. <b>Action needed</b> is Any, My turn, or Their turn. <b>When</b> is Any time, Upcoming, Today, Past settle date, End game, End of season, or Not sure yet. All Bets opens on <b>Unsettled bets</b>, <b>Any</b> action, and <b>Any time</b>.</p></div>
-  <div class="card"><b>Status</b><p><b>Unsettled bets</b> are agreed and not settled yet. A pool whose payouts are already entered is not unsettled. <b>Settled</b> has a winner, or it is a pool with payouts entered. <b>Wash</b> is a push: nobody owes anything. <b>Cancelled</b> was voided. <b>All</b> includes every one of those. Settled and washed bets are listed on Tally.</p></div>
-  <div class="card"><b>Whose turn</b><p><b>My turn</b> means there is a real step with your name on it: answer someone else’s correction, confirm a score that has already been proposed, or enter the result because that bet’s game is final and no score was proposed. A sorting date does not do this. A game later today, and a game still being played, are not your turn. A correction you still have to answer counts even if that game has not been played. <b>Their turn</b> is the same kind of step for the other person, on a bet you are in. An open bet is not “their turn” only because they wrote it. The number on My turn or Their turn is how many bets match that choice together with the other controls. It is not the yellow new-bet badge, and it is not the new-request badge. Those unseen numbers clear when you open All Bets. Changing a filter does not clear them.</p></div>
-  <div class="card"><b>When</b><p>Today, Upcoming, and Past settle date use this device’s calendar day, the same day the page already uses for sorting. They are not Eastern Time and not the tip-off. <b>Past settle date</b> means the sorting date is before today. The bet stays open until someone enters the result. <b>End of season</b> and <b>End game</b> are only those labels. No season-end date and no game-end time is invented, and neither one settles the bet.</p></div>
+  <div class="card"><b>Three controls</b><p><b>Everyone / a person</b> and <b>search</b> stay. <b>Status</b> is All, Needs action, or Unsettled. All Bets opens on <b>All</b>. <b>When</b> is Any time, End Of Game, End Of Season, Not Sure Yet, or Set A Date. Any time is the default.</p></div>
+  <div class="card"><b>Status</b><p><b>All</b> is every agreed bet. <b>Needs action</b> is a real step with your name on it: answer a correction, confirm a proposed score, or enter a result after the game is final. <b>Unsettled</b> means agreed and not settled yet. A pool whose payouts are already entered is not unsettled. Settled and washed bets are listed on Tally.</p></div>
+  <div class="card"><b>When</b><p>These are the same settle choices as the bet form. <b>End Of Game</b> and <b>End Of Season</b> are those labels. <b>Not Sure Yet</b> has no settle time. <b>Set A Date</b> is a bet with a chosen date. None of these choices settles the bet by itself.</p></div>
   <div class="card"><b>Requests stay separate</b><p>Open requests stay in their own list at the top of All Bets. Status, Action needed, and When do not try to classify a request. Everyone, Me, a named person, and search do apply to that list, but only after the page has already hidden requests you cannot see. You see a request you sent, or one you were invited to and can still take. You never see someone else’s request just because you searched their name. A guest does not see those cards.</p></div>
-  <div class="card"><b>Three examples</b><p>Open + My turn: the game is final and you still need to confirm the proposed score, or enter the result because the final did not propose one. It shows. A game today that has not started, and a game that is still being played, do not. Next week does not either.</p><p>Settled + Their turn: you asked to correct the result, and the person who posted it has not answered. It stays settled until they do.</p><p>Open + Any + End of season: those bets are grouped by that label. They do not settle when the season ends, because no end date is on file.</p></div>
+  <div class="card"><b>Three examples</b><p>Needs action: the game is final and you still need to confirm the proposed score, or enter the result because the final did not propose one. A game that has not finished does not.</p><p>Unsettled: the bet is agreed and nobody has entered the result yet.</p><p>All + End Of Season: those bets use that settle label. They do not settle when the season ends, because no end date is on file.</p></div>
   </section>
   <div class="card"><b>Copy</b><p>Each bet’s <b>Copy</b> button copies just that bet’s text.</p></div></div>`}
 VIEWS.howto=vHowTo;
@@ -4420,10 +4419,10 @@ function s24FixLink(b,me){if(!b||b.kind==='pool'||!me||me!==b.backer||!S24R.incl
 /*</CREATOR-SETTLE>*/
 /* ---- Bets filter (2026-27 view): the older STOOPIDS two-select design (Wagers list: Everyone / person + status), plus "Me" and "Waiting on me".
    Remembered per device in localStorage (stoopids_b27_person / stoopids_b27_status): only the filter value ("me" is stored as the word me, never a name for it). ---- */
-const S24FST=[['open','Unsettled bets'],['all','All'],['settled','Settled'],['wash','Wash'],['void','Cancelled']],S24FAC=[['any','Any'],['mine','My turn'],['theirs','Their turn']],S24FWH=[['any','Any time'],['up','Upcoming'],['today','Today'],['over','Past settle date'],['game','End game'],['season','End of season'],['none','Not sure yet']],S24FPK='stoopids_b27_person',S24FSK='stoopids_b27_status',S24FAK='stoopids_b27_action',S24FWK='stoopids_b27_when';
+const S24FST=[['open','Unsettled bets'],['all','All'],['settled','Settled'],['wash','Wash'],['void','Cancelled']],S24FAC=[['any','Any'],['mine','My turn'],['theirs','Their turn']],S24FWH=[['any','Any time'],['game','End Of Game'],['season','End Of Season'],['none','Not Sure Yet'],['date','Set A Date']],S24FPK='stoopids_b27_person',S24FSK='stoopids_b27_status',S24FAK='stoopids_b27_action',S24FWK='stoopids_b27_when';
 const s24FP=()=>{const v=lsGet(S24FPK);return v==='me'||b27OwnerNames().includes(v)?v:'all'};
 const s24One=(key,list,fb)=>{const v=lsGet(key);return list.some(x=>x[0]===v)?v:fb};
-const s24FSt=()=>s24One(S24FSK,S24FST,'open');
+const s24FSt=()=>s24One(S24FSK,S24FST,'all');
 const s24FAc=()=>s24One(S24FAK,S24FAC,'any');
 const s24FWh=()=>s24One(S24FWK,S24FWH,'any');
 function s24FSetP(v){lsSet(S24FPK,v==='me'||b27OwnerNames().includes(v)?v:'all');render()}
@@ -4440,7 +4439,7 @@ let s24Q='';
 const s24Hay=b=>[b.text,b.backer,b.other,...b27Opps(b),...(Array.isArray(b.parts)?b.parts:[])].join(' ').toLowerCase();
 function s24FSetQ(v){s24Q=String(v||'').slice(0,80);render()}
 function s24StatusOk(b,st){if(st==='all')return true;if(st==='open')return s24IsOpen(b);if(st==='settled')return b.status==='backer'||b.status==='other'||(b.kind==='pool'&&b.status==='open'&&!!b.back);if(st==='wash')return b.status==='push';if(st==='void')return b.status==='void';return false}
-function s24WhenOk(b,wh){if(!wh||wh==='any')return true;return SHARED_UI.whenClass(b)===wh}
+function s24WhenOk(b,wh){if(!wh||wh==='any')return true;const k=SHARED_UI.whenKind(b);if(wh==='none')return k==='unknown';return k===wh}
 function s24ActOk(b,me,ac){if(!ac||ac==='any')return true;if(ac==='mine')return s24Waiting(b,me);if(ac==='theirs')return s24TheirTurn(b,me);return false}
 function s24Match(b,me,o){o=o||{};const p=s24FP(),who=p==='me'?me:p==='all'?null:p,q=s24Q.trim().toLowerCase(),st=o.st||s24FSt(),ac=o.ac||s24FAc(),wh=o.wh||s24FWh();
   if(q&&!s24Hay(b).includes(q))return false;if(p!=='all'&&!(who&&s24InBet(b,who)))return false;return s24StatusOk(b,st)&&s24ActOk(b,me,ac)&&s24WhenOk(b,wh)}
@@ -4463,12 +4462,11 @@ function s24Chrono(){try{return localStorage.getItem('stoopids_b27_chrono')==='o
 function s24ChronoToggle(){lsSet('stoopids_b27_chrono',s24Chrono()==='new'?'old':'new');render()}
 function s24ChronoList(list,me){const dir=s24Chrono()==='old'?1:-1;const g=(list||[]).slice().sort((a,b)=>{const ca=Date.parse(a.created_at)||0,cb=Date.parse(b.created_at)||0;if(ca!==cb)return (ca-cb)*dir;return ((a.n||0)-(b.n||0))*dir});let show=g.slice(0,60);if(S24.sub){const x=g.find(b=>b.id===S24.sub);if(x&&!show.some(b=>b.id===x.id))show=show.concat([x])}return `<div class="b27-grid">${b27Cards(show,me)}</div>`+(g.length>60?'<p class="note">Showing the first 60.</p>':'')}
 function s24FilterBar(bets,me,ph){const settledOnly=ph==='Search settled bets';
-  if(!settledOnly&&s24FSt()!=='open'&&s24FSt()!=='all')lsSet(S24FSK,'open');
+  if(!settledOnly&&s24FSt()!=='open'&&s24FSt()!=='all')lsSet(S24FSK,'all');
   const p=s24FP(),ac=s24FAc(),wh=s24FWh(),stab=s24Stab(),ch=s24Chrono();
   const tab=(k,t)=>`<button type="button" role="tab" aria-selected="${stab===k?'true':'false'}" class="${stab===k?'on':''}" onclick="s24SetStab('${k}')">${t}</button>`;
-  const tabs=settledOnly?'':`<div class="s24st" role="tablist" aria-label="Bet status">${tab('need','Needs action')}${tab('open','Unsettled')}${tab('all','All')}</div>`;
-  const opt=(list,cur,extra)=>list.map(([k,t])=>`<option value="${k}"${k===cur?' selected':''}>${esc(t)}${extra&&extra[k]!=null?' ('+extra[k]+')':''}</option>`).join('');
-  const nMine=s24Count(bets,me,{ac:'mine'}),nTheirs=s24Count(bets,me,{ac:'theirs'});
+  const tabs=settledOnly?'':`<div class="s24st" role="tablist" aria-label="Bet status">${tab('all','All')}${tab('need','Needs action')}${tab('open','Unsettled')}</div>`;
+  const opt=(list,cur)=>list.map(([k,t])=>`<option value="${k}"${k===cur?' selected':''}>${esc(t)}</option>`).join('');
   const person=`<select id="sbPerson" aria-label="Person" onchange="s24FSetP(this.value)"><option value="all"${p==='all'?' selected':''}>Everyone</option><option value="me"${p==='me'?' selected':''}>Me</option>${b27OwnerNames().map(o=>`<option value="${esc(o)}"${o===p?' selected':''}>${esc(PN(o))}</option>`).join('')}</select>`;
   const tw=s24TWho(),picked=s24TNames(),nameLab=picked.length?picked.map(PN).join(' + '):'Names';
   const personSet=`<select id="sbPerson" aria-label="Person" onchange="s24TSetWho(this.value)"><option value="all"${tw!=='me'?' selected':''}>Everyone</option><option value="me"${tw==='me'?' selected':''}>Me</option></select>`;
@@ -4476,7 +4474,7 @@ function s24FilterBar(bets,me,ph){const settledOnly=ph==='Search settled bets';
   const panel=s24NamesOpen?`<div class="s24np-p">${b27OwnerNames().map(n=>`<button type="button" class="s24nm${picked.includes(n)?' on':''}" aria-pressed="${picked.includes(n)?'true':'false'}" data-n="${esc(n)}" onclick="s24TToggleName(this.getAttribute('data-n'))">${esc(PN(n))}</button>`).join('')}</div>`:'';
   const sort=`<button type="button" class="s24ch" aria-label="Sort" aria-pressed="${ch==='old'?'true':'false'}" onclick="s24ChronoToggle()">${ch==='old'?'Oldest first':'Newest first'}</button>`;
   const row=settledOnly?`<div class="s24set">${personSet}${names}<input id="sbQ" class="sb-in s24q" aria-label="Search bets" placeholder="${esc(ph||'search terms…')}" value="${esc(s24TQ)}" oninput="s24TSetQ(this.value)"></div>${panel}`
-    :`<div class="s24r2">${person}<select id="sbAction" aria-label="Bet type" onchange="s24FSetA(this.value)">${opt(S24FAC,ac,{mine:nMine,theirs:nTheirs})}</select><select id="sbWhen" aria-label="Settles when" onchange="s24FSetW(this.value)">${opt(S24FWH,wh)}</select>${sort}</div><input id="sbQ" class="sb-in s24q" aria-label="Search bets" placeholder="${esc(ph||'search terms…')}" value="${esc(s24Q)}" onchange="s24FSetQ(this.value)">`;
+    :`<div class="s24r2">${person}<select id="sbWhen" aria-label="Settles when" onchange="s24FSetW(this.value)">${opt(S24FWH,wh)}</select>${sort}</div><input id="sbQ" class="sb-in s24q" aria-label="Search bets" placeholder="${esc(ph||'search terms…')}" value="${esc(s24Q)}" onchange="s24FSetQ(this.value)">`;
   return `<div class="card s24fb">${tabs}${row}
    ${settledOnly?'':`<div class="note" style="margin-top:6px"><a href="${esc(s24Href('howto'))}" onclick="return s24HowFilters(event)">How these filters work →</a>${(ac==='mine'||ac==='theirs')&&!me?' Pick who you are to use My turn or Their turn.':''}</div>`}</div>`}
 
@@ -4752,8 +4750,8 @@ html body .b27-foot{display:flex;align-items:flex-end;justify-content:space-betw
 html body .b27-ts{flex:1 1 auto;min-width:0;color:var(--mut,#9aa3b5);font-size:12px;line-height:1.35;font-weight:500}
 html body .s24st{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;width:min(100%,480px)!important;gap:6px!important;margin:0 0 8px!important}
 html body .s24st>button{width:100%!important;flex:none!important;box-sizing:border-box!important;height:36px!important;min-height:36px!important;max-height:36px!important;padding:0 4px!important;font-size:13px!important;font-weight:800!important;line-height:34px!important;text-align:center!important;white-space:nowrap!important}
-html body .s24r2{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));align-items:center;gap:4px;width:100%}
-html body .s24r2 select,html body .s24r2 .s24ch{width:100%;min-width:0;box-sizing:border-box;height:32px;font-size:11px}
+html body .s24r2{display:flex;flex-wrap:wrap;justify-content:flex-start;align-items:center;gap:6px;width:auto;max-width:100%}
+html body .s24r2 select,html body .s24r2 .s24ch{flex:0 0 132px;width:132px;min-width:132px;max-width:132px;box-sizing:border-box;height:36px;font-size:12px}
 html body .s24r2 select{padding:0 14px 0 4px;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%23aab'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 4px center;background-size:8px 5px}
 html body .s24r2 .s24ch{margin:0;padding:0 2px;border-radius:999px;border:1px solid var(--line,#2d3548);background:transparent;color:inherit;font:inherit;font-size:11px;font-weight:800;line-height:30px;text-align:center;white-space:nowrap;cursor:pointer}
 html body .s24r2 .s24ch[aria-pressed="true"]{background:#ffd400;color:#111;border-color:#ffd400}
@@ -4847,8 +4845,8 @@ html body .gmon{justify-content:flex-start!important;width:auto!important;max-wi
 html body .gmon>button{flex:0 0 auto!important;width:auto!important;min-width:0!important;padding:5px 12px!important}
 html body .s24fb .row2{flex-wrap:wrap!important;gap:6px!important}
 html body .s24fb .row2>*{flex:0 1 auto!important;width:auto!important;max-width:100%!important;height:32px!important;min-height:32px!important}
-html body .s24r2{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:4px!important}
-html body .s24r2 select,html body .s24r2 .s24ch{width:100%!important;min-width:0!important;height:32px!important;min-height:32px!important;max-height:32px!important;font-size:11px!important}
+html body .s24r2{display:flex!important;flex-wrap:wrap!important;justify-content:flex-start!important;align-items:center!important;gap:6px!important;width:auto!important;max-width:100%!important}
+html body .s24r2 select,html body .s24r2 .s24ch{flex:0 0 132px!important;width:132px!important;min-width:132px!important;max-width:132px!important;height:36px!important;min-height:36px!important;max-height:36px!important;font-size:12px!important}
 @media (max-width:999px){
  html body .entry-pair{display:block!important}
  html body .entry-pair>.entry-col{position:absolute!important;width:0!important;height:0!important;margin:0!important;overflow:hidden!important}
