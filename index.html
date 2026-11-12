@@ -3409,7 +3409,7 @@ const POOL_TXT={
   participants:'Participants', youIn:'(you are in automatically)',
   fBuy:'Buy-in each: 250K', fPay:'Payouts when done (total received), e.g. kurt:800K, mark:1.2mil', s1:'What’s the pool?', s2:'Who’s in?', s3:'Buy-in per person', s4:'Payouts by place', termsPh:'e.g. STOOPIDS season-long tournament pool', buyPh:'e.g. 50', potLine:'Pot: {n} × {buy} = {pot}', potWait:'Pot: pick who’s in and a buy-in', addPlace:'+ Add place', payOpt:'Optional: leave blank to fill in when it’s over.', sumLine:'Adds up to {sum} of {pot}', ePlaceSum:'Payouts add up to {sum} but the pot is {pot} ({diff} {way}).', short:'short', over:'over', ePlaceNum:'Use whole numbers for the payouts (like 400).', pickWho:'Who finished where?', pickOne:'Pick…', ePickAll:'Pick someone for every place.', payLine:'Payouts: {x}',
   help:'Winner and runner-up money-back are just payouts (e.g. winner 1mil, 2nd 200K back). Payouts must add up to the pot. Use these short names for payouts: {keys}', helpPl:'Amounts only; you pick who finished where when you settle it. They must add up to the pot.',
-  build:'Build',
+  build:'Write it up',
   eMe:'Pick who you are first.', eTerms:'Write the terms of the pool first.', ePeople:'a pool needs 2+ participants', eBuy:'pool needs a buy-in like 250K',
   eBuyMin:'buy-in must be a whole number of at least {min} (like 250K)', eBadPay:"can't read one of the payouts (try 800K, 1.2mil)", eFmt:'Write each payout as name:amount, like kurt:800K.',
   eSum:'payouts add up to {sum} but the pot is {total}', eUnknown:'Unknown name "{x}". Use these short names for payouts: {keys}', eNotIn:'"{x}" is not in this pool.', eDup:'"{x}" is listed twice.', eEmptyPay:'Fill in the payouts first.',
@@ -3835,7 +3835,7 @@ function vB27(){
      ${SHARED_UI.whenBox({e:esc,kind:b27FormHasGame()&&(!U.whenPick||U.wk==='game')?'game':(U.whenPick&&U.wk!=='game'?U.wk:'unknown'),est:U.est,seasonId:b27Season(),step:'5',game:b27FormHasGame(),inputId:'b27Est',pick:id=>`onclick="b27When('${id}')"`,dateAttr:'onchange="U.est=this.value;U.whenPick=true"'})}
      <div class="b27-livebox" id="b27Live" data-brief aria-live="polite">${b27FormBrief()}</div>
      <div id="s29Auto">${/*<S29D-AUTO>*/s29AutoHtml(s29AutoForm())/*</S29D-AUTO>*/}</div><div class="b27-bad-t" id="b27Hint"></div>
-     <button type="button" id="b27Place" class="btn b27-big" onclick="b27Place()"${b27FormOK()?' disabled':''}>${U.editOf?'Update bet':'Place bet'}</button></div>`;
+     <button type="button" id="b27Place" class="btn b27-big" onclick="b27Place()"${b27FormOK()?' disabled':''}>${U.editOf?'Update bet':'Write it up'}</button></div>`;
   }
   const bets=U.doc.bets||[];
   /*<BALL-LOADER>*/if(U.state==='init'){h+=ballLoader();return h}   // ledger still loading: loader instead of an empty owes table / "No bets yet/*</BALL-LOADER>*/
