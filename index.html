@@ -368,6 +368,9 @@ nav button .nu{position:absolute;top:1px;left:2px;min-width:15px;background:#ff3
 .b27-big{width:100%;min-height:52px;font-size:17px;margin-top:6px}
 .b27-big:disabled,#b27Place:disabled{opacity:.45;cursor:default}
 .b27-act{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px}
+.b27-pool .b27-prow{flex-wrap:nowrap}
+.b27-pool .b27-prow>.btn{flex:1 1 0;min-width:0;display:inline-flex;align-items:center;justify-content:center;padding:0 8px;font-size:13px;white-space:nowrap;text-align:center}
+.b27-pool .b27-nopay{margin-top:6px}
 .b27-b{min-height:44px;padding:0 12px}
 .b27-t{margin:4px 0;font-size:15px;overflow-wrap:anywhere}.b27-m{font-size:13.5px;overflow-wrap:anywhere}
 .b27-stake{margin:2px 0 0;font-weight:800;font-size:14px}
@@ -3483,9 +3486,9 @@ function s26fPaint(show){const c=s26fPoolCheck(),sh=U.showErr||{};const set=(id,
   document.querySelectorAll('.s26pi').forEach(el=>el.classList.toggle('b27-errbox',!!c.e.pay));return c}
 function s26fFocus(id){const box=document.getElementById(id);if(!box)return;try{box.scrollIntoView({block:'center'})}catch(e){}try{box.focus({preventScroll:true})}catch(e){box.focus()}}
 /* settle by place: the creator picks who finished in each place */
-function s26fSettleHtml(b){const sel=U.placeWho[b.id]||(U.placeWho[b.id]=[]);const ask=U.askSettle&&U.askSettle.id===b.id&&U.askSettle.what==='pool'&&U.askSettle.terms===b27PoolTerms(b);
+function s26fSettleHtml(b){const sel=U.placeWho[b.id]||(U.placeWho[b.id]=[]);
   return `<div class="s26set"><div class="b27-lb">${esc(PT('pickWho'))}</div>${b.places.map((a,i)=>`<div class="s26pr"><label for="s26w_${b.id}_${i}" class="s26pl">${esc(s26fPlaceName(i))} <span class="mut">${esc(b27Num(a))}</span></label><select id="s26w_${b.id}_${i}" class="sb-in s26ps" onchange="U.placeWho['${b.id}'][${i}]=this.value;U.poolErr['${b.id}']='';U.askSettle=null"><option value="">${esc(PT('pickOne'))}</option>${b.parts.map(p=>`<option value="${esc(p)}"${sel[i]===p?' selected':''}>${esc(PN(p))}</option>`).join('')}</select></div>`).join('')}
-   ${U.poolErr[b.id]?`<div class="b27-bad-t" role="alert">${esc(U.poolErr[b.id])}</div>`:''}<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="s26fPlaceGo('${b.id}')"${U.busy?' disabled':''}>${esc(ask?POOL_TXT.again:POOL_TXT.save)}</button></div></div>`}
+   ${U.poolErr[b.id]?`<div class="b27-bad-t" role="alert">${esc(U.poolErr[b.id])}</div>`:''}</div>`}
 function s26fPlaceGo(id){const b=U.doc.bets.find(x=>x.id===id);if(!b||!b.places)return;const sel=U.placeWho[id]||[];
   if(b.places.some((a,i)=>!sel[i])){U.poolErr[id]=PT('ePickAll');U.askSettle=null;render();return}
   const tot={};b.places.forEach((a,i)=>{tot[sel[i]]=(tot[sel[i]]||0)+a});const keys=b27PoolKeys(b27OwnerNames());
@@ -3589,23 +3592,28 @@ function b27PoolCard(b,me){
   let h=`<div class="card b27-c b27-pool"${/*<S24-EDIT>*/s24Attr('b',b.id)/*</S24-EDIT>*/}><div class="s24hd"><b>${esc(POOL_TXT.word)} #${b.n}</b> <span class="st ${st==='void'?'unparsed':done?'settled':'open'}">${esc(stTxt)}</span> <span class="mut" style="font-size:12px">${esc(b27Day(Date.parse(b.created_at)))}</span> <span class="mut" style="font-size:12px">· ${esc(PT('who',{n:b.parts.length}))}</span>${/*<S24-EDIT>*/s24LinkBtn('bets',b.id,'pool')/*</S24-EDIT>*/}</div>
    ${/*<S29E-POSTED>*/s29ePosted(b)/*</S29E-POSTED>*/}<div class="b27-t">${esc(b.text)}</div><div class="b27-m">${esc(PT('line',{buy:b27Num(b.amt),tot:b27Num(b.amt*b.parts.length)}))}</div><div class="b27-m">${esc(PT('with',{names:b.parts.map(PN).join(', ')}))}</div>`;
   /*<S26F-POOL>*/if(b.places)h+=`<div class="b27-m">${esc(PT('payLine',{x:b.places.map((a,i)=>s26fPlaceName(i)+' '+b27Num(a)).join(' · ')}))}</div>`;/*</S26F-POOL>*/
-  if(st==='open'&&!b.back)h+=`<div class="note" style="margin-top:6px">${esc(POOL_TXT.noPay)}</div>`;
   if(done)h+=`<div class="note" style="margin-top:6px"><b>${esc(POOL_TXT.result)}:</b></div>`+b27PoolResultLines(b.parts,b.amt,b.back).map((l,i)=>`<div class="${i>=b.parts.length?'b27-l':'b27-w'}" style="margin-top:2px">${esc(l)}</div>`).join('');
   /*<S25D-TS>*/h+='<div class="s25sp" aria-hidden="true"></div>'+s25dTsHtml(b);/*</S25D-TS>*/
-  if(b27PoolCanSettle(b,me)&&b.places){if(!U.placeWho)U.placeWho={};h+=s26fSettleHtml(b)}
-  else if(b27PoolCanSettle(b,me)){const ask=U.askSettle&&U.askSettle.id===b.id&&U.askSettle.what==='pool'&&U.askSettle.terms===b27PoolTerms(b);
-    h+=`<div class="b27-cw"><label for="pb_${b.id}" class="sr">${esc(POOL_TXT.fPay)}</label><textarea maxlength="120" id="pb_${b.id}" class="sb-in b27-in" rows="2" autocomplete="off" placeholder="${esc(POOL_TXT.fPay)}" oninput="U.poolTxt['${b.id}']=this.value;U.poolErr['${b.id}']='';U.askSettle=null">${esc(U.poolTxt[b.id]||'')}</textarea></div>${U.poolErr[b.id]?`<div class="b27-bad-t" role="alert">${esc(U.poolErr[b.id])}</div>`:''}
-     <div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27PoolGo('${b.id}')"${U.busy?' disabled':''}>${esc(ask?POOL_TXT.again:POOL_TXT.save)}</button></div>`}
+  const poolAsk=U.askSettle&&U.askSettle.id===b.id&&U.askSettle.what==='pool'&&U.askSettle.terms===b27PoolTerms(b);
+  let saveBtn='';
+  if(b27PoolCanSettle(b,me)&&b.places){if(!U.placeWho)U.placeWho={};h+=s26fSettleHtml(b);saveBtn=`<button type="button" class="btn sec b27-b" onclick="s26fPlaceGo('${b.id}')"${U.busy?' disabled':''}>${esc(poolAsk?POOL_TXT.again:POOL_TXT.save)}</button>`}
+  else if(b27PoolCanSettle(b,me)){
+    h+=`<div class="b27-cw"><label for="pb_${b.id}" class="sr">${esc(POOL_TXT.fPay)}</label><textarea maxlength="120" id="pb_${b.id}" class="sb-in b27-in" rows="2" autocomplete="off" placeholder="${esc(POOL_TXT.fPay)}" oninput="U.poolTxt['${b.id}']=this.value;U.poolErr['${b.id}']='';U.askSettle=null">${esc(U.poolTxt[b.id]||'')}</textarea></div>${U.poolErr[b.id]?`<div class="b27-bad-t" role="alert">${esc(U.poolErr[b.id])}</div>`:''}`;
+    saveBtn=`<button type="button" class="btn sec b27-b" onclick="b27PoolGo('${b.id}')"${U.busy?' disabled':''}>${esc(poolAsk?POOL_TXT.again:POOL_TXT.save)}</button>`}
+  let endBtn='';
   if(st==='open'&&(me===b.backer||ADMIN)){
-    if(b27CanUndo(b))h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27Void('${b.id}','${b27Hash(b27Terms(b))}')"${U.busy?' disabled':''}>${esc(POOL_TXT.undo)}</button></div>`;
-    else if((me===b.backer&&!done)||ADMIN)h+=`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27Void('${b.id}','${b27Hash(b27Terms(b))}')"${U.busy?' disabled':''}>${esc(me===b.backer?POOL_TXT.cancel:POOL_TXT.adminCancel)}</button></div>`}
+    const v=`onclick="b27Void('${b.id}','${b27Hash(b27Terms(b))}')"${U.busy?' disabled':''}`;
+    if(b27CanUndo(b))endBtn=`<button type="button" class="btn sec b27-b" ${v}>${esc(POOL_TXT.undo)}</button>`;
+    else if((me===b.backer&&!done)||ADMIN)endBtn=`<button type="button" class="btn sec b27-b" ${v}>${esc(me===b.backer?POOL_TXT.cancel:POOL_TXT.adminCancel)}</button>`}
+  if(saveBtn||endBtn)h+=`<div class="b27-act b27-prow">${saveBtn}${endBtn}</div>`;
+  if(st==='open'&&!b.back)h+=`<div class="note b27-nopay">${esc(POOL_TXT.noPay)}</div>`;
   return h+/*<S25C-RX>*/s25RxHtml(b,me)/*</S25C-RX>*/+'</div>'}
 /*<S25D-TS>*/
 function s25dWhen(iso,now){const d=new Date(iso);if(!iso||isNaN(d))return '';now=now||new Date();
   const o={month:'short',day:'numeric'};if(d.getFullYear()!==now.getFullYear())o.year='numeric';
   return new Intl.DateTimeFormat('en-US',o).format(d)+', '+S25.localTime(d)}
 function s25dTsHtml(b){const settled=b.kind==='pool'?!!b.back&&b.status==='open'||['backer','other','push'].includes(b.status):['backer','other','push'].includes(b.status);
-  const p=[],c=s25dWhen(b.created_at),t=settled?s25dWhen(b.settled_at):'';if(c)p.push('Placed '+c);if(t)p.push('Settled '+t);
+  const p=[],c=s25dWhen(b.created_at),t=settled?s25dWhen(b.settled_at):'';if(c&&b.kind!=='pool')p.push('Placed '+c);if(t)p.push('Settled '+t);
   return p.length?'<div class="s25ts" data-s25-ts="'+esc(b.id)+'">'+esc(p.join(' · '))+'</div>':''}
 /*</S25D-TS>*/
 function b27PoolOwesHtml(T){if(!T.poolOwes.length)return '';
