@@ -3544,6 +3544,7 @@ function b27PoolForm(me){b27PoolSeed();const people=b27PoolPeople();/*<S26F-POOL
    <div id="s26ePeople" class="s26err" role="alert"></div></div>
    <div class="s26st"><div class="b27-lb"><span class="s26n">3</span><button type="button" class="s27-tipk" data-tip="buy" aria-expanded="false" onclick="s27Tip(this)">${esc(PT('s3'))}</button><label for="b27En" class="sr">${esc(PT('s3'))}</label></div><input maxlength="8" id="b27En" class="sb-in b27-in s26buy" inputmode="decimal" autocomplete="off" placeholder="${esc(PT('buyPh'))}" value="${esc(U.entry)}" aria-describedby="s26Pot s26eBuy" oninput="U.entry=this.value;b27PSync()"><div id="s26Pot" class="s26pot" aria-live="polite"></div><div id="s26eBuy" class="s26err" role="alert"></div></div>
    <div class="s26st"><div class="b27-lb"><span class="s26n">4</span><button type="button" class="s27-tipk" data-tip="pay" aria-expanded="false" onclick="s27Tip(this)">${esc(PT('s4'))}</button></div>${s26fPlaceRows()}<button type="button" class="b27-sm s26add" onclick="s26fAddPlace()"${U.places.length>=10?' disabled':''}>${esc(PT('addPlace'))}</button><div id="s26Sum" class="s26sum" aria-live="polite"></div><div id="s26ePay" class="s26err" role="alert"></div></div>
+   ${SHARED_UI.whenBox({e:esc,kind:b27PoolWhenKind(),est:U.pest||'',seasonId:b27Season(),step:'5',game:b27FormHasGame(),inputId:'b27PoolEst',pick:id=>`onclick="b27PoolWhen('${id}')"`,dateAttr:'onchange="U.pest=this.value;U.pwk=\'date\'"'})}
    <button type="button" id="b27Place" class="btn b27-big" onclick="b27Place()">${esc(POOL_TXT.build)}</button></div>`}
 function b27PoolSummary(){const ps=b27PoolParts(),r=/*<S26F-POOL>*/(c=>({ok:!s26fFirstErr(c),amt:c.amt}))(s26fPoolCheck())/*</S26F-POOL>*/;return r.ok?PT('sum',{names:ps.map(PN).join(', '),buy:b27Num(r.amt),tot:b27Num(r.amt*ps.length)}):''}
 function b27PoolResultLines(parts,amt,back){if(!back)return [PT('open')];const nets=parts.map(p=>[p,back[p]-amt]);
@@ -3552,8 +3553,10 @@ function b27PoolConfirmHtml(){const ps=b27PoolParts(),c=s26fPoolCheck(),r={ok:!s
   return `<div class="card b27-confirm"><b>${esc(POOL_TXT.confirmTitle)}</b>${b27Clean(U.text)?`<div class="s26terms">${esc(b27Clean(U.text))}</div>`:''}<div class="b27-sum">${esc(b27PoolSummary())}</div>${r.places?`<div class="b27-m">${esc(PT('payLine',{x:r.places.map((a,i)=>s26fPlaceName(i)+' '+b27Num(a)).join(' · ')}))}</div>`:''}<div id="b27Live">${b27PoolResultLines(ps,r.amt,r.back).map((l,i,a)=>`<div class="${r.back&&i>=ps.length?'b27-l':'b27-w'}">${esc(l)}</div>`).join('')}</div>
    <div class="b27-act"><button type="button" class="btn b27-big" onclick="b27Confirm()"${U.busy?' disabled':''}>${U.busy?'Saving…':esc(POOL_TXT.go)}</button><button type="button" class="btn sec b27-big" onclick="b27Edit()"${U.busy?' disabled':''}>${esc(POOL_TXT.change)}</button></div></div>`}
 function b27PoolPlace(){const e=b27PoolFormOK();/*<S26F-POOL>*/if(e){U.msg='';U.showErr={terms:1,people:1,buy:1,pay:1};render();const c=s26fPoolCheck();s26fFocus(c.e.terms?'b27Text':c.e.people?'s26lPeople':c.e.buy?'b27En':'s26p0');return}/*</S26F-POOL>*/U.msg='';U.confirm=true;render()}
-function b27PoolRecord(){const ps=b27PoolParts(),c=s26fPoolCheck(),r={amt:c.amt,back:null,places:c.places},k='pool|'+ps.join('|')+'|'+r.amt+'|'+JSON.stringify(r.places)+'|'+b27Clean(U.text),me=b27Who();
-  return Object.assign({id:U.fids[k]||(U.fids[k]=b27Rid()),kind:'pool',backer:me,parts:ps,amt:r.amt,back:null,text:b27Clean(U.text),status:'open'/*<S29E-POSTED>*/,postedBy:me,postedAt:new Date().toISOString()/*</S29E-POSTED>*/},r.places?{places:r.places}:{})}
+function b27PoolWhenKind(){if(U.pwk!=='date'&&U.pwk!=='season'&&U.pwk!=='game'&&U.pwk!=='unknown')U.pwk='season';const has=b27FormHasGame();if(U.pwk==='game'&&!has)return 'season';return U.pwk}
+function b27PoolWhen(k){U.pwk=k==='date'||k==='season'||k==='game'?k:'unknown';if(U.pwk!=='date')U.pest='';render()}
+function b27PoolRecord(){const ps=b27PoolParts(),c=s26fPoolCheck(),r={amt:c.amt,back:null,places:c.places},k='pool|'+ps.join('|')+'|'+r.amt+'|'+JSON.stringify(r.places)+'|'+b27Clean(U.text),me=b27Who(),w=SHARED_UI.whenPack(b27PoolWhenKind(),U.pest,b27Season())||SHARED_UI.whenPack('season');
+  return Object.assign({id:U.fids[k]||(U.fids[k]=b27Rid()),kind:'pool',backer:me,parts:ps,amt:r.amt,back:null,text:b27Clean(U.text),status:'open',wk:w.wk/*<S29E-POSTED>*/,postedBy:me,postedAt:new Date().toISOString()/*</S29E-POSTED>*/},w.est?{est:w.est}:{},w.sid?{sid:w.sid}:{},r.places?{places:r.places}:{})}
 async function b27PoolConfirm(){
   if(U.busy)return;const e=b27PoolFormOK();if(e){b27Err(e);U.confirm=false;render();return}
   U.busy=true;U.msg='Saving…';U.msgBad=false;render();const nb=b27PoolRecord();
@@ -4925,6 +4928,11 @@ html body .s24nm.on{background:#ffd400;color:#111;border-color:#ffd400}
 html body .s26sel{margin-top:6px;font-size:13px;font-weight:800}
 html body .s26tools{margin-top:8px}
 html body .s26tools .b27-util{display:flex;gap:6px}
+@media (max-width:700px){
+ html body .b27-opps.pool-pick{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+ html body .s26tools .b27-util{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+ html body .s26tools .s27-selb{box-sizing:border-box;min-height:52px;height:52px;margin:0}
+}
 @media (min-width:701px){
  html body .s24set{grid-template-columns:140px minmax(120px,200px) minmax(0,1fr)}
  html body .s24set input{grid-column:auto}
