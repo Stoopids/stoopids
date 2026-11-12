@@ -253,7 +253,7 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
     function rqMoney(n){var x=Math.round(Number(n)*100)/100;if(!(x>0))return '';return '$'+(Math.abs(x-Math.round(x))<0.001?String(Math.round(x)):x.toFixed(2))}
     function rqWin(amt,a,b){a=+a||1;b=+b||1;return Math.max(1,Math.floor((amt*a*2+b)/(2*b)))}
     function rqTeam(lab){return String(lab||'').replace(/\s*[+-]\d+(?:\.\d+)?$/,'').trim()}
-    function rqExp(f){if(f.mode==='start')return 'Tip';var n=+f.n,u={m:'m',h:'h',d:'d',w:'w',mo:'mo'};if(u[f.mode]&&n>0)return n+u[f.mode];if(f.mode==='at'&&f.at){var d=new Date(f.at);if(!isNaN(d)){var wd=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()],mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];return wd+' '+mo+' '+d.getDate()}}return ''}
+    function rqExp(f){if(f.mode==='start')return 'Tip';var n=+f.n,u={m:'m',h:'h',d:'d',w:'w',mo:'mo'};if(u[f.mode]&&n>0)return n+u[f.mode];if(f.mode==='at'&&f.at){var d=new Date(f.at);if(!isNaN(d)){var mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];return mo+' '+d.getDate()}}return ''}
     function expTxt(r,now){var ws=winStart(r,game(r.gid));return r.exp>=ws?(r.cov==='2h'?'when the 2nd half starts':'at tipoff'):'in '+left(r.exp-now)}
     function ifTxt(r,side){var s=String(side||''),k=r.k;if(k==='txt')return s?'If '+s+' hits':'If it misses';if(k==='ou')return 'If it goes '+s;s=s.replace(/\s[+-]\d+(\.\d+)?$/,k==='sp'?'$&':'');return 'If '+s+(k==='sp'?' covers':' wins')}
     function rqExpSaved(r){var ws=winStart(r,game(r.gid));if(ws<Infinity&&r.exp>=ws-1500)return r.cov==='2h'?'2nd half':'Tip';if(!r.exp)return '';var ms=r.exp-Date.now();return ms<=0?'closed':left(ms)}
