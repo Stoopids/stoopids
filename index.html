@@ -981,7 +981,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.66.5"></script>
+<script src="shared/ui.js?v=1.66.6"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -3175,6 +3175,7 @@ function b27Clean(t,max){
   t=String(t==null?'':t).replace(/[\u0000-\u001f\u007f-\u009f\u200b-\u200f\u202a-\u202e\u2060-\u2069\ufeff]/g,' ').replace(/\s+/g,' ').trim();
   t=t.replace(/[A-Z0-9._%+\-]+@[A-Z0-9.\-]+\.[A-Z]{2,}/gi,'[hidden]');
   t=t.replace(/\+?\(?\d[\d\s().\-]{6,}\d/g,m=>m.replace(/\D/g,'').length>=8?'[hidden]':m);
+  if(window.SHARED_UI&&SHARED_UI.showLine)t=SHARED_UI.showLine(t);
   const a=Array.from(t);return (a.length>(max||PULK.maxText)?a.slice(0,max||PULK.maxText).join(''):t).trim();
 }
 const b27OwnerNames=()=>(D&&D.owners||[]).map(o=>o.name);
@@ -3590,7 +3591,7 @@ function b27PoolCard(b,me){
   const st=b.status,done=st==='open'&&!!b.back;
   const stTxt=st==='void'?POOL_TXT.stVoid:b.back?POOL_TXT.stDone:POOL_TXT.stOpen;
   let h=`<div class="card b27-c b27-pool"${/*<S24-EDIT>*/s24Attr('b',b.id)/*</S24-EDIT>*/}><div class="s24hd"><b>${esc(POOL_TXT.word)} #${b.n}</b> <span class="st ${st==='void'?'unparsed':done?'settled':'open'}">${esc(stTxt)}</span> <span class="mut" style="font-size:12px">${esc(b27Day(Date.parse(b.created_at)))}</span> <span class="mut" style="font-size:12px">· ${esc(PT('who',{n:b.parts.length}))}</span>${/*<S24-EDIT>*/s24LinkBtn('bets',b.id,'pool')/*</S24-EDIT>*/}</div>
-   ${/*<S29E-POSTED>*/s29ePosted(b)/*</S29E-POSTED>*/}<div class="b27-t">${esc(b.text)}</div><div class="b27-m">${esc(PT('line',{buy:b27Num(b.amt),tot:b27Num(b.amt*b.parts.length)}))}</div><div class="b27-m">${esc(PT('with',{names:b.parts.map(PN).join(', ')}))}</div>`;
+   ${/*<S29E-POSTED>*/s29ePosted(b)/*</S29E-POSTED>*/}<div class="b27-t">${esc(b27Clean(b.text))}</div><div class="b27-m">${esc(PT('line',{buy:b27Num(b.amt),tot:b27Num(b.amt*b.parts.length)}))}</div><div class="b27-m">${esc(PT('with',{names:b.parts.map(PN).join(', ')}))}</div>`;
   /*<S26F-POOL>*/if(b.places)h+=`<div class="b27-m">${esc(PT('payLine',{x:b.places.map((a,i)=>s26fPlaceName(i)+' '+b27Num(a)).join(' · ')}))}</div>`;/*</S26F-POOL>*/
   if(done)h+=`<div class="note" style="margin-top:6px"><b>${esc(POOL_TXT.result)}:</b></div>`+b27PoolResultLines(b.parts,b.amt,b.back).map((l,i)=>`<div class="${i>=b.parts.length?'b27-l':'b27-w'}" style="margin-top:2px">${esc(l)}</div>`).join('');
   /*<S25D-TS>*/h+='<div class="s25sp" aria-hidden="true"></div>'+s25dTsHtml(b);/*</S25D-TS>*/

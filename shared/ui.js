@@ -4,7 +4,10 @@
 (function(g){var LIMITS={team:15,stoopName:12,leagueName:24,chat:200,betText:140,paste:300,payouts:120,stake:20,item:40,odds:9};
 var STRINGS={maxLen:'Keep it to {n} characters or fewer.',nameTooLong:'Keep the name to {n} characters or fewer.',teamTooLong:'Keep the team name to {n} characters or fewer.',checkedNow:'checked just now',online:'Who\u2019s online'};
 function t(k,n){var s=STRINGS[k];return s==null?'':String(s).replace('{n}',n)}
-g.SHARED_UI={version:'1.22.0',LIMITS:LIMITS,STRINGS:STRINGS,t:t};})(typeof window!=='undefined'?window:globalThis);
+function showLine(s){s=String(s==null?'':s).replace(/\b(?:Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sun|Mon|Tue|Tues|Wed|Thu|Thur|Thurs|Fri|Sat)\b\.?,?\s*/gi,'');
+  s=s.replace(/\s*\(([^)]+)\)/g,function(all,inner,offset,whole){var m=/^(.*?)\s+vs\.?\s+(.*?)(?:,\s*([A-Za-z]{3}\s+\d{1,2}))?\s*$/i.exec(String(inner).trim());if(!m)return all;var before=whole.slice(0,offset).toLowerCase(),L=m[1].trim().toLowerCase(),R=m[2].trim().toLowerCase();if(!L||!R||before.indexOf(L)<0||before.indexOf(R)<0)return all;if(m[3]&&before.indexOf(m[3].toLowerCase())<0)return ', '+m[3];return ''});
+  return s.replace(/\s+,/g,',').replace(/,\s*,/g,',').replace(/\s{2,}/g,' ').trim()}
+g.SHARED_UI={version:'1.22.0',LIMITS:LIMITS,STRINGS:STRINGS,t:t,showLine:showLine};})(typeof window!=='undefined'?window:globalThis);
 
 /* ---- shared modules (step 4). Source of truth: stoopids/stoopids shared/; copy to fantasy-bball and run scripts/check_shared.sh ---- */
 /* sortCmp(a,b,kind,dir): kind 's' = text A-Z (case-insensitive), 'r' = rank (null/'–' always last), 'n' = number. Used by the All teams table on both sites. */
@@ -180,7 +183,7 @@ U.halfLs=hsLs;U.halfScores=function(g,s,first,BOX){var tot=s.score!=null?esc(Str
     function pick(g,f){var tt=String(f.text||'').trim().slice(0,A.maxText||140);if(!g)return tt?{k:'txt',si:0,lab:tt,other:'',txt:tt}:null;if(tt&&!(f.side&&(function(){var q=f.side.split(':'),oo=sides(g).find(function(x){return x.k===q[0]});return oo&&oo.s[+q[1]]&&(oo.s[+q[1]].lab===tt||oo.s[+q[1]].txt===tt)})()))return {k:'txt',si:0,lab:tt,other:'',txt:tt+(hasBothTeams(tt,g)?'':' ('+A.tname(g.away)+' vs '+A.tname(g.home)+', '+A.dateET(g)+')')};if(!f.side)return null;var p=f.side.split(':'),o=sides(g).find(function(x){return x.k===p[0]}),s=o&&o.s[+p[1]];var ot=o.s[1-(+p[1])];return s?{k:p[0],si:+p[1],lab:s.lab,other:ot?ot.lab:'',txt:(f.cov==='2h'?'2nd half: ':'')+s.txt}:null}
     async function write(mut,ok){for(var k=0;k<3;k++){var cur=parse(await A.get());if(!ok(cur)){await A.set(JSON.stringify({v:1,reqs:mut(cur)}))}
         await new Promise(function(r){setTimeout(r,350+Math.random()*400)});var back=parse(await A.get());if(ok(back)){S.list=back;S.at=Date.now();return back}}throw new Error('conflict')}
-    function responseEvents(list,me){var out=[];(list||[]).forEach(function(r){if(!r||r.by!==me||!r.id)return;var sum=String(r.txt||r.lab||'Request').replace(/\s+/g,' ').trim().slice(0,90);
+    function responseEvents(list,me){var out=[];(list||[]).forEach(function(r){if(!r||r.by!==me||!r.id)return;var sum=sl(String(r.txt||r.lab||'Request').replace(/\s+/g,' ').trim()).slice(0,90);
       (r.took||[]).forEach(function(t){if(t&&t.m&&t.m!==me)out.push({key:'a:'+r.id+':'+t.m,who:t.m,resp:'accepted',sum:sum,id:r.id})});
       (r.dec||[]).forEach(function(m){if(m&&m!==me)out.push({key:'d:'+r.id+':'+m,who:m,resp:'declined',sum:sum,id:r.id})})});return out}
     function clearNotes(){S.noteT=S.noteT||{};if(typeof document==='undefined')return;var h=document.getElementById('rqNotes');if(h)h.textContent='';Object.keys(S.noteT).forEach(function(k){clearTimeout(S.noteT[k])});S.noteT={}}
@@ -211,7 +214,7 @@ U.halfLs=hsLs;U.halfScores=function(g,s,first,BOX){var tot=s.score!=null?esc(Str
       var nt=tk(r).length,mine=tk(r).indexOf(me)>=0;var sn=slots(r),who=n===1?'Open to '+e(A.nick(r.to[0])):sn<n?'Open to '+sn+' of '+n+' stoops':n>=A.others().length?'Open to all '+n+' stoops':'Open to '+n+' stoops';   /* STEP13-SLOTS */
       var stage=r.status==='open'?(nt?'Awaiting settlement':'Awaiting acceptance'):'';
       var h='<div class="card rq-card" data-rq-id="'+e(r.id)+'"><div class="rq-top"><b>📨 '+e(A.nick(r.by))+'</b> <span class="note">'+who+(nt?' · '+nt+' of '+slots(r)+' taken':'')+' · expires '+expTxt(r,now)+'</span></div>'+(stage?'<div class="note">'+stage+'</div>':'')
-        +'<div class="rq-body"><span class="rq-amt">'+e(r.amt)+'</span> <span class="rq-side">'+e(r.lab)+'</span>'+(function(){var o=r.odds||[1,1];return +o[0]===+o[1]?'':' <span class="note">at '+oddsTxt(o)+' odds</span>'})()+(r.cov==='2h'?' <span class="pill">2nd half</span>':'')+(r.game?'<div class="note">'+e(r.game)+' · '+e(r.date||'')+'</div>':'')+'</div>'+explain(r)+'<div class="b27-due" data-due="'+SHARED_UI.whenShow(r)+'">'+e(SHARED_UI.whenText(r))+'</div>';
+        +'<div class="rq-body"><span class="rq-amt">'+e(r.amt)+'</span> <span class="rq-side">'+e(sl(r.lab))+'</span>'+(function(){var o=r.odds||[1,1];return +o[0]===+o[1]?'':' <span class="note">at '+oddsTxt(o)+' odds</span>'})()+(r.cov==='2h'?' <span class="pill">2nd half</span>':'')+(r.game?'<div class="note">'+e(sl(r.game))+' · '+e(sl(r.date||''))+'</div>':'')+'</div>'+explain(r)+'<div class="b27-due" data-due="'+SHARED_UI.whenShow(r)+'">'+e(SHARED_UI.whenText(r))+'</div>';
       if(mine)h+='<div class="note good">You accepted: it is your bet now.</div>';
       else if(me&&inv&&!dec&&r.by!==me&&A.canWrite()){var accOn=armed(r.id,'acc',reqTerms(r)),decOn=armed(r.id,'dec',reqTerms(r));h+='<div class="rq-act"><button type="button" class="btn rq-yes" data-rq="acc" data-v="'+e(r.id)+'"'+stAttr(r)+(S.busy?' disabled':'')+'>'+(accOn?armLab('accept',r.n):'Accept')+'</button><button type="button" class="btn sec rq-no" data-rq="dec" data-v="'+e(r.id)+'"'+stAttr(r)+(S.busy?' disabled':'')+'>'+(decOn?armLab('decline',r.n):'Decline')+'</button>'+(r.offer&&r.offer.by===me?'':'<button type="button" class="btn sec" data-rq="coffer" data-v="'+e(r.id)+'"'+(S.busy?' disabled':'')+'>Counter</button>')+'</div>';}
       else if(dec)h+='<div class="note">You declined.</div>';
@@ -225,7 +228,8 @@ U.halfLs=hsLs;U.halfScores=function(g,s,first,BOX){var tot=s.score!=null?esc(Str
       if(r.status==='open'&&!(me&&r.by===me&&A.canWrite()&&!nt))h+='<div class="rq-act rq-copy">'+'<button type="button" class="btn sec rq-cp" data-rq="cp" data-v="'+e(r.id)+'">Copy</button>'+'</div>';   /* STEP14-COPY: every open card can copy the Bet Requested text */
       return h+'</div>'}
     function offerKey(o){o=o||{};return [o.by,o.amt,(o.odds||[]).join('-'),o.lab||'',o.txt||''].join('\u001f')}
-    function offerLine(o){var a=o.odds&&o.odds[0],b=o.odds&&o.odds[1],od=+a===+b?'':' · '+a+'-'+b;return '$'+o.amt+od+' · '+(o.lab||o.txt||'')}
+    function sl(s){return SHARED_UI.showLine?SHARED_UI.showLine(s):String(s==null?'':s)}
+    function offerLine(o){var a=o.odds&&o.odds[0],b=o.odds&&o.odds[1],od=+a===+b?'':' · '+a+'-'+b;return '$'+o.amt+od+' · '+sl(o.lab||o.txt||'')}
     function form(){var f=S.f,now0=Date.now(),G=games().filter(function(x){var st=Date.parse(x.start)||0,ws=f.cov==='2h'?st+HALF_MS:st;if(String(x.id)===String(f.gid))return true;if(x.status==='final'||st>=now0+7*86400000)return false;if(f.cov==='2h')return !(x.period&&+x.period>=2)&&now0<ws;return x.status==='scheduled'&&now0<ws}),g=game(f.gid),me=A.me(),nOth=A.others().length;
       if(!f.expPick)f.mode=g?'start':'h';
       /* same template as Write it Up: header, Select all / Clear, numbered questions, Amount + Odds, summary, big button. Identity stays on Profile. */
@@ -261,15 +265,15 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
     function explain(r){var o=r.odds||[1,1],nm=function(id){return (A.real||A.nick)(id)},nTo=(r.to||[]).length,nOth=A.others().length;
       var who=nTo===1?nm(r.to[0]):nTo?(nTo>=nOth?'all Stoops':(r.to||[]).map(nm).join(', ')):'any Stoop';
       var acceptor=nTo===1?who:'the Stoop who accepts',creator=nm(r.by)||'You',half=r.cov==='2h'?'2nd half: ':'';
-      var match=String(r.txt||r.lab||'').trim()||'the bet';
-      if((r.k==='sp'||r.k==='ou')&&r.lab&&r.other)match=half+r.lab+' vs '+r.other;
+      var match=sl(String(r.txt||r.lab||'').trim())||'the bet';
+      if((r.k==='sp'||r.k==='ou')&&r.lab&&r.other)match=sl(half+r.lab+' vs '+r.other);
       var stake=r.amt>0?rqMoney(r.amt):'',odds=+o[0]===+o[1]?'':' · '+o[0]+'-'+o[1];
       var line1=creator+': '+match+(stake?' · '+stake:'')+odds,exp=rqExpSaved(r);
-      var line2=[r.date||'','Open to '+who,exp?'Exp: '+exp:''].filter(Boolean).join(' · '),line3='';
+      var line2=[sl(r.date||''),'Open to '+who,exp?'Exp: '+exp:''].filter(Boolean).join(' · '),line3='';
       if(r.amt>0){var winC=rqMoney(rqWin(r.amt,o[0],o[1])),winO=rqMoney(r.amt);
-        if(r.k==='sp'&&r.lab&&r.other)line3=rqTeam(r.lab)+' covers, '+creator+' wins '+winC+'. '+rqTeam(r.other)+' covers, '+acceptor+' wins '+winO+'.';
-        else if(r.k==='ou'&&r.lab&&r.other)line3=r.lab+', '+creator+' wins '+winC+'. '+r.other+', '+acceptor+' wins '+winO+'.';
-        else line3=(r.lab||match)+', '+creator+' wins '+winC+'. Otherwise, '+acceptor+' wins '+winO+'.'}
+        if(r.k==='sp'&&r.lab&&r.other)line3=rqTeam(sl(r.lab))+' covers, '+creator+' wins '+winC+'. '+rqTeam(sl(r.other))+' covers, '+acceptor+' wins '+winO+'.';
+        else if(r.k==='ou'&&r.lab&&r.other)line3=sl(r.lab)+', '+creator+' wins '+winC+'. '+sl(r.other)+', '+acceptor+' wins '+winO+'.';
+        else line3=(sl(r.lab)||match)+', '+creator+' wins '+winC+'. Otherwise, '+acceptor+' wins '+winO+'.'}
       return '<div class="rq-ex"><b>'+e(line1)+'</b>'+(line2?'<div>'+e(line2)+'</div>':'')+(line3?'<div>'+e(line3)+'</div>':'')+'</div>'}
     function rqQ(n,tip,label){return '<div class="b27-q"><button type="button" class="s27-tipk" data-tip="'+tip+'" aria-expanded="false" onfocus="s27TipShow(this)" onclick="s27WhenClick(this)">'+n+'. '+label+'</button></div>'}
     function rqPreview(f){var g=game(f.gid),p=pick(g&&g.g,f),me=A.me(),amt=f.amtC?(+f.amtTxt>0?+f.amtTxt:null):f.amt,o=f.odds||[1,1];
@@ -281,7 +285,7 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
       var half=f.cov==='2h'?'2nd half: ':'',match=typed||'Write the bet';
       if(p&&(p.k==='sp'||p.k==='ou')&&p.lab&&p.other)match=half+p.lab+' vs '+p.other;
       var stake=amt>0?rqMoney(amt):'',odds=(+o[0]===+o[1])?'':' · '+o[0]+'-'+o[1];
-      var line1=creator+': '+match+(stake?' · '+stake:'')+odds;
+      var line1=sl(creator+': '+match+(stake?' · '+stake:'')+odds);
       var date=g&&A.dateET?A.dateET(g):'',exp=rqExp(f);
       var line2=[date,'Open to '+who,exp?'Exp: '+exp:''].filter(Boolean).join(' · ');
       var line3='';
@@ -292,8 +296,7 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
       return {sum:'',ex:'<b>'+e(line1)+'</b>'+(line2?'<div>'+e(line2)+'</div>':'')+(line3?'<div>'+e(line3)+'</div>':'')}}
     function rqPaintExplain(){var box=rqPreview(S.f),x=document.getElementById('rqEx');if(x)x.innerHTML=box.ex}
     function nmOf(id){return (A.real||A.nick)(id)}
-    function onceGame(t){return String(t||'').replace(/\s*\(([^)]+)\)\s*$/,function(all,inner){var head=String(t).slice(0,String(t).lastIndexOf(all)),m=/^(.*?)\s+vs\.?\s+(.*?)(?:,\s*([A-Za-z]{3}\s+\d{1,2}))?\s*$/i.exec(String(inner).trim()),h=head.toLowerCase();if(!m||h.indexOf(m[1].trim().toLowerCase())<0||h.indexOf(m[2].trim().toLowerCase())<0)return all;if(m[3]&&h.indexOf(m[3].toLowerCase())<0)return all;return ''}).replace(/\s+/g,' ').trim()}
-    function descLine(r){var t=onceGame(String(r.txt||r.lab||'').replace(/\s+/g,' ').trim()),o=r.odds||[1,1];
+    function descLine(r){var t=sl(String(r.txt||r.lab||'').replace(/\s+/g,' ').trim()),o=r.odds||[1,1];
       if(+o[0]===+o[1])return t;
       var od=o[0]+'-'+o[1];if(t.toLowerCase().indexOf(od.toLowerCase())>=0)return t;return (t?t+' ':'')+'at '+od}
     function vsRight(r,acc){if(acc)return nmOf(acc);if(r.to&&r.to.length===1)return nmOf(r.to[0]);var n=slots(r)||(r.to?r.to.length:0);return 'Open to '+n+' stoop'+(n===1?'':'s')}
