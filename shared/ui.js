@@ -344,7 +344,7 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
       var L=S.list.filter(function(r){return shown(r,now)}).sort(function(a,b){return a.exp-b.exp}),me=A.me();
       var h='';if(S.msg&&!S.f.gid)h+='<div class="card '+(S.bad?'b27-bad':'b27-ok')+'" role="status">'+e(S.msg)+(S.fb?'<pre class="rq-fb">'+e(S.fb)+'</pre><div class="rq-act"><button type="button" class="btn" data-rq="wa">Copy</button></div>':'')+'</div>';
       if(mode==='open')return h+(L.length?'<h2 class="rq-h">Pending requests</h2><div class="rq-grid">'+L.map(function(r){return card(r,now)}).join('')+'</div>':'<div class="card note rq-none">No pending requests right now.</div>');
-      return h+(me&&A.canWrite()?form():'<div class="card note rq-none">Set who you are on Profile before you request a bet.</div>')}
+      return h+(me&&A.canWrite()?form():(typeof A.lockHtml==='function'?A.lockHtml():'<div class="card note rq-none">Set who you are on Profile before you request a bet.</div>'))}
     async function act(k,v,st){var f=S.f,me=A.me(),now=Date.now();
       var actK=k==='acc'||k==='dec'||k==='cancel'||k==='close'||k==='slot-'||k==='slot+'||k==='edit';
       if(actK){if(S.busy)return;var curR=S.list.find(function(x){return x.id===v});if(!curR||reqHash(reqTerms(curR))!==st){S.arm=null;S.msg='That request changed. Review it again.';S.bad=true;A.render();return}}

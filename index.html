@@ -981,7 +981,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.66.7"></script>
+<script src="shared/ui.js?v=1.66.8"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -1650,9 +1650,9 @@ function ownerKey(n){return typeof legacyOwner==='function'?legacyOwner(n):n}
 function PN(n){const k=ownerKey(n);return OWNER_DISP[k]?OWNER_DISP[k].person:n}   // person name (any place that shows one name)
 function TN(n){const k=ownerKey(n);const o=D&&D.owners&&D.owners.find(x=>x.name===k);return OWNER_DISP[k]?OWNER_DISP[k].team:(o&&o.team_name)||n}   // team name
 /*</OWNER-NAMES>*/
-function idLine(){let name=null;if(!(typeof VIEW_ONLY!=='undefined'&&VIEW_ONLY)){try{const w=legacyOwner(localStorage.getItem('stoopids_who')||'');if(w&&w!=='__guest__'&&D&&D.owners&&D.owners.some(o=>o.name===w))name=PN(w)}catch(e){}}
-  if(window.SHARED_UI&&SHARED_UI.loginLine)return SHARED_UI.loginLine(name?{name:esc(name),change:'onclick="presAsk()"'} : {});
-  return name?`<p class="idline">You are logged in as <b>${esc(name)}</b> — <button type="button" class="idline-ch" onclick="presAsk()">Change?</button></p>`:`<p class="idline" role="status">You’re viewing as a guest. This visit can’t pick a name.</p>`}
+function idLine(){let name=null;if(!(typeof VIEW_ONLY!=='undefined'&&VIEW_ONLY)){try{const raw=(typeof PS!=='undefined'&&PS&&PS.who)||localStorage.getItem('stoopids_who')||'';const w=typeof whoKey==='function'?whoKey(raw):legacyOwner(raw);if(w&&w!=='__guest__'&&D&&D.owners&&D.owners.some(o=>o.name===w))name=PN(w)}catch(e){}}
+  const line=window.SHARED_UI&&SHARED_UI.loginLine?SHARED_UI.loginLine(name?{name:esc(name),change:'onclick="presAsk()"'} : {}):(name?`<p class="idline">You are logged in as <b>${esc(name)}</b> — <button type="button" class="idline-ch" onclick="presAsk()">Change?</button></p>`:`<p class="idline" role="status">You’re viewing as a guest. This visit can’t pick a name.</p>`);
+  return line+(name&&typeof whoWarn==='function'?whoWarn():'')}
 function vStandings(){const tail=idLine();/*<RANKINGS>*/const sv=rkView();if(sv==='points')return rkSeg()+vPoints()+tail;/*</RANKINGS>*/
   /*<STEP5-STANDINGS>*/if(typeof SHARED_UI!=='undefined'&&SHARED_UI.standingsList)return rkSeg()+SHARED_UI.standingsList(D.owners.map(o=>({rank:rankTxt(o),emoji:o.emoji,team:TN(o.name),person:PN(o.name),gold:goldTag(o.name),total:o.total,lbAttr:`onclick="goOwner('${esc(o.name)}')"`,chips:o.teams.map(t=>chipRec(t.tid,{out:t.status==='dropped',cn:1})).join('')})),esc)+goldNote()+tail;/*</STEP5-STANDINGS> fallback below*/
   const mx=Math.max(10,...D.owners.map(o=>o.total));
@@ -2582,7 +2582,7 @@ function cmGens(){try{const v=JSON.parse(lsGet('stoopids_acc_gen')||'{}');return
 function cmGen(name){return +(cmGens()[name]||0)}
 function cmGenSet(name,n){const g=cmGens();g[name]=n;lsSet('stoopids_acc_gen',JSON.stringify(g))}
 function cmAllowed(name){if((CM.off||[]).includes(name))return false;return cmGen(name)>=(+((CM.access||{})[name]||0))}
-function cmApply(){(D&&D.owners||[]).forEach(o=>{const L=CM.looks&&CM.looks[o.name];if(!L)return;if(L.emoji)o.emoji=L.emoji;if(L.team){if(!OWNER_DISP[o.name])OWNER_DISP[o.name]={team:L.team,person:PN(o.name)};else OWNER_DISP[o.name].team=L.team}});const me=legacyOwner(lsGet('stoopids_who')||'');if(me&&me!==PRES.guestKey&&!cmAllowed(me)){try{localStorage.removeItem('stoopids_who')}catch(e){}if(typeof PS!=='undefined'&&PS)PS.who=null;CM.kicked=true}}
+function cmApply(){(D&&D.owners||[]).forEach(o=>{const L=CM.looks&&CM.looks[o.name];if(!L)return;if(L.emoji)o.emoji=L.emoji;if(L.team){if(!OWNER_DISP[o.name])OWNER_DISP[o.name]={team:L.team,person:PN(o.name)};else OWNER_DISP[o.name].team=L.team}});const me=whoKey((typeof PS!=='undefined'&&PS&&PS.who)||lsGet('stoopids_who')||'');if(me&&me!==PRES.guestKey&&!cmAllowed(me)){try{localStorage.removeItem('stoopids_who')}catch(e){}if(typeof PS!=='undefined'&&PS)PS.who=null;CM.kicked=true}}
 async function cmGet(){const r=await fetch(CM_URL,{cache:'no-store'});if(!r.ok)return cmBlank();const t=await r.text();if(!t||!String(t).trim())return cmBlank();let d=JSON.parse(t);if(typeof d==='string')d=JSON.parse(d);return cmNorm(d)}
 function cmLoad(){if(CM.loading||CM.ready||!D)return;CM.loading=true;cmGet().then(d=>{CM.looks=d.looks;CM.off=d.off;CM.access=d.access;CM.ready=true;CM.loading=false;cmApply();if(CM.kicked&&typeof presAsk==='function')presAsk(true);if(typeof render==='function')render()}).catch(()=>{CM.loading=false;CM.ready=true})}
 async function cmWrite(mut){if(!profCmUnlocked())return;CM.msg='Saving…';render();
@@ -2816,10 +2816,16 @@ const PS={map:{},lastOk:0,timer:null,busy:false,started:false,dev:null,who:null}
 const lsGet=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
 const lsSet=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
 function presDev(){if(PS.dev)return PS.dev;let d=lsGet('stoopids_dev');if(!d||!/^[0-9a-f]{12}$/.test(d)){const a=new Uint8Array(6);(window.crypto||window.msCrypto).getRandomValues(a);d=Array.from(a,b=>('0'+b.toString(16)).slice(-2)).join('');lsSet('stoopids_dev',d)}return PS.dev=d}
-const LEGACY_OWNER={'Poo':'Paul','Party Paul':'Paul'/*<OWNER-NAMES>*/,'Mark':'Dirty Draymond','Jake':'Stock','Stock Rising':'Stock','Kurt':'Kurmoji','Ken':'Kentut','Cockchalkrock':'Murf','Murfcockchalkrock':'Murf','Jim':'Nasty','Nasty Peacock':'Nasty','Scotty':'En Fuego'/*</OWNER-NAMES>*/};const legacyOwner=n=>(typeof n==='string'&&Object.prototype.hasOwnProperty.call(LEGACY_OWNER,n))?LEGACY_OWNER[n]:n;   /* owner was "Poo", then "Party Paul", now "Paul": old saved identity / textdb records (presence, chat, 2026-27 bets) under either old name still resolve to "Paul" (merged, never two Pauls) */
+const LEGACY_OWNER={'Poo':'Paul','Party Paul':'Paul'/*<OWNER-NAMES>*/,'Mark':'Dirty Draymond','Jake':'Stock','Stock Rising':'Stock','Kurt':'Kurmoji','Ken':'Kentut','Cockchalkrock':'Murf','Murfcockchalkrock':'Murf','Jim':'Nasty','Nasty Peacock':'Nasty','Scotty':'En Fuego'/*</OWNER-NAMES>*/};
+function whoFold(s){return String(s||'').replace(/[\u200b-\u200d\ufeff]/g,'').replace(/\s+/g,' ').trim().toLowerCase()}
+const legacyOwner=n=>{if(typeof n!=='string')return n;const t=n.replace(/[\u200b-\u200d\ufeff]/g,'').replace(/\s+/g,' ').trim();if(Object.prototype.hasOwnProperty.call(LEGACY_OWNER,t))return LEGACY_OWNER[t];const f=t.toLowerCase();for(const k in LEGACY_OWNER)if(k.toLowerCase()===f)return LEGACY_OWNER[k];return t};   /* owner was "Poo", then "Party Paul", now "Paul": old saved identity / textdb records (presence, chat, 2026-27 bets) under either old name still resolve to "Paul" (merged, never two Pauls). Case and extra spaces count as the same name. */
+function whoKey(raw){if(raw==null)return '';const clean=String(raw).replace(/[\u200b-\u200d\ufeff]/g,'').replace(/\s+/g,' ').trim();if(!clean)return '';if(typeof PRES!=='undefined'&&clean===PRES.guestKey)return clean;const owners=(typeof D!=='undefined'&&D&&D.owners)||[],fold=whoFold(clean);let hit=owners.find(o=>whoFold(o.name)===fold);if(hit)return hit.name;const alias=legacyOwner(clean);hit=owners.find(o=>o.name===alias||whoFold(o.name)===whoFold(alias));if(hit)return hit.name;for(const o of owners){let person=o.name,team=o.team_name||'';try{if(typeof PN==='function')person=PN(o.name)}catch(e){}try{if(typeof TN==='function')team=TN(o.name)}catch(e){}if(whoFold(person)===fold||whoFold(team)===fold||whoFold(o.team_name)===fold)return o.name}if(!owners.length&&alias&&alias!==clean)return alias;return owners.length?'':alias}
+function whoSave(key){if(typeof VIEW_ONLY!=='undefined'&&VIEW_ONLY)return false;try{localStorage.setItem('stoopids_who',key);if(localStorage.getItem('stoopids_who')!==key){PS.nosave=true;return false}PS.nosave=false;return true}catch(e){PS.nosave=true;return false}}
+function whoWarn(){if(typeof PS==='undefined'||!PS||!PS.nosave)return '';return '<p class="note who-nosave">Your browser isn\'t saving your name. Turn off private browsing to stay signed in.</p>'}
+function b27LockHtml(kind){if(typeof VIEW_ONLY!=='undefined'&&VIEW_ONLY){if(kind==='request')return '<div class="card note rq-none">Set who you are on Profile before you request a bet.</div>';return '<div class="card note">Set who you are on <a href="'+esc(s24Href('profile'))+'" onclick="return s24NavClick(event,\'profile\')">Profile</a> before you write a bet.</div>'}const names=typeof b27OwnerNames==='function'?b27OwnerNames():((D&&D.owners)||[]).map(o=>o.name);const picks=names.map(n=>'<button type="button" class="who-pick" data-who="'+esc(n)+'" onclick="presPick(this.getAttribute(\'data-who\'))">'+esc(PN(n))+'</button>').join('');return '<div class="card who-lock"><p>Pick who you are to request or write a bet.</p><div class="who-picks" role="group" aria-label="Who are you?">'+picks+'</div>'+whoWarn()+'<p class="note">Or set it on <a href="'+esc(s24Href('profile'))+'" onclick="return s24NavClick(event,\'profile\')">Profile</a>.</p></div>'}
 /*<OWNER-NAMES>*/try{const w0=localStorage.getItem('stoopids_who');if(w0&&legacyOwner(w0)!==w0)localStorage.setItem('stoopids_who',legacyOwner(w0))}catch(e){}   // migrate an old saved identity once/*</OWNER-NAMES>*/
 const presOwners=()=>(D&&D.owners||[]);
-function presWho(){const w=legacyOwner(lsGet('stoopids_who'));if(!w)return null;if(w===PRES.guestKey)return w;if(!presOwners().some(o=>o.name===w))return null;if(CM.ready&&!cmAllowed(w))return null;return w}
+function presWho(){const w=whoKey((typeof PS!=='undefined'&&PS&&PS.who)||lsGet('stoopids_who'));if(!w)return null;if(w===PRES.guestKey)return w;if(!presOwners().some(o=>o.name===w))return null;if(CM.ready&&!cmAllowed(w))return null;return w}
 const presMyKey=()=>PS.who===PRES.guestKey?'g-'+presDev():PS.who;
 function presAgo(ms){const m=Math.floor(ms/60000);if(m<1)return 'just now';if(m<60)return m+'m ago';const h=Math.floor(m/60);if(h<24)return h+'h ago';if(h<48)return 'yesterday';return Math.floor(h/24)+'d ago'}
 function presParse(txt){try{if(!txt||!txt.trim())return {};let d=JSON.parse(txt);if(typeof d==='string')d=JSON.parse(d);if(!d||typeof d!=='object'||Array.isArray(d))return {};const o={};for(const k0 in d){const k=legacyOwner(k0),t=d[k0]&&Number(d[k0].t);if(isFinite(t)&&t>0&&!(o[k]&&o[k].t>=t)){o[k]={t};/*<CHAT-BAR>*/const y=Number(d[k0].y);if(isFinite(y)&&y>0)o[k].y=y;/*</CHAT-BAR>*/}}return o}catch(e){return {}}}
@@ -2847,17 +2853,22 @@ function presAsk(first){
 }
 function presPick(w){
   const d=document.getElementById('pwho');if(d)d.remove();
-  if(!w)return;
-  if(w&&w!==PRES.guestKey&&CM.ready&&(CM.off||[]).includes(w))return;
-  if(w&&w!==PRES.guestKey)cmGenSet(w,+((CM.access||{})[w]||0));
-  if(w!==PS.who){const oldKey=PS.who&&presMyKey();PS.who=w;lsSet('stoopids_who',w);if(oldKey&&oldKey!==presMyKey()&&PS.map[oldKey]&&oldKey.indexOf('g-')===0)delete PS.map[oldKey]}
+  if(w==null||w==='')return;
+  const key=w===PRES.guestKey?w:whoKey(w);
+  if(!key)return;
+  if(key!==PRES.guestKey&&CM.ready&&(CM.off||[]).includes(key))return;
+  if(key!==PRES.guestKey)cmGenSet(key,+((CM.access||{})[key]||0));
+  if(key!==PS.who){const oldKey=PS.who&&presMyKey();PS.who=key;if(oldKey&&oldKey!==presMyKey()&&PS.map[oldKey]&&oldKey.indexOf('g-')===0)delete PS.map[oldKey]}
+  if(!whoSave(key))PS.nosave=true;
   presBeat();presTick();
   try{if(typeof render==='function')render()}catch(e){}
 }
 function presTick(){clearInterval(PS.timer);PS.timer=null;if(!document.hidden&&PS.who){PS.timer=setInterval(()=>{presBeat()},PRES.beatMs)}}
 function presInit(){
   if(PS.started)return;PS.started=true;
-  PS.who=presWho();
+  const stored=lsGet('stoopids_who'),key=whoKey(stored);
+  PS.who=key&&!(key!==PRES.guestKey&&CM.ready&&!cmAllowed(key))?key:null;
+  if(key&&key!==PRES.guestKey&&stored!==key&&!whoSave(key)){PS.nosave=true;try{render()}catch(e){}}
   document.addEventListener('visibilitychange',()=>{presTick();if(!document.hidden)presBeat()});
   if(!PS.who)presAsk(true);else{presBeat();presTick()}
 }
@@ -2894,7 +2905,7 @@ function chatTrim(list){
 }
 /*<LOCAL-TIME>*/const chatETday=new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric'});/*</LOCAL-TIME>*/
 function chatTime(ms,now){const d=new Date(ms),tm=S25.localTime(d);return chatETday.format(d)===chatETday.format(new Date(now==null?Date.now():now))?tm:chatETday.format(d)+', '+tm}
-function chatWho(){const w=PS.who||legacyOwner(lsGet('stoopids_who'));return w&&presOwners().some(o=>o.name===w)?w:null}
+function chatWho(){const w=whoKey(PS.who)||whoKey(lsGet('stoopids_who'));return w&&w!==PRES.guestKey&&presOwners().some(o=>o.name===w)?w:null}
 const chatName=w=>presOwners().some(o=>o.name===w)?PN(w):'guest';
 const chatRid=()=>{const a=new Uint8Array(6);(window.crypto||window.msCrypto).getRandomValues(a);return 'm'+Array.from(a,b=>('0'+b.toString(16)).slice(-2)).join('')};
 function chatSay(t,bad){CH.msg=t||'';const e=$('#chatM');if(e){e.textContent=CH.msg;e.className=bad?'bad':''}clearTimeout(CH.msgT);if(t)CH.msgT=setTimeout(()=>chatSay(''),5000)}
@@ -3241,7 +3252,7 @@ function b27Tally(bets){
   return {owes,per,openTotal:openC,openCount:openN,lost,won,M/*<POOL>*/,poolOwes/*</POOL>*/};
 }
 /* ---- state / network (own key only) ---- */
-const b27Who=()=>{const w=PS.who||legacyOwner(lsGet('stoopids_who'));if(!b27OwnerNames().includes(w))return null;if(CM.ready&&!cmAllowed(w))return null;return w};
+const b27Who=()=>{const w=whoKey(PS.who)||whoKey(lsGet('stoopids_who'));if(!w||w===PRES.guestKey||!b27OwnerNames().includes(w))return null;if(CM.ready&&!cmAllowed(w))return null;if(PS.who!==w)PS.who=w;return w};
 const b27Rid=()=>{const a=new Uint8Array(6);(window.crypto||window.msCrypto).getRandomValues(a);return /*<V25>*/'v25'/*</V25>*/+Array.from(a,b=>('0'+b.toString(16)).slice(-2)).join('')};
 /*<V25>*/
 /* version marker (s25c). Old (pre-s25) clients rebuild every record from known fields only, so a marker must live in fields they keep:
@@ -3827,7 +3838,7 @@ function vB27(){
   /*<BETS-INTRO-BOTTOM>*/let h='';   // headline removed: New bet sits right under the season toggle + Share row
   /*</BETS-INTRO-BOTTOM>*/
   if(U.msg)h+=`<div class="card ${U.msgBad?'b27-bad':'b27-ok'}" role="status">${esc(U.msg)}${U.clip?`<pre class="rq-fb">${esc(U.clip)}</pre><div class="b27-act"><button type="button" class="btn sec" onclick="b27ClipRetry()">Copy</button></div>`:''}${/*<MULTI-BET>*/U.undoG&&b27GroupUndoable(U.undoG).length>1?`<div class="b27-act"><button type="button" class="btn sec b27-b" onclick="b27UndoGroup('${U.undoG}','${b27GroupHash(U.undoG)}')"${U.busy?' disabled':''}>↩ Undo all ${b27GroupUndoable(U.undoG).length} bets (5 min)</button></div>`:''/*</MULTI-BET>*/}</div>`;
-  /*<ALL-BETS>*/if(OB_VIEW==='all'){}/*list only: form lives on Write it Up*/else/*</ALL-BETS>*/ if(!me){h+=`<div class="card note">Set who you are on <a href="${esc(s24Href('profile'))}" onclick="return s24NavClick(event,'profile')">Profile</a> before you write a bet.</div>`}
+  /*<ALL-BETS>*/if(OB_VIEW==='all'){}/*list only: form lives on Write it Up*/else/*</ALL-BETS>*/ if(!me){h+=b27LockHtml('write')}
   /*<POOL>*/else if(U.kind==='pool'){h+=U.confirm?s26kModal(b27PoolConfirmHtml()):b27PoolForm(me)}/*</POOL>*/
   else if(U.confirm){
     const e=b27FormOK();
@@ -3881,7 +3892,7 @@ function b27ReqBet(r){const raw=b27Clean(r&&(r.txt||r.lab))||'';let parsed=null;
   else if(ou){const side=/^o/i.test(ou[1])?'Over':'Under',other=side==='Over'?'Under':'Over';text=b27Clean(side+' '+ou[2]+' vs '+other+' '+ou[2]+', '+teams[0]+' v '+teams[1]+dateBit);try{rd=S25.parse(text,when)}catch(e){}}
   return {text:text||raw,rd:rd&&rd.k&&rd.k!=='manual'?rd:(parsed||{k:'manual'})}}
 const RQ=(typeof SHARED_UI!=='undefined'&&SHARED_UI.Requests)?SHARED_UI.Requests({maxText:PULK.maxText,change:"presAsk();return false",
-  e:esc,me:()=>b27Who(),others:()=>b27Others().map(n=>({id:n,emoji:ownerEmoji(n),nick:TN(n)})),nick:n=>TN(n),real:n=>PN(n),
+  e:esc,me:()=>b27Who(),lockHtml:()=>b27LockHtml('request'),others:()=>b27Others().map(n=>({id:n,emoji:ownerEmoji(n),nick:TN(n)})),nick:n=>TN(n),real:n=>PN(n),
   canWrite:()=>!DEMO&&!!b27Who()&&b27OwnerNames().includes(b27Who()),amounts:PULK.amounts,
   seasonId:()=>b27Season(),games:()=>(D.games||[]).filter(g=>g&&g.home&&g.away).map(g=>({id:String(g.id),g,start:g.start,status:g.status,period:g.period||null,label:qbNm(g.away)+' vs '+qbNm(g.home)+' · '+qbDate(g)})),
   tname:s=>qbNm(s),dateET:g=>qbDate(g),link:()=>location.href.split('#')[0]+'#bets27',goRequest:()=>{tab='bets27';OB_VIEW='request'},waiting:()=>{try{const me=b27Who();return me&&U.doc&&U.doc.bets?U.doc.bets.filter(b=>s24Waiting(b,me)).length:0}catch(e){return 0}},navEl:()=>document.querySelector('a.nt[data-tab="bets27"]')||document.querySelector('a.nt[data-tab="bets"]'),
@@ -3949,8 +3960,8 @@ function obOldNote(){   // read-only replacement of the old shared-ledger card (
   if(DEMO)return;
   /*<ONE-BETS>*/const i=TABS.findIndex(t=>t[0]==='bets');if(i<0)TABS.push(['bets27','💵 Bets']);else TABS[i]=['bets27','💵 Bets'];   // the ONE Bets tab (was Side bets + Bets 26-27); the Draft link stays last
   const bi=TABS.findIndex(t=>t[0]==='bets27');if(TABS.every(t=>t[0]!=='tally'))TABS.splice(bi+1,0,['tally','🧮 Tally']);NAVSHORT.tally='Tally';VIEWS.tally=()=>vTally();
-  function entryPair(){const focus=OB_VIEW==='request'?'request':'form',wiu=vB27(),rq=(typeof RQ!=='undefined'&&RQ)?RQ.view():'<div class="card note">Request a bet is unavailable right now.</div>';
-    return `<div class="entry-pair" data-focus="${focus}"><div class="entry-col entry-rq${focus==='request'?' is-on':''}">${rq}</div><div class="entry-col entry-wiu${focus==='form'?' is-on':''}">${wiu}</div></div>`}
+  function entryPair(){if(!(typeof VIEW_ONLY!=='undefined'&&VIEW_ONLY)&&!b27Who())return b27LockHtml();const focus=OB_VIEW==='request'?'request':'form',wiu=vB27(),rq=(typeof RQ!=='undefined'&&RQ)?RQ.view():'<div class="card note">Request a bet is unavailable right now.</div>';
+    return whoWarn()+`<div class="entry-pair" data-focus="${focus}"><div class="entry-col entry-rq${focus==='request'?' is-on':''}">${rq}</div><div class="entry-col entry-wiu${focus==='form'?' is-on':''}">${wiu}</div></div>`}
   VIEWS.bets27=()=>{if(OB_VIEW==='open')OB_VIEW='all';
     const entry=OB_VIEW==='form'||OB_VIEW==='request';
     if(OB_VIEW==='stoopid')return obToggle()+(typeof sbView==='function'?sbView():'')+b27Fine();
@@ -4995,6 +5006,10 @@ html body .sb-list{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-sta
 html body .sb-card{flex:1 1 260px;max-width:440px}
 html body .sb-card .sb-use{margin-top:8px}
 html body .sb-basis{margin-top:4px;font-size:13px}
+html body .who-lock p{margin:0 0 8px}
+html body .who-picks{display:flex;flex-wrap:wrap;justify-content:flex-start;align-items:center;gap:6px;margin:0}
+html body .who-pick{flex:0 0 auto;width:auto;height:32px;min-height:32px;max-height:32px;padding:0 10px;border-radius:999px;border:1px solid var(--line,#2d3548);background:transparent;color:inherit;font:inherit;font-size:13px;font-weight:800;line-height:30px;cursor:pointer}
+html body .who-nosave{margin:8px 0 0}
 </style>
 <script src="stoopid-bet.js?v=4"></script>
 </body>
