@@ -3355,7 +3355,7 @@ function b27Edit(){U.confirm=false;render()}
       return cur.concat(miss.map(b=>Object.assign({},b,{n:++n,created_at:at,settled_at:null})))},cur=>ids.every(id=>cur.some(b=>b.id===id))/*<S24-EDIT>*/&&(!edOf||!cur.some(c=>c.id===edOf&&c.status==='open'))/*</S24-EDIT>*/);
     ids.forEach(id=>U.mine.add(id));b27Apply(back);
     const mine=ids.map(id=>back.find(b=>b.id===id)).filter(Boolean);
-    {const m=mine[0],k=m?b27Opps(m).length:1;let copied=false;try{copied=clip?await b27CopyNow(clip):false}catch(err){copied=false}U.msg='Placed! Bet #'+(m?m.n:'')+(k>1?' against '+k+' managers ('+b27Num(U.amt)+' each)':'')+' is open. You can undo it for 5 minutes.';if(copied){U.clip=null;U.msg+=' Message copied. Paste it in WhatsApp.'}else{U.clip=clip;U.msg+=' Could not copy it. Copy the message below.'}U.msgBad=false;/*<S25C-FX>*/s25PlacedFx(m&&m.id)/*</S25C-FX>*/}
+    {const m=mine[0],k=m?b27Opps(m).length:1;let copied=false;try{copied=clip?await b27CopyNow(clip):false}catch(err){copied=false}U.msg='Placed! Bet #'+(m?m.n:'')+(k>1?' against '+k+' managers ('+b27Num(U.amt)+' each)':'')+' is unsettled. You can undo it for 5 minutes.';if(copied){U.clip=null;U.msg+=' Message copied. Paste it in WhatsApp.'}else{U.clip=clip;U.msg+=' Could not copy it. Copy the message below.'}U.msgBad=false;/*<S25C-FX>*/s25PlacedFx(m&&m.id)/*</S25C-FX>*/}
     U.undoG=null;/*<S24-EDIT>*/if(edOf){const o=back.find(x=>x.id===edOf);U.msg+=o?' It replaces bet #'+o.n+' (now cancelled).':'';U.editOf=null}/*</S24-EDIT>*/
     U.opps=[];U.backer=null;U.pz=null;U.amt=null;U.amtCustom=false;U.amtTxt='';U.amtErr='';U.odds=[1,1];U.custom=false;U.customTxt='';U.oddsErr='';U.text='';U.est='';U.wk='game';U.whenPick=false;U.confirm=false;U.fids={};U.gid=null;/*<S25E-RD>*/U.rdEd=null;U.rdOpen=false;/*</S25E-RD>*/
     clearTimeout(U.undoT);U.undoT=setTimeout(()=>{if(tab==='bets27')render()},PULK.undoMs+300);
@@ -3415,8 +3415,8 @@ const POOL_TXT={
   eSum:'payouts add up to {sum} but the pot is {total}', eUnknown:'Unknown name "{x}". Use these short names for payouts: {keys}', eNotIn:'"{x}" is not in this pool.', eDup:'"{x}" is listed twice.', eEmptyPay:'Fill in the payouts first.',
   confirmTitle:'Check it, then confirm', sum:'Pool of {names} · buy-in {buy} each · total {tot}', open:'Payouts left open: it stays open until someone fills them in below.',
   row:'{name}: gets {got}, net {net}', settleUp:'{from} owes {to} {n}', go:'✅ Yes, build it', change:'← Change',
-  placed:'Built! Pool #{n} is open until the payouts are entered. You can undo it for 5 minutes.', placedDone:'Built! Pool #{n} counts now. You can undo it for 5 minutes.',
-  word:'Pool', stOpen:'Open', stDone:'Settled', stVoid:'Cancelled', who:'{n} managers', with:'With: {names}',
+  placed:'Built! Pool #{n} is unsettled until the payouts are entered. You can undo it for 5 minutes.', placedDone:'Built! Pool #{n} counts now. You can undo it for 5 minutes.',
+  word:'Pool', stOpen:'Unsettled', stDone:'Settled', stVoid:'Cancelled', who:'{n} managers', with:'With: {names}',
   line:'Buy-in each {buy} · total {tot}', noPay:'Payouts not entered yet.',
   save:'Save payouts', again:'Tap again to confirm', cancel:'Cancel this pool', undo:'↩ Undo this pool (5 min)', adminCancel:'Cancel pool (admin)', result:'Result',
   already:'Already settled.', saved:'Saved.',
@@ -3533,14 +3533,14 @@ function b27PSync(){try{const m=document.getElementById('main');if(!m)return;
 function b27PoolShell(){return `<div class="card b27-form">${typeof SHARED_UI!=='undefined'&&SHARED_UI.entryHead?SHARED_UI.entryHead('wiu'):''}${b27KindTabs('')}</div>`}
 function b27PoolPostedDay(ms){const d=new Date(ms);if(!ms||isNaN(d))return '';const wd=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()],mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];return wd+', '+mo+' '+d.getDate()}
 function b27PoolSettleWord(b){const k=window.SHARED_UI?SHARED_UI.whenKind(b):'unknown';if(k==='game')return 'End Of Game';if(k==='season')return 'End Of Season';if(k==='date')return SHARED_UI.estOk(b.est)?SHARED_UI.estLabel(b.est):'Set A Date';return 'Not Sure Yet'}
-function b27PoolClip(b){if(!b)return '';const money=n=>'$'+b27Num(n),st=b.status==='void'?'Cancelled':b.back?'Settled':'Open';
+function b27PoolClip(b){if(!b)return '';const money=n=>'$'+b27Num(n),st=b.status==='void'?'Cancelled':b.back?'Settled':'Unsettled';
   const pay=b.places&&b.places.length?'Payouts: '+b.places.map((a,i)=>s26fPlaceName(i)+' '+money(a)).join(' · '):'Payouts not entered yet.';
   const when=b27PoolPostedDay(Date.parse(b.postedAt||b.created_at));
   return ['Pool #'+(b.n||'')+' · '+st,b27Clean(b.text),'Buy-in '+money(b.amt)+' · '+(b.parts||[]).length+' managers · Total '+money(b.amt*(b.parts||[]).length),pay,'Members: '+(b.parts||[]).map(PN).join(', '),'Posted '+(when||'')+' by '+PN(b.postedBy||b.backer)+' · '+b27PoolSettleWord(b)].join('\n')}
 function b27PoolForm(me){b27PoolSeed();const people=b27PoolPeople();/*<S26F-POOL>*/setTimeout(()=>{try{s26fPaint()}catch(e){}},0);/*</S26F-POOL>*/
   return `<div class="card b27-form">${typeof SHARED_UI!=='undefined'&&SHARED_UI.entryHead?SHARED_UI.entryHead('wiu'):''}${b27KindTabs('')}
    <div class="s26st"><div class="b27-lb"><span class="s26n">1</span><button type="button" class="s27-tipk" data-tip="pterms" aria-expanded="false" onclick="s27Tip(this)">${esc(PT('s1'))}</button><label for="b27Text" class="sr">${esc(PT('s1'))}</label></div><textarea id="b27Text" class="sb-in b27-in" rows="2" maxlength="${PULK.maxText}" placeholder="${esc(PT('termsPh'))}" aria-describedby="s26eTerms" oninput="U.text=this.value;b27PSync()">${esc(U.text)}</textarea><div id="s26eTerms" class="s26err" role="alert"></div></div>
-   <div class="s26st"><div class="b27-lb" id="s26lPeople"><span class="s26n">2</span><button type="button" class="s27-tipk" data-tip="ppl" aria-expanded="false" onclick="s27Tip(this)">${esc(PT('s2'))}</button></div><div class="b27-opps pool-pick" role="group" aria-labelledby="s26lPeople">${people.map((n,i)=>{const o=(D.owners.find(x=>x.name===n)||{});const on=U.pp.includes(n);return `<button type="button" class="b27-chip op" data-b27-pp="${i}" data-b27-name="${esc(n)}" aria-label="${esc(TN(n))}" aria-pressed="${on}" onclick="b27PoolPP(${i})"><span class="ck" aria-hidden="true">✓</span><span class="em" aria-hidden="true">${esc(o.emoji||'')}</span><span class="nm" aria-hidden="true"><span class="f">${esc(TN(n))}</span><span class="sh">${esc(b27ShortT(n))}</span><span class="xs">${esc(b27TinyT(n))}</span></span></button>`}).join('')}</div><div class="s26tools">${b27UtilTile('onclick="b27PoolAll()"','onclick="b27PoolClear()"')}</div><div class="s26sel" id="b27SelCnt" aria-live="polite">${(U.pp||[]).length} selected</div>
+   <div class="s26st"><div class="b27-lb" id="s26lPeople"><span class="s26n">2</span><button type="button" class="s27-tipk" data-tip="ppl" aria-expanded="false" onclick="s27Tip(this)">${esc(PT('s2'))}</button></div><div class="b27-opps pool-pick" role="group" aria-labelledby="s26lPeople">${people.map((n,i)=>{const o=(D.owners.find(x=>x.name===n)||{});const on=U.pp.includes(n);return `<button type="button" class="b27-chip op" data-b27-pp="${i}" data-b27-name="${esc(n)}" aria-label="${esc(TN(n))}" aria-pressed="${on}" onclick="b27PoolPP(${i})"><span class="ck" aria-hidden="true">✓</span><span class="em" aria-hidden="true">${esc(o.emoji||'')}</span><span class="nm" aria-hidden="true"><span class="f">${esc(TN(n))}</span><span class="sh">${esc(b27ShortT(n))}</span><span class="xs">${esc(b27TinyT(n))}</span></span></button>`}).join('')}${b27UtilTile('onclick="b27PoolAll()"','onclick="b27PoolClear()"')}</div><div class="s26sel" id="b27SelCnt" aria-live="polite">${(U.pp||[]).length} selected</div>
    <div id="s26ePeople" class="s26err" role="alert"></div></div>
    <div class="s26st"><div class="b27-lb"><span class="s26n">3</span><button type="button" class="s27-tipk" data-tip="buy" aria-expanded="false" onclick="s27Tip(this)">${esc(PT('s3'))}</button><label for="b27En" class="sr">${esc(PT('s3'))}</label></div><input maxlength="8" id="b27En" class="sb-in b27-in s26buy" inputmode="decimal" autocomplete="off" placeholder="${esc(PT('buyPh'))}" value="${esc(U.entry)}" aria-describedby="s26Pot s26eBuy" oninput="U.entry=this.value;b27PSync()"><div id="s26Pot" class="s26pot" aria-live="polite"></div><div id="s26eBuy" class="s26err" role="alert"></div></div>
    <div class="s26st"><div class="b27-lb"><span class="s26n">4</span><button type="button" class="s27-tipk" data-tip="pay" aria-expanded="false" onclick="s27Tip(this)">${esc(PT('s4'))}</button></div>${s26fPlaceRows()}<button type="button" class="b27-sm s26add" onclick="s26fAddPlace()"${U.places.length>=10?' disabled':''}>${esc(PT('addPlace'))}</button><div id="s26Sum" class="s26sum" aria-live="polite"></div><div id="s26ePay" class="s26err" role="alert"></div></div>
@@ -4466,7 +4466,7 @@ function s24FilterBar(bets,me,ph){const settledOnly=ph==='Search settled bets';
   if(!settledOnly&&s24FSt()!=='open'&&s24FSt()!=='all')lsSet(S24FSK,'open');
   const p=s24FP(),ac=s24FAc(),wh=s24FWh(),stab=s24Stab(),ch=s24Chrono();
   const tab=(k,t)=>`<button type="button" role="tab" aria-selected="${stab===k?'true':'false'}" class="${stab===k?'on':''}" onclick="s24SetStab('${k}')">${t}</button>`;
-  const tabs=settledOnly?'':`<div class="s24st" role="tablist" aria-label="Bet status">${tab('need','Needs action')}${tab('open','Open')}${tab('all','All')}</div>`;
+  const tabs=settledOnly?'':`<div class="s24st" role="tablist" aria-label="Bet status">${tab('need','Needs action')}${tab('open','Unsettled')}${tab('all','All')}</div>`;
   const opt=(list,cur,extra)=>list.map(([k,t])=>`<option value="${k}"${k===cur?' selected':''}>${esc(t)}${extra&&extra[k]!=null?' ('+extra[k]+')':''}</option>`).join('');
   const nMine=s24Count(bets,me,{ac:'mine'}),nTheirs=s24Count(bets,me,{ac:'theirs'});
   const person=`<select id="sbPerson" aria-label="Person" onchange="s24FSetP(this.value)"><option value="all"${p==='all'?' selected':''}>Everyone</option><option value="me"${p==='me'?' selected':''}>Me</option>${b27OwnerNames().map(o=>`<option value="${esc(o)}"${o===p?' selected':''}>${esc(PN(o))}</option>`).join('')}</select>`;
@@ -4926,13 +4926,9 @@ html body .s24np-p{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 html body .s24nm{height:28px;padding:0 10px;border-radius:999px;border:1px solid var(--line,#2d3548);background:transparent;color:inherit;font:inherit;font-size:12px;font-weight:800;cursor:pointer}
 html body .s24nm.on{background:#ffd400;color:#111;border-color:#ffd400}
 html body .s26sel{margin-top:6px;font-size:13px;font-weight:800}
-html body .s26tools{margin-top:8px}
-html body .s26tools .b27-util{display:flex;gap:6px}
-@media (max-width:700px){
- html body .b27-opps.pool-pick{grid-template-columns:repeat(3,minmax(0,1fr))!important}
- html body .s26tools .b27-util{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
- html body .s26tools .s27-selb{box-sizing:border-box;min-height:52px;height:52px;margin:0}
-}
+html body .b27-opps.pool-pick{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+html body .b27-opps.pool-pick>.b27-util{display:grid!important;grid-template-columns:1fr 1fr;flex-direction:row;gap:3px;min-height:52px;height:100%}
+html body .b27-opps.pool-pick>.b27-util>.s27-selb{box-sizing:border-box;width:100%;min-width:0;min-height:0;height:100%;margin:0;padding:0 2px}
 @media (min-width:701px){
  html body .s24set{grid-template-columns:140px minmax(120px,200px) minmax(0,1fr)}
  html body .s24set input{grid-column:auto}
@@ -4952,7 +4948,7 @@ function s29eCopyText(b){if(!b)return '';if(b.status==='open'&&b.kind!=='pool')r
   const money=n=>'$'+b27Num(n);
   if(b.kind==='pool')return b27PoolClip(b);
   const OP=b27Opps(b),BU=OP.length>1,Bk=PN(b.backer),OPd=OP.map(PN),st=b.status,P=b27Pay(b);
-  const stTxt={open:'Open',backer:'Settled',other:'Settled',push:'Wash',void:'Cancelled'}[st]||'Open';
+  const stTxt={open:'Unsettled',backer:'Settled',other:'Settled',push:'Wash',void:'Cancelled'}[st]||'Unsettled';
   const win=st==='backer'?' · '+Bk+' won':st==='other'?' · '+(BU?'Managers':OPd[0])+' won':'';
   if(st==='backer'||st==='other'||st==='push'){const mark=st==='push'?'💦':'💥',head=st==='push'?'💦 Bet #'+b.n+' · Wash':mark+' Bet #'+b.n+' · Settled'+win+' '+mark,lines=[head,b27Clean(b.text),Bk+' vs '+OPd.join(', ')+' · '+money(b.amt)+(BU?' each':'')+b27OddsTail(b.odds&&b.odds.a,b.odds&&b.odds.b)];if(st==='push')lines.push('Result: 💦: nobody owes anything');return lines.join('\n')}
   L.push('Bet #'+b.n+' · '+stTxt+win,b27Clean(b.text),Bk+' vs '+OPd.join(', ')+' · '+money(b.amt)+(BU?' each':'')+b27OddsTail(b.odds&&b.odds.a,b.odds&&b.odds.b));
