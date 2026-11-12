@@ -32,7 +32,7 @@ const assert = require('assert');
     const shown = html.replace(/<[^>]+>/g, '');
     return {copy, settledStarts: settled.slice(0, 12), washHas: wash.includes('💦'), washWord: /Wash/.test(wash), line, qb, html, shown, noneHas99: none.includes('#99')};
   });
-  assert.equal(logic.copy, '💣 $5 Paul v Kurt · 2–1 💣\nMorehead St +21 v Louisville\nSat Nov 7 · Exp: Tip');
+  assert.equal(logic.copy, '💣 $5 Paul v Kurt · 2–1 💣\nMorehead St +21 v Louisville\nNov 7 · Exp: Tip');
   assert.ok(logic.settledStarts.startsWith('💥 Bet #'));
   assert.equal(logic.washHas, true);
   assert.equal(logic.washWord, false);

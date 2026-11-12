@@ -981,7 +981,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.66.3"></script>
+<script src="shared/ui.js?v=1.66.4"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -1378,9 +1378,9 @@ const rec=tid=>{const r=(D.records||{})[tid]||{w:0,l:0};return r.w+'-'+r.l};
 /*<CHIP-RECORD>*/const chipRec=(tid,o)=>{const h=chip(tid,o);return D.records?h.replace(/<\/a>$/,'<span class="cr" title="Season record (W-L)">'+rec(tid)+'</span></a>'):h};/*</CHIP-RECORD>*/
 const sign=n=>n>0?'+'+n:String(n);
 function ownerOf(tid){for(const o of D.owners)for(const t of o.teams)if(t.tid===tid&&t.status!=='dropped')return o.name;return '—'}
-const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-/* 'YYYY-MM-DD' -> 'Nov 2, 2026' (or 'Mon, Nov 2, 2026' with wd) */
-function fmtDate(k,wd){const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(k||'');if(!m)return k||'';const d=new Date(Date.UTC(+m[1],+m[2]-1,+m[3],12));return (wd?DOW[d.getUTCDay()]+', ':'')+MON[+m[2]-1]+' '+(+m[3])+', '+m[1]}
+const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+/* 'YYYY-MM-DD' -> 'Nov 2, 2026'. Day-of-week names are never shown. */
+function fmtDate(k){const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(k||'');if(!m)return k||'';return MON[+m[2]-1]+' '+(+m[3])+', '+m[1]}
 const MONL=['January','February','March','April','May','June','July','August','September','October','November','December'];
 function fmtDateLong(k){const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(k||'');return m?MONL[+m[2]-1]+' '+(+m[3])+', '+m[1]:(k||'')}
 function shuf(a,seed){a=a.slice();let x=seed>>>0||1;const r=()=>{x^=x<<13;x>>>=0;x^=x>>>17;x^=x<<5;x>>>=0;return x/4294967296};for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
@@ -1395,8 +1395,8 @@ function quip(o,i,n){
 }
 /* "Tue, Oct 27, 2026, 9:14 PM WIB" from the build time (UTC), in the viewer's zone */
 function genDate(){const u=D&&D.meta&&D.meta.generated_at_utc,d=u?new Date(u):null;return d&&!isNaN(d)?d:null}   // the data's last-updated stamp (same field as About > Updated)
-/*<LOCAL-TIME>*/const LSTAMP=new Intl.DateTimeFormat('en-US',{weekday:'short',year:'numeric',month:'numeric',day:'numeric',hour:'numeric',minute:'2-digit',hour12:true});
-function stampET(){const d=genDate();if(!d)return (D.meta&&D.meta.generated_at_wib)||'';const p={};LSTAMP.formatToParts(d).forEach(x=>p[x.type]=x.value);return p.weekday+', '+MON[+p.month-1]+' '+(+p.day)+', '+p.year+', '+p.hour+':'+p.minute+' '+p.dayPeriod}   // name kept; shows the viewer's zone/*</LOCAL-TIME>*/
+/*<LOCAL-TIME>*/const LSTAMP=new Intl.DateTimeFormat('en-US',{year:'numeric',month:'numeric',day:'numeric',hour:'numeric',minute:'2-digit',hour12:true});
+function stampET(){const d=genDate();if(!d)return String((D.meta&&D.meta.generated_at_wib)||'').replace(/^(?:Sun|Mon|Tue|Wed|Thu|Fri|Sat)[a-z]*[, ]+/i,'');const p={};LSTAMP.formatToParts(d).forEach(x=>p[x.type]=x.value);return MON[+p.month-1]+' '+(+p.day)+', '+p.year+', '+p.hour+':'+p.minute+' '+p.dayPeriod}   // name kept; shows the viewer's zone/*</LOCAL-TIME>*/
 /* ---------- rotating "Stoopid tagline" (header slot #tag): same line for everyone, changes every 2 days at 00:00 ET (s25) ---------- */
 const TAGLINE_MODES=['preseason'];   // data modes whose header slot shows the rotating tagline (add 'live' to use it in-season too)
 /*<TAGLINE-CORE>*/
@@ -1668,7 +1668,7 @@ function goOwner(n){/*<S26F-NOROSTERS>*/ownerSel=n;tab='standings';s26eView('poi
 /* ---------- games tab ---------- */
 const ETK=new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York'});
 function etKey(g){if(g.start){const d=new Date(g.start);if(!isNaN(d))return ETK.format(d)}return g.day}
-function etLabel(k){return fmtDate(k,true)}
+function etLabel(k){const s=fmtDate(k);return s.replace(/, \d{4}$/,'')}
 const ETHM=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',hour:'numeric',minute:'numeric',hourCycle:'h23'});
 /* ESPN uses 12:00 AM / 11:59 PM ET as "no tip time yet" placeholders */
 function isTBD(g){if(!g.start)return true;const d=new Date(g.start);if(isNaN(d))return true;const p={};ETHM.formatToParts(d).forEach(x=>p[x.type]=+x.value);const h=p.hour%24,m=p.minute;return (h===0&&m===0)||(h===23&&m===59)}
@@ -1723,7 +1723,7 @@ function gameCard(g){
 /* Quick bet opens Request a bet with the selected side and spread filled in. It is an invitation, including when both teams are owned. It never fills Write it Up (that form is only for a bet the two Stoops already agreed). Nothing is posted until Request bet. */
 let qbG=null,qbAmt=5,qbMe=null,qbMsg='';
 const qbOwn=s=>s&&s.owners&&s.owners.length?s.owners[0]:null;
-const qbDate=g=>etLabel(etKey(g)).replace(/,/g,'').replace(/\s+\d{4}$/,'');   // "Mon Nov 2": the ET game date on purpose (the auto-settle reader and ESPN match ET dates); display headers are local
+const qbDate=g=>etLabel(etKey(g)).replace(/,/g,'').replace(/\s+\d{4}$/,'');   // "Nov 2": the ET game date on purpose (the auto-settle reader and ESPN match ET dates); display headers are local
 const qbNm=s=>String(s.short||s.name||s.id);
 function qbStarted(g){if(!g||g.status!=='scheduled'||!g.home||!g.away)return true;if(isTBD(g))return false;const t=Date.parse(g.start||'');return isFinite(t)&&t<=Date.now()}
 function qbOk(g){if(DEMO||!g||typeof VIEWS==='undefined'||!VIEWS.bets27)return false;return !qbStarted(g)}
@@ -2458,7 +2458,7 @@ function d27Board(){const n=DRAFT27.slots.length,rows=[];const live={};(D.owners
   for(let r=0;r<R;r++){const row=[];for(let c=0;c<n;c++){const s=r%2?n-1-c:c;row.push({slot:s,owner:DRAFT27.slots[s][0],tid:lists[s][r],overall:r*n+c+1,round:r+1,pick:c+1})}rows.push(row)}return rows}
 function d27Grade(nm,id){const g=DRAFT27_RESULTS&&DRAFT27_RESULTS.grades;if(!g)return null;return g[id]||g[nm]||g[ownerKey(nm)]||g[TN(nm)]||g[PN(nm)]||g[String(PN(nm)).toLowerCase()]||null}
 function d27When(){const t=DRAFT27_RESULTS&&(DRAFT27_RESULTS.draft_completed_at||DRAFT27_RESULTS.completed_at||DRAFT27_RESULTS.draft_date);if(!t||!isFinite(Date.parse(t)))return '';
-  return ' · drafted '+esc(new Date(t).toLocaleString(undefined,{weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}))}
+  return ' · drafted '+esc(new Date(t).toLocaleString(undefined,{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}))}
 /*<S26N-DRAFT-RECAP>*/
 /* s26n2: the real 2026-27 draft is Sun Nov 1 2026 20:00 WIB (13:00 UTC). The inlined 64 picks were rebuilt on 2026-10-30 from the
    pre-draft site rosters + Paul's lists (draft_date null, no completed_at), so they are NOT the real draft.
@@ -3533,7 +3533,7 @@ function b27PSync(){try{const m=document.getElementById('main');if(!m)return;
   const sc=document.getElementById('b27SelCnt');if(sc)sc.textContent=(U.pp.length||0)+' selected';
   /*<S26F-POOL>*/const pb=document.getElementById('b27Place');if(pb){pb.disabled=!!U.busy;pb.removeAttribute('aria-disabled')}s26fPaint()/*</S26F-POOL>*/}catch(e){}}
 function b27PoolShell(){return `<div class="card b27-form">${typeof SHARED_UI!=='undefined'&&SHARED_UI.entryHead?SHARED_UI.entryHead('wiu'):''}${b27KindTabs('')}</div>`}
-function b27PoolPostedDay(ms){const d=new Date(ms);if(!ms||isNaN(d))return '';const wd=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()],mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];return wd+', '+mo+' '+d.getDate()}
+function b27PoolPostedDay(ms){const d=new Date(ms);if(!ms||isNaN(d))return '';const mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];return mo+' '+d.getDate()}
 function b27PoolSettleWord(b){const k=window.SHARED_UI?SHARED_UI.whenKind(b):'unknown';if(k==='game')return 'End Of Game';if(k==='season')return 'End Of Season';if(k==='date')return SHARED_UI.estOk(b.est)?SHARED_UI.estLabel(b.est):'Set A Date';return 'Not Sure Yet'}
 function b27PoolClip(b){if(!b)return '';const money=n=>'$'+b27Num(n),st=b.status==='void'?'Cancelled':b.back?'Settled':'Unsettled';
   const pay=b.places&&b.places.length?'Payouts: '+b.places.map((a,i)=>s26fPlaceName(i)+' '+money(a)).join(' · '):'Payouts not entered yet.';
@@ -3696,8 +3696,8 @@ function b27SettlesLabel(b){const k=b27SettleKind(b);if(k==='game')return 'Settl
 function b27CardDate(b){let iso='';try{const rd=s25BetRd(b);if(rd&&rd.d&&/^\d{4}-\d{2}-\d{2}$/.test(rd.d))iso=rd.d}catch(e){}if(!iso&&SHARED_UI.whenKind(b)==='date'&&SHARED_UI.estOk(b.est))iso=b.est;if(!iso)return '';const p=iso.split('-'),mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+p[1]-1],y=+p[0];return mo+' '+Number(p[2])+(y!==new Date().getFullYear()?', '+y:'')}
 function b27Matchup(b){let rd=null;try{rd=s25BetRd(b)}catch(e){}if(rd&&rd.k&&rd.k!=='manual'&&rd.t&&rd.o)return rd.t+' v '+rd.o;let t=b27Clean(b&&b.text||'');try{const dt=S25.dateFrom(t,b&&b.created_at?S25.etDay(b.created_at):undefined);if(dt&&dt.raw)t=t.replace(dt.raw,' ')}catch(e){}return t.replace(/\s+(?:vs\.?|versus)\s+/ig,' v ').replace(/\s+,/g,',').replace(/^[, ]+|[, ]+$/g,'').replace(/\s{2,}/g,' ').trim()}
 function b27SettlesHtml(b){const lab=esc(b27SettlesLabel(b)),open=!!(estDraft&&estDraft.id===b.id);if(!s24EstOwner(b))return `<div class="b27-set"><span class="b27-pill b27-pill-plain">${lab}</span></div>`;return `<div class="b27-set"><button type="button" class="b27-pill" data-settles="${esc(b.id)}" aria-expanded="${open?'true':'false'}" aria-controls="settles-${esc(b.id)}" onclick="s24EditStart('${b.id}')"${U.busy?' disabled':''}>${lab}<span class="b27-chev" aria-hidden="true"></span></button>${open?s24EstHtml(b):''}</div>`}
-function b27DayBit(iso){if(!/^\d{4}-\d{2}-\d{2}$/.test(iso||''))return '';const d=new Date(iso+'T12:00:00');if(isNaN(d))return '';const wd=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()],mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];return wd+' '+mo+' '+d.getDate()}
-function b27WhenBit(iso){const d=new Date(iso);if(!iso||isNaN(d))return '';const wd=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()],mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];return wd+' '+mo+' '+d.getDate()}
+function b27DayBit(iso){if(!/^\d{4}-\d{2}-\d{2}$/.test(iso||''))return '';const d=new Date(iso+'T12:00:00');if(isNaN(d))return '';const mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];return mo+' '+d.getDate()}
+function b27WhenBit(iso){const d=new Date(iso);if(!iso||isNaN(d))return '';const mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];return mo+' '+d.getDate()}
 function b27SpreadBit(l){l=Number(l);return l===0?'PK':(l>0?'+':'')+l}
 function b27FinalBit(b){if(b.src&&b.src.sc)return String(b.src.sc).replace(/^\((.*)\)$/,'$1').trim();try{const rd=s25BetRd(b),loc=rd&&s25FromGames(rd);if(loc&&loc.p&&loc.p.sc)return String(loc.p.sc)}catch(e){}return ''}
 function b27OppSpread(l){l=Number(l);return b27SpreadBit(l===0?0:-l)}
@@ -4533,7 +4533,7 @@ if(VIEW_ONLY){(function(){
 <!--<S29E-PASTE>--><script>
 /* s29e "Paste a bet": reads a WhatsApp-style line ("ken v paul 2-1 odds, duke +4 v Virginia") into the New bet form. Nothing is saved here:
    Confirm calls b27Place(), the normal check-then-confirm path. Spec: /workspace/s29e/paste_bet_spec.md */
-function s29ePosted(b){if(!b||!b.postedBy)return '';const t=b.postedAt||b.created_at;let w='';try{w=new Date(t).toLocaleString([], {weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}catch(e){}
+function s29ePosted(b){if(!b||!b.postedBy)return '';const t=b.postedAt||b.created_at;let w='';try{w=new Date(t).toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}catch(e){}
   return '<div class="mut s29e-pb" style="font-size:11.5px;margin:2px 0 0">Posted by '+esc(PN(b.postedBy))+(w?' · '+esc(w):'')+'</div>'}
 const S29E={
   CONN:/^(v|vs|vs\.|versus|bets|bet|against|and|&|with|,)$/i,
@@ -4566,7 +4566,7 @@ const S29E={
   phrase(r,o,rest){if(!r||r.k==='manual')return b27Clean(rest);const T=o.g?o.g.tn:r.t,O=o.g?o.g.on:r.o,dd=o.g&&o.gday!==S25.etDay(new Date())?' '+S25.dayLbl(o.gday):'';
     return b27Clean(r.k==='spread'?T+' '+S29E.fl(r.l)+' beats '+O+dd:r.k==='total'?T+' vs '+O+' '+(r.ou==='o'?'over':'under')+' '+r.l+dd:T+' beats '+O+dd)},
   vs(o){const r=o.rd;if(!r||r.k==='manual')return o.text;const T=o.g?o.g.tn:r.t,O=o.g?o.g.on:r.o;return r.k==='spread'?T+' '+S29E.fl(r.l)+' vs '+O:r.k==='total'?T+' vs '+O+' '+(r.ou==='o'?'over':'under')+' '+r.l:T+' beats '+O},
-  when(o){if(!o.g||!o.g.start)return '';try{return new Date(o.g.start).toLocaleString([], {weekday:'short',hour:'numeric',minute:'2-digit'})}catch(e){return ''}}
+  when(o){if(!o.g||!o.g.start)return '';try{return new Date(o.g.start).toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}catch(e){return ''}}
 };
 /* apply a parse to the form state (U). The first name in the line is the first bettor (backer: takes the bet as written); later names are the other side.
    Only one name: it is the opponent and the device's manager is the first bettor. */
@@ -4953,7 +4953,7 @@ function s29eOpenCopy(b){if(!b)return '';const who=(b27Opps(b).map(PN).join(', '
   let line2=b27Clean(b.text||'');const rd=typeof s25BetRd==='function'?s25BetRd(b):b.rd;
   if(rd&&rd.k==='spread'&&rd.t&&rd.o){const fl=rd.l===0?'PK':(rd.l>0?'+':'')+rd.l;line2=rd.t+' '+fl+' v '+rd.o}
   else{const m=/^(.*?)\s+([+-]\d+(?:\.\d+)?)\s+(?:vs\.?|v\.?)\s+(.*?)\s+([+-]\d+(?:\.\d+)?)(.*)$/i.exec(line2);if(m&&Math.abs(+m[2]+ +m[4])<0.05)line2=(m[1]+' '+m[2]+' v '+m[3]+(m[5]||'')).replace(/\s+/g,' ').trim();else line2=line2.replace(/\s+(?:vs\.?|versus)\s+/ig,' v ')}
-  const iso=(rd&&rd.d)||(SHARED_UI.whenKind(b)==='date'?b.est:'');let when='';if(iso&&/^\d{4}-\d{2}-\d{2}$/.test(iso)){const d=new Date(iso+'T12:00:00');const wd=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()],mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];when=wd+' '+mo+' '+d.getDate()}
+  const iso=(rd&&rd.d)||(SHARED_UI.whenKind(b)==='date'?b.est:'');let when='';if(iso&&/^\d{4}-\d{2}-\d{2}$/.test(iso)){const d=new Date(iso+'T12:00:00');const mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];when=mo+' '+d.getDate()}
   const k=SHARED_UI.whenKind(b),exp=k==='season'?'Season':k==='date'&&b.est?SHARED_UI.estLabel(b.est).replace(/,?\s+\d{4}$/,''):'Tip';
   const aa=+(b.odds&&b.odds.a||1),bb=+(b.odds&&b.odds.b||1),od=aa===1&&bb===1?'':' \u00b7 '+aa+'\u2013'+bb;
   return ['\uD83D\uDCA3 $'+b.amt+' '+PN(b.backer)+' v '+who+od+' \uD83D\uDCA3',line2,(when?when+' \u00b7 ':'')+'Exp: '+exp].join('\n')}
