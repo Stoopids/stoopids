@@ -981,7 +981,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.66.6"></script>
+<script src="shared/ui.js?v=1.66.7"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -3707,7 +3707,7 @@ function b27FaceBits(b){let rd=null;try{rd=s25BetRd(b)}catch(e){}if(!rd||rd.k===
   if(rd.k==='total'){const mine=rd.ou==='o'?'Over':'Under',theirs=mine==='Over'?'Under':'Over',n=rd.l;return {sides:mine+' '+n+' vs '+theirs+' '+n+', '+rd.t+' v '+rd.o,day:rd.d}}
   return {sides:rd.t+' vs '+rd.o,day:rd.d}}
 function b27FaceSides(b){if(!b||b.kind==='pool')return '';const bits=b27FaceBits(b);return bits&&bits.sides?bits.sides:b27Clean(b.text||'')}
-function b27FaceWhoStake(b){const Bk=PN(b.backer),OP=b27Opps(b).map(PN).join(', '),a=+(b.odds&&b.odds.a),c=+(b.odds&&b.odds.b);const odds=a>=1&&c>=1?(a===1&&c===1?'even odds':a+'-'+c):'';return [Bk+' v '+OP,'$'+b27Num(b.amt)+(b27Opps(b).length>1?' each':''),odds].filter(Boolean).join(' · ')}
+function b27FaceWhoStake(b){const Bk=PN(b.backer),OP=b27Opps(b).map(PN).join(', '),a=+(b.odds&&b.odds.a),c=+(b.odds&&b.odds.b);const odds=a>=1&&c>=1&&!(a===1&&c===1)?a+'-'+c:'';return [Bk+' v '+OP,'$'+b27Num(b.amt)+(b27Opps(b).length>1?' each':''),odds].filter(Boolean).join(' · ')}
 function b27GameLine(b){let rd=null;try{rd=s25BetRd(b)}catch(e){}
   let match=b27Matchup(b);
   if(rd&&rd.k==='spread'&&rd.t&&rd.o)match=rd.t+' '+b27SpreadBit(rd.l)+' vs '+rd.o;
@@ -3748,7 +3748,7 @@ function b27Card(b,me){
   }
   if(del||ready)h+=`<div class="b27-del">${del}${ready?'<span class="b27-ready-t">Ready to settle</span>':''}</div>`;
   else if(st==='open')h+=`<div class="note">Awaiting settlement</div>`;
-  h+=who+/*<S25>*/s25PropHtml(b,me)/*</S25>*/;
+  h+=(typeof sbLiveNote==='function'?sbLiveNote(b):'')+who+/*<S25>*/s25PropHtml(b,me)/*</S25>*/;
   /*<S24-EDIT>*/h+=s24EditedNote(b)+s24FixHtml(b,me);/*</S24-EDIT>*/
   const posted=b27PostedLine(b),fix=settled&&b.kind!=='pool'?s24FixLink(b,me):'';
   return h+fix+`<div class="b27-foot">${posted}${/*<S25>*/s25RxHtml(b,me)/*</S25>*/}</div></div>`;
@@ -3903,8 +3903,9 @@ function betsLand(){if(tab!=='bets27'&&tab!=='bets')return;obAlign()}
 function obView(v){tab='bets27';
   if(v==='open')OB_VIEW='all';
   else if(v==='tally')OB_VIEW='tally';
+  else if(v==='stoopid')OB_VIEW='stoopid';
   else OB_VIEW=v==='request'?'request':v==='all'?'all':'form';
-  render();betsLand()}
+  render();betsLand();if(v==='stoopid'&&typeof sbKick==='function')sbKick()}
 const TALLY_NM={mark:'DIRTY DRAYMOND',jake:'STOCK RISING',kurt:'KURMOJI',ken:'KENTUT',neal:'COCKCHALKROCK',paul:'PARTY PAUL',jim:'NASTY PEACOCK',scott:'EN FUEGO'};   // Tally display = team nickname in caps (ids unchanged); neal = Neal Murf (archive). matthew has no nickname: shown as MATTHEW
 const tNm=i=>TALLY_NM[i]||String(P(i).name||i).toUpperCase();
 function vTally(){/* STEP11: Tally = 2026-27 Bets ledger (b27Tally / U.doc), not D.bets.tallies.ledger */
@@ -3932,7 +3933,8 @@ function obToggle(){
   /*<BETS-TALLY>*/if(!SHOW_OLD_BETS||tab==='bets27'){const entry=OB_VIEW==='form'||OB_VIEW==='request',all=OB_VIEW==='all'||OB_VIEW==='open',tally=OB_VIEW==='tally';
     const sg=(k,on,t,id)=>`<button type="button" class="${on?'on':''}" aria-pressed="${on}" data-ob="${k}"${id?` id="${id}"`:''} onclick="obView('${k}')">${t}</button>`;
     const old=SHOW_OLD_BETS?`<button type="button" data-ob="bets" onclick="obGo('bets')">2025-26 (old)</button>`:'';
-    return `<div class="tabs ob-seg ob-desk" role="group" aria-label="Bets">${sg('form',entry,'Request or Write it up','b27Ob_form')}${sg('all',all,'All Bets','b27Ob_all')}${sg('tally',tally,'Tally','b27Ob_tally')}${old}</div><div class="tabs ob-seg ob-phone" role="group" aria-label="Bets">${sg('request',OB_VIEW==='request','Request')}${sg('form',OB_VIEW==='form','Write it Up')}${sg('all',all,'All Bets')}${sg('tally',tally,'Tally')}${old}</div>`}/*</BETS-TALLY>*/
+    const sbOn=OB_VIEW==='stoopid';
+    return `<div class="tabs ob-seg ob-desk" role="group" aria-label="Bets">${sg('form',entry,'Request or Write it up','b27Ob_form')}${sg('stoopid',sbOn,'Stoopid Bet','b27Ob_sb')}${sg('all',all,'All Bets','b27Ob_all')}${sg('tally',tally,'Tally','b27Ob_tally')}${old}</div><div class="tabs ob-seg ob-phone" role="group" aria-label="Bets">${sg('request',OB_VIEW==='request','Request')}${sg('form',OB_VIEW==='form','Write it Up')}${sg('stoopid',sbOn,'Stoopid Bet')}${sg('all',all,'All Bets')}${sg('tally',tally,'Tally')}${old}</div>`}/*</BETS-TALLY>*/
   const seg=(k,t,bd)=>`<button type="button" class="${tab===k?'on':''}" aria-pressed="${tab===k}" data-ob="${k}"${tab!==k&&bd?' aria-label="'+t+', new bets"':''} onclick="obGo('${k}')">${t}${tab===k?'':bd}</button>`;
   return `<div class="tabs ob-seg" role="group" aria-label="Bets season">${seg('bets27','2026-27',b27Badge())}${seg('bets','2025-26 (old)',nbBadge('bets'))}</div>`;
 }
@@ -3951,6 +3953,7 @@ function obOldNote(){   // read-only replacement of the old shared-ledger card (
     return `<div class="entry-pair" data-focus="${focus}"><div class="entry-col entry-rq${focus==='request'?' is-on':''}">${rq}</div><div class="entry-col entry-wiu${focus==='form'?' is-on':''}">${wiu}</div></div>`}
   VIEWS.bets27=()=>{if(OB_VIEW==='open')OB_VIEW='all';
     const entry=OB_VIEW==='form'||OB_VIEW==='request';
+    if(OB_VIEW==='stoopid')return obToggle()+(typeof sbView==='function'?sbView():'')+b27Fine();
     if(OB_VIEW==='tally')return obToggle()+vTally()+b27Fine();
     return obToggle()+(entry?entryPair():((typeof RQ!=='undefined'&&RQ?RQ.pinned(false,true):'')+vB27()))+b27Fine()};VIEWS.bets=()=>obToggle()+vBets();NAVSHORT.bets27='Bets';/*</ONE-BETS>*/
   if(typeof nbBadge==='function'){const _b=nbBadge;nbBadge=function(k){return k==='bets27'?/*<ONE-BETS>*/(tab==='bets'||tab==='bets27'?'':b27Badge()||_b('bets'))/*</ONE-BETS>*/:_b(k)}}      // 'new' badge on the one Bets tab: 2026-27 (own watermark) or the old ledger; inside the tab the toggle shows it on the other segment
@@ -4871,6 +4874,10 @@ html body .s24r2 .s24ch{padding:0 14px!important;line-height:34px!important}
 html body .b27-fine{width:100%;max-width:100%;box-sizing:border-box;margin:12px 0 8px;padding:8px 12px;border:1px solid var(--line,#2d3548);border-radius:10px;background:var(--card,#1b2030);color:var(--mut,#9aa3b5);font-size:13px;line-height:1.35}
 html body .b27-fine b{color:var(--tx,#eee)}
 html body #main>.segrow .rkseg>.rkseg-b:not(.segref):not(.gref),html body #main .gfone .rkseg>.rkseg-b:not(.gref),html body #main>.tabs.ob-seg>button,html body #main>.tapf>button{height:42px!important;min-height:42px!important;max-height:42px!important;padding:0 16px!important;font-size:15px!important;line-height:40px!important}
+@media (max-width:999px){
+ html body #main>.tabs.ob-seg.ob-phone{display:inline-flex!important;flex-flow:row nowrap!important;justify-content:flex-start!important;align-items:center!important;width:max-content!important;max-width:100%!important;gap:4px!important}
+ html body #main>.tabs.ob-seg.ob-phone>button{flex:0 0 auto!important;width:auto!important;height:32px!important;min-height:32px!important;max-height:32px!important;padding:0 6px!important;font-size:11px!important;line-height:30px!important}
+}
 html body #main>.tabs.ob-seg,html body #main>.segrow>.rkseg{justify-content:flex-start!important}
 @media (min-width:701px){
  html body #main>.tapf{display:flex!important;justify-content:center!important;width:100%!important}
@@ -4957,7 +4964,9 @@ function s29eOpenCopy(b){if(!b)return '';const who=(b27Opps(b).map(PN).join(', '
   const iso=(rd&&rd.d)||(SHARED_UI.whenKind(b)==='date'?b.est:'');let when='';if(iso&&/^\d{4}-\d{2}-\d{2}$/.test(iso))when=etLabel(iso);
   const k=SHARED_UI.whenKind(b),exp=k==='season'?'Season':k==='date'&&b.est?SHARED_UI.estLabel(b.est).replace(/,?\s+\d{4}$/,''):'Tip';
   const aa=+(b.odds&&b.odds.a||1),bb=+(b.odds&&b.odds.b||1),od=aa===1&&bb===1?'':' \u00b7 '+aa+'\u2013'+bb;
-  return ['\uD83D\uDCA3 $'+b.amt+' '+PN(b.backer)+' v '+who+od+' \uD83D\uDCA3',line2,(when?when+' \u00b7 ':'')+'Exp: '+exp].join('\n')}
+  const tail=(when?when+' \u00b7 ':'')+'Exp: '+exp;let stoop=/Stoopid bet:/i.test(b.text||'');try{if(!stoop&&typeof sbParse==='function')stoop=!!sbParse(b27Clean(b.text||''))}catch(e){}
+  if(stoop){let n=0,bet=String(line2||'').replace(/Stoopid bet:\s*/gi,function(){n++;return n===1?'Stoopid bet: ':''});return ['\uD83E\uDD2ASTOOPID Request\uD83E\uDD2A','$'+b.amt+' '+PN(b.backer)+' v '+who+od,bet,tail].join('\n')}
+  return ['\uD83D\uDCA3 $'+b.amt+' '+PN(b.backer)+' v '+who+od+' \uD83D\uDCA3',line2,tail].join('\n')}
 function s29eCopyText(b){if(!b)return '';if(b.status==='open'&&b.kind!=='pool')return s29eOpenCopy(b);const day=b27Day(Date.parse(b.created_at)),posted='Posted '+day+(b.postedBy?' by '+PN(b.postedBy):'')+' · STOOPIDS',L=[];
   const money=n=>'$'+b27Num(n);
   if(b.kind==='pool')return b27PoolClip(b);
@@ -4978,5 +4987,15 @@ function s29eCopyText(b){if(!b)return '';if(b.status==='open'&&b.kind!=='pool')r
  document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false)});
 })();
 </script>
+<style>
+html body .sb-pick,html body .sb-acts{display:flex;flex-wrap:wrap;justify-content:flex-start;align-items:center;gap:6px}
+html body .sb-own,html body .sb-sh,html body .sb-use{flex:0 0 auto;width:auto;min-width:0;height:36px;min-height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--line,#2d3548);background:transparent;color:inherit;font:inherit;font-size:13px;font-weight:800;cursor:pointer}
+html body .sb-own[aria-pressed="true"],html body .sb-use{background:#ffd400;color:#111;border-color:#ffd400}
+html body .sb-list{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-start;align-items:stretch}
+html body .sb-card{flex:1 1 260px;max-width:440px}
+html body .sb-card .sb-use{margin-top:8px}
+html body .sb-basis{margin-top:4px;font-size:13px}
+</style>
+<script src="stoopid-bet.js?v=4"></script>
 </body>
 </html>
