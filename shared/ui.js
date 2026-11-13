@@ -399,7 +399,7 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
         if(!err){var r0={id:rid(),gid:g?String(g.id):'',start:g&&g.start||null};if(started(Object.assign({cov:f.cov},r0),now))err='That '+(f.cov==='2h'?'half':'game')+' has already started.'}
         if(err){S.msg=err;S.bad=true;A.render();return}
         if(S.edit)r0.id=S.edit;
-        var toAll=f.to.length?f.to.slice():A.others().map(function(o){return o.id});var r=Object.assign(r0,{by:me,to:toAll,cov:f.cov,k:p.k,si:p.si,lab:p.lab,other:p.other,odds:f.odds.slice(),slots:f.sAll?null:f.slots?Math.min(f.slots,toAll.length):(f.to.length?null:1),txt:p.txt,game:g?A.tname(g.g.away)+' vs '+A.tname(g.g.home):'',date:g?A.dateET(g.g):'',amt:amt,exp:ex,at:now,status:'open',dec:[],wk:pack.wk,est:pack.est,sid:pack.sid});
+        var toAll=f.to.length?f.to.slice():A.others().map(function(o){return o.id});var r=Object.assign(r0,{by:me,to:toAll,cov:f.cov,k:p.k,si:p.si,lab:p.lab,other:p.other,odds:f.odds.slice(),slots:f.sAll?null:f.slots?Math.min(f.slots,toAll.length):(f.to.length?null:1),txt:p.txt,game:g?A.tname(g.g.away)+' vs '+A.tname(g.g.home):'',date:g?A.dateET(g.g):'',amt:amt,exp:ex,at:now,status:'open',dec:[],wk:pack.wk,est:pack.est,sid:pack.sid});if(f.rd&&f.rd.k&&f.rd.k!=='manual'&&f.rd.t&&f.rd.o&&f.rd.d){r.rd={k:f.rd.k,t:f.rd.t,o:f.rd.o,l:f.rd.l==null?null:f.rd.l,sp:f.rd.sp||'mcbb',d:f.rd.d};if(f.rd.ou==='o'||f.rd.ou==='u')r.rd.ou=f.rd.ou}
         say(waText(r,S.edit?'upd':'new'),S.edit?'Request updated':'Request posted');   /* one tap: copy starts inside the tap (clipboard needs it), then the request is posted */
         S.busy=true;S.msg='Sending…';S.bad=false;A.render();
         var ed=S.edit;r.ver=rid();
@@ -418,7 +418,7 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
           else{await A.placeBet(x,me);say(waText(x,'acc',me),'Accepted');S.posted=true;noteCopy(S.copied)}}
         catch(y){S.msg='Could not accept it. Try again.';S.bad=true}S.busy=false}
       A.render()}
-    function input(k,v){var f=S.f;if(k==='gid'){f.gid=v;f.side='';f.text=''}else if(k==='text'){f.text=v;return}else if(k==='mode'){f.mode=v;f.expPick=true}else if(k==='amtTxt'){f.amtTxt=v;f.amt=null;return}else if(k==='oddTxt'){f.oddTxt=v;var mo=/^\s*(\d{1,3})\s*[-:\/]\s*(\d{1,3})\s*$/.exec(v);if(mo&&+mo[1]>0&&+mo[2]>0)f.odds=[+mo[1],+mo[2]];A.render();return}else f[k]=v;A.render()}
+    function input(k,v){var f=S.f;if(k==='gid'){f.gid=v;f.side='';f.text=''}else if(k==='text'){f.text=v;f.rd=null;return}else if(k==='mode'){f.mode=v;f.expPick=true}else if(k==='amtTxt'){f.amtTxt=v;f.amt=null;return}else if(k==='oddTxt'){f.oddTxt=v;var mo=/^\s*(\d{1,3})\s*[-:\/]\s*(\d{1,3})\s*$/.exec(v);if(mo&&+mo[1]>0&&+mo[2]>0)f.odds=[+mo[1],+mo[2]];A.render();return}else f[k]=v;A.render()}
     function prefill(gid,k,i){S.f=nf();S.f.gid=String(gid);if(k){S.f.side=k+':'+i;var gq=game(gid),pq=gq&&pick(gq.g,{side:S.f.side,cov:'game'});if(pq)S.f.text=pq.txt}else{var gb=game(gid);if(gb&&gb.g)S.f.text=SHARED_UI.qbBlankText(gb.g,{name:A.tname,date:A.dateET(gb.g)})};/* STEP10: the full written bet line (team vs team, spread, date), not the short chip text */S.msg='';var g=game(gid);}
     /* Requests badge: open requests waiting for ME (invited, not declined, not mine, still live) on the Bets tab; refreshed by a light GET every 60 s */
     function count(){var me=A.me(),now=Date.now();if(!me)return 0;return S.list.filter(function(r){return live(r,now)&&r.by!==me&&r.to.indexOf(me)>=0&&(r.dec||[]).indexOf(me)<0&&tk(r).indexOf(me)<0}).length}
