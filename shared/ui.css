@@ -327,12 +327,12 @@ html body .gm .gl{margin-top:2px!important;padding-top:4px!important}
 .qbd-x{min-width:40px;min-height:40px;background:none;border:0;color:inherit;font-size:16px;cursor:pointer}
 .qbd .qbs-r{display:flex;align-items:center;gap:8px;margin:6px 0;flex-wrap:wrap}
 .qbd .qbs-l{flex:0 0 92px;font-size:12.5px;opacity:.75;font-weight:700}
-.qbd .qbs-s{display:flex;gap:6px;flex:1;flex-wrap:wrap}.qbd .qbs-s .qbs-o{flex:1 1 0}
-.qbd .qbd-req{display:block;width:100%;margin-top:8px}
+.qbd .qbs-s{display:flex;gap:6px;flex:0 1 auto;flex-wrap:wrap;justify-content:flex-start}.qbd .qbs-s .qbs-o{flex:0 0 auto;width:auto}
+.qbd .qbd-req{display:inline-flex;width:auto;margin-top:8px;align-self:flex-start}
 .ln-wrap{margin:8px 0 2px}.ln-go{width:auto;min-height:36px;height:36px;padding:0 12px;border-radius:99px}
 .ln-box{display:flex;flex-direction:column;gap:6px;margin-top:6px}
 .ln-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-.ln-row .b27-chip{min-height:36px;height:36px;padding:0 10px;font-size:13px}
+.ln-row .b27-chip,.py-add .b27-chip,.py-wrap .ln-go{flex:0 0 auto;width:auto;min-height:36px;height:36px;padding:0 10px;font-size:13px}
 .ln-lab{font-size:12px;font-weight:800;opacity:.7}
 .ln-pts{width:8.5em;min-height:36px;height:36px}
 .ln-terms{font-weight:800;font-size:15px}
@@ -341,7 +341,8 @@ html body .gm .gl{margin-top:2px!important;padding-top:4px!important}
 .py-wrap{margin:8px 0 2px}.py-box{display:flex;flex-direction:column;gap:6px;margin-top:6px}
 .py-leg{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:14px;font-weight:700}
 .py-x{min-width:32px;min-height:32px;border:1px solid var(--line);border-radius:8px;background:transparent;color:inherit;cursor:pointer}
-.py-add{display:flex;flex-wrap:wrap;gap:6px}.py-add .b27-chip{min-height:34px;height:34px;padding:0 8px;font-size:12px}
+.py-add{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-start}.py-add .b27-chip{min-height:34px;height:34px;padding:0 8px;font-size:12px}
+.py-box select{width:auto;max-width:100%;align-self:flex-start}
 .py-card{margin-top:6px;font-size:14px;font-weight:700;line-height:1.4}.py-card .note{font-weight:500}
 @media (max-width:600px){.qbd .qbs-l{flex-basis:100%}}
 .rq-spots{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.rq-spots .btn{min-width:44px;min-height:40px}
@@ -350,8 +351,9 @@ html body .gm .gl{margin-top:2px!important;padding-top:4px!important}
 html body .qbd{text-align:left!important}
 html body .qbd .qbs-r{display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;text-align:left!important;gap:8px!important;margin:6px 0!important;flex-wrap:wrap!important}
 html body .qbd .qbs-l{flex:0 0 92px!important;text-align:left!important;margin:0!important}
-html body .qbd .qbs-s{display:flex!important;flex:1 1 0!important;justify-content:flex-start!important;gap:6px!important;flex-wrap:wrap!important;margin:0!important}
-html body .qbd .qbs-s .qbs-o{flex:1 1 0!important;min-height:44px}
+html body .qbd .qbs-s{display:flex!important;flex:0 1 auto!important;justify-content:flex-start!important;gap:6px!important;flex-wrap:wrap!important;margin:0!important}
+html body .qbd .qbs-s .qbs-o,html body .qbd .qbd-req{flex:0 0 auto!important;width:auto!important;max-width:100%;min-height:36px;height:36px;padding:0 12px}
+html body .qbd .qbd-req{display:inline-flex!important;align-self:flex-start}
 html body .qbd-h{text-align:left!important}
 @media (max-width:600px){html body .qbd .qbs-l{flex-basis:100%!important}}
 /*</QB-SAME>*/
