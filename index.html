@@ -3905,7 +3905,7 @@ function betsLand(){if(tab!=='bets27'&&tab!=='bets')return;obAlign()}
 function obView(v){tab='bets27';
   if(v==='open')OB_VIEW='all';
   else if(v==='tally')OB_VIEW='tally';
-  else if(v==='stoopid')OB_VIEW='stoopid';
+  else if(v==='stoopid'){OB_VIEW='stoopid';try{const me=typeof sbMe==='function'?sbMe():'';if(me&&window.SB&&SB.sel.indexOf(me)<0){SB.sel.unshift(me);SB.key=''}}catch(e){}}
   else OB_VIEW=v==='request'?'request':v==='all'?'all':'form';
   render();betsLand();if(v==='stoopid'&&typeof sbKick==='function')sbKick()}
 const TALLY_NM={mark:'DIRTY DRAYMOND',jake:'STOCK RISING',kurt:'KURMOJI',ken:'KENTUT',neal:'COCKCHALKROCK',paul:'PARTY PAUL',jim:'NASTY PEACOCK',scott:'EN FUEGO'};   // Tally display = team nickname in caps (ids unchanged); neal = Neal Murf (archive). matthew has no nickname: shown as MATTHEW
@@ -5026,6 +5026,12 @@ html body .sb-own,html body .sb-sh,html body .sb-use{flex:0 0 auto;width:auto;mi
 html body .sb-own[aria-pressed="true"],html body .sb-use{background:#ffd400;color:#111;border-color:#ffd400}
 html body .sb-list{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-start;align-items:stretch}
 html body .sb-card{flex:1 1 260px;max-width:440px}
+html body .sb-go{display:flex;flex-wrap:wrap;justify-content:flex-start;align-items:center;gap:6px;margin-top:8px}
+html body .sb-card .sb-use{margin-top:0}
+html body .sb-all{flex:0 0 auto;width:auto;height:36px;min-height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--line,#2d3548);background:transparent;color:inherit;font:inherit;font-size:13px;font-weight:800;cursor:pointer}
+html body .sb-line{font-weight:800;line-height:1.35}
+html body .sb-em{margin-right:6px}
+html body .sb-set{margin-top:4px;color:var(--mut,#9aa3b5);font-size:12px;font-weight:650}
 html body .sb-card .sb-use{margin-top:8px}
 html body .sb-basis{margin-top:4px;font-size:13px}
 html body .who-lock p{margin:0 0 8px}
@@ -5033,6 +5039,6 @@ html body .who-picks{display:flex;flex-wrap:wrap;justify-content:flex-start;alig
 html body .who-pick{flex:0 0 auto;width:auto;height:32px;min-height:32px;max-height:32px;padding:0 10px;border-radius:999px;border:1px solid var(--line,#2d3548);background:transparent;color:inherit;font:inherit;font-size:13px;font-weight:800;line-height:30px;cursor:pointer}
 html body .who-nosave{margin:8px 0 0}
 </style>
-<script src="stoopid-bet.js?v=6"></script>
+<script src="stoopid-bet.js?v=10"></script>
 </body>
 </html>
