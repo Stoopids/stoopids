@@ -3140,7 +3140,6 @@ function chatInit(){
    Odds a-b: the BACKER ("I say...") bets `amt` (whole number, 5..1000); if the backer is right the other owes round(amt x a/b), if wrong the backer owes `amt`.
    Rounding rule: all maths is integer; amt x a/b is rounded HALF UP to a whole number (7.5 -> 8, 3.33 -> 3), and never below 1; the card says so when it happened.
    Remove everything between the BETS-2627 markers (CSS, JS, load hook) to drop the tab. */
-const BETS_DISCLAIMER="Bets here are just for fun and are settled in pullups, not money. Betting is Stoopid, and we don't endorse or facilitate gambling for money.";   // the ONLY place the unit word appears in the tab; rendered once above the form
 const PULK={url:'https://textdb.dev/api/data/stoopids-bets-2627-9eaa4f66',amounts:[5,10,20,25,50],minAmt:5,maxAmt:1000,oddsChips:[[1,1],[2,1],[3,1],[4,1],[5,1]],maxOdds:100,maxText:140,maxBets:300,undoMs:300000,seenKey:'stoopids_bets2627_seen',pollMs:45000,pollOpenMs:15000};
 const U={state:'init',doc:{bets:[]},known:null,maxN:0,mine:new Set(),opps:[],amt:null,amtCustom:false,amtTxt:'',amtErr:'',odds:[1,1],custom:false,customTxt:'',oddsErr:'',text:'',confirm:false,busy:false,msg:'',msgBad:false,fids:{},gid:null,askSettle:null,askDel:null,editOf:null,fails:0,timer:null,started:false,undoT:null,est:'',wk:'game',whenPick:false};
 /*<POOL>*/Object.assign(U,{kind:'bet',pp:[],entry:'',backTxt:'',poolTxt:{},poolErr:{}});/*</POOL>*/
@@ -3820,9 +3819,7 @@ function b27Due(b){if(!b||b.kind==='pool'||!s24IsOpen(b))return false;const k=b2
 function b27Ready(b){return b27Due(b)}
 function b27Cards(list,me){return (list||[]).map(b=>b.kind==='pool'?b27PoolCard(b,me):b27Card(b,me)).join('')}
 function b27Grouped(list,me){const names=[['game',''],['season','End of season'],['date','Set date'],['unknown','Not sure yet']];let left=60,h='',n=0;names.forEach(([k,lab])=>{const g=b27SortSoon(list.filter(b=>b27WhenGroup(b)===k));if(!g.length||left<=0)return;const show=g.slice(0,left);left-=show.length;n+=g.length;h+=(lab?`<h3 class="b27-gh">${lab}</h3>`:'')+`<div class="b27-grid">${b27Cards(show,me)}</div>`});if(n>60)h+='<p class="note">Showing the first 60 in these groups.</p>';return h}
-function b27Fine(){
-  const live=U.state==='ok'?' <span class="good">\u25cf live</span> \u00b7 anyone with the link can add bets (no logins). Play nice.':U.state==='error'?' <span class="bad">\u25cf can\u2019t reach the bets ledger right now</span>':'';
-  return `<div class="b27-fine" id="b27Note">${esc(BETS_DISCLAIMER)} This page just <b>records</b> who bet what and who owes whom.${live}</div>`}
+function b27Fine(){return ''}
 function vB27(){
   b27Seen();b27DropStale();
   const me=b27Who(),names=b27OwnerNames(),others=names.filter(n=>n!==me);
