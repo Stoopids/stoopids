@@ -983,7 +983,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.73.0"></script>
+<script src="shared/ui.js?v=1.74.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -5014,7 +5014,7 @@ function s29eOpenCopy(b){if(!b)return '';const who=(b27Opps(b).map(PN).join(', '
   const iso=(rd&&rd.d)||(SHARED_UI.whenKind(b)==='date'?b.est:'');let when='';if(iso&&/^\d{4}-\d{2}-\d{2}$/.test(iso))when=etLabel(iso);
   const k=SHARED_UI.whenKind(b),exp=k==='season'?'Season':k==='date'&&b.est?SHARED_UI.estLabel(b.est).replace(/,?\s+\d{4}$/,''):'Tip';
   const aa=+(b.odds&&b.odds.a||1),bb=+(b.odds&&b.odds.b||1),od=aa===1&&bb===1?'':' \u00b7 '+aa+'\u2013'+bb;
-  const tail=(when?when+' \u00b7 ':'')+'Exp: '+exp;if(b.legs&&b.legs.length>=2){const pod=aa===1&&bb===1?'1-1':aa+'-'+bb;return ['Parlay · '+b.legs.length+' legs · '+pod].concat(b.legs.map(L=>L.lab||'')).concat([tail]).join('\n')}let stoop=/Stoopid bet:/i.test(b.text||'');try{if(!stoop&&typeof sbParse==='function')stoop=!!sbParse(b27Clean(b.text||''))}catch(e){}
+  const tail=(when?when+' \u00b7 ':'')+'Exp: '+exp;if(b.legs&&b.legs.length>=2){const pod=aa===1&&bb===1?'':' \u00b7 '+aa+'\u2013'+bb;const first=b.legs.slice().sort((a,c)=>String(a.start||a.d||'').localeCompare(String(c.start||c.d||'')))[0];const pWhen=first&&first.d&&/^\d{4}-\d{2}-\d{2}$/.test(first.d)?etLabel(first.d):when;const pTail=(pWhen?pWhen+' \u00b7 ':'')+'Exp: '+exp;const pLegs=b.legs.map(L=>{if(L&&L.kind==='spread'&&L.t&&L.o&&L.l!=null){const n=+L.l;return L.t+' '+(n===0?'PK':(n>0?'+':'')+n)+' v '+L.o}return L&&L.t&&L.o?L.t+' v '+L.o:(L&&L.lab||'')});return ['\uD83D\uDCA3 $'+b.amt+' '+PN(b.backer)+' v '+who+pod+' \uD83D\uDCA3'].concat(pLegs).concat([pTail]).join('\n')}let stoop=/Stoopid bet:/i.test(b.text||'');try{if(!stoop&&typeof sbParse==='function')stoop=!!sbParse(b27Clean(b.text||''))}catch(e){}
   if(stoop){let n=0,bet=String(line2||'').replace(/Stoopid bet:\s*/gi,function(){n++;return n===1?'Stoopid bet: ':''});return ['\uD83E\uDD2ASTOOPID Request\uD83E\uDD2A','$'+b.amt+' '+PN(b.backer)+' v '+who+od,bet,tail].join('\n')}
   return ['\uD83D\uDCA3 $'+b.amt+' '+PN(b.backer)+' v '+who+od+' \uD83D\uDCA3',line2,tail].join('\n')}
 function s29eCopyText(b){if(!b)return '';if(b.status==='open'&&b.kind!=='pool')return s29eOpenCopy(b);const day=b27Day(Date.parse(b.created_at)),posted='Posted '+day+(b.postedBy?' by '+PN(b.postedBy):'')+' · STOOPIDS',L=[];
