@@ -236,12 +236,25 @@ U.halfLs=hsLs;U.halfScores=function(g,s,first,BOX){var tot=s.score!=null?esc(Str
     function linePtsOf(info,name){if(!info||!name)return null;if(name===info.fav)return -info.sp;if(name===info.dog)return info.sp;return null}
     function lineNum(s){var m=/^\s*([+-])?\s*(\d{1,2}(?:\.\d)?)\s*$/.exec(String(s||''));if(!m)return null;var n=Math.round(+m[2]*2)/2;if(m[1]==='-')n=-n;return n}
     function lineBit(n){n=+n;if(!n)return 'PK';return (n>0?'+':'')+n}
+    function lineErf(x){var s=x<0?-1:1,a=Math.abs(x),t=1/(1+0.3275911*a);var y=1-(((((1.061405429*t-1.453152027)*t+1.421413741)*t-0.284496736)*t+0.254829592)*t)*Math.exp(-a*a);return s*y}
+    function linePhi(z){return 0.5*(1+lineErf(z/Math.SQRT2))}
+    function lineMlP(ml){ml=+ml;if(!isFinite(ml)||!ml)return null;return ml>0?100/(ml+100):(-ml)/(-ml+100)}
+    var LINE_SIG=12.5,LINE_RUNG=[1,2,3,4,5,6,7,8,9,10,12,15,20,25,30,40,50];
+    function lineRung(r){if(!(r>0))return null;if(r<1){var inv=lineRung(1/r);return inv?[inv[1],inv[0]]:null}var best=LINE_RUNG[0],bd=1e9;for(var i=0;i<LINE_RUNG.length;i++){var d=Math.abs(Math.log(LINE_RUNG[i])-Math.log(r));if(d<bd){bd=d;best=LINE_RUNG[i]}}return [best,1]}
+    function lineSideMl(gw,name){var g=gw&&gw.g,ln=g&&g.line;if(!ln||!name)return null;if(name===A.tname(g.home)&&ln.hml!=null&&isFinite(+ln.hml)&&+ln.hml)return +ln.hml;if(name===A.tname(g.away)&&ln.aml!=null&&isFinite(+ln.aml)&&+ln.aml)return +ln.aml;return null}
+    function lineFair(gw,team,other,kind,pts){var info=linePosted(gw),got=linePtsOf(info,team),mu=got==null?null:-got,p=null;
+      if(kind==='none'){var p1=lineMlP(lineSideMl(gw,team)),p2=lineMlP(lineSideMl(gw,other));if(p1!=null&&p2!=null&&p1+p2>0)p=p1/(p1+p2);else if(p1!=null)p=p1;else if(mu!=null)p=linePhi(mu/LINE_SIG)}
+      else if(kind==='custom'&&mu!=null&&pts!=null)p=linePhi((mu+pts)/LINE_SIG);
+      if(!(p>0&&p<1))return null;var raw=(1-p)/p,rung=lineRung(raw);if(!rung)return null;return {a:rung[0],b:rung[1],label:rung[0]+'-'+rung[1],raw:raw}}
+    function lineLop(odds,fair){if(!fair||!odds||(+odds[0]===fair.a&&+odds[1]===fair.b))return false;var u=+odds[0]/+odds[1],r=fair.raw;return !!(r>0&&u>0&&Math.abs(u-r)/r>0.30)}
     function linePhrase(team,kind,pts,odds){odds=odds||[1,1];var tail=+odds[0]===+odds[1]?'':' \u00b7 '+odds[0]+'-'+odds[1];if(kind==='none'||pts===0)return team+' wins (no points)'+tail;return team+' '+lineBit(pts)+tail}
     function lineDay(gw){var g=gw&&gw.g;if(g&&g.day)return g.day;try{if(gw&&gw.start&&typeof S25!=='undefined'&&S25.etDay)return S25.etDay(gw.start)}catch(e){}return ''}
-    function applyLine(f){var gw=game(f.gid),names=lineTeams(gw);if(names.length<2)return;var i=f.lineSide?1:0,team=names[i],other=names[1-i],odds=f.odds||[1,1];
-      if(!f.lineKind||f.lineKind==='posted'){if(f.lineBase)f.text=f.lineBase;f.rd=null;if(f.lineSideKey)f.side=f.lineSideKey;return}
+    function applyLine(f,useFair){var gw=game(f.gid),names=lineTeams(gw);if(names.length<2)return;var i=f.lineSide?1:0,team=names[i],other=names[1-i];
+      if(!f.lineKind||f.lineKind==='posted'){if(f.lineBase)f.text=f.lineBase;f.rd=null;f.lineFair=null;if(f.lineSideKey)f.side=f.lineSideKey;f.odds=[1,1];f.oddC=false;f.oddTxt='';return}
       var kind=f.lineKind,pts=null;if(kind==='custom'){pts=lineNum(f.linePts);if(pts==null)return;if(!pts)kind='none'}
-      var day=lineDay(gw);f.text=linePhrase(team,kind,pts,odds);f.side='';
+      var fair=lineFair(gw,team,other,kind,pts);f.lineFair=fair;
+      if(useFair&&fair){f.odds=[fair.a,fair.b];f.oddC=![[1,1],[2,1],[3,1],[4,1],[5,1]].some(function(o){return o[0]===fair.a&&o[1]===fair.b});f.oddTxt=fair.label}
+      var odds=f.odds||[1,1],day=lineDay(gw);f.text=linePhrase(team,kind,pts,odds);f.side='';
       if(day)f.rd=kind==='none'?{k:'ml',t:team,o:other,l:null,sp:'mcbb',d:day}:{k:'spread',t:team,o:other,l:pts,sp:'mcbb',d:day}}
     function lineBox(f,gw){var names=lineTeams(gw);if(names.length<2)return '';var on=!!f.lineOn,side=names[f.lineSide?1:0],info=linePosted(gw),pp=linePtsOf(info,side);
       var h='<div class="ln-wrap"><button type="button" class="b27-chip ln-go" data-rq="line" aria-expanded="'+(on?'true':'false')+'">Change the line</button>';
@@ -251,7 +264,9 @@ U.halfLs=hsLs;U.halfScores=function(g,s,first,BOX){var tot=s.score!=null?esc(Str
       h+='<div class="ln-row"><button type="button" class="b27-chip" data-rq="lnone" aria-pressed="'+(f.lineKind==='none'?'true':'false')+'">No points</button>';
       if(pp!=null)h+='<button type="button" class="b27-chip" data-rq="lpost" aria-pressed="'+(!f.lineKind||f.lineKind==='posted'?'true':'false')+'">'+e(side+' '+lineBit(pp))+'</button>';
       h+='<input class="sb-in b27-in rq-in ln-pts" data-rq-in="linePts" inputmode="decimal" placeholder="Custom, +7.5" aria-label="Custom spread" value="'+e(f.linePts||'')+'"></div>';
-      h+='<div class="ln-row"><span class="ln-lab">Odds if '+e(side)+' wins</span>'+[[1,1],[2,1],[3,1],[4,1],[5,1]].map(function(o){var pressed=!f.oddC&&+f.odds[0]===o[0]&&+f.odds[1]===o[1];return '<button type="button" class="b27-chip" data-rq="odds" data-v="'+o[0]+'-'+o[1]+'" aria-pressed="'+pressed+'">'+(o[0]===1?'Even':o[0]+'-'+o[1])+'</button>'}).join('')+'</div>';
+      var chips=[[1,1],[2,1],[3,1],[4,1],[5,1]],ca=+f.odds[0]||1,cb=+f.odds[1]||1;if(!(ca===1&&cb===1)&&!chips.some(function(o){return o[0]===ca&&o[1]===cb}))chips=chips.concat([[ca,cb]]);
+      h+='<div class="ln-row"><span class="ln-lab">Odds if '+e(side)+' wins</span>'+chips.map(function(o){return '<button type="button" class="b27-chip" data-rq="odds" data-v="'+o[0]+'-'+o[1]+'" aria-pressed="'+(ca===o[0]&&cb===o[1]?'true':'false')+'">'+(o[0]===o[1]?'Even':o[0]+'-'+o[1])+'</button>'}).join('')+'</div>';
+      if((f.lineKind==='none'||f.lineKind==='custom')&&f.lineFair)h+='<div class="ln-fair">Fair: about '+e(f.lineFair.label)+(lineLop(f.odds,f.lineFair)?' <span class="ln-lop">Lopsided</span>':'')+'</div>';
       if(f.lineKind==='none'||f.lineKind==='custom')h+='<div class="ln-terms">'+e(f.text||'')+'</div>';
       return h+'</div></div>'}
     function form(){var f=S.f,now0=Date.now(),G=games().filter(function(x){var st=Date.parse(x.start)||0,ws=f.cov==='2h'?st+HALF_MS:st;if(String(x.id)===String(f.gid))return true;if(x.status==='final'||st>=now0+7*86400000)return false;if(f.cov==='2h')return !(x.period&&+x.period>=2)&&now0<ws;return x.status==='scheduled'&&now0<ws}),g=tipOf(f),me=A.me(),nOth=A.others().length;
@@ -412,9 +427,9 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
       if(k==='unedit'){S.edit=null;S.f=nf();A.render();return}
       if(k==='when'){f.whenPick=true;f.wk=v==='date'||v==='season'||v==='game'?v:'unknown';if(f.wk!=='date')f.est='';A.render();return}
       if(k==='line'){f.lineOn=!f.lineOn;if(f.lineOn&&!f.lineBase)f.lineBase=f.text||'';A.render();return}
-      if(k==='lnone'){f.lineOn=true;f.lineKind='none';f.linePts='';applyLine(f);A.render();return}
+      if(k==='lnone'){f.lineOn=true;f.lineKind='none';f.linePts='';applyLine(f,true);A.render();return}
       if(k==='lpost'){f.lineOn=true;f.lineKind='posted';applyLine(f);A.render();return}
-      if(k==='lside'){f.lineSide=+v===1?1:0;if(f.lineKind==='none'||f.lineKind==='custom')applyLine(f);A.render();return}
+      if(k==='lside'){f.lineSide=+v===1?1:0;if(f.lineKind==='none'||f.lineKind==='custom')applyLine(f,true);A.render();return}
       if(k==='to'){var i=f.to.indexOf(v);if(i>=0)f.to.splice(i,1);else f.to.push(v)}
       else if(k==='all')f.to=A.others().map(function(o){return o.id});else if(k==='clear')f.to=[];
       else if(k==='side'){f.side=v;var gg=game(f.gid),pp=gg&&pick(gg.g,{side:v,cov:'game'});if(pp)f.text=pp.txt}else if(k==='cov'){f.cov=v}else if(k==='amt'){f.amt=+v;f.amtTxt='';f.amtC=false}else if(k==='amtc'){f.amtC=true;f.amt=null}else if(k==='oddc'){f.oddC=true}else if(k==='fslotall'){f.sAll=true;f.slots=null}else if(k==='fslot-'||k==='fslot+'){var nT=f.to.length,cT=nT||A.others().length,cur=f.sAll?cT:f.slots?Math.min(f.slots,cT):(nT||1);f.sAll=false;cur+=k==='fslot+'?1:-1;f.slots=Math.max(1,Math.min(cT,cur))}else if(k==='odds'){f.odds=v.split('-').map(Number);f.oddC=false;f.oddTxt='';if(f.lineKind==='none'||f.lineKind==='custom')applyLine(f)}
@@ -445,7 +460,7 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
           else{await A.placeBet(x,me);say(waText(x,'acc',me),'Accepted');S.posted=true;noteCopy(S.copied)}}
         catch(y){S.msg='Could not accept it. Try again.';S.bad=true}S.busy=false}
       A.render()}
-    function input(k,v){var f=S.f;if(k==='gid'){f.gid=v;f.side='';f.text=''}else if(k==='text'){f.text=v;f.rd=null;f.lineKind='';return}else if(k==='mode'){f.mode=v;f.expPick=true}else if(k==='amtTxt'){f.amtTxt=v;f.amt=null;return}else if(k==='linePts'){f.linePts=v;f.lineKind='custom';f.lineOn=true;applyLine(f);A.render();return}else if(k==='oddTxt'){f.oddTxt=v;var mo=/^\s*(\d{1,3})\s*[-:\/]\s*(\d{1,3})\s*$/.exec(v);if(mo&&+mo[1]>0&&+mo[2]>0)f.odds=[+mo[1],+mo[2]];if(f.lineKind==='none'||f.lineKind==='custom')applyLine(f);A.render();return}else f[k]=v;A.render()}
+    function input(k,v){var f=S.f;if(k==='gid'){f.gid=v;f.side='';f.text=''}else if(k==='text'){f.text=v;f.rd=null;f.lineKind='';return}else if(k==='mode'){f.mode=v;f.expPick=true}else if(k==='amtTxt'){f.amtTxt=v;f.amt=null;return}else if(k==='linePts'){f.linePts=v;f.lineKind='custom';f.lineOn=true;applyLine(f,true);A.render();return}else if(k==='oddTxt'){f.oddTxt=v;var mo=/^\s*(\d{1,3})\s*[-:\/]\s*(\d{1,3})\s*$/.exec(v);if(mo&&+mo[1]>0&&+mo[2]>0)f.odds=[+mo[1],+mo[2]];if(f.lineKind==='none'||f.lineKind==='custom')applyLine(f);A.render();return}else f[k]=v;A.render()}
     function prefill(gid,k,i){S.f=nf();S.f.gid=String(gid);if(k){S.f.side=k+':'+i;S.f.lineSideKey=k+':'+i;var gq=game(gid),pq=gq&&pick(gq.g,{side:S.f.side,cov:'game'});if(pq)S.f.text=pq.txt;if(k==='sp'&&pq&&gq&&gq.g){var team=String(pq.lab||'').replace(/\s+[+-].*$/,'').replace(/\s+pk$/i,'').trim();S.f.lineSide=A.tname(gq.g.home)===team?1:0}}else{var gb=game(gid);if(gb&&gb.g)S.f.text=SHARED_UI.qbBlankText(gb.g,{name:A.tname,date:A.dateET(gb.g)})};S.f.lineBase=S.f.text||'';/* STEP10: the full written bet line (team vs team, spread, date), not the short chip text */S.msg='';var g=game(gid);}
     /* Requests badge: open requests waiting for ME (invited, not declined, not mine, still live) on the Bets tab; refreshed by a light GET every 60 s */
     function count(){var me=A.me(),now=Date.now();if(!me)return 0;return S.list.filter(function(r){return live(r,now)&&r.by!==me&&r.to.indexOf(me)>=0&&(r.dec||[]).indexOf(me)<0&&tk(r).indexOf(me)<0}).length}
