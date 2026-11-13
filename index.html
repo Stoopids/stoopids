@@ -983,7 +983,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.75.0"></script>
+<script src="shared/ui.js?v=1.76.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -3303,7 +3303,7 @@ function b27Apply(list,fromPoll){
   if(tab==='bets27')b27Seen();
   const fresh=added.filter(b=>!U.mine.has(b.id)&&b.status==='open');
   if(fresh.length&&profAlert('newBets')&&typeof nbShow==='function'){nbShow(fresh.map(b=>({n:b.n,_msg:/*<POOL>*/b.kind==='pool'?PT('toast',{who:PN(b.backer),names:b27Opps(b).map(PN).join(', ')}):/*</POOL>*/PN(b.backer)+' just bet '+b27Num(b.amt)+(b27IsBundle(b)?' each':'')+(b27OddsFace(b.odds.a,b.odds.b)?' '+b27OddsFace(b.odds.a,b.odds.b):'')+' with '+b27Opps(b).map(PN).join(', ')})))}
-  if(first||added.length||changed||fromPoll==='force'){const ae=document.activeElement;if(tab==='bets27'){if(!(ae&&ae.closest&&ae.closest('#main')&&/INPUT|TEXTAREA/.test(ae.tagName)))render()}else if(tab==='profile')render();else if(b27Badge())setTimeout(render,0)}
+  if(first||added.length||changed||fromPoll==='force'){const ae=document.activeElement;if(tab==='bets27'){if(!(ae&&ae.closest&&ae.closest('#rqForm')))render()}else if(tab==='profile')render();else if(b27Badge())setTimeout(render,0)}
 }
 function b27Seen(){if(U.state==='ok'&&U.maxN)lsSet(PULK.seenKey,String(Math.max(U.maxN,parseInt(lsGet(PULK.seenKey),10)||0)))}
 function b27Badge(){if(tab==='bets27'||U.state!=='ok')return '';const s=parseInt(lsGet(PULK.seenKey),10);return isFinite(s)&&U.maxN>s?'<b class="nb" aria-hidden="true">new</b>':''}
@@ -4530,6 +4530,7 @@ setTimeout(onlRead,1500);setInterval(onlRead,60000);/*</ONLINE-STRIP>*/
 /*<S26K-MODAL>*//* bet confirm card as a centered modal: backdrop tap / Esc = ← Change (b27Edit keeps the form values) */
 function s26kModal(c){return c?`<div class="s26k-bd" onclick="if(event.target===this&&!U.busy)b27Edit()"><div class="s26k-m" role="dialog" aria-modal="true" aria-label="Check it, then confirm">${c}</div></div>`:''}
 {const r0=render;let was=false;render=function(){const x=r0.apply(this,arguments);const m=document.querySelector('.s26k-m');document.body.classList.toggle('s26k-lock',!!m);if(m&&!was){const b=m.querySelector('.b27-act .btn');if(b)b.focus({preventScroll:true})}was=!!m;return x};
+(function(){var real=render,hold=0,defer=0;function typing(){var a=document.activeElement;return !!(a&&a.closest&&a.closest('#rqForm')&&/^(SELECT|INPUT|TEXTAREA)$/.test(a.tagName))}function flush(){if(Date.now()<hold||typing()||!defer)return;defer=0;render()}document.addEventListener('pointerdown',function(e){if(e.target&&e.target.closest&&e.target.closest('#rqForm'))hold=Date.now()+900},true);function up(){hold=0;flush()}document.addEventListener('pointerup',up,true);document.addEventListener('pointercancel',up,true);document.addEventListener('focusout',function(){setTimeout(flush,0)});render=function(){if(!render.rqSelf&&(Date.now()<hold||Date.now()<(render.rqHold||0)||typing())){defer=1;return}return real.apply(this,arguments)}})();
  document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&document.querySelector('.s26k-m')&&!U.busy){ev.preventDefault();b27Edit()}})}
 /*</S26K-MODAL>*/
 </script>
