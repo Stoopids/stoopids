@@ -957,7 +957,7 @@ main,#main{padding-top:6px!important}
 /* SYNC7..SYNC14 moved to shared/ui.css (linked right after this style block) */
 
 </style>
-<link rel="stylesheet" href="shared/ui.css?v=1.40.0">
+<link rel="stylesheet" href="shared/ui.css?v=1.41.0">
 <style>/*<SORT-FIT> phone All teams: the card scrolls sideways, the page does not. Names stay full size. */@media (max-width:480px){html body .card.tap.s27-rk{padding-left:4px!important;padding-right:4px!important}html body .card.tap.s27-rk th{font-size:11px!important}html body .card.tap.s27-rk td.n,html body .card.tap.s27-rk td.to,html body .card.tap.s27-rk td.cf{font-size:13px!important}html body .card.tap.s27-rk .s27-sort i{font-size:.7em!important;margin-left:0!important}}/*</SORT-FIT>*/</style>
 </head>
 <body>
@@ -983,7 +983,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.68.0"></script>
+<script src="shared/ui.js?v=1.69.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -1740,7 +1740,7 @@ function qbBtn(g){/*<SYNC1>*/// the Quick bet button, stacked under Copy in the 
   return `<button type="button" class="s27-copy qb-btn" aria-expanded="${open}" aria-label="Quick bet: ${esc(qbNm(g.away))} vs ${esc(qbNm(g.home))}" onclick="qbToggle('${esc(id)}')"><svg class="qb-bolt" viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg> Quick bet</button>`}
 function qbHtml(g){
   if(!qbOk(g))return '';const id=String(g.id),open=qbG===id;
-  /*<STEP7-QB>*/if(typeof SHARED_UI!=='undefined'&&SHARED_UI.qbSheet){if(!open)return '';return SHARED_UI.qbSheet(g,qbList(g),{e:esc,name:qbNm,date:qbDate(g),close:()=>`onclick="qbToggle(null)"`,blank:()=>`onclick="qbGo('${esc(id)}',null,0)"`,pick:(k,i)=>`onclick="qbGo('${esc(id)}','${k}',${i})"`})}/*</STEP7-QB>*/
+  /*<STEP7-QB>*/if(typeof SHARED_UI!=='undefined'&&SHARED_UI.qbSheet){if(!open)return '';return SHARED_UI.qbSheet(g,qbList(g),{e:esc,name:qbNm,date:qbDate(g),close:()=>`onclick="qbToggle(null)"`,blank:()=>`onclick="qbGo('${esc(id)}',null,0)"`,pick:(k,i)=>`onclick="qbGo('${esc(id)}','${k}',${i})"`,line:()=>`onclick="qbLine('${esc(id)}')"`})}/*</STEP7-QB>*/
   let h='';
   const oa=qbOwn(g.away),oh=qbOwn(g.home),me=b27Who(),need=me!==oa&&me!==oh;
   h+=`<div class="qb-pick" role="group" aria-label="Quick bet picker">`;
@@ -1758,6 +1758,10 @@ const qbList=g=>SHARED_UI.qbOptions(g,{name:qbNm,date:qbDate(g)});
 function qbGo(id,k,i){const g=(D.games||[]).find(x=>String(x.id)===String(id));if(!g||!qbOk(g))return;
   if(!(typeof RQ!=='undefined'&&RQ)){qbMsg='Request a bet is unavailable right now.';render();return}
   RQ.prefill(id,k,i);qbG=null;qbMsg='';tab='bets27';OB_VIEW='request';render();betsLand()}
+function qbLine(id){const g=(D.games||[]).find(x=>String(x.id)===String(id));if(!g||!qbOk(g))return;
+  if(!(typeof RQ!=='undefined'&&RQ)){qbMsg='Request a bet is unavailable right now.';render();return}
+  const sp=(qbList(g)||[]).find(x=>x.k==='sp');
+  RQ.prefill(id,sp?'sp':null,sp?1:0);RQ.S.f.lineOn=true;qbG=null;qbMsg='';tab='bets27';OB_VIEW='request';render();betsLand()}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&qbG!=null&&document.querySelector('.qbd,.qb-pick')){e.preventDefault();qbToggle(null)}});
 document.addEventListener('click',e=>{if(qbG==null)return;const t=e.target;if(t&&t.closest&&t.closest('.qbd,.qb-pick,.qb-btn'))return;qbToggle(null)},true);
 /*</STEP7-QB>*/
@@ -3707,8 +3711,9 @@ function b27SpreadBit(l){l=Number(l);return l===0?'PK':(l>0?'+':'')+l}
 function b27FinalBit(b){if(b.src&&b.src.sc)return String(b.src.sc).replace(/^\((.*)\)$/,'$1').trim();try{const rd=s25BetRd(b),loc=rd&&s25FromGames(rd);if(loc&&loc.p&&loc.p.sc)return String(loc.p.sc)}catch(e){}return ''}
 function b27OppSpread(l){l=Number(l);return b27SpreadBit(l===0?0:-l)}
 function b27FaceBits(b){let rd=null;try{rd=s25BetRd(b)}catch(e){}if(!rd||rd.k==='manual'||!rd.t||!rd.o)return null;
-  if(rd.k==='spread'){const mine=b27SpreadBit(rd.l),theirs=b27OppSpread(rd.l);return {sides:rd.t+' '+mine+' vs '+rd.o+' '+theirs,day:rd.d}}
+  if(rd.k==='spread'){const mine=b27SpreadBit(rd.l),theirs=b27OppSpread(rd.l),raw=b27Clean(b.text||'');if(/wins \(no points\)/i.test(raw)||(!/\bvs\b/i.test(raw)&&/·/.test(raw)))return {sides:raw,day:rd.d};return {sides:rd.t+' '+mine+' vs '+rd.o+' '+theirs,day:rd.d}}
   if(rd.k==='total'){const mine=rd.ou==='o'?'Over':'Under',theirs=mine==='Over'?'Under':'Over',n=rd.l;return {sides:mine+' '+n+' vs '+theirs+' '+n+', '+rd.t+' v '+rd.o,day:rd.d}}
+  if(/wins \(no points\)/i.test(b.text||''))return {sides:b27Clean(b.text||''),day:rd.d};
   return {sides:rd.t+' vs '+rd.o,day:rd.d}}
 function b27FaceSides(b){if(!b||b.kind==='pool')return '';const bits=b27FaceBits(b);return bits&&bits.sides?bits.sides:b27Clean(b.text||'')}
 function b27FaceWhoStake(b){const Bk=PN(b.backer),OP=b27Opps(b).map(PN).join(', '),a=+(b.odds&&b.odds.a),c=+(b.odds&&b.odds.b);const odds=a>=1&&c>=1&&!(a===1&&c===1)?a+'-'+c:'';return [Bk+' v '+OP,'$'+b27Num(b.amt)+(b27Opps(b).length>1?' each':''),odds].filter(Boolean).join(' · ')}
@@ -4992,7 +4997,9 @@ html body .b27-opps.pool-pick>.b27-util>.s27-selb{box-sizing:border-box;width:10
 /* s29e: the per-bet Copy button copies the whole card as WhatsApp-ready plain text (no link). Same words, numbers (b27Num) and odds math (b27Pay) as the card. */
 function s29eOpenCopy(b){if(!b)return '';const who=(b27Opps(b).map(PN).join(', ')||PN(b.other));
   let line2=b27Clean(b.text||'');const rd=typeof s25BetRd==='function'?s25BetRd(b):b.rd;
-  if(rd&&rd.k==='spread'&&rd.t&&rd.o){const fl=rd.l===0?'PK':(rd.l>0?'+':'')+rd.l;line2=rd.t+' '+fl+' v '+rd.o}
+  const keepLine=/wins \(no points\)/i.test(b.text||'')||(rd&&rd.k==='spread'&&!/\bvs\b/i.test(b.text||'')&&/·/.test(b.text||''));
+  if(keepLine)line2=b27Clean(b.text||'');
+  else if(rd&&rd.k==='spread'&&rd.t&&rd.o){const fl=rd.l===0?'PK':(rd.l>0?'+':'')+rd.l;line2=rd.t+' '+fl+' v '+rd.o}
   else{const m=/^(.*?)\s+([+-]\d+(?:\.\d+)?)\s+(?:vs\.?|v\.?)\s+(.*?)\s+([+-]\d+(?:\.\d+)?)(.*)$/i.exec(line2);if(m&&Math.abs(+m[2]+ +m[4])<0.05)line2=(m[1]+' '+m[2]+' v '+m[3]+(m[5]||'')).replace(/\s+/g,' ').trim();else line2=line2.replace(/\s+(?:vs\.?|versus)\s+/ig,' v ')}
   const iso=(rd&&rd.d)||(SHARED_UI.whenKind(b)==='date'?b.est:'');let when='';if(iso&&/^\d{4}-\d{2}-\d{2}$/.test(iso))when=etLabel(iso);
   const k=SHARED_UI.whenKind(b),exp=k==='season'?'Season':k==='date'&&b.est?SHARED_UI.estLabel(b.est).replace(/,?\s+\d{4}$/,''):'Tip';

@@ -154,7 +154,7 @@ U.halfLs=hsLs;U.halfScores=function(g,s,first,BOX){var tot=s.score!=null?esc(Str
      A request auto-cancels when its own window starts (full game: tip-off; 2nd half: halftime) or at the poster's expiry, whichever first. */
   SHARED_UI.Requests=function(A){
     var e=A.e,S={f:null,list:[],at:0,busy:false,msg:'',bad:false,loading:false,arm:null};
-      var nf=function(){return{gid:'',side:'',cov:'game',odds:[1,1],amt:null,amtTxt:'',to:[],mode:'h',n:3,at:'',est:'',wk:'game',whenPick:false,expPick:false}};S.f=nf();
+      var nf=function(){return{gid:'',side:'',cov:'game',odds:[1,1],amt:null,amtTxt:'',to:[],mode:'h',n:3,at:'',est:'',wk:'game',whenPick:false,expPick:false,lineOn:false,lineKind:'',lineSide:0,linePts:'',lineBase:'',lineSideKey:''}};S.f=nf();
     var HALF_MS=70*60000;
     function parse(t){try{var o=JSON.parse(t||'{}');if(typeof o==='string')o=JSON.parse(o);return Array.isArray(o.reqs)?o.reqs.filter(function(r){return r&&r.id}):[]}catch(x){return[]}}
     function rid(){return 'rq'+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
@@ -231,13 +231,36 @@ U.halfLs=hsLs;U.halfScores=function(g,s,first,BOX){var tot=s.score!=null?esc(Str
     function sl(s){return SHARED_UI.showLine?SHARED_UI.showLine(s):String(s==null?'':s)}
     function offerLine(o){var a=o.odds&&o.odds[0],b=o.odds&&o.odds[1],od=+a===+b?'':' · '+a+'-'+b;return '$'+o.amt+od+' · '+sl(o.lab||o.txt||'')}
     function tipOf(f){return SHARED_UI.tipGame({games:games(),gid:f&&f.gid,text:f&&f.text,now:Date.now(),today:(typeof S25!=='undefined'&&S25.etDay)?S25.etDay(new Date()):'',dateFrom:(typeof S25!=='undefined'&&S25.dateFrom)?S25.dateFrom:null,day:(typeof S25!=='undefined'&&S25.etDay)?S25.etDay:null})}
+    function lineTeams(gw){if(!gw||!gw.g)return [];return [A.tname(gw.g.away),A.tname(gw.g.home)].filter(Boolean)}
+    function linePosted(gw){var g=gw&&gw.g,ln=g&&g.line;if(!ln||!(+ln.sp>0))return null;var fav=String(ln.fav)===String(g.away.id)?g.away:String(ln.fav)===String(g.home.id)?g.home:null;if(!fav)return null;var dog=fav===g.away?g.home:g.away,sp=+ln.sp;return {fav:A.tname(fav),dog:A.tname(dog),sp:sp}}
+    function linePtsOf(info,name){if(!info||!name)return null;if(name===info.fav)return -info.sp;if(name===info.dog)return info.sp;return null}
+    function lineNum(s){var m=/^\s*([+-])?\s*(\d{1,2}(?:\.\d)?)\s*$/.exec(String(s||''));if(!m)return null;var n=Math.round(+m[2]*2)/2;if(m[1]==='-')n=-n;return n}
+    function lineBit(n){n=+n;if(!n)return 'PK';return (n>0?'+':'')+n}
+    function linePhrase(team,kind,pts,odds){odds=odds||[1,1];var tail=+odds[0]===+odds[1]?'':' \u00b7 '+odds[0]+'-'+odds[1];if(kind==='none'||pts===0)return team+' wins (no points)'+tail;return team+' '+lineBit(pts)+tail}
+    function lineDay(gw){var g=gw&&gw.g;if(g&&g.day)return g.day;try{if(gw&&gw.start&&typeof S25!=='undefined'&&S25.etDay)return S25.etDay(gw.start)}catch(e){}return ''}
+    function applyLine(f){var gw=game(f.gid),names=lineTeams(gw);if(names.length<2)return;var i=f.lineSide?1:0,team=names[i],other=names[1-i],odds=f.odds||[1,1];
+      if(!f.lineKind||f.lineKind==='posted'){if(f.lineBase)f.text=f.lineBase;f.rd=null;if(f.lineSideKey)f.side=f.lineSideKey;return}
+      var kind=f.lineKind,pts=null;if(kind==='custom'){pts=lineNum(f.linePts);if(pts==null)return;if(!pts)kind='none'}
+      var day=lineDay(gw);f.text=linePhrase(team,kind,pts,odds);f.side='';
+      if(day)f.rd=kind==='none'?{k:'ml',t:team,o:other,l:null,sp:'mcbb',d:day}:{k:'spread',t:team,o:other,l:pts,sp:'mcbb',d:day}}
+    function lineBox(f,gw){var names=lineTeams(gw);if(names.length<2)return '';var on=!!f.lineOn,side=names[f.lineSide?1:0],info=linePosted(gw),pp=linePtsOf(info,side);
+      var h='<div class="ln-wrap"><button type="button" class="b27-chip ln-go" data-rq="line" aria-expanded="'+(on?'true':'false')+'">Change the line</button>';
+      if(!on)return h+'</div>';
+      h+='<div class="ln-box" role="group" aria-label="Change the line">';
+      h+='<div class="ln-row"><span class="ln-lab">If</span>'+names.map(function(n,i){return '<button type="button" class="b27-chip" data-rq="lside" data-v="'+i+'" aria-pressed="'+((f.lineSide?1:0)===i?'true':'false')+'">'+e(n)+'</button>'}).join('')+'<span class="ln-lab">wins</span></div>';
+      h+='<div class="ln-row"><button type="button" class="b27-chip" data-rq="lnone" aria-pressed="'+(f.lineKind==='none'?'true':'false')+'">No points</button>';
+      if(pp!=null)h+='<button type="button" class="b27-chip" data-rq="lpost" aria-pressed="'+(!f.lineKind||f.lineKind==='posted'?'true':'false')+'">'+e(side+' '+lineBit(pp))+'</button>';
+      h+='<input class="sb-in b27-in rq-in ln-pts" data-rq-in="linePts" inputmode="decimal" placeholder="Custom, +7.5" aria-label="Custom spread" value="'+e(f.linePts||'')+'"></div>';
+      h+='<div class="ln-row"><span class="ln-lab">Odds if '+e(side)+' wins</span>'+[[1,1],[2,1],[3,1],[4,1],[5,1]].map(function(o){var pressed=!f.oddC&&+f.odds[0]===o[0]&&+f.odds[1]===o[1];return '<button type="button" class="b27-chip" data-rq="odds" data-v="'+o[0]+'-'+o[1]+'" aria-pressed="'+pressed+'">'+(o[0]===1?'Even':o[0]+'-'+o[1])+'</button>'}).join('')+'</div>';
+      if(f.lineKind==='none'||f.lineKind==='custom')h+='<div class="ln-terms">'+e(f.text||'')+'</div>';
+      return h+'</div></div>'}
     function form(){var f=S.f,now0=Date.now(),G=games().filter(function(x){var st=Date.parse(x.start)||0,ws=f.cov==='2h'?st+HALF_MS:st;if(String(x.id)===String(f.gid))return true;if(x.status==='final'||st>=now0+7*86400000)return false;if(f.cov==='2h')return !(x.period&&+x.period>=2)&&now0<ws;return x.status==='scheduled'&&now0<ws}),g=tipOf(f),me=A.me(),nOth=A.others().length;
       var timed=!!(g&&Date.parse(g.start));if(!f.expPick)f.mode=timed?'start':'h';
       /* same template as Write it Up: header, Select all / Clear, numbered questions, Amount + Odds, summary, big button. Identity stays on Profile. */
       var h='<div class="card b27-form rq-form" id="rqForm">'+SHARED_UI.entryHead('rq')+(S.edit?'<div class="note">Editing this request. Nothing is posted until you save.</div>':'');
       /* STEP10: Select all / Clear sit right-aligned on the same line as question 1; the Stoop buttons stay on the next row */
       h+=(A.others().length%4?rqQ(1,'rqwho','Who is it open to?'):'<div class="rq-qrow">'+rqQ(1,'rqwho','Who is it open to?')+'<div class="s27-sel b27-selbar"><button type="button" class="s27-selb" data-rq="all"><span class="f">Select all</span><span class="s">All</span></button><button type="button" class="s27-selb" data-rq="clear">Clear</button></div></div>')+chips(f);
-      h+=rqQ(2,'text','What\u2019s the bet?')+'<input class="sb-in b27-in rq-in" data-rq-in="text" maxlength="'+(A.maxText||140)+'" autocomplete="off" placeholder="e.g. Virginia -3" value="'+e(f.text||'')+'" aria-label="What\u2019s the bet?">';
+      h+=rqQ(2,'text','What\u2019s the bet?')+'<input class="sb-in b27-in rq-in" data-rq-in="text" maxlength="'+(A.maxText||140)+'" autocomplete="off" placeholder="e.g. Virginia -3" value="'+e(f.text||'')+'" aria-label="What\u2019s the bet?">'+lineBox(f,g);
       var oc=!![[1,1],[2,1],[3,1],[4,1],[5,1]].every(function(o){return !(+f.odds[0]===o[0]&&+f.odds[1]===o[1])})||f.oddC;
       h+='<div class="b27-ao"><div class="b27-ao-c">'+rqQ(3,'rqamt','Amount')+'<div class="b27-amts" role="group" aria-label="Amount">'+A.amounts.map(function(a){return '<button type="button" class="b27-amt" data-rq="amt" data-v="'+a+'" aria-pressed="'+(!f.amtC&&f.amt===a)+'">'+a+'</button>'}).join('')+'<button type="button" class="b27-amt cu" data-rq="amtc" aria-pressed="'+!!f.amtC+'">Custom</button></div>'+(f.amtC?'<div class="b27-cw"><input class="sb-in b27-in rq-in" data-rq-in="amtTxt" inputmode="numeric" placeholder="Whole number" value="'+e(f.amtTxt)+'" aria-label="Custom amount"></div>':'')+'</div>';
       h+='<div class="b27-ao-c">'+rqQ(4,'rqodds','Odds')+'<div class="b27-chips" role="group" aria-label="Odds">'+[[1,1],[2,1],[3,1],[4,1],[5,1]].map(function(o){var on=!f.oddC&&+f.odds[0]===o[0]&&+f.odds[1]===o[1];return '<button type="button" class="b27-chip" data-rq="odds" data-v="'+o[0]+'-'+o[1]+'" aria-pressed="'+on+'">'+(o[0]===1?'Even':o[0]+'-'+o[1])+'</button>'}).join('')+'<button type="button" class="b27-chip cu" data-rq="oddc" aria-pressed="'+!!oc+'">Custom</button></div>'+(oc?'<div class="b27-cw"><input class="sb-in b27-in rq-in" data-rq-in="oddTxt" placeholder="e.g. 7-2 or 10-1" value="'+e(f.oddTxt||(f.odds[0]+'-'+f.odds[1]))+'" aria-label="Custom odds"></div>':'')+'</div></div>';
@@ -271,7 +294,7 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
       var acceptor=nTo===1?who:'the Stoop who accepts',creator=nm(r.by)||'You',half=r.cov==='2h'?'2nd half: ':'';
       var match=sbOnce(sl(String(r.txt||r.lab||'').trim())||'the bet');
       if((r.k==='sp'||r.k==='ou')&&r.lab&&r.other)match=sl(half+r.lab+' vs '+r.other);
-      var stake=r.amt>0?rqMoney(r.amt):'',odds=+o[0]===+o[1]?'':' · '+o[0]+'-'+o[1];
+      var stake=r.amt>0?rqMoney(r.amt):'',odds=+o[0]===+o[1]||String(match).indexOf(o[0]+'-'+o[1])>=0?'':' · '+o[0]+'-'+o[1];
       var line1=creator+': '+match+(stake?' · '+stake:'')+odds,exp=rqExpSaved(r);
       var line2=[sl(r.date||''),'Open to '+who,exp?'Exp: '+exp:''].filter(Boolean).join(' · '),line3='';
       if(r.amt>0){var winC=rqMoney(rqWin(r.amt,o[0],o[1])),winO=rqMoney(r.amt);
@@ -288,7 +311,7 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
       if(!p&&!typed&&!(amt>0))return {sum:'',ex:''};
       var half=f.cov==='2h'?'2nd half: ':'',match=sbOnce(sl(typed||'Write the bet'));
       if(p&&(p.k==='sp'||p.k==='ou')&&p.lab&&p.other)match=sl(half+p.lab+' vs '+p.other);
-      var stake=amt>0?rqMoney(amt):'',odds=(+o[0]===+o[1])?'':' · '+o[0]+'-'+o[1];
+      var stake=amt>0?rqMoney(amt):'',odds=(+o[0]===+o[1])||String(match).indexOf(o[0]+'-'+o[1])>=0?'':' · '+o[0]+'-'+o[1];
       var line1=sl(creator+': '+match+(stake?' · '+stake:'')+odds);
       var date=g&&A.dateET?A.dateET(g):'',exp=rqExp(f);
       var line2=[date,'Open to '+who,exp?'Exp: '+exp:''].filter(Boolean).join(' · ');
@@ -388,9 +411,13 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
           if(k==='close'){S.posted=true;noteCopy(S.copied)}else{S.msg='Spots: '+want+'.';S.bad=false}}catch(x){S.msg='Could not save that. Try again.';S.bad=true}S.busy=false;A.render();return}
       if(k==='unedit'){S.edit=null;S.f=nf();A.render();return}
       if(k==='when'){f.whenPick=true;f.wk=v==='date'||v==='season'||v==='game'?v:'unknown';if(f.wk!=='date')f.est='';A.render();return}
+      if(k==='line'){f.lineOn=!f.lineOn;if(f.lineOn&&!f.lineBase)f.lineBase=f.text||'';A.render();return}
+      if(k==='lnone'){f.lineOn=true;f.lineKind='none';f.linePts='';applyLine(f);A.render();return}
+      if(k==='lpost'){f.lineOn=true;f.lineKind='posted';applyLine(f);A.render();return}
+      if(k==='lside'){f.lineSide=+v===1?1:0;if(f.lineKind==='none'||f.lineKind==='custom')applyLine(f);A.render();return}
       if(k==='to'){var i=f.to.indexOf(v);if(i>=0)f.to.splice(i,1);else f.to.push(v)}
       else if(k==='all')f.to=A.others().map(function(o){return o.id});else if(k==='clear')f.to=[];
-      else if(k==='side'){f.side=v;var gg=game(f.gid),pp=gg&&pick(gg.g,{side:v,cov:'game'});if(pp)f.text=pp.txt}else if(k==='cov'){f.cov=v}else if(k==='amt'){f.amt=+v;f.amtTxt='';f.amtC=false}else if(k==='amtc'){f.amtC=true;f.amt=null}else if(k==='oddc'){f.oddC=true}else if(k==='fslotall'){f.sAll=true;f.slots=null}else if(k==='fslot-'||k==='fslot+'){var nT=f.to.length,cT=nT||A.others().length,cur=f.sAll?cT:f.slots?Math.min(f.slots,cT):(nT||1);f.sAll=false;cur+=k==='fslot+'?1:-1;f.slots=Math.max(1,Math.min(cT,cur))}else if(k==='odds'){f.odds=v.split('-').map(Number);f.oddC=false;f.oddTxt=''}
+      else if(k==='side'){f.side=v;var gg=game(f.gid),pp=gg&&pick(gg.g,{side:v,cov:'game'});if(pp)f.text=pp.txt}else if(k==='cov'){f.cov=v}else if(k==='amt'){f.amt=+v;f.amtTxt='';f.amtC=false}else if(k==='amtc'){f.amtC=true;f.amt=null}else if(k==='oddc'){f.oddC=true}else if(k==='fslotall'){f.sAll=true;f.slots=null}else if(k==='fslot-'||k==='fslot+'){var nT=f.to.length,cT=nT||A.others().length,cur=f.sAll?cT:f.slots?Math.min(f.slots,cT):(nT||1);f.sAll=false;cur+=k==='fslot+'?1:-1;f.slots=Math.max(1,Math.min(cT,cur))}else if(k==='odds'){f.odds=v.split('-').map(Number);f.oddC=false;f.oddTxt='';if(f.lineKind==='none'||f.lineKind==='custom')applyLine(f)}
       else if(k==='send'){var g=tipOf(f);if(!f.expPick)f.mode=(g&&Date.parse(g.start))?'start':'h';var p=pick(g&&g.g,f),amt=f.amtC?(+f.amtTxt>0?Math.round(+f.amtTxt):null):f.amt,ex=expAt(f,now,g?winStart({cov:f.cov,start:g.start},g):null);
         var err=!p?'Write the bet.':!amt?'Choose an amount.':!ex||ex<=now?'Choose when it expires (up to a year).':null;
         var hasGame=!!(g&&Date.parse(g.start)),wk=hasGame&&(!f.whenPick||f.wk==='game')?'game':(f.whenPick&&(f.wk==='date'||f.wk==='season'||f.wk==='unknown')?f.wk:'');
@@ -418,8 +445,8 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
           else{await A.placeBet(x,me);say(waText(x,'acc',me),'Accepted');S.posted=true;noteCopy(S.copied)}}
         catch(y){S.msg='Could not accept it. Try again.';S.bad=true}S.busy=false}
       A.render()}
-    function input(k,v){var f=S.f;if(k==='gid'){f.gid=v;f.side='';f.text=''}else if(k==='text'){f.text=v;f.rd=null;return}else if(k==='mode'){f.mode=v;f.expPick=true}else if(k==='amtTxt'){f.amtTxt=v;f.amt=null;return}else if(k==='oddTxt'){f.oddTxt=v;var mo=/^\s*(\d{1,3})\s*[-:\/]\s*(\d{1,3})\s*$/.exec(v);if(mo&&+mo[1]>0&&+mo[2]>0)f.odds=[+mo[1],+mo[2]];A.render();return}else f[k]=v;A.render()}
-    function prefill(gid,k,i){S.f=nf();S.f.gid=String(gid);if(k){S.f.side=k+':'+i;var gq=game(gid),pq=gq&&pick(gq.g,{side:S.f.side,cov:'game'});if(pq)S.f.text=pq.txt}else{var gb=game(gid);if(gb&&gb.g)S.f.text=SHARED_UI.qbBlankText(gb.g,{name:A.tname,date:A.dateET(gb.g)})};/* STEP10: the full written bet line (team vs team, spread, date), not the short chip text */S.msg='';var g=game(gid);}
+    function input(k,v){var f=S.f;if(k==='gid'){f.gid=v;f.side='';f.text=''}else if(k==='text'){f.text=v;f.rd=null;f.lineKind='';return}else if(k==='mode'){f.mode=v;f.expPick=true}else if(k==='amtTxt'){f.amtTxt=v;f.amt=null;return}else if(k==='linePts'){f.linePts=v;f.lineKind='custom';f.lineOn=true;applyLine(f);A.render();return}else if(k==='oddTxt'){f.oddTxt=v;var mo=/^\s*(\d{1,3})\s*[-:\/]\s*(\d{1,3})\s*$/.exec(v);if(mo&&+mo[1]>0&&+mo[2]>0)f.odds=[+mo[1],+mo[2]];if(f.lineKind==='none'||f.lineKind==='custom')applyLine(f);A.render();return}else f[k]=v;A.render()}
+    function prefill(gid,k,i){S.f=nf();S.f.gid=String(gid);if(k){S.f.side=k+':'+i;S.f.lineSideKey=k+':'+i;var gq=game(gid),pq=gq&&pick(gq.g,{side:S.f.side,cov:'game'});if(pq)S.f.text=pq.txt;if(k==='sp'&&pq&&gq&&gq.g){var team=String(pq.lab||'').replace(/\s+[+-].*$/,'').replace(/\s+pk$/i,'').trim();S.f.lineSide=A.tname(gq.g.home)===team?1:0}}else{var gb=game(gid);if(gb&&gb.g)S.f.text=SHARED_UI.qbBlankText(gb.g,{name:A.tname,date:A.dateET(gb.g)})};S.f.lineBase=S.f.text||'';/* STEP10: the full written bet line (team vs team, spread, date), not the short chip text */S.msg='';var g=game(gid);}
     /* Requests badge: open requests waiting for ME (invited, not declined, not mine, still live) on the Bets tab; refreshed by a light GET every 60 s */
     function count(){var me=A.me(),now=Date.now();if(!me)return 0;return S.list.filter(function(r){return live(r,now)&&r.by!==me&&r.to.indexOf(me)>=0&&(r.dec||[]).indexOf(me)<0&&tk(r).indexOf(me)<0}).length}
     /* STEP9-BADGES: Bets tab = requests waiting for me + bets waiting on my action (A.waiting); Request a bet segment = requests only */
@@ -455,6 +482,7 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
     /* inline drop-down under the game card (no modal): spread each side and over/under when posted, plus a plain Request a bet. Every choice opens Request a bet prefilled */
     var h='<div class="qbd" role="region" aria-label="Quick bet: '+t+'"><div class="qbd-h"><b>\u26A1 Quick bet</b><button type="button" class="qbd-x" aria-label="Close" '+o.close()+'>\u2715</button></div>';
     list.forEach(function(x){h+='<div class="qbs-r"><span class="qbs-l">'+e(x.t)+'</span><span class="qbs-s">'+x.s.map(function(s,i){return '<button type="button" class="qbs-o" aria-label="'+e(s.txt)+'" '+o.pick(x.k,i)+'>'+e(s.lab)+'</button>'}).join('')+'</span></div>'});
+    if(o.line)h+='<div class="qbs-r"><span class="qbs-l">Line</span><span class="qbs-s"><button type="button" class="qbs-o" '+o.line()+'>Change the line</button></span></div>';
     return h+'<button type="button" class="qbs-o qbd-req" '+o.blank()+'>\u{1F4E8} Request a bet</button></div>'};
   /* STEP7-UPSETS: Rules "upset rule" card + empty state (each site passes its own wording, already safe markup) */
   SHARED_UI.upsetHead=function(note,empty){var h='<div class="card"><b>\u{1F631} The upset rule</b><div class="note">'+note+'</div></div>';return empty==null?h:h+'<div class="card">'+empty+'</div>'};
