@@ -983,7 +983,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.74.0"></script>
+<script src="shared/ui.js?v=1.75.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -2525,17 +2525,8 @@ function s27SharePage(){try{s24Share()}catch(e){}}
 /*<S29B-GCOPY>*/ // per-game Copy: the game's text only (no link), same button as the per-bet Copy (.s27-copy -> 'Copied')
 const S29G={};
 function s29GameBtn(g){const id=String(g&&g.id||'');if(!s24IdOK(id))return '';S29G[id]=g;return `<button type="button" class="s27-copy" data-s29-gcopy="${esc(id)}" aria-label="Copy this game's details" onclick="s29CopyGame('${esc(id)}',this)">Copy</button>`}
-function s29GameText(g){const L=[],tn=s=>{const t=D.teams[s.id]||{};const rk=s.seed?'('+s.seed+') ':(s.rank||t.rank||t.ap)?'#'+(s.rank||t.rank||t.ap)+' ':'';const ln=g.line;const mk=ln?(String(ln.fav)===String(s.id)?' ⭐':String(ln.dog)===String(s.id)?' 🐶':''):'';return rk+(t.name||s.short||s.name||s.id)+mk};
-  const fin=g.status==='final',live=g.status==='live',sc=s=>(fin||live)&&s.score!=null?' '+s.score:'';
-  L.push(tn(g.away)+sc(g.away)+(g.neutral?' vs ':' @ ')+tn(g.home)+sc(g.home));
-  const day=/*<S29E-GDATE>*/etLabel(etKey(g))/*</S29E-GDATE> US game date (Eastern). The card clock stays the viewer's local time.*/;L.push((fin?'Final · ':live?'LIVE · ':'')+day+(isTBD(g)?' · time TBD':g.start?' · '+S25.localTime(new Date(g.start)):''));
-  if(g.round)L.push(String(g.round));else if(g.kind==='conf')L.push('Conf tournament');
-  const v=g.venue&&(g.venue.name||g.venue);if(v&&typeof v==='string')L.push(v+(g.neutral?' (neutral site)':''));else if(g.neutral)L.push('Neutral site');
-  const ln=g.line;if(ln){if(ln.fav_name&&ln.sp!=null)L.push('Spread: '+ln.fav_name+' -'+ln.sp);else if(ln.sp===0)L.push('Spread: Pick’em');
-    if(ln.ou!=null)L.push('Over/under: '+ln.ou)}
-  const ow=s=>(s.owners||[]).map(n=>(ownerEmoji(n)?ownerEmoji(n)+' ':'')+PN(n)).join(', ');const oa=ow(g.away),oh=ow(g.home);
-  if(oa)L.push(g.away.short+': '+oa);if(oh)L.push(g.home.short+': '+oh);
-  return L.join('\n')}
+function s29SideSpread(g,side){const ln=g&&g.line;if(!ln||ln.sp==null||!side)return '';const id=String(side.id||''),name=side.short||side.name||'';let sign=0;if(String(ln.fav)===id||(ln.fav_name&&ln.fav_name===name))sign=-1;else if(String(ln.dog)===id||(ln.dog_name&&ln.dog_name===name))sign=1;else return '';if(!(+ln.sp))return ' PK';const n=sign*Math.abs(+ln.sp);return ' '+(n>0?'+':'')+n}
+function s29GameText(g){if(!g||!g.away||!g.home)return '';const nm=s=>s.short||s.name||s.id;const bomb='\uD83D\uDCA3 '+nm(g.away)+s29SideSpread(g,g.away)+' v '+nm(g.home)+s29SideSpread(g,g.home)+' \uD83D\uDCA3';const day=etLabel(etKey(g));const upcoming=g.status!=='final'&&g.status!=='live'&&!!(g.start)&&Date.parse(g.start)>Date.now();const lines=[bomb];if(day)lines.push(day+' \u00b7');if(upcoming)lines.push('Exp: Tip');return lines.join('\n')}
 function s29CopyGame(id,btn){const g=S29G[id];if(!g)return;s27CopyText(s29GameText(g),()=>{if(!btn)return;btn.textContent='Copied';btn.classList.add('on','flash');clearTimeout(btn._t);btn._t=setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('on','flash')},700)})}
 /*</S29B-GCOPY>*/
 /*<S29B-SHARE>*/ // the Share tab: pick Whole site or one tab -> a view-only link (?view=1#tab), navigator.share with a copy fallback ('Copied')
@@ -5014,7 +5005,7 @@ function s29eOpenCopy(b){if(!b)return '';const who=(b27Opps(b).map(PN).join(', '
   const iso=(rd&&rd.d)||(SHARED_UI.whenKind(b)==='date'?b.est:'');let when='';if(iso&&/^\d{4}-\d{2}-\d{2}$/.test(iso))when=etLabel(iso);
   const k=SHARED_UI.whenKind(b),exp=k==='season'?'Season':k==='date'&&b.est?SHARED_UI.estLabel(b.est).replace(/,?\s+\d{4}$/,''):'Tip';
   const aa=+(b.odds&&b.odds.a||1),bb=+(b.odds&&b.odds.b||1),od=aa===1&&bb===1?'':' \u00b7 '+aa+'\u2013'+bb;
-  const tail=(when?when+' \u00b7 ':'')+'Exp: '+exp;if(b.legs&&b.legs.length>=2){const pod=aa===1&&bb===1?'':' \u00b7 '+aa+'\u2013'+bb;const first=b.legs.slice().sort((a,c)=>String(a.start||a.d||'').localeCompare(String(c.start||c.d||'')))[0];const pWhen=first&&first.d&&/^\d{4}-\d{2}-\d{2}$/.test(first.d)?etLabel(first.d):when;const pTail=(pWhen?pWhen+' \u00b7 ':'')+'Exp: '+exp;const pLegs=b.legs.map(L=>{if(L&&L.kind==='spread'&&L.t&&L.o&&L.l!=null){const n=+L.l;return L.t+' '+(n===0?'PK':(n>0?'+':'')+n)+' v '+L.o}return L&&L.t&&L.o?L.t+' v '+L.o:(L&&L.lab||'')});return ['\uD83D\uDCA3 $'+b.amt+' '+PN(b.backer)+' v '+who+pod+' \uD83D\uDCA3'].concat(pLegs).concat([pTail]).join('\n')}let stoop=/Stoopid bet:/i.test(b.text||'');try{if(!stoop&&typeof sbParse==='function')stoop=!!sbParse(b27Clean(b.text||''))}catch(e){}
+  const tail=(when?when+' \u00b7 ':'')+'Exp: '+exp;if(b.legs&&b.legs.length>=2){const pod=aa===1&&bb===1?'':' \u00b7 '+aa+'\u2013'+bb;const first=b.legs.slice().sort((a,c)=>String(a.start||a.d||'').localeCompare(String(c.start||c.d||'')))[0];const pWhen=first&&first.d&&/^\d{4}-\d{2}-\d{2}$/.test(first.d)?etLabel(first.d):when;const named=b27Opps(b).map(PN).filter(Boolean);const pWho=named.length===1?named[0]:named.length?named.join(', '):(b.slots===1||!b.slots?'1 Stoop':b.slots+' Stoops');const pLegs=b.legs.map(L=>{if(L&&L.kind==='spread'&&L.t&&L.o&&L.l!=null){const n=+L.l;return L.t+' '+(n===0?'PK':(n>0?'+':'')+n)+' v '+L.o}return L&&L.t&&L.o?L.t+' v '+L.o:(L&&L.lab||'')});const pLines=['\uD83D\uDCA3 $'+b.amt+' '+PN(b.backer)+' v '+pWho+pod+' \uD83D\uDCA3',b.legs.length+' Legs'+(pWhen?' '+pWhen+' \u00b7':'')].concat(pLegs);pLines.push('Exp: '+exp);return pLines.join('\n')}let stoop=/Stoopid bet:/i.test(b.text||'');try{if(!stoop&&typeof sbParse==='function')stoop=!!sbParse(b27Clean(b.text||''))}catch(e){}
   if(stoop){let n=0,bet=String(line2||'').replace(/Stoopid bet:\s*/gi,function(){n++;return n===1?'Stoopid bet: ':''});return ['\uD83E\uDD2ASTOOPID Request\uD83E\uDD2A','$'+b.amt+' '+PN(b.backer)+' v '+who+od,bet,tail].join('\n')}
   return ['\uD83D\uDCA3 $'+b.amt+' '+PN(b.backer)+' v '+who+od+' \uD83D\uDCA3',line2,tail].join('\n')}
 function s29eCopyText(b){if(!b)return '';if(b.status==='open'&&b.kind!=='pool')return s29eOpenCopy(b);const day=b27Day(Date.parse(b.created_at)),posted='Posted '+day+(b.postedBy?' by '+PN(b.postedBy):'')+' · STOOPIDS',L=[];
