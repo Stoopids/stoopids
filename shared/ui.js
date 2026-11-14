@@ -576,9 +576,9 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
     if(k==='season'){var id=o.seasonId||'';h+='<div class="note">'+(id?e('End of '+id+'. No calendar end date is set, so this only groups the bet.'):e('End of season. No season id is on file, so this only groups the bet.'))+'</div>'}
     if(k==='game')h+='<div class="note">'+e(o.gameNote||'Settles when the game ends.')+'</div>';
     return h+'</div>'};
-  SHARED_UI.entryHead=function(k){return k==='rq'
+  SHARED_UI.entryHead=function(k,extra){return k==='rq'
     ?'<div class="entry-hd entry-hd-rq"><h2><span class="entry-ico" aria-hidden="true">💣</span>Request a bet</h2><p class="entry-sub-d">Nothing agreed yet? Find a stoop who wants to feel something.</p><p class="entry-sub-m">Nothing agreed yet—find a Stoop who wants to feel something.</p></div>'
-    :'<div class="entry-hd entry-hd-wiu"><h2><span class="entry-ico" aria-hidden="true">💥</span>Write it Up</h2><p class="entry-sub-d">Bet already discussed.</p><p class="entry-sub-m">Already agreed on a bet? Record it here and add it to All bets.</p></div>'};
+    :'<div class="entry-hd entry-hd-wiu"><div class="entry-hd-row"><h2><span class="entry-ico" aria-hidden="true">💥</span>Write it Up</h2>'+(extra||'')+'</div><p class="entry-sub-d">Bet already discussed.</p><p class="entry-sub-m">Already agreed on a bet? Record it here and add it to All bets.</p></div>'};
   SHARED_UI.weeklySection=function(items,o){var e=o.e;var L=(items||[]).filter(function(x){return x&&x.title}).slice().sort(function(a,b){return String(b.date||'').localeCompare(String(a.date||''))});
     var list=L.length?'<div class="rcl">'+L.map(function(x){return '<article class="card rci"><small>'+e(x.kind==='special'?'Special':'Weekly')+(x.date?' · '+e(o.fmtDate(String(x.date).slice(0,10))):'')+'</small><h3>'+e(x.title)+'</h3><p>'+e(x.body||'')+'</p></article>'}).join('')+'</div>':'<div class="card note rcnone"'+(o.emptyAttr||'')+'>No weekly write-ups yet. The first one comes after opening week.</div>';
     return '<section class="rcw"'+(o.secAttr||'')+'><h2>📰 Weekly write-ups</h2>'+list+'</section>'};

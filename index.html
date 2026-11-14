@@ -983,7 +983,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.78.0"></script>
+<script src="shared/ui.js?v=1.79.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -3523,7 +3523,8 @@ function b27PoolValid(x,names){
 /* ---- the form (same components / classes as the live New bet form) ---- */
 function b27Kind(k){U.kind=k;U.msg='';U.confirm=false;render()}
 /*<SYNC7-BF>*/// bet-type toggle (left) + Select all / Clear (right) on one line; sel = the select buttons of the open form/*</SYNC7-BF>*/
-const b27KindTabs=(sel='')=>`<div class="b27-kindrow">${U.editOf?'':`<div class="tabs s29-kind" role="group" aria-label="Bet type"><button type="button" class="${U.kind==='bet'?'on':''}" onclick="b27Kind('bet')"><span class="kf">${esc(POOL_TXT.toggleBet)}</span><span class="ks">1 vs 1</span></button><button type="button" class="${U.kind==='pool'?'on':''}" onclick="b27Kind('pool')"><span class="kf">${esc(POOL_TXT.toggle)}</span><span class="ks">Pool</span></button></div>`}${sel}</div>`;
+const b27KindOnly=()=>U.editOf?'':`<div class="tabs s29-kind wiu-kind" role="group" aria-label="Bet type"><button type="button" class="${U.kind==='bet'?'on':''}" onclick="b27Kind('bet')"><span class="kf">${esc(POOL_TXT.toggleBet)}</span><span class="ks">1 vs 1</span></button><button type="button" class="${U.kind==='pool'?'on':''}" onclick="b27Kind('pool')"><span class="kf">${esc(POOL_TXT.toggle)}</span><span class="ks">Pool</span></button></div>`;
+const b27KindTabs=(sel='')=>sel?`<div class="b27-kindrow">${sel}</div>`:'';
 const b27UtilTile=(all,clear)=>`<div class="b27-util" role="group" aria-label="Select people"><button type="button" class="s27-selb" ${all}><span class="f">Select all</span><span class="s">All</span></button><button type="button" class="s27-selb" ${clear}>Clear</button></div>`;
 const b27SelAbove=(n,html)=>n%4?'' :html;
 const b27PoolPeople=()=>b27OwnerNames();
@@ -3540,7 +3541,7 @@ function b27PSync(){try{const m=document.getElementById('main');if(!m)return;
   m.querySelectorAll('[data-b27-pp]').forEach(b=>b.setAttribute('aria-pressed',String(U.pp.includes(b27PoolPeople()[+b.getAttribute('data-b27-pp')]))));
   const sc=document.getElementById('b27SelCnt');if(sc)sc.textContent=(U.pp.length||0)+' selected';
   /*<S26F-POOL>*/const pb=document.getElementById('b27Place');if(pb){pb.disabled=!!U.busy;pb.removeAttribute('aria-disabled')}s26fPaint()/*</S26F-POOL>*/}catch(e){}}
-function b27PoolShell(){return `<div class="card b27-form">${typeof SHARED_UI!=='undefined'&&SHARED_UI.entryHead?SHARED_UI.entryHead('wiu'):''}${b27KindTabs('')}</div>`}
+function b27PoolShell(){return `<div class="card b27-form">${typeof SHARED_UI!=='undefined'&&SHARED_UI.entryHead?SHARED_UI.entryHead('wiu',b27KindOnly()):''}</div>`}
 function b27PoolPostedDay(ms){const d=new Date(ms);if(!ms||isNaN(d))return '';const mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];return mo+' '+d.getDate()}
 function b27PoolSettleWord(b){const k=window.SHARED_UI?SHARED_UI.whenKind(b):'unknown';if(k==='game')return 'End Of Game';if(k==='season')return 'End Of Season';if(k==='date')return SHARED_UI.estOk(b.est)?SHARED_UI.estLabel(b.est):'Set A Date';return 'Not Sure Yet'}
 function b27PoolClip(b){if(!b)return '';const money=n=>'$'+b27Num(n),st=b.status==='void'?'Cancelled':b.back?'Settled':'Unsettled';
@@ -3548,7 +3549,7 @@ function b27PoolClip(b){if(!b)return '';const money=n=>'$'+b27Num(n),st=b.status
   const when=b27PoolPostedDay(Date.parse(b.postedAt||b.created_at));
   return ['Pool #'+(b.n||'')+' · '+st,b27Clean(b.text),'Buy-in '+money(b.amt)+' · '+(b.parts||[]).length+' managers · Total '+money(b.amt*(b.parts||[]).length),pay,'Members: '+(b.parts||[]).map(PN).join(', '),'Posted '+(when||'')+' by '+PN(b.postedBy||b.backer)+' · '+b27PoolSettleWord(b)].join('\n')}
 function b27PoolForm(me){b27PoolSeed();const people=b27PoolPeople();/*<S26F-POOL>*/setTimeout(()=>{try{s26fPaint()}catch(e){}},0);/*</S26F-POOL>*/
-  return `<div class="card b27-form">${typeof SHARED_UI!=='undefined'&&SHARED_UI.entryHead?SHARED_UI.entryHead('wiu'):''}${b27KindTabs('')}
+  return `<div class="card b27-form">${typeof SHARED_UI!=='undefined'&&SHARED_UI.entryHead?SHARED_UI.entryHead('wiu',b27KindOnly()):''}
    <div class="s26st"><div class="b27-lb"><span class="s26n">1</span><button type="button" class="s27-tipk" data-tip="pterms" aria-expanded="false" onclick="s27Tip(this)">${esc(PT('s1'))}</button><label for="b27Text" class="sr">${esc(PT('s1'))}</label></div><textarea id="b27Text" class="sb-in b27-in" rows="2" maxlength="${PULK.maxText}" placeholder="${esc(PT('termsPh'))}" aria-describedby="s26eTerms" oninput="U.text=this.value;b27PSync()">${esc(U.text)}</textarea><div id="s26eTerms" class="s26err" role="alert"></div></div>
    <div class="s26st"><div class="b27-lb" id="s26lPeople"><span class="s26n">2</span><button type="button" class="s27-tipk" data-tip="ppl" aria-expanded="false" onclick="s27Tip(this)">${esc(PT('s2'))}</button></div><div class="b27-opps pool-pick" role="group" aria-labelledby="s26lPeople">${people.map((n,i)=>{const o=(D.owners.find(x=>x.name===n)||{});const on=U.pp.includes(n);return `<button type="button" class="b27-chip op" data-b27-pp="${i}" data-b27-name="${esc(n)}" aria-label="${esc(TN(n))}" aria-pressed="${on}" onclick="b27PoolPP(${i})"><span class="ck" aria-hidden="true">✓</span><span class="em" aria-hidden="true">${esc(o.emoji||'')}</span><span class="nm" aria-hidden="true"><span class="f">${esc(TN(n))}</span><span class="sh">${esc(b27ShortT(n))}</span><span class="xs">${esc(b27TinyT(n))}</span></span></button>`}).join('')}${b27UtilTile('onclick="b27PoolAll()"','onclick="b27PoolClear()"')}</div><div class="s26sel" id="b27SelCnt" aria-live="polite">${(U.pp||[]).length} selected</div>
    <div id="s26ePeople" class="s26err" role="alert"></div></div>
@@ -3843,7 +3844,7 @@ function vB27(){
   }else{
     const oc=U.odds?U.odds.join('-'):'';
     /*<S29E-PASTE>*/if(PASTE_BET&&U.kind!=='pool')h+=s29ePasteBox();/*</S29E-PASTE>*/
-    h+=`<div class="card b27-form">${SHARED_UI.entryHead('wiu')}${/*<QUICK-BET>*/qbHint()/*</QUICK-BET>*/}${/*<S24-EDIT>*/s24EditHint()/*</S24-EDIT>*/}${/*<POOL>*/b27KindTabs(b27SelAbove(others.length,`<div class="s27-sel"><button type="button" class="s27-selb" data-b27-all="1" onclick="b27OppAll()"><span class="f">Select all</span><span class="s">All</span></button><button type="button" class="s27-selb" data-b27-clear="1" onclick="b27OppClear()">Clear</button></div>`))/*</POOL>*/}
+    h+=`<div class="card b27-form">${SHARED_UI.entryHead('wiu',b27KindOnly())}${/*<QUICK-BET>*/qbHint()/*</QUICK-BET>*/}${/*<S24-EDIT>*/s24EditHint()/*</S24-EDIT>*/}${/*<POOL>*/b27KindTabs(b27SelAbove(others.length,`<div class="s27-sel"><button type="button" class="s27-selb" data-b27-all="1" onclick="b27OppAll()"><span class="f">Select all</span><span class="s">All</span></button><button type="button" class="s27-selb" data-b27-clear="1" onclick="b27OppClear()">Clear</button></div>`))/*</POOL>*/}
      ${/*<MULTI-BET>*/''/*opponents: multi-select*/}<div class="b27-q"><button type="button" class="s27-tipk" data-tip="who" aria-expanded="false" onfocus="s27TipShow(this)" onclick="s27WhenClick(this)">1. Who are you betting against?</button></div><div class="b27-opps" role="group" aria-label="Opponents" style="--n:${others.length}">${others.map((n,i)=>{const o=(D.owners.find(x=>x.name===n)||{});const on=U.opps.includes(n);return `<button type="button" class="b27-chip op" data-b27-opp="${i}" data-b27-name="${esc(n)}" aria-label="${esc(TN(n))}" aria-pressed="${on}" onclick="b27Opp(${i})"><span class="ck" aria-hidden="true">✓</span><span class="em" aria-hidden="true">${esc(o.emoji||'')}</span><span class="nm" aria-hidden="true"><span class="f">${esc(TN(n))}</span><span class="sh">${esc(b27ShortT(n))}</span><span class="xs">${esc(b27TinyT(n))}</span></span></button>`}).join('')}${others.length%4?b27UtilTile('data-b27-all="1" onclick="b27OppAll()"','data-b27-clear="1" onclick="b27OppClear()"'):''}</div><span class="sr" id="b27SelCnt" aria-live="polite">${esc(b27SelTxt())}</span>
      ${''/*</MULTI-BET>*/}<div class="b27-q"><button type="button" class="s27-tipk" data-tip="text" aria-expanded="false" onfocus="s27TipShow(this)" onclick="s27WhenClick(this)">2. What’s the bet?</button><label for="b27Text" class="sr">What’s the bet?</label></div><input id="b27Text" class="sb-in b27-in" maxlength="${PULK.maxText}" autocomplete="off" enterkeyhint="go" placeholder="e.g. Kansas -4 beats Duke" value="${esc(U.text)}" oninput="b27Text(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();b27Place()}">${/*<S25>*/'<div id="s25Rd">'+s25RdHtml()+'</div>'/*</S25>*/}
      <div class="b27-ao"><div class="b27-ao-c"><div class="b27-q"><button type="button" class="s27-tipk" data-tip="amt" aria-expanded="false" onfocus="s27TipShow(this)" onclick="s27WhenClick(this)">3. Amount</button></div><div class="b27-amts" role="group" aria-label="Amount">${[5,10,20,25].map(a=>`<button type="button" class="b27-amt" data-b27-amt="${a}" aria-pressed="${!U.amtCustom&&a===U.amt}" onclick="b27Amt(${a})">${a}</button>`).join('')}<button type="button" class="b27-amt cu" data-b27-amtcustom="1" aria-pressed="${U.amtCustom}" onclick="b27AmtCustomOpen()">Custom</button></div>
@@ -5033,6 +5034,17 @@ html body #rqForm .b27-when input[type=date]{display:block;width:auto!important;
  html body #main .entry-wiu .b27-chip[aria-pressed=true],html body #main .entry-wiu .b27-amt[aria-pressed=true]{background:#FFD400!important;color:#1a1400!important;border-color:#FFD400!important}
  html body #main .entry-rq .btn.b27-big:not(.sec),html body #main .entry-rq .rq-send:not(.sec){margin-top:auto;background:#1e3a8a!important;color:#fff!important;border:0!important;border-radius:10px;min-height:48px}
  html body #main .entry-wiu #b27Place.btn.b27-big{margin-top:auto;background:#FFD400!important;color:#1a1400!important;border:0!important;border-radius:10px;min-height:48px}
+}
+html body .entry-hd-wiu .entry-hd-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 10px;width:100%}
+html body .entry-hd-wiu .wiu-kind{display:inline-flex!important;flex:0 1 auto;flex-wrap:wrap;justify-content:flex-end;align-items:center;width:auto!important;max-width:100%;gap:4px!important;margin:0!important;padding:0!important;background:transparent!important;border:0!important;grid-template-columns:none!important}
+html body .entry-hd-wiu .wiu-kind>button{flex:0 0 auto!important;width:auto!important;height:28px!important;min-height:28px!important;max-height:28px!important;padding:0 10px!important;font-size:12px!important;font-weight:800!important;line-height:26px!important;border-radius:999px!important;border:1px solid rgba(26,20,0,.35)!important;background:transparent!important;color:#1a1400!important;box-shadow:none!important}
+html body .entry-hd-wiu .wiu-kind>button.on{background:#1a1400!important;color:#FFD400!important;border-color:#1a1400!important}
+html body .entry-hd-wiu .wiu-kind .ks{display:none}
+@media (max-width:999px){
+ html body .entry-hd.entry-hd-wiu{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:4px!important;padding:8px 10px!important}
+ html body .entry-hd-wiu h2{font-size:15px!important;line-height:1.15!important;text-transform:none!important;letter-spacing:0!important;white-space:nowrap}
+ html body .entry-hd-wiu .entry-sub-d{display:block!important;font-size:12px!important;line-height:1.2!important;white-space:normal!important}
+ html body .entry-hd-wiu .entry-sub-m{display:none!important}
 }
 </style><!--</S29E-PASTE>-->
 <!--<S29E-COPY>--><script>
