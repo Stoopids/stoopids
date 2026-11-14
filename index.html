@@ -983,7 +983,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.77.0"></script>
+<script src="shared/ui.js?v=1.80.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -2525,8 +2525,14 @@ function s27SharePage(){try{s24Share()}catch(e){}}
 /*<S29B-GCOPY>*/ // per-game Copy: the game's text only (no link), same button as the per-bet Copy (.s27-copy -> 'Copied')
 const S29G={};
 function s29GameBtn(g){const id=String(g&&g.id||'');if(!s24IdOK(id))return '';S29G[id]=g;return `<button type="button" class="s27-copy" data-s29-gcopy="${esc(id)}" aria-label="Copy this game's details" onclick="s29CopyGame('${esc(id)}',this)">Copy</button>`}
-function s29SideSpread(g,side){const ln=g&&g.line;if(!ln||ln.sp==null||!side)return '';const id=String(side.id||''),name=side.short||side.name||'';let sign=0;if(String(ln.fav)===id||(ln.fav_name&&ln.fav_name===name))sign=-1;else if(String(ln.dog)===id||(ln.dog_name&&ln.dog_name===name))sign=1;else return '';if(!(+ln.sp))return ' PK';const n=sign*Math.abs(+ln.sp);return ' '+(n>0?'+':'')+n}
-function s29GameText(g){if(!g||!g.away||!g.home)return '';const nm=s=>s.short||s.name||s.id;const bomb='\uD83D\uDCA3 '+nm(g.away)+s29SideSpread(g,g.away)+' v '+nm(g.home)+s29SideSpread(g,g.home)+' \uD83D\uDCA3';const day=etLabel(etKey(g));const upcoming=g.status!=='final'&&g.status!=='live'&&!!(g.start)&&Date.parse(g.start)>Date.now();const lines=[bomb];if(day)lines.push(day+' \u00b7');if(upcoming)lines.push('Exp: Tip');return lines.join('\n')}
+function s29Nm(s){return s&&(s.short||s.name||s.id)||''}
+function s29Mgr(s){const names=(s&&s.owners||[]).map(n=>{try{return PN(n)}catch(e){return n}}).filter(Boolean);return names.length?' ('+names.join(', ')+')':''}
+function s29HasScore(s){return s&&s.score!=null&&s.score!==''&&isFinite(+s.score)}
+function s29Pair(g,scored){const a=s29Nm(g.away)+s29Mgr(g.away),h=s29Nm(g.home)+s29Mgr(g.home);if(scored&&s29HasScore(g.away)&&s29HasScore(g.home))return a+' '+g.away.score+' v '+h+' '+g.home.score;return a+' v '+h}
+function s29LineRow(g){const ln=g&&g.line;if(!ln)return '';const bits=[];if(ln.sp!=null&&isFinite(+ln.sp)&&+ln.sp>0&&ln.fav_name)bits.push(ln.fav_name+' -'+ln.sp);else if(ln.sp!=null&&isFinite(+ln.sp)&&!(+ln.sp))bits.push('Pick\'em');if(ln.ou!=null&&ln.ou!=='')bits.push('O/U '+ln.ou);return bits.length?'Line: '+bits.join(' \u00b7 '):''}
+function s29EtWhen(g){const day=etLabel(etKey(g));if(isTBD(g))return day||'';let tm='';try{const d=new Date(g.start);if(!isNaN(d))tm=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',hour:'numeric',minute:'2-digit'}).format(d).replace(/\u202f/g,' ')+' ET'}catch(e){}if(day&&tm)return day+' \u00b7 '+tm;return day||tm}
+function s29LiveBit(g){const d=String(g&&g._lv&&g._lv.detail||'').replace(/\s+/g,' ').trim();if(!d)return 'Live';if(/^half(\s*time)?$/i.test(d)||/halftime/i.test(d))return 'Halftime';return d}
+function s29GameText(g){if(!g||!g.away||!g.home)return '';const line=s29LineRow(g),day=etLabel(etKey(g));if(g.status==='live'){const lines=[s29Pair(g,true)+' \u00b7 '+s29LiveBit(g)];if(line)lines.push(line);return lines.join('\n')}if(g.status==='final'){const lines=[s29Pair(g,true)+' \u00b7 '+(gWentOt(g)?'Final/OT':'Final')];if(day)lines.push(day);if(line)lines.push(line);return lines.join('\n')}const lines=[s29Pair(g,false)],when=s29EtWhen(g);if(when)lines.push(when);if(line)lines.push(line);return lines.join('\n')}
 function s29CopyGame(id,btn){const g=S29G[id];if(!g)return;s27CopyText(s29GameText(g),()=>{if(!btn)return;btn.textContent='Copied';btn.classList.add('on','flash');clearTimeout(btn._t);btn._t=setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('on','flash')},700)})}
 /*</S29B-GCOPY>*/
 /*<S29B-SHARE>*/ // the Share tab: pick Whole site or one tab -> a view-only link (?view=1#tab), navigator.share with a copy fallback ('Copied')
@@ -3303,7 +3309,7 @@ function b27Apply(list,fromPoll){
   if(tab==='bets27')b27Seen();
   const fresh=added.filter(b=>!U.mine.has(b.id)&&b.status==='open');
   if(fresh.length&&profAlert('newBets')&&typeof nbShow==='function'){nbShow(fresh.map(b=>({n:b.n,_msg:/*<POOL>*/b.kind==='pool'?PT('toast',{who:PN(b.backer),names:b27Opps(b).map(PN).join(', ')}):/*</POOL>*/PN(b.backer)+' just bet '+b27Num(b.amt)+(b27IsBundle(b)?' each':'')+(b27OddsFace(b.odds.a,b.odds.b)?' '+b27OddsFace(b.odds.a,b.odds.b):'')+' with '+b27Opps(b).map(PN).join(', ')})))}
-  if(first||added.length||changed||fromPoll==='force'){const ae=document.activeElement;if(tab==='bets27'){if(!(ae&&ae.closest&&ae.closest('#rqForm')))render()}else if(tab==='profile')render();else if(b27Badge())setTimeout(render,0)}
+  if(first||added.length||changed||fromPoll==='force'){const ae=document.activeElement;if(tab==='bets27'){if(!(ae&&ae.closest&&(ae.closest('#rqForm')||ae.closest('.entry-wiu'))))render()}else if(tab==='profile')render();else if(b27Badge())setTimeout(render,0)}
 }
 function b27Seen(){if(U.state==='ok'&&U.maxN)lsSet(PULK.seenKey,String(Math.max(U.maxN,parseInt(lsGet(PULK.seenKey),10)||0)))}
 function b27Badge(){if(tab==='bets27'||U.state!=='ok')return '';const s=parseInt(lsGet(PULK.seenKey),10);return isFinite(s)&&U.maxN>s?'<b class="nb" aria-hidden="true">new</b>':''}
@@ -3322,6 +3328,7 @@ function b27FormOK(){
   if(U.opps.includes(me))return 'You can’t bet against yourself.';
   if(new Set(U.opps).size!==U.opps.length)return 'Choose who you are betting against.';/*</MULTI-BET>*/
 
+  if(U.kind!=='pool'&&U.parlay&&(!(U.legs&&U.legs.length>=2)||U.legs.length>5))return U.legs&&U.legs.length>5?'Keep it to 5 legs.':'Add at least 2 legs.';
   if(!b27Clean(U.text))return 'Say what the bet is about.';
   if(!Number.isInteger(U.amt)||U.amt<PULK.minAmt||U.amt>PULK.maxAmt)return U.amtCustom?b27ParseAmt(U.amtTxt).err||'Pick an amount.':'Tap an amount or type your own (minimum '+PULK.minAmt+').';
   if(!(U.odds&&U.odds[0]>=1&&U.odds[1]>=1))return 'Pick the odds.';
@@ -3333,8 +3340,8 @@ function b27FormHasGame(){try{if(!window.SHARED_UI||!SHARED_UI.tipGame)return fa
 /*<MULTI-BET>*//* ONE bet record however many opponents are ticked (<BUNDLE>): with 2+ it carries `opponents:[...]` (other = the first one); with 1 it is the plain single-opponent record, exactly as before. The id is kept across a failed save (per selection) so a retry never double-posts. */
 function b27Season(){const s=D&&D.meta&&D.meta.season;return typeof s==='string'&&/^[0-9]{4}-[0-9]{2}$/.test(s)?s:''}
 function b27When(k){U.whenPick=true;U.wk=k==='date'||k==='season'||k==='game'?k:'unknown';if(U.wk!=='date')U.est='';render()}
-function b27BetsFromForm(){const k=U.opps.join('|'),has=b27FormHasGame(),kind=has&&(!U.whenPick||U.wk==='game')?'game':(U.whenPick&&(U.wk==='date'||U.wk==='season'||U.wk==='unknown')?U.wk:(has?'game':'unknown')),w=SHARED_UI.whenPack(kind,U.est,b27Season())||SHARED_UI.whenPack('unknown');
-  return [Object.assign({id:U.fids[k]||(U.fids[k]=b27Rid()),backer:U.backer||b27Who(),other:U.opps[0]/*<S29E-POSTED>*/,postedBy:b27Who(),postedAt:new Date().toISOString()/*</S29E-POSTED>*/},U.opps.length>1?{opponents:U.opps.slice()}:{},{amt:U.amt,odds:{a:U.odds[0],b:U.odds[1]},text:b27Clean(U.text),status:'open',wk:w.wk,est:w.est,sid:w.sid}/*<S25>*/,{rd:s25FormRd()}/*</S25>*/)]}
+function b27BetsFromForm(){const k=U.opps.join('|'),has=b27FormHasGame(),kind=has&&(!U.whenPick||U.wk==='game')?'game':(U.whenPick&&(U.wk==='date'||U.wk==='season'||U.wk==='unknown')?U.wk:(has?'game':'unknown')),w=SHARED_UI.whenPack(kind,U.est,b27Season())||SHARED_UI.whenPack('unknown'),legs=U.parlay?b27Legs({legs:U.legs||[]}):null;
+  return [Object.assign({id:U.fids[k]||(U.fids[k]=b27Rid()),backer:U.backer||b27Who(),other:U.opps[0]/*<S29E-POSTED>*/,postedBy:b27Who(),postedAt:new Date().toISOString()/*</S29E-POSTED>*/},U.opps.length>1?{opponents:U.opps.slice()}:{},{amt:U.amt,odds:{a:U.odds[0],b:U.odds[1]},text:b27Clean(U.text),status:'open',wk:w.wk,est:w.est,sid:w.sid},legs?{legs:legs}/*<S25>*/:{rd:s25FormRd()}/*</S25>*/)]}
 const b27Others=()=>b27OwnerNames().filter(n=>n!==b27Who());
 function b27Opp(i){const n=b27Others()[i];if(!n)return;const k=U.opps.indexOf(n);if(k>=0)U.opps.splice(k,1);else{U.opps.push(n);const o=b27Others();U.opps.sort((x,y)=>o.indexOf(x)-o.indexOf(y))}b27Sync()}
 function b27OppAll(){U.opps=b27Others().slice();b27Sync()}
@@ -3346,7 +3353,13 @@ function b27Odds(a,b){U.custom=false;U.oddsErr='';U.odds=[a,b];b27Sync()}
 function b27CustomOpen(){U.custom=true;b27CustomApply(U.customTxt,true);b27Sync();const i=document.getElementById('b27Co');if(i)i.focus({preventScroll:true})}
 function b27CustomApply(t,quiet){U.customTxt=t;const r=b27ParseOdds(t);if(r.ok){U.odds=[r.a,r.b];U.oddsErr=''}else{U.odds=null;U.oddsErr=quiet&&!t?'':r.err}}
 function b27Text(t){U.text=t;b27Sync()}
-function b27ClipText(b){if(!b||!RQ||!RQ.waText)return '';return RQ.waText({by:b.backer,to:b27Opps(b),amt:b.amt,odds:[b.odds.a,b.odds.b],txt:b.text||'',lab:b.text||''},'bet')}
+function b27ParlaySync(){if(!U.parlay||!Array.isArray(U.odds))return;const chips=[[1,1],[2,1],[3,1],[4,1]],on=chips.some(o=>o[0]===+U.odds[0]&&o[1]===+U.odds[1]);U.custom=!on;U.customTxt=on?'':(U.oddTxt||U.odds[0]+'-'+U.odds[1]);if(U.gid)U.gid=String(U.gid)}
+function b27ParlayAct(k,v){if(!RQ||typeof RQ.parlayAct!=='function')return;RQ.parlayAct(U,k,v);b27ParlaySync();render()}
+let wiuGo=0;
+document.addEventListener('pointerdown',function(ev){const t=ev.target&&ev.target.closest&&ev.target.closest('.entry-wiu [data-wiu]');if(!t||ev.button>0)return;wiuGo=Date.now();if(typeof render==='function'){render.rqHold=Date.now()+900;render.rqSelf=1}try{b27ParlayAct(t.getAttribute('data-wiu'),t.getAttribute('data-v'))}finally{if(typeof render==='function')render.rqSelf=0}},true);
+document.addEventListener('click',function(ev){const t=ev.target&&ev.target.closest&&ev.target.closest('.entry-wiu [data-wiu]');if(!t)return;ev.preventDefault();if(Date.now()-wiuGo<400)return;if(typeof render==='function')render.rqSelf=1;try{b27ParlayAct(t.getAttribute('data-wiu'),t.getAttribute('data-v'))}finally{if(typeof render==='function')render.rqSelf=0}},true);
+document.addEventListener('change',function(ev){const t=ev.target;if(!(t&&t.dataset&&t.dataset.wiuIn==='pyGid'))return;if(typeof render==='function'){render.rqHold=Date.now()+900;render.rqSelf=1}try{b27ParlayAct('pyGid',t.value)}finally{if(typeof render==='function')render.rqSelf=0}});
+function b27ClipText(b){if(b&&b.legs&&b.legs.length>=2&&typeof s29eOpenCopy==='function')return s29eOpenCopy(b);if(!b||!RQ||!RQ.waText)return '';return RQ.waText({by:b.backer,to:b27Opps(b),amt:b.amt,odds:[b.odds.a,b.odds.b],txt:b.text||'',lab:b.text||'',legs:b.legs||null},'bet')}
 function b27CopyNow(t){return new Promise(resolve=>{const fin=ok=>resolve(!!ok);const fb=()=>{let ok=false;try{const ta=document.createElement('textarea');ta.value=t;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();ok=!!(document.execCommand&&document.execCommand('copy'));ta.remove()}catch(e){}fin(ok)};try{if(navigator.clipboard&&navigator.clipboard.writeText&&window.isSecureContext){const p=navigator.clipboard.writeText(t);if(p&&p.then){p.then(()=>fin(true),fb);return}} }catch(e){}fb()})}
 async function b27ClipRetry(){if(!U.clip)return;const ok=await b27CopyNow(U.clip);if(ok){U.msg=String(U.msg||'').replace(/ Could not copy\.$/,'').replace(/ Could not copy it\. Copy the message below\.$/,'').replace(/ Message copied\. Paste it in WhatsApp\.$/,'');U.clip=null;U.msgBad=false;betCopied()}else U.msgBad=true;render()}
 function b27Place(){/*<POOL>*/if(U.kind==='pool')return b27PoolPlace();/*</POOL>*/const e=b27FormOK();if(e){b27Err(e);render();return}U.msg='';U.clip=null;U.confirm=true;render()}
@@ -3523,7 +3536,8 @@ function b27PoolValid(x,names){
 /* ---- the form (same components / classes as the live New bet form) ---- */
 function b27Kind(k){U.kind=k;U.msg='';U.confirm=false;render()}
 /*<SYNC7-BF>*/// bet-type toggle (left) + Select all / Clear (right) on one line; sel = the select buttons of the open form/*</SYNC7-BF>*/
-const b27KindTabs=(sel='')=>`<div class="b27-kindrow">${U.editOf?'':`<div class="tabs s29-kind" role="group" aria-label="Bet type"><button type="button" class="${U.kind==='bet'?'on':''}" onclick="b27Kind('bet')"><span class="kf">${esc(POOL_TXT.toggleBet)}</span><span class="ks">1 vs 1</span></button><button type="button" class="${U.kind==='pool'?'on':''}" onclick="b27Kind('pool')"><span class="kf">${esc(POOL_TXT.toggle)}</span><span class="ks">Pool</span></button></div>`}${sel}</div>`;
+const b27KindOnly=()=>U.editOf?'':`<div class="tabs s29-kind wiu-kind" role="group" aria-label="Bet type"><button type="button" class="${U.kind==='bet'?'on':''}" onclick="b27Kind('bet')"><span class="kf">${esc(POOL_TXT.toggleBet)}</span><span class="ks">1 vs 1</span></button><button type="button" class="${U.kind==='pool'?'on':''}" onclick="b27Kind('pool')"><span class="kf">${esc(POOL_TXT.toggle)}</span><span class="ks">Pool</span></button></div>`;
+const b27KindTabs=(sel='')=>sel?`<div class="b27-kindrow">${sel}</div>`:'';
 const b27UtilTile=(all,clear)=>`<div class="b27-util" role="group" aria-label="Select people"><button type="button" class="s27-selb" ${all}><span class="f">Select all</span><span class="s">All</span></button><button type="button" class="s27-selb" ${clear}>Clear</button></div>`;
 const b27SelAbove=(n,html)=>n%4?'' :html;
 const b27PoolPeople=()=>b27OwnerNames();
@@ -3540,7 +3554,7 @@ function b27PSync(){try{const m=document.getElementById('main');if(!m)return;
   m.querySelectorAll('[data-b27-pp]').forEach(b=>b.setAttribute('aria-pressed',String(U.pp.includes(b27PoolPeople()[+b.getAttribute('data-b27-pp')]))));
   const sc=document.getElementById('b27SelCnt');if(sc)sc.textContent=(U.pp.length||0)+' selected';
   /*<S26F-POOL>*/const pb=document.getElementById('b27Place');if(pb){pb.disabled=!!U.busy;pb.removeAttribute('aria-disabled')}s26fPaint()/*</S26F-POOL>*/}catch(e){}}
-function b27PoolShell(){return `<div class="card b27-form">${typeof SHARED_UI!=='undefined'&&SHARED_UI.entryHead?SHARED_UI.entryHead('wiu'):''}${b27KindTabs('')}</div>`}
+function b27PoolShell(){return `<div class="card b27-form">${typeof SHARED_UI!=='undefined'&&SHARED_UI.entryHead?SHARED_UI.entryHead('wiu',b27KindOnly()):''}</div>`}
 function b27PoolPostedDay(ms){const d=new Date(ms);if(!ms||isNaN(d))return '';const mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];return mo+' '+d.getDate()}
 function b27PoolSettleWord(b){const k=window.SHARED_UI?SHARED_UI.whenKind(b):'unknown';if(k==='game')return 'End Of Game';if(k==='season')return 'End Of Season';if(k==='date')return SHARED_UI.estOk(b.est)?SHARED_UI.estLabel(b.est):'Set A Date';return 'Not Sure Yet'}
 function b27PoolClip(b){if(!b)return '';const money=n=>'$'+b27Num(n),st=b.status==='void'?'Cancelled':b.back?'Settled':'Unsettled';
@@ -3548,7 +3562,7 @@ function b27PoolClip(b){if(!b)return '';const money=n=>'$'+b27Num(n),st=b.status
   const when=b27PoolPostedDay(Date.parse(b.postedAt||b.created_at));
   return ['Pool #'+(b.n||'')+' · '+st,b27Clean(b.text),'Buy-in '+money(b.amt)+' · '+(b.parts||[]).length+' managers · Total '+money(b.amt*(b.parts||[]).length),pay,'Members: '+(b.parts||[]).map(PN).join(', '),'Posted '+(when||'')+' by '+PN(b.postedBy||b.backer)+' · '+b27PoolSettleWord(b)].join('\n')}
 function b27PoolForm(me){b27PoolSeed();const people=b27PoolPeople();/*<S26F-POOL>*/setTimeout(()=>{try{s26fPaint()}catch(e){}},0);/*</S26F-POOL>*/
-  return `<div class="card b27-form">${typeof SHARED_UI!=='undefined'&&SHARED_UI.entryHead?SHARED_UI.entryHead('wiu'):''}${b27KindTabs('')}
+  return `<div class="card b27-form">${typeof SHARED_UI!=='undefined'&&SHARED_UI.entryHead?SHARED_UI.entryHead('wiu',b27KindOnly()):''}
    <div class="s26st"><div class="b27-lb"><span class="s26n">1</span><button type="button" class="s27-tipk" data-tip="pterms" aria-expanded="false" onclick="s27Tip(this)">${esc(PT('s1'))}</button><label for="b27Text" class="sr">${esc(PT('s1'))}</label></div><textarea id="b27Text" class="sb-in b27-in" rows="2" maxlength="${PULK.maxText}" placeholder="${esc(PT('termsPh'))}" aria-describedby="s26eTerms" oninput="U.text=this.value;b27PSync()">${esc(U.text)}</textarea><div id="s26eTerms" class="s26err" role="alert"></div></div>
    <div class="s26st"><div class="b27-lb" id="s26lPeople"><span class="s26n">2</span><button type="button" class="s27-tipk" data-tip="ppl" aria-expanded="false" onclick="s27Tip(this)">${esc(PT('s2'))}</button></div><div class="b27-opps pool-pick" role="group" aria-labelledby="s26lPeople">${people.map((n,i)=>{const o=(D.owners.find(x=>x.name===n)||{});const on=U.pp.includes(n);return `<button type="button" class="b27-chip op" data-b27-pp="${i}" data-b27-name="${esc(n)}" aria-label="${esc(TN(n))}" aria-pressed="${on}" onclick="b27PoolPP(${i})"><span class="ck" aria-hidden="true">✓</span><span class="em" aria-hidden="true">${esc(o.emoji||'')}</span><span class="nm" aria-hidden="true"><span class="f">${esc(TN(n))}</span><span class="sh">${esc(b27ShortT(n))}</span><span class="xs">${esc(b27TinyT(n))}</span></span></button>`}).join('')}${b27UtilTile('onclick="b27PoolAll()"','onclick="b27PoolClear()"')}</div><div class="s26sel" id="b27SelCnt" aria-live="polite">${(U.pp||[]).length} selected</div>
    <div id="s26ePeople" class="s26err" role="alert"></div></div>
@@ -3630,8 +3644,8 @@ function b27PoolOwesHtml(T){if(!T.poolOwes.length)return '';
 /*</POOL>*/
 function b27CanUndo(b){if(!b||b.status!=='open')return false;if(!(b.backer===b27Who()||(b.postedBy&&b.postedBy===b27Who())))return false;if(!(Date.now()-Date.parse(b.created_at)<PULK.undoMs))return false;if(b27Ready(b)||b27GameFinal(b))return false;return true}
 function b27OpenEdit(id){if(U.busy)return;const b=(U.doc.bets||[]).find(x=>x.id===id);if(!b||b.kind==='pool'||!b27CanUndo(b)){U.askDel=null;U.msg='Only the person who posted this bet can edit it, and only for 5 minutes.';U.msgBad=true;render();return}
-  const odds=[+(b.odds&&b.odds.a)||1,+(b.odds&&b.odds.b)||1],chip=PULK.oddsChips.some(([a,c])=>a===odds[0]&&c===odds[1]),amtChip=PULK.amounts.includes(+b.amt),k=SHARED_UI.whenKind(b),me=b27Who();
-  Object.assign(U,{kind:'bet',confirm:false,editOf:id,askDel:null,msg:'',msgBad:false,backer:b.backer&&b.backer!==me?b.backer:null,opps:b27Opps(b).slice(),text:b.text||'',amt:+b.amt,amtCustom:!amtChip,amtTxt:amtChip?'':String(b.amt),amtErr:'',odds:odds,custom:!chip,customTxt:chip?'':odds[0]+'-'+odds[1],oddsErr:'',wk:k==='date'||k==='season'||k==='game'?k:'unknown',est:k==='date'?(b.est||''):'',whenPick:k!=='game',rdEd:null,rdOpen:false});
+  const odds=[+(b.odds&&b.odds.a)||1,+(b.odds&&b.odds.b)||1],chip=[[1,1],[2,1],[3,1],[4,1]].some(([a,c])=>a===odds[0]&&c===odds[1]),amtChip=[5,10,20,25].includes(+b.amt),k=SHARED_UI.whenKind(b),me=b27Who();
+  Object.assign(U,{kind:'bet',confirm:false,editOf:id,askDel:null,msg:'',msgBad:false,backer:b.backer&&b.backer!==me?b.backer:null,opps:b27Opps(b).slice(),text:b.text||'',amt:+b.amt,amtCustom:!amtChip,amtTxt:amtChip?'':String(b.amt),amtErr:'',odds:odds,custom:!chip,customTxt:chip?'':odds[0]+'-'+odds[1],oddsErr:'',wk:k==='date'||k==='season'||k==='game'?k:'unknown',est:k==='date'?(b.est||''):'',whenPick:k!=='game',rdEd:null,rdOpen:false,parlay:!!(b.legs&&b.legs.length>=2),legs:b.legs&&b.legs.length>=2?b.legs.slice():[],pyGid:b.legs&&b.legs[0]?String(b.legs[0].gid):'',gid:b.legs&&b.legs[0]?String(b.legs[0].gid):''});
   obView('form')}
 function b27AskDel(id){if(U.busy)return;const b=(U.doc.bets||[]).find(x=>x.id===id);if(!b||!b27CanUndo(b)){U.askDel=null;U.askDelAt=null;b27Stale('The 5 minutes are up. Nothing was deleted.');return}U.askDel=id;U.askDelAt={at:Date.now(),terms:b27Terms(b)};U.askSettle=null;if(typeof S25P!=='undefined')S25P.ask=null;b27ArmTick();render()}
 function b27DoDel(id,hash){if(U.busy||b27TapLock())return;if(U.askDel!==id){U.askDel=null;b27Stale('That confirm was for a different bet. Nothing was deleted.');return}const b=(U.doc.bets||[]).find(x=>x.id===id);if(!b||!b27CanUndo(b)){U.askDel=null;b27Stale('The 5 minutes are up. Nothing was deleted.');return}U.askDel=null;return b27Void(id,hash)}
@@ -3843,14 +3857,14 @@ function vB27(){
   }else{
     const oc=U.odds?U.odds.join('-'):'';
     /*<S29E-PASTE>*/if(PASTE_BET&&U.kind!=='pool')h+=s29ePasteBox();/*</S29E-PASTE>*/
-    h+=`<div class="card b27-form">${SHARED_UI.entryHead('wiu')}${/*<QUICK-BET>*/qbHint()/*</QUICK-BET>*/}${/*<S24-EDIT>*/s24EditHint()/*</S24-EDIT>*/}${/*<POOL>*/b27KindTabs(b27SelAbove(others.length,`<div class="s27-sel"><button type="button" class="s27-selb" data-b27-all="1" onclick="b27OppAll()"><span class="f">Select all</span><span class="s">All</span></button><button type="button" class="s27-selb" data-b27-clear="1" onclick="b27OppClear()">Clear</button></div>`))/*</POOL>*/}
+    h+=`<div class="card b27-form">${SHARED_UI.entryHead('wiu',b27KindOnly())}${/*<QUICK-BET>*/qbHint()/*</QUICK-BET>*/}${/*<S24-EDIT>*/s24EditHint()/*</S24-EDIT>*/}${/*<POOL>*/b27KindTabs(b27SelAbove(others.length,`<div class="s27-sel"><button type="button" class="s27-selb" data-b27-all="1" onclick="b27OppAll()"><span class="f">Select all</span><span class="s">All</span></button><button type="button" class="s27-selb" data-b27-clear="1" onclick="b27OppClear()">Clear</button></div>`))/*</POOL>*/}
      ${/*<MULTI-BET>*/''/*opponents: multi-select*/}<div class="b27-q"><button type="button" class="s27-tipk" data-tip="who" aria-expanded="false" onfocus="s27TipShow(this)" onclick="s27WhenClick(this)">1. Who are you betting against?</button></div><div class="b27-opps" role="group" aria-label="Opponents" style="--n:${others.length}">${others.map((n,i)=>{const o=(D.owners.find(x=>x.name===n)||{});const on=U.opps.includes(n);return `<button type="button" class="b27-chip op" data-b27-opp="${i}" data-b27-name="${esc(n)}" aria-label="${esc(TN(n))}" aria-pressed="${on}" onclick="b27Opp(${i})"><span class="ck" aria-hidden="true">✓</span><span class="em" aria-hidden="true">${esc(o.emoji||'')}</span><span class="nm" aria-hidden="true"><span class="f">${esc(TN(n))}</span><span class="sh">${esc(b27ShortT(n))}</span><span class="xs">${esc(b27TinyT(n))}</span></span></button>`}).join('')}${others.length%4?b27UtilTile('data-b27-all="1" onclick="b27OppAll()"','data-b27-clear="1" onclick="b27OppClear()"'):''}</div><span class="sr" id="b27SelCnt" aria-live="polite">${esc(b27SelTxt())}</span>
-     ${''/*</MULTI-BET>*/}<div class="b27-q"><button type="button" class="s27-tipk" data-tip="text" aria-expanded="false" onfocus="s27TipShow(this)" onclick="s27WhenClick(this)">2. What’s the bet?</button><label for="b27Text" class="sr">What’s the bet?</label></div><input id="b27Text" class="sb-in b27-in" maxlength="${PULK.maxText}" autocomplete="off" enterkeyhint="go" placeholder="e.g. Kansas -4 beats Duke" value="${esc(U.text)}" oninput="b27Text(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();b27Place()}">${/*<S25>*/'<div id="s25Rd">'+s25RdHtml()+'</div>'/*</S25>*/}
-     <div class="b27-ao"><div class="b27-ao-c"><div class="b27-q"><button type="button" class="s27-tipk" data-tip="amt" aria-expanded="false" onfocus="s27TipShow(this)" onclick="s27WhenClick(this)">3. Amount</button></div><div class="b27-amts" role="group" aria-label="Amount">${PULK.amounts.map(a=>`<button type="button" class="b27-amt" data-b27-amt="${a}" aria-pressed="${!U.amtCustom&&a===U.amt}" onclick="b27Amt(${a})">${a}</button>`).join('')}<button type="button" class="b27-amt cu" data-b27-amtcustom="1" aria-pressed="${U.amtCustom}" onclick="b27AmtCustomOpen()">Custom</button></div>
+     ${''/*</MULTI-BET>*/}<div class="b27-q"><button type="button" class="s27-tipk" data-tip="text" aria-expanded="false" onfocus="s27TipShow(this)" onclick="s27WhenClick(this)">2. What’s the bet?</button><label for="b27Text" class="sr">What’s the bet?</label></div><input id="b27Text" class="sb-in b27-in" maxlength="${PULK.maxText}" autocomplete="off" enterkeyhint="go" placeholder="e.g. Kansas -4 beats Duke" value="${esc(U.text)}" oninput="b27Text(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();b27Place()}">${/*<S25>*/'<div id="s25Rd">'+s25RdHtml()+'</div>'/*</S25>*/}${U.kind==='pool'?'':(typeof RQ!=='undefined'&&RQ.parlayBox?RQ.parlayBox(U):'')}
+     <div class="b27-ao"><div class="b27-ao-c"><div class="b27-q"><button type="button" class="s27-tipk" data-tip="amt" aria-expanded="false" onfocus="s27TipShow(this)" onclick="s27WhenClick(this)">3. Amount</button></div><div class="b27-amts" role="group" aria-label="Amount">${[5,10,20,25].map(a=>`<button type="button" class="b27-amt" data-b27-amt="${a}" aria-pressed="${!U.amtCustom&&a===U.amt}" onclick="b27Amt(${a})">${a}</button>`).join('')}<button type="button" class="b27-amt cu" data-b27-amtcustom="1" aria-pressed="${U.amtCustom}" onclick="b27AmtCustomOpen()">Custom</button></div>
      <div id="b27Aw" class="b27-cw"${U.amtCustom?'':' hidden'}><label for="b27Ao" class="sr">Custom amount</label><input id="b27Ao" class="sb-in b27-in" inputmode="numeric" pattern="[0-9]*" autocomplete="off" maxlength="6" placeholder="Whole number, ${PULK.minAmt} to ${PULK.maxAmt}" value="${esc(U.amtTxt)}" oninput="b27AmtApply(this.value);b27Sync()" onkeydown="if(event.key==='Enter'){event.preventDefault();b27Place()}"><div id="b27Ae" class="b27-bad-t" role="alert">${esc(U.amtErr)}</div></div></div><div class="b27-ao-c">
-     <div class="b27-q"><button type="button" class="s27-tipk" data-tip="odds" aria-expanded="false" onfocus="s27TipShow(this)" onclick="s27WhenClick(this)">4. Odds</button></div><div class="b27-chips" role="group" aria-label="Odds">${PULK.oddsChips.map(([a,b])=>`<button type="button" class="b27-chip" data-b27-odds="${a}-${b}" aria-pressed="${!U.custom&&!!U.odds&&U.odds[0]===a&&U.odds[1]===b}" onclick="b27Odds(${a},${b})">${a===1&&b===1?'Even':a+'-'+b}</button>`).join('')}<button type="button" class="b27-chip cu" data-b27-custom="1" aria-pressed="${U.custom}" onclick="b27CustomOpen()">Custom</button></div>
+     <div class="b27-q"><button type="button" class="s27-tipk" data-tip="odds" aria-expanded="false" onfocus="s27TipShow(this)" onclick="s27WhenClick(this)">4. Odds</button></div><div class="b27-chips" role="group" aria-label="Odds">${[[1,1],[2,1],[3,1],[4,1]].map(([a,b])=>`<button type="button" class="b27-chip" data-b27-odds="${a}-${b}" aria-pressed="${!U.custom&&!!U.odds&&U.odds[0]===a&&U.odds[1]===b}" onclick="b27Odds(${a},${b})">${a===1&&b===1?'Even':a+'-'+b}</button>`).join('')}<button type="button" class="b27-chip cu" data-b27-custom="1" aria-pressed="${U.custom}" onclick="b27CustomOpen()">Custom</button></div>
      <div id="b27Cw" class="b27-cw"${U.custom?'':' hidden'}><label for="b27Co" class="sr">Custom odds</label><input id="b27Co" class="sb-in b27-in" inputmode="text" autocomplete="off" maxlength="9" placeholder="e.g. 7-2 or 10-1" value="${esc(U.customTxt)}" oninput="b27CustomApply(this.value);b27Sync()" onkeydown="if(event.key==='Enter'){event.preventDefault();b27Place()}"><div id="b27Ce" class="b27-bad-t" role="alert">${esc(U.oddsErr)}</div></div></div></div>
-     ${SHARED_UI.whenBox({e:esc,kind:b27FormHasGame()&&(!U.whenPick||U.wk==='game')?'game':(U.whenPick&&U.wk!=='game'?U.wk:'unknown'),est:U.est,seasonId:b27Season(),step:'5',game:b27FormHasGame(),inputId:'b27Est',pick:id=>`onclick="b27When('${id}')"`,dateAttr:'onchange="U.est=this.value;U.whenPick=true"'})}
+     ${SHARED_UI.whenBox({e:esc,kind:b27FormHasGame()&&(!U.whenPick||U.wk==='game')?'game':(U.whenPick&&U.wk!=='game'?U.wk:'unknown'),est:U.est,seasonId:b27Season(),step:'5',game:b27FormHasGame(),menu:true,menuAttr:'onchange="b27When(this.value)"',inputId:'b27Est',dateAttr:'onchange="U.est=this.value;U.whenPick=true"'})}
      <div class="b27-livebox" id="b27Live" data-brief aria-live="polite">${b27FormBrief()}</div>
      <div id="s29Auto">${/*<S29D-AUTO>*/s29AutoHtml(s29AutoForm())/*</S29D-AUTO>*/}</div><div class="b27-bad-t" id="b27Hint"></div>
      <button type="button" id="b27Place" class="btn b27-big" onclick="b27Place()"${b27FormOK()?' disabled':''}>${U.editOf?'Update bet':'Write it up'}</button></div>`;
@@ -4053,7 +4067,7 @@ function njPut(k){if(!k)return;const ds=[];for(const x of k.a){const e=document.
   let best=ds[0],bn=0;for(const d of ds){const c=ds.filter(z=>Math.abs(z-d)<=2).length;if(c>bn||(c===bn&&Math.abs(d)<Math.abs(best))){bn=c;best=d}}
   if(Math.abs(best)>=1)njScroll(window.scrollY+best)}
 /*</NO-JUMP>*/
-function pinNavH(){const n=document.getElementById('nav');if(n)document.documentElement.style.setProperty('--navh',Math.ceil(n.getBoundingClientRect().height)+'px');const seg=document.querySelector('#main[data-tab="games"]>.segrow');document.documentElement.style.setProperty('--segh',(seg?Math.ceil(seg.getBoundingClientRect().height):0)+'px');try{obEqual()}catch(e){}}
+function pinNavH(){const n=document.getElementById('nav');if(n)document.documentElement.style.setProperty('--navh',Math.ceil(n.getBoundingClientRect().height)+'px');const seg=document.querySelector('#main[data-tab="games"]>.segrow');document.documentElement.style.setProperty('--segh',(seg?Math.ceil(seg.getBoundingClientRect().height):0)+'px');const sub=document.querySelector('#main>.tabs.ob-seg.ob-desk');document.documentElement.style.setProperty('--subh',(sub&&sub.getClientRects().length?Math.ceil(sub.getBoundingClientRect().height):0)+'px');try{obEqual()}catch(e){}}
 addEventListener('resize',()=>{try{pinNavH()}catch(e){}});
 /* Header (photo + STOOPIDS) is ordinary page content: it scrolls away and comes back only at the very top.
    Once it has left, the main nav stays fixed and the page's second row stays stuck under it, in both directions.
@@ -4078,6 +4092,7 @@ addEventListener('resize',()=>{try{pinNavH()}catch(e){}});
   var scrollTo0=window.scrollTo.bind(window),scrollBy0=window.scrollBy.bind(window);
   window.scrollTo=function(){hush();return scrollTo0.apply(window,arguments)};
   window.scrollBy=function(){hush();return scrollBy0.apply(window,arguments)};
+  function deskBets(){var m=document.getElementById('main');return !!(m&&window.matchMedia('(min-width:1000px)').matches&&m.querySelector(':scope>.tabs.ob-seg.ob-desk'))}
   function enter(y){
     if(away)return;
     var n=navEl(),line=pinLine();if(!n||line<8)return;
@@ -4088,6 +4103,7 @@ addEventListener('resize',()=>{try{pinNavH()}catch(e){}});
     document.body.classList.add('hdr-away');
     hold(true,nh);
     try{pinNavH()}catch(e){}
+    if(deskBets()){var m=document.getElementById('main');if(m)m.scrollTop=0;next=0}
     if(Math.abs((window.scrollY||0)-next)>1)window.scrollTo(0,next);
     lastY=window.scrollY||0;
   }
@@ -4105,11 +4121,12 @@ addEventListener('resize',()=>{try{pinNavH()}catch(e){}});
   addEventListener('scroll',function(){
     var y=window.scrollY||0,dy=y-lastY;
     if(!away){if(y>0)enter(y)}
-    else if(!mute&&y<=0&&dy<0)show(false);
+    else if(!mute&&y<=0&&dy<0&&!deskBets())show(false);
     lastY=window.scrollY||0;
   },{passive:true});
   addEventListener('wheel',function(e){
     if(mute||!away)return;
+    if(e.deltaY<0&&deskBets()){var m=document.getElementById('main');if(m&&m.scrollTop<=0)show(false);return}
     if((window.scrollY||0)<=0&&e.deltaY<0)show(false);
   },{passive:true});
   var ty=0;
@@ -4531,7 +4548,7 @@ setTimeout(onlRead,1500);setInterval(onlRead,60000);/*</ONLINE-STRIP>*/
 /*<S26K-MODAL>*//* bet confirm card as a centered modal: backdrop tap / Esc = ← Change (b27Edit keeps the form values) */
 function s26kModal(c){return c?`<div class="s26k-bd" onclick="if(event.target===this&&!U.busy)b27Edit()"><div class="s26k-m" role="dialog" aria-modal="true" aria-label="Check it, then confirm">${c}</div></div>`:''}
 {const r0=render;let was=false;render=function(){const x=r0.apply(this,arguments);const m=document.querySelector('.s26k-m');document.body.classList.toggle('s26k-lock',!!m);if(m&&!was){const b=m.querySelector('.b27-act .btn');if(b)b.focus({preventScroll:true})}was=!!m;return x};
-(function(){var real=render,hold=0,defer=0;function typing(){var a=document.activeElement;return !!(a&&a.closest&&a.closest('#rqForm')&&/^(SELECT|INPUT|TEXTAREA)$/.test(a.tagName))}function flush(){if(Date.now()<hold||typing()||!defer)return;defer=0;render()}document.addEventListener('pointerdown',function(e){if(e.target&&e.target.closest&&e.target.closest('#rqForm'))hold=Date.now()+900},true);function up(){hold=0;flush()}document.addEventListener('pointerup',up,true);document.addEventListener('pointercancel',up,true);document.addEventListener('focusout',function(){setTimeout(flush,0)});render=function(){if(!render.rqSelf&&(Date.now()<hold||Date.now()<(render.rqHold||0)||typing())){defer=1;return}return real.apply(this,arguments)}})();
+(function(){var real=render,hold=0,defer=0;function inBet(el){return !!(el&&el.closest&&(el.closest('#rqForm')||el.closest('.entry-wiu')))}function typing(){var a=document.activeElement;return !!(inBet(a)&&/^(SELECT|INPUT|TEXTAREA)$/.test(a.tagName))}function flush(){if(Date.now()<hold||typing()||!defer)return;defer=0;render()}document.addEventListener('pointerdown',function(e){if(inBet(e.target))hold=Date.now()+900},true);function up(){hold=0;flush()}document.addEventListener('pointerup',up,true);document.addEventListener('pointercancel',up,true);document.addEventListener('focusout',function(){setTimeout(flush,0)});render=function(){if(!render.rqSelf&&(Date.now()<hold||Date.now()<(render.rqHold||0)||typing())){defer=1;return}return real.apply(this,arguments)}})();
  document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&document.querySelector('.s26k-m')&&!U.busy){ev.preventDefault();b27Edit()}})}
 /*</S26K-MODAL>*/
 </script>
@@ -5003,7 +5020,10 @@ html body .b27-opps.pool-pick>.b27-util>.s27-selb{box-sizing:border-box;width:10
  html body #main .gfone .gf3>.gf2.gfpills>input.gf2-s{width:20ch!important;max-width:none!important;padding:0 14px!important}
 }
 @media (min-width:1000px){
- html body #main>.tabs.ob-seg.ob-desk{display:flex!important;flex-flow:row nowrap!important;justify-content:flex-start!important;align-items:center!important;width:100%!important;max-width:100%!important;gap:6px!important;margin:0 0 12px!important;padding:0 0 4px!important;background:var(--bg,#0e121b)!important;position:sticky!important;top:var(--navh,56px)!important;z-index:36!important}
+ html body #main>.tabs.ob-seg.ob-desk{display:flex!important;flex-flow:row nowrap!important;justify-content:flex-start!important;align-items:center!important;width:100%!important;max-width:100%!important;gap:6px!important;margin:0 0 12px!important;padding:0 0 8px!important;background:var(--bg,#0e121b)!important;position:sticky!important;top:var(--navh,56px)!important;z-index:36!important}
+ body.hdr-away:has(#main>.tabs.ob-seg.ob-desk){overflow:hidden}
+ body.hdr-away:has(#main>.tabs.ob-seg.ob-desk) #main{position:fixed!important;top:calc(var(--navh,55px) + var(--subh,52px))!important;left:0;right:0;bottom:0;width:min(100%,var(--nav-max,1080px));margin:0 auto!important;overflow:auto;z-index:1;box-sizing:border-box;padding-bottom:88px!important;background:var(--bg,#0e121b)}
+ body.hdr-away #main>.tabs.ob-seg.ob-desk{position:fixed!important;top:var(--navh,55px)!important;left:0;right:0;width:min(100%,var(--nav-max,1080px))!important;margin:0 auto!important;z-index:36!important;box-sizing:border-box}
  html body #main>.tabs.ob-seg.ob-desk>button{flex:0 0 var(--obw,max-content)!important;width:var(--obw,max-content)!important;min-width:0!important;max-width:none!important;height:44px!important;min-height:44px!important;max-height:44px!important;padding:0 16px!important;font-size:15px!important;line-height:42px!important}
  html body #main .entry-pair,.entry-hd.entry-hd-rq,.entry-hd.entry-hd-wiu{scroll-margin-top:calc(var(--navh,56px) + 60px)}
 }
@@ -5012,9 +5032,39 @@ html body #rqForm .b27-amt,html body #rqForm .b27-chip{flex:0 0 auto!important;w
 html body #rqForm .rq-exp-row{display:block;width:100%;max-width:100%;margin-top:8px;box-sizing:border-box}
 html body #rqForm .rq-exp-row .rq-exp{display:flex!important;flex-flow:row nowrap!important;justify-content:flex-start!important;align-items:center!important;gap:6px!important;width:auto!important;max-width:100%!important}
 html body #rqForm .rq-exp-row .rq-num{flex:0 0 64px!important;width:64px!important;max-width:64px!important;height:36px!important;min-height:36px!important;padding:0 8px!important;text-align:center}
-html body #rqForm .rq-exp-row .rq-unit,html body #rqForm select.rq-when{flex:0 0 auto!important;width:auto!important;max-width:100%!important;height:36px!important;min-height:36px!important;field-sizing:content;padding:0 28px 0 12px!important;box-sizing:border-box}
+html body #rqForm .rq-exp-row .rq-unit,html body #rqForm select.rq-when,html body .entry-wiu select.rq-when{flex:0 0 auto!important;width:auto!important;max-width:100%!important;height:36px!important;min-height:36px!important;field-sizing:content;padding:0 28px 0 12px!important;box-sizing:border-box}
+html body .entry-wiu .b27-amts,html body .entry-wiu .b27-chips{flex-wrap:nowrap!important;justify-content:flex-start!important}
 html body #rqForm .rq-exp-row input[type=datetime-local]{flex:1 1 auto;width:auto!important;min-width:0;max-width:100%!important;height:36px!important;min-height:36px!important}
 html body #rqForm .b27-when input[type=date]{display:block;width:auto!important;max-width:100%;height:36px;min-height:36px;margin-top:6px}
+/* Desktop Make A Bet: one clean pair. Blue is Request, yellow is Write it Up. */
+@media (min-width:1000px){
+ html body #main .entry-pair{align-items:stretch!important}
+ html body #main .entry-col{display:flex!important;flex-direction:column;align-items:stretch}
+ html body #main .entry-col>.card.b27-form,html body #main .entry-col>.card.rq-form{flex:1 1 auto;display:flex;flex-direction:column;margin:0!important;padding:0 14px 14px!important;border-radius:14px!important;overflow:hidden;box-shadow:none!important}
+ html body #main .entry-rq>.card{background:#141a2b!important;border:1px solid #3b5ccc!important}
+ html body #main .entry-wiu>.card{background:#1c1a12!important;border:1px solid #d4b000!important}
+ html body #main .entry-hd.entry-hd-rq,html body #main .entry-hd.entry-hd-wiu{display:flex!important;flex-direction:column;justify-content:center;box-sizing:border-box;min-height:78px;margin:0 -14px 14px!important;padding:14px 16px 12px!important;border-radius:13px 13px 0 0!important}
+ html body #main .entry-hd-rq h2,html body #main .entry-hd-wiu h2{font-size:20px!important;line-height:1.1!important;letter-spacing:.04em;text-transform:uppercase}
+ html body #main .entry-hd-rq{background:#1e3a8a!important;color:#f8fafc!important}
+ html body #main .entry-hd-rq p{color:#dbeafe!important}
+ html body #main .entry-hd-wiu{background:#FFD400!important;color:#1a1400!important}
+ html body #main .entry-hd-wiu p{color:#3f3200!important}
+ html body #main .entry-rq .b27-chip[aria-pressed=true],html body #main .entry-rq .b27-amt[aria-pressed=true]{background:#1e3a8a!important;color:#fff!important;border-color:#1e3a8a!important}
+ html body #main .entry-wiu .b27-chip[aria-pressed=true],html body #main .entry-wiu .b27-amt[aria-pressed=true]{background:#FFD400!important;color:#1a1400!important;border-color:#FFD400!important}
+ html body #main .entry-rq .btn.b27-big:not(.sec),html body #main .entry-rq .rq-send:not(.sec){margin-top:auto;background:#1e3a8a!important;color:#fff!important;border:0!important;border-radius:10px;min-height:48px}
+ html body #main .entry-wiu #b27Place.btn.b27-big{margin-top:auto;background:#FFD400!important;color:#1a1400!important;border:0!important;border-radius:10px;min-height:48px}
+}
+html body .entry-hd-wiu .entry-hd-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 10px;width:100%}
+html body .entry-hd-wiu .wiu-kind{display:inline-flex!important;flex:0 1 auto;flex-wrap:wrap;justify-content:flex-end;align-items:center;width:auto!important;max-width:100%;gap:4px!important;margin:0!important;padding:0!important;background:transparent!important;border:0!important;grid-template-columns:none!important}
+html body .entry-hd-wiu .wiu-kind>button{flex:0 0 auto!important;width:auto!important;height:28px!important;min-height:28px!important;max-height:28px!important;padding:0 10px!important;font-size:12px!important;font-weight:800!important;line-height:26px!important;border-radius:999px!important;border:1px solid rgba(26,20,0,.35)!important;background:transparent!important;color:#1a1400!important;box-shadow:none!important}
+html body .entry-hd-wiu .wiu-kind>button.on{background:#1a1400!important;color:#FFD400!important;border-color:#1a1400!important}
+html body .entry-hd-wiu .wiu-kind .ks{display:none}
+@media (max-width:999px){
+ html body .entry-hd.entry-hd-wiu{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:4px!important;padding:8px 10px!important}
+ html body .entry-hd-wiu h2{font-size:15px!important;line-height:1.15!important;text-transform:none!important;letter-spacing:0!important;white-space:nowrap}
+ html body .entry-hd-wiu .entry-sub-d{display:block!important;font-size:12px!important;line-height:1.2!important;white-space:normal!important}
+ html body .entry-hd-wiu .entry-sub-m{display:none!important}
+}
 </style><!--</S29E-PASTE>-->
 <!--<S29E-COPY>--><script>
 /* s29e: the per-bet Copy button copies the whole card as WhatsApp-ready plain text (no link). Same words, numbers (b27Num) and odds math (b27Pay) as the card. */
