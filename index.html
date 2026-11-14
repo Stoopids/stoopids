@@ -5015,6 +5015,24 @@ html body #rqForm .rq-exp-row .rq-num{flex:0 0 64px!important;width:64px!importa
 html body #rqForm .rq-exp-row .rq-unit,html body #rqForm select.rq-when{flex:0 0 auto!important;width:auto!important;max-width:100%!important;height:36px!important;min-height:36px!important;field-sizing:content;padding:0 28px 0 12px!important;box-sizing:border-box}
 html body #rqForm .rq-exp-row input[type=datetime-local]{flex:1 1 auto;width:auto!important;min-width:0;max-width:100%!important;height:36px!important;min-height:36px!important}
 html body #rqForm .b27-when input[type=date]{display:block;width:auto!important;max-width:100%;height:36px;min-height:36px;margin-top:6px}
+/* Desktop Make A Bet: one clean pair. Blue is Request, yellow is Write it Up. */
+@media (min-width:1000px){
+ html body #main .entry-pair{align-items:stretch!important}
+ html body #main .entry-col{display:flex!important;flex-direction:column;align-items:stretch}
+ html body #main .entry-col>.card.b27-form,html body #main .entry-col>.card.rq-form{flex:1 1 auto;display:flex;flex-direction:column;margin:0!important;padding:0 14px 14px!important;border-radius:14px!important;overflow:hidden;box-shadow:none!important}
+ html body #main .entry-rq>.card{background:#141a2b!important;border:1px solid #3b5ccc!important}
+ html body #main .entry-wiu>.card{background:#1c1a12!important;border:1px solid #d4b000!important}
+ html body #main .entry-hd.entry-hd-rq,html body #main .entry-hd.entry-hd-wiu{display:flex!important;flex-direction:column;justify-content:center;box-sizing:border-box;min-height:78px;margin:0 -14px 14px!important;padding:14px 16px 12px!important;border-radius:13px 13px 0 0!important}
+ html body #main .entry-hd-rq h2,html body #main .entry-hd-wiu h2{font-size:20px!important;line-height:1.1!important;letter-spacing:.04em;text-transform:uppercase}
+ html body #main .entry-hd-rq{background:#1e3a8a!important;color:#f8fafc!important}
+ html body #main .entry-hd-rq p{color:#dbeafe!important}
+ html body #main .entry-hd-wiu{background:#FFD400!important;color:#1a1400!important}
+ html body #main .entry-hd-wiu p{color:#3f3200!important}
+ html body #main .entry-rq .b27-chip[aria-pressed=true],html body #main .entry-rq .b27-amt[aria-pressed=true]{background:#1e3a8a!important;color:#fff!important;border-color:#1e3a8a!important}
+ html body #main .entry-wiu .b27-chip[aria-pressed=true],html body #main .entry-wiu .b27-amt[aria-pressed=true]{background:#FFD400!important;color:#1a1400!important;border-color:#FFD400!important}
+ html body #main .entry-rq .btn.b27-big:not(.sec),html body #main .entry-rq .rq-send:not(.sec){margin-top:auto;background:#1e3a8a!important;color:#fff!important;border:0!important;border-radius:10px;min-height:48px}
+ html body #main .entry-wiu #b27Place.btn.b27-big{margin-top:auto;background:#FFD400!important;color:#1a1400!important;border:0!important;border-radius:10px;min-height:48px}
+}
 </style><!--</S29E-PASTE>-->
 <!--<S29E-COPY>--><script>
 /* s29e: the per-bet Copy button copies the whole card as WhatsApp-ready plain text (no link). Same words, numbers (b27Num) and odds math (b27Pay) as the card. */
