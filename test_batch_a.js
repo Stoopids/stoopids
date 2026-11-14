@@ -157,7 +157,7 @@ const assert = require('assert');
     return {when, exp};
   });
   assert.deepEqual(phone.exp, desk.exp);
-  assert.ok(phone.exp.some(x => x.startsWith('start:at tipoff')), phone.exp.join('|'));
+  assert.ok(phone.exp.some(x => x.startsWith('start:Tipoff')), phone.exp.join('|'));
   assert.deepEqual(phone.when.map(x => x.id + ':' + x.text), desk.when.map(x => x.id + ':' + x.text));
   assert.ok(phone.when.some(x => x.id === 'game' && x.display !== 'none'));
   assert.ok(desk.when.some(x => x.id === 'game' && x.display !== 'none'));
