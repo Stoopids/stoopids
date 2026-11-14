@@ -569,7 +569,7 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
     if(k==='game'&&!o.game&&!o.menu)k='unknown';
     var head='<div class="b27-when"><div class="b27-q"><button type="button" class="s27-tipk" data-tip="when" aria-expanded="false" onfocus="s27TipShow(this)" onclick="s27WhenClick(this)">'+e(q)+'</button></div>';
     var opts;
-    if(o.menu){var items=[['game','End of game'],['season','End of season'],['unknown','Not sure yet'],['date','Set a date']];opts='<select class="sb-in b27-in rq-when" data-rq-in="wkMenu" aria-label="When can this be settled?">'+items.map(function(it){return '<option value="'+it[0]+'"'+(k===it[0]?' selected':'')+'>'+e(it[1])+'</option>'}).join('')+'</select>'}
+    if(o.menu){var items=[['game','End of game'],['season','End of season'],['unknown','Not sure yet'],['date','Set a date']];opts='<select class="sb-in b27-in rq-when" '+(o.menuAttr||'data-rq-in="wkMenu"')+' aria-label="When can this be settled?">'+items.map(function(it){return '<option value="'+it[0]+'"'+(k===it[0]?' selected':'')+'>'+e(it[1])+'</option>'}).join('')+'</select>'}
     else opts='<div class="b27-when-c" role="group" aria-label="When can this be settled?">'+(o.game?btn('game','End Of Game'):'')+btn('season','End Of Season')+btn('unknown','Not Sure Yet')+btn('date','Set A Date')+'</div>';
     var h=head+opts;
     if(k==='date')h+='<input class="sb-in b27-in" type="date" id="'+(o.inputId||'whenDate')+'" aria-label="Choose a date" value="'+e(o.est||'')+'" '+(o.dateAttr||'')+'>';
