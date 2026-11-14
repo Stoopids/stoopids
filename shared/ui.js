@@ -154,7 +154,7 @@ U.halfLs=hsLs;U.halfScores=function(g,s,first,BOX){var tot=s.score!=null?esc(Str
      A request auto-cancels when its own window starts (full game: tip-off; 2nd half: halftime) or at the poster's expiry, whichever first. */
   SHARED_UI.Requests=function(A){
     var e=A.e,S={f:null,list:[],at:0,busy:false,msg:'',bad:false,loading:false,arm:null};
-      var nf=function(){return{gid:'',side:'',cov:'game',odds:[1,1],amt:null,amtTxt:'',to:[],mode:'h',n:3,at:'',est:'',wk:'game',whenPick:false,expPick:false,lineOn:false,lineKind:'',lineSide:0,linePts:'',lineBase:'',lineSideKey:'',parlay:false,legs:[],pyGid:''}};S.f=nf();
+      var nf=function(){return{gid:'',side:'',cov:'game',odds:[1,1],amt:null,amtTxt:'',to:[],mode:'start',n:3,at:'',est:'',wk:'game',whenPick:false,expPick:false,lineOn:false,lineKind:'',lineSide:0,linePts:'',lineBase:'',lineSideKey:'',parlay:false,legs:[],pyGid:''}};S.f=nf();
     var HALF_MS=70*60000;
     function parse(t){try{var o=JSON.parse(t||'{}');if(typeof o==='string')o=JSON.parse(o);return Array.isArray(o.reqs)?o.reqs.filter(function(r){return r&&r.id}):[]}catch(x){return[]}}
     function rid(){return 'rq'+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
@@ -281,7 +281,7 @@ U.halfLs=hsLs;U.halfScores=function(g,s,first,BOX){var tot=s.score!=null?esc(Str
     function rqChipOdds(){return [[1,1],[2,1],[3,1],[4,1]]}
     function rqAmts(){return (A.amounts||[]).filter(function(a){return +a!==50})}
     function form(){var f=S.f,now0=Date.now(),G=games().filter(function(x){var st=Date.parse(x.start)||0,ws=f.cov==='2h'?st+HALF_MS:st;if(String(x.id)===String(f.gid))return true;if(x.status==='final'||st>=now0+7*86400000)return false;if(f.cov==='2h')return !(x.period&&+x.period>=2)&&now0<ws;return x.status==='scheduled'&&now0<ws}),g=tipOf(f),me=A.me(),nOth=A.others().length;
-      var timed=!!(g&&Date.parse(g.start));if(!f.expPick)f.mode=timed?'start':'h';
+      var timed=!!(g&&Date.parse(g.start));if(!f.expPick)f.mode='start';
       /* same template as Write it Up: header, Select all / Clear, numbered questions, Amount + Odds, summary, big button. Identity stays on Profile. */
       var h='<div class="card b27-form rq-form" id="rqForm">'+SHARED_UI.entryHead('rq')+(S.edit?'<div class="note">Editing this request. Nothing is posted until you save.</div>':'');
       /* STEP10: Select all / Clear sit right-aligned on the same line as question 1; the Stoop buttons stay on the next row */
@@ -293,8 +293,8 @@ U.halfLs=hsLs;U.halfScores=function(g,s,first,BOX){var tot=s.score!=null?esc(Str
       /* STEP10: N works with no picks (empty = open to any Stoop, up to N); with picks N is clamped to the picked count */
       var nTo=f.to.length,nOth0=A.others().length,cap=nTo||nOth0,sl=f.sAll?cap:f.slots?Math.max(1,Math.min(f.slots,cap)):(nTo||1);
       h+=rqQ(5,'rqmany','Open to how many Stoops?')+'<div class="rq-spots"><button type="button" class="btn sec" data-rq="fslot-"'+(sl<=1?' disabled':'')+' aria-label="Fewer">\u2212</button><b>'+(f.sAll?'All':nTo?sl+' of '+nTo:sl+' of any')+'</b><button type="button" class="btn sec" data-rq="fslot+"'+(sl>=cap?' disabled':'')+' aria-label="More">+</button><button type="button" class="btn sec'+(f.sAll?' on':'')+'" data-rq="fslotall" aria-pressed="'+!!f.sAll+'">All</button><span class="note">each acceptance is its own bet</span></div>';
-      h+='<div class="rq-exp-row">'+rqQ(6,'rqexp','Expires')+'<div class="rq-exp">'+(f.mode==='start'?'':f.mode==='at'?'<input class="sb-in b27-in rq-in" type="datetime-local" data-rq-in="at" value="'+e(f.at)+'" aria-label="Expires at">':'<input class="sb-in b27-in rq-in rq-num" data-rq-in="n" inputmode="numeric" value="'+e(f.n)+'" aria-label="Expires in">')+'<select class="sb-in b27-in rq-in rq-unit" data-rq-in="mode" aria-label="Unit">'+[['m','minutes'],['h','hours'],['d','days'],['w','weeks'],['mo','months'],].concat(timed?[['start','at tipoff']]:[]).concat([['at','exact date/time']]).map(function(m){return '<option value="'+m[0]+'"'+(f.mode===m[0]?' selected':'')+'>'+m[1]+'</option>'}).join('')+'</select></div>'+(timed?'<div class="note">It also closes by itself at tip-off.</div>':'')+'</div>';
-      var rqHasGame=timed,rqKind=!f.whenPick?(rqHasGame?'game':'unknown'):(f.wk==='date'||f.wk==='season'||f.wk==='game'?f.wk:'unknown');
+      h+='<div class="rq-exp-row">'+rqQ(6,'rqexp','Expires')+'<div class="rq-exp">'+(f.mode==='start'?'':f.mode==='at'?'<input class="sb-in b27-in rq-in" type="datetime-local" data-rq-in="at" value="'+e(f.at)+'" aria-label="Expires at">':'<input class="sb-in b27-in rq-in rq-num" data-rq-in="n" inputmode="numeric" value="'+e(f.n)+'" aria-label="Expires in">')+'<select class="sb-in b27-in rq-in rq-unit" data-rq-in="mode" aria-label="Unit">'+[['m','minutes'],['h','hours'],['d','days'],['w','weeks'],['mo','months'],['start','Tipoff'],['at','exact date/time']].map(function(m){return '<option value="'+m[0]+'"'+(f.mode===m[0]?' selected':'')+'>'+m[1]+'</option>'}).join('')+'</select></div>'+(f.mode==='start'?(timed?'<div class="note">It also closes by itself at tip-off.</div>':'<div class="note">Name the game so this closes at tipoff.</div>'):'')+'</div>';
+      var rqHasGame=timed,rqKind=!f.whenPick?'game':(f.wk==='date'||f.wk==='season'||f.wk==='game'?f.wk:'unknown');
       h+=SHARED_UI.whenBox({e:e,kind:rqKind,est:f.est,seasonId:A.seasonId?A.seasonId():'',step:'7',game:rqHasGame,menu:true,gameNote:f.parlay&&f.legs&&f.legs.length?'Settles when the last game ends.':'',inputId:'rqEst',pick:function(id){return 'data-rq="when" data-v="'+id+'"'},dateAttr:'data-rq-in="est"'});
       var pv=rqPreview(f);
       h+='<div class="rq-prev" id="rqEx">'+pv.ex+'</div>';
@@ -452,9 +452,12 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
       if(k==='to'){var i=f.to.indexOf(v);if(i>=0)f.to.splice(i,1);else f.to.push(v)}
       else if(k==='all')f.to=A.others().map(function(o){return o.id});else if(k==='clear')f.to=[];
       else if(k==='side'){f.side=v;var gg=game(f.gid),pp=gg&&pick(gg.g,{side:v,cov:'game'});if(pp)f.text=pp.txt}else if(k==='cov'){f.cov=v}else if(k==='amt'){f.amt=+v;f.amtTxt='';f.amtC=false}else if(k==='amtc'){f.amtC=true;f.amt=null}else if(k==='oddc'){f.oddC=true}else if(k==='fslotall'){f.sAll=true;f.slots=null}else if(k==='fslot-'||k==='fslot+'){var nT=f.to.length,cT=nT||A.others().length,cur=f.sAll?cT:f.slots?Math.min(f.slots,cT):(nT||1);f.sAll=false;cur+=k==='fslot+'?1:-1;f.slots=Math.max(1,Math.min(cT,cur))}else if(k==='odds'){f.odds=v.split('-').map(Number);f.oddC=false;f.oddTxt='';if(f.parlay)pySync(f,false);else if(f.lineKind==='none'||f.lineKind==='custom')applyLine(f)}
-      else if(k==='send'){var g=tipOf(f);if(!f.expPick)f.mode=(g&&Date.parse(g.start))?'start':'h';var p=pick(g&&g.g,f),amt=f.amtC?(+f.amtTxt>0?Math.round(+f.amtTxt):null):f.amt,ex=expAt(f,now,g?winStart({cov:f.cov,start:g.start},g):null);
-        var err=f.parlay&&(!f.legs||f.legs.length<2)?'Add at least 2 legs.':f.parlay&&f.legs.length>5?'Keep it to 5 legs.':!p?'Write the bet.':!amt?'Choose an amount.':!ex||ex<=now?'Choose when it expires (up to a year).':null;
-        var hasGame=!!(g&&Date.parse(g.start)),wk=hasGame&&(!f.whenPick||f.wk==='game')?'game':(f.whenPick&&(f.wk==='date'||f.wk==='season'||f.wk==='unknown')?f.wk:'');
+      else if(k==='send'){var g=tipOf(f);if(!f.expPick)f.mode='start';var p=pick(g&&g.g,f),amt=f.amtC?(+f.amtTxt>0?Math.round(+f.amtTxt):null):f.amt,ex=expAt(f,now,g?winStart({cov:f.cov,start:g.start},g):null);
+        var hasGame=!!(g&&Date.parse(g.start)),wk=!f.whenPick?'game':(f.wk==='date'||f.wk==='season'||f.wk==='game'?f.wk:(f.wk==='unknown'?'unknown':''));
+        var err=f.parlay&&(!f.legs||f.legs.length<2)?'Add at least 2 legs.':f.parlay&&f.legs.length>5?'Keep it to 5 legs.':!p?'Write the bet.':!amt?'Choose an amount.':null;
+        if(!err&&f.mode==='start'&&!hasGame)err=wk==='game'?'Name the game so it expires at tipoff and settles at the end of the game.':'Name the game so it expires at tipoff.';
+        else if(!err&&(!ex||ex<=now))err='Choose when it expires (up to a year).';
+        else if(!err&&wk==='game'&&!hasGame)err='Name the game so this settles at the end of the game.';
         if(!err&&!wk)err='Say when it settles: end of season, a date, or not sure yet.';
         var pack=SHARED_UI.whenPack(wk||'unknown',f.est,A.seasonId?A.seasonId():'');if(!err&&wk==='date'&&!pack)err='Use a real date, or pick End Of Season or Not Sure Yet.';
         if(!err){var r0={id:rid(),gid:g?String(g.id):'',start:g&&g.start||null};if(started(Object.assign({cov:f.cov},r0),now))err='That '+(f.cov==='2h'?'half':'game')+' has already started.'}

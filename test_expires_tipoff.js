@@ -24,9 +24,9 @@ const assert = require('assert');
     const sel = document.querySelector('#rqForm select[data-rq-in="mode"]');
     return {value: sel.value, text: sel.selectedOptions[0].textContent, hasStart: [...sel.options].some(o => o.value === 'start')};
   });
-  assert.equal(blank.value, 'h');
-  assert.equal(blank.text, 'hours');
-  assert.equal(blank.hasStart, false);
+  assert.equal(blank.value, 'start');
+  assert.equal(blank.text, 'Tipoff');
+  assert.equal(blank.hasStart, true);
   const withGame = await page.evaluate(() => {
     const g = (D.games || []).find(x => x && x.status === 'scheduled' && x.home && x.away && x.start);
     RQ.prefill(g.id, null, 0);
@@ -36,7 +36,7 @@ const assert = require('assert');
     return {id: String(g.id), value: sel.value, text: sel.selectedOptions[0].textContent, pick: RQ.S.f.expPick, bets: betBefore === JSON.stringify(U.doc.bets)};
   });
   assert.equal(withGame.value, 'start');
-  assert.equal(withGame.text, 'at tipoff');
+  assert.equal(withGame.text, 'Tipoff');
   assert.equal(withGame.pick, false);
   assert.equal(withGame.bets, true);
   const kept = await page.evaluate(() => {
