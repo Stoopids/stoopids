@@ -4994,6 +4994,13 @@ html body .b27-opps.pool-pick>.b27-util>.s27-selb{box-sizing:border-box;width:10
  html body .s24set{grid-template-columns:140px minmax(120px,200px) minmax(0,1fr)}
  html body .s24set input{grid-column:auto}
 }
+/* Desktop Games filters sit under the 42px Upcoming / Past games tabs. A step larger than 28px, still clearly shorter. */
+@media (min-width:1000px){
+ html body #main .gfone .gf3>.gf2.gfpills,html body #main .gfone .gf3>.gf2.gfwhen{display:flex!important;flex-flow:row nowrap!important;justify-content:flex-start!important;align-items:center!important;gap:6px!important;width:auto!important;max-width:100%!important}
+ html body #main .gfone .gf3>.gf2.gfpills>.gf2-s,html body #main .gfone .gf3>.gf2.gfpills>.gf2-b,html body #main .gfone .gf3>.gf2.gfwhen>.gf2-s,html body #main .gfone .gf3>.gf2.gfwhen>.gf2-b{flex:0 0 auto!important;width:auto!important;min-width:0!important;max-width:none!important;height:34px!important;min-height:34px!important;max-height:34px!important;padding:0 14px!important;font-size:14px!important;line-height:32px!important;box-sizing:border-box!important}
+ html body #main .gfone .gf3>.gf2.gfpills>select.gf2-s,html body #main .gfone .gf3>.gf2.gfwhen>select.gf2-s{width:auto!important;max-width:none!important;padding:0 26px 0 14px!important;field-sizing:content}
+ html body #main .gfone .gf3>.gf2.gfpills>input.gf2-s{width:20ch!important;max-width:none!important;padding:0 14px!important}
+}
 </style><!--</S29E-PASTE>-->
 <!--<S29E-COPY>--><script>
 /* s29e: the per-bet Copy button copies the whole card as WhatsApp-ready plain text (no link). Same words, numbers (b27Num) and odds math (b27Pay) as the card. */
