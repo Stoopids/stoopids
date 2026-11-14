@@ -4061,7 +4061,7 @@ function njPut(k){if(!k)return;const ds=[];for(const x of k.a){const e=document.
   let best=ds[0],bn=0;for(const d of ds){const c=ds.filter(z=>Math.abs(z-d)<=2).length;if(c>bn||(c===bn&&Math.abs(d)<Math.abs(best))){bn=c;best=d}}
   if(Math.abs(best)>=1)njScroll(window.scrollY+best)}
 /*</NO-JUMP>*/
-function pinNavH(){const n=document.getElementById('nav');if(n)document.documentElement.style.setProperty('--navh',Math.ceil(n.getBoundingClientRect().height)+'px');const seg=document.querySelector('#main[data-tab="games"]>.segrow');document.documentElement.style.setProperty('--segh',(seg?Math.ceil(seg.getBoundingClientRect().height):0)+'px');try{obEqual()}catch(e){}}
+function pinNavH(){const n=document.getElementById('nav');if(n)document.documentElement.style.setProperty('--navh',Math.ceil(n.getBoundingClientRect().height)+'px');const seg=document.querySelector('#main[data-tab="games"]>.segrow');document.documentElement.style.setProperty('--segh',(seg?Math.ceil(seg.getBoundingClientRect().height):0)+'px');const sub=document.querySelector('#main>.tabs.ob-seg.ob-desk');document.documentElement.style.setProperty('--subh',(sub&&sub.getClientRects().length?Math.ceil(sub.getBoundingClientRect().height):0)+'px');try{obEqual()}catch(e){}}
 addEventListener('resize',()=>{try{pinNavH()}catch(e){}});
 /* Header (photo + STOOPIDS) is ordinary page content: it scrolls away and comes back only at the very top.
    Once it has left, the main nav stays fixed and the page's second row stays stuck under it, in both directions.
@@ -4086,6 +4086,7 @@ addEventListener('resize',()=>{try{pinNavH()}catch(e){}});
   var scrollTo0=window.scrollTo.bind(window),scrollBy0=window.scrollBy.bind(window);
   window.scrollTo=function(){hush();return scrollTo0.apply(window,arguments)};
   window.scrollBy=function(){hush();return scrollBy0.apply(window,arguments)};
+  function deskBets(){var m=document.getElementById('main');return !!(m&&window.matchMedia('(min-width:1000px)').matches&&m.querySelector(':scope>.tabs.ob-seg.ob-desk'))}
   function enter(y){
     if(away)return;
     var n=navEl(),line=pinLine();if(!n||line<8)return;
@@ -4096,6 +4097,7 @@ addEventListener('resize',()=>{try{pinNavH()}catch(e){}});
     document.body.classList.add('hdr-away');
     hold(true,nh);
     try{pinNavH()}catch(e){}
+    if(deskBets()){var m=document.getElementById('main');if(m)m.scrollTop=0;next=0}
     if(Math.abs((window.scrollY||0)-next)>1)window.scrollTo(0,next);
     lastY=window.scrollY||0;
   }
@@ -4113,11 +4115,12 @@ addEventListener('resize',()=>{try{pinNavH()}catch(e){}});
   addEventListener('scroll',function(){
     var y=window.scrollY||0,dy=y-lastY;
     if(!away){if(y>0)enter(y)}
-    else if(!mute&&y<=0&&dy<0)show(false);
+    else if(!mute&&y<=0&&dy<0&&!deskBets())show(false);
     lastY=window.scrollY||0;
   },{passive:true});
   addEventListener('wheel',function(e){
     if(mute||!away)return;
+    if(e.deltaY<0&&deskBets()){var m=document.getElementById('main');if(m&&m.scrollTop<=0)show(false);return}
     if((window.scrollY||0)<=0&&e.deltaY<0)show(false);
   },{passive:true});
   var ty=0;
@@ -5011,7 +5014,10 @@ html body .b27-opps.pool-pick>.b27-util>.s27-selb{box-sizing:border-box;width:10
  html body #main .gfone .gf3>.gf2.gfpills>input.gf2-s{width:20ch!important;max-width:none!important;padding:0 14px!important}
 }
 @media (min-width:1000px){
- html body #main>.tabs.ob-seg.ob-desk{display:flex!important;flex-flow:row nowrap!important;justify-content:flex-start!important;align-items:center!important;width:100%!important;max-width:100%!important;gap:6px!important;margin:0 0 12px!important;padding:0 0 4px!important;background:var(--bg,#0e121b)!important;position:sticky!important;top:var(--navh,56px)!important;z-index:36!important}
+ html body #main>.tabs.ob-seg.ob-desk{display:flex!important;flex-flow:row nowrap!important;justify-content:flex-start!important;align-items:center!important;width:100%!important;max-width:100%!important;gap:6px!important;margin:0 0 12px!important;padding:0 0 8px!important;background:var(--bg,#0e121b)!important;position:sticky!important;top:var(--navh,56px)!important;z-index:36!important}
+ body.hdr-away:has(#main>.tabs.ob-seg.ob-desk){overflow:hidden}
+ body.hdr-away:has(#main>.tabs.ob-seg.ob-desk) #main{position:fixed!important;top:calc(var(--navh,55px) + var(--subh,52px))!important;left:0;right:0;bottom:0;width:min(100%,var(--nav-max,1080px));margin:0 auto!important;overflow:auto;z-index:1;box-sizing:border-box;padding-bottom:88px!important;background:var(--bg,#0e121b)}
+ body.hdr-away #main>.tabs.ob-seg.ob-desk{position:fixed!important;top:var(--navh,55px)!important;left:0;right:0;width:min(100%,var(--nav-max,1080px))!important;margin:0 auto!important;z-index:36!important;box-sizing:border-box}
  html body #main>.tabs.ob-seg.ob-desk>button{flex:0 0 var(--obw,max-content)!important;width:var(--obw,max-content)!important;min-width:0!important;max-width:none!important;height:44px!important;min-height:44px!important;max-height:44px!important;padding:0 16px!important;font-size:15px!important;line-height:42px!important}
  html body #main .entry-pair,.entry-hd.entry-hd-rq,.entry-hd.entry-hd-wiu{scroll-margin-top:calc(var(--navh,56px) + 60px)}
 }
