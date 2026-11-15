@@ -1116,6 +1116,14 @@ S25.parse=function(text,createdISO){
     const mm=new RegExp(String.raw`^(.*?)\s(?:`+OPP+String.raw`|and|-)\s(.*)$`,'i').exec(rest);if(!mm)return manual;const a=teamL(mm[1]),b=teamR(mm[2]);if(!a||!b)return manual;
     return R({k:'total',t:a,o:b,l,ou})}
   if((m=/^(.*?)\s(?:will\s|would\s)?loses?\sto\s(.*)$/i.exec(t))){const a=teamR(m[2]),b=teamL(m[1]);if(!a||!b)return manual;return R({k:'ml',t:a,o:b,l:null})}   // "Duke loses to Kansas" = Kansas beats Duke
+  // 4c) no points. "Saint Louis (no points) v High Point" and the older "Saint Louis wins (no points) (High Point vs Saint Louis)".
+  // The odds tail is already stripped. A trailing middot must not become part of the opponent's name.
+  {const np=t.replace(/\s*·\s*/g,' ').replace(/\s+/g,' ').trim();let core=np,paren='';
+    const wrap=/^(.*)\s\(([^)]*\bvs\.?\b[^)]*)\)\s*$/i.exec(np);if(wrap){core=wrap[1].trim();paren=wrap[2]}
+    if((m=/^(.*?)\s*\(no points\)\s+(?:v|vs\.?|versus)\s+(.*)$/i.exec(core))){const a=teamL(m[1]),b=teamR(m[2]);if(a&&b)return R({k:'ml',t:a,o:b,l:null})}
+    if((m=/^(.*?)\s+wins?\s*\(no points\)\s*$/i.exec(core))&&paren){const a=teamL(m[1]),gm=/^(.*?)\s+vs\.?\s+(.*)$/i.exec(paren.replace(/,.*$/,'').trim());
+      const x=gm&&(teamL(gm[1])||teamR(gm[1])),y=gm&&(teamR(gm[2])||teamL(gm[2]));
+      if(a&&x&&y){const same=(p,q)=>norm(p)===norm(q),b=same(a,x)?y:same(a,y)?x:null;if(b)return R({k:'ml',t:a,o:b,l:null})}}}
   // 5) moneyline: "Duke beats Kansas", "UVA tops L'ville", "Phillies will win the game versus the Orioles"
   if((m=/^(.*?)\s(?:will\s|would\s)?(?:beats?|tops?|defeats?|outscores?|over|wins?\s(?:the\sgame\s)?(?:vs\.?|versus|against|over|at)|win\s(?:the\sgame\s)?(?:vs\.?|versus|against|over|at))\s(.*)$/i.exec(t))){
     if(/^(the\s)?(spread|by)\b/i.test(m[2]))return manual;const a=teamL(m[1]),b=teamR(m[2]);if(!a||!b)return manual;return R({k:'ml',t:a,o:b,l:null})}
@@ -1775,10 +1783,11 @@ const qbHint=()=>U.qb&&U.qb===U.text&&U.kind==='bet'&&!U.confirm?'<div class="qb
 /*</QUICK-BET>*/
 let gOwner='all',gMode=null,gDay='all',gH2H=params.has('h2h');let gMore=false,gQ='';/*<SYNC3-GF>*/
 /*<SYNC1>*/const tName=id=>{const t=(D.teams||{})[id]||{};return String(t.short||t.name||id)};
-// games with a (non-void) 2026-27 bet on them: the SAME reading + matcher as auto-settle (b.rd via S25.match), so no new parsing rules
+// games with a (non-void) 2026-27 bet on them: the stored reading, each parlay leg's game id, and S25.match
 let gBetCache=null;
 function gBetMap(){if(gBetCache)return gBetCache;const map={};const add=(id,b)=>{if(!id||!b)return;const a=map[id]||(map[id]=[]);if(!a.some(x=>x.id===b.id))a.push(b)};
-  try{for(const b of (U.doc&&U.doc.bets)||[]){if(!b||b.status==='void'||b.kind==='pool')continue;if(b.src&&b.src.g)add(String(b.src.g),b);
+  try{for(const b of (U.doc&&U.doc.bets)||[]){if(!b||b.status==='void'||b.kind==='pool')continue;    if(b.src&&b.src.g)add(String(b.src.g),b);
+    if(Array.isArray(b.legs))b.legs.forEach(L=>{if(L&&L.gid)add(String(L.gid),b)});
     let rd=null;try{rd=s25BetRd(b)}catch(e){}if(rd&&rd.k&&rd.k!=='manual'&&rd.d){try{const m=S25.match(s29Sb(rd.d),rd);if(m&&m.id)add(String(m.id),b)}catch(e){}}}}catch(e){}
   return gBetCache=map}
 function gBetIds(){const out=new Set();try{const m=gBetMap();Object.keys(m).forEach(id=>{if(m[id].length)out.add(id)})}catch(e){}return out}
@@ -3900,6 +3909,9 @@ function b27ReqBet(r){const raw=b27Clean(r&&(r.txt||r.lab))||'';let parsed=null;
     if(other){text=b27Clean(side+' '+fl(l)+' vs '+other+' '+fl(l===0?0:-l)+dateBit);try{rd=S25.parse(text,when)}catch(e){}
       if(!rd||rd.k==='manual'){let d='';try{const dt=S25.dateFrom(String(r.date||text),S25.etDay(new Date(when)));if(dt)d=dt.d}catch(e){}if(!d&&r.start){try{d=S25.etDay(new Date(r.start))}catch(e){}}if(d)rd={k:'spread',t:side,o:other,l,sp:S25.sportOf(teams.join(' ')),d}}}}
   else if(ou){const side=/^o/i.test(ou[1])?'Over':'Under',other=side==='Over'?'Under':'Over';text=b27Clean(side+' '+ou[2]+' vs '+other+' '+ou[2]+', '+teams[0]+' v '+teams[1]+dateBit);try{rd=S25.parse(text,when)}catch(e){}}
+  else{const np=/^(.*?)\s*(?:wins?\s*)?\(no points\)/i.exec(src.replace(/\s*·\s*\d+\s*-\s*\d+.*$/,'').trim());
+    if(np){const side=b27TeamHit(np[1].trim(),teams),other=teams.find(t=>t.toLowerCase()!==String(side||'').toLowerCase())||'';
+      if(side&&other){let d='';try{const dt=S25.dateFrom(String(r.date||src),S25.etDay(new Date(when)));if(dt)d=dt.d}catch(e){}if(!d&&r.start){try{d=S25.etDay(new Date(r.start))}catch(e){}}if(d)rd={k:'ml',t:side,o:other,l:null,sp:'mcbb',d}}}}
   return {text:text||raw,rd:rd&&rd.k&&rd.k!=='manual'?rd:(parsed||{k:'manual'})}}
 const RQ=(typeof SHARED_UI!=='undefined'&&SHARED_UI.Requests)?SHARED_UI.Requests({maxText:PULK.maxText,change:"presAsk();return false",
   e:esc,me:()=>b27Who(),lockHtml:()=>b27LockHtml('request'),others:()=>b27Others().map(n=>({id:n,emoji:ownerEmoji(n),nick:TN(n)})),nick:n=>TN(n),real:n=>PN(n),
