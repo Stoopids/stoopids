@@ -361,7 +361,7 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
     function lineDayLbl(r){var rd=r&&r.rd,d=rd&&rd.d||'';if(/^\d{4}-\d{2}-\d{2}/.test(d)){var p=String(d).split('-'),mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+p[1]-1];return mo+' '+Number(p[2])}if(r&&r.legs&&r.legs.length>=2)return parlayDay(r);return String(r&&r.date||'').replace(/,?\s+20\d\d$/,'').replace(/^(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\s+/i,'').trim()}
     function lineFace(r){var rd=r&&r.rd;if(!rd)return '';if(rd.k==='total'&&rd.l!=null){var side=rd.ou==='u'?'Under':'Over';return side+' '+rd.l+' v '+(side==='Over'?'Under':'Over')+' '+rd.l}if(!rd.t||!rd.o)return '';if(rd.k==='spread'){var n=+rd.l;return rd.t+' '+(n===0?'PK':(n>0?'+':'')+n)+' v '+rd.o}if(rd.k==='ml')return rd.t+' (no points) v '+rd.o;return ''}
     /* One copy for the form, the open-request card, an accepted bet, and a parlay. Built from the stored game reading, stake, names, odds and expiry. The saved sentence is not the source. */
-    function copyText(r,kind,acc){if(!r)return '';var o=r.odds||[1,1],od=+o[0]===+o[1]?'':' \u00b7 '+o[0]+'-'+o[1],left=nmOf(r.by),right=copyWho(r,kind,acc),bomb='\uD83D\uDCA3 $'+r.amt+' '+left+' v '+right+od+' \uD83D\uDCA3',exp=expLbl(r),day=lineDayLbl(r),last=[day,exp?'Exp: '+exp:''].filter(Boolean).join(' \u00b7 '),lines=['\uD83E\uDD2ASTOOPID Request\uD83E\uDD2A',bomb];
+    function copyText(r,kind,acc){if(!r)return '';var o=r.odds||[1,1],od=+o[0]===+o[1]?'':' \u00b7 '+o[0]+'-'+o[1],left=nmOf(r.by),right=copyWho(r,kind,acc),bomb='\uD83D\uDCA3 $'+r.amt+' '+left+' v '+right+od+' \uD83D\uDCA3',exp=expLbl(r),day=lineDayLbl(r),last=[day,exp?'Exp: '+exp:''].filter(Boolean).join(' \u00b7 '),lines=[bomb];
       if(r.legs&&r.legs.length>=2){var legs=r.legs.map(legLine).filter(Boolean);if(!legs.length)return '';lines.push('Parlay \u00b7 '+r.legs.length+' legs');legs.forEach(function(x){lines.push(x)})}
       else{var face=lineFace(r);if(!face)return '';lines.push(face)}
       if(last)lines.push(last);
@@ -370,7 +370,7 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
     function waText(r,kind,acc){var lined=copyText(r,kind,acc);if(lined)return lined;var left=nmOf(r.by),right=vsRight(r,kind==='acc'?acc:null),money='$'+r.amt+' '+left+' v '+right,desc=descLine(r);
       if(sbIs(r.txt)||sbIs(r.lab)){var o=r.odds||[1,1],od=+o[0]===+o[1]?'':' · '+o[0]+'-'+o[1],bet=sbOnce(sl(String(r.txt||r.lab||'').replace(/\s+/g,' ').trim())),whoM=money;
         if(kind==='bet'){var rights=(r.to||[]).map(nmOf).filter(Boolean),rightB=rights.length?rights.join(', '):right;whoM='$'+r.amt+' '+left+' v '+rightB}
-        var lines=['\uD83E\uDD2ASTOOPID Request\uD83E\uDD2A',whoM+od,bet];
+        var lines=[whoM+od,bet];
         if(kind==='acc')lines.push('Accepted');
         else if(kind==='del')lines.push('Deleted');
         else if(kind==='close')lines.push('Closed · '+tk(r).length+' stoops in');
