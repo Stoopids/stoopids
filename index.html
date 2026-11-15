@@ -7,12 +7,12 @@
 (function(){var W=window.S26W={deep:false,user:false,t0:Date.now()};
   try{if('scrollRestoration' in history)history.scrollRestoration='manual'}catch(e){}
   try{var m=/^#(bets|bets-2025-26|games)\/([A-Za-z0-9_-]{1,40})(?:$|[&?\/])/i.exec(location.hash||'');
-    if(m){var nv=performance.getEntriesByType&&performance.getEntriesByType('navigation')[0],fresh=!nv||nv.type==='navigate',seen={};
+    if(m&&!/^(open|request|tally|form|write|all|stoopid)$/i.test(m[2])){var nv=performance.getEntriesByType&&performance.getEntriesByType('navigation')[0],fresh=!nv||nv.type==='navigate',seen={};
       try{seen=JSON.parse(localStorage.getItem('stoopids_linkseen')||'{}')||{}}catch(e){seen={}}
       var k=m[1].toLowerCase()+'/'+m[2];
       if(fresh&&!seen[k]){W.deep=true;seen[k]=Date.now();var ks=Object.keys(seen).sort(function(a,b){return seen[b]-seen[a]}).slice(0,200),o={};ks.forEach(function(x){o[x]=seen[x]});try{localStorage.setItem('stoopids_linkseen',JSON.stringify(o))}catch(e){}}
       else history.replaceState(null,'',location.pathname+location.search+'#'+m[1])}
-    try{var t=sessionStorage.getItem('stoopids.tab');if(t&&t.indexOf('/')>0&&/^(bets|bets-2025-26|games)\//i.test(t))sessionStorage.setItem('stoopids.tab',t.split('/')[0])}catch(e){}
+    try{var t=sessionStorage.getItem('stoopids.tab');if(t&&t.indexOf('/')>0&&/^(bets|bets-2025-26|games)\//i.test(t)&&!/^(open|request|tally|form|write|all|stoopid)$/i.test(t.split('/')[1]||''))sessionStorage.setItem('stoopids.tab',t.split('/')[0])}catch(e){}
   }catch(e){}
   /* installed app (Install / Create shortcut): a launch with no hash opens the tab it was installed from (or the shortcut's #tab); a plain browser open is unchanged */
   try{var sa=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||(window.matchMedia&&matchMedia('(display-mode: minimal-ui)').matches)||navigator.standalone===true,at=localStorage.getItem('stoopids_app_tab');
@@ -3938,12 +3938,15 @@ function obEqual(){const row=document.querySelector('#main>.tabs.ob-seg.ob-desk'
 function stickTo(el){if(!el)return;if(window.S26W)window.S26W.user=true;const go=()=>{const mt=parseFloat(getComputedStyle(el).marginTop)||0;const y=Math.round(el.getBoundingClientRect().top+window.scrollY-obRows()-mt);if(Math.abs((window.scrollY||0)-y)>1)window.scrollTo(0,Math.max(0,y))};go();requestAnimationFrame(()=>requestAnimationFrame(go));setTimeout(go,80)}
 function obAlign(){const head=obLandEl();if(head)stickTo(head)}
 function betsLand(){if(tab!=='bets27'&&tab!=='bets')return;obAlign()}
+function b27IsViewWord(s){return /^(open|request|tally|form|write|all|stoopid)$/i.test(String(s||''))}
+function b27ApplyViewWord(s){s=String(s||'').toLowerCase();if(s==='request')OB_VIEW='request';else if(s==='write'||s==='form')OB_VIEW='form';else if(s==='tally')OB_VIEW='tally';else if(s==='stoopid')OB_VIEW='stoopid';else if(s==='all'||s==='open')OB_VIEW='all';else return false;return true}
+function b27ViewSlug(){if(typeof OB_VIEW==='undefined')return '';if(OB_VIEW==='request')return 'request';if(OB_VIEW==='form')return 'write';if(OB_VIEW==='stoopid')return 'stoopid';if(OB_VIEW==='tally')return 'tally';if(OB_VIEW==='all'||OB_VIEW==='open')return 'all';return ''}
 function obView(v){tab='bets27';
   if(v==='open')OB_VIEW='all';
   else if(v==='tally')OB_VIEW='tally';
   else if(v==='stoopid'){OB_VIEW='stoopid';try{const me=typeof sbMe==='function'?sbMe():'';if(me&&window.SB&&SB.sel.indexOf(me)<0){SB.sel.unshift(me);SB.key=''}}catch(e){}}
   else OB_VIEW=v==='request'?'request':v==='all'?'all':'form';
-  render();betsLand();if(v==='stoopid'&&typeof sbKick==='function')sbKick()}
+  render();try{s24Put(true)}catch(e){}betsLand();if(v==='stoopid'&&typeof sbKick==='function')sbKick()}
 const TALLY_NM={mark:'DIRTY DRAYMOND',jake:'STOCK RISING',kurt:'KURMOJI',ken:'KENTUT',neal:'COCKCHALKROCK',paul:'PARTY PAUL',jim:'NASTY PEACOCK',scott:'EN FUEGO'};   // Tally display = team nickname in caps (ids unchanged); neal = Neal Murf (archive). matthew has no nickname: shown as MATTHEW
 const tNm=i=>TALLY_NM[i]||String(P(i).name||i).toUpperCase();
 function vTally(){/* STEP11: Tally = 2026-27 Bets ledger (b27Tally / U.doc), not D.bets.tallies.ledger */
@@ -4028,7 +4031,7 @@ function s24HashOf(t){return ({bets27:'bets',bets:s24HasNew()?'bets-2025-26':'be
 function s24Read(h){const m=/^#?([a-z0-9-]+)(?:\/([A-Za-z0-9_-]{1,40}))?(?:$|[&?\/])/i.exec(String(h||''));if(!m)return null;let t=s24TabFromHash(m[1].toLowerCase());if(!t)return null;
   /*<S26E>*/if(t==='standings'&&m[2]){const s=m[2].toLowerCase();if(/^(apnet|ap-net|ap|net|rankings|polls)$/.test(s))t='teams';else if(/^(points|breakdown|rosters|squads)$/.test(s))s26eView('points');else if(s==='league')s26eView('league')}/*</S26E>*/
   return {t,sub:m[2]&&(t==='bets27'||t==='games')?m[2]:null}}
-const s24RouteHash=()=>s24HashOf(tab)+(S24.sub&&S24.done!==tab+'/'+S24.sub?'/'+S24.sub:'');/*<S26V> a used deep link never stays in the URL </S26V>*/
+const s24RouteHash=()=>{const base=s24HashOf(tab);if(S24.sub&&!b27IsViewWord(S24.sub)&&S24.done!==tab+'/'+S24.sub)return base+'/'+S24.sub;if((tab==='bets27'||tab==='bets')&&typeof b27ViewSlug==='function'){const slug=b27ViewSlug();if(slug)return base+'/'+slug}return base};/*<S26V> a used deep link never stays in the URL. A Bets sub-tab (request, write, all) does. </S26V>*/
 /* address-bar / href URL: path + (?demo=1) + (?admin=1 only in the address bar of an admin, never in shared links) + hash */
 function s24Url(h,share){const q=new URLSearchParams();if(DEMO)q.set('demo','1');if(!share&&ADMIN)q.set('admin','1');const s=q.toString();return location.pathname+(s?'?'+s:'')+(h?'#'+h:'')}
 const s24Href=t=>s24Url(s24HashOf(t),true);
@@ -4037,11 +4040,12 @@ function s24ShareUrl(kind,id){const h=kind&&s24IdOK(String(id))?(kind==='games'?
 function s29ViewUrl(h){h=String(h||'').replace(/[^A-Za-z0-9_\/-]/g,'');return location.origin+location.pathname+'?view=1'+(h?'#'+h:'')}/*</S29B-SHARE>*/
 /*<S26W-MANIFEST>*/ // Install / Add to home screen from any tab opens that tab: the manifest link points at a per-tab manifest whose start_url is ./#<tab>
 const S26W_MT=["standings", "games", "bets", "bets-2025-26", "teams", "draft", "recap", "howto", "rules", "archive", "share", "profile", "postseason", "redraft", "rosters", "points"];function s26wMan(h){try{h=String(h||'').split('/')[0];const l=document.querySelector('link[rel=manifest]');if(!l)return;const want=S26W_MT.includes(h)?'manifest-'+h+'.webmanifest':'manifest.webmanifest';if(l.getAttribute('href')!==want)l.setAttribute('href',want)}catch(e){}}/*</S26W-MANIFEST>*/
-function s24Put(push){try{s26wMan(s24HashOf(tab));const want=s24Url(s24RouteHash());try{sessionStorage.setItem('stoopids.tab',s24HashOf(tab))}catch(_){}if(location.pathname+location.search+location.hash===want)return;history[push?'pushState':'replaceState'](null,'',want)}catch(e){}}
-function s24NavClick(e,t){if(e&&(e.button>0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey))return true;if(e&&e.preventDefault)e.preventDefault();tab=t;S24.sub=null;render();if(t==='bets27'||t==='bets')betsLand();else{if(window.hdrShow)window.hdrShow();window.scrollTo(0,0)}return false}
+function s24Put(push){try{s26wMan(s24HashOf(tab));const want=s24Url(s24RouteHash());try{sessionStorage.setItem('stoopids.tab',s24RouteHash())}catch(_){}if(location.pathname+location.search+location.hash===want)return;history[push?'pushState':'replaceState'](null,'',want)}catch(e){}}
+function s24NavClick(e,t){if(e&&(e.button>0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey))return true;if(e&&e.preventDefault)e.preventDefault();tab=t;S24.sub=null;if(t==='bets27'||t==='bets')OB_VIEW='request';render();try{s24Put(true)}catch(_){}if(t==='bets27'||t==='bets')betsLand();else{if(window.hdrShow)window.hdrShow();window.scrollTo(0,0)}return false}
 function s24OnNav(){const r=s24Read(location.hash);/*<S26W>*/try{if(r&&r.sub&&window.S26W)S26W.deep=true}catch(_){}/*</S26W>*/if(!r&&location.hash.length>1)return;const R=r||{t:'standings',sub:null};if(R.t===tab&&R.sub===S24.sub)return;/*<S26W>*/if(R.t===tab&&!R.sub&&S24.sub&&S24.done===tab+'/'+S24.sub)return;/*</S26W> the deep link just cleaned its own hash: popstate after hashchange must not undo the jump */
   tab=R.t;S24.sub=R.sub;S24.prep=null;S24.done=null;S24.nf=null;S24.last=tab;try{sessionStorage.setItem('stoopids.tab',s24HashOf(tab))}catch(_){}
-  if(tab==='bets27'&&S24.sub&&/^(open|request|tally|form|write|all)$/i.test(S24.sub)){const a=S24.sub.toLowerCase();S24.sub=null;obView(a==='write'?'form':a);return}
+  if((tab==='bets27'||tab==='bets')&&b27IsViewWord(S24.sub)){const a=S24.sub;S24.sub=null;b27ApplyViewWord(a);render();try{s24Put(false)}catch(_){}if(tab==='bets27'||tab==='bets')betsLand();return}
+  if((tab==='bets27'||tab==='bets')&&S24.sub)OB_VIEW='all';
   render();/*<S27> alias hashes (#draft) settle to the tab hash + its manifest */try{if(!R.sub)s24Put(false)}catch(_){}if(!R.sub){if(tab==='bets27'||tab==='bets')betsLand();else{if(window.hdrShow)window.hdrShow();window.scrollTo(0,0)}}}
 window.addEventListener('popstate',s24OnNav);window.addEventListener('hashchange',s24OnNav);
 /*<TAB-TOP>*/ // every tab switch opens at the top; the browser must not restore an old scroll position on reload/back. Only a link to one bet/game (#bets/<id>) scrolls to it.
@@ -4050,8 +4054,8 @@ window.addEventListener('pageshow',()=>{if(!S24.sub){if(window.hdrShow)window.hd
 /* first load: the hash wins over ?tab=; a reload that lost its hash falls back to this browser tab's last route; plain URLs are left alone */
 (function(){let r=s24Read(location.hash);
   if(!r&&!params.has('tab')){try{const nv=performance.getEntriesByType&&performance.getEntriesByType('navigation')[0];if(nv&&nv.type==='reload'){const x=s24Read(sessionStorage.getItem('stoopids.tab')||'');if(x)r=x}}catch(e){}}
-  /*<S26V>*/try{const nv=performance.getEntriesByType&&performance.getEntriesByType('navigation')[0];if(r&&r.sub&&nv&&nv.type!=='navigate')r.sub=null}catch(e){}/*</S26V>*/
-  if(r){tab=r.t;S24.sub=r.sub;S24.route0=true;S24.last=tab;s24Put(false)}
+  /*<S26V> a reloaded bet/game id does not stick. A Bets sub-tab word does, and it wins over a blank hash. */try{const nv=performance.getEntriesByType&&performance.getEntriesByType('navigation')[0];if(r&&r.sub&&!b27IsViewWord(r.sub)&&nv&&nv.type!=='navigate'){r.sub=null;const saved=s24Read(sessionStorage.getItem('stoopids.tab')||'');if(saved&&saved.t===r.t&&b27IsViewWord(saved.sub))r.sub=saved.sub}}catch(e){}/*</S26V>*/
+  if(r){tab=r.t;if((r.t==='bets27'||r.t==='bets')&&b27IsViewWord(r.sub)){b27ApplyViewWord(r.sub);r.sub=null}else if(r.t==='bets27'||r.t==='bets')OB_VIEW=r.sub?'all':'request';S24.sub=r.sub;S24.route0=true;S24.last=tab;s24Put(false)}
   else{S24.last=tab;if(location.hash.length>1)try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}/*<S26W>*/s24Put(false)/*</S26W>*/}   // a stray / private fragment is never kept
 })();
 /* ---- share / copy ---- */
@@ -4177,6 +4181,7 @@ function s24DeepGo(){
     const g=(D.games||[]).find(x=>String(x.id)===sub);if(!g){s24NotFound('game');return}
     if(S24.prep!==key){S24.prep=key;gOwner='all';gDay='all';gH2H=false;gMode=g.status==='final'?'scores':'upcoming';try{if(!gOwned(g))gAll=true}catch(_){}render();return}
   }else if(tab==='bets27'){
+    if(b27IsViewWord(sub)){S24.sub=null;return}
     if(U.state==='init')return;                       // ledger not loaded yet: b27Apply re-renders
     if(!U.doc.bets.some(b=>b.id===sub)){s24NotFound('bet');return}
     S24.prep=key;
@@ -5060,8 +5065,7 @@ html body #rqForm .b27-when input[type=date]{display:block;width:auto!important;
  html body #main .entry-col>.card.b27-form,html body #main .entry-col>.card.rq-form{flex:1 1 auto;display:flex;flex-direction:column;margin:0!important;padding:0 14px 14px!important;border-radius:14px!important;overflow:hidden;box-shadow:none!important}
  html body #main .entry-rq>.card{background:#141a2b!important;border:1px solid #3b5ccc!important}
  html body #main .entry-wiu>.card{background:#1c1a12!important;border:1px solid #d4b000!important}
- html body #main .entry-hd.entry-hd-rq,html body #main .entry-hd.entry-hd-wiu{display:flex!important;flex-direction:column;justify-content:center;box-sizing:border-box;min-height:78px;margin:0 -14px 14px!important;padding:14px 16px 12px!important;border-radius:13px 13px 0 0!important}
- html body #main .entry-hd-rq h2,html body #main .entry-hd-wiu h2{font-size:20px!important;line-height:1.1!important;letter-spacing:.04em;text-transform:uppercase}
+ html body #main .entry-hd.entry-hd-rq,html body #main .entry-hd.entry-hd-wiu{margin:0 -14px 12px!important;padding:4px 10px!important}
  html body #main .entry-hd-rq{background:#1e3a8a!important;color:#f8fafc!important}
  html body #main .entry-hd-rq p{color:#dbeafe!important}
  html body #main .entry-hd-wiu{background:#FFD400!important;color:#1a1400!important}
@@ -5071,17 +5075,17 @@ html body #rqForm .b27-when input[type=date]{display:block;width:auto!important;
  html body #main .entry-rq .btn.b27-big:not(.sec),html body #main .entry-rq .rq-send:not(.sec){margin-top:auto;background:#1e3a8a!important;color:#fff!important;border:0!important;border-radius:10px;min-height:48px}
  html body #main .entry-wiu #b27Place.btn.b27-big{margin-top:auto;background:#FFD400!important;color:#1a1400!important;border:0!important;border-radius:10px;min-height:48px}
 }
-html body .entry-hd-wiu .entry-hd-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 10px;width:100%}
-html body .entry-hd-wiu .wiu-kind{display:inline-flex!important;flex:0 1 auto;flex-wrap:wrap;justify-content:flex-end;align-items:center;width:auto!important;max-width:100%;gap:4px!important;margin:0!important;padding:0!important;background:transparent!important;border:0!important;grid-template-columns:none!important}
-html body .entry-hd-wiu .wiu-kind>button{flex:0 0 auto!important;width:auto!important;height:28px!important;min-height:28px!important;max-height:28px!important;padding:0 10px!important;font-size:12px!important;font-weight:800!important;line-height:26px!important;border-radius:999px!important;border:1px solid rgba(26,20,0,.35)!important;background:transparent!important;color:#1a1400!important;box-shadow:none!important}
+html body .entry-rq>.card.rq-form,html body .entry-wiu>.card.b27-form{overflow:hidden!important;border-radius:14px!important}
+html body .entry-hd.entry-hd-rq,html body .entry-hd.entry-hd-wiu{display:flex!important;flex-flow:row nowrap!important;align-items:center!important;gap:6px!important;box-sizing:border-box!important;min-height:0!important;height:auto!important;margin:-7px -7px 8px!important;padding:4px 8px!important;border-radius:0!important;overflow:hidden}
+@media (min-width:641px) and (max-width:999px){html body .entry-hd.entry-hd-rq,html body .entry-hd.entry-hd-wiu{margin:-8px -8px 8px!important}}
+html body .entry-hd-rq h2,html body .entry-hd-wiu h2{flex:none!important;font-size:13px!important;line-height:1.15!important;letter-spacing:-.02em!important;text-transform:none!important;white-space:nowrap!important}
+html body .entry-hd.entry-hd-rq p,html body .entry-hd.entry-hd-wiu p{flex:1 1 auto;min-width:0;margin:0!important;font-size:11px!important;line-height:1.15!important;white-space:nowrap!important;overflow:hidden;text-overflow:ellipsis}
+html body .entry-hd-wiu .entry-hd-row{display:contents}
+html body .entry-hd-wiu .wiu-kind{display:inline-flex!important;flex:none!important;flex-wrap:nowrap!important;order:2;align-items:center;width:auto!important;max-width:none;gap:4px!important;margin:0 0 0 auto!important;padding:0!important;background:transparent!important;border:0!important;grid-template-columns:none!important}
+html body .entry-hd-wiu p{order:1}
+html body #main .entry-hd-wiu .wiu-kind>button{flex:0 0 auto!important;width:auto!important;height:18px!important;min-height:18px!important;max-height:18px!important;padding:0 7px!important;font-size:10px!important;font-weight:800!important;line-height:16px!important;border-radius:999px!important;border:1px solid rgba(26,20,0,.35)!important;background:transparent!important;color:#1a1400!important;box-shadow:none!important}
 html body .entry-hd-wiu .wiu-kind>button.on{background:#1a1400!important;color:#FFD400!important;border-color:#1a1400!important}
 html body .entry-hd-wiu .wiu-kind .ks{display:none}
-@media (max-width:999px){
- html body .entry-hd.entry-hd-wiu{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:4px!important;padding:8px 10px!important}
- html body .entry-hd-wiu h2{font-size:15px!important;line-height:1.15!important;text-transform:none!important;letter-spacing:0!important;white-space:nowrap}
- html body .entry-hd-wiu .entry-sub-d{display:block!important;font-size:12px!important;line-height:1.2!important;white-space:normal!important}
- html body .entry-hd-wiu .entry-sub-m{display:none!important}
-}
 </style><!--</S29E-PASTE>-->
 <!--<S29E-COPY>--><script>
 /* s29e: the per-bet Copy button copies the whole card as WhatsApp-ready plain text (no link). Same words, numbers (b27Num) and odds math (b27Pay) as the card. */
