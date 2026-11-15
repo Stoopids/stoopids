@@ -983,7 +983,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.82.0"></script>
+<script src="shared/ui.js?v=1.83.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -1144,7 +1144,7 @@ S25.result=function(r,ts,os){
 
 /* ===== ESPN matching ===== */
 const ALIAS={uva:'virginia',unc:'north carolina',iu:'indiana',ou:'oklahoma',bama:'alabama',vt:'virginia tech','mich st':'michigan state','miss st':'mississippi state',msu:'michigan state',"l'ville":'louisville',lville:'louisville',boilers:'purdue',hoosiers:'indiana',badgers:'wisconsin',wiscy:'wisconsin',vandy:'vanderbilt',vikes:'vikings','t-wolves':'timberwolves',wolves:'timberwolves',dubs:'warriors','49s':'49ers',niners:'49ers',sixers:'76ers',cownboys:'cowboys',kansa:'kansas',zags:'gonzaga',cuse:'syracuse',nova:'villanova',pitt:'pittsburgh',ucsb:'uc santa barbara','uc-irvine':'uc irvine'};
-const norm=s=>{s=String(s||'').toLowerCase().replace(/&/g,' and ').replace(/[.]/g,'').replace(/\bst$/,'state').replace(/[^a-z0-9' -]/g,' ').replace(/\s+/g,' ').trim();return ALIAS[s]||s};
+const norm=s=>{s=String(s||'').toLowerCase().replace(/&/g,' and ').replace(/[.]/g,'').replace(/\bst$/,'state').replace(/^st\s+/,'saint ').replace(/\sst\s+/g,' state ').replace(/[^a-z0-9' -]/g,' ').replace(/\s+/g,' ').trim();return ALIAS[s]||s};
 function teamScore(q,tm){if(!tm)return 0;const qn=norm(q);if(!qn)return 0;
   const ex=[tm.location,tm.shortDisplayName,tm.nickname,tm.abbreviation,tm.displayName].map(norm);if(ex.includes(qn))return 3;
   if(norm(tm.name)===qn)return 2;const dn=norm(tm.displayName);return dn.startsWith(qn+' ')||dn.endsWith(' '+qn)?1:0}

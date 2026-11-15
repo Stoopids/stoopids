@@ -230,7 +230,7 @@ U.halfLs=hsLs;U.halfScores=function(g,s,first,BOX){var tot=s.score!=null?esc(Str
     function offerKey(o){o=o||{};return [o.by,o.amt,(o.odds||[]).join('-'),o.lab||'',o.txt||''].join('\u001f')}
     function sl(s){return SHARED_UI.showLine?SHARED_UI.showLine(s):String(s==null?'':s)}
     function offerLine(o){var a=o.odds&&o.odds[0],b=o.odds&&o.odds[1],od=+a===+b?'':' · '+a+'-'+b;return '$'+o.amt+od+' · '+sl(o.lab||o.txt||'')}
-    function tipOf(f){return SHARED_UI.tipGame({games:games(),gid:f&&f.gid,text:f&&f.text,now:Date.now(),today:(typeof S25!=='undefined'&&S25.etDay)?S25.etDay(new Date()):'',dateFrom:(typeof S25!=='undefined'&&S25.dateFrom)?S25.dateFrom:null,day:(typeof S25!=='undefined'&&S25.etDay)?S25.etDay:null})}
+    function tipOf(f){var g=SHARED_UI.tipGame({games:games(),gid:f&&f.gid,text:f&&f.text,now:Date.now(),today:(typeof S25!=='undefined'&&S25.etDay)?S25.etDay(new Date()):'',dateFrom:(typeof S25!=='undefined'&&S25.dateFrom)?S25.dateFrom:null,day:(typeof S25!=='undefined'&&S25.etDay)?S25.etDay:null});if(g)return g;if(f&&f.gid){var hit=game(f.gid);if(hit&&Date.parse(hit.start))return hit}return null}
     function lineTeams(gw){if(!gw||!gw.g)return [];return [A.tname(gw.g.away),A.tname(gw.g.home)].filter(Boolean)}
     function linePosted(gw){var g=gw&&gw.g,ln=g&&g.line;if(!ln||!(+ln.sp>0))return null;var fav=String(ln.fav)===String(g.away.id)?g.away:String(ln.fav)===String(g.home.id)?g.home:null;if(!fav)return null;var dog=fav===g.away?g.home:g.away,sp=+ln.sp;return {fav:A.tname(fav),dog:A.tname(dog),sp:sp}}
     function linePtsOf(info,name){if(!info||!name)return null;if(name===info.fav)return -info.sp;if(name===info.dog)return info.sp;return null}
@@ -464,9 +464,9 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
       else if(k==='send'){var g=tipOf(f);if(!f.expPick)f.mode='start';var p=pick(g&&g.g,f),amt=f.amtC?(+f.amtTxt>0?Math.round(+f.amtTxt):null):f.amt,ex=expAt(f,now,g?winStart({cov:f.cov,start:g.start},g):null);
         var hasGame=!!(g&&Date.parse(g.start)),wk=!f.whenPick?'game':(f.wk==='date'||f.wk==='season'||f.wk==='game'?f.wk:(f.wk==='unknown'?'unknown':''));
         var err=f.parlay&&(!f.legs||f.legs.length<2)?'Add at least 2 legs.':f.parlay&&f.legs.length>5?'Keep it to 5 legs.':!p?'Write the bet.':!amt?'Choose an amount.':null;
-        if(!err&&f.mode==='start'&&!hasGame)err=wk==='game'?'Name the game so it expires at tipoff and settles at the end of the game.':'Name the game so it expires at tipoff.';
+        if(!err&&f.mode==='start'&&!hasGame)err=wk==='game'?'No game matches those words. Pick it from the game card, or name both teams, so this can close at tipoff and settle at the end of the game.':'No game matches those words. Pick it from the game card, or name both teams, so this can close at tipoff.';
         else if(!err&&(!ex||ex<=now))err='Choose when it expires (up to a year).';
-        else if(!err&&wk==='game'&&!hasGame)err='Name the game so this settles at the end of the game.';
+        else if(!err&&wk==='game'&&!hasGame)err='No game matches those words. Pick it from the game card, or name both teams, so this can settle at the end of the game.';
         if(!err&&!wk)err='Say when it settles: end of season, a date, or not sure yet.';
         var pack=SHARED_UI.whenPack(wk||'unknown',f.est,A.seasonId?A.seasonId():'');if(!err&&wk==='date'&&!pack)err='Use a real date, or pick End Of Season or Not Sure Yet.';
         if(!err){var r0={id:rid(),gid:g?String(g.id):'',start:g&&g.start||null};if(started(Object.assign({cov:f.cov},r0),now))err='That '+(f.cov==='2h'?'half':'game')+' has already started.'}
@@ -559,7 +559,10 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
     if(!text.trim())return null;
     var ymds=[],rest=text,df=o.dateFrom;if(df){for(var n=0;n<4;n++){var d=df(rest,o.today);if(!d||!d.d)break;ymds.push(d.d);rest=String(rest).split(d.raw).join(' ')}}
     function names(side){if(!side)return [];return [side.short,side.name,side.nickname,side.displayName,side.shortDisplayName].filter(Boolean)}
-    function mentioned(n){if(!n||String(n).length<3)return false;return new RegExp('(^|[^A-Za-z0-9\\-])'+String(n).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'([^A-Za-z0-9\\-]|$)','i').test(text)}
+    /* St Louis = Saint Louis, Michigan St = Michigan State. "at", "vs" and "v" are just the words between the two names. */
+    function light(s){return String(s||'').toLowerCase().replace(/&/g,' and ').replace(/[.]/g,'').replace(/[^a-z0-9' -]/g,' ').replace(/\s+/g,' ').trim()}
+    var hay=light(text);
+    function mentioned(n){var s=light(n),keys=[];if(!s||s.length<3)return false;keys.push(s);if(/^saint /.test(s))keys.push('st '+s.slice(6));if(/ state$/.test(s))keys.push(s.replace(/ state$/,' st'));if(/ st$/.test(s))keys.push(s.replace(/ st$/,' state'));return keys.some(function(key){return key.length>=3&&new RegExp('(^|[^a-z0-9-])'+key.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'([^a-z0-9-]|$)').test(hay)})}
     var cands=[];for(var j=0;j<list.length;j++){var g=list[j],st=startOf(g);if(!st||st<=now||g.status==='final')continue;var raw=g.g||g,day=o.day?o.day(g.start):'';if(ymds.length&&day&&ymds.indexOf(day)<0){var lo=ymds.slice().sort()[0],hi=ymds.slice().sort().pop();if(!(ymds.length>1&&day>=lo&&day<=hi))continue}if(!ymds.length&&st>=now+7*86400000)continue;var a=(names(raw.away)||[]).some(mentioned),h=(names(raw.home)||[]).some(mentioned);if(!a&&!h)continue;cands.push({g:g,both:!!(a&&h)})}
     var both=cands.filter(function(c){return c.both});if(both.length===1)return both[0].g;if(cands.length===1)return cands[0].g;return null};
   SHARED_UI.whenKind=function(b){if(!b||typeof b!=='object')return 'unknown';if(b.wk==='game')return 'game';if(b.wk==='season')return 'season';if(b.wk==='unknown')return 'unknown';if(b.wk==='date')return SHARED_UI.estOk(b.est)?'date':'unknown';return SHARED_UI.estOk(b.est)?'date':'unknown'};
