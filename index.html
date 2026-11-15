@@ -983,7 +983,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.80.0"></script>
+<script src="shared/ui.js?v=1.81.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -3368,7 +3368,7 @@ let wiuGo=0;
 document.addEventListener('pointerdown',function(ev){const t=ev.target&&ev.target.closest&&ev.target.closest('.entry-wiu [data-wiu]');if(!t||ev.button>0)return;wiuGo=Date.now();if(typeof render==='function'){render.rqHold=Date.now()+900;render.rqSelf=1}try{b27ParlayAct(t.getAttribute('data-wiu'),t.getAttribute('data-v'))}finally{if(typeof render==='function')render.rqSelf=0}},true);
 document.addEventListener('click',function(ev){const t=ev.target&&ev.target.closest&&ev.target.closest('.entry-wiu [data-wiu]');if(!t)return;ev.preventDefault();if(Date.now()-wiuGo<400)return;if(typeof render==='function')render.rqSelf=1;try{b27ParlayAct(t.getAttribute('data-wiu'),t.getAttribute('data-v'))}finally{if(typeof render==='function')render.rqSelf=0}},true);
 document.addEventListener('change',function(ev){const t=ev.target;if(!(t&&t.dataset&&t.dataset.wiuIn==='pyGid'))return;if(typeof render==='function'){render.rqHold=Date.now()+900;render.rqSelf=1}try{b27ParlayAct('pyGid',t.value)}finally{if(typeof render==='function')render.rqSelf=0}});
-function b27ClipText(b){if(b&&b.legs&&b.legs.length>=2&&typeof s29eOpenCopy==='function')return s29eOpenCopy(b);if(!b||!RQ||!RQ.waText)return '';return RQ.waText({by:b.backer,to:b27Opps(b),amt:b.amt,odds:[b.odds.a,b.odds.b],txt:b.text||'',lab:b.text||'',legs:b.legs||null},'bet')}
+function b27ClipText(b){if(!b)return '';if(RQ&&RQ.copyText){const rd=typeof s25BetRd==='function'?s25BetRd(b):b.rd;const t=RQ.copyText({by:b.backer,to:b27Opps(b),amt:b.amt,odds:[b.odds&&b.odds.a,b.odds&&b.odds.b],rd:rd&&rd.k&&rd.k!=='manual'?rd:null,legs:b.legs&&b.legs.length>=2?b.legs:null,wk:b.wk,est:b.est,cov:b.cov||'game',gid:b.gid||'',start:b.start||'',exp:b.exp||0,date:b.date||''},'bet');if(t)return t}if(b.legs&&b.legs.length>=2&&typeof s29eOpenCopy==='function')return s29eOpenCopy(b);if(!RQ||!RQ.waText)return '';return RQ.waText({by:b.backer,to:b27Opps(b),amt:b.amt,odds:[b.odds.a,b.odds.b],txt:b.text||'',lab:b.text||'',legs:b.legs||null},'bet')}
 function b27CopyNow(t){return new Promise(resolve=>{const fin=ok=>resolve(!!ok);const fb=()=>{let ok=false;try{const ta=document.createElement('textarea');ta.value=t;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();ok=!!(document.execCommand&&document.execCommand('copy'));ta.remove()}catch(e){}fin(ok)};try{if(navigator.clipboard&&navigator.clipboard.writeText&&window.isSecureContext){const p=navigator.clipboard.writeText(t);if(p&&p.then){p.then(()=>fin(true),fb);return}} }catch(e){}fb()})}
 async function b27ClipRetry(){if(!U.clip)return;const ok=await b27CopyNow(U.clip);if(ok){U.msg=String(U.msg||'').replace(/ Could not copy\.$/,'').replace(/ Could not copy it\. Copy the message below\.$/,'').replace(/ Message copied\. Paste it in WhatsApp\.$/,'');U.clip=null;U.msgBad=false;betCopied()}else U.msgBad=true;render()}
 function b27Place(){/*<POOL>*/if(U.kind==='pool')return b27PoolPlace();/*</POOL>*/const e=b27FormOK();if(e){b27Err(e);render();return}U.msg='';U.clip=null;U.confirm=true;render()}
@@ -5082,10 +5082,10 @@ html body .entry-hd-wiu .wiu-kind .ks{display:none}
 </style><!--</S29E-PASTE>-->
 <!--<S29E-COPY>--><script>
 /* s29e: the per-bet Copy button copies the whole card as WhatsApp-ready plain text (no link). Same words, numbers (b27Num) and odds math (b27Pay) as the card. */
-function s29eOpenCopy(b){if(!b)return '';const who=(b27Opps(b).map(PN).join(', ')||PN(b.other));
+function s29eOpenCopy(b){if(!b)return '';try{if(typeof RQ!=='undefined'&&RQ&&RQ.copyText){const rd=typeof s25BetRd==='function'?s25BetRd(b):b.rd;const t=RQ.copyText({by:b.backer,to:b27Opps(b),amt:b.amt,odds:[+(b.odds&&b.odds.a||1),+(b.odds&&b.odds.b||1)],rd:rd&&rd.k&&rd.k!=='manual'?rd:null,legs:b.legs&&b.legs.length>=2?b.legs:null,wk:b.wk,est:b.est,cov:b.cov||'game',gid:b.gid||'',start:b.start||'',exp:b.exp||0,date:b.date||''},'bet');if(t)return t}}catch(e){}const who=(b27Opps(b).map(PN).join(', ')||PN(b.other));
   let line2=b27Clean(b.text||'');const rd=typeof s25BetRd==='function'?s25BetRd(b):b.rd;
-  const keepLine=/\(no points\)/i.test(b.text||'')||(rd&&rd.k==='spread'&&!/\bvs\b/i.test(b.text||'')&&/·/.test(b.text||''));
-  if(keepLine)line2=b27Clean(b.text||'');
+  if(rd&&rd.k==='ml'&&rd.t&&rd.o)line2=rd.t+' (no points) v '+rd.o;
+  else if(rd&&rd.k==='total'&&rd.l!=null){const side=rd.ou==='u'?'Under':'Over';line2=side+' '+rd.l+' v '+(side==='Over'?'Under':'Over')+' '+rd.l}
   else if(rd&&rd.k==='spread'&&rd.t&&rd.o){const fl=rd.l===0?'PK':(rd.l>0?'+':'')+rd.l;line2=rd.t+' '+fl+' v '+rd.o}
   else{const m=/^(.*?)\s+([+-]\d+(?:\.\d+)?)\s+(?:vs\.?|v\.?)\s+(.*?)\s+([+-]\d+(?:\.\d+)?)(.*)$/i.exec(line2);if(m&&Math.abs(+m[2]+ +m[4])<0.05)line2=(m[1]+' '+m[2]+' v '+m[3]+(m[5]||'')).replace(/\s+/g,' ').trim();else line2=line2.replace(/\s+(?:vs\.?|versus)\s+/ig,' v ')}
   const iso=(rd&&rd.d)||(SHARED_UI.whenKind(b)==='date'?b.est:'');let when='';if(iso&&/^\d{4}-\d{2}-\d{2}$/.test(iso))when=etLabel(iso);
