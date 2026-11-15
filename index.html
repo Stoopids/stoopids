@@ -3724,9 +3724,9 @@ function b27SpreadBit(l){l=Number(l);return l===0?'PK':(l>0?'+':'')+l}
 function b27FinalBit(b){if(b.src&&b.src.sc)return String(b.src.sc).replace(/^\((.*)\)$/,'$1').trim();try{const rd=s25BetRd(b),loc=rd&&s25FromGames(rd);if(loc&&loc.p&&loc.p.sc)return String(loc.p.sc)}catch(e){}return ''}
 function b27OppSpread(l){l=Number(l);return b27SpreadBit(l===0?0:-l)}
 function b27FaceBits(b){let rd=null;try{rd=s25BetRd(b)}catch(e){}if(!rd||rd.k==='manual'||!rd.t||!rd.o)return null;
-  if(rd.k==='spread'){const mine=b27SpreadBit(rd.l),theirs=b27OppSpread(rd.l),raw=b27Clean(b.text||'');if(/wins \(no points\)/i.test(raw)||(!/\bvs\b/i.test(raw)&&/·/.test(raw)))return {sides:raw,day:rd.d};return {sides:rd.t+' '+mine+' vs '+rd.o+' '+theirs,day:rd.d}}
+  if(rd.k==='spread'){const mine=b27SpreadBit(rd.l),theirs=b27OppSpread(rd.l),raw=b27Clean(b.text||'');if(/\(no points\)/i.test(raw)||(!/\bvs\b/i.test(raw)&&/·/.test(raw)))return {sides:raw,day:rd.d};return {sides:rd.t+' '+mine+' vs '+rd.o+' '+theirs,day:rd.d}}
   if(rd.k==='total'){const mine=rd.ou==='o'?'Over':'Under',theirs=mine==='Over'?'Under':'Over',n=rd.l;return {sides:mine+' '+n+' vs '+theirs+' '+n+', '+rd.t+' v '+rd.o,day:rd.d}}
-  if(/wins \(no points\)/i.test(b.text||''))return {sides:b27Clean(b.text||''),day:rd.d};
+  if(/\(no points\)/i.test(b.text||''))return {sides:b27Clean(b.text||''),day:rd.d};
   return {sides:rd.t+' vs '+rd.o,day:rd.d}}
 function b27FaceSides(b){if(!b||b.kind==='pool')return '';if(b.legs&&b.legs.length>=2){const a=+(b.odds&&b.odds.a)||1,c=+(b.odds&&b.odds.b)||1;return 'Parlay · '+b.legs.length+' legs · '+(a===c?'1-1':a+'-'+c)}const bits=b27FaceBits(b);return bits&&bits.sides?bits.sides:b27Clean(b.text||'')}
 function b27ParlayHtml(b){if(!b||!b.legs||b.legs.length<2)return '';const rows=b.legs.map(L=>{let sug='After the game';try{const g=(D.games||[]).find(x=>String(x.id)===String(L.gid));if(g&&g.status==='final'&&g.away&&g.home&&g.away.score!=null&&g.home.score!=null){const mine=(g.away.short||g.away.name)===L.t?g.away:g.home,opp=mine===g.away?g.home:g.away;const res=S25.result({k:L.kind==='ml'?'ml':'spread',t:L.t,o:L.o,l:L.kind==='ml'?null:+L.l,sp:'mcbb',d:L.d},+mine.score,+opp.score);sug=res?(res.r==='backer'?'Suggested: hit':res.r==='push'?'Suggested: push':'Suggested: miss'):'No score'}}catch(e){}return '<div class="py-leg"><span>'+esc(L.lab||'')+'</span> <span class="note">'+esc(sug)+'</span></div>'});return '<div class="py-card">'+rows.join('')+'<div class="note">Every leg has to hit. Nothing is settled until someone taps Confirm.</div></div>'}
@@ -5072,7 +5072,7 @@ html body .entry-hd-wiu .wiu-kind .ks{display:none}
 /* s29e: the per-bet Copy button copies the whole card as WhatsApp-ready plain text (no link). Same words, numbers (b27Num) and odds math (b27Pay) as the card. */
 function s29eOpenCopy(b){if(!b)return '';const who=(b27Opps(b).map(PN).join(', ')||PN(b.other));
   let line2=b27Clean(b.text||'');const rd=typeof s25BetRd==='function'?s25BetRd(b):b.rd;
-  const keepLine=/wins \(no points\)/i.test(b.text||'')||(rd&&rd.k==='spread'&&!/\bvs\b/i.test(b.text||'')&&/·/.test(b.text||''));
+  const keepLine=/\(no points\)/i.test(b.text||'')||(rd&&rd.k==='spread'&&!/\bvs\b/i.test(b.text||'')&&/·/.test(b.text||''));
   if(keepLine)line2=b27Clean(b.text||'');
   else if(rd&&rd.k==='spread'&&rd.t&&rd.o){const fl=rd.l===0?'PK':(rd.l>0?'+':'')+rd.l;line2=rd.t+' '+fl+' v '+rd.o}
   else{const m=/^(.*?)\s+([+-]\d+(?:\.\d+)?)\s+(?:vs\.?|v\.?)\s+(.*?)\s+([+-]\d+(?:\.\d+)?)(.*)$/i.exec(line2);if(m&&Math.abs(+m[2]+ +m[4])<0.05)line2=(m[1]+' '+m[2]+' v '+m[3]+(m[5]||'')).replace(/\s+/g,' ').trim();else line2=line2.replace(/\s+(?:vs\.?|versus)\s+/ig,' v ')}
