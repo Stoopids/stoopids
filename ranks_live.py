@@ -64,7 +64,14 @@ def should_fetch(state, now):
 
 # ---------------- sources
 def kenpom_snapshot(team_map, path=None):
-    rows = json.load(open(path or KENPOM_SNAPSHOT, encoding="utf-8"))
+    raw = json.load(open(path or KENPOM_SNAPSHOT, encoding="utf-8"))
+    as_of = KENPOM_SNAPSHOT_DATE
+    rows = raw
+    if isinstance(raw, dict):
+        if raw.get("as_of"):
+            as_of = str(raw["as_of"])
+        rows = raw.get("rows") or []
+    kenpom_snapshot.as_of = as_of
     idx = {}
     for tid, t in team_map.items():
         for n in list(t.get("net_names", [])) + [t.get("school", "")]:
@@ -197,13 +204,14 @@ def apply(out, prev, out_dir=HERE, cache_dir=None, now=None, provider=None, team
             try:
                 new, meta = (provider or _default_provider)(cache_dir, et_day(now))
                 kp, miss = kenpom_snapshot(team_map)
+                fetch["kenpom_snapshot"] = getattr(kenpom_snapshot, "as_of", KENPOM_SNAPSHOT_DATE)
                 for t in team_map:
                     new.setdefault(t, {})
                     if new[t].get("kenpom") is None:
                         new[t]["kenpom"] = kp.get(t)
                 teams, used = merge(teams, new, list(team_map))
                 sources = {s: dict((meta or {}).get(s) or {}, used=used[s]) for s in SOURCES}
-                sources["kenpom"].update(status="snapshot", as_of=KENPOM_SNAPSHOT_DATE, unmatched=len(miss))
+                sources["kenpom"].update(status="snapshot", as_of=fetch["kenpom_snapshot"], unmatched=len(miss))
                 failed = [s for s in ("ap", "net") if used[s] != "new"]
                 state.update(status="fail" if failed else "ok", **({} if failed else {"ok_day": et_day(now)}))
                 fetch.update(called=True, reason=why, failed=failed)

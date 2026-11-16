@@ -1,0 +1,31 @@
+# Rank refresh. About every 2 days, plus a manual run. Public sources only, no secrets.
+# Day-of-month */2 is the 1st, 3rd, 5th, and so on, at 14:17 UTC.
+# A source that cannot be read keeps its previous ranks. The job still succeeds.
+# Commits data.js / data.json / data/net.json only when a rank or a real source date changed.
+name: ranks
+on:
+  schedule:
+    - cron: "17 14 */2 * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: ranks-refresh
+  cancel-in-progress: false
+jobs:
+  ranks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 ranks_refresh.py
+      - run: |
+          git config user.name stoopids-bot
+          git config user.email "bot@users.noreply.github.com"
+          git add data.js data.json data/net.json kenpom_o.json
+          if git diff --cached --quiet; then
+            echo "No rank changes to commit."
+          else
+            git commit -m "ranks"
+            git pull --rebase -X theirs origin main
+            git push
+          fi
