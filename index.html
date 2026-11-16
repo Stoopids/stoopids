@@ -983,7 +983,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.83.0"></script>
+<script src="shared/ui.js?v=1.84.0"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -3942,7 +3942,7 @@ const RQ=(typeof SHARED_UI!=='undefined'&&SHARED_UI.Requests)?SHARED_UI.Requests
   tname:s=>qbNm(s),dateET:g=>qbDate(g),link:()=>location.href.split('#')[0]+'#bets27',goRequest:()=>{tab='bets27';OB_VIEW='request'},waiting:()=>{try{const me=b27Who();return me&&U.doc&&U.doc.bets?U.doc.bets.filter(b=>s24Waiting(b,me)).length:0}catch(e){return 0}},navEl:()=>document.querySelector('a.nt[data-tab="bets27"]')||document.querySelector('a.nt[data-tab="bets"]'),
   get:async()=>{const r=await fetch(REQ_URL,{cache:'no-store'});if(!r.ok)throw 0;return r.text()},
   set:async txt=>{const w=await fetch(REQ_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:txt});if(!w.ok)throw 0},
-  placeBet:async(r,me)=>{const id=b27Rid(),at=new Date().toISOString(),built=(r&&(r.gid||r.game))?b27ReqBet(r):{text:b27Clean(r.txt)};const text=built.text||b27Clean(r.txt);if(text){if(!r.lab||r.lab===r.txt)r.lab=text;r.txt=text}let rd=null;try{const pinned=r&&r.rd&&s25ValidExtra({rd:r.rd},b27OwnerNames(),'open').rd;if(pinned&&pinned.k&&pinned.k!=='manual')rd=pinned}catch(e){}if(!rd)rd=built.rd;if(!rd||rd.k==='manual'){try{rd=S25.parse(text,r.start||at)}catch(_){}}
+  placeBet:async(r,me)=>{const id=b27Rid(),at=new Date().toISOString(),built=r&&r.free?{text:b27Clean(r.txt)}:(r&&(r.gid||r.game))?b27ReqBet(r):{text:b27Clean(r.txt)};const text=built.text||b27Clean(r.txt);if(text){if(!r.lab||r.lab===r.txt)r.lab=text;r.txt=text}let rd=null;if(!r.free){try{const pinned=r&&r.rd&&s25ValidExtra({rd:r.rd},b27OwnerNames(),'open').rd;if(pinned&&pinned.k&&pinned.k!=='manual')rd=pinned}catch(e){}if(!rd)rd=built.rd;if(!rd||rd.k==='manual'){try{rd=S25.parse(text,r.start||at)}catch(_){}}}
     const w=SHARED_UI.whenPack(r.wk,r.est,r.sid)||SHARED_UI.whenPack('unknown');
     const legs=b27Legs(r);if(legs)rd=null;
     const nb=Object.assign({id,backer:r.by,other:me,postedBy:me,postedAt:at,amt:r.amt,odds:{a:(r.odds||[1,1])[0],b:(r.odds||[1,1])[1]},text,status:'open',req:r.id,wk:w.wk,est:w.est,sid:w.sid},rd?{rd}:{},legs?{legs}:{});
