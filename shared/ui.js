@@ -289,8 +289,11 @@ U.halfLs=hsLs;U.halfScores=function(g,s,first,BOX){var tot=s.score!=null?esc(Str
       return h+'</div></div>'}
     function rqChipOdds(){return [[1,1],[2,1],[3,1],[4,1]]}
     function rqAmts(){return (A.amounts||[]).filter(function(a){return +a!==50})}
+    /* Unmatched text shows a real expiry (3 days) and Not sure yet. Those visible choices are the pick; a matched game still uses tipoff and end of game until the person changes them. */
+    function freeShown(f,hasGame){if(hasGame||!f||!String(f.text||'').trim())return;if(!f.expPick&&f.mode==='start'){f.mode='d';if(!(+f.n>0))f.n=3}if(!f.whenPick)f.wk='unknown'}
+    function commitRqSelect(t){if(!t||!t.dataset)return;var k=t.dataset.rqIn,v=t.value,f=S.f;if(k==='mode'){if(f.mode===v&&f.expPick)return;f.mode=v;f.expPick=true}else if(k==='wkMenu'){var wk=v==='date'||v==='season'||v==='game'?v:'unknown';if(f.whenPick&&f.wk===wk)return;f.whenPick=true;f.wk=wk;if(wk!=='date')f.est=''}else return;A.render()}
     function form(){var f=S.f,now0=Date.now(),G=games().filter(function(x){var st=Date.parse(x.start)||0,ws=f.cov==='2h'?st+HALF_MS:st;if(String(x.id)===String(f.gid))return true;if(x.status==='final'||st>=now0+7*86400000)return false;if(f.cov==='2h')return !(x.period&&+x.period>=2)&&now0<ws;return x.status==='scheduled'&&now0<ws}),g=tipOf(f),me=A.me(),nOth=A.others().length;
-      var timed=!!(g&&Date.parse(g.start));if(!f.expPick&&timed)f.mode='start';
+      var timed=!!(g&&Date.parse(g.start));if(!f.expPick&&timed)f.mode='start';freeShown(f,timed);
       /* same template as Write it Up: header, Select all / Clear, numbered questions, Amount + Odds, summary, big button. Identity stays on Profile. */
       var h='<div class="card b27-form rq-form" id="rqForm">'+SHARED_UI.entryHead('rq')+(S.edit?'<div class="note">Editing this request. Nothing is posted until you save.</div>':'');
       /* STEP10: Select all / Clear sit right-aligned on the same line as question 1; the Stoop buttons stay on the next row */
@@ -462,12 +465,12 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
       if(k==='to'){var i=f.to.indexOf(v);if(i>=0)f.to.splice(i,1);else f.to.push(v)}
       else if(k==='all')f.to=A.others().map(function(o){return o.id});else if(k==='clear')f.to=[];
       else if(k==='side'){f.side=v;var gg=game(f.gid),pp=gg&&pick(gg.g,{side:v,cov:'game'});if(pp)f.text=pp.txt}else if(k==='cov'){f.cov=v}else if(k==='amt'){f.amt=+v;f.amtTxt='';f.amtC=false}else if(k==='amtc'){f.amtC=true;f.amt=null}else if(k==='oddc'){f.oddC=true}else if(k==='fslotall'){f.sAll=true;f.slots=null}else if(k==='fslot-'||k==='fslot+'){var nT=f.to.length,cT=nT||A.others().length,cur=f.sAll?cT:f.slots?Math.min(f.slots,cT):(nT||1);f.sAll=false;cur+=k==='fslot+'?1:-1;f.slots=Math.max(1,Math.min(cT,cur))}else if(k==='odds'){f.odds=v.split('-').map(Number);f.oddC=false;f.oddTxt='';if(f.parlay)pySync(f,false);else if(f.lineKind==='none'||f.lineKind==='custom')applyLine(f)}
-      else if(k==='send'){var g=tipOf(f);var hasGame=!!(g&&Date.parse(g.start));if(!f.expPick&&hasGame)f.mode='start';var p=pick(hasGame?g.g:null,f),amt=f.amtC?(+f.amtTxt>0?Math.round(+f.amtTxt):null):f.amt,ex=expAt(f,now,hasGame?winStart({cov:f.cov,start:g.start},g):null);
-        var wk=hasGame&&!f.whenPick?'game':(f.whenPick&&(f.wk==='date'||f.wk==='season'||f.wk==='game')?f.wk:(f.whenPick&&f.wk==='unknown'?'unknown':''));
+      else if(k==='send'){var g=tipOf(f);var hasGame=!!(g&&Date.parse(g.start));if(!f.expPick&&hasGame)f.mode='start';freeShown(f,hasGame);var p=pick(hasGame?g.g:null,f),amt=f.amtC?(+f.amtTxt>0?Math.round(+f.amtTxt):null):f.amt,ex=expAt(f,now,hasGame?winStart({cov:f.cov,start:g.start},g):null);
+        var wk=hasGame&&!f.whenPick?'game':(f.wk==='date'||f.wk==='season'||f.wk==='game'?f.wk:(f.wk==='unknown'?'unknown':''));
         var err=f.parlay&&(!f.legs||f.legs.length<2)?'Add at least 2 legs.':f.parlay&&f.legs.length>5?'Keep it to 5 legs.':!p?'Write the bet.':!amt?'Choose an amount.':null;
-        if(!err&&!hasGame&&(f.mode==='start'||!f.expPick))err='Pick when it expires.';
+        if(!err&&!hasGame&&f.mode==='start')err='Pick when it expires.';
         else if(!err&&(!ex||ex<=now))err='Choose when it expires (up to a year).';
-        else if(!err&&!hasGame&&(!f.whenPick||wk==='game'))err='Pick when it can be settled.';
+        else if(!err&&!hasGame&&wk==='game')err='Pick when it can be settled.';
         if(!err&&!wk)err='Say when it settles: end of season, a date, or not sure yet.';
         var pack=SHARED_UI.whenPack(wk||'unknown',f.est,A.seasonId?A.seasonId():'');if(!err&&wk==='date'&&!pack)err='Use a real date, or pick End Of Season or Not Sure Yet.';
         if(!err){var r0={id:rid(),gid:g?String(g.id):'',start:g&&g.start||null};if(started(Object.assign({cov:f.cov},r0),now))err='That '+(f.cov==='2h'?'half':'game')+' has already started.'}
@@ -508,6 +511,7 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
     if(typeof window!=='undefined'&&typeof setInterval!=='undefined'){setTimeout(function(){if(A.me())load()},3000);setInterval(function(){if(A.me()&&!S.busy)load()},60000);setInterval(paint,2000)}
     if(typeof document!=='undefined'){var rqGo=0;document.addEventListener('pointerdown',function(ev){var t=ev.target&&ev.target.closest&&ev.target.closest('#rqForm [data-rq]');if(!t||ev.button>0)return;rqGo=Date.now();if(typeof render==='function'){render.rqHold=Date.now()+900;render.rqSelf=1}try{act(t.getAttribute('data-rq'),t.getAttribute('data-v'),t.getAttribute('data-st'))}finally{if(typeof render==='function')render.rqSelf=0}},true);document.addEventListener('click',function(ev){var t=ev.target.closest&&ev.target.closest('[data-rq]');if(!t)return;ev.preventDefault();if(Date.now()-rqGo<400)return;if(typeof render==='function')render.rqSelf=1;try{act(t.dataset.rq,t.dataset.v,t.getAttribute('data-st'))}finally{if(typeof render==='function')render.rqSelf=0}});
       document.addEventListener('change',function(ev){var t=ev.target;if(!(t&&t.dataset&&t.dataset.rqIn))return;if(typeof render==='function')render.rqSelf=1;try{input(t.dataset.rqIn,t.value)}finally{if(typeof render==='function')render.rqSelf=0}});
+      document.addEventListener('blur',function(ev){var t=ev.target;if(!(t&&t.dataset&&(t.dataset.rqIn==='mode'||t.dataset.rqIn==='wkMenu')))return;if(typeof render==='function')render.rqSelf=1;try{commitRqSelect(t)}finally{if(typeof render==='function')render.rqSelf=0}},true);
       document.addEventListener('input',function(ev){var t=ev.target;if(t&&t.dataset&&t.dataset.co&&S.coff){S.coff[t.dataset.co]=t.value;return}if(!(t&&t.dataset&&(t.dataset.rqIn==='amtTxt'||t.dataset.rqIn==='n'||t.dataset.rqIn==='oddTxt'||t.dataset.rqIn==='text')))return;S.f[t.dataset.rqIn]=t.value;if(t.dataset.rqIn==='text'||t.dataset.rqIn==='amtTxt')rqPaintExplain()})}
     function straight(side){var f=S.f;f.lineOn=true;f.lineSide=side?1:0;f.lineKind='none';f.linePts='';applyLine(f,true)}
     return {view:view,openN:openN,pinned:pinned,prefill:prefill,straight:straight,parlayBegin:pyBegin,parlaySet:pySet,parlayBox:function(f){return pyBox(f,'wiu')},parlayAct:pyAct,load:load,count:count,paint:paint,observe:observe,S:S,waText:waText,copyText:copyText,parlayText:parlayText,label:'\u{1F4E8} Request a bet'}};
