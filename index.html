@@ -2546,7 +2546,8 @@ const S27_KP_SEASON='2027';
 const S27T={k:'kp',d:1};   // opens on KenPom, best rank first
 function s27Day(iso){const m=/(\d{4}-\d{2}-\d{2})/.exec(String(iso||''));return m?etLabel(m[1]):''}
 function s27TeamsNote(){const kp=s27Day((D.ranks&&D.ranks.sources&&D.ranks.sources.kenpom&&D.ranks.sources.kenpom.as_of)||(D.meta&&D.meta.ranks_fetch&&D.meta.ranks_fetch.kenpom_snapshot));
-  const ap=RK.apPoll?s27Day(RK.apDate):'';const net=s27Day(RK.netFetched||RK.netAsOf);
+  const storedAp=D.ranks&&D.ranks.sources&&D.ranks.sources.ap&&D.ranks.sources.ap.poll_date;
+  const ap=s27Day((RK.apPoll&&RK.apDate)||storedAp);const net=s27Day(RK.netFetched||RK.netAsOf);
   return [kp?('KenPom updated '+kp):'KenPom has no date on file',ap?('AP Top 25 '+ap):'AP Top 25 (no poll date loaded)',net?('NET fetched '+net):'NET has no date on file'].join(' · ')}
 function s27Sort(f){if(S27T.k!==f){S27T.k=f;S27T.d=(f==='rec'||f==='pts')?-1:1}else S27T.d=-S27T.d;render()}/* SORT-ALL: tap toggles asc/desc; REC/PTS start best-first */
 function s27SharePage(){try{s24Share()}catch(e){}}
@@ -4420,7 +4421,7 @@ async function rkLoad(){if(RK.started||DEMO)return;RK.started=true;let ss=null;t
   try{let j=null;try{const c=ss&&JSON.parse(ss.getItem(KEY)||'null');if(c&&Date.now()-c.at<36e5)j=c.j}catch(e){}
     if(!j){const r=await fetch('https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/rankings',{credentials:'omit'});if(r.ok){j=await r.json();try{ss&&ss.setItem(KEY,JSON.stringify({at:Date.now(),j:{rankings:(j.rankings||[]).filter(x=>x.type==='ap')}}))}catch(e){}}}
     if(j)useAp(j)}catch(e){}
-  /*<S29D-RANKS>*/try{if(!RK.ap&&D.ranks&&D.ranks.teams){const m={},L=[];Object.keys(D.ranks.teams).forEach(tid=>{const n=Number(D.ranks.teams[tid].ap),t=D.teams[tid]||{};if(n>=1&&n<=25){m[String(t.espn_id||tid)]=n;L.push({n,tid,name:String(t.name||t.short||'').slice(0,40)})}});if(L.length){RK.ap=m;RK.apList=L.sort((a,b)=>a.n-b.n);RK.apDate=String((D.meta&&D.meta.ranks_fetch&&(D.meta.ranks_fetch.at||D.meta.ranks_fetch.fetched_at))||'')}}}catch(e){}   // ESPN AP fetch failed: AP from data.json ranks/*</S29D-RANKS>*/
+  /*<S29D-RANKS>*/try{if(!RK.ap&&D.ranks&&D.ranks.teams){const m={},L=[];Object.keys(D.ranks.teams).forEach(tid=>{const n=Number(D.ranks.teams[tid].ap),t=D.teams[tid]||{};if(n>=1&&n<=25){m[String(t.espn_id||tid)]=n;L.push({n,tid,name:String(t.name||t.short||'').slice(0,40)})}});if(L.length){RK.ap=m;RK.apList=L.sort((a,b)=>a.n-b.n);const poll=String((D.ranks&&D.ranks.sources&&D.ranks.sources.ap&&D.ranks.sources.ap.poll_date)||'');if(/^\d{4}-\d{2}-\d{2}/.test(poll)){RK.apDate=poll.slice(0,10);RK.apPoll=true;}}}}catch(e){}   // ESPN AP fetch failed: AP ranks and the stored poll date from data.json/*</S29D-RANKS>*/
   try{const r=await fetch('data/net.json',{credentials:'omit'});if(r.ok){const n=await r.json();if(Array.isArray(n.rows)){RK.net=n.rows.filter(x=>Number.isInteger(x.net)&&typeof x.school==='string');RK.netAsOf=String(n.as_of||'');RK.netFetched=String(n.fetched_at||'');RK.netSeason=String(n.season||'')}}}catch(e){}
   try{render()}catch(e){}}
 /*</RANKINGS>*/
