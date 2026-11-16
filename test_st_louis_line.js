@@ -36,21 +36,28 @@ const assert = require('assert');
     RQ.S.f.lineKind = '';
     const kept = RQ.S.f.gid;
     const still = SHARED_UI.tipGame(Object.assign({}, opts, {gid: kept}));
+    const upcoming = g && g.status === 'scheduled' && Date.parse(g.start) > Date.now();
     return {
       id: hit && String(hit.id),
+      upcoming,
       parsed: {k: parsed.k, t: parsed.t, o: parsed.o, l: parsed.l},
       matched: matched && String(matched.id),
       gidBefore, kept, still: still && String(still.id)
     };
   }, text);
-  assert.equal(found.id, '401911251', 'the sentence with no saved id still finds Saint Louis v High Point');
   assert.equal(found.parsed.k, 'spread');
   assert.equal(found.parsed.t, 'High Point');
   assert.equal(found.parsed.l, -7.5);
   assert.equal(found.matched, '401911251');
   assert.equal(found.gidBefore, '401911251');
   assert.equal(found.kept, '401911251', 'rewriting the Quick bet text keeps the game id');
-  assert.equal(found.still, '401911251');
+  if (found.upcoming) {
+    assert.equal(found.id, '401911251', 'the sentence with no saved id still finds Saint Louis v High Point');
+    assert.equal(found.still, '401911251');
+  } else {
+    assert.equal(found.id, null, 'a finished game is not used as the tipoff');
+    assert.equal(found.still, '401911251', 'a picked game id is kept even after the text is rewritten');
+  }
 
   await page.evaluate((text) => {
     tab = 'bets27'; OB_VIEW = 'request';
@@ -70,8 +77,13 @@ const assert = require('assert');
   await page.waitForTimeout(800);
   const sent = await page.evaluate(() => ({msg: RQ.S.msg, gid: RQ.S.f.gid}));
   const posted = writes.filter(w => /stoopids-requests-/.test(w));
-  assert.equal(sent.msg, 'Could not send it. Try again.', 'a matched game is not blocked with Name the game');
-  assert.equal(posted.length > 0, true, 'send attempted a request write, which this test aborted');
+  if (found.upcoming) {
+    assert.equal(sent.msg, 'Could not send it. Try again.', 'a matched game is not blocked with Name the game');
+    assert.equal(posted.length > 0, true, 'send attempted a request write, which this test aborted');
+  } else {
+    assert.ok(/Pick when it expires/.test(sent.msg), sent.msg);
+    assert.equal(posted.length, 0);
+  }
 
   writes.length = 0;
   await page.evaluate(() => {
@@ -85,7 +97,7 @@ const assert = require('assert');
   });
   await page.waitForTimeout(200);
   const none = await page.evaluate(() => RQ.S.msg);
-  assert.ok(/No game matches those words/.test(none), none);
+  assert.ok(/Pick when it expires/.test(none), none);
   assert.equal(writes.some(w => /stoopids-requests-/.test(w)), false);
   assert.ok(!writes.some(w => /stoopids-bets-2627-/.test(w)));
   if (errors.length) throw new Error(errors.join('\n'));
