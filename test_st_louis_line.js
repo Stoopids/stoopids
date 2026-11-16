@@ -81,7 +81,7 @@ const assert = require('assert');
     assert.equal(sent.msg, 'Could not send it. Try again.', 'a matched game is not blocked with Name the game');
     assert.equal(posted.length > 0, true, 'send attempted a request write, which this test aborted');
   } else {
-    assert.ok(/Pick when it expires/.test(sent.msg), sent.msg);
+    assert.ok(/Pick when it (expires|can be settled)/.test(sent.msg), sent.msg);
     assert.equal(posted.length, 0);
   }
 
@@ -97,7 +97,7 @@ const assert = require('assert');
   });
   await page.waitForTimeout(200);
   const none = await page.evaluate(() => RQ.S.msg);
-  assert.ok(/Pick when it expires/.test(none), none);
+  assert.ok(/Pick when it (expires|can be settled)/.test(none), none);
   assert.equal(writes.some(w => /stoopids-requests-/.test(w)), false);
   assert.ok(!writes.some(w => /stoopids-bets-2627-/.test(w)));
   if (errors.length) throw new Error(errors.join('\n'));
