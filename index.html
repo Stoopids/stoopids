@@ -2488,7 +2488,22 @@ const D27_START='2026-11-01T13:00:00Z',D27_OWNERS=8,D27_ROUNDS=8,D27_TOTAL=D27_O
 function d27Done(){const r=DRAFT27_RESULTS;if(!r)return false;const t=r.draft_completed_at||r.completed_at,ms=t?Date.parse(t):NaN;
   return isFinite(ms)&&ms>=Date.parse(D27_START)&&Array.isArray(r.picks)&&r.picks.length===D27_TOTAL}
 /* Weekly write-ups for the Recap tab: Monday recaps + milestone specials. Newest first by date. Add entries like {date:'2026-11-09',title:'Week 1',kind:'weekly',body:'...'} (kind 'weekly' | 'special'). body is plain text (escaped). */
-const RECAPS=[{date:'2026-11-09',title:'Week 1',kind:'special',body:`Opening week (Nov 1-9) started everyone at zero. Four people are still tied at the top: Mark, Jake, Kurt, and Jim, all on 17. Ken has 15, Murf 14, and Paul and Scotty are tied at 13. Every point so far is a win. No bonuses, and nobody has the lead alone.
+const RECAPS=[{date:'2026-11-16',title:'Week 2',kind:'weekly',body:`Nov 10-15. Mark and Jim are still tied for first, now on 28. Ken went from 15 to 27, one point back. Murf and Paul are tied on 25. Kurt fell out of the opening tie to 24, Jake to 23, and Scotty has 18. Points this week: Ken 12, Paul 12, Mark 11, Jim 11, Murf 11, Kurt 7, Jake 6, Scotty 5.
+
+Best team: Ken's UNC Wilmington, 2-0 by a combined 77 (91-73 Kent State, 100-41 Montreat). Worst team: Scotty's Colgate, 0-2 this week and 0-4 on the season (59-90 St John's, 58-64 Delaware).
+
+Biggest roster upset: Murf's Memphis, a 10.5-point dog, beat Kurt's Louisville 98-78 on Nov 15.
+
+Pullups: 7 bets settled, none a wash. Paul went 4-3. Murf owes him 10, Jim owes him 5, and Paul owes 5 to Scotty and 5 to Ken. Jake, Mark, and Kurt did not settle a bet. 20 are still open.
+
+Mark: 11 points, and he still has to share first place.
+Jake: he started tied for first and left the week on 23. Duke was a 7.5 favorite and lost.
+Kurt: Virginia went 2-0, and he still dropped out of the tie. Louisville was favored by 10.5 and lost by 20.
+Jim: tied for first at 28, the same week Kansas beat his Kentucky by 20.
+Ken: tied for the most points this week, and he is still one short.
+Murf: the upset of the week, and a 24-point loss, same week.
+Paul: 12 points, tied for the most, and Saint Louis lost to a 7.5-point dog.
+Scotty: Kansas won by 20. Colgate is still on zero.`},{date:'2026-11-09',title:'Week 1',kind:'special',body:`Opening week (Nov 1-9) started everyone at zero. Four people are still tied at the top: Mark, Jake, Kurt, and Jim, all on 17. Ken has 15, Murf 14, and Paul and Scotty are tied at 13. Every point so far is a win. No bonuses, and nobody has the lead alone.
 
 Best team: Jake's Texas, 3-0 by a combined 129 (109-59 Chicago St, 98-50 Gardner-Webb, 93-62 Grambling). Worst team: Scotty's Colgate, 0-2, the only roster team still on zero (76-90 Washington, 74-77 Drexel).
 
