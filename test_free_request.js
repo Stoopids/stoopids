@@ -27,7 +27,7 @@ const assert = require('assert');
     const games = (D.games || []).filter(g => g && g.home && g.away).map(g => ({id: String(g.id), g, start: g.start, status: g.status}));
     const opts = {games, now: Date.now(), today: S25.etDay(new Date()), dateFrom: S25.dateFrom, day: S25.etDay};
     const hit = SHARED_UI.tipGame(Object.assign({gid: '', text}, opts));
-    const linked = SHARED_UI.tipGame(Object.assign({gid: '', text: 'Grambling covers the -7.5 at Kentucky'}, opts));
+    const linked = SHARED_UI.tipGame(Object.assign({gid: '', text: 'Illinois covers the -7.5 at Duke'}, opts));
     tab = 'bets27'; OB_VIEW = 'request';
     RQ.S.f = Object.assign(RQ.S.f, {gid: '', text, rd: null, lineKind: '', to: ['Paul'], amt: 5, odds: [1, 1], mode: 'd', n: 3, expPick: true, whenPick: true, wk: 'season', est: '', parlay: false, legs: []});
     RQ.S.msg = '';
@@ -36,7 +36,7 @@ const assert = require('assert');
     return {hit: hit && String(hit.id), linked: linked && String(linked.id)};
   }, text);
   assert.equal(prep.hit, null, 'the finished St Louis game is not an automatic tipoff match');
-  assert.equal(prep.linked, '401921804', 'wording that names an upcoming game still matches');
+  assert.equal(prep.linked, '401909566', 'wording that names an upcoming game still matches');
   await page.waitForTimeout(900);
   const msg = await page.evaluate(() => RQ.S.msg);
   assert.ok(!/No game matches those words/.test(msg), msg);
@@ -91,7 +91,7 @@ const assert = require('assert');
     assert.equal(view.retap.whenPick, true, 're-tapping Not sure yet stays picked at ' + width);
   }
   const matched = await page.evaluate(() => {
-    RQ.S.f.text = 'Grambling covers the -7.5 at Kentucky';
+    RQ.S.f.text = 'Illinois covers the -7.5 at Duke';
     RQ.S.f.gid = '';
     RQ.S.f.expPick = false;
     RQ.S.f.whenPick = false;

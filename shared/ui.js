@@ -364,8 +364,18 @@ function oddsTxt(o){o=o||[1,1];return +o[0]===+o[1]?'even':o[0]+'-'+o[1]}
     function parlayText(r,kind,acc){return copyText(r,kind,acc)}
     function lineDayLbl(r){var rd=r&&r.rd,d=rd&&rd.d||'';if(/^\d{4}-\d{2}-\d{2}/.test(d)){var p=String(d).split('-'),mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+p[1]-1];return mo+' '+Number(p[2])}if(r&&r.legs&&r.legs.length>=2)return parlayDay(r);return String(r&&r.date||'').replace(/,?\s+20\d\d$/,'').replace(/^(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\s+/i,'').trim()}
     function lineFace(r){var rd=r&&r.rd;if(!rd)return '';if(rd.k==='total'&&rd.l!=null){var side=rd.ou==='u'?'Under':'Over';return side+' '+rd.l+' v '+(side==='Over'?'Under':'Over')+' '+rd.l}if(!rd.t||!rd.o)return '';if(rd.k==='spread'){var n=+rd.l;return rd.t+' '+(n===0?'PK':(n>0?'+':'')+n)+' v '+rd.o}if(rd.k==='ml')return rd.t+' (no points) v '+rd.o;return ''}
+    /* Ready for someone else to settle: the viewer is in the bet, and the backer (Only X can enter result) has to enter it.
+       Four lines. Winner is the name the page already suggested from the final, or omitted when there is no result or it is a push. */
+    function settleWaitText(r){if(!r||!r.settleFor||r.n==null)return '';var face=lineFace(r),day=lineDayLbl(r),body=[];
+      if(r.legs&&r.legs.length>=2){body.push('Parlay \u00b7 '+r.legs.length+' legs');r.legs.forEach(function(L){var x=legLine(L);if(x)body.push(x)})}
+      else if(face)body.push(face);
+      if(!body.length)return '';
+      var win=r.winName&&r.winName!=='Wash'?String(r.winName):'';
+      var lines=['\uD83C\uDF89 Bet #'+r.n+(win?' \u00b7 '+win+' Won':'')+' \uD83C\uDF89','Hey '+r.settleFor+', settle this bet!'].concat(body);
+      if(day)lines.push(day);
+      return lines.join('\n')}
     /* One copy for the form, the open-request card, an accepted bet, and a parlay. Built from the stored game reading, stake, names, odds and expiry. The saved sentence is not the source. */
-    function copyText(r,kind,acc){if(!r)return '';var o=r.odds||[1,1],od=+o[0]===+o[1]?'':' \u00b7 '+o[0]+'-'+o[1],left=nmOf(r.by),right=copyWho(r,kind,acc),bomb='\uD83D\uDCA3 $'+r.amt+' '+left+' v '+right+od+' \uD83D\uDCA3',exp=expLbl(r),day=lineDayLbl(r),last=[day,exp?'Exp: '+exp:''].filter(Boolean).join(' \u00b7 '),lines=[bomb];
+    function copyText(r,kind,acc){if(!r)return '';if(kind==='settle')return settleWaitText(r);var o=r.odds||[1,1],od=+o[0]===+o[1]?'':' \u00b7 '+o[0]+'-'+o[1],left=nmOf(r.by),right=copyWho(r,kind,acc),bomb='\uD83D\uDCA3 $'+r.amt+' '+left+' v '+right+od+' \uD83D\uDCA3',exp=expLbl(r),day=lineDayLbl(r),last=[day,exp?'Exp: '+exp:''].filter(Boolean).join(' \u00b7 '),lines=[bomb];
       if(r.legs&&r.legs.length>=2){var legs=r.legs.map(legLine).filter(Boolean);if(!legs.length)return '';lines.push('Parlay \u00b7 '+r.legs.length+' legs');legs.forEach(function(x){lines.push(x)})}
       else{var face=lineFace(r);if(!face&&r.free){face=String(r.txt||r.lab||'').replace(/\s+/g,' ').trim();if(!day&&r.exp){day=freeDay(r.exp);last=[day,exp?'Exp: '+exp:''].filter(Boolean).join(' \u00b7 ')}}if(!face)return '';lines.push(face)}
       if(last)lines.push(last);
