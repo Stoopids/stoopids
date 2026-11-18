@@ -3909,7 +3909,7 @@ function vB27(){
   const ready=b27SortSoon(FL.filter(b27Ready)),mine=ready.filter(b=>!b27NeedsOther(b,me)),other=ready.filter(b=>b27NeedsOther(b,me)),ids=new Set(ready.map(b=>b.id)),rest=FL.filter(b=>!ids.has(b.id));
   if(mine.length)h+=`<section id="b27Ready"><h2>Ready to settle <span class="note">${mine.length}</span></h2><div class="b27-grid">${b27Cards(mine,me)}</div></section>`;
   if(other.length)h+=`<section id="b27ReadyElse"><h2>Ready For Someone Else to Settle <span class="note">${other.length}</span></h2><div class="b27-grid">${b27Cards(other,me)}</div></section>`;
-  h+=`<h2>All bets (${rest.length}${rest.length!==bets.length?' of '+bets.length:''})${/*<S25>*/s25MuteBtn()/*</S25>*/}</h2><p class="note">Agreed bets awaiting settlement. Ready ones are marked above.</p>`+s24FilterBar(bets,me)+(rest.length?s24ChronoList(rest,me):bets.length?'<div class="card note s24fe">No unsettled bets match this filter.</div>':'<div class="card note">No bets yet. Be the first.</div>');}/*</S24-EDIT>*/
+  h+=`<h2 class="b27-allh">All bets (${rest.length}${rest.length!==bets.length?' of '+bets.length:''})${/*<S25>*/s25MuteBtn()/*</S25>*/}</h2>`+s24FilterBar(bets,me)+(rest.length?s24ChronoList(rest,me):bets.length?'<div class="card note s24fe">No unsettled bets match this filter.</div>':'<div class="card note">No bets yet. Be the first.</div>');}/*</S24-EDIT>*/
   return h;
 }
 /*<ONE-BETS>*/
@@ -5161,6 +5161,19 @@ html body .who-lock p{margin:0 0 8px}
 html body .who-picks{display:flex;flex-wrap:wrap;justify-content:flex-start;align-items:center;gap:6px;margin:0}
 html body .who-pick{flex:0 0 auto;width:auto;height:32px;min-height:32px;max-height:32px;padding:0 10px;border-radius:999px;border:1px solid var(--line,#2d3548);background:transparent;color:inherit;font:inherit;font-size:13px;font-weight:800;line-height:30px;cursor:pointer}
 html body .who-nosave{margin:8px 0 0}
+/* All Bets list: no helper line under the heading. Tighter heading, filter box, and the gap before the first card. Pills stay the width of their label. */
+html body #main h2.b27-allh{margin:4px 0 2px!important}
+html body #main h2.b27-allh+.card.s24fb{margin:2px 0 4px!important;padding:4px 6px!important}
+html body #main h2.b27-allh+.card.s24fb .s24st{justify-content:flex-start!important;width:auto!important;max-width:100%!important;margin:0 0 4px!important}
+html body #main h2.b27-allh+.card.s24fb .s24st>button{flex:0 0 auto!important;width:auto!important}
+html body #main h2.b27-allh+.card.s24fb .s24r2{justify-content:flex-start!important;width:auto!important}
+html body #main h2.b27-allh+.card.s24fb .s24r2>select,html body #main h2.b27-allh+.card.s24fb .s24r2>.s24ch{flex:0 0 auto!important;width:auto!important;max-width:100%!important}
+html body #main h2.b27-allh+.card.s24fb>.note{margin-top:2px!important}
+html body #main h2.b27-allh+.card.s24fb+.b27-grid{margin-top:0}
+@media (max-width:700px){
+ html body #main h2.b27-allh{font-size:16px!important;line-height:1.2!important}
+ html body #main h2.b27-allh+.card.s24fb>input.s24q{flex:0 1 auto!important;width:auto!important;max-width:100%!important;min-width:9em;margin-top:4px!important}
+}
 </style>
 <script src="stoopid-bet.js?v=14"></script>
 </body>
