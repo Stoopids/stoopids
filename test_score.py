@@ -17,10 +17,10 @@ def game(gid, day, kind, w, l, rnd="", status="final", headline="", conf=None, h
             "neutral": False, "confId": conf, "home": h, "away": a, "src": "espn"}
 
 
-def run(games, windows, standings=None, lines=None, ov=None, cfg=None, today="2027-04-15"):
+def run(games, windows, standings=None, lines=None, ov=None, cfg=None, today="2027-04-15", draft_order=None):
     cfg = cfg or copy.deepcopy(CFG)
     teams = {str(i): {"short": "T%s" % i} for i in range(1, 200)}
-    res = S.compute(cfg, ov or {}, today, teams, windows, games, standings or {}, lines or {}, resolve=lambda n: None)
+    res = S.compute(cfg, ov or {}, today, teams, windows, games, standings or {}, lines or {}, resolve=lambda n: None, draft_order=draft_order)
     return {o["name"]: o for o in res["owners"]}, res
 
 
@@ -36,6 +36,23 @@ class T(unittest.TestCase):
         self.assertEqual(o["Dirty Draymond"]["total"], 2)
         self.assertEqual(r["records"]["1"]["w"], 2)
         self.assertEqual(r["records"]["1"]["l"], 1)
+
+    def test_roster_follows_draft_not_points(self):
+        # pick 8 scored the wins; pick 1 did not. A redraft add arrived later. Pick 2 was dropped.
+        g = [game(1, "2026-11-10", "reg", side(47, 80, True), side(50, 70, False)),
+             game(2, "2026-11-12", "reg", side(47, 80, True), side(51, 60, False)),
+             game(3, "2027-02-02", "reg", side(999, 70, True), side(52, 60, False))]
+        win = W([])
+        win["Paul"] = [
+            {"tid": "47", "start": None, "end": None},
+            {"tid": "66", "start": None, "end": "2027-01-20"},
+            {"tid": "41", "start": None, "end": None},
+            {"tid": "999", "start": "2027-02-01", "end": None},
+        ]
+        draft = {"Paul": ["41", "66", "158", "2377", "139", "2724", "222", "47"]}
+        o, _ = run(g, win, draft_order=draft)
+        self.assertEqual([t["tid"] for t in o["Paul"]["teams"]], ["41", "47", "999", "66"])
+        self.assertGreater(o["Paul"]["teams"][1]["total"], o["Paul"]["teams"][0]["total"])
 
     def test_redraft_windows(self):
         g = [game(1, "2027-01-19", "reg", side(1, 80, True), side(50, 70, False)),

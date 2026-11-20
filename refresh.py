@@ -32,6 +32,36 @@ def log(*a):
     print(*a, file=sys.stderr)
 
 
+def load_draft_order(index_path):
+    """Owner -> original 8 team ids, pick 1 to 8, from DRAFT27.order in index.html.
+
+    That list matches the inlined 2026-27 picks. roster_snapshot.json does not:
+    Kentut and En Fuego have a few late picks swapped on the sheet.
+    """
+    try:
+        text = open(index_path, encoding="utf-8").read()
+    except OSError:
+        return {}
+    i = text.find("const DRAFT27=")
+    j = text.find("order:", i if i >= 0 else 0)
+    k = text.find("{", j if j >= 0 else 0)
+    if k < 0:
+        return {}
+    depth = 0
+    for n, ch in enumerate(text[k:], k):
+        if ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+            if depth == 0:
+                try:
+                    order = json.loads(text[k:n + 1])
+                except ValueError:
+                    return {}
+                return {name: [str(tid) for tid in tids] for name, tids in order.items()} if isinstance(order, dict) else {}
+    return {}
+
+
 def http_json(url, tries=3, timeout=30):
     last = None
     for i in range(tries):
@@ -617,7 +647,8 @@ def _refresh():
                            "color": t.get("color"), "alt": t.get("alternateColor"),
                            "logo": (logos[0]["href"] if logos else None), "logo_dark": next((l["href"] for l in logos if "dark" in (l.get("rel") or [])), None),
                            "mascot": t.get("name"), "espn_id": tid}
-    res = S.compute(cfg, ov, today, teams_info, windows, games, standings, lines, resolve=resolve)
+    draft_order = load_draft_order(os.path.join(HERE, "index.html"))
+    res = S.compute(cfg, ov, today, teams_info, windows, games, standings, lines, resolve=resolve, draft_order=draft_order)
 
     # missing assets report
     pool_info = [v for k, v in teams_info.items() if k in pool_tids]
