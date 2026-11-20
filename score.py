@@ -117,7 +117,28 @@ def build_games_view(cfg, ov, today, games, lines, windows, recent_days, ahead_d
     return items
 
 
-def compute(cfg, ov, today, teams, windows, games, standings, lines, resolve=lambda n: None):
+def _draft_order(name, teams, draft_order):
+    """Pick 1 to 8, then later adds in the order they arrived, dropped teams last.
+
+    draft_order maps an owner name to the original draft team ids. A team that is
+    not in that list (a redraft add) keeps its place after the original eight.
+    Points never decide the order.
+    """
+    order = [str(t) for t in (draft_order or {}).get(name, [])]
+    index = {tid: i for i, tid in enumerate(order)}
+
+    def key(pair):
+        i, t = pair
+        tid = str(t.get("tid"))
+        dropped = 1 if t.get("status") == "dropped" else 0
+        if tid in index:
+            return (dropped, 0, index[tid], i)
+        return (dropped, 1, i, i)
+
+    return [t for _, t in sorted(enumerate(teams), key=key)]
+
+
+def compute(cfg, ov, today, teams, windows, games, standings, lines, resolve=lambda n: None, draft_order=None):
     pts = cfg["points"]
     rules = cfg["rules"]
     ov = ov or {}
@@ -382,7 +403,7 @@ def compute(cfg, ov, today, teams, windows, games, standings, lines, resolve=lam
             if e["cat"] == "adjust" and e.get("owner") == name and not e["tid"]:
                 total += e["pts"]
                 cat_tot["adjust"] += e["pts"]
-        tl.sort(key=lambda t: (t["status"] == "dropped", -t["total"]))
+        tl = _draft_order(name, tl, draft_order)
         owners_out.append({"name": name, "team_name": o.get("team_name"), "emoji": o.get("emoji", ""), "total": total,
                            "by_cat": dict(cat_tot), "teams": tl})
     owners_out.sort(key=lambda o: -o["total"])

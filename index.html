@@ -1663,15 +1663,19 @@ function TN(n){const k=ownerKey(n);const o=D&&D.owners&&D.owners.find(x=>x.name=
 function idLine(){let name=null;if(!(typeof VIEW_ONLY!=='undefined'&&VIEW_ONLY)){try{const raw=(typeof PS!=='undefined'&&PS&&PS.who)||localStorage.getItem('stoopids_who')||'';const w=typeof whoKey==='function'?whoKey(raw):legacyOwner(raw);if(w&&w!=='__guest__'&&D&&D.owners&&D.owners.some(o=>o.name===w))name=PN(w)}catch(e){}}
   const line=window.SHARED_UI&&SHARED_UI.loginLine?SHARED_UI.loginLine(name?{name:esc(name),change:'onclick="presAsk()"'} : {}):(name?`<p class="idline">You are logged in as <b>${esc(name)}</b> — <button type="button" class="idline-ch" onclick="presAsk()">Change?</button></p>`:`<p class="idline" role="status">You’re viewing as a guest. This visit can’t pick a name.</p>`);
   return line+(name&&typeof whoWarn==='function'?whoWarn():'')}
+/* Standings chips and the Breakdown rows: pick 1 to 8, then any team added after the draft, dropped teams last. Points do not reorder them. */
+function draftTeams(o){const teams=(o&&o.teams)||[],ord=((typeof DRAFT27!=='undefined'&&DRAFT27.order&&DRAFT27.order[ownerKey(o.name)])||[]).map(String),ix={};ord.forEach((id,i)=>{ix[id]=i});
+  return teams.map((t,i)=>({t,i})).sort((a,b)=>{const A=a.t.status==='dropped'?1:0,B=b.t.status==='dropped'?1:0,ai=ix[String(a.t.tid)],bi=ix[String(b.t.tid)];
+    const ag=ai==null?1:0,bg=bi==null?1:0;return A-B||ag-bg||(ag?a.i-b.i:ai-bi)||a.i-b.i}).map(x=>x.t)}
 function vStandings(){const tail=idLine();/*<RANKINGS>*/const sv=rkView();if(sv==='points')return rkSeg()+vPoints()+tail;/*</RANKINGS>*/
-  /*<STEP5-STANDINGS>*/if(typeof SHARED_UI!=='undefined'&&SHARED_UI.standingsList)return rkSeg()+SHARED_UI.standingsList(D.owners.map(o=>({rank:rankTxt(o),emoji:o.emoji,team:TN(o.name),person:PN(o.name),gold:goldTag(o.name),total:o.total,lbAttr:`onclick="goOwner('${esc(o.name)}')"`,chips:o.teams.map(t=>chipRec(t.tid,{out:t.status==='dropped',cn:1})).join('')})),esc)+goldNote()+tail;/*</STEP5-STANDINGS> fallback below*/
+  /*<STEP5-STANDINGS>*/if(typeof SHARED_UI!=='undefined'&&SHARED_UI.standingsList)return rkSeg()+SHARED_UI.standingsList(D.owners.map(o=>({rank:rankTxt(o),emoji:o.emoji,team:TN(o.name),person:PN(o.name),gold:goldTag(o.name),total:o.total,lbAttr:`onclick="goOwner('${esc(o.name)}')"`,chips:draftTeams(o).map(t=>chipRec(t.tid,{out:t.status==='dropped',cn:1})).join('')})),esc)+goldNote()+tail;/*</STEP5-STANDINGS> fallback below*/
   const mx=Math.max(10,...D.owners.map(o=>o.total));
   return /*<RANKINGS>*/rkSeg()+/*</RANKINGS>*//*<RANK-CHIPS>*/'<div class="ocl">'/*</RANK-CHIPS>*/+D.owners.map((o,i)=>`<div class="card${/*<RANK-CHIPS>*/' oc'/*</RANK-CHIPS>*/}"><div class="lb" onclick="goOwner('${esc(o.name)}')">
     <div class="rank">${rankTxt(o)}</div>
     <div class="who"><b>${esc(o.emoji)} ${esc(/*<OWNER-NAMES>*/TN(o.name)/*</OWNER-NAMES>*/)}</b><small>${esc(/*<OWNER-NAMES>*/PN(o.name)/*</OWNER-NAMES>*/)}${/*<GOLD-LINE>*//*<SYNC2-ST>*/goldTag(o.name)/*</GOLD-LINE>*/}</small>${/*<RANK-CHIPS>*/''/*per-owner quip no longer shown on these cards (quip() itself is untouched; Rosters still uses it)*//*</RANK-CHIPS>*/}</div>
     <div class="pts">${o.total}<small>Points</small></div></div>
     <div class="bar"><i style="width:${Math.max(0,o.total)/mx*100}%"></i></div>
-    <div class="chips">${o.teams.map(t=>/*<CHIP-RECORD>*/chipRec/*</CHIP-RECORD>*/(t.tid,{out:t.status==='dropped',cn:1})).join('')}</div></div>`).join('')+'</div>'+
+    <div class="chips">${draftTeams(o).map(t=>/*<CHIP-RECORD>*/chipRec/*</CHIP-RECORD>*/(t.tid,{out:t.status==='dropped',cn:1})).join('')}</div></div>`).join('')+'</div>'+
     /*<S29D-NONOTE> standings owner-tap/redraft note removed </S29D-NONOTE>*/goldNote()+tail}
 function goOwner(n){/*<S26F-NOROSTERS>*/ownerSel=n;tab='standings';s26eView('points');S24.sub=null;render();try{s24Put(true)}catch(e){}const c=[...document.querySelectorAll('.pcard')].find(x=>x.getAttribute('data-pc')===n);if(c)c.scrollIntoView({block:'start'});else window.scrollTo(0,0)/*</S26F-NOROSTERS>*/}
 
@@ -2461,10 +2465,10 @@ function vPoints(){/*<S26Q-PTAB>*/const hd='<tr><th class="pn" scope="col"><span
   const tn=tid=>{const t=(D.teams||{})[tid]||{};return t.name||t.short||tid};
   /*<STEP6-BREAKDOWN>*/const SU=typeof SHARED_UI!=='undefined'&&SHARED_UI.pointsList?SHARED_UI:null;
   if(SU)return SU.pointsList(D.owners.map(o=>({attr:` data-pc="${esc(o.name)}"`,hAttr:` onclick="goOwner('${esc(o.name)}')"`,rank:rankTxt(o),emoji:o.emoji,team:TN(o.name),person:PN(o.name),gold:goldTag(o.name),total:o.total,
-    rows:(o.teams||[]).map(t=>{const b=t.by||{};return{drop:t.status==='dropped',title:tn(t.tid),chip:chip(t.tid,{out:t.status==='dropped',cn:true}),cells:PCOLS.map(c=>c[2](b)||0),total:t.total}})})),PCOLS.map(c=>[c[0],c[1]]),esc)+
+    rows:draftTeams(o).map(t=>{const b=t.by||{};return{drop:t.status==='dropped',title:tn(t.tid),chip:chip(t.tid,{out:t.status==='dropped',cn:true}),cells:PCOLS.map(c=>c[2](b)||0),total:t.total}})})),PCOLS.map(c=>[c[0],c[1]]),esc)+
    `<p class="note">Points each team earned for its manager, by category; \u2014 = none yet. ${PCOLS.map(c=>`<b>${c[0]}</b> ${esc(c[1])}`).join(' · ')} · <b>Tot</b> team total. Team totals add up to the manager total shown in League.</p>`+goldNote();/*</STEP6-BREAKDOWN> fallback below*/
   return '<div class="orl q">'+D.owners.map(o=>`<div class="card pcard" data-pc="${esc(o.name)}"><div class="orh" onclick="goOwner('${esc(o.name)}')"><span class="rank">${rankTxt(o)}</span><div class="who"><b>${esc(o.emoji)} ${esc(TN(o.name))}</b><small>${esc(PN(o.name))}${/*<S26H-TROPHY>*//*<SYNC2-ST>*/goldTag(o.name)/*</S26H-TROPHY>*/}</small></div><div class="pts">${o.total}<small>Points</small></div></div><div class="ptw"><table class="ptab">${hd}`+
-   (o.teams||[]).map(t=>{const b=t.by||{};return `<tr class="prow${t.status==='dropped'?' drop':''}"><td class="pn" title="${esc(tn(t.tid))}">${chip(t.tid,{out:t.status==='dropped',cn:true})}</td>${PCOLS.map(c=>`<td>${pCell(c[2](b)||0)}</td>`).join('')}<td class="ptot">${t.total}</td></tr>`}).join('')+'</table></div></div>').join('')+'</div>'+/*</S26Q-PTAB>*/
+   draftTeams(o).map(t=>{const b=t.by||{};return `<tr class="prow${t.status==='dropped'?' drop':''}"><td class="pn" title="${esc(tn(t.tid))}">${chip(t.tid,{out:t.status==='dropped',cn:true})}</td>${PCOLS.map(c=>`<td>${pCell(c[2](b)||0)}</td>`).join('')}<td class="ptot">${t.total}</td></tr>`}).join('')+'</table></div></div>').join('')+'</div>'+/*</S26Q-PTAB>*/
   `<p class="note">Points each team earned for its manager, by category; \u2014 = none yet. ${PCOLS.map(c=>`<b>${c[0]}</b> ${esc(c[1])}`).join(' · ')} · <b>Tot</b> team total. Team totals add up to the manager total shown in League.</p>`+goldNote()}
 /*</S26E>*/
 /*<S26D-DRAFT>*/
