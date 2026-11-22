@@ -957,7 +957,7 @@ main,#main{padding-top:6px!important}
 /* SYNC7..SYNC14 moved to shared/ui.css (linked right after this style block) */
 
 </style>
-<link rel="stylesheet" href="shared/ui.css?v=1.44.5">
+<link rel="stylesheet" href="shared/ui.css?v=1.44.7">
 <style>/*<SORT-FIT> phone All teams: the card scrolls sideways, the page does not. Names stay full size. */@media (max-width:480px){html body .card.tap.s27-rk{padding-left:4px!important;padding-right:4px!important}html body .card.tap.s27-rk th{font-size:11px!important}html body .card.tap.s27-rk td.n,html body .card.tap.s27-rk td.to,html body .card.tap.s27-rk td.cf{font-size:13px!important}html body .card.tap.s27-rk .s27-sort i{font-size:.7em!important;margin-left:0!important}}/*</SORT-FIT>*/</style>
 </head>
 <body>
@@ -983,7 +983,7 @@ main,#main{padding-top:6px!important}
   </div>
 </section><!--</CHAT>-->
 <footer id="foot"></footer>
-<script src="shared/ui.js?v=1.86.11"></script>
+<script src="shared/ui.js?v=1.86.13"></script>
 <script src="archive.js?v=1"></script>
 <script>
 /*<S25-SHARED>*/
@@ -1667,12 +1667,13 @@ function idLine(){let name=null;if(!(typeof VIEW_ONLY!=='undefined'&&VIEW_ONLY))
 function draftTeams(o){const teams=(o&&o.teams)||[],ord=((typeof DRAFT27!=='undefined'&&DRAFT27.order&&DRAFT27.order[ownerKey(o.name)])||[]).map(String),ix={};ord.forEach((id,i)=>{ix[id]=i});
   return teams.map((t,i)=>({t,i})).sort((a,b)=>{const A=a.t.status==='dropped'?1:0,B=b.t.status==='dropped'?1:0,ai=ix[String(a.t.tid)],bi=ix[String(b.t.tid)];
     const ag=ai==null?1:0,bg=bi==null?1:0;return A-B||ag-bg||(ag?a.i-b.i:ai-bi)||a.i-b.i}).map(x=>x.t)}
+function mgrRec(teams){let w=0,l=0;(teams||[]).forEach(t=>{const r=(D.records||{})[t.tid]||{};w+=(+r.w||0);l+=(+r.l||0)});return w+'-'+l}
 function vStandings(){const tail=idLine();/*<RANKINGS>*/const sv=rkView();if(sv==='points')return rkSeg()+vPoints()+tail;/*</RANKINGS>*/
-  /*<STEP5-STANDINGS>*/if(typeof SHARED_UI!=='undefined'&&SHARED_UI.standingsList)return rkSeg()+SHARED_UI.standingsList(D.owners.map(o=>({rank:rankTxt(o),emoji:o.emoji,team:TN(o.name),person:PN(o.name),gold:goldTag(o.name),total:o.total,lbAttr:`onclick="goOwner('${esc(o.name)}')"`,chips:draftTeams(o).map(t=>chipRec(t.tid,{out:t.status==='dropped',cn:1})).join('')})),esc)+goldNote()+tail;/*</STEP5-STANDINGS> fallback below*/
+  /*<STEP5-STANDINGS>*/if(typeof SHARED_UI!=='undefined'&&SHARED_UI.standingsList)return rkSeg()+SHARED_UI.standingsList(D.owners.map(o=>({rank:rankTxt(o),emoji:o.emoji,team:TN(o.name),person:PN(o.name),wl:mgrRec(draftTeams(o)),gold:goldTag(o.name),total:o.total,lbAttr:`onclick="goOwner('${esc(o.name)}')"`,chips:draftTeams(o).map(t=>chipRec(t.tid,{out:t.status==='dropped',cn:1})).join('')})),esc)+goldNote()+tail;/*</STEP5-STANDINGS> fallback below*/
   const mx=Math.max(10,...D.owners.map(o=>o.total));
   return /*<RANKINGS>*/rkSeg()+/*</RANKINGS>*//*<RANK-CHIPS>*/'<div class="ocl">'/*</RANK-CHIPS>*/+D.owners.map((o,i)=>`<div class="card${/*<RANK-CHIPS>*/' oc'/*</RANK-CHIPS>*/}"><div class="lb" onclick="goOwner('${esc(o.name)}')">
     <div class="rank">${rankTxt(o)}</div>
-    <div class="who"><b>${esc(o.emoji)} ${esc(/*<OWNER-NAMES>*/TN(o.name)/*</OWNER-NAMES>*/)}</b><small>${esc(/*<OWNER-NAMES>*/PN(o.name)/*</OWNER-NAMES>*/)}${/*<GOLD-LINE>*//*<SYNC2-ST>*/goldTag(o.name)/*</GOLD-LINE>*/}</small>${/*<RANK-CHIPS>*/''/*per-owner quip no longer shown on these cards (quip() itself is untouched; Rosters still uses it)*//*</RANK-CHIPS>*/}</div>
+    <div class="who"><b>${esc(o.emoji)} ${esc(/*<OWNER-NAMES>*/TN(o.name)/*</OWNER-NAMES>*/)}</b><small><span class="mn">${esc(/*<OWNER-NAMES>*/PN(o.name)/*</OWNER-NAMES>*/)}</span><span class="mrec" title="Combined team record">${mgrRec(draftTeams(o))}</span>${/*<GOLD-LINE>*//*<SYNC2-ST>*/goldTag(o.name)/*</GOLD-LINE>*/}</small>${/*<RANK-CHIPS>*/''/*per-owner quip no longer shown on these cards (quip() itself is untouched; Rosters still uses it)*//*</RANK-CHIPS>*/}</div>
     <div class="pts">${o.total}<small>Points</small></div></div>
     <div class="bar"><i style="width:${Math.max(0,o.total)/mx*100}%"></i></div>
     <div class="chips">${draftTeams(o).map(t=>/*<CHIP-RECORD>*/chipRec/*</CHIP-RECORD>*/(t.tid,{out:t.status==='dropped',cn:1})).join('')}</div></div>`).join('')+'</div>'+
