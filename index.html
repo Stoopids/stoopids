@@ -2495,7 +2495,22 @@ const D27_START='2026-11-01T13:00:00Z',D27_OWNERS=8,D27_ROUNDS=8,D27_TOTAL=D27_O
 function d27Done(){const r=DRAFT27_RESULTS;if(!r)return false;const t=r.draft_completed_at||r.completed_at,ms=t?Date.parse(t):NaN;
   return isFinite(ms)&&ms>=Date.parse(D27_START)&&Array.isArray(r.picks)&&r.picks.length===D27_TOTAL}
 /* Weekly write-ups for the Recap tab: Monday recaps + milestone specials. Newest first by date. Add entries like {date:'2026-11-09',title:'Week 1',kind:'weekly',body:'...'} (kind 'weekly' | 'special'). body is plain text (escaped). */
-const RECAPS=[{date:'2026-11-16',title:'Week 2',kind:'weekly',body:`Nov 10-15. Mark and Jim are still tied for first, now on 28. Ken went from 15 to 27, one point back. Murf and Paul are tied on 25. Kurt fell out of the opening tie to 24, Jake to 23, and Scotty has 18. Points this week: Ken 12, Paul 12, Mark 11, Jim 11, Murf 11, Kurt 7, Jake 6, Scotty 5.
+const RECAPS=[{date:'2026-11-23',title:'Week 3',kind:'weekly',body:`Nov 16-22. Jim left the tie and has first alone on 38. Mark fell out of it into a tie on 37 with Kurt and Ken. Jake has 36, Murf 32, and Paul and Scotty are tied on 30. Scotty went from 18 to 30. Points this week: Kurt 12, Scotty 12, Jake 11, Jim 10, Ken 10, Mark 9, Murf 7, Paul 5.
+
+Best team: Jake's UCLA, 3-0 by a combined 80 (105-66 Long Beach St, 75-71 Fullerton, 85-48 Delaware). Worst team: Mark's UC Irvine, 0-3 by a combined 11 (61-65 Stanford, 64-67 San Diego, 68-72 LMU).
+
+Biggest roster upset: Ken's Illinois, a 9.5-point dog, beat Jake's Duke 99-78 on Nov 17.
+
+Pullups: 2 bets settled, none a wash. Jim went 0-2. He owes Kurt 5 on Michigan St -2.5, and he owes Paul 5 on Wichita St +1.5. Jake, Mark, Ken, Murf, and Scotty did not settle a bet. 22 are still open.
+
+Mark: 9 points, and he still has to share second. Florida was favored by 1.5 and lost.
+Jake: UCLA went 3-0 by 80. Duke was a 9.5 favorite and lost by 21.
+Kurt: tied for the most points, and he still has to share second. Tennessee was a 2.5 dog and won by 15.
+Jim: alone in first at 38, the same week Michigan St lost by 15 as a 2.5 favorite.
+Ken: the upset of the week, and he is still one short.
+Murf: Houston went 3-0, and he dropped to 6th.
+Paul: 5 points, the fewest, and he is tied for last. Villanova was a 3.5 dog and won.
+Scotty: tied for the most points, and tied for last. Colgate finally won.`},{date:'2026-11-16',title:'Week 2',kind:'weekly',body:`Nov 10-15. Mark and Jim are still tied for first, now on 28. Ken went from 15 to 27, one point back. Murf and Paul are tied on 25. Kurt fell out of the opening tie to 24, Jake to 23, and Scotty has 18. Points this week: Ken 12, Paul 12, Mark 11, Jim 11, Murf 11, Kurt 7, Jake 6, Scotty 5.
 
 Best team: Ken's UNC Wilmington, 2-0 by a combined 77 (91-73 Kent State, 100-41 Montreat). Worst team: Scotty's Colgate, 0-2 this week and 0-4 on the season (59-90 St John's, 58-64 Delaware).
 
