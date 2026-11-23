@@ -290,7 +290,7 @@
   "ranks_fetch": {
    "provider": "draft-room ranks.py",
    "stoopid_source": "current",
-   "kenpom_snapshot": "2026-11-02",
+   "kenpom_snapshot": "2026-11-22",
    "called": false,
    "reason": "already fetched today (ET)",
    "state": {
@@ -116343,63 +116343,63 @@
    "104": {
     "ap": null,
     "net": 266,
-    "kenpom": 255,
+    "kenpom": 261,
     "stoopid": null,
     "stoopid_current": null
    },
    "107": {
     "ap": null,
     "net": 331,
-    "kenpom": 361,
+    "kenpom": 362,
     "stoopid": null,
     "stoopid_current": null
    },
    "108": {
     "ap": null,
     "net": 154,
-    "kenpom": 183,
+    "kenpom": 185,
     "stoopid": null,
     "stoopid_current": null
    },
    "111": {
     "ap": null,
     "net": 287,
-    "kenpom": 202,
+    "kenpom": 243,
     "stoopid": null,
     "stoopid_current": null
    },
    "112358": {
     "ap": null,
     "net": 198,
-    "kenpom": 277,
+    "kenpom": 282,
     "stoopid": 83,
     "stoopid_current": 83
    },
    "113": {
     "ap": null,
     "net": 202,
-    "kenpom": 191,
+    "kenpom": 163,
     "stoopid": null,
     "stoopid_current": null
    },
    "116": {
     "ap": null,
     "net": 277,
-    "kenpom": 333,
+    "kenpom": 334,
     "stoopid": null,
     "stoopid_current": null
    },
    "119": {
     "ap": null,
     "net": 160,
-    "kenpom": 160,
+    "kenpom": 180,
     "stoopid": null,
     "stoopid_current": null
    },
    "12": {
     "ap": 12,
     "net": 3,
-    "kenpom": 8,
+    "kenpom": 7,
     "stoopid": 6,
     "stoopid_current": 6
    },
@@ -116413,28 +116413,28 @@
    "127": {
     "ap": 2,
     "net": 11,
-    "kenpom": 11,
+    "kenpom": 12,
     "stoopid": 11,
     "stoopid_current": 11
    },
    "13": {
     "ap": null,
     "net": 227,
-    "kenpom": 177,
+    "kenpom": 188,
     "stoopid": null,
     "stoopid_current": null
    },
    "130": {
     "ap": 18,
     "net": 1,
-    "kenpom": 25,
+    "kenpom": 26,
     "stoopid": 26,
     "stoopid_current": 26
    },
    "135": {
     "ap": null,
     "net": 82,
-    "kenpom": 22,
+    "kenpom": 21,
     "stoopid": null,
     "stoopid_current": null
    },
@@ -116448,119 +116448,119 @@
    "140": {
     "ap": null,
     "net": 358,
-    "kenpom": 257,
+    "kenpom": 255,
     "stoopid": null,
     "stoopid_current": null
    },
    "142": {
     "ap": null,
     "net": 59,
-    "kenpom": 21,
+    "kenpom": 23,
     "stoopid": 46,
     "stoopid_current": 46
    },
    "145": {
     "ap": null,
     "net": 80,
-    "kenpom": 29,
+    "kenpom": 27,
     "stoopid": null,
     "stoopid_current": null
    },
    "147": {
     "ap": null,
     "net": 132,
-    "kenpom": 106,
+    "kenpom": 109,
     "stoopid": 53,
     "stoopid_current": 53
    },
    "149": {
     "ap": null,
     "net": 196,
-    "kenpom": 268,
+    "kenpom": 267,
     "stoopid": null,
     "stoopid_current": null
    },
    "150": {
     "ap": 5,
     "net": 2,
-    "kenpom": 5,
+    "kenpom": 9,
     "stoopid": 1,
     "stoopid_current": 1
    },
    "151": {
     "ap": null,
     "net": 262,
-    "kenpom": 180,
+    "kenpom": 203,
     "stoopid": null,
     "stoopid_current": null
    },
    "152": {
     "ap": null,
     "net": 36,
-    "kenpom": 56,
+    "kenpom": 57,
     "stoopid": 40,
     "stoopid_current": 40
    },
    "153": {
     "ap": null,
     "net": 26,
-    "kenpom": 54,
+    "kenpom": 53,
     "stoopid": 58,
     "stoopid_current": 58
    },
    "154": {
     "ap": null,
     "net": 69,
-    "kenpom": 88,
+    "kenpom": 84,
     "stoopid": null,
     "stoopid_current": null
    },
    "155": {
     "ap": null,
     "net": 271,
-    "kenpom": 322,
+    "kenpom": 320,
     "stoopid": null,
     "stoopid_current": null
    },
    "156": {
     "ap": null,
     "net": 83,
-    "kenpom": 49,
+    "kenpom": 50,
     "stoopid": 73,
     "stoopid_current": 73
    },
    "158": {
     "ap": 24,
     "net": 12,
-    "kenpom": 10,
+    "kenpom": 13,
     "stoopid": 16,
     "stoopid_current": 16
    },
    "159": {
     "ap": null,
     "net": 267,
-    "kenpom": 311,
+    "kenpom": 315,
     "stoopid": null,
     "stoopid_current": null
    },
    "16": {
     "ap": null,
     "net": 270,
-    "kenpom": 220,
+    "kenpom": 222,
     "stoopid": null,
     "stoopid_current": null
    },
    "160": {
     "ap": null,
     "net": 348,
-    "kenpom": 299,
+    "kenpom": 305,
     "stoopid": null,
     "stoopid_current": null
    },
    "161": {
     "ap": null,
     "net": 333,
-    "kenpom": 323,
+    "kenpom": 319,
     "stoopid": null,
     "stoopid_current": null
    },
@@ -116574,112 +116574,112 @@
    "164": {
     "ap": null,
     "net": 136,
-    "kenpom": 68,
+    "kenpom": 67,
     "stoopid": null,
     "stoopid_current": null
    },
    "166": {
     "ap": null,
     "net": 187,
-    "kenpom": 175,
+    "kenpom": 189,
     "stoopid": null,
     "stoopid_current": null
    },
    "167": {
     "ap": null,
     "net": 46,
-    "kenpom": 62,
+    "kenpom": 78,
     "stoopid": 34,
     "stoopid_current": 34
    },
    "171": {
     "ap": null,
     "net": 188,
-    "kenpom": 150,
+    "kenpom": 137,
     "stoopid": null,
     "stoopid_current": null
    },
    "172": {
     "ap": null,
     "net": 149,
-    "kenpom": 222,
+    "kenpom": 200,
     "stoopid": null,
     "stoopid_current": null
    },
    "179": {
     "ap": null,
     "net": 140,
-    "kenpom": 132,
+    "kenpom": 131,
     "stoopid": null,
     "stoopid_current": null
    },
    "183": {
     "ap": null,
     "net": 85,
-    "kenpom": 78,
+    "kenpom": 89,
     "stoopid": null,
     "stoopid_current": null
    },
    "189": {
     "ap": null,
     "net": 159,
-    "kenpom": 167,
+    "kenpom": 212,
     "stoopid": null,
     "stoopid_current": null
    },
    "193": {
     "ap": null,
     "net": 65,
-    "kenpom": 113,
+    "kenpom": 100,
     "stoopid": 32,
     "stoopid_current": 32
    },
    "194": {
     "ap": null,
     "net": 30,
-    "kenpom": 36,
+    "kenpom": 39,
     "stoopid": 37,
     "stoopid_current": 37
    },
    "195": {
     "ap": null,
     "net": 232,
-    "kenpom": 142,
+    "kenpom": 143,
     "stoopid": null,
     "stoopid_current": null
    },
    "197": {
     "ap": null,
     "net": 81,
-    "kenpom": 45,
+    "kenpom": 30,
     "stoopid": null,
     "stoopid_current": null
    },
    "198": {
     "ap": null,
     "net": 314,
-    "kenpom": 266,
+    "kenpom": 258,
     "stoopid": null,
     "stoopid_current": null
    },
    "2": {
     "ap": null,
     "net": 37,
-    "kenpom": 39,
+    "kenpom": 40,
     "stoopid": 74,
     "stoopid_current": 74
    },
    "2000": {
     "ap": null,
     "net": 248,
-    "kenpom": 259,
+    "kenpom": 262,
     "stoopid": null,
     "stoopid_current": null
    },
    "2005": {
     "ap": null,
     "net": 350,
-    "kenpom": 269,
+    "kenpom": 287,
     "stoopid": null,
     "stoopid_current": null
    },
@@ -116693,42 +116693,42 @@
    "201": {
     "ap": null,
     "net": 47,
-    "kenpom": 81,
+    "kenpom": 80,
     "stoopid": 43,
     "stoopid_current": 43
    },
    "2010": {
     "ap": null,
     "net": 310,
-    "kenpom": 295,
+    "kenpom": 299,
     "stoopid": null,
     "stoopid_current": null
    },
    "2011": {
     "ap": null,
     "net": 323,
-    "kenpom": 276,
+    "kenpom": 273,
     "stoopid": null,
     "stoopid_current": null
    },
    "2016": {
     "ap": null,
     "net": 349,
-    "kenpom": 338,
+    "kenpom": 340,
     "stoopid": null,
     "stoopid_current": null
    },
    "202": {
     "ap": null,
     "net": 51,
-    "kenpom": 111,
+    "kenpom": 106,
     "stoopid": null,
     "stoopid_current": null
    },
    "2026": {
     "ap": null,
     "net": 191,
-    "kenpom": 163,
+    "kenpom": 167,
     "stoopid": null,
     "stoopid_current": null
    },
@@ -116742,385 +116742,385 @@
    "2031": {
     "ap": null,
     "net": 309,
-    "kenpom": 230,
+    "kenpom": 259,
     "stoopid": null,
     "stoopid_current": null
    },
    "2032": {
     "ap": null,
     "net": 155,
-    "kenpom": 205,
+    "kenpom": 197,
     "stoopid": null,
     "stoopid_current": null
    },
    "204": {
     "ap": null,
     "net": 172,
-    "kenpom": 77,
+    "kenpom": 76,
     "stoopid": null,
     "stoopid_current": null
    },
    "2046": {
     "ap": null,
     "net": 164,
-    "kenpom": 195,
+    "kenpom": 211,
     "stoopid": null,
     "stoopid_current": null
    },
    "2050": {
     "ap": null,
     "net": 299,
-    "kenpom": 244,
+    "kenpom": 246,
     "stoopid": null,
     "stoopid_current": null
    },
    "2057": {
     "ap": null,
     "net": 64,
-    "kenpom": 147,
+    "kenpom": 151,
     "stoopid": null,
     "stoopid_current": null
    },
    "2065": {
     "ap": null,
     "net": 260,
-    "kenpom": 198,
+    "kenpom": 194,
     "stoopid": 82,
     "stoopid_current": 82
    },
    "2066": {
     "ap": null,
     "net": 360,
-    "kenpom": 344,
+    "kenpom": 328,
     "stoopid": null,
     "stoopid_current": null
    },
    "2083": {
     "ap": null,
     "net": 334,
-    "kenpom": 332,
+    "kenpom": 333,
     "stoopid": null,
     "stoopid_current": null
    },
    "2084": {
     "ap": null,
     "net": 197,
-    "kenpom": 199,
+    "kenpom": 198,
     "stoopid": null,
     "stoopid_current": null
    },
    "2086": {
     "ap": null,
     "net": 84,
-    "kenpom": 90,
+    "kenpom": 87,
     "stoopid": null,
     "stoopid_current": null
    },
    "2097": {
     "ap": null,
     "net": 200,
-    "kenpom": 226,
+    "kenpom": 228,
     "stoopid": null,
     "stoopid_current": null
    },
    "2099": {
     "ap": null,
     "net": 344,
-    "kenpom": 351,
+    "kenpom": 359,
     "stoopid": null,
     "stoopid_current": null
    },
    "21": {
     "ap": null,
     "net": 48,
-    "kenpom": 64,
+    "kenpom": 65,
     "stoopid": 69,
     "stoopid_current": 69
    },
    "2110": {
     "ap": null,
     "net": 166,
-    "kenpom": 158,
+    "kenpom": 144,
     "stoopid": 80,
     "stoopid_current": 80
    },
    "2115": {
     "ap": null,
     "net": 289,
-    "kenpom": 317,
+    "kenpom": 321,
     "stoopid": null,
     "stoopid_current": null
    },
    "2116": {
     "ap": null,
     "net": 52,
-    "kenpom": 79,
+    "kenpom": 77,
     "stoopid": null,
     "stoopid_current": null
    },
    "2117": {
     "ap": null,
     "net": 281,
-    "kenpom": 224,
+    "kenpom": 233,
     "stoopid": null,
     "stoopid_current": null
    },
    "2127": {
     "ap": null,
     "net": 241,
-    "kenpom": 292,
+    "kenpom": 293,
     "stoopid": null,
     "stoopid_current": null
    },
    "213": {
     "ap": null,
     "net": 138,
-    "kenpom": 94,
+    "kenpom": 95,
     "stoopid": null,
     "stoopid_current": null
    },
    "2130": {
     "ap": null,
     "net": 343,
-    "kenpom": 335,
+    "kenpom": 337,
     "stoopid": null,
     "stoopid_current": null
    },
    "2132": {
     "ap": null,
     "net": 49,
-    "kenpom": 26,
+    "kenpom": 32,
     "stoopid": 50,
     "stoopid_current": 50
    },
    "2142": {
     "ap": null,
     "net": 228,
-    "kenpom": 236,
+    "kenpom": 238,
     "stoopid": null,
     "stoopid_current": null
    },
    "2154": {
     "ap": null,
     "net": 363,
-    "kenpom": 353,
+    "kenpom": 351,
     "stoopid": null,
     "stoopid_current": null
    },
    "2166": {
     "ap": null,
     "net": 112,
-    "kenpom": 121,
+    "kenpom": 119,
     "stoopid": null,
     "stoopid_current": null
    },
    "2168": {
     "ap": null,
     "net": 66,
-    "kenpom": 98,
+    "kenpom": 124,
     "stoopid": 54,
     "stoopid_current": 54
    },
    "2169": {
     "ap": null,
     "net": 362,
-    "kenpom": 354,
+    "kenpom": 356,
     "stoopid": null,
     "stoopid_current": null
    },
    "2172": {
     "ap": null,
     "net": 245,
-    "kenpom": 258,
+    "kenpom": 241,
     "stoopid": null,
     "stoopid_current": null
    },
    "2174": {
     "ap": null,
     "net": 220,
-    "kenpom": 341,
+    "kenpom": 336,
     "stoopid": null,
     "stoopid_current": null
    },
    "218": {
     "ap": null,
     "net": 167,
-    "kenpom": 146,
+    "kenpom": 155,
     "stoopid": null,
     "stoopid_current": null
    },
    "2181": {
     "ap": null,
     "net": 201,
-    "kenpom": 149,
+    "kenpom": 157,
     "stoopid": null,
     "stoopid_current": null
    },
    "2182": {
     "ap": null,
     "net": 212,
-    "kenpom": 214,
+    "kenpom": 213,
     "stoopid": null,
     "stoopid_current": null
    },
    "2184": {
     "ap": null,
     "net": 130,
-    "kenpom": 131,
+    "kenpom": 147,
     "stoopid": null,
     "stoopid_current": null
    },
    "219": {
     "ap": null,
     "net": 146,
-    "kenpom": 144,
+    "kenpom": 133,
     "stoopid": 72,
     "stoopid_current": 72
    },
    "2193": {
     "ap": null,
     "net": 139,
-    "kenpom": 162,
+    "kenpom": 164,
     "stoopid": null,
     "stoopid_current": null
    },
    "2197": {
     "ap": null,
     "net": 320,
-    "kenpom": 362,
+    "kenpom": 363,
     "stoopid": null,
     "stoopid_current": null
    },
    "2198": {
     "ap": null,
     "net": 291,
-    "kenpom": 253,
+    "kenpom": 252,
     "stoopid": null,
     "stoopid_current": null
    },
    "2199": {
     "ap": null,
     "net": 240,
-    "kenpom": 156,
+    "kenpom": 166,
     "stoopid": null,
     "stoopid_current": null
    },
    "221": {
     "ap": null,
     "net": 106,
-    "kenpom": 43,
+    "kenpom": 41,
     "stoopid": null,
     "stoopid_current": null
    },
    "2210": {
     "ap": null,
     "net": 222,
-    "kenpom": 192,
+    "kenpom": 175,
     "stoopid": null,
     "stoopid_current": null
    },
    "2217": {
     "ap": null,
     "net": 238,
-    "kenpom": 284,
+    "kenpom": 275,
     "stoopid": null,
     "stoopid_current": null
    },
    "222": {
     "ap": null,
     "net": 34,
-    "kenpom": 48,
+    "kenpom": 45,
     "stoopid": 39,
     "stoopid_current": 39
    },
    "2226": {
     "ap": null,
     "net": 123,
-    "kenpom": 138,
+    "kenpom": 139,
     "stoopid": null,
     "stoopid_current": null
    },
    "2229": {
     "ap": null,
     "net": 195,
-    "kenpom": 185,
+    "kenpom": 187,
     "stoopid": null,
     "stoopid_current": null
    },
    "2230": {
     "ap": null,
     "net": 174,
-    "kenpom": 102,
+    "kenpom": 115,
     "stoopid": null,
     "stoopid_current": null
    },
    "2239": {
     "ap": null,
     "net": 180,
-    "kenpom": 165,
+    "kenpom": 148,
     "stoopid": null,
     "stoopid_current": null
    },
    "2241": {
     "ap": null,
     "net": 361,
-    "kenpom": 350,
+    "kenpom": 344,
     "stoopid": null,
     "stoopid_current": null
    },
    "2244": {
     "ap": null,
     "net": 94,
-    "kenpom": 107,
+    "kenpom": 99,
     "stoopid": null,
     "stoopid_current": null
    },
    "2247": {
     "ap": null,
     "net": 306,
-    "kenpom": 194,
+    "kenpom": 196,
     "stoopid": null,
     "stoopid_current": null
    },
    "225": {
     "ap": null,
     "net": 297,
-    "kenpom": 262,
+    "kenpom": 274,
     "stoopid": null,
     "stoopid_current": null
    },
    "2250": {
     "ap": 22,
     "net": 10,
-    "kenpom": 14,
+    "kenpom": 16,
     "stoopid": 3,
     "stoopid_current": 3
    },
    "2253": {
     "ap": null,
     "net": 71,
-    "kenpom": 41,
+    "kenpom": 42,
     "stoopid": 12,
     "stoopid_current": 12
    },
    "2261": {
     "ap": null,
     "net": 269,
-    "kenpom": 261,
+    "kenpom": 266,
     "stoopid": null,
     "stoopid_current": null
    },
    "227": {
     "ap": null,
     "net": 150,
-    "kenpom": 118,
+    "kenpom": 104,
     "stoopid": null,
     "stoopid_current": null
    },
    "2272": {
     "ap": null,
     "net": 68,
-    "kenpom": 52,
+    "kenpom": 51,
     "stoopid": 9,
     "stoopid_current": 9
    },
@@ -117134,14 +117134,14 @@
    "2277": {
     "ap": null,
     "net": 294,
-    "kenpom": 241,
+    "kenpom": 232,
     "stoopid": null,
     "stoopid_current": null
    },
    "228": {
     "ap": null,
     "net": 35,
-    "kenpom": 76,
+    "kenpom": 75,
     "stoopid": 65,
     "stoopid_current": 65
    },
@@ -117155,21 +117155,21 @@
    "2294": {
     "ap": null,
     "net": 22,
-    "kenpom": 30,
+    "kenpom": 31,
     "stoopid": null,
     "stoopid_current": null
    },
    "2296": {
     "ap": null,
     "net": 347,
-    "kenpom": 303,
+    "kenpom": 300,
     "stoopid": null,
     "stoopid_current": null
    },
    "23": {
     "ap": null,
     "net": 243,
-    "kenpom": 151,
+    "kenpom": 159,
     "stoopid": null,
     "stoopid_current": null
    },
@@ -117183,70 +117183,70 @@
    "2306": {
     "ap": null,
     "net": 99,
-    "kenpom": 105,
+    "kenpom": 102,
     "stoopid": null,
     "stoopid_current": null
    },
    "2309": {
     "ap": null,
     "net": 153,
-    "kenpom": 211,
+    "kenpom": 201,
     "stoopid": null,
     "stoopid_current": null
    },
    "231": {
     "ap": null,
     "net": 183,
-    "kenpom": 140,
+    "kenpom": 135,
     "stoopid": 47,
     "stoopid_current": 47
    },
    "232": {
     "ap": null,
     "net": 165,
-    "kenpom": 128,
+    "kenpom": 127,
     "stoopid": null,
     "stoopid_current": null
    },
    "2320": {
     "ap": null,
     "net": 249,
-    "kenpom": 206,
+    "kenpom": 208,
     "stoopid": null,
     "stoopid_current": null
    },
    "2325": {
     "ap": null,
     "net": 244,
-    "kenpom": 204,
+    "kenpom": 226,
     "stoopid": null,
     "stoopid_current": null
    },
    "2329": {
     "ap": null,
     "net": 282,
-    "kenpom": 223,
+    "kenpom": 224,
     "stoopid": null,
     "stoopid_current": null
    },
    "233": {
     "ap": null,
     "net": 286,
-    "kenpom": 293,
+    "kenpom": 291,
     "stoopid": null,
     "stoopid_current": null
    },
    "2330": {
     "ap": null,
     "net": 290,
-    "kenpom": 313,
+    "kenpom": 316,
     "stoopid": null,
     "stoopid_current": null
    },
    "2335": {
     "ap": null,
     "net": 102,
-    "kenpom": 139,
+    "kenpom": 138,
     "stoopid": 71,
     "stoopid_current": 71
    },
@@ -117260,14 +117260,14 @@
    "2348": {
     "ap": null,
     "net": 208,
-    "kenpom": 245,
+    "kenpom": 242,
     "stoopid": null,
     "stoopid_current": null
    },
    "2349": {
     "ap": null,
     "net": 321,
-    "kenpom": 267,
+    "kenpom": 245,
     "stoopid": null,
     "stoopid_current": null
    },
@@ -117281,84 +117281,84 @@
    "2350": {
     "ap": null,
     "net": 278,
-    "kenpom": 120,
+    "kenpom": 111,
     "stoopid": null,
     "stoopid_current": null
    },
    "2351": {
     "ap": null,
     "net": 182,
-    "kenpom": 154,
+    "kenpom": 153,
     "stoopid": null,
     "stoopid_current": null
    },
    "2352": {
     "ap": null,
     "net": 329,
-    "kenpom": 359,
+    "kenpom": 360,
     "stoopid": null,
     "stoopid_current": null
    },
    "236": {
     "ap": null,
     "net": 288,
-    "kenpom": 186,
+    "kenpom": 205,
     "stoopid": null,
     "stoopid_current": null
    },
    "2363": {
     "ap": null,
     "net": 328,
-    "kenpom": 336,
+    "kenpom": 342,
     "stoopid": null,
     "stoopid_current": null
    },
    "2368": {
     "ap": null,
     "net": 181,
-    "kenpom": 287,
+    "kenpom": 288,
     "stoopid": null,
     "stoopid_current": null
    },
    "2377": {
     "ap": null,
     "net": 57,
-    "kenpom": 100,
+    "kenpom": 120,
     "stoopid": 20,
     "stoopid_current": 20
    },
    "2378": {
     "ap": null,
     "net": 199,
-    "kenpom": 309,
+    "kenpom": 314,
     "stoopid": null,
     "stoopid_current": null
    },
    "2379": {
     "ap": null,
     "net": 351,
-    "kenpom": 360,
+    "kenpom": 361,
     "stoopid": null,
     "stoopid_current": null
    },
    "238": {
     "ap": 15,
     "net": 15,
-    "kenpom": 6,
+    "kenpom": 5,
     "stoopid": 19,
     "stoopid_current": 19
    },
    "2382": {
     "ap": null,
     "net": 184,
-    "kenpom": 208,
+    "kenpom": 216,
     "stoopid": null,
     "stoopid_current": null
    },
    "2385": {
     "ap": null,
     "net": 274,
-    "kenpom": 319,
+    "kenpom": 324,
     "stoopid": null,
     "stoopid_current": null
    },
@@ -117372,14 +117372,14 @@
    "2390": {
     "ap": 17,
     "net": 32,
-    "kenpom": 19,
+    "kenpom": 20,
     "stoopid": 14,
     "stoopid_current": 14
    },
    "2393": {
     "ap": null,
     "net": 162,
-    "kenpom": 190,
+    "kenpom": 178,
     "stoopid": null,
     "stoopid_current": null
    },
@@ -117400,42 +117400,42 @@
    "2405": {
     "ap": null,
     "net": 168,
-    "kenpom": 197,
+    "kenpom": 190,
     "stoopid": null,
     "stoopid_current": null
    },
    "2413": {
     "ap": null,
     "net": 265,
-    "kenpom": 330,
+    "kenpom": 338,
     "stoopid": null,
     "stoopid_current": null
    },
    "2415": {
     "ap": null,
     "net": 352,
-    "kenpom": 348,
+    "kenpom": 354,
     "stoopid": null,
     "stoopid_current": null
    },
    "242": {
     "ap": null,
     "net": 242,
-    "kenpom": 212,
+    "kenpom": 202,
     "stoopid": null,
     "stoopid_current": null
    },
    "2426": {
     "ap": null,
     "net": 141,
-    "kenpom": 298,
+    "kenpom": 313,
     "stoopid": null,
     "stoopid_current": null
    },
    "2427": {
     "ap": null,
     "net": 235,
-    "kenpom": 315,
+    "kenpom": 309,
     "stoopid": null,
     "stoopid_current": null
    },
@@ -117449,28 +117449,28 @@
    "2429": {
     "ap": null,
     "net": 171,
-    "kenpom": 114,
+    "kenpom": 117,
     "stoopid": null,
     "stoopid_current": null
    },
    "2430": {
     "ap": null,
     "net": 293,
-    "kenpom": 275,
+    "kenpom": 256,
     "stoopid": null,
     "stoopid_current": null
    },
    "2433": {
     "ap": null,
     "net": 355,
-    "kenpom": 306,
+    "kenpom": 307,
     "stoopid": null,
     "stoopid_current": null
    },
    "2437": {
     "ap": null,
     "net": 261,
-    "kenpom": 325,
+    "kenpom": 323,
     "stoopid": null,
     "stoopid_current": null
    },
@@ -117491,77 +117491,77 @@
    "2441": {
     "ap": null,
     "net": 325,
-    "kenpom": 349,
+    "kenpom": 345,
     "stoopid": null,
     "stoopid_current": null
    },
    "2443": {
     "ap": null,
     "net": 215,
-    "kenpom": 297,
+    "kenpom": 285,
     "stoopid": null,
     "stoopid_current": null
    },
    "2447": {
     "ap": null,
     "net": 250,
-    "kenpom": 289,
+    "kenpom": 297,
     "stoopid": null,
     "stoopid_current": null
    },
    "2448": {
     "ap": null,
     "net": 276,
-    "kenpom": 286,
+    "kenpom": 294,
     "stoopid": null,
     "stoopid_current": null
    },
    "2449": {
     "ap": null,
     "net": 116,
-    "kenpom": 240,
+    "kenpom": 239,
     "stoopid": null,
     "stoopid_current": null
    },
    "245": {
     "ap": null,
     "net": 43,
-    "kenpom": 17,
+    "kenpom": 14,
     "stoopid": 36,
     "stoopid_current": 36
    },
    "2450": {
     "ap": null,
     "net": 317,
-    "kenpom": 337,
+    "kenpom": 335,
     "stoopid": null,
     "stoopid_current": null
    },
    "2453": {
     "ap": null,
     "net": 338,
-    "kenpom": 281,
+    "kenpom": 279,
     "stoopid": null,
     "stoopid_current": null
    },
    "2454": {
     "ap": null,
     "net": 337,
-    "kenpom": 318,
+    "kenpom": 296,
     "stoopid": null,
     "stoopid_current": null
    },
    "2458": {
     "ap": null,
     "net": 148,
-    "kenpom": 273,
+    "kenpom": 269,
     "stoopid": null,
     "stoopid_current": null
    },
    "2459": {
     "ap": null,
     "net": 335,
-    "kenpom": 232,
+    "kenpom": 184,
     "stoopid": null,
     "stoopid_current": null
    },
@@ -117575,28 +117575,28 @@
    "2463": {
     "ap": null,
     "net": 189,
-    "kenpom": 201,
+    "kenpom": 199,
     "stoopid": null,
     "stoopid_current": null
    },
    "2464": {
     "ap": null,
     "net": 315,
-    "kenpom": 264,
+    "kenpom": 257,
     "stoopid": null,
     "stoopid_current": null
    },
    "2466": {
     "ap": null,
     "net": 300,
-    "kenpom": 305,
+    "kenpom": 308,
     "stoopid": null,
     "stoopid_current": null
    },
    "2473": {
     "ap": null,
     "net": 175,
-    "kenpom": 235,
+    "kenpom": 236,
     "stoopid": null,
     "stoopid_current": null
    },
@@ -117624,70 +117624,70 @@
    "2492": {
     "ap": null,
     "net": 275,
-    "kenpom": 172,
+    "kenpom": 170,
     "stoopid": null,
     "stoopid_current": null
    },
    "25": {
     "ap": null,
     "net": 72,
-    "kenpom": 96,
+    "kenpom": 94,
     "stoopid": null,
     "stoopid_current": null
    },
    "250": {
     "ap": null,
     "net": 163,
-    "kenpom": 182,
+    "kenpom": 179,
     "stoopid": null,
     "stoopid_current": null
    },
    "2501": {
     "ap": null,
     "net": 223,
-    "kenpom": 164,
+    "kenpom": 207,
     "stoopid": null,
     "stoopid_current": null
    },
    "2502": {
     "ap": null,
     "net": 145,
-    "kenpom": 196,
+    "kenpom": 221,
     "stoopid": null,
     "stoopid_current": null
    },
    "2504": {
     "ap": null,
     "net": 301,
-    "kenpom": 316,
+    "kenpom": 317,
     "stoopid": null,
     "stoopid_current": null
    },
    "2506": {
     "ap": null,
     "net": 258,
-    "kenpom": 248,
+    "kenpom": 270,
     "stoopid": null,
     "stoopid_current": null
    },
    "2507": {
     "ap": null,
     "net": 78,
-    "kenpom": 51,
+    "kenpom": 52,
     "stoopid": 78,
     "stoopid_current": 78
    },
    "2509": {
     "ap": null,
     "net": 8,
-    "kenpom": 33,
+    "kenpom": 35,
     "stoopid": 45,
     "stoopid_current": 45
    },
    "251": {
     "ap": 6,
     "net": 38,
-    "kenpom": 12,
+    "kenpom": 10,
     "stoopid": 15,
     "stoopid_current": 15
    },
@@ -117708,217 +117708,217 @@
    "2515": {
     "ap": null,
     "net": 252,
-    "kenpom": 274,
+    "kenpom": 247,
     "stoopid": null,
     "stoopid_current": null
    },
    "252": {
     "ap": 21,
     "net": 23,
-    "kenpom": 27,
+    "kenpom": 25,
     "stoopid": 41,
     "stoopid_current": 41
    },
    "2520": {
     "ap": null,
     "net": 357,
-    "kenpom": 357,
+    "kenpom": 353,
     "stoopid": null,
     "stoopid_current": null
    },
    "2523": {
     "ap": null,
     "net": 143,
-    "kenpom": 243,
+    "kenpom": 230,
     "stoopid": null,
     "stoopid_current": null
    },
    "2529": {
     "ap": null,
     "net": 292,
-    "kenpom": 314,
+    "kenpom": 318,
     "stoopid": null,
     "stoopid_current": null
    },
    "253": {
     "ap": null,
     "net": 272,
-    "kenpom": 279,
+    "kenpom": 277,
     "stoopid": null,
     "stoopid_current": null
    },
    "2534": {
     "ap": null,
     "net": 109,
-    "kenpom": 119,
+    "kenpom": 116,
     "stoopid": null,
     "stoopid_current": null
    },
    "2535": {
     "ap": null,
     "net": 213,
-    "kenpom": 234,
+    "kenpom": 249,
     "stoopid": null,
     "stoopid_current": null
    },
    "2539": {
     "ap": null,
     "net": 121,
-    "kenpom": 170,
+    "kenpom": 171,
     "stoopid": null,
     "stoopid_current": null
    },
    "254": {
     "ap": null,
     "net": 133,
-    "kenpom": 126,
+    "kenpom": 129,
     "stoopid": null,
     "stoopid_current": null
    },
    "2540": {
     "ap": null,
     "net": 142,
-    "kenpom": 80,
+    "kenpom": 79,
     "stoopid": 44,
     "stoopid_current": 44
    },
    "2541": {
     "ap": null,
     "net": 42,
-    "kenpom": 75,
+    "kenpom": 81,
     "stoopid": 57,
     "stoopid_current": 57
    },
    "2545": {
     "ap": null,
     "net": 295,
-    "kenpom": 304,
+    "kenpom": 306,
     "stoopid": null,
     "stoopid_current": null
    },
    "2546": {
     "ap": null,
     "net": 224,
-    "kenpom": 300,
+    "kenpom": 295,
     "stoopid": null,
     "stoopid_current": null
    },
    "2547": {
     "ap": null,
     "net": 119,
-    "kenpom": 130,
+    "kenpom": 105,
     "stoopid": null,
     "stoopid_current": null
    },
    "2550": {
     "ap": null,
     "net": 53,
-    "kenpom": 66,
+    "kenpom": 68,
     "stoopid": null,
     "stoopid_current": null
    },
    "256": {
     "ap": null,
     "net": 209,
-    "kenpom": 127,
+    "kenpom": 126,
     "stoopid": 66,
     "stoopid_current": 66
    },
    "2561": {
     "ap": null,
     "net": 173,
-    "kenpom": 218,
+    "kenpom": 217,
     "stoopid": null,
     "stoopid_current": null
    },
    "2565": {
     "ap": null,
     "net": 259,
-    "kenpom": 308,
+    "kenpom": 312,
     "stoopid": null,
     "stoopid_current": null
    },
    "2567": {
     "ap": null,
     "net": 40,
-    "kenpom": 67,
+    "kenpom": 66,
     "stoopid": null,
     "stoopid_current": null
    },
    "2569": {
     "ap": null,
     "net": 356,
-    "kenpom": 345,
+    "kenpom": 346,
     "stoopid": null,
     "stoopid_current": null
    },
    "257": {
     "ap": null,
     "net": 161,
-    "kenpom": 124,
+    "kenpom": 122,
     "stoopid": null,
     "stoopid_current": null
    },
    "2571": {
     "ap": null,
     "net": 211,
-    "kenpom": 169,
+    "kenpom": 174,
     "stoopid": null,
     "stoopid_current": null
    },
    "2572": {
     "ap": null,
     "net": 216,
-    "kenpom": 270,
+    "kenpom": 218,
     "stoopid": null,
     "stoopid_current": null
    },
    "2579": {
     "ap": null,
     "net": 104,
-    "kenpom": 89,
+    "kenpom": 90,
     "stoopid": null,
     "stoopid_current": null
    },
    "258": {
     "ap": 4,
     "net": 16,
-    "kenpom": 9,
+    "kenpom": 8,
     "stoopid": 8,
     "stoopid_current": 8
    },
    "2582": {
     "ap": null,
     "net": 279,
-    "kenpom": 285,
+    "kenpom": 286,
     "stoopid": null,
     "stoopid_current": null
    },
    "259": {
     "ap": null,
     "net": 56,
-    "kenpom": 37,
+    "kenpom": 48,
     "stoopid": null,
     "stoopid_current": null
    },
    "2599": {
     "ap": 13,
     "net": 13,
-    "kenpom": 15,
+    "kenpom": 18,
     "stoopid": 17,
     "stoopid_current": 17
    },
    "26": {
     "ap": 7,
     "net": 31,
-    "kenpom": 20,
+    "kenpom": 17,
     "stoopid": 42,
     "stoopid_current": 42
    },
    "2603": {
     "ap": null,
     "net": 111,
-    "kenpom": 135,
+    "kenpom": 132,
     "stoopid": null,
     "stoopid_current": null
    },
@@ -117932,56 +117932,56 @@
    "261": {
     "ap": null,
     "net": 229,
-    "kenpom": 188,
+    "kenpom": 177,
     "stoopid": 64,
     "stoopid_current": 64
    },
    "2612": {
     "ap": null,
     "net": 231,
-    "kenpom": 346,
+    "kenpom": 349,
     "stoopid": null,
     "stoopid_current": null
    },
    "2617": {
     "ap": null,
     "net": 89,
-    "kenpom": 155,
+    "kenpom": 158,
     "stoopid": 55,
     "stoopid_current": 55
    },
    "2619": {
     "ap": null,
     "net": 233,
-    "kenpom": 251,
+    "kenpom": 214,
     "stoopid": null,
     "stoopid_current": null
    },
    "2623": {
     "ap": null,
     "net": 205,
-    "kenpom": 239,
+    "kenpom": 229,
     "stoopid": null,
     "stoopid_current": null
    },
    "2627": {
     "ap": null,
     "net": 230,
-    "kenpom": 229,
+    "kenpom": 220,
     "stoopid": null,
     "stoopid_current": null
    },
    "2628": {
     "ap": null,
     "net": 39,
-    "kenpom": 61,
+    "kenpom": 64,
     "stoopid": null,
     "stoopid_current": null
    },
    "2630": {
     "ap": null,
     "net": 207,
-    "kenpom": 228,
+    "kenpom": 204,
     "stoopid": null,
     "stoopid_current": null
    },
@@ -117995,77 +117995,77 @@
    "2634": {
     "ap": null,
     "net": 176,
-    "kenpom": 207,
+    "kenpom": 206,
     "stoopid": 79,
     "stoopid_current": 79
    },
    "2635": {
     "ap": null,
     "net": 308,
-    "kenpom": 168,
+    "kenpom": 150,
     "stoopid": null,
     "stoopid_current": null
    },
    "2636": {
     "ap": null,
     "net": 342,
-    "kenpom": 210,
+    "kenpom": 182,
     "stoopid": null,
     "stoopid_current": null
    },
    "2638": {
     "ap": null,
     "net": 268,
-    "kenpom": 141,
+    "kenpom": 146,
     "stoopid": null,
     "stoopid_current": null
    },
    "264": {
     "ap": null,
     "net": 55,
-    "kenpom": 87,
+    "kenpom": 88,
     "stoopid": null,
     "stoopid_current": null
    },
    "2640": {
     "ap": null,
     "net": 322,
-    "kenpom": 326,
+    "kenpom": 329,
     "stoopid": null,
     "stoopid_current": null
    },
    "2641": {
     "ap": 9,
     "net": 20,
-    "kenpom": 13,
+    "kenpom": 11,
     "stoopid": 25,
     "stoopid_current": 25
    },
    "2643": {
     "ap": null,
     "net": 346,
-    "kenpom": 312,
+    "kenpom": 310,
     "stoopid": null,
     "stoopid_current": null
    },
    "2649": {
     "ap": null,
     "net": 134,
-    "kenpom": 143,
+    "kenpom": 142,
     "stoopid": null,
     "stoopid_current": null
    },
    "265": {
     "ap": null,
     "net": 144,
-    "kenpom": 116,
+    "kenpom": 107,
     "stoopid": null,
     "stoopid_current": null
    },
    "2653": {
     "ap": null,
     "net": 137,
-    "kenpom": 189,
+    "kenpom": 191,
     "stoopid": null,
     "stoopid_current": null
    },
@@ -118079,77 +118079,77 @@
    "2670": {
     "ap": null,
     "net": 44,
-    "kenpom": 53,
+    "kenpom": 54,
     "stoopid": 24,
     "stoopid_current": 24
    },
    "2674": {
     "ap": null,
     "net": 157,
-    "kenpom": 129,
+    "kenpom": 145,
     "stoopid": null,
     "stoopid_current": null
    },
    "2678": {
     "ap": null,
     "net": 359,
-    "kenpom": 301,
+    "kenpom": 304,
     "stoopid": null,
     "stoopid_current": null
    },
    "2681": {
     "ap": null,
     "net": 303,
-    "kenpom": 331,
+    "kenpom": 330,
     "stoopid": null,
     "stoopid_current": null
    },
    "269": {
     "ap": null,
     "net": 93,
-    "kenpom": 40,
+    "kenpom": 37,
     "stoopid": 52,
     "stoopid_current": 52
    },
    "2692": {
     "ap": null,
     "net": 203,
-    "kenpom": 307,
+    "kenpom": 311,
     "stoopid": null,
     "stoopid_current": null
    },
    "2697": {
     "ap": null,
     "net": null,
-    "kenpom": 321,
+    "kenpom": 325,
     "stoopid": null,
     "stoopid_current": null
    },
    "2698": {
     "ap": null,
     "net": 298,
-    "kenpom": 340,
+    "kenpom": 341,
     "stoopid": null,
     "stoopid_current": null
    },
    "27": {
     "ap": null,
     "net": 273,
-    "kenpom": 203,
+    "kenpom": 192,
     "stoopid": null,
     "stoopid_current": null
    },
    "270": {
     "ap": null,
     "net": 253,
-    "kenpom": 225,
+    "kenpom": 276,
     "stoopid": null,
     "stoopid_current": null
    },
    "2710": {
     "ap": null,
     "net": 364,
-    "kenpom": 363,
+    "kenpom": 352,
     "stoopid": null,
     "stoopid_current": null
    },
@@ -118163,147 +118163,147 @@
    "2717": {
     "ap": null,
     "net": 225,
-    "kenpom": 217,
+    "kenpom": 231,
     "stoopid": null,
     "stoopid_current": null
    },
    "2724": {
     "ap": null,
     "net": 70,
-    "kenpom": 74,
+    "kenpom": 61,
     "stoopid": 27,
     "stoopid_current": 27
    },
    "2729": {
     "ap": null,
     "net": 127,
-    "kenpom": 184,
+    "kenpom": 165,
     "stoopid": null,
     "stoopid_current": null
    },
    "2737": {
     "ap": null,
     "net": 129,
-    "kenpom": 280,
+    "kenpom": 284,
     "stoopid": null,
     "stoopid_current": null
    },
    "2739": {
     "ap": null,
     "net": 218,
-    "kenpom": 256,
+    "kenpom": 254,
     "stoopid": null,
     "stoopid_current": null
    },
    "2747": {
     "ap": null,
     "net": 246,
-    "kenpom": 288,
+    "kenpom": 281,
     "stoopid": null,
     "stoopid_current": null
    },
    "275": {
     "ap": null,
     "net": 27,
-    "kenpom": 73,
+    "kenpom": 74,
     "stoopid": 77,
     "stoopid_current": 77
    },
    "2750": {
     "ap": null,
     "net": 125,
-    "kenpom": 91,
+    "kenpom": 92,
     "stoopid": 70,
     "stoopid_current": 70
    },
    "2751": {
     "ap": null,
     "net": 97,
-    "kenpom": 95,
+    "kenpom": 86,
     "stoopid": null,
     "stoopid_current": null
    },
    "2752": {
     "ap": null,
     "net": 96,
-    "kenpom": 57,
+    "kenpom": 56,
     "stoopid": null,
     "stoopid_current": null
    },
    "2754": {
     "ap": null,
     "net": 219,
-    "kenpom": 216,
+    "kenpom": 250,
     "stoopid": null,
     "stoopid_current": null
    },
    "2755": {
     "ap": null,
     "net": 305,
-    "kenpom": 310,
+    "kenpom": 302,
     "stoopid": null,
     "stoopid_current": null
    },
    "276": {
     "ap": null,
     "net": 170,
-    "kenpom": 152,
+    "kenpom": 156,
     "stoopid": null,
     "stoopid_current": null
    },
    "277": {
     "ap": null,
     "net": 54,
-    "kenpom": 35,
+    "kenpom": 36,
     "stoopid": 76,
     "stoopid_current": 76
    },
    "2771": {
     "ap": null,
     "net": 178,
-    "kenpom": 272,
+    "kenpom": 268,
     "stoopid": 67,
     "stoopid_current": 67
    },
    "278": {
     "ap": null,
     "net": 151,
-    "kenpom": 179,
+    "kenpom": 183,
     "stoopid": null,
     "stoopid_current": null
    },
    "279": {
     "ap": null,
     "net": 114,
-    "kenpom": 122,
+    "kenpom": 130,
     "stoopid": null,
     "stoopid_current": null
    },
    "28": {
     "ap": null,
     "net": 124,
-    "kenpom": 108,
+    "kenpom": 134,
     "stoopid": null,
     "stoopid_current": null
    },
    "2803": {
     "ap": null,
     "net": 354,
-    "kenpom": 302,
+    "kenpom": 301,
     "stoopid": null,
     "stoopid_current": null
    },
    "2815": {
     "ap": null,
     "net": 264,
-    "kenpom": 324,
+    "kenpom": 322,
     "stoopid": null,
     "stoopid_current": null
    },
    "282": {
     "ap": null,
     "net": 217,
-    "kenpom": 247,
+    "kenpom": 263,
     "stoopid": null,
     "stoopid_current": null
    },
@@ -118317,14 +118317,14 @@
    "284": {
     "ap": null,
     "net": 332,
-    "kenpom": 358,
+    "kenpom": 348,
     "stoopid": null,
     "stoopid_current": null
    },
    "2856": {
     "ap": null,
     "net": 98,
-    "kenpom": 342,
+    "kenpom": 327,
     "stoopid": null,
     "stoopid_current": null
    },
@@ -118338,35 +118338,35 @@
    "288": {
     "ap": null,
     "net": 193,
-    "kenpom": 209,
+    "kenpom": 210,
     "stoopid": null,
     "stoopid_current": null
    },
    "2885": {
     "ap": null,
     "net": 327,
-    "kenpom": 355,
+    "kenpom": 357,
     "stoopid": null,
     "stoopid_current": null
    },
    "290": {
     "ap": null,
     "net": 221,
-    "kenpom": 254,
+    "kenpom": 253,
     "stoopid": null,
     "stoopid_current": null
    },
    "2900": {
     "ap": null,
     "net": 113,
-    "kenpom": 157,
+    "kenpom": 140,
     "stoopid": 56,
     "stoopid_current": 56
    },
    "2908": {
     "ap": null,
     "net": 302,
-    "kenpom": 352,
+    "kenpom": 355,
     "stoopid": null,
     "stoopid_current": null
    },
@@ -118380,70 +118380,70 @@
    "292": {
     "ap": null,
     "net": 126,
-    "kenpom": 250,
+    "kenpom": 225,
     "stoopid": null,
     "stoopid_current": null
    },
    "2934": {
     "ap": null,
     "net": 330,
-    "kenpom": 227,
+    "kenpom": 223,
     "stoopid": null,
     "stoopid_current": null
    },
    "294": {
     "ap": null,
     "net": 296,
-    "kenpom": 249,
+    "kenpom": 272,
     "stoopid": null,
     "stoopid_current": null
    },
    "295": {
     "ap": null,
     "net": 255,
-    "kenpom": 148,
+    "kenpom": 152,
     "stoopid": null,
     "stoopid_current": null
    },
    "299": {
     "ap": null,
     "net": 257,
-    "kenpom": 237,
+    "kenpom": 240,
     "stoopid": null,
     "stoopid_current": null
    },
    "30": {
     "ap": 18,
     "net": 77,
-    "kenpom": 23,
+    "kenpom": 22,
     "stoopid": 38,
     "stoopid_current": 38
    },
    "300": {
     "ap": null,
     "net": 120,
-    "kenpom": 101,
+    "kenpom": 114,
     "stoopid": 63,
     "stoopid_current": 63
    },
    "301": {
     "ap": null,
     "net": 236,
-    "kenpom": 153,
+    "kenpom": 121,
     "stoopid": null,
     "stoopid_current": null
    },
    "302": {
     "ap": null,
     "net": 179,
-    "kenpom": 200,
+    "kenpom": 195,
     "stoopid": null,
     "stoopid_current": null
    },
    "304": {
     "ap": null,
     "net": 239,
-    "kenpom": 291,
+    "kenpom": 292,
     "stoopid": null,
     "stoopid_current": null
    },
@@ -118457,7 +118457,7 @@
    "3084": {
     "ap": null,
     "net": 86,
-    "kenpom": 99,
+    "kenpom": 103,
     "stoopid": null,
     "stoopid_current": null
    },
@@ -118471,84 +118471,84 @@
    "3101": {
     "ap": null,
     "net": 177,
-    "kenpom": 238,
+    "kenpom": 251,
     "stoopid": null,
     "stoopid_current": null
    },
    "311": {
     "ap": null,
     "net": 339,
-    "kenpom": 320,
+    "kenpom": 332,
     "stoopid": null,
     "stoopid_current": null
    },
    "314": {
     "ap": null,
     "net": 234,
-    "kenpom": 231,
+    "kenpom": 234,
     "stoopid": null,
     "stoopid_current": null
    },
    "315": {
     "ap": null,
     "net": 340,
-    "kenpom": 328,
+    "kenpom": 331,
     "stoopid": null,
     "stoopid_current": null
    },
    "322": {
     "ap": null,
     "net": 324,
-    "kenpom": 327,
+    "kenpom": 303,
     "stoopid": null,
     "stoopid_current": null
    },
    "324": {
     "ap": null,
     "net": 226,
-    "kenpom": 242,
+    "kenpom": 248,
     "stoopid": null,
     "stoopid_current": null
    },
    "325": {
     "ap": null,
     "net": 318,
-    "kenpom": 282,
+    "kenpom": 298,
     "stoopid": null,
     "stoopid_current": null
    },
    "326": {
     "ap": null,
     "net": 237,
-    "kenpom": 84,
+    "kenpom": 69,
     "stoopid": null,
     "stoopid_current": null
    },
    "328": {
     "ap": null,
     "net": 25,
-    "kenpom": 31,
+    "kenpom": 34,
     "stoopid": 30,
     "stoopid_current": 30
    },
    "331": {
     "ap": null,
     "net": 204,
-    "kenpom": 145,
+    "kenpom": 149,
     "stoopid": null,
     "stoopid_current": null
    },
    "333": {
     "ap": 16,
     "net": 14,
-    "kenpom": 18,
+    "kenpom": 19,
     "stoopid": 29,
     "stoopid_current": 29
    },
    "338": {
     "ap": null,
     "net": 147,
-    "kenpom": 137,
+    "kenpom": 141,
     "stoopid": null,
     "stoopid_current": null
    },
@@ -118562,21 +118562,21 @@
    "344": {
     "ap": null,
     "net": 108,
-    "kenpom": 65,
+    "kenpom": 62,
     "stoopid": null,
     "stoopid_current": null
    },
    "349": {
     "ap": null,
     "net": 336,
-    "kenpom": 334,
+    "kenpom": 347,
     "stoopid": null,
     "stoopid_current": null
    },
    "350": {
     "ap": null,
     "net": 100,
-    "kenpom": 109,
+    "kenpom": 113,
     "stoopid": 33,
     "stoopid_current": 33
    },
@@ -118597,84 +118597,84 @@
    "36": {
     "ap": null,
     "net": 88,
-    "kenpom": 103,
+    "kenpom": 101,
     "stoopid": null,
     "stoopid_current": null
    },
    "38": {
     "ap": null,
     "net": 76,
-    "kenpom": 97,
+    "kenpom": 98,
     "stoopid": null,
     "stoopid_current": null
    },
    "399": {
     "ap": null,
     "net": 326,
-    "kenpom": 347,
+    "kenpom": 350,
     "stoopid": null,
     "stoopid_current": null
    },
    "41": {
     "ap": 3,
     "net": 9,
-    "kenpom": 7,
+    "kenpom": 6,
     "stoopid": 4,
     "stoopid_current": 4
    },
    "43": {
     "ap": null,
     "net": 74,
-    "kenpom": 159,
+    "kenpom": 168,
     "stoopid": null,
     "stoopid_current": null
    },
    "44": {
     "ap": null,
     "net": 256,
-    "kenpom": 174,
+    "kenpom": 162,
     "stoopid": 68,
     "stoopid_current": 68
    },
    "45": {
     "ap": null,
     "net": 92,
-    "kenpom": 86,
+    "kenpom": 91,
     "stoopid": null,
     "stoopid_current": null
    },
    "46": {
     "ap": null,
     "net": 87,
-    "kenpom": 70,
+    "kenpom": 72,
     "stoopid": null,
     "stoopid_current": null
    },
    "47": {
     "ap": null,
     "net": 194,
-    "kenpom": 171,
+    "kenpom": 172,
     "stoopid": 28,
     "stoopid_current": 28
    },
    "48": {
     "ap": null,
     "net": 284,
-    "kenpom": 213,
+    "kenpom": 227,
     "stoopid": null,
     "stoopid_current": null
    },
    "5": {
     "ap": null,
     "net": 118,
-    "kenpom": 133,
+    "kenpom": 154,
     "stoopid": null,
     "stoopid_current": null
    },
    "50": {
     "ap": null,
     "net": 311,
-    "kenpom": 356,
+    "kenpom": 358,
     "stoopid": null,
     "stoopid_current": null
    },
@@ -118688,21 +118688,21 @@
    "526": {
     "ap": null,
     "net": 247,
-    "kenpom": 233,
+    "kenpom": 235,
     "stoopid": null,
     "stoopid_current": null
    },
    "55": {
     "ap": null,
     "net": 214,
-    "kenpom": 187,
+    "kenpom": 186,
     "stoopid": null,
     "stoopid_current": null
    },
    "56": {
     "ap": null,
     "net": 312,
-    "kenpom": 290,
+    "kenpom": 289,
     "stoopid": null,
     "stoopid_current": null
    },
@@ -118716,21 +118716,21 @@
    "58": {
     "ap": null,
     "net": 45,
-    "kenpom": 92,
+    "kenpom": 96,
     "stoopid": null,
     "stoopid_current": null
    },
    "59": {
     "ap": null,
     "net": 169,
-    "kenpom": 115,
+    "kenpom": 118,
     "stoopid": null,
     "stoopid_current": null
    },
    "6": {
     "ap": null,
     "net": 185,
-    "kenpom": 221,
+    "kenpom": 209,
     "stoopid": null,
     "stoopid_current": null
    },
@@ -118744,14 +118744,14 @@
    "62": {
     "ap": null,
     "net": 103,
-    "kenpom": 166,
+    "kenpom": 169,
     "stoopid": null,
     "stoopid_current": null
    },
    "66": {
     "ap": null,
     "net": 7,
-    "kenpom": 16,
+    "kenpom": 15,
     "stoopid": 13,
     "stoopid_current": 13
    },
@@ -118765,28 +118765,28 @@
    "70": {
     "ap": null,
     "net": 152,
-    "kenpom": 263,
+    "kenpom": 264,
     "stoopid": null,
     "stoopid_current": null
    },
    "71": {
     "ap": null,
     "net": 117,
-    "kenpom": 252,
+    "kenpom": 237,
     "stoopid": null,
     "stoopid_current": null
    },
    "77": {
     "ap": null,
     "net": 61,
-    "kenpom": 134,
+    "kenpom": 108,
     "stoopid": null,
     "stoopid_current": null
    },
    "79": {
     "ap": null,
     "net": 122,
-    "kenpom": 178,
+    "kenpom": 160,
     "stoopid": null,
     "stoopid_current": null
    },
@@ -118800,63 +118800,63 @@
    "82": {
     "ap": null,
     "net": 115,
-    "kenpom": 117,
+    "kenpom": 128,
     "stoopid": 48,
     "stoopid_current": 48
    },
    "84": {
     "ap": null,
     "net": 41,
-    "kenpom": 34,
+    "kenpom": 33,
     "stoopid": 51,
     "stoopid_current": 51
    },
    "85": {
     "ap": null,
     "net": 319,
-    "kenpom": 294,
+    "kenpom": 280,
     "stoopid": null,
     "stoopid_current": null
    },
    "87": {
     "ap": null,
     "net": 95,
-    "kenpom": 50,
+    "kenpom": 49,
     "stoopid": null,
     "stoopid_current": null
    },
    "88": {
     "ap": null,
     "net": 345,
-    "kenpom": 329,
+    "kenpom": 326,
     "stoopid": null,
     "stoopid_current": null
    },
    "9": {
     "ap": null,
     "net": 73,
-    "kenpom": 72,
+    "kenpom": 73,
     "stoopid": null,
     "stoopid_current": null
    },
    "91": {
     "ap": null,
     "net": 285,
-    "kenpom": 296,
+    "kenpom": 290,
     "stoopid": null,
     "stoopid_current": null
    },
    "93": {
     "ap": null,
     "net": 110,
-    "kenpom": 69,
+    "kenpom": 70,
     "stoopid": 62,
     "stoopid_current": 62
    },
    "94": {
     "ap": null,
     "net": 186,
-    "kenpom": 246,
+    "kenpom": 244,
     "stoopid": null,
     "stoopid_current": null
    },
@@ -118870,21 +118870,21 @@
    "97": {
     "ap": 23,
     "net": 19,
-    "kenpom": 42,
+    "kenpom": 43,
     "stoopid": 18,
     "stoopid_current": 18
    },
    "98": {
     "ap": null,
     "net": 156,
-    "kenpom": 104,
+    "kenpom": 97,
     "stoopid": 59,
     "stoopid_current": 59
    },
    "99": {
     "ap": 25,
     "net": 75,
-    "kenpom": 32,
+    "kenpom": 29,
     "stoopid": null,
     "stoopid_current": null
    }
@@ -118892,9 +118892,10 @@
   "sources": {
    "ap": {
     "source": "ap",
-    "fetched_at": "2026-11-23T05:49:26Z",
+    "fetched_at": "2026-11-23T15:18:41Z",
     "status": "fresh",
-    "used": "new"
+    "used": "same",
+    "poll_date": "2026-11-16"
    },
    "net": {
     "source": "net",
@@ -118904,11 +118905,11 @@
    },
    "kenpom": {
     "source": "kenpom",
-    "fetched_at": null,
-    "status": "snapshot",
+    "fetched_at": "2026-11-23T15:18:41Z",
+    "status": "fresh",
     "note": "always None: kenpom.com is behind a bot check; no permitted automated source",
     "used": "new",
-    "as_of": "2026-11-20",
+    "as_of": "2026-11-22",
     "unmatched": 0
    },
    "stoopid": {
