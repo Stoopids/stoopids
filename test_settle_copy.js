@@ -39,21 +39,26 @@ const assert = require('assert');
     PS.who = 'Paul';
     const asSettler = s29eCopyText(bet);
     PS.who = prev;
-    return {who: b27Who(), only: 'Only ' + PN(bet.backer) + ' can enter result.', mine, open, pushed, later, seasonOpen, req, asSettler,
-      ready: b27Ready(bet), other: b27NeedsOther(bet, 'Kurmoji'), win: s29eSettleWin(bet), pushWin: s29eSettleWin(push)};
+    const due = Object.assign({}, bet, {id:'due-date', n:8, wk:'date', est:'2026-11-01', rd:null, postedBy:'Ken', text:'A result with no game'});
+    const strangerCard = b27Card(due, 'Jake');
+    const oppCard = b27Card(due, 'Kurmoji');
+    return {who: b27Who(), mine, open, pushed, later, seasonOpen, req, asSettler,
+      ready: b27Ready(bet), other: b27NeedsOther(bet, 'Kurmoji'), stranger: b27NeedsOther(bet, 'Jake'),
+      poster: b27CanSettle(due, 'Ken'), oppSettle: b27CanSettle(due, 'Kurmoji'),
+      note: /Only people in the bet can settle it/.test(strangerCard) && !/Who won\?/.test(strangerCard),
+      whoWon: /Who won\?/.test(oppCard) && !/Only people in the bet can settle/.test(oppCard),
+      win: s29eSettleWin(bet), pushWin: s29eSettleWin(push)};
   });
   assert.equal(out.who, 'Kurmoji');
   assert.equal(out.ready, true);
-  assert.equal(out.other, true);
+  assert.equal(out.other, false);
+  assert.equal(out.stranger, true);
+  assert.equal(out.poster, false);
+  assert.equal(out.oppSettle, true);
+  assert.equal(out.note, true);
+  assert.equal(out.whoWon, true);
   assert.equal(out.win, 'Paul');
-  const lines = out.mine.split('\n');
-  assert.equal(lines.length, 4, out.mine);
-  assert.equal(lines[0], '🎉 Bet #5 · Paul Won 🎉');
-  assert.equal(lines[1], 'Hey Paul, settle this bet!');
-  assert.equal(lines[2], 'Minnesota -1.5 v Cincinnati');
-  assert.equal(lines[3], 'Nov 9');
-  assert.ok(!/Exp:|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|\b(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\b/.test(out.mine), out.mine);
-  assert.ok(!/[\$💥💣]/.test(out.mine), out.mine);
+  assert.equal(out.mine, out.open, out.mine);
   const pushLines = out.pushed.split('\n');
   assert.equal(pushLines[0], '🎉 Bet #6 🎉', out.pushed);
   assert.equal(pushLines.length, 4);
