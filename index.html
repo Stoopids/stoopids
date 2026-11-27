@@ -3979,7 +3979,7 @@ function b27ReqBet(r){const raw=b27Clean(r&&(r.txt||r.lab))||'';let parsed=null;
 const RQ=(typeof SHARED_UI!=='undefined'&&SHARED_UI.Requests)?SHARED_UI.Requests({maxText:PULK.maxText,change:"presAsk();return false",
   e:esc,me:()=>b27Who(),lockHtml:()=>b27LockHtml('request'),others:()=>b27Others().map(n=>({id:n,emoji:ownerEmoji(n),nick:TN(n)})),nick:n=>TN(n),real:n=>PN(n),
   canWrite:()=>!DEMO&&!!b27Who()&&b27OwnerNames().includes(b27Who()),amounts:PULK.amounts,
-  seasonId:()=>b27Season(),games:()=>(D.games||[]).filter(g=>g&&g.home&&g.away).map(g=>({id:String(g.id),g,start:g.start,status:g.status,period:g.period||null,label:qbNm(g.away)+' vs '+qbNm(g.home)+' · '+qbDate(g)})),
+  seasonId:()=>b27Season(),games:()=>rqGames(),
   tname:s=>qbNm(s),dateET:g=>qbDate(g),link:()=>location.href.split('#')[0]+'#bets27',goRequest:()=>{tab='bets27';OB_VIEW='request'},waiting:()=>{try{const me=b27Who();return me&&U.doc&&U.doc.bets?U.doc.bets.filter(b=>s24Waiting(b,me)).length:0}catch(e){return 0}},navEl:()=>document.querySelector('a.nt[data-tab="bets27"]')||document.querySelector('a.nt[data-tab="bets"]'),
   get:async()=>{const r=await fetch(REQ_URL,{cache:'no-store'});if(!r.ok)throw 0;return r.text()},
   set:async txt=>{const w=await fetch(REQ_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:txt});if(!w.ok)throw 0},
@@ -4065,14 +4065,17 @@ function nflCard(g){const fin=g.status==='final',live=g.status==='live',head=`<s
   return `<div class="gm nfl"${s24Attr('g',g.id)}>${inner}<div class="gsp" aria-hidden="true"></div>${nflSheet(g)}</div>`}
 function nflToggle(id){qbG=(id==null||qbG===String(id))?null:String(id);qbMsg='';render()}
 function nflFin(id){id=String(id);NFL.open.has(id)?NFL.open.delete(id):NFL.open.add(id);render()}
-function nflFill(g,k,i){if(!(typeof RQ!=='undefined'&&RQ)||!RQ.S)return;RQ.prefill('',null,0);const f=RQ.S.f,d=qbDate(g),day=g.day||'';
-  f.gid='';f.whenPick=true;f.wk='date';f.est=day;f.expPick=true;f.mode='d';if(!(+f.n>0))f.n=3;
-  if(k==='sp'||k==='ou'){const row=(SHARED_UI.qbOptions(g,{name:qbNm,date:d})||[]).find(x=>x.k===k),s=row&&row.s[i];f.text=s?s.txt:'';f.lineBase=f.text;
-    if(k==='ou'&&g.line&&g.line.ou!=null)f.rd={k:'total',t:qbNm(g.away),o:qbNm(g.home),l:+g.line.ou,ou:+i===0?'o':'u',sp:'nfl',d:day};
-    else{let rd=null;try{rd=S25.parse(f.text,g.start)}catch(e){}if(rd&&rd.k&&rd.k!=='manual')f.rd=rd}}
-  else if(k==='ml'){const q=SHARED_UI.mlQuote(g),side=i?g.home:g.away,other=i?g.away:g.home;f.text=qbNm(side)+' ML v '+qbNm(other);f.lineBase=f.text;
-    if(q){f.odds=[q.a,q.b];f.oddC=q.a!==q.b;f.oddTxt=q.label==='Even'?'':q.label;f.lineKind='ml';const fav=String(side.id)===String(q.favId);f.rd={k:'ml',ml:1,t:qbNm(side),o:qbNm(other),l:null,sp:'nfl',d:day,fav:fav?qbNm(side):qbNm(other)}}}
-  else{f.text=SHARED_UI.qbBlankText(g,{name:qbNm,date:d});f.lineBase=f.text}}
+let RQG=null;
+function rqWrap(g){return {id:String(g.id),g:g,start:g.start||'',status:g.status||'',period:g.period||null,label:qbNm(g.away)+' vs '+qbNm(g.home)+' · '+qbDate(g)}}
+function rqGames(){const base=(D.games||[]).filter(g=>g&&g.home&&g.away).map(rqWrap);if(!RQG)RQG=[];RQG.length=0;base.forEach(x=>RQG.push(x));
+  const pin=NFL.pin;if(pin&&typeof RQ!=='undefined'&&RQ&&RQ.S&&RQ.S.f&&String(RQ.S.f.gid)===String(pin.id)&&!RQG.some(x=>x.id===String(pin.id)))RQG.push(rqWrap(pin));
+  return RQG}
+function nflAttach(g){NFL.pin=g;if(!RQG)RQG=[];if(!RQG.some(x=>x.id===String(g.id)))RQG.push(rqWrap(g))}
+function nflSport(f){if(f&&f.rd&&NFL.pin&&String(f.gid)===String(NFL.pin.id))f.rd.sp='nfl'}
+function nflFill(g,k,i){if(!(typeof RQ!=='undefined'&&RQ)||!RQ.S)return;nflAttach(g);
+  if(k==='ml'){RQ.prefill(g.id,null,0);if(typeof RQ.moneyline==='function')RQ.moneyline(i?1:0)}
+  else RQ.prefill(g.id,k,i||0);
+  nflSport(RQ.S.f)}
 function nflPick(id,k,i){const g=(NFL.list||[]).find(x=>String(x.id)===String(id));if(!g||!qbOk(g))return;if(!(typeof RQ!=='undefined'&&RQ)){qbMsg='Request a bet is unavailable right now.';render();return}
   nflFill(g,k,i);qbG=null;qbMsg='';tab='bets27';OB_VIEW='request';render();betsLand()}
 function vNfl(){nflCss();if(!NFL.st){NFL.st='load';nflLoad();return '<div class="card">'+(typeof ballLoader==='function'?ballLoader():'Loading NFL games…')+'</div>'}
